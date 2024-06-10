@@ -157,13 +157,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
     this.currentRequest.session.flow_thread_id = uuid()
-    const contents = await this.getContentsByNode(startNode, resolvedLocale)
-
-    await trackFlowContent(
-      this.currentRequest as unknown as ActionRequest,
-      contents
-    )
-    return contents
+    return await this.getContentsByNode(startNode, resolvedLocale)
   }
 
   async getContentsByNode(
