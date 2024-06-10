@@ -10,18 +10,22 @@ export interface BotonicPluginFlowBuilderOptions {
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string
-  trackEvent?: (
-    request: ActionRequest,
-    eventAction: string,
-    args?: Record<string, any>
-  ) => Promise<void>
-  getKnowledgeBaseResponse?: (
-    request: ActionRequest,
-    userInput: string,
-    sources: string[]
-  ) => Promise<KnowledgeBaseResponse>
+  trackEvent?: TrackEventFunction
+  getKnowledgeBaseResponse?: KnowledgeBaseFunction
   smartIntentsConfig?: { numSmartIntentsToUse: number }
 }
+
+export type TrackEventFunction = (
+  request: ActionRequest,
+  eventAction: string,
+  args?: Record<string, any>
+) => Promise<void>
+
+export type KnowledgeBaseFunction = (
+  request: ActionRequest,
+  userInput: string,
+  sources: string[]
+) => Promise<KnowledgeBaseResponse>
 
 export interface FlowBuilderApiOptions {
   url: string

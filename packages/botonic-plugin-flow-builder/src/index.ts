@@ -31,12 +31,12 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { trackFlowContent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
-  KnowledgeBaseResponse,
+  KnowledgeBaseFunction,
   PayloadParamsBase,
+  TrackEventFunction,
 } from './types'
 import { getNodeByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
@@ -49,16 +49,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
-  public trackEvent?: (
-    request: ActionRequest,
-    eventAction: string,
-    args?: Record<string, any>
-  ) => Promise<void>
-  public getKnowledgeBaseResponse?: (
-    request: ActionRequest,
-    userInput: string,
-    sources: string[]
-  ) => Promise<KnowledgeBaseResponse>
+  public trackEvent?: TrackEventFunction
+  public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {

@@ -3,7 +3,7 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
-import { KnowledgeBaseResponse } from '../types'
+import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
 import { getContentsByFallback } from './fallback'
 import { FlowBuilderContext } from './index'
 
@@ -50,11 +50,7 @@ export async function getContentsByKnowledgeBase({
 }
 
 async function resolveKnowledgeBaseNode(
-  getKnowledgeBaseResponse: (
-    request: ActionRequest,
-    userInput: string,
-    sources: string[]
-  ) => Promise<KnowledgeBaseResponse>,
+  getKnowledgeBaseResponse: KnowledgeBaseFunction,
   request: ActionRequest,
   knowledgeBaseContent: FlowKnowledgeBase,
   contents: FlowContent[]
