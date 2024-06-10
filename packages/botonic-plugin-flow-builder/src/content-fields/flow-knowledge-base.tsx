@@ -7,7 +7,7 @@ import { HtKnowledgeBaseNode } from './hubtype-fields'
 export class FlowKnowledgeBase extends ContentFieldsBase {
   public code = ''
   public sources: string[] = []
-  public text = 'knowledge base text'
+  public text = ''
 
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)

@@ -208,14 +208,14 @@ export class FlowBuilderApi {
     return flow ? flow.name : ''
   }
 
-  getStartNodeKnowledeBaseFlow(): HtNodeWithContent {
+  getStartNodeKnowledeBaseFlow(): HtNodeWithContent | undefined {
     const knowledgeBaseFlow = this.flow.flows.find(
       flow => flow.name === KNOWLEDGE_BASE_FLOW_NAME
     )
     if (!knowledgeBaseFlow) {
-      throw new Error('Knowledge base flow must be defined')
+      return undefined
     }
-    return this.getNodeById(knowledgeBaseFlow.start_node_id)
+    return this.getNodeById<HtNodeWithContent>(knowledgeBaseFlow.start_node_id)
   }
 
   isKnowledgeBaseEnabled(): boolean {
