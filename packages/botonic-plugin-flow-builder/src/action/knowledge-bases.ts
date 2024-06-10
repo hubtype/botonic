@@ -1,79 +1,86 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+import { INPUT } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import { v4 as uuid } from 'uuid'
 
-import { FlowBuilderApi } from '../api'
-import {
-  HtNodeWithContent,
-  HtNodeWithContentType,
-  HtTextNode,
-} from '../content-fields/hubtype-fields'
-import { getFlowBuilderPlugin } from '../helpers'
+import { FlowContent, FlowKnowledgeBase } from '../content-fields'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseResponse } from '../types'
+import { getContentsByFallback } from './fallback'
+import { FlowBuilderContext } from './index'
 
-export async function createNodeFromKnowledgeBase(
-  cmsApi: FlowBuilderApi,
-  request: ActionRequest
-): Promise<HtNodeWithContent | undefined> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const locale = flowBuilderPlugin.getLocale(request.session)
-  const resolvedLocale = cmsApi.getResolvedLocale(locale)
-  const knowledgeBaseConfig = cmsApi.getKnowledgeBaseConfig()
+export async function getContentsByKnowledgeBase({
+  cmsApi,
+  flowBuilderPlugin,
+  request,
+  resolvedLocale,
+}: FlowBuilderContext): Promise<FlowContent[]> {
+  const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
 
-  if (
-    flowBuilderPlugin.getKnowledgeBaseResponse &&
-    knowledgeBaseConfig?.isActive
-  ) {
-    try {
-      const knowledgeBaseResponse =
-        await flowBuilderPlugin.getKnowledgeBaseResponse(request)
-      await trackKnowledgeBase(knowledgeBaseResponse, request)
+  if (startNodeKnowledeBaseFlow) {
+    const contents = await flowBuilderPlugin.getContentsByNode(
+      startNodeKnowledeBaseFlow,
+      resolvedLocale
+    )
 
-      if (
-        knowledgeBaseResponse.hasKnowledge &&
-        knowledgeBaseResponse.isFaithuful
-      ) {
-        const knowledgeBaseNode: HtTextNode = {
-          type: HtNodeWithContentType.TEXT,
-          content: {
-            text: [
-              {
-                message: knowledgeBaseResponse.answer,
-                locale: resolvedLocale,
-              },
-            ],
-            buttons_style: undefined,
-            buttons: [],
-          },
-          flow_id: 'randomUUID', // TODO: Add flow_id consequentially with HtBaseNode changes
-          id: uuid(),
-          code: 'knowledge-response',
-          meta: {
-            x: 0,
-            y: 0,
-          },
-          follow_up: knowledgeBaseConfig.followup,
-        }
-        return knowledgeBaseNode
-      }
-    } catch (e) {
-      console.error('Hubtype knowledge base api error: ', { e })
+    const knowledgeBaseContent = contents.find(
+      content => content instanceof FlowKnowledgeBase
+    ) as FlowKnowledgeBase
+
+    if (
+      flowBuilderPlugin.getKnowledgeBaseResponse &&
+      knowledgeBaseContent &&
+      request.input.data &&
+      request.input.type === INPUT.TEXT
+    ) {
+      await resolveKnowledgeBaseNode(
+        flowBuilderPlugin.getKnowledgeBaseResponse,
+        request,
+        knowledgeBaseContent,
+        contents
+      )
     }
+    return contents
   }
-  return undefined
+
+  return await getContentsByFallback({
+    cmsApi,
+    flowBuilderPlugin,
+    request,
+    resolvedLocale,
+  })
+}
+
+async function resolveKnowledgeBaseNode(
+  getKnowledgeBaseResponse: (
+    request: ActionRequest,
+    userInput: string,
+    sources: string[]
+  ) => Promise<KnowledgeBaseResponse>,
+  request: ActionRequest,
+  knowledgeBaseContent: FlowKnowledgeBase,
+  contents: FlowContent[]
+) {
+  const knowledgeBaseResponse = await getKnowledgeBaseResponse(
+    request,
+    request.input.data!,
+    knowledgeBaseContent.sources
+  )
+
+  if (knowledgeBaseResponse.hasKnowledge && knowledgeBaseResponse.isFaithuful) {
+    const answer = knowledgeBaseResponse.answer
+
+    contents.forEach(content => {
+      if (content instanceof FlowKnowledgeBase) {
+        content.text = answer
+      }
+    })
+    await trackKnowledgeBase(knowledgeBaseResponse, request)
+  }
 }
 
 async function trackKnowledgeBase(
   response: KnowledgeBaseResponse,
   request: ActionRequest
 ) {
-  /*  TODO:
-      In order to have all these parameters in the base knowlege response 
-      it is necessary to use the new endpoint to which the knowledge sources 
-      have to be indicated. For now this will not work, we need to finish 
-      the knowldege base node in the flow builder frontend.
-  */
   const knowledgebaseInferenceId = response.inferenceId
   const knowledgebaseSourcesIds = response.sources.map(
     source => source.knowledgeSourceId

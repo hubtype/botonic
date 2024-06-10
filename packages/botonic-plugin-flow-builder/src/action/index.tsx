@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
@@ -70,6 +71,10 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
 
   if (request.input.payload) {
     return await getContentsByPayload(context)
+  }
+
+  if (request.input.data && request.input.type === INPUT.TEXT) {
+    return await getContentsByKnowledgeBase(context)
   }
 
   return await getContentsByFallback(context)
