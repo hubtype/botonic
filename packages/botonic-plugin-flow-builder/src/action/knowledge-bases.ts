@@ -15,30 +15,44 @@ export async function getContentsByKnowledgeBase({
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
 
-  if (startNodeKnowledeBaseFlow) {
-    const contents = await flowBuilderPlugin.getContentsByNode(
-      startNodeKnowledeBaseFlow,
-      resolvedLocale
-    )
+  if (!startNodeKnowledeBaseFlow) {
+    return await getContentsByFallback({
+      cmsApi,
+      flowBuilderPlugin,
+      request,
+      resolvedLocale,
+    })
+  }
 
-    const knowledgeBaseContent = contents.find(
-      content => content instanceof FlowKnowledgeBase
-    ) as FlowKnowledgeBase
+  const contents = await flowBuilderPlugin.getContentsByNode(
+    startNodeKnowledeBaseFlow,
+    resolvedLocale
+  )
 
-    if (
-      flowBuilderPlugin.getKnowledgeBaseResponse &&
-      knowledgeBaseContent &&
-      request.input.data &&
-      request.input.type === INPUT.TEXT
-    ) {
-      await resolveKnowledgeBaseNode(
+  const knowledgeBaseContent = contents.find(
+    content => content instanceof FlowKnowledgeBase
+  ) as FlowKnowledgeBase
+
+  if (!knowledgeBaseContent) {
+    return contents
+  }
+
+  if (
+    flowBuilderPlugin.getKnowledgeBaseResponse &&
+    request.input.data &&
+    request.input.type === INPUT.TEXT
+  ) {
+    const contentsWithKnowledgeResponse =
+      await getContentsWithKnowledgeResponse(
         flowBuilderPlugin.getKnowledgeBaseResponse,
         request,
         knowledgeBaseContent,
         contents
       )
+
+    if (contentsWithKnowledgeResponse) {
+      return contentsWithKnowledgeResponse
     }
-    return contents
   }
 
   return await getContentsByFallback({
@@ -49,28 +63,41 @@ export async function getContentsByKnowledgeBase({
   })
 }
 
-async function resolveKnowledgeBaseNode(
+async function getContentsWithKnowledgeResponse(
   getKnowledgeBaseResponse: KnowledgeBaseFunction,
   request: ActionRequest,
   knowledgeBaseContent: FlowKnowledgeBase,
   contents: FlowContent[]
-) {
+): Promise<FlowContent[] | undefined> {
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
     request.input.data!,
     knowledgeBaseContent.sources
   )
 
-  if (knowledgeBaseResponse.hasKnowledge && knowledgeBaseResponse.isFaithuful) {
-    const answer = knowledgeBaseResponse.answer
-
-    contents.forEach(content => {
-      if (content instanceof FlowKnowledgeBase) {
-        content.text = answer
-      }
-    })
-    await trackKnowledgeBase(knowledgeBaseResponse, request)
+  if (
+    !knowledgeBaseResponse.hasKnowledge ||
+    !knowledgeBaseResponse.isFaithuful
+  ) {
+    return undefined
   }
+
+  await trackKnowledgeBase(knowledgeBaseResponse, request)
+
+  return updateContentsWithAnswer(contents, knowledgeBaseResponse.answer)
+}
+
+function updateContentsWithAnswer(
+  contents: FlowContent[],
+  answer: string
+): FlowContent[] {
+  return contents.map(content => {
+    if (content instanceof FlowKnowledgeBase) {
+      content.text = answer
+    }
+
+    return content
+  })
 }
 
 async function trackKnowledgeBase(
