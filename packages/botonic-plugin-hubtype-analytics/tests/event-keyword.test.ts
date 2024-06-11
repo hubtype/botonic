@@ -10,6 +10,7 @@ describe('Create nlu keyword events', () => {
       nluKeywordName: 'hello',
       nluKeywordIsRegex: false,
       nluKeywordMessageId: 'messageId',
+      userInput: 'hello',
     })
 
     expect(htEvent).toEqual({
@@ -22,6 +23,7 @@ describe('Create nlu keyword events', () => {
       nlu_keyword_name: 'hello',
       nlu_keyword_is_regex: false,
       nlu_keyword_message_id: 'messageId',
+      user_input: 'hello',
       type: EventType.BotEvent,
     })
   })
