@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.27.X] - 2024-xx-xx
+## [0.27.X] - aaaa-mm-dd
 
 ### Changed
 
@@ -18,7 +18,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.27.0] - tbd
+## [0.27.0] - 2024-11-06
 
 ### Added
 
@@ -32,6 +32,7 @@ All notable changes to Botonic will be documented in this file.
 
   - [Remove unused code from experimental 1.0 version](https://github.com/hubtype/botonic/pull/2812)
   - [Remove types `HubtypeSession` and `SessionWithBotonicAction` all typed in `Session`](https://github.com/hubtype/botonic/pull/2812)
+  - [Add `withBotEvent` in HandoffBuilder](https://github.com/hubtype/botonic/pull/2835)
 
 - [@botonic/plugin-hubtype-babel](https://www.npmjs.com/package/@botonic/plugin-hubtype-babel)
 
@@ -44,6 +45,12 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Modified Smart Intents api request to call smart intents inference v2](https://github.com/hubtype/botonic/pull/2825)
+  - [New node/flow for knowledge base](https://github.com/hubtype/botonic/pull/2847)
+  - [Use events v2](https://github.com/hubtype/botonic/pull/2827)
+
+- [@botonic/plugin-hubtype-analytics](https://www.npmjs.com/package/@botonic/plugin-hubtype-analytics)
+
+  - [Change events to use new endpoint and format v2](https://github.com/hubtype/botonic/pull/2827)
 
 ### Fixed
 
