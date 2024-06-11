@@ -74,6 +74,7 @@ export interface EventIntent extends HtBaseEventProps {
   nluIntentConfidence: number
   nluIntentThreshold: number
   nluIntentMessageId: string
+  userInput?: string
 }
 
 export interface EventKeyword extends HtBaseEventProps {
@@ -82,6 +83,7 @@ export interface EventKeyword extends HtBaseEventProps {
   nluKeywordName: string
   nluKeywordIsRegex?: boolean
   nluKeywordMessageId: string
+  userInput?: string
 }
 
 export interface EventIntentSmart extends HtBaseEventProps {
@@ -89,6 +91,7 @@ export interface EventIntentSmart extends HtBaseEventProps {
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
+  userInput?: string
 }
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
@@ -98,6 +101,7 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   knowledgebaseSourcesIds: string[]
   knowledgebaseChunksIds: string[]
   knowledgebaseMessageId: string
+  userInput?: string
 }
 
 export enum KnowledgebaseFailReason {

@@ -126,5 +126,6 @@ async function trackKnowledgeBase(
     knowledgebaseSourcesIds,
     knowledgebaseChunksIds,
     knowledgebaseMessageId,
+    userInput: request.input.data,
   })
 }
