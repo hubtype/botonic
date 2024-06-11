@@ -7,6 +7,7 @@ import { HtHandoffNode } from './handoff'
 import { HtImageNode } from './image'
 import { HtIntentNode } from './intent'
 import { HtKeywordNode } from './keyword'
+import { HtKnowledgeBaseNode } from './knowledge-base'
 import { HtPayloadNode } from './payload'
 import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
@@ -28,6 +29,7 @@ export type HtNodeWithContent =
   | HtWhatsappButtonListNode
   | HtWhatsappCTAUrlButtonNode
   | HtSmartIntentNode
+  | HtKnowledgeBaseNode
 
 export type HtNodeWithoutContent =
   | HtUrlNode

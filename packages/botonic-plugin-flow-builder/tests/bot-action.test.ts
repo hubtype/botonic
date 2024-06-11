@@ -13,7 +13,7 @@ import {
 
 describe('The user clicks on a button that is connected to a BotActionNode', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
   const ratingMessageUuid = '578b30eb-d230-4162-8a36-6c7fa18ff0db'
   const botActionUuid = '85dbeb56-81c9-419d-a235-4ebf491b4fc9'
   test('The button has  a payload equal to ba|botActionUuid', async () => {

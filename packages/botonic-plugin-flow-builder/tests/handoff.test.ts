@@ -14,7 +14,7 @@ import {
 
 describe('Check the content returned by the plugin, when the queue is open', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   beforeEach(() => mockQueueAvailability({ isOpen: true, name: 'General' }))
 
@@ -41,7 +41,7 @@ describe('Check the content returned by the plugin, when the queue is open', () 
 
 describe('The content connected to the closed queue status is displayed and the handoff is not done', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   beforeEach(() => mockQueueAvailability({ isOpen: false, name: 'General' }))
 

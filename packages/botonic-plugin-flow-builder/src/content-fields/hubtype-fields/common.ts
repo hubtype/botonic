@@ -7,6 +7,7 @@ export interface HtFlowBuilderData {
   locales: string[]
   start_node_id?: string
   ai_model_id?: string
+  is_knowledge_base_active?: boolean
   nodes: HtNodeComponent[]
   flows: HtFlows[]
 }

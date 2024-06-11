@@ -1221,7 +1221,7 @@ export const basicFlow = {
             },
           },
           {
-            result: '0',
+            result: 0,
             target: {
               id: '981be6fb-f2f8-4dfd-b997-6b1b0d0ab080',
               type: 'text',

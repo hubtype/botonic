@@ -11,6 +11,7 @@ export enum HtNodeWithContentType {
   VIDEO = 'video',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
+  KNOWLEDGE_BASE = 'knowledge-base',
 }
 
 export enum HtNodeWithoutContentType {

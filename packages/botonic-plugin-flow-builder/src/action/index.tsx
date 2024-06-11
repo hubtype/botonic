@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
@@ -6,8 +7,9 @@ import { FlowContent, FlowHandoff } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
-import { EventAction, trackEvent, trackFlowContent } from '../tracking'
-import { createNodeFromKnowledgeBase } from './knowledge-bases'
+import { trackFlowContent } from '../tracking'
+import { getContentsByFallback } from './fallback'
+import { getContentsByKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -20,6 +22,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     request: ActionRequest
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request)
+    await trackFlowContent(request, contents)
 
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
@@ -70,10 +73,14 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
     return await getContentsByPayload(context)
   }
 
+  if (request.input.data && request.input.type === INPUT.TEXT) {
+    return await getContentsByKnowledgeBase(context)
+  }
+
   return await getContentsByFallback(context)
 }
 
-interface FlowBuilderContext {
+export interface FlowBuilderContext {
   cmsApi: FlowBuilderApi
   flowBuilderPlugin: BotonicPluginFlowBuilder
   request: ActionRequest
@@ -91,56 +98,8 @@ async function getContentsByPayload({
     : undefined
 
   if (targetNode) {
-    const contents = await flowBuilderPlugin.getContentsByNode(
-      targetNode,
-      resolvedLocale
-    )
-    await trackFlowContent(request, contents)
-
-    return contents
+    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
   }
 
   return []
-}
-
-async function getContentsByFallback({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
-  const fallbackNode = await getFallbackNode(cmsApi, request)
-  const fallbackContents = await flowBuilderPlugin.getContentsByNode(
-    fallbackNode,
-    resolvedLocale
-  )
-  await trackFlowContent(request, fallbackContents)
-
-  return fallbackContents
-}
-
-async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
-  if (request.session.user.extra_data?.isFirstFallbackOption === undefined) {
-    request.session.user.extra_data = {
-      ...request.session.user.extra_data,
-      isFirstFallbackOption: true,
-    }
-  }
-
-  const knowledgeBaseNode = await createNodeFromKnowledgeBase(cmsApi, request)
-  if (knowledgeBaseNode) {
-    return knowledgeBaseNode
-  }
-
-  const isFirstFallbackOption =
-    !!request.session.user.extra_data.isFirstFallbackOption
-  const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
-  request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
-
-  trackEvent(request, EventAction.Fallback, {
-    fallbackOut: isFirstFallbackOption ? 1 : 2,
-    fallbackMessageId: request.input.message_id,
-  })
-
-  return fallbackNode
 }

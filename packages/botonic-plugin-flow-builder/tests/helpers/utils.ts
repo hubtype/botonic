@@ -8,13 +8,28 @@ import {
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import BotonicPluginFlowBuilder, { FlowBuilderAction } from '../../src'
+import BotonicPluginFlowBuilder, {
+  FlowBuilderAction,
+  FlowBuilderActionProps,
+} from '../../src'
+import { KnowledgeBaseFunction } from '../../src/types'
 
-export function createFlowBuilderPlugin(flow: any, locale: string = 'en') {
+interface FlowBuilderOptions {
+  flow: any
+  locale?: string
+  getKnowledgeBaseResponse?: KnowledgeBaseFunction
+}
+
+export function createFlowBuilderPlugin({
+  flow,
+  locale = 'en',
+  getKnowledgeBaseResponse,
+}: FlowBuilderOptions) {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
     getLocale: () => locale,
     getAccessToken: () => 'fake_token',
+    getKnowledgeBaseResponse,
   })
 
   // @ts-ignore
@@ -72,8 +87,28 @@ export function getActionRequest(request: PluginPreRequest): ActionRequest {
 export async function getContentsAfterPreAndBotonicInit(
   request: PluginPreRequest,
   flowBuilderPlugin: BotonicPluginFlowBuilder
-): Promise<any> {
+): Promise<FlowBuilderActionProps> {
   await flowBuilderPlugin.pre(request)
   const actionRequest = getActionRequest(request)
   return await FlowBuilderAction.botonicInit(actionRequest)
+}
+
+interface FlowBuilderPluginAndGetContentsArgs {
+  flowBuilderOptions: FlowBuilderOptions
+  requestArgs: RequestArgs
+}
+
+export function createFlowBuilderPluginAndGetContents({
+  flowBuilderOptions,
+  requestArgs,
+}: FlowBuilderPluginAndGetContentsArgs): Promise<FlowBuilderActionProps> {
+  const flowBuilderPlugin = createFlowBuilderPlugin(flowBuilderOptions)
+  const request = createRequest({
+    ...requestArgs,
+    plugins: {
+      // @ts-ignore
+      flowBuilderPlugin,
+    },
+  })
+  return getContentsAfterPreAndBotonicInit(request, flowBuilderPlugin)
 }

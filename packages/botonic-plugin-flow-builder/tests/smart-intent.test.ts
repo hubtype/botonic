@@ -14,7 +14,7 @@ import {
 
 describe('Check the contents returned by the plugin when match a smart intent', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(smartIntentsFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: smartIntentsFlow })
 
   beforeEach(() => mockSmartIntent('Add a bag'))
 
@@ -42,7 +42,7 @@ describe('Check the contents returned by the plugin when match a smart intent', 
 
 describe('Check the contents returned by the plugin when no match a smart intent', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(smartIntentsFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: smartIntentsFlow })
 
   beforeEach(() => mockSmartIntent('Other'))
 

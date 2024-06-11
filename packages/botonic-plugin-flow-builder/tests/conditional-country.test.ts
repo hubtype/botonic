@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents returned by the plugin after conditional country node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test.each([
     ['ES', 'Message only for Spain'],

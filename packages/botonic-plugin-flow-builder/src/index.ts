@@ -14,11 +14,12 @@ import {
   FlowContent,
   FlowHandoff,
   FlowImage,
+  FlowKnowledgeBase,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
+  FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
-import { FlowWhatsappCtaUrlButtonNode } from './content-fields/flow-whatsapp-cta-url-button'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
@@ -30,12 +31,12 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
-import { trackFlowContent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
-  KnowledgeBaseResponse,
+  KnowledgeBaseFunction,
   PayloadParamsBase,
+  TrackEventFunction,
 } from './types'
 import { getNodeByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
@@ -48,14 +49,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private currentRequest: PluginPreRequest
   private getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
-  public trackEvent?: (
-    request: ActionRequest,
-    eventAction: string,
-    args?: Record<string, any>
-  ) => Promise<void>
-  public getKnowledgeBaseResponse?: (
-    request: ActionRequest
-  ) => Promise<KnowledgeBaseResponse>
+  public trackEvent?: TrackEventFunction
+  public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
 
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
@@ -154,13 +149,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
     this.currentRequest.session.flow_thread_id = uuid()
-    const contents = await this.getContentsByNode(startNode, resolvedLocale)
-
-    await trackFlowContent(
-      this.currentRequest as unknown as ActionRequest,
-      contents
-    )
-    return contents
+    return await this.getContentsByNode(startNode, resolvedLocale)
   }
 
   async getContentsByNode(
@@ -216,6 +205,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         )
       case HtNodeWithContentType.HANDOFF:
         return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
+
+      case HtNodeWithContentType.KNOWLEDGE_BASE:
+        return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
       default:
         return undefined
     }

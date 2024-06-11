@@ -1,7 +1,11 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import { BOT_ACTION_PAYLOAD_PREFIX, SEPARATOR } from './constants'
+import {
+  BOT_ACTION_PAYLOAD_PREFIX,
+  KNOWLEDGE_BASE_FLOW_NAME,
+  SEPARATOR,
+} from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -202,6 +206,20 @@ export class FlowBuilderApi {
   getFlowName(flowId: string): string {
     const flow = this.flow.flows.find(flow => flow.id === flowId)
     return flow ? flow.name : ''
+  }
+
+  getStartNodeKnowledeBaseFlow(): HtNodeWithContent | undefined {
+    const knowledgeBaseFlow = this.flow.flows.find(
+      flow => flow.name === KNOWLEDGE_BASE_FLOW_NAME
+    )
+    if (!knowledgeBaseFlow) {
+      return undefined
+    }
+    return this.getNodeById<HtNodeWithContent>(knowledgeBaseFlow.start_node_id)
+  }
+
+  isKnowledgeBaseEnabled(): boolean {
+    return this.flow.is_knowledge_base_active || false
   }
 
   getResolvedLocale(locale: string): string {

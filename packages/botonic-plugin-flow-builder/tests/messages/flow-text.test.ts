@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents and logic of a text node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the text message are displayed', async () => {
     const request = createRequest({

@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents returned by the plugin', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The starting content is displayed on the first interaction', async () => {
     const request = createRequest({

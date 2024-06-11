@@ -12,7 +12,7 @@ import {
 
 describe('Check the contents of a image node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin(basicFlow)
+  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The src of the image is in contents', async () => {
     const request = createRequest({
