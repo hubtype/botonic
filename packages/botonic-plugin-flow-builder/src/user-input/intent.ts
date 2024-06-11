@@ -2,7 +2,7 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { HtIntentNode } from '../content-fields/hubtype-fields'
-import { EventName, trackEvent } from '../tracking'
+import { EventAction, trackEvent } from '../tracking'
 
 export async function getIntentNodeByInput(
   cmsApi: FlowBuilderApi,
@@ -10,22 +10,29 @@ export async function getIntentNodeByInput(
   request: ActionRequest
 ): Promise<HtIntentNode | undefined> {
   const intentNode = cmsApi.getIntentNode(request.input, locale)
-  const eventArgs = {
-    intent: request.input.intent as string,
-    confidence: request.input.confidence as number,
-    confidence_successful: true,
-  }
+
   if (request.input.confidence && request.input.intent && intentNode) {
+    await trackIntentEvent(request, intentNode)
+
     if (isIntentValid(intentNode, request, cmsApi)) {
-      await trackEvent(request, EventName.botAiModel, eventArgs)
       return intentNode
     }
-
-    eventArgs.confidence_successful = false
-    await trackEvent(request, EventName.botAiModel, eventArgs)
   }
 
   return undefined
+}
+
+async function trackIntentEvent(
+  request: ActionRequest,
+  intentNode: HtIntentNode
+) {
+  const eventArgs = {
+    nluIntentLabel: request.input.intent,
+    nluIntentConfidence: request.input.confidence,
+    nluIntentThreshold: intentNode?.content.confidence,
+    nluIntentMessageId: request.input.message_id,
+  }
+  await trackEvent(request, EventAction.Intent, eventArgs)
 }
 
 function isIntentValid(

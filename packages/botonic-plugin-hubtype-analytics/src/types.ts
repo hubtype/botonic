@@ -1,169 +1,145 @@
-import { PROVIDER } from '@botonic/core'
-
-export interface Event {
-  chat: string
-  event_type: EventName
-  event_data: BaseEventData
+export enum EventType {
+  BotEvent = 'botevent',
+  WebEvent = 'webevent',
 }
 
-export enum EventName {
-  botAgentRating = 'bot_agent_rating',
-  botChannelRating = 'bot_channel_rating',
-  botFaqUseful = 'bot_faq_useful',
-  botRating = 'bot_rating',
-  botFaq = 'bot_faq',
-  botStart = 'bot_start',
-  botOpen = 'bot_open',
-  botAiModel = 'bot_ai_model',
-  botAiKnowledgeBase = 'bot_ai_knowledge_base',
-  botKeywordsModel = 'bot_keywords_model',
-  fallback = 'fallback',
-  handoffOption = 'handoff_option',
-  handoffSuccess = 'handoff_success',
-  handoffFail = 'handoff_fail',
-}
-export interface BaseEventData {
-  channel: string
-  event_datetime: string
-  enduser_language: string
-  enduser_country?: string
-  format_version?: number
-  bot_version?: string
-  flow_version?: string
+export enum EventAction {
+  FeedbackCase = 'feedback_case',
+  FeedbackMessage = 'feedback_message',
+  FeedbackConversation = 'feedback_conversation',
+  FeedbackWebview = 'feedback_webview',
+  FlowNode = 'flow_node',
+  HandoffOption = 'handoff_option',
+  HandoffSuccess = 'handoff_success',
+  HandoffFail = 'handoff_fail',
+  Keyword = 'nlu_keyword',
+  Intent = 'nlu_intent',
+  IntentSmart = 'nlu_intent_smart',
+  Knowledgebase = 'knowledgebase',
+  Fallback = 'fallback',
+  WebviewStep = 'webview_step',
+  WebviewEnd = 'webview_end',
+  Custom = 'custom',
 }
 
 export interface HtBaseEventProps {
-  event_type: EventName
+  action: EventAction
 }
 
-export interface EventAgentRating extends HtBaseEventProps {
-  event_type: EventName.botAgentRating
-  event_data: EventDataRating
-}
-
-export interface EventDataRating {
-  case_id: string
-  rating?: number
+export interface EventFeedback extends HtBaseEventProps {
+  action:
+    | EventAction.FeedbackCase
+    | EventAction.FeedbackConversation
+    | EventAction.FeedbackMessage
+    | EventAction.FeedbackWebview
+  messageGeneratedBy?: string
+  feedbackTargetId?: string
+  feedbackGroupId?: string
+  possibleOptions: string[]
+  possibleValues: number[]
+  option: string
+  value: number
   comment?: string
 }
-export interface EventChannelRating extends HtBaseEventProps {
-  event_type: EventName.botChannelRating
-  event_data: EventDataChannelRating
+
+export interface EventFlow extends HtBaseEventProps {
+  action: EventAction.FlowNode
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful?: boolean
 }
 
-export interface EventDataChannelRating {
-  rating: number
-}
-
-export interface EventFaqUseful extends HtBaseEventProps {
-  event_type: EventName.botFaqUseful
-  event_data: EventDataUseful
-}
-
-export interface EventDataUseful {
-  faq_name: string
-  useful: boolean
-}
-export interface EventBotRating extends HtBaseEventProps {
-  event_type: EventName.botRating
-  event_data: EventDataBotRating
-}
-
-export interface EventDataBotRating {
-  rating: number
-  free_comment?: string
-  selected_options?: string[]
-}
-
-export interface EventBotFaq extends HtBaseEventProps {
-  event_type: EventName.botFaq
-  event_data: EventDataBotFaq
-}
-
-export interface EventDataBotFaq {
-  faq_name: string
-}
-export interface EventBotStart extends HtBaseEventProps {
-  event_type: EventName.botStart
-}
-
-export interface EventBotOpen {
-  event_type: EventName.botOpen
-}
-
-export interface EventBotAiModel {
-  event_type: EventName.botAiModel
-  event_data: EventDataBotAiModel
-}
-
-export interface EventDataBotAiModel {
-  intent: string
-  confidence: number
-  confidence_successful: boolean
-}
-
-export interface EventBotAiKnowledgeBase {
-  event_type: EventName.botAiKnowledgeBase
-  event_data: EventDataBotAiKnowledgeBase
-}
-
-export interface EventDataBotAiKnowledgeBase {
-  answer: string
-  knowledge_source_ids: string[]
-}
-
-export interface EventBotKeywordModel extends HtBaseEventProps {
-  event_type: EventName.botKeywordsModel
-  event_data: EventDataBotKeywordModel
-}
-
-export interface EventDataBotKeywordModel {
-  confidence_successful: boolean
-}
-export interface EventFallback extends HtBaseEventProps {
-  event_type: EventName.fallback
+export interface EventHandoff extends HtBaseEventProps {
+  action: EventAction.HandoffSuccess | EventAction.HandoffFail
+  queueId: string
+  queueName: string
+  caseId?: string
+  isQueueOpen?: boolean
+  isAvailableAgent?: boolean
+  isThresholdReached?: boolean
 }
 
 export interface EventHandoffOption extends HtBaseEventProps {
-  event_type: EventName.handoffOption
+  action: EventAction.HandoffOption
+  queueId: string
+  queueName: string
 }
 
-export interface EventHandoffSuccess extends HtBaseEventProps {
-  event_type: EventName.handoffSuccess
-  event_data: EventDataHandoff
+export interface EventIntent extends HtBaseEventProps {
+  action: EventAction.Intent
+  nluIntentLabel: string
+  nluIntentConfidence: number
+  nluIntentThreshold: number
+  nluIntentMessageId: string
 }
 
-export interface EventHandoffFail extends HtBaseEventProps {
-  event_type: EventName.handoffFail
-  event_data: EventDataHandoff
+export interface EventKeyword extends HtBaseEventProps {
+  action: EventAction.Keyword
+  nluKeywordId: string
+  nluKeywordName: string
+  nluKeywordIsRegex?: boolean
+  nluKeywordMessageId: string
 }
 
-export interface EventDataHandoff {
-  queue_open: boolean
-  queue_id: string
-  available_agents: boolean
-  threshold_reached: boolean
+export interface EventIntentSmart extends HtBaseEventProps {
+  action: EventAction.IntentSmart
+  nluIntentSmartTitle: string
+  nluIntentSmartNumUsed: number
+  nluIntentSmartMessageId: string
+}
+
+export interface EventKnowledgeBase extends HtBaseEventProps {
+  action: EventAction.Knowledgebase
+  knowledgebaseInferenceId: string
+  knowledgebaseFailReason?: KnowledgebaseFailReason
+  knowledgebaseSourcesIds: string[]
+  knowledgebaseChunksIds: string[]
+  knowledgebaseMessageId: string
+}
+
+export enum KnowledgebaseFailReason {
+  NoKnowledge = 'no_knowledge',
+  Hallucination = 'hallucination',
+}
+
+export interface EventFallback extends HtBaseEventProps {
+  action: EventAction.Fallback
+  fallbackOut: number
+  fallbackMessageId: string
+}
+
+export interface EventWebview extends HtBaseEventProps {
+  action: EventAction.WebviewStep | EventAction.WebviewEnd
+  webviewThreadId: string
+  webviewName: string
+  webviewStepName?: string
+  webviewEndFailType?: string
+  webviewEndFailMessage?: string
+}
+
+export interface EventCustom extends HtBaseEventProps {
+  action: EventAction.Custom
+  customFields: Record<string, any>
 }
 
 export type HtEventProps =
-  | EventAgentRating
-  | EventChannelRating
-  | EventFaqUseful
-  | EventBotRating
-  | EventBotFaq
-  | EventBotStart
-  | EventBotOpen
-  | EventBotAiModel
-  | EventBotAiKnowledgeBase
-  | EventBotKeywordModel
-  | EventFallback
+  | EventFeedback
+  | EventFlow
+  | EventHandoff
   | EventHandoffOption
-  | EventHandoffSuccess
-  | EventHandoffFail
+  | EventIntent
+  | EventKeyword
+  | EventIntentSmart
+  | EventKnowledgeBase
+  | EventFallback
+  | EventWebview
+  | EventCustom
 
 export interface RequestData {
   language: string
   country: string
-  provider: PROVIDER
   userId: string
 }

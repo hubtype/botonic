@@ -1,50 +1,61 @@
-import { HtEvent } from './event-models/ht-event'
-import { HtEventAgentRating } from './event-models/ht-event-agent-rating'
-import { HtEventBotAiModel } from './event-models/ht-event-bot-ai-model'
-import { HtEventBotFaq } from './event-models/ht-event-bot-faq'
-import { HtEventBotKeywordModel } from './event-models/ht-event-bot-keyword-model'
-import { HtEventBotAiKnowledgeBase } from './event-models/ht-event-bot-knowledge-base'
-import { HtEventBotRating } from './event-models/ht-event-bot-rating'
-import { HtEventChannelRating } from './event-models/ht-event-channel-rating'
-import { HtEventFaqUseful } from './event-models/ht-event-faq-useful'
-import { HtEventHandoffFail } from './event-models/ht-event-handoff-fail'
-import { HtEventHandoffSuccess } from './event-models/ht-event-handoff-success'
-import { EventName, HtEventProps, RequestData } from './types'
+import {
+  HtEvent,
+  HtEventCustom,
+  HtEventFallback,
+  HtEventFeedback,
+  HtEventFlow,
+  HtEventHandoff,
+  HtEventHandoffOption,
+  HtEventIntent,
+  HtEventIntentSmart,
+  HtEventKeyword,
+  HtEventKnowledgeBase,
+  HtEventWebview,
+} from './event-models'
+import { EventAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,
   htEventProps: HtEventProps
 ): HtEvent {
-  switch (htEventProps.event_type) {
-    case EventName.botAgentRating:
-      return new HtEventAgentRating(htEventProps, requestData)
+  switch (htEventProps.action) {
+    case EventAction.FeedbackCase:
+    case EventAction.FeedbackConversation:
+    case EventAction.FeedbackMessage:
+    case EventAction.FeedbackWebview:
+      return new HtEventFeedback(htEventProps, requestData)
 
-    case EventName.botChannelRating:
-      return new HtEventChannelRating(htEventProps, requestData)
+    case EventAction.FlowNode:
+      return new HtEventFlow(htEventProps, requestData)
 
-    case EventName.botFaqUseful:
-      return new HtEventFaqUseful(htEventProps, requestData)
+    case EventAction.HandoffOption:
+      return new HtEventHandoffOption(htEventProps, requestData)
 
-    case EventName.botRating:
-      return new HtEventBotRating(htEventProps, requestData)
+    case EventAction.HandoffSuccess:
+    case EventAction.HandoffFail:
+      return new HtEventHandoff(htEventProps, requestData)
 
-    case EventName.botFaq:
-      return new HtEventBotFaq(htEventProps, requestData)
+    case EventAction.Intent:
+      return new HtEventIntent(htEventProps, requestData)
 
-    case EventName.botAiModel:
-      return new HtEventBotAiModel(htEventProps, requestData)
+    case EventAction.Keyword:
+      return new HtEventKeyword(htEventProps, requestData)
 
-    case EventName.botAiKnowledgeBase:
-      return new HtEventBotAiKnowledgeBase(htEventProps, requestData)
+    case EventAction.IntentSmart:
+      return new HtEventIntentSmart(htEventProps, requestData)
 
-    case EventName.botKeywordsModel:
-      return new HtEventBotKeywordModel(htEventProps, requestData)
+    case EventAction.Knowledgebase:
+      return new HtEventKnowledgeBase(htEventProps, requestData)
 
-    case EventName.handoffSuccess:
-      return new HtEventHandoffSuccess(htEventProps, requestData)
+    case EventAction.Fallback:
+      return new HtEventFallback(htEventProps, requestData)
 
-    case EventName.handoffFail:
-      return new HtEventHandoffFail(htEventProps, requestData)
+    case EventAction.WebviewStep:
+    case EventAction.WebviewEnd:
+      return new HtEventWebview(htEventProps, requestData)
+
+    case EventAction.Custom:
+      return new HtEventCustom(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

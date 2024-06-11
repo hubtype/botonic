@@ -12,7 +12,7 @@ export interface BotonicPluginFlowBuilderOptions {
   getAccessToken: () => string
   trackEvent?: (
     request: ActionRequest,
-    eventName: string,
+    eventAction: string,
     args?: Record<string, any>
   ) => Promise<void>
   getKnowledgeBaseResponse?: (
@@ -39,12 +39,27 @@ export enum FlowBuilderJSONVersion {
 }
 
 export interface KnowledgeBaseResponse {
+  inferenceId: string
+  question: string
   answer: string
   hasKnowledge: boolean
+  isFaithuful: boolean
   sources: {
+    knowledgeBaseId: string
     knowledgeSourceId: string
-    page?: number
+    knowledgeChunkId: string
   }[]
+}
+
+export interface SmartIntentResponse {
+  data: {
+    smart_intent_title: string
+    text: string
+    smart_intents_used: {
+      title: string
+      description: string
+    }[]
+  }
 }
 
 export interface PayloadParamsBase {

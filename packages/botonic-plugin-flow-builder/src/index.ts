@@ -1,5 +1,6 @@
-import { Plugin, PluginPreRequest, Session } from '@botonic/core'
+import { INPUT, Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
+import { v4 as uuid } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
@@ -29,6 +30,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
+import { trackFlowContent } from './tracking'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
@@ -48,7 +50,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getLocale: (session: Session) => string
   public trackEvent?: (
     request: ActionRequest,
-    eventName: string,
+    eventAction: string,
     args?: Record<string, any>
   ) => Promise<void>
   public getKnowledgeBaseResponse?: (
@@ -84,6 +86,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
     const checkUserTextInput =
       request.input.data &&
+      request.input.type === INPUT.TEXT &&
       !request.input.payload &&
       !request.session.is_first_interaction
 
@@ -107,7 +110,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = this.removeSourceSufix(request.input.payload)
 
       if (request.input.payload.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
-        request.input.payload = this.replacePayload(request.input.payload)
+        request.input.payload = this.replaceBotActionPayload(
+          request.input.payload
+        )
       }
     }
   }
@@ -116,7 +121,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
-  private replacePayload(payload: string): string {
+  public replaceBotActionPayload(payload: string): string {
     const botActionId = payload.split(SEPARATOR)[1]
     const botActionNode = this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
     return this.cmsApi.createPayloadWithParams(botActionNode)
@@ -146,8 +151,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async getStartContents(locale: string): Promise<FlowContent[]> {
+    const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
-    return await this.getContentsByNode(startNode, locale)
+    this.currentRequest.session.flow_thread_id = uuid()
+    const contents = await this.getContentsByNode(startNode, resolvedLocale)
+
+    await trackFlowContent(
+      this.currentRequest as unknown as ActionRequest,
+      contents
+    )
+    return contents
   }
 
   async getContentsByNode(
@@ -263,10 +276,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const payloadParams = JSON.parse(payload.split(SEPARATOR)[1] || '{}')
     return payloadParams
   }
+
+  getFlowName(flowId: string): string {
+    return this.cmsApi.getFlowName(flowId)
+  }
 }
 
 export * from './action'
+export { BOT_ACTION_PAYLOAD_PREFIX } from './constants'
 export * from './content-fields'
+export { trackFlowContent } from './tracking'
 export {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,

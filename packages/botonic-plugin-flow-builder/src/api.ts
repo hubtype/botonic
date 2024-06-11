@@ -1,11 +1,7 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  BOT_ACTION_PAYLOAD_PREFIX,
-  REG_EXP_PATTERN,
-  SEPARATOR,
-} from './constants'
+import { BOT_ACTION_PAYLOAD_PREFIX, SEPARATOR } from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -154,57 +150,10 @@ export class FlowBuilderApi {
     return predictedConfidence >= nodeConfidence
   }
 
-  getNodeByKeyword(
-    userInput: string,
-    locale: string
-  ): HtKeywordNode | undefined {
-    try {
-      const keywordNodes = this.flow.nodes.filter(
-        node => node.type === HtNodeWithContentType.KEYWORD
-      ) as HtKeywordNode[]
-      const matchedKeywordNodes = keywordNodes.filter(node =>
-        this.matchKeywords(node, userInput, locale)
-      )
-      if (matchedKeywordNodes.length > 0 && matchedKeywordNodes[0].target) {
-        return matchedKeywordNodes[0]
-      }
-    } catch (error) {
-      console.error(`Error getting node by keyword '${userInput}': `, error)
-    }
-
-    return undefined
-  }
-
-  private matchKeywords(
-    node: HtKeywordNode,
-    input: string,
-    locale: string
-  ): boolean {
-    const result = node.content.keywords.find(
-      keywords =>
-        keywords.locale === locale &&
-        this.inputMatchesAnyKeyword(input, keywords.values)
-    )
-    return Boolean(result)
-  }
-
-  private inputMatchesAnyKeyword(input: string, keywords: string[]): boolean {
-    return keywords.some(keyword => {
-      const regExpMatchArray = keyword.match(REG_EXP_PATTERN)
-      if (regExpMatchArray) {
-        return this.resolveKeywordAsRegExp(regExpMatchArray, input)
-      }
-      return input.includes(keyword)
-    })
-  }
-
-  private resolveKeywordAsRegExp(
-    regExpMatchArray: RegExpMatchArray,
-    input: string
-  ) {
-    const [, pattern, flags] = regExpMatchArray
-    const keywordAsRegExp = new RegExp(pattern, flags)
-    return input.match(keywordAsRegExp)
+  getKeywordNodes(): HtKeywordNode[] {
+    return this.flow.nodes.filter(
+      node => node.type === HtNodeWithContentType.KEYWORD
+    ) as HtKeywordNode[]
   }
 
   getPayload(target?: HtNodeLink): string | undefined {
@@ -248,6 +197,11 @@ export class FlowBuilderApi {
     } else {
       return followUpNode?.code
     }
+  }
+
+  getFlowName(flowId: string): string {
+    const flow = this.flow.flows.find(flow => flow.id === flowId)
+    return flow ? flow.name : ''
   }
 
   getResolvedLocale(locale: string): string {
