@@ -74,6 +74,7 @@ async function getContentsWithKnowledgeResponse(
     request.input.data!,
     knowledgeBaseContent.sources
   )
+  await trackKnowledgeBase(knowledgeBaseResponse, request)
 
   if (
     !knowledgeBaseResponse.hasKnowledge ||
@@ -81,8 +82,6 @@ async function getContentsWithKnowledgeResponse(
   ) {
     return undefined
   }
-
-  await trackKnowledgeBase(knowledgeBaseResponse, request)
 
   return updateContentsWithAnswer(contents, knowledgeBaseResponse.answer)
 }
