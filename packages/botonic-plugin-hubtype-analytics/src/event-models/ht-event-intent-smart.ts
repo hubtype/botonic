@@ -5,7 +5,7 @@ export class HtEventIntentSmart extends HtEvent {
   nlu_intent_smart_title: string
   nlu_intent_smart_num_used: number
   nlu_intent_smart_message_id: string
-  user_input?: string
+  user_input: string
 
   constructor(event: EventIntentSmart, requestData: RequestData) {
     super(event, requestData)

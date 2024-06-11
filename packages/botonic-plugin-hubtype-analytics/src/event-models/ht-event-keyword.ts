@@ -6,7 +6,7 @@ export class HtEventKeyword extends HtEvent {
   nlu_keyword_name: string
   nlu_keyword_is_regex: boolean
   nlu_keyword_message_id: string
-  user_input?: string
+  user_input: string
 
   constructor(event: EventKeyword, requestData: RequestData) {
     super(event, requestData)

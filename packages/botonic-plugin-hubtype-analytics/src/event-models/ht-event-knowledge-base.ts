@@ -12,7 +12,7 @@ export class HtEventKnowledgeBase extends HtEvent {
   knowledgebase_sources_ids: string[]
   knowledgebase_chunks_ids: string[]
   knowledgebase_message_id: string
-  user_input?: string
+  user_input: string
 
   constructor(event: EventKnowledgeBase, requestData: RequestData) {
     super(event, requestData)

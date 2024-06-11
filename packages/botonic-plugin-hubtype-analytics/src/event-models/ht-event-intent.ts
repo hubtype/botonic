@@ -6,7 +6,7 @@ export class HtEventIntent extends HtEvent {
   nlu_intent_confidence: number
   nlu_intent_threshold: number
   nlu_intent_message_id: string
-  user_input?: string
+  user_input: string
 
   constructor(event: EventIntent, requestData: RequestData) {
     super(event, requestData)

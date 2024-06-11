@@ -9,6 +9,7 @@ describe('Create nlu intent smart events', () => {
       nluIntentSmartTitle: 'ADD_A_BAG',
       nluIntentSmartNumUsed: 2,
       nluIntentSmartMessageId: 'messageId',
+      userInput: 'Add a bag',
     })
 
     expect(htEvent).toEqual({
@@ -20,6 +21,7 @@ describe('Create nlu intent smart events', () => {
       nlu_intent_smart_title: 'ADD_A_BAG',
       nlu_intent_smart_num_used: 2,
       nlu_intent_smart_message_id: 'messageId',
+      user_input: 'Add a bag',
       type: EventType.BotEvent,
     })
   })

@@ -15,6 +15,7 @@ describe('Create knowledge base events', () => {
       knowledgebaseSourcesIds: ['sourceId1', 'sourceId2'],
       knowledgebaseChunksIds: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebaseMessageId: 'knowledgebaseMessageId',
+      userInput: 'What is Flow Builder?',
     })
 
     expect(htEvent).toEqual({
@@ -27,6 +28,7 @@ describe('Create knowledge base events', () => {
       knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
       knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebase_message_id: 'knowledgebaseMessageId',
+      user_input: 'What is Flow Builder?',
       type: EventType.BotEvent,
     })
   })
@@ -39,6 +41,7 @@ describe('Create knowledge base events', () => {
       knowledgebaseSourcesIds: ['sourceId1', 'sourceId2'],
       knowledgebaseChunksIds: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebaseMessageId: 'knowledgebaseMessageId',
+      userInput: 'What is Flow Builder?',
     })
 
     expect(htEvent).toEqual({
@@ -52,6 +55,7 @@ describe('Create knowledge base events', () => {
       knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
       knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebase_message_id: 'knowledgebaseMessageId',
+      user_input: 'What is Flow Builder?',
       type: EventType.BotEvent,
     })
   })
