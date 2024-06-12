@@ -253,6 +253,7 @@ export const MultichannelText = props => {
             body={textElements[0]}
             displayText={webviewButtonElements[0].props.children}
             webview={webviewButtonElements[0].props.webview}
+            params={webviewButtonElements[0].props.params}
           />
         )
       }
