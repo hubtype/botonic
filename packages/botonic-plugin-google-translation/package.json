@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-google-translation",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.23.9",
-    "@botonic/core": "^0.26.0",
+    "@botonic/core": "^0.27.0",
     "axios": "^1.6.8",
     "jsrsasign": "^10.9.0"
   },
