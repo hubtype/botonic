@@ -11,6 +11,7 @@ import { trackFlowContent } from '../tracking'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
+import { getContentsByPayload } from './payload'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -86,21 +87,4 @@ export interface FlowBuilderContext {
   flowBuilderPlugin: BotonicPluginFlowBuilder
   request: ActionRequest
   resolvedLocale: string
-}
-
-async function getContentsByPayload({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
-  const targetNode = request.input.payload
-    ? cmsApi.getNodeById<HtNodeWithContent>(request.input.payload)
-    : undefined
-
-  if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
-  }
-
-  return []
 }
