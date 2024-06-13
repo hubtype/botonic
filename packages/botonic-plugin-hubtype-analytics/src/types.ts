@@ -126,7 +126,8 @@ export interface EventWebview extends HtBaseEventProps {
 
 export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
-  customFields: Record<string, any>
+  customFields?: Record<string, any>
+  customSensitiveFields?: Record<string, any>
 }
 
 export type HtEventProps =
