@@ -124,14 +124,6 @@ export interface EventWebview extends HtBaseEventProps {
   webviewEndFailMessage?: string
 }
 
-export interface EventPropsWebview {
-  webviewThreadId: string
-  webviewName: string
-  webviewStepName?: string
-  webviewEndFailType?: string
-  webviewEndFailMessage?: string
-}
-
 export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
   customFields: Record<string, any>
