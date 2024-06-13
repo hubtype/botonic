@@ -10,6 +10,9 @@ describe('Create custom events', () => {
         name: 'custom bot event',
         value: '12345',
       },
+      customSensitiveFields: {
+        bank_account: '1234567890',
+      },
     })
 
     expect(htEvent).toEqual({
@@ -22,6 +25,7 @@ describe('Create custom events', () => {
         name: 'custom bot event',
         value: '12345',
       },
+      custom_sensitive_fields: { bank_account: '1234567890' },
       type: EventType.WebEvent,
     })
   })

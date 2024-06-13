@@ -111,6 +111,7 @@ export enum KnowledgebaseFailReason {
 
 export interface EventFallback extends HtBaseEventProps {
   action: EventAction.Fallback
+  userInput: string
   fallbackOut: number
   fallbackMessageId: string
 }
@@ -124,17 +125,10 @@ export interface EventWebview extends HtBaseEventProps {
   webviewEndFailMessage?: string
 }
 
-export interface EventPropsWebview {
-  webviewThreadId: string
-  webviewName: string
-  webviewStepName?: string
-  webviewEndFailType?: string
-  webviewEndFailMessage?: string
-}
-
 export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
-  customFields: Record<string, any>
+  customFields?: Record<string, any>
+  customSensitiveFields?: Record<string, any>
 }
 
 export type HtEventProps =

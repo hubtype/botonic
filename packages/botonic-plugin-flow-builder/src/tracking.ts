@@ -43,6 +43,7 @@ export async function trackFlowContent(
     flowId: firstNodeContent.flow_id,
     flowName,
     id: firstNodeContent.id,
+    isMeaningful: firstNodeContent.is_meaningful ?? false,
   })
   await trackEvent(request, EventAction.FlowNode, eventArgs)
 }
@@ -54,6 +55,7 @@ export function getContentEventArgs(
     flowId: string
     flowName: string
     id: string
+    isMeaningful: boolean
   }
 ) {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
@@ -63,6 +65,6 @@ export function getContentEventArgs(
     flowName: flowBuilderPlugin.getFlowName(contentInfo.flowId),
     flowNodeId: contentInfo.id,
     flowNodeContentId: contentInfo.code,
-    flowNodeIsMeaningful: undefined, //node?.isMeaningful,
+    flowNodeIsMeaningful: contentInfo.isMeaningful,
   }
 }
