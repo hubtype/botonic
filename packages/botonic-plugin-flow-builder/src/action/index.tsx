@@ -9,6 +9,7 @@ import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
 import { getContentsByFallback } from './fallback'
+import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 
 export type FlowBuilderActionProps = {
@@ -66,7 +67,7 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
   }
 
   if (request.session.is_first_interaction) {
-    return await flowBuilderPlugin.getStartContents(resolvedLocale)
+    return await getContentsByFirstInteraction(context)
   }
 
   if (request.input.payload) {
