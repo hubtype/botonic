@@ -33,7 +33,7 @@ export interface HtBaseNode {
   follow_up?: HtNodeLink
   target?: HtNodeLink
   flow_id: string // TODO: Review if this field is necessary in all HtBaseNode
-  is_meaningful: boolean
+  is_meaningful?: boolean
 }
 
 export interface HtTextLocale {

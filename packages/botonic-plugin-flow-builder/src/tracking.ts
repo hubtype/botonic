@@ -43,7 +43,7 @@ export async function trackFlowContent(
     flowId: firstNodeContent.flow_id,
     flowName,
     id: firstNodeContent.id,
-    isMeaningful: firstNodeContent.is_meaningful,
+    isMeaningful: firstNodeContent.is_meaningful ?? false,
   })
   await trackEvent(request, EventAction.FlowNode, eventArgs)
 }
