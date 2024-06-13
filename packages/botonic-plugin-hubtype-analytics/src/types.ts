@@ -111,6 +111,7 @@ export enum KnowledgebaseFailReason {
 
 export interface EventFallback extends HtBaseEventProps {
   action: EventAction.Fallback
+  userInput: string
   fallbackOut: number
   fallbackMessageId: string
 }
