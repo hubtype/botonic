@@ -773,7 +773,7 @@ export const knowledgeBaseTestFlow = {
       content: {
         text: [
           {
-            message: 'FollowUp Knowledge base ',
+            message: 'FollowUp Knowledge base',
             locale: 'es',
           },
         ],
