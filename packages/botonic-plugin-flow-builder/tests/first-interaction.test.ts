@@ -3,6 +3,8 @@ import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
+// eslint-disable-next-line jest/no-mocks-import
+import { mockSmartIntent } from './__mocks__/smart-intent'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
@@ -67,6 +69,31 @@ describe('Check the contents returned by the plugin in first interaction', () =>
     expect(contents.length).toBe(3)
     expect((contents[2] as FlowText).text).toBe(
       'Message explaining how to select a seat'
+    )
+  })
+})
+
+describe('Check the contents returned by the plugin in first interaction with smart intent', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => mockSmartIntent('add a bag'))
+
+  test('The start contents are displayed followed by more contents obtained by matching a smart-intent', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: {
+          data: 'I want to add a bag to my booking',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(3)
+    expect((contents[2] as FlowText).text).toBe(
+      'Message explaining how to add a bag'
     )
   })
 })

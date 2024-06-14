@@ -2520,6 +2520,27 @@ export const basicFlow = {
         confidence: 50,
       },
     },
+    {
+      id: 'a962b2e5-9424-4fe5-81bd-8cb398b59875',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 924.8309575588046,
+        y: -433.9169466024687,
+      },
+      follow_up: null,
+      target: {
+        id: 'a91c0bca-c213-4693-b3bd-f091fcbf445c',
+        type: 'text',
+      },
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
+      type: 'smart-intent',
+      content: {
+        title: 'add a bag',
+        description: 'the user wants to add a bag to his booking',
+      },
+    },
   ],
   flows: [
     {
