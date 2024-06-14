@@ -4,31 +4,69 @@ import { describe, test } from '@jest/globals'
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from './helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
-describe('Check the contents returned by the plugin', () => {
+describe('Check the contents returned by the plugin in first interaction', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
-  test('The starting content is displayed on the first interaction', async () => {
-    const request = createRequest({
-      input: { data: 'Hola', type: INPUT.TEXT },
-      isFirstInteraction: true,
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
+  test('The start contents is displayed because user input no match with any keyword or intent', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: { data: 'Hello', type: INPUT.TEXT },
+        isFirstInteraction: true,
       },
     })
 
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(2)
+  })
+
+  test('The start contents is displayed because user input matches a keyword or intent that points to the first content', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: { data: 'Hola', type: INPUT.TEXT },
+        isFirstInteraction: true,
+      },
+    })
 
     expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(2)
+  })
+
+  test('The start contents are displayed followed by more contents obtained by matching a keyword', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: { data: 'differentMessages', type: INPUT.TEXT },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(3)
+    expect((contents[2] as FlowText).text).toBe('All types of messages')
+  })
+
+  test('The start contents are displayed followed by more contents obtained by matching an intent', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: {
+          data: 'I want to select my seat ',
+          type: INPUT.TEXT,
+          intent: 'select a seat',
+          confidence: 0.8,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(3)
+    expect((contents[2] as FlowText).text).toBe(
+      'Message explaining how to select a seat'
+    )
   })
 })

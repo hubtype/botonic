@@ -1,3 +1,7 @@
+/* 
+  To edit this flow use the flow builder bot 
+  Plugin Flow Builder Tests from the backline organisation. 
+*/
 /* eslint-disable @typescript-eslint/naming-convention */
 export const basicFlow = {
   version: 'draft',
@@ -7,7 +11,8 @@ export const basicFlow = {
   published_on: null,
   locales: ['en'],
   start_node_id: '607205c9-6814-45ba-9aeb-2dd08d0cb529',
-  ai_model_id: null,
+  ai_model_id: 'fe5465d6-f1f6-4f0d-9dd8-7a990bd62c73',
+  is_knowledge_base_active: false,
   nodes: [
     {
       id: '164be5e1-9147-4d7d-938b-73e9698a3d18',
@@ -34,6 +39,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      is_meaningful: null,
       type: 'fallback',
       content: {
         first_message: {
@@ -62,6 +68,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -85,6 +92,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -111,6 +119,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'bot-action',
       content: {
         payload_id: 'f0ceef47-16a9-49b6-ab30-1ba0f5127ab2',
@@ -128,6 +137,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -151,6 +161,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -223,6 +234,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -249,6 +261,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'bot-action',
       content: {
         payload_id: 'f0ceef47-16a9-49b6-ab30-1ba0f5127ab2',
@@ -269,6 +282,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      is_meaningful: null,
       type: 'bot-action',
       content: {
         payload_id: 'f0ceef47-16a9-49b6-ab30-1ba0f5127ab2',
@@ -289,6 +303,7 @@ export const basicFlow = {
         type: 'text',
       },
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [
@@ -316,6 +331,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -414,12 +430,13 @@ export const basicFlow = {
       code: 'ADD_BAG_MSG',
       is_code_ai_generated: false,
       meta: {
-        x: 1280.4629164691908,
-        y: -173.10067057051984,
+        x: 1253.1694319856201,
+        y: -287.091105766608,
       },
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -437,12 +454,13 @@ export const basicFlow = {
       code: 'SELECT_SEAT_MSG',
       is_code_ai_generated: false,
       meta: {
-        x: 1485.5446400345668,
-        y: -33.65734385216269,
+        x: 1618.8010642778809,
+        y: -65.76732559753964,
       },
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -466,6 +484,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -492,6 +511,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -518,6 +538,7 @@ export const basicFlow = {
         type: 'go-to-flow',
       },
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'handoff',
       content: {
         queue: [
@@ -542,6 +563,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'go-to-flow',
       content: {
         flow_id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
@@ -558,6 +580,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'function',
       content: {
         action: 'check-queue-status',
@@ -616,6 +639,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -633,12 +657,13 @@ export const basicFlow = {
       code: 'Go to flow',
       is_code_ai_generated: false,
       meta: {
-        x: 1437.8057614942547,
-        y: 89.2293519915766,
+        x: 1442.6222587560612,
+        y: 116.52283647514702,
       },
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'go-to-flow',
       content: {
         flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
@@ -658,6 +683,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [
@@ -685,6 +711,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -789,6 +816,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'function',
       content: {
         action: 'get-channel-type',
@@ -829,6 +857,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -852,6 +881,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -875,6 +905,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -898,6 +929,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'function',
       content: {
         action: 'check-country',
@@ -945,6 +977,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -968,6 +1001,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -991,6 +1025,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1014,6 +1049,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1031,12 +1067,13 @@ export const basicFlow = {
       code: 'Go to flow',
       is_code_ai_generated: false,
       meta: {
-        x: 1467.0778104633966,
-        y: 176.45237507323054,
+        x: 1430.1513314562133,
+        y: 243.88333673852213,
       },
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'go-to-flow',
       content: {
         flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
@@ -1056,6 +1093,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -1081,6 +1119,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -1103,6 +1142,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'function',
       content: {
         action: 'check-bot-variable',
@@ -1156,6 +1196,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'function',
       content: {
         action: 'check-bot-variable',
@@ -1192,59 +1233,6 @@ export const basicFlow = {
       },
     },
     {
-      id: '0ad4e94f-201f-474e-8912-5b8ae1411b64',
-      code: '',
-      is_code_ai_generated: false,
-      meta: {
-        x: 614.7060799789346,
-        y: 526.5926529619337,
-      },
-      follow_up: null,
-      target: null,
-      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
-      type: 'function',
-      content: {
-        action: 'check-bot-variable',
-        arguments: [
-          {
-            type: 'number',
-            name: 'keyPath',
-            value: 'bagsAdded',
-          },
-        ],
-        result_mapping: [
-          {
-            result: 'default',
-            target: {
-              id: '5715facc-b8d4-4814-9986-287b656b682a',
-              type: 'text',
-            },
-          },
-          {
-            result: 0,
-            target: {
-              id: '981be6fb-f2f8-4dfd-b997-6b1b0d0ab080',
-              type: 'text',
-            },
-          },
-          {
-            result: 1,
-            target: {
-              id: '3dd74922-70d4-4e2a-950c-1496511cd846',
-              type: 'text',
-            },
-          },
-          {
-            result: 2,
-            target: {
-              id: '74feb945-f8ce-4868-afbf-78cdb7228c89',
-              type: 'text',
-            },
-          },
-        ],
-      },
-    },
-    {
       id: '01abe8b5-369d-4ebe-8f2d-cf17c727d546',
       code: '',
       is_code_ai_generated: false,
@@ -1258,6 +1246,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -1283,6 +1272,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -1299,8 +1289,8 @@ export const basicFlow = {
       code: '',
       is_code_ai_generated: false,
       meta: {
-        x: 259.8174421854689,
-        y: 612.9101554226803,
+        x: 191.5929549358214,
+        y: 569.0001276620213,
       },
       follow_up: null,
       target: {
@@ -1308,6 +1298,7 @@ export const basicFlow = {
         type: 'function',
       },
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -1330,6 +1321,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1353,6 +1345,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1376,6 +1369,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1399,6 +1393,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1422,6 +1417,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1445,6 +1441,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1468,6 +1465,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1492,6 +1490,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1515,6 +1514,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1538,6 +1538,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1561,6 +1562,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1675,12 +1677,13 @@ export const basicFlow = {
       code: 'Go to flow',
       is_code_ai_generated: false,
       meta: {
-        x: 1250.9984807974104,
-        y: 297.63186879664977,
+        x: 1231.7324917501842,
+        y: 379.512322247361,
       },
       follow_up: null,
       target: null,
       flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
       type: 'go-to-flow',
       content: {
         flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
@@ -1697,6 +1700,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1756,6 +1760,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'carousel',
       content: {
         elements: [
@@ -1854,6 +1859,7 @@ export const basicFlow = {
       },
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1877,6 +1883,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1900,6 +1907,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'image',
       content: {
         image: [
@@ -1922,6 +1930,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -1945,6 +1954,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'video',
       content: {
         video: [
@@ -1967,6 +1977,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'whatsapp-button-list',
       content: {
         text: [
@@ -2083,6 +2094,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'whatsapp-cta-url-button',
       content: {
         text: [
@@ -2134,6 +2146,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -2157,6 +2170,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -2180,6 +2194,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -2203,6 +2218,7 @@ export const basicFlow = {
       follow_up: null,
       target: null,
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'text',
       content: {
         text: [
@@ -2229,6 +2245,7 @@ export const basicFlow = {
         type: 'text',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2254,6 +2271,7 @@ export const basicFlow = {
         type: 'text',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2279,6 +2297,7 @@ export const basicFlow = {
         type: 'carousel',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2304,6 +2323,7 @@ export const basicFlow = {
         type: 'image',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2329,6 +2349,7 @@ export const basicFlow = {
         type: 'video',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2354,6 +2375,7 @@ export const basicFlow = {
         type: 'whatsapp-button-list',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2379,6 +2401,7 @@ export const basicFlow = {
         type: 'whatsapp-cta-url-button',
       },
       flow_id: '43a736f8-4837-4fbb-a661-021291749b4f',
+      is_meaningful: null,
       type: 'keyword',
       content: {
         title: [],
@@ -2390,27 +2413,119 @@ export const basicFlow = {
         ],
       },
     },
+    {
+      id: '0ad4e94f-201f-474e-8912-5b8ae1411b64',
+      code: 'Custom Conditional Number',
+      is_code_ai_generated: false,
+      meta: {
+        x: 614.7060799789346,
+        y: 526.5926529619337,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: null,
+      type: 'function',
+      content: {
+        action: 'check-bot-variable',
+        arguments: [
+          {
+            type: 'number',
+            name: 'keyPath',
+            value: 'bagsAdded',
+          },
+        ],
+        result_mapping: [
+          {
+            result: 'default',
+            target: {
+              id: '5715facc-b8d4-4814-9986-287b656b682a',
+              type: 'text',
+            },
+          },
+          {
+            result: 0,
+            target: {
+              id: '981be6fb-f2f8-4dfd-b997-6b1b0d0ab080',
+              type: 'text',
+            },
+          },
+          {
+            result: 1,
+            target: {
+              id: '3dd74922-70d4-4e2a-950c-1496511cd846',
+              type: 'text',
+            },
+          },
+          {
+            result: 2,
+            target: {
+              id: '74feb945-f8ce-4868-afbf-78cdb7228c89',
+              type: 'text',
+            },
+          },
+        ],
+      },
+    },
+    {
+      id: 'e72899cc-91ad-4987-ad1c-3a9991c8811f',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 437.12449600376215,
+        y: -225.5132070881366,
+      },
+      follow_up: null,
+      target: {
+        id: '07947391-3460-45fb-a195-2c2e12483ad3',
+        type: 'handoff',
+      },
+      flow_id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      is_meaningful: null,
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['handoff'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '1ce92e20-3286-4077-80e0-b1d890b66487',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1271.816475698173,
+        y: -137.1586714352393,
+      },
+      follow_up: null,
+      target: {
+        id: '59071c29-2cd7-447a-b290-04269b76701d',
+        type: 'text',
+      },
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: null,
+      type: 'intent',
+      content: {
+        title: [],
+        intents: [
+          {
+            values: ['select a seat'],
+            locale: 'en',
+          },
+        ],
+        confidence: 50,
+      },
+    },
   ],
   flows: [
     {
       id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
       name: 'Main',
       start_node_id: '607205c9-6814-45ba-9aeb-2dd08d0cb529',
-    },
-    {
-      id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
-      name: 'Fallback',
-      start_node_id: 'f3931bce-7de3-5c7a-8287-81f0292ee4f3',
-    },
-    {
-      id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
-      name: 'Rating',
-      start_node_id: '578b30eb-d230-4162-8a36-6c7fa18ff0db',
-    },
-    {
-      id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
-      name: 'Handoff',
-      start_node_id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
     },
     {
       id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
@@ -2421,6 +2536,21 @@ export const basicFlow = {
       id: '43a736f8-4837-4fbb-a661-021291749b4f',
       name: 'Different messages',
       start_node_id: '99badeca-29e1-4855-866c-3cf9b60bb6a8',
+    },
+    {
+      id: '7c284240-5b87-4d3e-8de8-fa4934d07dd9',
+      name: 'Handoff',
+      start_node_id: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
+    },
+    {
+      id: 'e589fd0d-7323-4cc2-81f7-4902b1addbcf',
+      name: 'Rating',
+      start_node_id: '578b30eb-d230-4162-8a36-6c7fa18ff0db',
+    },
+    {
+      id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      name: 'Fallback',
+      start_node_id: 'f3931bce-7de3-5c7a-8287-81f0292ee4f3',
     },
   ],
   webviews: [],
