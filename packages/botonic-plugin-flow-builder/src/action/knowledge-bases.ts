@@ -4,7 +4,6 @@ import { ActionRequest } from '@botonic/react'
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
-import { getContentsByFallback } from './fallback'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
@@ -16,12 +15,7 @@ export async function getContentsByKnowledgeBase({
   const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
 
   if (!startNodeKnowledeBaseFlow) {
-    return await getContentsByFallback({
-      cmsApi,
-      flowBuilderPlugin,
-      request,
-      resolvedLocale,
-    })
+    return []
   }
 
   const contents = await flowBuilderPlugin.getContentsByNode(
@@ -55,12 +49,7 @@ export async function getContentsByKnowledgeBase({
     }
   }
 
-  return await getContentsByFallback({
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-  })
+  return []
 }
 
 async function getContentsWithKnowledgeResponse(

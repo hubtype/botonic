@@ -76,7 +76,10 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
   }
 
   if (request.input.data && request.input.type === INPUT.TEXT) {
-    return await getContentsByKnowledgeBase(context)
+    const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
+    if (knowledgeBaseContents.length > 0) {
+      return knowledgeBaseContents
+    }
   }
 
   return await getContentsByFallback(context)
