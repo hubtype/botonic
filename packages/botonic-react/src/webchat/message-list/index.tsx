@@ -58,13 +58,10 @@ export const WebchatMessageList = props => {
   }, [webchatState.messagesComponents])
 
   useEffect(() => {
-    if (webchatState.isLastMessageVisible && webchatState.typing) {
+    setTimeout(() => {
       scrollToBottom({ host: props.host })
-    }
-    if (webchatState.isLastMessageVisible) {
-      scrollToBottom({ host: props.host })
-    }
-  }, [webchatState.typing, webchatState.isLastMessageVisible])
+    }, 100)
+  }, [webchatState.typing])
 
   useEffect(() => {
     if (firstUnreadMessageId) {
