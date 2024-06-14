@@ -1,4 +1,4 @@
-import { INPUT, Plugin, PluginPreRequest, Session } from '@botonic/core'
+import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v4 as uuid } from 'uuid'
 
@@ -53,10 +53,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
 
+  // TODO: Rethink how we construct FlowBuilderApi to be simpler
+  public jsonVersion: FlowBuilderJSONVersion
+  public apiUrl: string
+
   constructor(readonly options: BotonicPluginFlowBuilderOptions) {
-    const apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
-    const jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
-    this.flowUrl = `${apiUrl}/flow/${jsonVersion}`
+    this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
+    this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
     this.getLocale = options.getLocale
     this.getAccessToken = resolveGetAccessToken(options)
@@ -64,16 +67,23 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
-      useLatest: jsonVersion === FlowBuilderJSONVersion.LATEST,
+      useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
     }
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
   }
 
+  resolveFlowUrl(request: PluginPreRequest): string {
+    if (request.session.is_test_integration) {
+      return `${this.apiUrl}/flow/${FlowBuilderJSONVersion.DRAFT}`
+    }
+    return `${this.apiUrl}/flow/${this.jsonVersion}`
+  }
+
   async pre(request: PluginPreRequest): Promise<void> {
     this.currentRequest = request
     this.cmsApi = await FlowBuilderApi.create({
-      url: this.flowUrl,
+      url: this.resolveFlowUrl(request),
       flow: this.flow,
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
