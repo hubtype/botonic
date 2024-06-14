@@ -48,7 +48,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   }
 
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
-    if (request.session.is_test_integration) return Promise.resolve(undefined)
+    if (request.session.is_test_integration) return
     const requestData = this.getRequestData(request)
     const event = createHtEvent(requestData, htEventProps)
     return this.sendEvent(request, event)
