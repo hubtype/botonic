@@ -189,6 +189,7 @@ export interface Session {
   _access_token: string
   _hubtype_api: string
   is_first_interaction: boolean
+  is_test_integration: boolean
   last_session?: any
   organization_id: string
   organization: string
