@@ -1,4 +1,5 @@
 import { ActionRequest } from '@botonic/react'
+import { v4 as uuid } from 'uuid'
 
 import { FlowContent } from './content-fields'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
@@ -59,8 +60,9 @@ export function getContentEventArgs(
   }
 ) {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowThreadId = request.session.flow_thread_id ?? uuid()
   return {
-    flowThreadId: request.session.flow_thread_id,
+    flowThreadId,
     flowId: contentInfo.flowId,
     flowName: flowBuilderPlugin.getFlowName(contentInfo.flowId),
     flowNodeId: contentInfo.id,
