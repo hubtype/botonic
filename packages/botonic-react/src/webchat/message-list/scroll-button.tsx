@@ -6,6 +6,7 @@ import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
 import { ContainerScrollButton } from './styles'
 import { useDebounce } from './use-debounce'
+import { useNotifications } from './use-notifications'
 
 interface ScrollButtonProps {
   handleClick: () => void
@@ -14,19 +15,9 @@ interface ScrollButtonProps {
 export const ScrollButton = ({
   handleClick,
 }: ScrollButtonProps): JSX.Element => {
-  const { getThemeProperty } = useContext(WebchatContext)
+  const { CustomScrollButton, scrollButtonEnabled } = useNotifications()
 
   const show = useDebounce()
-
-  const CustomScrollButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.scrollButtonCustom,
-    undefined
-  )
-
-  const scrollButtonEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.scrollButtonEnabled,
-    CustomScrollButton
-  )
 
   return (
     <>
