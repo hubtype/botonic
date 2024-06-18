@@ -1,11 +1,11 @@
 import { INPUT, isBrowser } from '@botonic/core'
 import React, { useContext, useEffect, useState } from 'react'
-import Fade from 'react-reveal/Fade'
 import { v4 as uuidv4 } from 'uuid'
 
 import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext, WebchatContext } from '../../contexts'
 import { SENDERS } from '../../index-types'
+import { Fade } from '../../shared/styles'
 import { isDev } from '../../util/environment'
 import { ConditionalWrapper, renderComponent } from '../../util/react'
 import { Button } from '../button'

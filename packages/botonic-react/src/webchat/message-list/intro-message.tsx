@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import Fade from 'react-reveal/Fade'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { Fade } from '../../shared/styles'
 import { resolveImage } from '../../util/environment'
 import { ConditionalWrapper } from '../../util/react'
 import { DefaultIntroImage } from './styles'
