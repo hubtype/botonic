@@ -9,8 +9,9 @@ import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
 import { ContainerMessage } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
+import { useNotifications } from './use-notifications'
 
-export const WebchatMessageList = props => {
+export const WebchatMessageList = () => {
   const {
     webchatState,
     getThemeProperty,
@@ -25,11 +26,31 @@ export const WebchatMessageList = props => {
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
-  const lastMessageRef = useRef<HTMLDivElement>(null)
+  const lastMessageBottomRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      lastMessageBottomRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
+    }, 100)
+  }
 
   const handleScrollToBottom = () => {
     resetUnreadMessages()
-    scrollToBottom({ host: props.host })
+    scrollToBottom()
+  }
+
+  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBanner = () => {
+    setTimeout(() => {
+      unreadMessagesBannerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }, 100)
   }
 
   const showUnreadMessagesBanner = (messageComponentId: string) =>
@@ -57,29 +78,26 @@ export const WebchatMessageList = props => {
     }
   }, [webchatState.messagesComponents])
 
+  const { notificationsEnabled } = useNotifications()
+
   useEffect(() => {
-    setTimeout(() => {
-      scrollToBottom({ host: props.host })
-    }, 100)
+    if (!notificationsEnabled) {
+      scrollToBottom()
+      return
+    }
   }, [webchatState.typing])
 
   useEffect(() => {
-    if (firstUnreadMessageId) {
-      if (unreadMessagesBannerRef.current) {
-        unreadMessagesBannerRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        })
+    if (notificationsEnabled) {
+      if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
+        scrollToBanner()
         return
       }
-    } else if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      })
+
+      scrollToBottom()
       return
     }
-  }, [firstUnreadMessageId])
+  }, [firstUnreadMessageId, webchatState.isWebchatOpen, webchatState.typing])
 
   const showScrollButton =
     webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
@@ -94,9 +112,7 @@ export const WebchatMessageList = props => {
         scrollbar={scrollbarOptions}
         autoHide={scrollbarOptions.autoHide}
         ismessagescontainer={true.toString()}
-        style={{
-          ...props.style,
-        }}
+        style={{ flex: 1 }}
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
