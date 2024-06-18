@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { scrollToBottom } from '../../util'
 import { StyledScrollbar } from '../components/styled-scrollbar'
 import { TypingIndicator } from '../components/typing-indicator'
 import { IntroMessage } from './intro-message'
@@ -58,8 +57,6 @@ export const WebchatMessageList = () => {
     messageComponentId === firstUnreadMessageId &&
     webchatState.numUnreadMessages > 0
 
-  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     const firstUnreadMessage = webchatState.messagesComponents.find(
       message => message.props.isUnread
@@ -68,13 +65,16 @@ export const WebchatMessageList = () => {
   }, [webchatState.messagesComponents])
 
   useEffect(() => {
-    if (webchatState.messagesComponents.length > 0 && lastMessageRef.current) {
+    if (
+      webchatState.messagesComponents.length > 0 &&
+      lastMessageBottomRef.current
+    ) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           setLastMessageVisible(entry.isIntersecting)
         })
       })
-      observer.observe(lastMessageRef.current)
+      observer.observe(lastMessageBottomRef.current)
     }
   }, [webchatState.messagesComponents])
 
@@ -123,11 +123,15 @@ export const WebchatMessageList = () => {
                   unreadMessagesBannerRef={unreadMessagesBannerRef}
                 />
               )}
-
-              {index === webchatState.messagesComponents.length - 1 && (
-                <div ref={lastMessageRef} style={{ content: '' }}></div>
-              )}
               {messageComponent}
+              {index === webchatState.messagesComponents.length - 1 && (
+                <div
+                  ref={lastMessageBottomRef}
+                  style={{
+                    content: '',
+                  }}
+                ></div>
+              )}
             </ContainerMessage>
           )
         })}
