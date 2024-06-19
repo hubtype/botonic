@@ -1,13 +1,12 @@
-import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
+import { inputHasTextData } from '../utils'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -75,7 +74,7 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
     return await getContentsByPayload(context)
   }
 
-  if (request.input.data && request.input.type === INPUT.TEXT) {
+  if (inputHasTextData(request.input)) {
     const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
     if (knowledgeBaseContents.length > 0) {
       return knowledgeBaseContents

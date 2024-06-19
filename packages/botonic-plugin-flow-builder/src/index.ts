@@ -40,7 +40,7 @@ import {
 } from './types'
 import { getNodeByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
-import { resolveGetAccessToken } from './utils'
+import { inputHasTextData, resolveGetAccessToken } from './utils'
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flowUrl: string
@@ -80,8 +80,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
 
     const checkUserTextInput =
-      request.input.data &&
-      request.input.type === INPUT.TEXT &&
+      inputHasTextData(request.input) &&
       !request.input.payload &&
       !request.session.is_first_interaction
 

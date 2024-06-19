@@ -3,6 +3,7 @@ import { INPUT } from '@botonic/core'
 import { BOT_ACTION_PAYLOAD_PREFIX, MAIN_FLOW_NAME } from '../constants'
 import { FlowContent } from '../content-fields'
 import { getNodeByUserInput } from '../user-input'
+import { inputHasTextData } from '../utils'
 import { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
@@ -16,7 +17,7 @@ export async function getContentsByFirstInteraction({
   const firstInteractionContents =
     await flowBuilderPlugin.getStartContents(resolvedLocale)
 
-  if (request.input.data && request.input.type === INPUT.TEXT) {
+  if (inputHasTextData(request.input)) {
     const contentsByUserInput = await getContentsByUserInput({
       cmsApi,
       flowBuilderPlugin,

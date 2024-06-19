@@ -1,4 +1,4 @@
-import { Session } from '@botonic/core'
+import { INPUT, Input, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { BotonicPluginFlowBuilderOptions, ProcessEnvNodeEnvs } from './types'
@@ -46,4 +46,8 @@ function resolveObjectKey(object: any, key: string): any {
     return object[key]
   }
   return undefined
+}
+
+export function inputHasTextData(input: Input): boolean {
+  return input.data !== undefined && input.type === INPUT.TEXT
 }

@@ -4,6 +4,7 @@ import { ActionRequest } from '@botonic/react'
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
+import { inputHasTextData } from '../utils'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
@@ -33,8 +34,7 @@ export async function getContentsByKnowledgeBase({
 
   if (
     flowBuilderPlugin.getKnowledgeBaseResponse &&
-    request.input.data &&
-    request.input.type === INPUT.TEXT
+    inputHasTextData(request.input)
   ) {
     const contentsWithKnowledgeResponse =
       await getContentsWithKnowledgeResponse(
