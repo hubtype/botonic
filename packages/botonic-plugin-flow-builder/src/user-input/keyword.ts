@@ -31,7 +31,7 @@ export class KeywordMatcher {
     if (!keywordNode) {
       return undefined
     }
-    this.trackKeywordEvent()
+    await this.trackKeywordEvent()
     return keywordNode
   }
 
