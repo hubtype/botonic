@@ -33,7 +33,7 @@ async function getFallbackNode(cmsApi: FlowBuilderApi, request: ActionRequest) {
   const fallbackNode = cmsApi.getFallbackNode(isFirstFallbackOption)
   request.session.user.extra_data.isFirstFallbackOption = !isFirstFallbackOption
 
-  trackEvent(request, EventAction.Fallback, {
+  await trackEvent(request, EventAction.Fallback, {
     userInput: request.input.data,
     fallbackOut: isFirstFallbackOption ? 1 : 2,
     fallbackMessageId: request.input.message_id,
