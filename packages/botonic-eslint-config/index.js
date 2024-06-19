@@ -97,6 +97,7 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off', // the plugin removes removes type annotations from typescript code :-(
     'unicorn/filename-case': 'off', // React convention is in CamelCase
     'valid-jsdoc': 'off', // function comments hide code complexity (and typescript already have type specifications),
+    '@typescript-eslint/no-explicit-any': 'warn',
   },
   overrides: [
     {
