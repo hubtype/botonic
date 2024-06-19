@@ -753,7 +753,7 @@ export const Webchat = forwardRef((props, ref) => {
               inputRef={textArea}
               name='text'
               onFocus={() => {
-                deviceAdapter.onFocus(host)
+                deviceAdapter.onFocus()
               }}
               onBlur={() => {
                 deviceAdapter.onBlur()
@@ -907,7 +907,7 @@ export const Webchat = forwardRef((props, ref) => {
             </ErrorMessageContainer>
           )}
 
-          <WebchatMessageList style={{ flex: 1 }} host={host} />
+          <WebchatMessageList />
 
           {webchatState.replies &&
             Object.keys(webchatState.replies).length > 0 && (

@@ -2,15 +2,15 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { scrollToBottom } from '../../util'
 import { StyledScrollbar } from '../components/styled-scrollbar'
 import { TypingIndicator } from '../components/typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
 import { ContainerMessage } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
+import { useNotifications } from './use-notifications'
 
-export const WebchatMessageList = props => {
+export const WebchatMessageList = () => {
   const {
     webchatState,
     getThemeProperty,
@@ -25,19 +25,37 @@ export const WebchatMessageList = props => {
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
-  const lastMessageRef = useRef<HTMLDivElement>(null)
+  const lastMessageBottomRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      lastMessageBottomRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
+    }, 100)
+  }
 
   const handleScrollToBottom = () => {
     resetUnreadMessages()
-    scrollToBottom({ host: props.host })
+    scrollToBottom()
+  }
+
+  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBanner = () => {
+    setTimeout(() => {
+      unreadMessagesBannerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }, 100)
   }
 
   const showUnreadMessagesBanner = (messageComponentId: string) =>
     firstUnreadMessageId &&
     messageComponentId === firstUnreadMessageId &&
     webchatState.numUnreadMessages > 0
-
-  const unreadMessagesBannerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const firstUnreadMessage = webchatState.messagesComponents.find(
@@ -47,42 +65,39 @@ export const WebchatMessageList = props => {
   }, [webchatState.messagesComponents])
 
   useEffect(() => {
-    if (webchatState.messagesComponents.length > 0 && lastMessageRef.current) {
+    if (
+      webchatState.messagesComponents.length > 0 &&
+      lastMessageBottomRef.current
+    ) {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           setLastMessageVisible(entry.isIntersecting)
         })
       })
-      observer.observe(lastMessageRef.current)
+      observer.observe(lastMessageBottomRef.current)
     }
   }, [webchatState.messagesComponents])
 
-  useEffect(() => {
-    if (webchatState.isLastMessageVisible && webchatState.typing) {
-      scrollToBottom({ host: props.host })
-    }
-    if (webchatState.isLastMessageVisible) {
-      scrollToBottom({ host: props.host })
-    }
-  }, [webchatState.typing, webchatState.isLastMessageVisible])
+  const { notificationsEnabled } = useNotifications()
 
   useEffect(() => {
-    if (firstUnreadMessageId) {
-      if (unreadMessagesBannerRef.current) {
-        unreadMessagesBannerRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        })
-        return
-      }
-    } else if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      })
+    if (!notificationsEnabled) {
+      scrollToBottom()
       return
     }
-  }, [firstUnreadMessageId])
+  }, [webchatState.typing])
+
+  useEffect(() => {
+    if (notificationsEnabled) {
+      if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
+        scrollToBanner()
+        return
+      }
+
+      scrollToBottom()
+      return
+    }
+  }, [firstUnreadMessageId, webchatState.isWebchatOpen, webchatState.typing])
 
   const showScrollButton =
     webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
@@ -97,9 +112,7 @@ export const WebchatMessageList = props => {
         scrollbar={scrollbarOptions}
         autoHide={scrollbarOptions.autoHide}
         ismessagescontainer={true.toString()}
-        style={{
-          ...props.style,
-        }}
+        style={{ flex: 1 }}
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
@@ -110,11 +123,15 @@ export const WebchatMessageList = props => {
                   unreadMessagesBannerRef={unreadMessagesBannerRef}
                 />
               )}
-
-              {index === webchatState.messagesComponents.length - 1 && (
-                <div ref={lastMessageRef} style={{ content: '' }}></div>
-              )}
               {messageComponent}
+              {index === webchatState.messagesComponents.length - 1 && (
+                <div
+                  ref={lastMessageBottomRef}
+                  style={{
+                    content: '',
+                  }}
+                ></div>
+              )}
             </ContainerMessage>
           )
         })}

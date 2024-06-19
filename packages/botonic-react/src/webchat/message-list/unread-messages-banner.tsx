@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
-import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
 import { ContainerUnreadMessagesBanner } from './styles'
+import { useNotifications } from './use-notifications'
 
 interface UnreadMessagesBannerProps {
   unreadMessagesBannerRef: React.RefObject<HTMLDivElement>
@@ -13,36 +13,10 @@ interface UnreadMessagesBannerProps {
 export const UnreadMessagesBanner = ({
   unreadMessagesBannerRef,
 }: UnreadMessagesBannerProps): JSX.Element => {
-  const { getThemeProperty, webchatState } = useContext(WebchatContext)
+  const { webchatState } = useContext(WebchatContext)
 
-  const CustomUnreadMessagesBanner = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerCustom,
-    undefined
-  )
-
-  const notificationsBannerEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerEnabled,
-    undefined
-  )
-
-  const notificationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsEnabled,
-    CustomUnreadMessagesBanner || notificationsBannerEnabled
-  )
-
-  const text = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerText,
-    'unread messages'
-  )
-
-  useEffect(() => {
-    if (webchatState.isWebchatOpen && unreadMessagesBannerRef.current) {
-      unreadMessagesBannerRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
-    }
-  }, [webchatState.isWebchatOpen, unreadMessagesBannerRef])
+  const { notificationsEnabled, CustomUnreadMessagesBanner, bannerText } =
+    useNotifications()
 
   return (
     <>
@@ -53,7 +27,7 @@ export const UnreadMessagesBanner = ({
           ) : (
             <ContainerUnreadMessagesBanner>
               <img src={resolveImage(ArrowDown)} />
-              {webchatState.numUnreadMessages} {text}
+              {webchatState.numUnreadMessages} {bannerText}
             </ContainerUnreadMessagesBanner>
           )}
         </div>
