@@ -54,6 +54,7 @@ export interface EventFlow extends HtBaseEventProps {
 
 export interface EventHandoff extends HtBaseEventProps {
   action: EventAction.HandoffSuccess | EventAction.HandoffFail
+  flowThreadId?: string
   queueId: string
   queueName: string
   caseId?: string
@@ -64,6 +65,7 @@ export interface EventHandoff extends HtBaseEventProps {
 
 export interface EventHandoffOption extends HtBaseEventProps {
   action: EventAction.HandoffOption
+  flowThreadId?: string
   queueId: string
   queueName: string
 }
