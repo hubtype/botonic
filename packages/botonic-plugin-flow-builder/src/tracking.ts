@@ -37,19 +37,20 @@ export async function trackFlowContent(
 ) {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
-  const firstNodeContent = cmsApi.getNodeById<HtNodeWithContent>(contents[0].id)
-  const flowName = flowBuilderPlugin.getFlowName(firstNodeContent.flow_id)
-  const eventArgs = getContentEventArgs(request, {
-    code: firstNodeContent.code,
-    flowId: firstNodeContent.flow_id,
-    flowName,
-    id: firstNodeContent.id,
-    isMeaningful: firstNodeContent.is_meaningful ?? false,
-  })
-  await trackEvent(request, EventAction.FlowNode, eventArgs)
+  for (const content of contents) {
+    const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
+    const eventArgs = getContentEventArgs(request, {
+      code: nodeContent.code,
+      flowId: nodeContent.flow_id,
+      flowName: flowBuilderPlugin.getFlowName(nodeContent.flow_id),
+      id: nodeContent.id,
+      isMeaningful: nodeContent.is_meaningful ?? false,
+    })
+    await trackEvent(request, EventAction.FlowNode, eventArgs)
+  }
 }
 
-export function getContentEventArgs(
+function getContentEventArgs(
   request: ActionRequest,
   contentInfo: {
     code: string
@@ -59,12 +60,11 @@ export function getContentEventArgs(
     isMeaningful: boolean
   }
 ) {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const flowThreadId = request.session.flow_thread_id ?? uuid()
   return {
     flowThreadId,
     flowId: contentInfo.flowId,
-    flowName: flowBuilderPlugin.getFlowName(contentInfo.flowId),
+    flowName: contentInfo.flowName,
     flowNodeId: contentInfo.id,
     flowNodeContentId: contentInfo.code,
     flowNodeIsMeaningful: contentInfo.isMeaningful,
