@@ -3,6 +3,7 @@ import {
   HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
+  HtEventFeedbackKnowledgebase,
   HtEventFlow,
   HtEventHandoff,
   HtEventHandoffOption,
@@ -24,6 +25,9 @@ export function createHtEvent(
     case EventAction.FeedbackMessage:
     case EventAction.FeedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
+
+    case EventAction.FeedbackKnowledgebase:
+      return new HtEventFeedbackKnowledgebase(htEventProps, requestData)
 
     case EventAction.FlowNode:
       return new HtEventFlow(htEventProps, requestData)
