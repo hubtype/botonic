@@ -5,9 +5,10 @@ import { ContentFieldsBase } from './content-fields-base'
 import { HtKnowledgeBaseNode } from './hubtype-fields'
 
 export class FlowKnowledgeBase extends ContentFieldsBase {
-  public code = ''
+  public code: string = ''
   public sources: string[] = []
-  public text = ''
+  public text: string = ''
+  public inferenceId?: string
 
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)
@@ -18,6 +19,10 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    return <Text key={id}>{this.text}</Text>
+    return (
+      <Text key={id} withfeedback={true} inferenceid={this.inferenceId}>
+        {this.text}
+      </Text>
+    )
   }
 }

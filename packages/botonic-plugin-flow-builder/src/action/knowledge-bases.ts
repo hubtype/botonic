@@ -71,16 +71,17 @@ async function getContentsWithKnowledgeResponse(
     return undefined
   }
 
-  return updateContentsWithAnswer(contents, knowledgeBaseResponse.answer)
+  return updateContentsWithResponse(contents, knowledgeBaseResponse)
 }
 
-function updateContentsWithAnswer(
+function updateContentsWithResponse(
   contents: FlowContent[],
-  answer: string
+  response: KnowledgeBaseResponse
 ): FlowContent[] {
   return contents.map(content => {
     if (content instanceof FlowKnowledgeBase) {
-      content.text = answer
+      content.text = response.answer
+      content.inferenceId = response.inferenceId
     }
 
     return content
