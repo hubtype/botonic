@@ -2,6 +2,7 @@ import { INPUT } from '@botonic/core'
 import React, { Children } from 'react'
 
 import { mapObjectNonBooleanValues } from '../util/react'
+import { TextProps } from './index-types'
 import { serializeMarkdown, toMarkdownChildren } from './markdown'
 import { Message } from './message'
 
@@ -17,7 +18,7 @@ const serializeText = children => {
   return text
 }
 
-const serialize = textProps => {
+const serialize = (textProps: TextProps) => {
   if (!textProps.markdown)
     return {
       text: serializeText(textProps.children),
@@ -25,20 +26,19 @@ const serialize = textProps => {
   return { text: serializeMarkdown(textProps.children) }
 }
 
-/**
- *
- * @param {TextProps} props
- * @returns {JSX.Element}
- */
-export const Text = props => {
+export const Text = (props: TextProps) => {
   const defaultTextProps = {
     markdown: props.markdown === undefined ? true : props.markdown,
+    withfeedback: props.withfeedback,
+    inferenceid: props.inferenceid,
   }
+
   const textProps = mapObjectNonBooleanValues({
     ...props,
     ...defaultTextProps,
     ...{ children: Children.toArray(props.children) },
   })
+
   if (!textProps.markdown)
     return (
       <Message json={serialize(textProps)} {...textProps} type={INPUT.TEXT}>

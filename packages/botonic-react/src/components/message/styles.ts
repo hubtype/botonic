@@ -85,8 +85,6 @@ export const TimestampContainer = styled.div<TimestampContainerProps>`
 
   box-sizing: border-box;
   width: 100%;
-  padding: 0px 15px 4px 15px;
-  padding-top: ${props => (props.isSentByUser ? '0px' : '4px')};
 
   img {
     max-width: 20px;
@@ -102,4 +100,54 @@ export const TimestampText = styled.div<TimestampTextProps>`
   font-size: 10px;
   color: ${COLORS.SOLID_BLACK};
   text-align: ${props => (props.isSentByUser ? 'right' : 'left')};
+`
+
+export const MessageFooterContainer = styled.div<TimestampContainerProps>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 0px 15px 4px 15px;
+  padding-top: ${props => (props.isSentByUser ? '0px' : '4px')};
+  width: 100%;
+`
+
+export const FeedbackMessageContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+
+  box-sizing: border-box;
+`
+
+export const FeedbackButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: none;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 8px;
+  height: 24px;
+  width: 24px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f4f3f4;
+  }
+
+  &:disabled {
+    cursor: default;
+    background: none;
+    opacity: 0.3;
+  }
+
+  &.clicked {
+    opacity: 0;
+    transition: 1s 1s;
+  }
 `

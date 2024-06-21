@@ -12,6 +12,7 @@ import { Button } from '../button'
 import { ButtonsDisabler } from '../buttons-disabler'
 import { getMarkdownStyle, renderLinks, renderMarkdown } from '../markdown'
 import { Reply } from '../reply'
+import { MessageFooter } from './message-footer'
 import { MessageImage } from './message-image'
 import {
   BlobContainer,
@@ -20,7 +21,7 @@ import {
   BlobTickContainer,
   MessageContainer,
 } from './styles'
-import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'
+import { resolveMessageTimestamps } from './timestamps'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
@@ -36,6 +37,8 @@ export const Message = props => {
     style,
     imagestyle = props.imagestyle || props.imageStyle,
     isUnread = true,
+    withfeedback,
+    inferenceid,
     ...otherProps
   } = props
 
@@ -67,8 +70,10 @@ export const Message = props => {
       typeof e === 'string' ? renderLinks(e) : e
     )
 
-  const { timestampsEnabled, getFormattedTimestamp, timestampStyle } =
-    resolveMessageTimestamps(getThemeProperty, enabletimestamps)
+  const { timestampsEnabled, getFormattedTimestamp } = resolveMessageTimestamps(
+    getThemeProperty,
+    enabletimestamps
+  )
 
   const getEnvAck = () => {
     if (isDev) return 1
@@ -111,6 +116,8 @@ export const Message = props => {
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
         isUnread: isUnread === 1 || isUnread === true,
+        withfeedback,
+        inferenceid,
       }
       addMessage(message)
     }
@@ -255,13 +262,15 @@ export const Message = props => {
               {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
             </BlobContainer>
           </MessageContainer>
-          {timestampsEnabled && (
-            <MessageTimestamp
+          {timestampsEnabled || withfeedback ? (
+            <MessageFooter
+              enabletimestamps={timestampsEnabled}
+              messageJSON={messageJSON}
               sentBy={sentBy}
-              style={timestampStyle}
-              timestamp={messageJSON.timestamp}
+              withfeedback={withfeedback}
+              inferenceid={inferenceid}
             />
-          )}
+          ) : null}
         </>
       </ConditionalWrapper>
     )
