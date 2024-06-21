@@ -117,13 +117,20 @@ export interface WebchatArgs {
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onOpen?: (app: WebchatApp, args: any) => void
   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  onTrackEvent?: TrackEventFunction
   persistentMenu?: PersistentMenuTheme
   storage?: Storage | null
   storageKey?: any
   theme?: ThemeProps
 }
 
-// export interface WebchatAppArgs extends WebchatArgs {
+type EventArgs = { [key: string]: any }
+type TrackEventFunction = (
+  request: ActionRequest,
+  eventName: string,
+  args?: EventArgs
+) => Promise<void>
+
 export interface WebchatAppArgs {
   appId?: string
   visibility?: () => boolean
@@ -201,6 +208,7 @@ export interface WebchatContextProps {
   updateUser: (user: Partial<CoreSessionUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   webchatState: WebchatState
+  trackEvent: TrackEventFunction
 }
 
 // export class DevApp extends WebchatApp {

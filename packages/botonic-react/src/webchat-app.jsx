@@ -29,6 +29,7 @@ export class WebchatApp {
     onOpen,
     onClose,
     onMessage,
+    onTrackEvent,
     onConnectionChange,
     appId,
     visibility,
@@ -58,6 +59,7 @@ export class WebchatApp {
     this.onOpen = onOpen
     this.onClose = onClose
     this.onMessage = onMessage
+    this.onTrackEvent = onTrackEvent
     this.onConnectionChange = onConnectionChange
     this.visibility = visibility
     this.server = server
@@ -284,6 +286,7 @@ export class WebchatApp {
       onClose,
       onMessage,
       onConnectionChange,
+      onTrackEvent,
       appId,
       visibility,
       server,
@@ -307,6 +310,7 @@ export class WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.onTrackEvent = onTrackEvent || this.onTrackEvent
     this.onConnectionChange = onConnectionChange || this.onConnectionChange
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
@@ -335,6 +339,7 @@ export class WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
+        onTrackEvent={(...args) => this.onTrackEvent(...args)}
         server={server}
       />
     )

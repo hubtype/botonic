@@ -91,4 +91,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
     return
   },
   webchatState: webchatInitialState,
+  trackEvent: async () => {
+    return
+  },
 })
