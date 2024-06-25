@@ -85,11 +85,63 @@ export class CoreBot {
     session.__locale = locale
   }
 
-  async input({
-    input,
-    session,
-    lastRoutePath,
-  }: BotRequest): Promise<BotResponse> {
+  async input({ input, session, lastRoutePath }: any): Promise<BotResponse> {
+    const output = await this.runInput({ input, session, lastRoutePath })
+    if (!session.is_test_integration) {
+      return output
+    }
+    if (!session._botonic_action?.startsWith('create_test_integration_case:')) {
+      return output
+    }
+
+    const [_, onFinishPayloadId] = session._botonic_action.split(
+      'create_test_integration_case:'
+    )
+
+    const newInput = {
+      ...input,
+      payload: onFinishPayloadId,
+      type: INPUT.POSTBACK,
+      data: undefined,
+      text: undefined,
+    }
+
+    session._botonic_action = undefined
+
+    const newOutput = (this.router as Router).processInput(
+      newInput,
+      output.session,
+      output.lastRoutePath
+    )
+
+    const newRequest = {
+      getString: stringId => this.getString(stringId, session),
+      setLocale: locale => this.setLocale(locale, session),
+      session: session || {},
+      params: newOutput.params || {},
+      input: newInput,
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      lastRoutePath,
+    }
+    const followUpResponse = await this.renderer({
+      request: newRequest,
+      actions: [
+        newOutput.fallbackAction,
+        newOutput.action,
+        newOutput.emptyAction,
+      ],
+    })
+    return {
+      input: newInput,
+      response: output.response.concat(followUpResponse),
+      session,
+      lastRoutePath: newOutput.lastRoutePath,
+    }
+  }
+
+  async runInput({ input, session, lastRoutePath }: any): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
@@ -126,12 +178,12 @@ export class CoreBot {
         this.inspector.routeInspector
       )
     }
-
     const output = (this.router as Router).processInput(
       input,
       session,
       lastRoutePath
     )
+
     const request = {
       getString: stringId => this.getString(stringId, session),
       setLocale: locale => this.setLocale(locale, session),
@@ -143,13 +195,13 @@ export class CoreBot {
       defaultDelay: this.defaultDelay,
       lastRoutePath,
     }
-
     const response = await this.renderer({
       request,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
 
     lastRoutePath = output.lastRoutePath
+
     if (this.plugins) {
       await runPlugins(
         this.plugins,
@@ -162,6 +214,7 @@ export class CoreBot {
     }
 
     session.is_first_interaction = false
+
     return {
       input,
       response,

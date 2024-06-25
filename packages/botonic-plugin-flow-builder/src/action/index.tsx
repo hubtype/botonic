@@ -31,7 +31,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     if (handoffContent) {
       await handoffContent.doHandoff(request)
     }
-
     return { contents }
   }
 

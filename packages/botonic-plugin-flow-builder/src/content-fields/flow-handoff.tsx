@@ -1,5 +1,10 @@
 import { HandOffBuilder, isDev, isWebchat } from '@botonic/core'
-import { ActionRequest, WebchatSettings } from '@botonic/react'
+import {
+  ActionRequest,
+  Multichannel,
+  Text,
+  WebchatSettings,
+} from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -11,6 +16,7 @@ export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
   public onFinishPayload?: string
   public handoffAutoAssign: boolean
+  public isTestIntegration: boolean
 
   static fromHubtypeCMS(
     cmsHandoff: HtHandoffNode,
@@ -51,11 +57,24 @@ export class FlowHandoff extends ContentFieldsBase {
         language: request.session.user.extra_data.language,
         country: request.session.user.extra_data.country,
       })
+      this.isTestIntegration = request.session.is_test_integration
       await handOffBuilder.handOff()
     }
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    if (this.isTestIntegration) {
+      return (
+        <Multichannel key={this.id}>
+          <Text>
+            ℹ️ _At this point, a new case would be created in {this.queue?.name}{' '}
+            queue. To continue with the preview, a case resolved scenario will
+            be simulated._
+          </Text>
+        </Multichannel>
+      )
+    }
+
     return isDev(request.session) || isWebchat(request.session) ? (
       <WebchatSettings key={id} enableUserInput={true} />
     ) : (
