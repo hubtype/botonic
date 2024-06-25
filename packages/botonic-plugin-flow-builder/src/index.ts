@@ -81,7 +81,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
-    request.session.is_test_integration = true
     this.currentRequest = request
     this.cmsApi = await FlowBuilderApi.create({
       url: this.resolveFlowUrl(request),

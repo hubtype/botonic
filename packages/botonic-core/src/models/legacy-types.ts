@@ -248,7 +248,6 @@ export interface BotRequest {
   input: Input
   lastRoutePath: RoutePath
   session: Session
-  followUpAction?: any
 }
 
 /** The response of the bot for the triggered actions, which can be
