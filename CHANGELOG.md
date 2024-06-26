@@ -10,13 +10,25 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.27.X] - aaaa-mm-dd
+## [0.28.X] - aaaa-mm-dd
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.28.X] - aaaa-mm-dd
+
+### Added
+
+- [Project](https://github.com/hubtype/botonic)
+
+  - Added specific behavior for bots having `is_test_integration` defined.
+
+### Changed
+
+### Fixed
 
 ## [0.27.0] - 2024-11-06
 
