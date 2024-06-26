@@ -40,7 +40,6 @@ export class CoreBot {
   theme?: any
 
   constructor({
-    // TODO: Receives dataProvider
     renderer,
     routes,
     locales,
@@ -59,10 +58,7 @@ export class CoreBot {
       typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
     this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
     this.locales = locales
-    if (appId) {
-      this.appId = appId
-      return
-    }
+    this.appId = appId || undefined
     this.rootElement = null
     this.inspector = inspector || new Inspector()
     this.routes = routes
@@ -133,6 +129,7 @@ export class CoreBot {
         newOutput.emptyAction,
       ],
     })
+
     return {
       input: newInput,
       response: output.response.concat(followUpResponse),
