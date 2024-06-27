@@ -3,6 +3,7 @@ import { HtEvent } from './ht-event'
 
 export class HtEventHandoff extends HtEvent {
   action: EventAction.HandoffSuccess | EventAction.HandoffFail
+  flow_thread_id?: string
   handoff_queue_id: string
   handoff_queue_name: string
   handoff_case_id?: string
@@ -14,6 +15,7 @@ export class HtEventHandoff extends HtEvent {
     super(event, requestData)
     this.type = EventType.BotEvent
     this.action = event.action
+    this.flow_thread_id = event.flowThreadId
     this.handoff_queue_id = event.queueId
     this.handoff_queue_name = event.queueName
     this.handoff_case_id = event.caseId
