@@ -5,7 +5,7 @@ export const staticAsset = path => {
   try {
     if (isURL(path)) return path // Webpack 5 >= fully resolves absolute path to assets
     const scriptBaseURL = document
-      .querySelector('script[src$="webchat.botonic.js"]')
+      .querySelector('script[src*="webchat.botonic.js"]')
       .getAttribute('src')
     const scriptName = scriptBaseURL.split('/').pop()
     const basePath = scriptBaseURL.replace('/' + scriptName, '/')
