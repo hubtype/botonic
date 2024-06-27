@@ -19,16 +19,43 @@ export function useWebviewContents({
   botId,
   webviewId,
   locale,
+  mapContents,
 }: UseWebviewContentsProps): UseWebviewContents {
   const [textContents, setTextContents] = useState<WebviewTextContent[]>()
   const [imageContents, setImageContents] = useState<WebviewImageContent[]>()
+  const [contents, setContents] = useState({})
   const [currentLocale, setCurrentLocale] = useState(locale)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+
+  const getTextContent = (contentID: string): string => {
+    return (
+      textContents
+        ?.find(textContent => textContent.code === contentID)
+        ?.content.text.find(text => text.locale === currentLocale)?.message ||
+      ''
+    )
+  }
+
+  const getImageSrc = (contentID: string): string => {
+    return (
+      imageContents
+        ?.find(imageContent => imageContent.code === contentID)
+        ?.content.image.find(image => image.locale === currentLocale)?.file ||
+      ''
+    )
+  }
+
+  const createContentsObject = () => {
+    const contentsObject = {}
+    for (const [key, value] of Object.entries(mapContents)) {
+      contentsObject[key] = getTextContent(value)
+    }
+    setContents(contentsObject)
+  }
 
   useEffect(() => {
     const getResponseContents = async () => {
-      setLoading(true)
       const url = `${apiUrl}/webview/${version}`
       try {
         const response = await axios.get<WebviewContentsResponse>(url, {
@@ -44,6 +71,7 @@ export function useWebviewContents({
           webviewContent => webviewContent.type === WebviewContentType.IMAGE
         ) as WebviewImageContent[]
         setImageContents(imageResponseContents)
+        createContentsObject()
       } catch (error) {
         console.error('Error fetching webview contents:', error)
         setError(true)
@@ -54,18 +82,6 @@ export function useWebviewContents({
     getResponseContents()
   }, [])
 
-  const getTextContent = (contentID: string): string | undefined => {
-    return textContents
-      ?.find(textContent => textContent.code === contentID)
-      ?.content.text.find(text => text.locale === currentLocale)?.message
-  }
-
-  const getImageSrc = (contentID: string): string | undefined => {
-    return imageContents
-      ?.find(imageContent => imageContent.code === contentID)
-      ?.content.image.find(image => image.locale === currentLocale)?.file
-  }
-
   return {
     isLoading,
     error,
@@ -73,6 +89,7 @@ export function useWebviewContents({
       getTextContent,
       getImageSrc,
       setCurrentLocale,
+      contents,
     },
   }
 }

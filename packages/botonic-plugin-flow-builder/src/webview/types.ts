@@ -32,6 +32,7 @@ export interface UseWebviewContentsProps {
   botId: string
   webviewId: string
   locale: string
+  mapContents: Record<string, string>
 }
 
 export interface UseWebviewContents {
@@ -41,7 +42,8 @@ export interface UseWebviewContents {
 }
 
 export interface WebviewContentsContextType {
-  getTextContent: (code: string) => string | undefined
-  getImageSrc: (code: string) => string | undefined
+  getTextContent: (code: string) => string
+  getImageSrc: (code: string) => string
   setCurrentLocale: (locale: string) => void
+  contents: Record<string, string>
 }

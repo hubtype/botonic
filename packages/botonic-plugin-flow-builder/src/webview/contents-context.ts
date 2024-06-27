@@ -4,8 +4,9 @@ import { WebviewContentsContextType } from './types'
 
 export const WebviewContentsContext = createContext<WebviewContentsContextType>(
   {
-    getTextContent: () => undefined,
-    getImageSrc: () => undefined,
+    getTextContent: () => '',
+    getImageSrc: () => '',
     setCurrentLocale: () => undefined,
+    contents: {},
   }
 )
