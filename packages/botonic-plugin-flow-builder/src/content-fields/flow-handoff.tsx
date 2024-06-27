@@ -1,4 +1,4 @@
-import { HandOffBuilder } from '@botonic/core'
+import { HandOffBuilder, isDev, isWebchat } from '@botonic/core'
 import { ActionRequest, WebchatSettings } from '@botonic/react'
 import React from 'react'
 
@@ -55,7 +55,11 @@ export class FlowHandoff extends ContentFieldsBase {
     }
   }
 
-  toBotonic(): JSX.Element {
-    return <WebchatSettings enableUserInput={true} />
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    return isDev(request.session) || isWebchat(request.session) ? (
+      <WebchatSettings key={id} enableUserInput={true} />
+    ) : (
+      <></>
+    )
   }
 }
