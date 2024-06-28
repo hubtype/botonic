@@ -1,7 +1,7 @@
-import { INPUT } from '@botonic/core'
-
+import { FlowBuilderApi } from '../api'
 import { BOT_ACTION_PAYLOAD_PREFIX, MAIN_FLOW_NAME } from '../constants'
 import { FlowContent } from '../content-fields'
+import BotonicPluginFlowBuilder from '../index'
 import { getNodeByUserInput } from '../user-input'
 import { inputHasTextData } from '../utils'
 import { FlowBuilderContext } from './index'
@@ -45,9 +45,7 @@ async function getContentsByUserInput({
   )
 
   request.input.payload = cmsApi.getPayload(nodeByUserInput?.target)
-  const conversationStartId = cmsApi.flow.flows.find(
-    flow => flow.name === MAIN_FLOW_NAME
-  )?.start_node_id
+  const conversationStartId = getConversationStartId(cmsApi)
 
   if (request.input.payload === conversationStartId) {
     return []
@@ -66,6 +64,16 @@ async function getContentsByUserInput({
     resolvedLocale,
   })
 
+  const hasRepeatedContent = await checkRepetedContents(
+    flowBuilderPlugin,
+    resolvedLocale,
+    contentsByKeywordsOrIntents
+  )
+
+  if (hasRepeatedContent) {
+    return []
+  }
+
   if (contentsByKeywordsOrIntents.length > 0) {
     return contentsByKeywordsOrIntents
   }
@@ -76,4 +84,28 @@ async function getContentsByUserInput({
     request,
     resolvedLocale,
   })
+}
+
+function getConversationStartId(cmsApi: FlowBuilderApi) {
+  const conversationStartId = cmsApi.flow.flows.find(
+    flow => flow.name === MAIN_FLOW_NAME
+  )?.start_node_id
+
+  return conversationStartId
+}
+
+async function checkRepetedContents(
+  flowBuilderPlugin: BotonicPluginFlowBuilder,
+  resolvedLocale: string,
+  contentsByKeywordsOrIntents: FlowContent[]
+) {
+  const startContents = await flowBuilderPlugin.getStartContents(resolvedLocale)
+  const contentIds = new Set(
+    contentsByKeywordsOrIntents.map(content => content.id)
+  )
+  const hasRepeatedContent = startContents.some(content =>
+    contentIds.has(content.id)
+  )
+
+  return hasRepeatedContent
 }
