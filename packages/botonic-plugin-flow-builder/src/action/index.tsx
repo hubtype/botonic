@@ -1,15 +1,16 @@
-import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
+import { inputHasTextData } from '../utils'
 import { getContentsByFallback } from './fallback'
+import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
+import { getContentsByPayload } from './payload'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -66,15 +67,18 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
   }
 
   if (request.session.is_first_interaction) {
-    return await flowBuilderPlugin.getStartContents(resolvedLocale)
+    return await getContentsByFirstInteraction(context)
   }
 
   if (request.input.payload) {
     return await getContentsByPayload(context)
   }
 
-  if (request.input.data && request.input.type === INPUT.TEXT) {
-    return await getContentsByKnowledgeBase(context)
+  if (inputHasTextData(request.input)) {
+    const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
+    if (knowledgeBaseContents.length > 0) {
+      return knowledgeBaseContents
+    }
   }
 
   return await getContentsByFallback(context)
@@ -85,21 +89,4 @@ export interface FlowBuilderContext {
   flowBuilderPlugin: BotonicPluginFlowBuilder
   request: ActionRequest
   resolvedLocale: string
-}
-
-async function getContentsByPayload({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
-  const targetNode = request.input.payload
-    ? cmsApi.getNodeById<HtNodeWithContent>(request.input.payload)
-    : undefined
-
-  if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
-  }
-
-  return []
 }

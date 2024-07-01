@@ -1,10 +1,9 @@
-import { INPUT } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
-import { getContentsByFallback } from './fallback'
+import { inputHasTextData } from '../utils'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
@@ -16,12 +15,7 @@ export async function getContentsByKnowledgeBase({
   const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
 
   if (!startNodeKnowledeBaseFlow) {
-    return await getContentsByFallback({
-      cmsApi,
-      flowBuilderPlugin,
-      request,
-      resolvedLocale,
-    })
+    return []
   }
 
   const contents = await flowBuilderPlugin.getContentsByNode(
@@ -39,8 +33,7 @@ export async function getContentsByKnowledgeBase({
 
   if (
     flowBuilderPlugin.getKnowledgeBaseResponse &&
-    request.input.data &&
-    request.input.type === INPUT.TEXT
+    inputHasTextData(request.input)
   ) {
     const contentsWithKnowledgeResponse =
       await getContentsWithKnowledgeResponse(
@@ -55,12 +48,7 @@ export async function getContentsByKnowledgeBase({
     }
   }
 
-  return await getContentsByFallback({
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-  })
+  return []
 }
 
 async function getContentsWithKnowledgeResponse(
@@ -113,9 +101,11 @@ async function trackKnowledgeBase(
   const knowledgebaseMessageId = request.input.message_id
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
+
   if (!response.isFaithuful) {
     knowledgebaseFailReason = KnowledgebaseFailReason.Hallucination
   }
+
   if (!response.hasKnowledge) {
     knowledgebaseFailReason = KnowledgebaseFailReason.NoKnowledge
   }

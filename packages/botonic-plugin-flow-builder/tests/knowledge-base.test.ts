@@ -3,37 +3,31 @@ import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src'
 import { ProcessEnvNodeEnvs } from '../src/types'
+// eslint-disable-next-line jest/no-mocks-import
+import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
 import { knowledgeBaseTestFlow } from './helpers/flows/knowledge-base'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
 describe('Check the contents returned by the plugin when it use a knowledge base', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
-  test('When the knowledge base answer is correct, (with knowledge and without hallucinations) the answer is used to display a knowledge base node', async () => {
-    const userInput = 'What is Flow Builder?'
-    const mockKnowledgeBaseResponse = jest.fn(() => {
-      return Promise.resolve({
-        inferenceId: 'inferenceId',
-        question: userInput,
-        answer:
-          'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
-        hasKnowledge: true,
-        isFaithuful: true,
-        sources: [
-          {
-            knowledgeBaseId: 'knowledgeBaseId',
-            knowledgeSourceId: 'knowledgeSourceId',
-            knowledgeChunkId: 'knowledgeChunkId',
-          },
-        ],
-      })
-    })
+  const userInput = 'What is Flow Builder?'
+  const language = 'es'
+  const country = 'ES'
+  const locale = `${language}-${country}`
 
+  test('When the knowledge base answer is correct, (with knowledge and without hallucinations) the answer is used to display a knowledge base node', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale: 'es-ES',
-        getKnowledgeBaseResponse: mockKnowledgeBaseResponse,
+        locale,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          userInput,
+          answer:
+            'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
+          hasKnowledge: true,
+          isFaithuful: true,
+        }),
       },
       requestArgs: {
         input: {
@@ -41,8 +35,8 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           type: INPUT.TEXT,
         },
         extraData: {
-          language: 'es',
-          country: 'ES',
+          language,
+          country,
         },
       },
     })
@@ -100,29 +94,16 @@ describe('Check the contents returned by the plugin when it use a knowledge base
   })
 
   test("When the knowledge base's response does not have sufficient knowledge, the fallback content is displayed.", async () => {
-    const userInput = 'What is Flow Builder?'
-    const mockKnowledgeBaseResponse = jest.fn(() => {
-      return Promise.resolve({
-        inferenceId: 'inferenceId',
-        question: userInput,
-        answer: 'This answer is incorrect',
-        hasKnowledge: false,
-        isFaithuful: true,
-        sources: [
-          {
-            knowledgeBaseId: 'knowledgeBaseId',
-            knowledgeSourceId: 'knowledgeSourceId',
-            knowledgeChunkId: 'knowledgeChunkId',
-          },
-        ],
-      })
-    })
-
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale: 'es-ES',
-        getKnowledgeBaseResponse: mockKnowledgeBaseResponse,
+        locale,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          userInput,
+          answer: 'This answer is incorrect',
+          hasKnowledge: false,
+          isFaithuful: true,
+        }),
       },
       requestArgs: {
         input: {
@@ -130,8 +111,8 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           type: INPUT.TEXT,
         },
         extraData: {
-          language: 'es',
-          country: 'ES',
+          language,
+          country,
         },
       },
     })

@@ -7,6 +7,7 @@ import {
   HtKeywordNode,
   HtSmartIntentNode,
 } from '../content-fields/hubtype-fields'
+import { inputHasTextData } from '../utils'
 import { getIntentNodeByInput } from './intent'
 import { KeywordMatcher } from './keyword'
 import { SmartIntentsApi, SmartIntentsInferenceConfig } from './smart-intent'
@@ -17,14 +18,16 @@ export async function getNodeByUserInput(
   request: ActionRequest,
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<HtSmartIntentNode | HtIntentNode | HtKeywordNode | undefined> {
-  if (request.input.data && request.input.type === INPUT.TEXT) {
+  if (inputHasTextData(request.input)) {
     const keywordMatcher = new KeywordMatcher({
       cmsApi,
       locale,
       request,
     })
-    const keywordNode = await keywordMatcher.getNodeByInput(request.input.data)
-    if (keywordNode) return keywordNode
+    const keywordNode = await keywordMatcher.getNodeByInput(request.input.data!)
+    if (keywordNode) {
+      return keywordNode
+    }
 
     const smartIntentsApi = new SmartIntentsApi(
       cmsApi,
@@ -32,10 +35,15 @@ export async function getNodeByUserInput(
       smartIntentsConfig
     )
     const smartIntentNode = await smartIntentsApi.getNodeByInput()
-    if (smartIntentNode) return smartIntentNode
+    if (smartIntentNode) {
+      return smartIntentNode
+    }
 
     const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
-    if (intentNode) return intentNode
+    if (intentNode) {
+      return intentNode
+    }
   }
+
   return undefined
 }
