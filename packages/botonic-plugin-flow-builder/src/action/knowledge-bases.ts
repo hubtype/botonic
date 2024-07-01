@@ -1,4 +1,3 @@
-import { INPUT } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
@@ -102,9 +101,11 @@ async function trackKnowledgeBase(
   const knowledgebaseMessageId = request.input.message_id
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
+
   if (!response.isFaithuful) {
     knowledgebaseFailReason = KnowledgebaseFailReason.Hallucination
   }
+
   if (!response.hasKnowledge) {
     knowledgebaseFailReason = KnowledgebaseFailReason.NoKnowledge
   }

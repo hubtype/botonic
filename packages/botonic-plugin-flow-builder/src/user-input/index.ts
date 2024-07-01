@@ -25,7 +25,9 @@ export async function getNodeByUserInput(
       request,
     })
     const keywordNode = await keywordMatcher.getNodeByInput(request.input.data!)
-    if (keywordNode) return keywordNode
+    if (keywordNode) {
+      return keywordNode
+    }
 
     const smartIntentsApi = new SmartIntentsApi(
       cmsApi,
@@ -33,10 +35,15 @@ export async function getNodeByUserInput(
       smartIntentsConfig
     )
     const smartIntentNode = await smartIntentsApi.getNodeByInput()
-    if (smartIntentNode) return smartIntentNode
+    if (smartIntentNode) {
+      return smartIntentNode
+    }
 
     const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
-    if (intentNode) return intentNode
+    if (intentNode) {
+      return intentNode
+    }
   }
+
   return undefined
 }
