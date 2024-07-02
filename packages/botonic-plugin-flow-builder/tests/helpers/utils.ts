@@ -47,6 +47,7 @@ interface RequestArgs {
   plugins?: ResolvedPlugins
   provider?: ProviderType
   isFirstInteraction?: boolean
+  isTestIntegration?: boolean
   extraData?: any
 }
 
@@ -55,11 +56,13 @@ export function createRequest({
   plugins = {},
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
+  isTestIntegration = false,
   extraData = {},
 }: RequestArgs): PluginPreRequest {
   return {
     session: {
       is_first_interaction: isFirstInteraction,
+      is_test_integration: isTestIntegration,
       organization: 'orgTest',
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
