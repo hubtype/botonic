@@ -29,13 +29,13 @@ export const MessageFeedback = ({ inferenceid, messageId }: RatingProps) => {
     negative: false,
   })
 
-  const updateMsgWithFeedback = (withfeedback: boolean) => {
+  const updateMsgWithFeedback = (feedbackenabled: boolean) => {
     const message = webchatState.messagesJSON.find(
       message => message.id === messageId
     )
     const updatedMsg = {
       ...message,
-      withfeedback,
+      feedbackenabled,
     }
     updateMessage(updatedMsg)
   }

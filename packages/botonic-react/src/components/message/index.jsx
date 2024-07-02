@@ -37,7 +37,7 @@ export const Message = props => {
     style,
     imagestyle = props.imagestyle || props.imageStyle,
     isUnread = true,
-    withfeedback,
+    feedbackenabled,
     inferenceid,
     ...otherProps
   } = props
@@ -116,7 +116,7 @@ export const Message = props => {
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
         isUnread: isUnread === 1 || isUnread === true,
-        withfeedback,
+        feedbackenabled,
         inferenceid,
       }
       addMessage(message)
@@ -262,12 +262,12 @@ export const Message = props => {
               {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
             </BlobContainer>
           </MessageContainer>
-          {timestampsEnabled || withfeedback ? (
+          {timestampsEnabled || feedbackenabled ? (
             <MessageFooter
               enabletimestamps={timestampsEnabled}
               messageJSON={messageJSON}
               sentBy={sentBy}
-              withfeedback={withfeedback}
+              feedbackenabled={feedbackenabled}
               inferenceid={inferenceid}
             />
           ) : null}

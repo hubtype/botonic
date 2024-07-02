@@ -29,7 +29,7 @@ export interface MessageProps {
 export interface TextProps extends MessageProps {
   // converts markdown syntax to HTML
   markdown?: boolean
-  withfeedback?: boolean
+  feedbackenabled?: boolean
   inferenceid?: string
 }
 

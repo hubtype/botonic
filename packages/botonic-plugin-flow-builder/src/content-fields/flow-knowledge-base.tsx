@@ -6,7 +6,7 @@ import { HtKnowledgeBaseNode } from './hubtype-fields'
 
 export class FlowKnowledgeBase extends ContentFieldsBase {
   public code: string = ''
-  public acceptFeedback: boolean = false
+  public feedbackEnabled: boolean = false
   public sources: string[] = []
   public text: string = ''
   public inferenceId?: string
@@ -14,7 +14,7 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)
     newKnowledgeBase.code = component.code
-    newKnowledgeBase.acceptFeedback = component.content.accept_feedback
+    newKnowledgeBase.feedbackEnabled = component.content.feedback_enabled
     newKnowledgeBase.sources = component.content.sources
 
     return newKnowledgeBase
@@ -24,7 +24,7 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
     return (
       <Text
         key={id}
-        withfeedback={this.acceptFeedback}
+        feedbackenabled={this.feedbackEnabled}
         inferenceid={this.inferenceId}
       >
         {this.text}
