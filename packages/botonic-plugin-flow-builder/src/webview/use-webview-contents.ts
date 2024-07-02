@@ -48,13 +48,15 @@ export function useWebviewContents<T>({
     )
   }
 
-  const createContentsObject = () => {
-    const contentsObject = {} as Record<keyof T, string>
-    for (const [key, value] of Object.entries<string>(mapContents)) {
-      contentsObject[key] = getTextContent(value) || getImageSrc(value)
+  useEffect(() => {
+    if (textContents || imageContents) {
+      const contentsObject = {} as Record<keyof T, string>
+      for (const [key, value] of Object.entries<string>(mapContents)) {
+        contentsObject[key] = getTextContent(value) || getImageSrc(value)
+      }
+      setContents(contentsObject)
     }
-    setContents(contentsObject)
-  }
+  }, [textContents, imageContents, currentLocale])
 
   useEffect(() => {
     const getResponseContents = async () => {
@@ -73,7 +75,6 @@ export function useWebviewContents<T>({
           webviewContent => webviewContent.type === WebviewContentType.IMAGE
         ) as WebviewImageContent[]
         setImageContents(imageResponseContents)
-        createContentsObject()
       } catch (error) {
         console.error('Error fetching webview contents:', error)
         setError(true)
