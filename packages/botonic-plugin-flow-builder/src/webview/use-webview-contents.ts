@@ -12,7 +12,7 @@ import {
   WebviewTextContent,
 } from './types'
 
-export function useWebviewContents({
+export function useWebviewContents<T>({
   apiUrl = FLOW_BUILDER_API_URL_PROD,
   version = FlowBuilderJSONVersion.LATEST,
   orgId,
@@ -20,10 +20,12 @@ export function useWebviewContents({
   webviewId,
   locale,
   mapContents,
-}: UseWebviewContentsProps): UseWebviewContents {
+}: UseWebviewContentsProps<T>): UseWebviewContents<T> {
   const [textContents, setTextContents] = useState<WebviewTextContent[]>()
   const [imageContents, setImageContents] = useState<WebviewImageContent[]>()
-  const [contents, setContents] = useState({})
+  const [contents, setContents] = useState<Record<keyof T, string>>(
+    {} as Record<keyof T, string>
+  )
   const [currentLocale, setCurrentLocale] = useState(locale)
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -47,9 +49,9 @@ export function useWebviewContents({
   }
 
   const createContentsObject = () => {
-    const contentsObject = {}
-    for (const [key, value] of Object.entries(mapContents)) {
-      contentsObject[key] = getTextContent(value)
+    const contentsObject = {} as Record<keyof T, string>
+    for (const [key, value] of Object.entries<string>(mapContents)) {
+      contentsObject[key] = getTextContent(value) || getImageSrc(value)
     }
     setContents(contentsObject)
   }
