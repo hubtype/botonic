@@ -33,24 +33,24 @@ export interface EventFeedback extends HtBaseEventProps {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  feedbackTargetId?: string
-  feedbackGroupId?: string
+  feedbackTargetId: string
+  feedbackGroupId: string
   possibleOptions: string[]
-  possibleValues: number[]
+  possibleValues?: number[]
   option: string
-  value: number
+  value?: number
   comment?: string
 }
 
 export interface EventFeedbackKnowledgebase extends HtBaseEventProps {
   action: EventAction.FeedbackKnowledgebase
   knowledgebaseInferenceId: string
-  feedbackTargetId?: string
-  feedbackGroupId?: string
+  feedbackTargetId: string
+  feedbackGroupId: string
   possibleOptions: string[]
-  possibleValues: number[]
+  possibleValues?: number[]
   option: string
-  value: number
+  value?: number
   comment?: string
 }
 

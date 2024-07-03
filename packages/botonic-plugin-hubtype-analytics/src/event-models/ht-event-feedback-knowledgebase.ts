@@ -9,12 +9,12 @@ import { HtEvent } from './ht-event'
 export class HtEventFeedbackKnowledgebase extends HtEvent {
   action: EventAction.FeedbackKnowledgebase
   knowledgebase_inference_id: string
-  feedback_target_id?: string
-  feedback_group_id?: string
+  feedback_target_id: string
+  feedback_group_id: string
   possible_options: string[]
-  possible_values: number[]
+  possible_values?: number[]
   option: string
-  value: number
+  value?: number
   comment?: string
 
   constructor(event: EventFeedbackKnowledgebase, requestData: RequestData) {
@@ -22,8 +22,8 @@ export class HtEventFeedbackKnowledgebase extends HtEvent {
     this.type = EventType.WebEvent
     this.action = event.action
     this.knowledgebase_inference_id = event.knowledgebaseInferenceId
-    this.feedback_target_id = event.feedbackTargetId // ?? case_id, message_id, conversation_id ???, webview_name
-    this.feedback_group_id = event.feedbackGroupId // ??
+    this.feedback_target_id = event.feedbackTargetId
+    this.feedback_group_id = event.feedbackGroupId
     this.possible_options = event.possibleOptions
     this.possible_values = event.possibleValues
     this.option = event.option

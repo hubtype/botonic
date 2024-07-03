@@ -6,7 +6,8 @@ describe('Create feedback knowledgebase event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
       action: EventAction.FeedbackKnowledgebase,
-      messageGeneratedById: 'messageIdTest',
+      feedbackTargetId: 'messageIdTest',
+      feedbackGroupId: 'groupIdTest',
       knowledgebaseInferenceId: 'knowledgebaseInferenceIdTest',
       possibleOptions: ['thumbs_down', 'thumbs_up'],
       possibleValues: [0, 1],
@@ -20,7 +21,8 @@ describe('Create feedback knowledgebase event', () => {
       chat_country: 'ES',
       format_version: 2,
       action: EventAction.FeedbackKnowledgebase,
-      message_generated_by_id: 'messageIdTest',
+      feedback_target_id: 'messageIdTest',
+      feedback_group_id: 'groupIdTest',
       knowledgebase_inference_id: 'knowledgebaseInferenceIdTest',
       possible_options: ['thumbs_down', 'thumbs_up'],
       possible_values: [0, 1],
