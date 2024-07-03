@@ -10,16 +10,16 @@ interface MessageFooterProps {
   enabletimestamps: boolean
   messageJSON: any
   sentBy: SENDERS
-  feedbackenabled: boolean
-  inferenceid?: string
+  feedbackEnabled: boolean
+  inferenceId?: string
 }
 
 export const MessageFooter = ({
   enabletimestamps,
   messageJSON,
   sentBy,
-  feedbackenabled,
-  inferenceid,
+  feedbackEnabled,
+  inferenceId,
 }: MessageFooterProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
@@ -44,8 +44,8 @@ export const MessageFooter = ({
           timestamp={messageJSON.timestamp}
         />
       ) : null}
-      {feedbackenabled ? (
-        <MessageFeedback inferenceid={inferenceid} messageId={messageJSON.id} />
+      {feedbackEnabled ? (
+        <MessageFeedback inferenceId={inferenceId} messageId={messageJSON.id} />
       ) : null}
     </MessageFooterContainer>
   )

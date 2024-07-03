@@ -29,8 +29,8 @@ const serialize = (textProps: TextProps) => {
 export const Text = (props: TextProps) => {
   const defaultTextProps = {
     markdown: props.markdown === undefined ? true : props.markdown,
-    feedbackenabled: props.feedbackenabled,
-    inferenceid: props.inferenceid,
+    feedbackEnabled: props.feedbackEnabled,
+    inferenceId: props.inferenceId,
   }
 
   const textProps = mapObjectNonBooleanValues({

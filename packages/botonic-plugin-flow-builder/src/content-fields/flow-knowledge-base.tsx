@@ -24,8 +24,8 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
     return (
       <Text
         key={id}
-        feedbackenabled={this.feedbackEnabled}
-        inferenceid={this.inferenceId}
+        feedbackEnabled={this.feedbackEnabled}
+        inferenceId={this.inferenceId}
       >
         {this.text}
       </Text>

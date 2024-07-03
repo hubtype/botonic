@@ -29,8 +29,8 @@ export interface MessageProps {
 export interface TextProps extends MessageProps {
   // converts markdown syntax to HTML
   markdown?: boolean
-  feedbackenabled?: boolean
-  inferenceid?: string
+  feedbackEnabled?: boolean
+  inferenceId?: string
 }
 
 export interface Webview {

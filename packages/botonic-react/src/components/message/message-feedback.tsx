@@ -15,11 +15,11 @@ interface ButtonsState {
 }
 
 interface RatingProps {
-  inferenceid?: string
+  inferenceId?: string
   messageId: string
 }
 
-export const MessageFeedback = ({ inferenceid, messageId }: RatingProps) => {
+export const MessageFeedback = ({ inferenceId, messageId }: RatingProps) => {
   const { webchatState, updateMessage, trackEvent } = useContext(WebchatContext)
   const request = useContext(RequestContext)
 
@@ -29,13 +29,13 @@ export const MessageFeedback = ({ inferenceid, messageId }: RatingProps) => {
     negative: false,
   })
 
-  const updateMsgWithFeedback = (feedbackenabled: boolean) => {
+  const updateMsgWithFeedback = (feedbackEnabled: boolean) => {
     const message = webchatState.messagesJSON.find(
       message => message.id === messageId
     )
     const updatedMsg = {
       ...message,
-      feedbackenabled,
+      feedbackEnabled,
     }
     updateMessage(updatedMsg)
   }
@@ -63,7 +63,7 @@ export const MessageFeedback = ({ inferenceid, messageId }: RatingProps) => {
     }
 
     const args = {
-      knowledgebaseInferenceId: inferenceid,
+      knowledgebaseInferenceId: inferenceId,
       feedbackTargetId: messageId,
       feedbackGroupId: uuid(),
       possibleOptions: [FeedbackOption.ThumbsUp, FeedbackOption.ThumbsDown],
