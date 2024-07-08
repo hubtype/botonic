@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { WebviewContentsContextType } from './types'
+import { MapContentsType, WebviewContentsContextType } from './types'
 
 /* 
    Define a generic type parameter for your context
@@ -26,7 +26,7 @@ import { WebviewContentsContextType } from './types'
 
     const { contents } = useContext(MyWebviewContentsContext)
 */
-export const WebviewContentsContext = <T>() =>
+export const createWebviewContentsContext = <T extends MapContentsType>() =>
   createContext<WebviewContentsContextType<T>>({
     getTextContent: () => '',
     getImageSrc: () => '',
