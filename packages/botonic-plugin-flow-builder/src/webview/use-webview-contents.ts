@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { FLOW_BUILDER_API_URL_PROD } from '../constants'
 import { FlowBuilderJSONVersion } from '../types'
 import {
+  MapContentsType,
   UseWebviewContents,
   UseWebviewContentsProps,
   WebviewContentsResponse,
@@ -12,7 +13,7 @@ import {
   WebviewTextContent,
 } from './types'
 
-export function useWebviewContents<T>({
+export function useWebviewContents<T extends MapContentsType>({
   apiUrl = FLOW_BUILDER_API_URL_PROD,
   version = FlowBuilderJSONVersion.LATEST,
   orgId,
@@ -50,11 +51,11 @@ export function useWebviewContents<T>({
 
   useEffect(() => {
     if (textContents || imageContents) {
-      const contentsObject = {} as Record<keyof T, string>
+      const contentsObject = {}
       for (const [key, value] of Object.entries<string>(mapContents)) {
         contentsObject[key] = getTextContent(value) || getImageSrc(value)
       }
-      setContents(contentsObject)
+      setContents(contentsObject as Record<keyof T, string>)
     }
   }, [textContents, imageContents, currentLocale])
 
