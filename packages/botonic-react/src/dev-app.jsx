@@ -26,6 +26,7 @@ export class DevApp extends WebchatApp {
     onOpen,
     onClose,
     onMessage,
+    onTrackEvent,
     ...botOptions
   }) {
     super({
@@ -45,6 +46,7 @@ export class DevApp extends WebchatApp {
       onOpen,
       onClose,
       onMessage,
+      onTrackEvent,
     })
     this.bot = new ReactBot({
       ...botOptions,
@@ -67,6 +69,7 @@ export class DevApp extends WebchatApp {
       onOpen,
       onClose,
       onMessage,
+      onTrackEvent,
       hostId,
       ...webchatOptions
     } = optionsAtRuntime
@@ -84,6 +87,7 @@ export class DevApp extends WebchatApp {
     this.onOpen = onOpen || this.onOpen
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
+    this.onTrackEvent = onTrackEvent || this.onTrackEvent
     this.hostId = hostId || this.hostId
     this.createRootElement(host)
     return (
@@ -108,6 +112,7 @@ export class DevApp extends WebchatApp {
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
+        onTrackEvent={(...args) => this.onTrackEvent(...args)}
       />
     )
   }

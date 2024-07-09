@@ -880,6 +880,7 @@ export const Webchat = forwardRef((props, ref) => {
         updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
         webchatState,
+        trackEvent: props.onTrackEvent,
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}

@@ -1,4 +1,4 @@
-import React, { ErrorInfo } from 'react'
+import React from 'react'
 
 import { SENDERS } from '../index-types'
 import { CoverComponentProps } from '../webchat/index-types'
@@ -29,6 +29,8 @@ export interface MessageProps {
 export interface TextProps extends MessageProps {
   // converts markdown syntax to HTML
   markdown?: boolean
+  feedbackEnabled?: boolean
+  inferenceId?: string
 }
 
 export interface Webview {
@@ -204,21 +206,3 @@ export interface WebchatSettingsProps {
 export type WrappedComponent<Props> = React.FunctionComponent<Props> & {
   customTypeName: string
 }
-
-// TODO: Reuse types to be typed in respective functions
-// export class ErrorBoundary<Props> extends React.Component<Props> {
-//   componentDidCatch(error: Error, errorInfo: ErrorInfo): void
-// }
-
-// export function createErrorBoundary<Props>(_?: {
-//   errorComponent: React.ComponentType
-// }): ErrorBoundary<Props>
-
-// export function customMessage<Props>(_: {
-//   name: string
-//   component: React.ComponentType<Props>
-//   defaultProps?: Record<string, unknown>
-//   errorBoundary?: ErrorBoundary<Props>
-// }): WrappedComponent<Props>
-
-// export function getDisplayName(component: React.ComponentType): string

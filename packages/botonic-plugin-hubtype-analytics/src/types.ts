@@ -7,6 +7,7 @@ export enum EventAction {
   FeedbackCase = 'feedback_case',
   FeedbackMessage = 'feedback_message',
   FeedbackConversation = 'feedback_conversation',
+  FeedbackKnowledgebase = 'feedback_knowledgebase',
   FeedbackWebview = 'feedback_webview',
   FlowNode = 'flow_node',
   HandoffOption = 'handoff_option',
@@ -32,13 +33,24 @@ export interface EventFeedback extends HtBaseEventProps {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  messageGeneratedBy?: string
-  feedbackTargetId?: string
-  feedbackGroupId?: string
+  feedbackTargetId: string
+  feedbackGroupId: string
   possibleOptions: string[]
-  possibleValues: number[]
+  possibleValues?: number[]
   option: string
-  value: number
+  value?: number
+  comment?: string
+}
+
+export interface EventFeedbackKnowledgebase extends HtBaseEventProps {
+  action: EventAction.FeedbackKnowledgebase
+  knowledgebaseInferenceId: string
+  feedbackTargetId: string
+  feedbackGroupId: string
+  possibleOptions: string[]
+  possibleValues?: number[]
+  option: string
+  value?: number
   comment?: string
 }
 
@@ -135,6 +147,7 @@ export interface EventCustom extends HtBaseEventProps {
 
 export type HtEventProps =
   | EventFeedback
+  | EventFeedbackKnowledgebase
   | EventFlow
   | EventHandoff
   | EventHandoffOption
