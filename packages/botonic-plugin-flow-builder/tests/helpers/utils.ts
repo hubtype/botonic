@@ -7,6 +7,7 @@ import {
   ResolvedPlugins,
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
+import { v4 as uuid } from 'uuid'
 
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
@@ -72,7 +73,7 @@ export function createRequest({
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
     },
-    input,
+    input: { ...input, message_id: uuid() },
     lastRoutePath: '',
     plugins,
   }

@@ -3,12 +3,17 @@ import { describe, test } from '@jest/globals'
 
 import { ProcessEnvNodeEnvs } from './../src/types'
 // eslint-disable-next-line jest/no-mocks-import
+import { mockSmartIntent } from './__mocks__/smart-intent'
+// eslint-disable-next-line jest/no-mocks-import
 import { trackEventMock } from './__mocks__/track-event'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
 describe('Check tracked events when a contents are displayed', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => trackEventMock.mockClear())
+  beforeEach(() => mockSmartIntent('Other'))
 
   test('Track nlu_keyword and flow_node events', async () => {
     await createFlowBuilderPluginAndGetContents({
@@ -30,7 +35,7 @@ describe('Check tracked events when a contents are displayed', () => {
         nluKeywordId: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
         nluKeywordName: 'flowText',
         nluKeywordIsRegex: false,
-        nluKeywordMessageId: undefined,
+        nluKeywordMessageId: expect.anything(),
         userInput: 'flowText',
       }
     )
@@ -69,7 +74,7 @@ describe('Check tracked events when a contents are displayed', () => {
       {
         userInput: userInput,
         fallbackOut: 1,
-        fallbackMessageId: undefined,
+        fallbackMessageId: expect.anything(),
       }
     )
     expect(trackEventMock).toHaveBeenNthCalledWith(
