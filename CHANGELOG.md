@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.28.X] - aaaa-mm-dd
+## [0.29.X] - aaaa-mm-dd
 
 ### Changed
 
@@ -18,7 +18,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.28.X] - aaaa-mm-dd
+## [0.28.X] - 2024-07-09
 
 ### Added
 
@@ -26,7 +26,23 @@ All notable changes to Botonic will be documented in this file.
 
   - Added specific behavior for bots having `is_test_integration` defined.
 
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  -[Add `onTrackEvent` function and `message feedback`](https://github.com/hubtype/botonic/pull/2859)
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  -[Use `message feedback` in knowledge base messages](https://github.com/hubtype/botonic/pull/2859)
+
+- [@botonic/plugin-hubtype-analytics](https://www.npmjs.com/package/@botonic/plugin-hubtype-analytics)
+
+  -[Add `knowledge base feedback event`](https://github.com/hubtype/botonic/pull/2859)
+
 ### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  -[Change `WebviewContentsContext` for `createWebviewContentsContext` to allow mapping keys to contents ids](https://github.com/hubtype/botonic/pull/2863)
 
 ### Fixed
 
