@@ -34,6 +34,7 @@ export function createRequest(args?: RequestArgs): BotRequest {
       __retries: 0,
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',
+      is_test_integration: false,
     },
     input: { data: 'Hola', type: INPUT.TEXT },
     lastRoutePath: '',
