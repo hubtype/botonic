@@ -67,9 +67,9 @@ export class FlowHandoff extends ContentFieldsBase {
       return (
         <Multichannel key={this.id}>
           <Text>
-            ℹ️ _At this point, a new case would be created in {this.queue?.name}{' '}
-            queue. To continue with the preview, a case resolved scenario will
-            be simulated._
+            _**HANDOFF IN PREVIEW**_ {'\n'}ℹ️ _At this point, a new case would
+            be created in {this.queue?.name} queue. To continue with the
+            preview, a case resolved scenario will be simulated._
           </Text>
         </Multichannel>
       )
