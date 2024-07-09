@@ -127,4 +127,13 @@ describe('Handoff', () => {
       })
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
+
+  test('defines create_test_integration_case_with_payload for test integrations', () => {
+    const builder = new HandOffBuilder({
+      is_test_integration: true,
+    }).withOnFinishPayload('payload1')
+    builder.handOff()
+    const expectedBotonicAction = 'create_test_integration_case:payload1'
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 })

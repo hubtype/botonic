@@ -11,6 +11,7 @@ export function testSession(): Session {
     _access_token: '1234',
     _hubtype_api: 'app.hubtype.com',
     is_first_interaction: true,
+    is_test_integration: false,
     organization: 'test_org',
     organization_id: '1234567890',
     __retries: 0,

@@ -40,7 +40,6 @@ export class CoreBot {
   theme?: any
 
   constructor({
-    // TODO: Receives dataProvider
     renderer,
     routes,
     locales,
@@ -59,10 +58,7 @@ export class CoreBot {
       typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
     this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
     this.locales = locales
-    if (appId) {
-      this.appId = appId
-      return
-    }
+    this.appId = appId || undefined
     this.rootElement = null
     this.inspector = inspector || new Inspector()
     this.routes = routes
@@ -85,11 +81,36 @@ export class CoreBot {
     session.__locale = locale
   }
 
-  async input({
-    input,
-    session,
-    lastRoutePath,
-  }: BotRequest): Promise<BotResponse> {
+  createRequestFromOutput({ input, session, lastRoutePath }, output) {
+    return {
+      getString: stringId => this.getString(stringId, session),
+      setLocale: locale => this.setLocale(locale, session),
+      session: session || {},
+      params: output.params || {},
+      input,
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      lastRoutePath,
+    }
+  }
+
+  async input({ input, session, lastRoutePath }: any): Promise<BotResponse> {
+    const output = await this.runInput({ input, session, lastRoutePath })
+    if (!session.is_test_integration) {
+      return output
+    }
+    if (!session._botonic_action?.startsWith('create_test_integration_case:')) {
+      return output
+    }
+    return await this.runFollowUpTestIntegrationInput(output, {
+      input,
+      session,
+      lastRoutePath,
+    })
+  }
+
+  async runInput({ input, session, lastRoutePath }: any): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
@@ -126,30 +147,22 @@ export class CoreBot {
         this.inspector.routeInspector
       )
     }
-
     const output = (this.router as Router).processInput(
       input,
       session,
       lastRoutePath
     )
-    const request = {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
-      session: session || {},
-      params: output.params || {},
-      input: input,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
-      defaultDelay: this.defaultDelay,
-      lastRoutePath,
-    }
 
     const response = await this.renderer({
-      request,
+      request: this.createRequestFromOutput(
+        { input, session, lastRoutePath },
+        output
+      ),
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
 
     lastRoutePath = output.lastRoutePath
+
     if (this.plugins) {
       await runPlugins(
         this.plugins,
@@ -162,11 +175,51 @@ export class CoreBot {
     }
 
     session.is_first_interaction = false
+
     return {
       input,
       response,
       session,
       lastRoutePath,
+    }
+  }
+
+  async runFollowUpTestIntegrationInput(
+    previousOutput,
+    { input, session, lastRoutePath }
+  ) {
+    const [_, onFinishPayloadId] = session._botonic_action.split(
+      'create_test_integration_case:'
+    )
+    const onFinishPayloadInput = {
+      ...input,
+      payload: onFinishPayloadId,
+      type: INPUT.POSTBACK,
+      data: undefined,
+      text: undefined,
+    }
+
+    session._botonic_action = undefined
+
+    const output = (this.router as Router).processInput(
+      onFinishPayloadInput,
+      previousOutput.session,
+      previousOutput.lastRoutePath
+    )
+
+    const followUpResponse = await this.renderer({
+      request: this.createRequestFromOutput(
+        { input: onFinishPayloadInput, session, lastRoutePath },
+        output
+      ),
+      actions: [output.fallbackAction, output.action, output.emptyAction],
+    })
+
+    return {
+      input: onFinishPayloadInput,
+      response: previousOutput.response.concat(followUpResponse),
+      session,
+      lastRoutePath: output.lastRoutePath,
     }
   }
 }

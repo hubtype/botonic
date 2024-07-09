@@ -249,7 +249,11 @@ async function _humanHandOff(
   if (botEvent) {
     params.bot_event = botEvent
   }
-  session._botonic_action = `create_case:${JSON.stringify(params)}`
+  if (!session.is_test_integration) {
+    session._botonic_action = `create_case:${JSON.stringify(params)}`
+  } else {
+    session._botonic_action = `create_test_integration_case:${params.on_finish || ''}`
+  }
 }
 
 export async function storeCaseRating(

@@ -34,7 +34,7 @@ export class SmartIntentsApi {
       bot_id: this.currentRequest.session.bot.id,
       text: this.currentRequest.input.data,
       num_smart_intents_to_use: this.smartIntentsConfig.numSmartIntentsToUse,
-      use_latest: this.smartIntentsConfig.useLatest,
+      use_latest: this.resolveUseLatest(),
     }
 
     try {
@@ -56,6 +56,11 @@ export class SmartIntentsApi {
       console.error(e)
     }
     return undefined
+  }
+
+  private resolveUseLatest(): boolean {
+    if (this.currentRequest.session.is_test_integration) return false
+    return this.smartIntentsConfig.useLatest
   }
 
   private async getInference(
