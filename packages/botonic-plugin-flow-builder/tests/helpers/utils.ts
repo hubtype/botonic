@@ -12,23 +12,26 @@ import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
   FlowBuilderActionProps,
 } from '../../src'
-import { KnowledgeBaseFunction } from '../../src/types'
+import { KnowledgeBaseFunction, TrackEventFunction } from '../../src/types'
 
 interface FlowBuilderOptions {
   flow: any
   locale?: string
+  trackEvent?: TrackEventFunction
   getKnowledgeBaseResponse?: KnowledgeBaseFunction
 }
 
 export function createFlowBuilderPlugin({
   flow,
   locale = 'en',
+  trackEvent,
   getKnowledgeBaseResponse,
 }: FlowBuilderOptions) {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
     getLocale: () => locale,
     getAccessToken: () => 'fake_token',
+    trackEvent,
     getKnowledgeBaseResponse,
   })
 
