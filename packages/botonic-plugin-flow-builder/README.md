@@ -109,3 +109,99 @@ export function routes(request: RouteRequest) {
 ```
 
 For personalized behavior, create an action in your bot. For other cases, let the plugin handle all actions.
+
+## Webview Contents
+
+It is possible to define contents for a webview in flow builder.
+
+1. create a flow with the name webiew_my_new_webiview. This will create a new flow which currently only allows you to create text and images. Once created you can change the name.
+
+2. In the webview code you can use the hook useWebviewContents to obtain these contents.
+
+Define a mapContents object (key: ContentID of flow builder) to pass through the hook and get the same typed contents object but with the value of the contents.
+e.g.
+
+`webviews/flow-builder-webview-example/index.ts`
+
+```typescript
+import {
+  createWebviewContentsContext,
+  FlowBuilderJSONVersion,
+  useWebviewContents,
+} from '@botonic/plugin-flow-builder'
+import { WebviewRequestContext } from '@botonic/react'
+import React, { useContext, useState } from 'react'
+
+import { Step1 } from './first-step'
+
+const mapContents = {
+  textIntro: 'TEXT_INTRO',
+  image2: 'IMAGE_2',
+  headerWebview: 'HEADER_WEBVIEW',
+  image: 'IMAGE',
+}
+
+export const MyWebviewContentsContext = createWebviewContentsContext<typeof mapContents>()
+
+export const FlowBuilderWebviewExample = () => {
+  const webviewRequestContext = useContext(WebviewRequestContext)
+
+  const { isLoading, error, webviewContentsContext } = useWebviewContents({
+    apiUrl: FLOW_BUILDER_API_URL,
+    version: FlowBuilderJSONVersion.LATEST,
+    orgId: webviewRequestContext.session.organization_id,
+    botId: webviewRequestContext.session.bot.id,
+    webviewId: WEBVIEW_ID,
+    locale: 'es',
+    mapContents,
+  })
+
+  const [stepNum, setStepNum] = useState(0)
+  const steps = [<Step1 />, <Step2 />]
+
+  const handleCloseWebview = () => {
+    webviewRequestContext.closeWebview()
+  }
+
+  if (error) {
+    return <div>Error</div>
+  }
+
+  return (
+    <MyWebviewContentsContext.Provider value={webviewContentsContext}>
+      <div>
+        <div>
+          <h1>FlowBuilderWebview</h1>
+          <button onClick={handleCloseWebview}>Close</button>
+        </div>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <Step1 />
+        )}
+      </div>
+    </MyWebviewContentsContext.Provider>
+  )
+}
+```
+
+In any component within the webview you can use the contents from the context
+
+`webviews/flow-builder-webview-example/first-step.ts`
+
+```typescript
+import React, { useContext } from 'react'
+
+import { MyWebviewContentsContext } from './index'
+
+export const Step1 = () => {
+  const { contents } = useContext(MyWebviewContentsContext)
+
+  return (
+    <div>
+      <p>{contents.headerWebview}</p>
+      <img src={contents.image} />
+    </div>
+  )
+}
+```

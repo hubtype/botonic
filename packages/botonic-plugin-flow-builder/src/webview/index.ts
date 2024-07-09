@@ -1,3 +1,3 @@
-export { WebviewContentsContext } from './contents-context'
+export { createWebviewContentsContext } from './contents-context'
 export * from './types'
 export { useWebviewContents } from './use-webview-contents'

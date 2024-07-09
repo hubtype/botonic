@@ -1,11 +1,11 @@
 import { createContext } from 'react'
 
-import { WebviewContentsContextType } from './types'
+import { MapContentsType, WebviewContentsContextType } from './types'
 
-export const WebviewContentsContext = createContext<WebviewContentsContextType>(
-  {
-    getTextContent: () => undefined,
-    getImageSrc: () => undefined,
+export const createWebviewContentsContext = <T extends MapContentsType>() =>
+  createContext<WebviewContentsContextType<T>>({
+    getTextContent: () => '',
+    getImageSrc: () => '',
     setCurrentLocale: () => undefined,
-  }
-)
+    contents: {} as Record<keyof T, string>,
+  })

@@ -25,23 +25,27 @@ export interface WebviewImageContent {
   }
 }
 
-export interface UseWebviewContentsProps {
+export type MapContentsType = Record<string, string>
+
+export interface UseWebviewContentsProps<T extends MapContentsType> {
   apiUrl?: string
   version?: FlowBuilderJSONVersion
   orgId: string
   botId: string
   webviewId: string
   locale: string
+  mapContents: Record<keyof T, string>
 }
 
-export interface UseWebviewContents {
+export interface UseWebviewContents<T extends MapContentsType> {
   isLoading: boolean
   error: boolean
-  webviewContentsContext: WebviewContentsContextType
+  webviewContentsContext: WebviewContentsContextType<T>
 }
 
-export interface WebviewContentsContextType {
-  getTextContent: (code: string) => string | undefined
-  getImageSrc: (code: string) => string | undefined
+export interface WebviewContentsContextType<T extends MapContentsType> {
+  getTextContent: (code: string) => string
+  getImageSrc: (code: string) => string
   setCurrentLocale: (locale: string) => void
+  contents: Record<keyof T, string>
 }
