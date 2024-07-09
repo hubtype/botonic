@@ -1,5 +1,5 @@
 import { BotRequest, Plugin } from '@botonic/core'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
@@ -48,7 +48,10 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   }
 
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
-    if (request.session.is_test_integration) return
+    if (request.session.is_test_integration) {
+      return Promise.resolve()
+    }
+
     const requestData = this.getRequestData(request)
     const event = createHtEvent(requestData, htEventProps)
     return this.sendEvent(request, event)
