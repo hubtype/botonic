@@ -28,21 +28,21 @@ All notable changes to Botonic will be documented in this file.
 
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
-  -[Add `onTrackEvent` function and `message feedback`](https://github.com/hubtype/botonic/pull/2859)
+  - [Add `onTrackEvent` function and `message feedback`](https://github.com/hubtype/botonic/pull/2859)
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
-  -[Use `message feedback` in knowledge base messages](https://github.com/hubtype/botonic/pull/2859)
+  - [Use `message feedback` in knowledge base messages](https://github.com/hubtype/botonic/pull/2859)
 
 - [@botonic/plugin-hubtype-analytics](https://www.npmjs.com/package/@botonic/plugin-hubtype-analytics)
 
-  -[Add `knowledge base feedback event`](https://github.com/hubtype/botonic/pull/2859)
+  - [Add `knowledge base feedback event`](https://github.com/hubtype/botonic/pull/2859)
 
 ### Changed
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
-  -[Change `WebviewContentsContext` for `createWebviewContentsContext` to allow mapping keys to contents ids](https://github.com/hubtype/botonic/pull/2863)
+  - [Change `WebviewContentsContext` for `createWebviewContentsContext` to allow mapping keys to contents ids](https://github.com/hubtype/botonic/pull/2863)
 
 ### Fixed
 
