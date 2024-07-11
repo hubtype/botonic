@@ -6,6 +6,7 @@ import {
   INPUT,
   Input,
   Locales,
+  ProcessInputResult,
   ResolvedPlugins,
   Route,
   RoutePath,
@@ -83,37 +84,21 @@ export class CoreBot {
     session.__locale = locale
   }
 
-  createRequestFromOutput({ input, session, lastRoutePath }, output) {
-    return {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
-      session: session || {},
-      params: output.params || {},
-      input,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
-      defaultDelay: this.defaultDelay,
-      lastRoutePath,
-    }
-  }
-
   async input({
     input,
     session,
     lastRoutePath,
   }: BotRequest): Promise<BotResponse> {
     const output = await this.runInput({ input, session, lastRoutePath })
-    if (!session.is_test_integration) {
-      return output
+    if (session._botonic_action?.startsWith('create_test_integration_case:')) {
+      return await this.runFollowUpTestIntegrationInput(output, {
+        input,
+        session,
+        lastRoutePath,
+      })
     }
-    if (!session._botonic_action?.startsWith('create_test_integration_case:')) {
-      return output
-    }
-    return await this.runFollowUpTestIntegrationInput(output, {
-      input,
-      session,
-      lastRoutePath,
-    })
+
+    return output
   }
 
   private async runInput({
@@ -159,11 +144,28 @@ export class CoreBot {
     }
   }
 
-  private async getOutput(
+  private async runPrePlugins(
     input: Input,
     session: Session,
     lastRoutePath: RoutePath
   ) {
+    if (this.plugins) {
+      await runPlugins(
+        this.plugins,
+        'pre',
+        input,
+        session,
+        lastRoutePath,
+        undefined
+      )
+    }
+  }
+
+  private async getOutput(
+    input: Input,
+    session: Session,
+    lastRoutePath: RoutePath
+  ): Promise<ProcessInputResult> {
     await this.setRouter(input, session, lastRoutePath)
 
     const output = (this.router as Router).processInput(
@@ -194,20 +196,20 @@ export class CoreBot {
     }
   }
 
-  private async runPrePlugins(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
+  private createRequestFromOutput(
+    { input, session, lastRoutePath }: BotRequest,
+    output: ProcessInputResult
   ) {
-    if (this.plugins) {
-      await runPlugins(
-        this.plugins,
-        'pre',
-        input,
-        session,
-        lastRoutePath,
-        undefined
-      )
+    return {
+      getString: stringId => this.getString(stringId, session),
+      setLocale: locale => this.setLocale(locale, session),
+      session: session || {},
+      params: output.params || {},
+      input,
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      lastRoutePath,
     }
   }
 
@@ -230,50 +232,33 @@ export class CoreBot {
   }
 
   private async runFollowUpTestIntegrationInput(
-    previousOutput,
-    { input, session, lastRoutePath }
+    previousResponse: BotResponse,
+    { input, session, lastRoutePath }: BotRequest
   ) {
-    const [_, onFinishPayloadId] = session._botonic_action.split(
+    const [_, onFinishPayloadId] = session._botonic_action!.split(
       'create_test_integration_case:'
     )
     const inputWithOnFinishPayload: Input = {
       ...input,
       payload: onFinishPayloadId,
-      type: INPUT.POSTBACK, // Why POSTBACK?
+      type: INPUT.POSTBACK,
       data: undefined,
       text: undefined,
     }
 
     session._botonic_action = undefined
 
-    await this.runPrePlugins(inputWithOnFinishPayload, session, lastRoutePath)
-
-    const output = await this.getOutput(
-      inputWithOnFinishPayload,
-      session,
-      lastRoutePath
-    )
-
-    const followUpResponse = await this.renderer({
-      request: this.createRequestFromOutput(
-        { input: inputWithOnFinishPayload, session, lastRoutePath },
-        output
-      ),
-      actions: [output.fallbackAction, output.action, output.emptyAction],
-    })
-
-    await this.runPostPlugins(
-      inputWithOnFinishPayload,
+    const followUp = await this.runInput({
+      input: inputWithOnFinishPayload,
       session,
       lastRoutePath,
-      followUpResponse
-    )
+    })
 
     return {
-      input: inputWithOnFinishPayload,
-      response: previousOutput.response.concat(followUpResponse),
+      input: followUp.input,
+      response: previousResponse.response.concat(followUp.response),
       session,
-      lastRoutePath: output.lastRoutePath,
+      lastRoutePath: followUp.lastRoutePath,
     }
   }
 }
