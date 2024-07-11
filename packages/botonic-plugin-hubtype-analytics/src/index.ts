@@ -1,5 +1,5 @@
 import { BotRequest, Plugin } from '@botonic/core'
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
@@ -49,7 +49,9 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
 
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
     if (request.session.is_test_integration) {
-      return Promise.resolve()
+      return Promise.resolve({
+        data: 'Event not sent because it is a test integration',
+      })
     }
 
     const requestData = this.getRequestData(request)
