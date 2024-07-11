@@ -201,8 +201,8 @@ export class CoreBot {
     output: ProcessInputResult
   ) {
     return {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
+      getString: (stringId: string) => this.getString(stringId, session),
+      setLocale: (locale: string) => this.setLocale(locale, session),
       session: session || {},
       params: output.params || {},
       input,
