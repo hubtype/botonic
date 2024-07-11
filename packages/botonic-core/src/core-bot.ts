@@ -241,7 +241,7 @@ export class CoreBot {
     const inputWithOnFinishPayload: Input = {
       ...input,
       payload: onFinishPayloadId,
-      type: INPUT.POSTBACK,
+      type: INPUT.POSTBACK, // Why POSTBACK?
       data: undefined,
       text: undefined,
     }
