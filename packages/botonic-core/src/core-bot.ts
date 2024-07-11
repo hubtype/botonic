@@ -4,9 +4,12 @@ import {
   BotRequest,
   BotResponse,
   INPUT,
+  Input,
   Locales,
+  ProcessInputResult,
   ResolvedPlugins,
   Route,
+  RoutePath,
   Routes,
   Session,
 } from './models'
@@ -81,36 +84,28 @@ export class CoreBot {
     session.__locale = locale
   }
 
-  createRequestFromOutput({ input, session, lastRoutePath }, output) {
-    return {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
-      session: session || {},
-      params: output.params || {},
-      input,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
-      defaultDelay: this.defaultDelay,
-      lastRoutePath,
-    }
-  }
-
-  async input({ input, session, lastRoutePath }: any): Promise<BotResponse> {
+  async input({
+    input,
+    session,
+    lastRoutePath,
+  }: BotRequest): Promise<BotResponse> {
     const output = await this.runInput({ input, session, lastRoutePath })
-    if (!session.is_test_integration) {
-      return output
+    if (session._botonic_action?.startsWith('create_test_integration_case:')) {
+      return await this.runFollowUpTestIntegrationInput(output, {
+        input,
+        session,
+        lastRoutePath,
+      })
     }
-    if (!session._botonic_action?.startsWith('create_test_integration_case:')) {
-      return output
-    }
-    return await this.runFollowUpTestIntegrationInput(output, {
-      input,
-      session,
-      lastRoutePath,
-    })
+
+    return output
   }
 
-  async runInput({ input, session, lastRoutePath }: any): Promise<BotResponse> {
+  private async runInput({
+    input,
+    session,
+    lastRoutePath,
+  }: BotRequest): Promise<BotResponse> {
     session = session || {}
     if (!session.__locale) session.__locale = 'en'
 
@@ -123,6 +118,37 @@ export class CoreBot {
       }
     }
 
+    await this.runPrePlugins(input, session, lastRoutePath)
+
+    const output = await this.getOutput(input, session, lastRoutePath)
+
+    const response = await this.renderer({
+      request: this.createRequestFromOutput(
+        { input, session, lastRoutePath },
+        output
+      ),
+      actions: [output.fallbackAction, output.action, output.emptyAction],
+    })
+
+    lastRoutePath = output.lastRoutePath
+
+    await this.runPostPlugins(input, session, lastRoutePath, response)
+
+    session.is_first_interaction = false
+
+    return {
+      input,
+      response,
+      session,
+      lastRoutePath,
+    }
+  }
+
+  private async runPrePlugins(
+    input: Input,
+    session: Session,
+    lastRoutePath: RoutePath
+  ) {
     if (this.plugins) {
       await runPlugins(
         this.plugins,
@@ -133,7 +159,28 @@ export class CoreBot {
         undefined
       )
     }
+  }
 
+  private async getOutput(
+    input: Input,
+    session: Session,
+    lastRoutePath: RoutePath
+  ): Promise<ProcessInputResult> {
+    await this.setRouter(input, session, lastRoutePath)
+
+    const output = (this.router as Router).processInput(
+      input,
+      session,
+      lastRoutePath
+    )
+    return output
+  }
+
+  private async setRouter(
+    input: Input,
+    session: Session,
+    lastRoutePath: RoutePath
+  ) {
     if (this.routes instanceof Function) {
       this.router = new Router(
         [
@@ -147,22 +194,31 @@ export class CoreBot {
         this.inspector.routeInspector
       )
     }
-    const output = (this.router as Router).processInput(
+  }
+
+  private createRequestFromOutput(
+    { input, session, lastRoutePath }: BotRequest,
+    output: ProcessInputResult
+  ) {
+    return {
+      getString: stringId => this.getString(stringId, session),
+      setLocale: locale => this.setLocale(locale, session),
+      session: session || {},
+      params: output.params || {},
       input,
-      session,
-      lastRoutePath
-    )
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      lastRoutePath,
+    }
+  }
 
-    const response = await this.renderer({
-      request: this.createRequestFromOutput(
-        { input, session, lastRoutePath },
-        output
-      ),
-      actions: [output.fallbackAction, output.action, output.emptyAction],
-    })
-
-    lastRoutePath = output.lastRoutePath
-
+  private async runPostPlugins(
+    input: Input,
+    session: Session,
+    lastRoutePath: RoutePath,
+    response: any
+  ) {
     if (this.plugins) {
       await runPlugins(
         this.plugins,
@@ -173,25 +229,16 @@ export class CoreBot {
         response
       )
     }
-
-    session.is_first_interaction = false
-
-    return {
-      input,
-      response,
-      session,
-      lastRoutePath,
-    }
   }
 
-  async runFollowUpTestIntegrationInput(
-    previousOutput,
-    { input, session, lastRoutePath }
+  private async runFollowUpTestIntegrationInput(
+    previousResponse: BotResponse,
+    { input, session, lastRoutePath }: BotRequest
   ) {
-    const [_, onFinishPayloadId] = session._botonic_action.split(
+    const [_, onFinishPayloadId] = session._botonic_action!.split(
       'create_test_integration_case:'
     )
-    const onFinishPayloadInput = {
+    const inputWithOnFinishPayload: Input = {
       ...input,
       payload: onFinishPayloadId,
       type: INPUT.POSTBACK,
@@ -201,25 +248,17 @@ export class CoreBot {
 
     session._botonic_action = undefined
 
-    const output = (this.router as Router).processInput(
-      onFinishPayloadInput,
-      previousOutput.session,
-      previousOutput.lastRoutePath
-    )
-
-    const followUpResponse = await this.renderer({
-      request: this.createRequestFromOutput(
-        { input: onFinishPayloadInput, session, lastRoutePath },
-        output
-      ),
-      actions: [output.fallbackAction, output.action, output.emptyAction],
+    const followUp = await this.runInput({
+      input: inputWithOnFinishPayload,
+      session,
+      lastRoutePath,
     })
 
     return {
-      input: onFinishPayloadInput,
-      response: previousOutput.response.concat(followUpResponse),
+      input: followUp.input,
+      response: previousResponse.response.concat(followUp.response),
       session,
-      lastRoutePath: output.lastRoutePath,
+      lastRoutePath: followUp.lastRoutePath,
     }
   }
 }

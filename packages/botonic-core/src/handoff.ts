@@ -261,6 +261,9 @@ export async function storeCaseRating(
   rating: number,
   context: any = {}
 ): Promise<{ status: string }> {
+  if (session.is_test_integration) {
+    return Promise.resolve({ status: 'ok' })
+  }
   const baseUrl = session._hubtype_api || HUBTYPE_API_URL
   const chatId = session.user.id
   context = contextDefaults(context)
