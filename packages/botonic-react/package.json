@@ -26,7 +26,6 @@
     "he": "^1.2.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.0.6",
-    "qrcode.react": "^1.0.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-frame-component": "^4.1.3",
