@@ -1,22 +1,37 @@
 import { INPUT } from '@botonic/core'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import decode from 'unescape'
 
 import { Reply } from './components/reply'
 import { Text } from './components/text'
+
+function decodeHTMLEntities(text) {
+  const entities = {
+    '&quot;': '"',
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&apos;': "'",
+  }
+
+  return text.replace(
+    /&quot;|&amp;|&lt;|&gt;|&apos;/g,
+    match => entities[match]
+  )
+}
 
 export class BotonicInputTester {
   constructor(bot) {
     this.bot = bot
   }
+
   async text(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
     const res = await this.bot.input({
       input: { type: INPUT.TEXT, data: inp },
       session: session,
       lastRoutePath: lastRoutePath,
     })
-    return decode(res.response)
+    return decodeHTMLEntities(res.response)
   }
 
   async payload(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
@@ -25,7 +40,7 @@ export class BotonicInputTester {
       session: session,
       lastRoutePath: lastRoutePath,
     })
-    return decode(res.response)
+    return decodeHTMLEntities(res.response)
   }
 
   async path(inp, session = { user: { id: '123' } }, lastRoutePath = '') {
@@ -34,7 +49,7 @@ export class BotonicInputTester {
       session: session,
       lastRoutePath: lastRoutePath,
     })
-    return decode(res.response)
+    return decodeHTMLEntities(res.response)
   }
 }
 
@@ -44,7 +59,7 @@ export class BotonicOutputTester {
   }
 
   text(out, replies = null) {
-    return decode(
+    return decodeHTMLEntities(
       ReactDOMServer.renderToStaticMarkup(
         !replies ? (
           <Text>{out}</Text>
@@ -60,14 +75,14 @@ export class BotonicOutputTester {
 
   reply({ text, payload = null, path = null }) {
     if (payload) {
-      return decode(
+      return decodeHTMLEntities(
         ReactDOMServer.renderToStaticMarkup(
           <Reply payload={payload}>{text}</Reply>
         )
       )
     }
     if (path) {
-      return decode(
+      return decodeHTMLEntities(
         ReactDOMServer.renderToStaticMarkup(<Reply path={path}>{text}</Reply>)
       )
     }
