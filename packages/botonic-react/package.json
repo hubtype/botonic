@@ -23,7 +23,6 @@
     "@botonic/core": "^0.28.1",
     "axios": "^1.7.2",
     "emoji-picker-react": "^4.4.9",
-    "he": "^1.2.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.0.6",
     "react": "^16.14.0",
