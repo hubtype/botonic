@@ -62,7 +62,8 @@ import * as hubtypeFlowBuilder from '@botonic/plugin-flow-builder'
 
 const flowBuilderOptions = {
   flowUrl: 'HUBTYPE_FLOW_BUILDER_URL',
-  getAccessToken: () => 'HUBTYPE_FLOW_BUILDER_ACCESS_TOKEN',
+  jsonVersion: 'latest',
+  getAccessToken: () => 'HUBTYPE_FLOW_BUILDER_ACCESS_TOKEN', // Used locally,
   getLocale: () => 'YOUR_LOCALE',
 }
 
@@ -81,13 +82,63 @@ Below are the parameters that we can pass to the plugin:
 
 - `flowUrl`: This is the URL where the Flow is located. The bot will automatically collect this URL, so in most cases, we don't have to pass it. It is used in cases where the Flow URL is in a testing environment.
 
+- `jsonVersion`: This indicates which version of flow you want the bot to use. By default it will use the `latest` version which is what we want in production. We can set this to `draft` if we want the bot to use this content in a test environment.
+
 - `flow`: In some situations, we may want to test a flow locally instead of using the Flow Builder service. To do this, we can define the flow and its corresponding tree of nodes in a JSON file and pass it to our plugin through this variable. By doing so, we can run and test our flow locally without relying on the external service.
 
 - `customFunctions`: We are able to pass custom functions to the plugin by defining them in our code and then passing them as parameters. This allows us to extend the functionality of the plugin beyond its default capabilities and execute custom logic that is tailored to our specific needs. We can add custom functions in the frontend of the Flow Builder and pass them to the plugin through this variable.
 
-- `getLocale`: We can pass an array of locales to the plugin to specify which language our bot will use.
+- `getLocale`: We can pass a locale value to the plugin to specify which language our bot will use.
 
 - `getAccessToken`: When our bot is deployed in Hubtype, the plugin will automatically retrieve the access token. However, when testing our bot locally, we need to pass the access token as a variable.
+
+- `trackEvent`: Using this option we can get the events generated in the plugin and track them in the platform we want.
+
+e.g. using @botonic/plugin-hubtype-analytics.
+
+```ts
+trackEvent: async (request: BotRequest, eventName, args) => {
+  const htEventProps = {
+    action: eventName as EventAction,
+    ...args,
+  }
+
+  try {
+    await hubtypeAnalytics.trackEvent(request, htEventProps)
+  } catch (error: any) {
+    console.error(error)
+  }
+},
+```
+
+- `getKnowledgeBaseResponse`: Using this option we can inject a function so that the bot can respond to the user using a knowledge base.
+
+e.g using @botonic/plugin-knowledge-bases
+
+```ts
+getKnowledgeBaseResponse: async (
+  request: BotRequest,
+  userInput: string,
+  sources: string[]
+) => {
+  try {
+    const knowledgeBasePlugin = request.plugins.knowledgeBases
+    const response = await knowledgeBasePlugin.getInference(
+      request.session,
+      userInput,
+      sources
+    )
+    return response
+  } catch (error) {
+    console.error(error)
+    return {
+      answer: '',
+      hasKnowledge: false,
+      sources: [],
+    }
+  }
+},
+```
 
 2. Modify the `routes.ts` file, where routes map user inputs to actions which are in fact React Components:
 
@@ -123,7 +174,7 @@ e.g.
 
 `webviews/flow-builder-webview-example/index.ts`
 
-```typescript
+```ts
 import {
   createWebviewContentsContext,
   FlowBuilderJSONVersion,
@@ -133,6 +184,7 @@ import { WebviewRequestContext } from '@botonic/react'
 import React, { useContext, useState } from 'react'
 
 import { Step1 } from './first-step'
+import { Step2 } from './second-step'
 
 const mapContents = {
   textIntro: 'TEXT_INTRO',
@@ -189,7 +241,7 @@ In any component within the webview you can use the contents from the context
 
 `webviews/flow-builder-webview-example/first-step.ts`
 
-```typescript
+```ts
 import React, { useContext } from 'react'
 
 import { MyWebviewContentsContext } from './index'
