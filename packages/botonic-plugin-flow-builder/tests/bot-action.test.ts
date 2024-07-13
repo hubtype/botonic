@@ -7,6 +7,7 @@ import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
+  createFlowBuilderPluginAndGetContents,
   createRequest,
   getContentsAfterPreAndBotonicInit,
 } from './helpers/utils'
@@ -17,21 +18,15 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
   const ratingMessageUuid = '578b30eb-d230-4162-8a36-6c7fa18ff0db'
   const botActionUuid = '85dbeb56-81c9-419d-a235-4ebf491b4fc9'
   test('The button has  a payload equal to ba|botActionUuid', async () => {
-    const request = createRequest({
-      input: {
-        type: INPUT.POSTBACK,
-        payload: ratingMessageUuid,
-      },
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: {
+          type: INPUT.POSTBACK,
+          payload: ratingMessageUuid,
+        },
       },
     })
-
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
 
     const nextPaylod = (contents[0] as FlowText).buttons[0].payload
     expect(nextPaylod).toBe(`${BOT_ACTION_PAYLOAD_PREFIX}${botActionUuid}`)

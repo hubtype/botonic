@@ -12,6 +12,7 @@ import { v4 as uuid } from 'uuid'
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
   FlowBuilderActionProps,
+  FlowContent,
 } from '../../src'
 import { KnowledgeBaseFunction, TrackEventFunction } from '../../src/types'
 
@@ -79,16 +80,6 @@ export function createRequest({
   }
 }
 
-export function getActionRequest(request: PluginPreRequest): ActionRequest {
-  return {
-    ...request,
-    lastRoutePath: 'flow-builder-action',
-    defaultDelay: 0,
-    defaultTyping: 0,
-    params: {},
-  }
-}
-
 export async function getContentsAfterPreAndBotonicInit(
   request: PluginPreRequest,
   flowBuilderPlugin: BotonicPluginFlowBuilder
@@ -98,16 +89,29 @@ export async function getContentsAfterPreAndBotonicInit(
   return await FlowBuilderAction.botonicInit(actionRequest)
 }
 
+function getActionRequest(request: PluginPreRequest): ActionRequest {
+  return {
+    ...request,
+    lastRoutePath: 'flow-builder-action',
+    defaultDelay: 0,
+    defaultTyping: 0,
+    params: {},
+  }
+}
 interface FlowBuilderPluginAndGetContentsArgs {
   flowBuilderOptions: FlowBuilderOptions
   requestArgs: RequestArgs
 }
 
-export function createFlowBuilderPluginAndGetContents({
+export async function createFlowBuilderPluginAndGetContents({
   flowBuilderOptions,
   requestArgs,
-}: FlowBuilderPluginAndGetContentsArgs): Promise<FlowBuilderActionProps> {
+}: FlowBuilderPluginAndGetContentsArgs): Promise<{
+  contents: FlowContent[]
+  request: PluginPreRequest
+}> {
   const flowBuilderPlugin = createFlowBuilderPlugin(flowBuilderOptions)
+
   const request = createRequest({
     ...requestArgs,
     plugins: {
@@ -115,5 +119,11 @@ export function createFlowBuilderPluginAndGetContents({
       flowBuilderPlugin,
     },
   })
-  return getContentsAfterPreAndBotonicInit(request, flowBuilderPlugin)
+
+  const { contents } = await getContentsAfterPreAndBotonicInit(
+    request,
+    flowBuilderPlugin
+  )
+
+  return { contents, request }
 }

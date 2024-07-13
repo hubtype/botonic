@@ -4,32 +4,22 @@ import { describe, test } from '@jest/globals'
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from './helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
 describe('Check the contents returned by the plugin after conditional custom node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test.each(['tourist', 'business', 'first class', '', undefined])(
     'The expected content is displayed after using a string variable in the conditional',
     async (bookingType?: string) => {
-      const request = createRequest({
-        input: { data: 'stringVariable', type: INPUT.TEXT },
-        plugins: {
-          // @ts-ignore
-          flowBuilderPlugin,
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'stringVariable', type: INPUT.TEXT },
+          extraData: { bookingType },
         },
-        extraData: { bookingType },
       })
 
-      const { contents } = await getContentsAfterPreAndBotonicInit(
-        request,
-        flowBuilderPlugin
-      )
       const contentFlowText = contents[0] as FlowText
       expect(contentFlowText.text).toBe(
         `The booking is ${bookingType || '{bookingType}'}`
@@ -40,19 +30,14 @@ describe('Check the contents returned by the plugin after conditional custom nod
   test.each([true, false, undefined])(
     'The expected content is displayed after using a boolean variable in the conditional',
     async (isLogged?: boolean) => {
-      const request = createRequest({
-        input: { data: 'booleanVariable', type: INPUT.TEXT },
-        plugins: {
-          // @ts-ignore
-          flowBuilderPlugin,
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'booleanVariable', type: INPUT.TEXT },
+          extraData: { isLogged },
         },
-        extraData: { isLogged },
       })
 
-      const { contents } = await getContentsAfterPreAndBotonicInit(
-        request,
-        flowBuilderPlugin
-      )
       const contentFlowText = contents[0] as FlowText
       expect(contentFlowText.text).toBe(
         `User is logged ${isLogged ? 'in' : 'out'}`
@@ -77,19 +62,14 @@ describe('Check the contents returned by the plugin after conditional custom nod
   ])(
     'The expected content is displayed after using a number variable with value $bagsAdded in the conditional',
     async ({ messageExpected, bagsAdded }) => {
-      const request = createRequest({
-        input: { data: 'numberVariable', type: INPUT.TEXT },
-        plugins: {
-          // @ts-ignore
-          flowBuilderPlugin,
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'numberVariable', type: INPUT.TEXT },
+          extraData: { bagsAdded },
         },
-        extraData: { bagsAdded },
       })
 
-      const { contents } = await getContentsAfterPreAndBotonicInit(
-        request,
-        flowBuilderPlugin
-      )
       const contentFlowText = contents[0] as FlowText
       expect(contentFlowText.text).toBe(messageExpected)
     }

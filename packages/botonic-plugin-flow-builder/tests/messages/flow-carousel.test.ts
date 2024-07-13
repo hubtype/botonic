@@ -4,29 +4,17 @@ import { describe, test } from '@jest/globals'
 import { FlowCarousel } from '../../src/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from '../helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
 describe('Check the contents of a carousel node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the carousel and elements are displayed', async () => {
-    const request = createRequest({
-      input: { data: 'flowCarousel', type: INPUT.TEXT },
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
-      },
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: { input: { data: 'flowCarousel', type: INPUT.TEXT } },
     })
 
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
     const carouselContent = contents[0] as FlowCarousel
     const carouselElements = carouselContent.elements
 

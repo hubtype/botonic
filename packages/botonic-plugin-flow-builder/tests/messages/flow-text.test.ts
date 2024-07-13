@@ -4,29 +4,17 @@ import { describe, test } from '@jest/globals'
 import { FlowText } from '../../src/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from '../helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
 describe('Check the contents and logic of a text node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the text message are displayed', async () => {
-    const request = createRequest({
-      input: { data: 'flowText', type: INPUT.TEXT },
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
-      },
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: { input: { data: 'flowText', type: INPUT.TEXT } },
     })
 
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
     const firstContent = contents[0] as FlowText
     expect(firstContent.text).toBe(
       'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -44,19 +32,14 @@ describe('Check the contents and logic of a text node', () => {
   })
 
   test('The rendered message has the replaced bagsAdded variable to 2', async () => {
-    const request = createRequest({
-      input: { data: 'flowText', type: INPUT.TEXT },
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: { data: 'flowText', type: INPUT.TEXT },
+        extraData: { bagsAdded: 2 },
       },
-      extraData: { bagsAdded: 2 },
     })
 
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
     const firstContent = contents[0] as FlowText
     // @ts-ignore
     const renderedMessage = firstContent.toBotonic(firstContent.id, request)
