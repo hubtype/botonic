@@ -137,7 +137,7 @@ export class MessageContentInverseTraverser {
     return this.referencesTo.size > 0
   }
 
-  async messageContentTypes(): Promise<MessageContentType[]> {
+  async messageContentTypes() {
     return andArrays(MESSAGE_CONTENT_TYPES, await this.info.contentTypes())
   }
 
