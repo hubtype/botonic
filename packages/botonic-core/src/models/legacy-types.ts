@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
 
 export enum CASE_STATUS {
@@ -77,23 +78,6 @@ export enum INPUT {
 export interface Locales {
   [id: string]: string | string[] | Locales
 }
-
-interface PluginConstructor<T> {
-  new (arg: T): Plugin
-}
-
-export interface PluginConfig<T> {
-  id: string
-  options?: T
-  resolve: { default: PluginConstructor<T> }
-}
-
-export interface ResolvedPlugin extends Plugin {
-  id: string
-  name: string
-  config: any
-}
-export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
 export type InputType =
   | INPUT.AUDIO
@@ -258,17 +242,50 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export interface PluginPreRequest extends BotRequest {
+export interface ActionRequest {
+  defaultDelay: number
+  defaultTyping: number
+  input: Input
+  lastRoutePath: string | null
+  params: { [key: string]: string }
   plugins: ResolvedPlugins
-}
-export interface PluginPostRequest extends BotResponse {
-  plugins: ResolvedPlugins
+  session: Session
 }
 
-export interface Plugin {
-  post?(request: PluginPostRequest): void | Promise<void>
-  pre?(request: PluginPreRequest): void | Promise<void>
+// Aquest tipus s'hauria de fer servir en el post dels plugins ja que a de tenir la response i els plugins
+export interface ActionResponse extends ActionRequest {
+  response: any
 }
+
+interface PluginConstructor<T> {
+  new (arg: T): Plugin
+}
+
+export interface PluginConfig<T> {
+  id: string
+  options?: T
+  resolve: { default: PluginConstructor<T> }
+}
+
+export interface ResolvedPlugin extends Plugin {
+  id: string
+  name: string
+  config: any
+}
+export type ResolvedPlugins = Record<string, ResolvedPlugin>
+
+export interface Plugin {
+  pre?(request: ActionRequest): void | Promise<void>
+  post?(request: ActionResponse): void | Promise<void>
+}
+
+// export interface PluginPreRequest extends BotRequest {
+//   plugins: ResolvedPlugins
+// }
+
+// export interface PluginPostRequest extends BotResponse {
+//   plugins: ResolvedPlugins
+// }
 
 export interface Params {
   [key: string]: any

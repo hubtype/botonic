@@ -1,4 +1,5 @@
 import {
+  ActionRequest,
   BotRequest as CoreBotRequest,
   Input as CoreInput,
   InputType as CoreInputType,
@@ -36,19 +37,20 @@ export interface Route extends CoreRoute {
 export type Routes = CoreRoutes<Route>
 
 // Parameters of the actions' botonicInit method
-export interface ActionRequest {
-  defaultDelay: number
-  defaultTyping: number
-  input: CoreInput
-  lastRoutePath: string
-  params: { [key: string]: string }
-  plugins: { [id: string]: CorePlugin }
-  session: CoreSession
-}
+// export interface ActionRequest {
+//   defaultDelay: number
+//   defaultTyping: number
+//   input: CoreInput
+//   lastRoutePath: string
+//   params: { [key: string]: string }
+//   plugins: { [id: string]: CorePlugin }
+//   session: CoreSession
+// }
+export { ActionRequest } from '@botonic/core'
 
 export interface RequestContextInterface extends ActionRequest {
   getString: (stringId: string) => string
-  setLocale: (locale: string) => string
+  setLocale: (locale: string) => void
 }
 
 export interface CustomMessageType {
