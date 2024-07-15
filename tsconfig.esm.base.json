@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "ES2022",
+    "module": "Node16",
     "moduleResolution": "Node16"
   }
 }
