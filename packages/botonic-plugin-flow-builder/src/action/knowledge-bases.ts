@@ -25,7 +25,7 @@ export async function getContentsByKnowledgeBase({
 
   const knowledgeBaseContent = contents.find(
     content => content instanceof FlowKnowledgeBase
-  ) as FlowKnowledgeBase
+  )
 
   if (!knowledgeBaseContent) {
     return contents

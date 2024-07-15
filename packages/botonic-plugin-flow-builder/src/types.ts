@@ -1,7 +1,7 @@
 import { PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
-import { HtFlowBuilderData } from './content-fields/hubtype-fields'
+import { HtFlowBuilderData, HtNodeLink } from './content-fields/hubtype-fields'
 
 export interface BotonicPluginFlowBuilderOptions {
   apiUrl?: string
@@ -20,6 +20,8 @@ export type TrackEventFunction = (
   eventAction: string,
   args?: Record<string, any>
 ) => Promise<void>
+
+export type KnowledgeBaseConfig = { followup?: HtNodeLink; isActive: boolean }
 
 export type KnowledgeBaseFunction = (
   request: ActionRequest,

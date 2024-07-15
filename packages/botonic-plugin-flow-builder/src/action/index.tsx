@@ -27,7 +27,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
-    ) as FlowHandoff
+    )
     if (handoffContent) {
       await handoffContent.doHandoff(request)
     }

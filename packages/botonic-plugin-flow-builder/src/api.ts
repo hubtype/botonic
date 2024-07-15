@@ -8,7 +8,6 @@ import {
 } from './constants'
 import {
   HtBotActionNode,
-  HtFallbackNode,
   HtFlowBuilderData,
   HtGoToFlow,
   HtIntentNode,
@@ -21,7 +20,7 @@ import {
   HtPayloadNode,
 } from './content-fields/hubtype-fields'
 import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
-import { FlowBuilderApiOptions } from './types'
+import { FlowBuilderApiOptions, KnowledgeBaseConfig } from './types'
 
 export class FlowBuilderApi {
   url: string
@@ -79,7 +78,7 @@ export class FlowBuilderApi {
   getFallbackNode(alternate: boolean): HtNodeWithContent {
     const fallbackNode = this.flow.nodes.find(
       node => node.type === HtNodeWithContentType.FALLBACK
-    ) as HtFallbackNode | undefined
+    )
     if (!fallbackNode) {
       throw new Error('Fallback node must be defined')
     }
@@ -96,12 +95,10 @@ export class FlowBuilderApi {
       : this.getNodeById(fallbackSecondMessage.id)
   }
 
-  getKnowledgeBaseConfig():
-    | { followup?: HtNodeLink; isActive: boolean }
-    | undefined {
+  getKnowledgeBaseConfig(): KnowledgeBaseConfig | undefined {
     const fallbackNode = this.flow.nodes.find(
       node => node.type === HtNodeWithContentType.FALLBACK
-    ) as HtFallbackNode | undefined
+    )
 
     return fallbackNode
       ? {
@@ -115,7 +112,7 @@ export class FlowBuilderApi {
     try {
       const intentsNodes = this.flow.nodes.filter(
         node => node.type === HtNodeWithContentType.INTENT
-      ) as HtIntentNode[]
+      )
       const inputIntent = input.intent
       if (inputIntent) {
         return intentsNodes.find(
@@ -133,7 +130,7 @@ export class FlowBuilderApi {
   getSmartIntentNodes(): HtSmartIntentNode[] {
     return this.flow.nodes.filter(
       node => node.type === HtNodeWithContentType.SMART_INTENT
-    ) as HtSmartIntentNode[]
+    )
   }
 
   private nodeContainsIntent(
@@ -157,7 +154,7 @@ export class FlowBuilderApi {
   getKeywordNodes(): HtKeywordNode[] {
     return this.flow.nodes.filter(
       node => node.type === HtNodeWithContentType.KEYWORD
-    ) as HtKeywordNode[]
+    )
   }
 
   getPayload(target?: HtNodeLink): string | undefined {

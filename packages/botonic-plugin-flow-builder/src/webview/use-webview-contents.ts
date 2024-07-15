@@ -69,12 +69,12 @@ export function useWebviewContents<T extends MapContentsType>({
 
         const textResponseContents = response.data.webview_contents.filter(
           webviewContent => webviewContent.type === WebviewContentType.TEXT
-        ) as WebviewTextContent[]
+        )
         setTextContents(textResponseContents)
 
         const imageResponseContents = response.data.webview_contents.filter(
           webviewContent => webviewContent.type === WebviewContentType.IMAGE
-        ) as WebviewImageContent[]
+        )
         setImageContents(imageResponseContents)
       } catch (error) {
         console.error('Error fetching webview contents:', error)
