@@ -87,11 +87,12 @@ const routes = [...defaultRoutes, ...fallbackRoutes, notFoundRoute]
 describe('TEST: Root Level Accesses (lastRoutePath is null)', () => {
   const router = new Router(routes)
 
+  // que es normal input? hi ha diferents inputs amb intent, payload, text
   describe('normal input', () => {
     it('1. should retrieve routes at root level (initial path)', () => {
       expect(
         router.processInput(
-          { type: 'text', text: 'hi', intent: 'greeting' },
+          { type: 'text', text: 'hi', intent: 'greeting' }, // Com funciona el match del intent? si trec el intent falla, si poso ggreting funciona
           testSession(),
           null
         )
@@ -176,7 +177,7 @@ describe('TEST: Root Level Accesses (lastRoutePath is null)', () => {
     it('3. should retrieve routes at root level (404 path payload)', () => {
       expect(
         router.processInput(
-          { type: 'postback', payload: createPathPayload('404') },
+          { type: 'postback', payload: createPathPayload('404') }, // qualsevol payload que no existeixi fa que el test passi en verd
           testSession(),
           null
         )
@@ -1257,7 +1258,7 @@ describe('TEST: Converting Functional Routes to Routes', () => {
     expect(computedRoutes).toEqual(routes)
   })
 })
-// eslint-disable-next-line jest/valid-describe
+
 describe('TEST: Functional Router process input', () => {
   it('Resolves correctly the dynamic routes and incoming input', async () => {
     const routes = async ({ input, session }) => {

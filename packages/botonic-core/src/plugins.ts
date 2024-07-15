@@ -1,10 +1,4 @@
-import {
-  Input,
-  PluginConfig,
-  ResolvedPlugins,
-  RoutePath,
-  Session,
-} from './models'
+import { ActionRequest, PluginConfig, ResolvedPlugins } from './models'
 
 type PluginMode = 'pre' | 'post'
 
@@ -27,26 +21,21 @@ export function loadPlugins(plugins: PluginConfig<any>[]): ResolvedPlugins {
 }
 
 export async function runPlugins(
-  plugins: ResolvedPlugins,
+  actionRequest: ActionRequest,
   mode: PluginMode,
-  input: Input,
-  session: Session,
-  lastRoutePath: RoutePath,
   response: string | null = null
 ): Promise<void> {
+  const { plugins } = actionRequest
   for (const key in plugins) {
-    const p = await plugins[key]
+    const plugin = plugins[key]
     try {
-      if (mode === 'pre' && p.pre) {
-        await p.pre({ input, session, lastRoutePath, plugins })
+      if (mode === 'pre' && plugin.pre) {
+        await plugin.pre(actionRequest)
       }
-      if (mode === 'post' && p.post) {
-        await p.post({
-          input,
-          session,
-          lastRoutePath,
+      if (mode === 'post' && plugin.post) {
+        await plugin.post({
+          ...actionRequest,
           response,
-          plugins,
         })
       }
     } catch (e) {

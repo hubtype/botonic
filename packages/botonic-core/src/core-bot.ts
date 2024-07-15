@@ -1,6 +1,7 @@
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
+  ActionRequest,
   BotRequest,
   BotResponse,
   INPUT,
@@ -9,7 +10,6 @@ import {
   ProcessInputResult,
   ResolvedPlugins,
   Route,
-  RoutePath,
   Routes,
   Session,
 } from './models'
@@ -30,12 +30,12 @@ export interface CoreBotConfig {
 }
 export class CoreBot {
   appId?: string
-  defaultDelay?: number
+  defaultDelay: number
   defaultRoutes: Route[]
-  defaultTyping?: number
+  defaultTyping: number
   inspector: Inspector
   locales: Locales
-  plugins?: ResolvedPlugins
+  plugins: ResolvedPlugins
   renderer: any
   rootElement: any
   router: Router | null
@@ -57,9 +57,8 @@ export class CoreBot {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
-    this.defaultTyping =
-      typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
-    this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
+    this.defaultTyping = defaultTyping ?? 0.6
+    this.defaultDelay = defaultDelay ?? 0.4
     this.locales = locales
     this.appId = appId || undefined
     this.rootElement = null
@@ -118,9 +117,19 @@ export class CoreBot {
       }
     }
 
-    await this.runPrePlugins(input, session, lastRoutePath)
+    const actionRequest: ActionRequest = {
+      defaultDelay: this.defaultDelay,
+      defaultTyping: this.defaultTyping,
+      input,
+      lastRoutePath,
+      params: {},
+      plugins: this.plugins,
+      session,
+    }
 
-    const output = await this.getOutput(input, session, lastRoutePath)
+    await this.runPrePlugins(actionRequest)
+
+    const output = await this.getOutput(actionRequest)
 
     const response = await this.renderer({
       request: this.createRequestFromOutput(
@@ -130,65 +139,44 @@ export class CoreBot {
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
 
-    lastRoutePath = output.lastRoutePath
+    actionRequest.lastRoutePath = output.lastRoutePath
 
-    await this.runPostPlugins(input, session, lastRoutePath, response)
+    await this.runPostPlugins(actionRequest, response)
 
     session.is_first_interaction = false
 
     return {
-      input,
+      input: actionRequest.input,
+      session: actionRequest.session,
+      lastRoutePath: actionRequest.lastRoutePath,
       response,
-      session,
-      lastRoutePath,
     }
   }
 
-  private async runPrePlugins(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
-  ) {
+  private async runPrePlugins(actionRequest: ActionRequest) {
     if (this.plugins) {
-      await runPlugins(
-        this.plugins,
-        'pre',
-        input,
-        session,
-        lastRoutePath,
-        undefined
-      )
+      await runPlugins(actionRequest, 'pre', undefined)
     }
   }
 
   private async getOutput(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
+    actionRequest: ActionRequest
   ): Promise<ProcessInputResult> {
-    await this.setRouter(input, session, lastRoutePath)
+    await this.setRouter(actionRequest)
 
     const output = (this.router as Router).processInput(
-      input,
-      session,
-      lastRoutePath
+      actionRequest.input,
+      actionRequest.session,
+      actionRequest.lastRoutePath
     )
     return output
   }
 
-  private async setRouter(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
-  ) {
+  private async setRouter(actionRequest: ActionRequest) {
     if (this.routes instanceof Function) {
       this.router = new Router(
         [
-          ...(await getComputedRoutes(this.routes, {
-            input,
-            session,
-            lastRoutePath,
-          })),
+          ...(await getComputedRoutes(this.routes, actionRequest)),
           ...this.defaultRoutes,
         ],
         this.inspector.routeInspector
@@ -199,35 +187,26 @@ export class CoreBot {
   private createRequestFromOutput(
     { input, session, lastRoutePath }: BotRequest,
     output: ProcessInputResult
-  ) {
+  ): ActionRequest & {
+    getString: (stringId: string) => string
+    setLocale: (locale: string) => void
+  } {
     return {
-      getString: stringId => this.getString(stringId, session),
-      setLocale: locale => this.setLocale(locale, session),
-      session: session || {},
-      params: output.params || {},
-      input,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
+      getString: (stringId: string) => this.getString(stringId, session),
+      setLocale: (locale: string) => this.setLocale(locale, session),
       defaultDelay: this.defaultDelay,
+      defaultTyping: this.defaultTyping,
+      input,
       lastRoutePath,
+      params: output.params || {},
+      plugins: this.plugins || {},
+      session: session || {},
     }
   }
 
-  private async runPostPlugins(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath,
-    response: any
-  ) {
+  private async runPostPlugins(actionRequest: ActionRequest, response: any) {
     if (this.plugins) {
-      await runPlugins(
-        this.plugins,
-        'post',
-        input,
-        session,
-        lastRoutePath,
-        response
-      )
+      await runPlugins(actionRequest, 'post', response)
     }
   }
 
