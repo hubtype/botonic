@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
+import { Scale } from '../shared/styles'
 import { resolveImage } from '../util/environment'
 import { ConditionalWrapper } from '../util/react'
 
@@ -99,9 +99,7 @@ export const DefaultHeader = props => {
       </TextContainer>
       <ConditionalWrapper
         condition={animationsEnabled}
-        wrapper={children => (
-          <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
-        )}
+        wrapper={children => <Scale>{children}</Scale>}
       >
         <CloseHeader onClick={props.onCloseClick}>⨯</CloseHeader>
       </ConditionalWrapper>

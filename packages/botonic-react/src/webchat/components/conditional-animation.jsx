@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion'
 import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { Scale } from '../../shared/styles'
 import { ConditionalWrapper } from '../../util/react'
 
 export const ConditionalAnimation = props => {
@@ -15,9 +15,7 @@ export const ConditionalAnimation = props => {
   return (
     <ConditionalWrapper
       condition={animationsEnabled}
-      wrapper={children => (
-        <motion.div whileHover={{ scale: 1.2 }}>{children}</motion.div>
-      )}
+      wrapper={children => <Scale>{children}</Scale>}
     >
       {props.children}
     </ConditionalWrapper>
