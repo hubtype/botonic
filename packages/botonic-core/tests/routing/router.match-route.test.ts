@@ -6,12 +6,14 @@ const textInput: Input = {
   type: INPUT.TEXT,
   text: 'hi',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const textInputComplex: Input = {
   type: INPUT.TEXT,
   text: 'Cömplêx input &% 🚀',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const textPayloadInput: Input = {
@@ -19,36 +21,42 @@ const textPayloadInput: Input = {
   text: 'hi',
   payload: 'foo',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const postbackInput: Input = {
   type: INPUT.POSTBACK,
   payload: 'foo',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const audioInput: Input = {
   type: INPUT.AUDIO,
   src: 'data:audio/mpeg;base64,iVBORw0KG',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const documentInput: Input = {
   type: INPUT.DOCUMENT,
   src: 'data:application/pdf;base64,iVBORw0KG',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const imageInput: Input = {
   type: INPUT.IMAGE,
   src: 'data:image/png;base64,iVBORw0KG',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const videoInput: Input = {
   type: INPUT.VIDEO,
   src: 'data:video/mp4;base64,iVBORw0KG',
   bot_interaction_id: 'testInteractionId',
+  message_id: 'testMessageId',
 }
 
 const requestInput: BotRequest = {

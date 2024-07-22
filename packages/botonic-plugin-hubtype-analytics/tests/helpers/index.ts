@@ -40,6 +40,7 @@ export function createRequest(args?: RequestArgs): BotRequest {
       data: 'Hola',
       type: INPUT.TEXT,
       bot_interaction_id: 'testInteractionId',
+      message_id: 'testMessageId',
     },
     lastRoutePath: '',
   }

@@ -7,7 +7,6 @@ import {
   ResolvedPlugins,
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import { v4 as uuid } from 'uuid'
 
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
@@ -76,7 +75,7 @@ export function createRequest({
     },
     input: {
       bot_interaction_id: 'testInteractionId',
-      message_id: uuid(),
+      message_id: 'testMessageId',
       ...input,
     },
     lastRoutePath: '',
