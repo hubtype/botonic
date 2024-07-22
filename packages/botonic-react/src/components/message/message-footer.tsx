@@ -12,6 +12,7 @@ interface MessageFooterProps {
   sentBy: SENDERS
   feedbackEnabled: boolean
   inferenceId?: string
+  botInteractionId?: string
 }
 
 export const MessageFooter = ({
@@ -20,6 +21,7 @@ export const MessageFooter = ({
   sentBy,
   feedbackEnabled,
   inferenceId,
+  botInteractionId,
 }: MessageFooterProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
@@ -45,7 +47,11 @@ export const MessageFooter = ({
         />
       ) : null}
       {feedbackEnabled ? (
-        <MessageFeedback inferenceId={inferenceId} messageId={messageJSON.id} />
+        <MessageFeedback
+          inferenceId={inferenceId}
+          messageId={messageJSON.id}
+          botInteractionId={botInteractionId}
+        />
       ) : null}
     </MessageFooterContainer>
   )

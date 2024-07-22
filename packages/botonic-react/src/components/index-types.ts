@@ -31,6 +31,7 @@ export interface TextProps extends MessageProps {
   markdown?: boolean
   feedbackEnabled?: boolean
   inferenceId?: string
+  botInteractionId?: string
 }
 
 export interface Webview {

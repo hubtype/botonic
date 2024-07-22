@@ -15,11 +15,16 @@ interface ButtonsState {
 }
 
 interface RatingProps {
+  botInteractionId?: string
   inferenceId?: string
   messageId: string
 }
 
-export const MessageFeedback = ({ inferenceId, messageId }: RatingProps) => {
+export const MessageFeedback = ({
+  botInteractionId,
+  inferenceId,
+  messageId,
+}: RatingProps) => {
   const { webchatState, updateMessage, trackEvent } = useContext(WebchatContext)
   const request = useContext(RequestContext)
 
@@ -64,6 +69,7 @@ export const MessageFeedback = ({ inferenceId, messageId }: RatingProps) => {
 
     const args = {
       knowledgebaseInferenceId: inferenceId,
+      feedbackBotInteractionId: botInteractionId,
       feedbackTargetId: messageId,
       feedbackGroupId: uuid(),
       possibleOptions: [FeedbackOption.ThumbsUp, FeedbackOption.ThumbsDown],
