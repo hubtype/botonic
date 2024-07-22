@@ -45,6 +45,7 @@ export interface EventFeedback extends HtBaseEventProps {
 export interface EventFeedbackKnowledgebase extends HtBaseEventProps {
   action: EventAction.FeedbackKnowledgebase
   knowledgebaseInferenceId: string
+  feedbackBotInteractionId: string
   feedbackTargetId: string
   feedbackGroupId: string
   possibleOptions: string[]
