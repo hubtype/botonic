@@ -148,6 +148,7 @@ export interface Input extends Partial<NluResult> {
     campaign?: Campaign
   }
   message_id?: string
+  bot_interaction_id: string
 }
 
 export interface Campaign {
