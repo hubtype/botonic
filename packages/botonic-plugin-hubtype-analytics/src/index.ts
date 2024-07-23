@@ -1,5 +1,5 @@
 import { BotRequest, Plugin } from '@botonic/core'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
@@ -44,6 +44,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
       language: this.getLanguage(request),
       country: this.getCountry(request),
       userId: request.session.user.id,
+      botInteractionId: request.input?.bot_interaction_id,
     }
   }
 

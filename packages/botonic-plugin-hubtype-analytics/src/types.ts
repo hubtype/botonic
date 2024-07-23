@@ -164,4 +164,5 @@ export interface RequestData {
   language: string
   country: string
   userId: string
+  botInteractionId: string
 }
