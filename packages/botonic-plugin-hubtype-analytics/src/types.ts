@@ -131,11 +131,22 @@ export interface EventFallback extends HtBaseEventProps {
   fallbackMessageId: string
 }
 
-export interface EventWebview extends HtBaseEventProps {
-  action: EventAction.WebviewStep | EventAction.WebviewEnd
+export interface EventWebviewStep extends HtBaseEventProps {
+  action: EventAction.WebviewStep
+  flowThreadId?: string
   webviewThreadId: string
   webviewName: string
-  webviewStepName?: string
+  webviewStepName: string
+  webviewStepNumber?: number
+}
+
+export interface EventWebviewEnd extends HtBaseEventProps {
+  action: EventAction.WebviewEnd
+  flowThreadId?: string
+  webviewThreadId: string
+  webviewName: string
+  webviewEndStepName?: string
+  webviewEndStepNumber?: number
   webviewEndFailType?: string
   webviewEndFailMessage?: string
 }
@@ -157,7 +168,8 @@ export type HtEventProps =
   | EventIntentSmart
   | EventKnowledgeBase
   | EventFallback
-  | EventWebview
+  | EventWebviewStep
+  | EventWebviewEnd
   | EventCustom
 
 export interface RequestData {

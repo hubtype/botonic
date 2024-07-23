@@ -11,7 +11,8 @@ import {
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
-  HtEventWebview,
+  HtEventWebviewEnd,
+  HtEventWebviewStep,
 } from './event-models'
 import { EventAction, HtEventProps, RequestData } from './types'
 
@@ -55,8 +56,10 @@ export function createHtEvent(
       return new HtEventFallback(htEventProps, requestData)
 
     case EventAction.WebviewStep:
+      return new HtEventWebviewStep(htEventProps, requestData)
+
     case EventAction.WebviewEnd:
-      return new HtEventWebview(htEventProps, requestData)
+      return new HtEventWebviewEnd(htEventProps, requestData)
 
     case EventAction.Custom:
       return new HtEventCustom(htEventProps, requestData)
