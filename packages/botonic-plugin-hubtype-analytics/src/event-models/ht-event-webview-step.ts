@@ -2,7 +2,7 @@ import { EventAction, EventType, EventWebviewStep, RequestData } from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventWebviewStep extends HtEvent {
-  action: EventAction.WebviewStep | EventAction.WebviewEnd
+  action: EventAction.WebviewStep
   flow_thread_id?: string
   webview_thread_id: string
   webview_name: string
