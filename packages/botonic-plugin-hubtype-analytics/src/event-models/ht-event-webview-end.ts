@@ -18,8 +18,8 @@ export class HtEventWebviewEnd extends HtEvent {
     this.flow_thread_id = event.flowThreadId
     this.webview_thread_id = event.webviewThreadId
     this.webview_name = event.webviewName
-    this.webview_end_step_name = event.webviewEndStepName
-    this.webview_end_step_n = event.webviewEndStepNumber
+    this.webview_end_step_name = event.webviewStepName
+    this.webview_end_step_n = event.webviewStepNumber
     this.webview_end_fail_type = event.webviewEndFailType
     this.webview_end_fail_message = event.webviewEndFailMessage
   }

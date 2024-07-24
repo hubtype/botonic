@@ -145,8 +145,8 @@ export interface EventWebviewEnd extends HtBaseEventProps {
   flowThreadId?: string
   webviewThreadId: string
   webviewName: string
-  webviewEndStepName?: string
-  webviewEndStepNumber?: number
+  webviewStepName?: string
+  webviewStepNumber?: number
   webviewEndFailType?: string
   webviewEndFailMessage?: string
 }
