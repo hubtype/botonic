@@ -31,8 +31,8 @@ describe('Create webview events', () => {
       action: EventAction.WebviewEnd,
       webviewThreadId: '12345',
       webviewName: 'ADD_A_BAG',
-      webviewEndStepName: 'summary_step',
-      webviewEndStepNumber: 3,
+      webviewStepName: 'summary_step',
+      webviewStepNumber: 3,
       webviewEndFailType: 'canceled_by_user',
       webviewEndFailMessage: 'Closed by user',
     })

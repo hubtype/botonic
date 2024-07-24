@@ -24,6 +24,7 @@ describe('Create nlu intent classic events', () => {
       nlu_intent_threshold: 0.6,
       nlu_intent_message_id: 'nluIntentMessageId',
       user_input: 'Add a bag',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })

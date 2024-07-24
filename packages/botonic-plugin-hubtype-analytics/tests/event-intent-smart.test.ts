@@ -22,6 +22,7 @@ describe('Create nlu intent smart events', () => {
       nlu_intent_smart_num_used: 2,
       nlu_intent_smart_message_id: 'messageId',
       user_input: 'Add a bag',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
