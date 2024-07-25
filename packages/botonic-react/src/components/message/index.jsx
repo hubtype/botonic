@@ -119,6 +119,7 @@ export const Message = props => {
         isUnread: isUnread === 1 || isUnread === true,
         feedbackEnabled,
         inferenceId,
+        botInteractionId,
       }
       addMessage(message)
     }
