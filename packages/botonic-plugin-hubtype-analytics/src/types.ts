@@ -175,6 +175,6 @@ export type HtEventProps =
 export interface RequestData {
   language: string
   country: string
-  userId: string
+  userId?: string
   botInteractionId: string
 }

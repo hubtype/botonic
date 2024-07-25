@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { EventAction, EventType, HtEventProps, RequestData } from '../types'
 
 const excludedEvents = [
@@ -10,7 +11,7 @@ const excludedEvents = [
 ]
 
 export class HtEvent {
-  chat_id: string
+  chat_id?: string
   type: EventType
   chat_language: string
   chat_country?: string
