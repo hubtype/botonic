@@ -25,7 +25,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   getCountry: (request: BotRequest) => string
   constructor(options?: HubtypeAnalyticsOptions) {
     const hubtypeUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
-    this.eventsBaseUrl = `${hubtypeUrl}/external/v2/conversational_apps/`
+    this.eventsBaseUrl = `${hubtypeUrl}/external/v2/conversational_apps`
     this.getLanguage = options?.getLanguage || getDefaultLanguage
     this.getCountry = options?.getCountry || getDefaultCountry
   }
