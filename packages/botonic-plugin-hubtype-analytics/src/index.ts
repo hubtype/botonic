@@ -1,5 +1,6 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
+import { send } from 'process'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
@@ -19,11 +20,12 @@ function getDefaultCountry(request: BotRequest): string {
 }
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {
-  baseUrl: string
+  eventsBaseUrl: string
   getLanguage: (request: BotRequest) => string
   getCountry: (request: BotRequest) => string
   constructor(options?: HubtypeAnalyticsOptions) {
-    this.baseUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+    const hubtypeUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+    this.eventsBaseUrl = `${hubtypeUrl}/external/v2/conversational_apps/`
     this.getLanguage = options?.getLanguage || getDefaultLanguage
     this.getCountry = options?.getCountry || getDefaultCountry
   }
@@ -58,42 +60,44 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
   }
 
   private sendEvent(request: BotRequest, event: HtEvent) {
-    const url = this.getUrl(request, event.type)
-    const config = this.getConfig(event, request)
+    if (event.type === EventType.BotEvent) {
+      return this.sendBotEvent(request, event)
+    }
 
+    return this.sendWebEvent(request, event)
+  }
+
+  private sendBotEvent(request: BotRequest, event: HtEvent) {
+    const botId = request.session.bot.id
+    const url = `${this.eventsBaseUrl}/${botId}/bot_event/`
+    const config = {
+      headers: { Authorization: `Bearer ${request.session._access_token}` },
+    }
     return axios.post(url, event, config)
   }
 
-  private getUrl(request: BotRequest, eventType: EventType) {
-    if (eventType === EventType.BotEvent) {
-      const botId = request.session.bot.id
-      return `${this.baseUrl}/external/v2/conversational_apps/${botId}/bot_event/`
+  private sendWebEvent(request: BotRequest, event: HtEvent) {
+    if (this.isLambdaEvent(request)) {
+      return this.sendWebEventByBotId(request, event)
     }
-    return `${this.baseUrl}/external/v2/conversational_apps/web_event/`
+
+    return this.sendWebEventByProviderId(request, event)
   }
 
-  private getConfig(event: HtEvent, request: BotRequest) {
-    if (event.type === EventType.BotEvent) {
-      return {
-        headers: { Authorization: `Bearer ${request.session._access_token}` },
-      }
-    }
+  private sendWebEventByBotId(request: BotRequest, event: HtEvent) {
+    const botId = request.session.bot.id
+    const url = `${this.eventsBaseUrl}/${botId}/web_event/`
+    return axios.post(url, event)
+  }
 
-    // this is a web event send from bot lambda or webview
-    if (this.isLambdaEvent(request)) {
-      return {
-        params: {
-          bot_id: request.session.bot.id,
-        },
-      }
-    }
-
-    // this is a web event send from webchat
-    return {
+  private sendWebEventByProviderId(request: BotRequest, event: HtEvent) {
+    const url = `${this.eventsBaseUrl}/web_event/`
+    const config = {
       params: {
         provider_id: request.session.user.id,
       },
     }
+    return axios.post(url, event, config)
   }
 }
 
