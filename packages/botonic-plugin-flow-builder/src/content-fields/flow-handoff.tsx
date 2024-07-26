@@ -52,11 +52,17 @@ export class FlowHandoff extends ContentFieldsBase {
     }
 
     if (this.queue) {
+      const language = request.session.user.extra_data.language
+      const country = request.session.user.extra_data.country
+
       handOffBuilder.withQueue(this.queue.id)
       handOffBuilder.withBotEvent({
-        language: request.session.user.extra_data.language,
-        country: request.session.user.extra_data.country,
-        bot_interaction_id: request.input.bot_interaction_id,
+        language,
+        country,
+        botInteractionId: request.input.bot_interaction_id,
+      })
+      handOffBuilder.withExtraData({
+        language,
       })
       this.isTestIntegration = request.session.is_test_integration
       await handOffBuilder.handOff()
