@@ -61,7 +61,7 @@ npm install @botonic/plugin-flow-builder
 import * as hubtypeFlowBuilder from '@botonic/plugin-flow-builder'
 
 const flowBuilderOptions = {
-  flowUrl: 'HUBTYPE_FLOW_BUILDER_URL',
+  apiUrl: 'HUBTYPE_FLOW_BUILDER_URL',
   jsonVersion: 'latest',
   getAccessToken: () => 'HUBTYPE_FLOW_BUILDER_ACCESS_TOKEN', // Used locally,
   getLocale: () => 'YOUR_LOCALE',
@@ -80,7 +80,7 @@ By doing this, we are passing configuration parameters to the bot. This way we c
 
 Below are the parameters that we can pass to the plugin:
 
-- `flowUrl`: This is the URL where the Flow is located. The bot will automatically collect this URL, so in most cases, we don't have to pass it. It is used in cases where the Flow URL is in a testing environment.
+- `apiUrl`: This is the URL of the flow-builder API. The bot will automatically collect this URL, so in most cases, we don't have to pass it. It is used in cases where the Flow URL is in a testing environment.
 
 - `jsonVersion`: This indicates which version of flow you want the bot to use. By default it will use the `latest` version which is what we want in production. We can set this to `draft` if we want the bot to use this content in a test environment.
 
