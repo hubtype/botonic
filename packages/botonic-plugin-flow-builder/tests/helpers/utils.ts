@@ -7,7 +7,6 @@ import {
   ResolvedPlugins,
 } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import { v4 as uuid } from 'uuid'
 
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
@@ -48,7 +47,7 @@ export function createFlowBuilderPlugin({
 }
 
 interface RequestArgs {
-  input: Input
+  input: Omit<Input, 'bot_interaction_id' | 'message_id'>
   plugins?: ResolvedPlugins
   provider?: ProviderType
   isFirstInteraction?: boolean
@@ -74,7 +73,11 @@ export function createRequest({
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
     },
-    input: { ...input, message_id: uuid() },
+    input: {
+      bot_interaction_id: 'testInteractionId',
+      message_id: 'testMessageId',
+      ...input,
+    },
     lastRoutePath: '',
     plugins,
   }

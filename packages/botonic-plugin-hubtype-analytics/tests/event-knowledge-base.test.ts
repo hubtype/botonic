@@ -29,6 +29,7 @@ describe('Create knowledge base events', () => {
       knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebase_message_id: 'knowledgebaseMessageId',
       user_input: 'What is Flow Builder?',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
@@ -56,6 +57,7 @@ describe('Create knowledge base events', () => {
       knowledgebase_chunks_ids: ['cunkId1', 'chunkId2', 'chunkId3'],
       knowledgebase_message_id: 'knowledgebaseMessageId',
       user_input: 'What is Flow Builder?',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })

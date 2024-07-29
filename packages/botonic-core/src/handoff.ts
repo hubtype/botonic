@@ -32,6 +32,7 @@ export type HandoffExtraData = {
 interface BotEventData {
   language: string
   country: string
+  bot_interaction_id?: string
 }
 
 function contextDefaults(context: any): BackendContext {

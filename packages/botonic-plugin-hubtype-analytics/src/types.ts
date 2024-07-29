@@ -45,6 +45,7 @@ export interface EventFeedback extends HtBaseEventProps {
 export interface EventFeedbackKnowledgebase extends HtBaseEventProps {
   action: EventAction.FeedbackKnowledgebase
   knowledgebaseInferenceId: string
+  feedbackBotInteractionId: string
   feedbackTargetId: string
   feedbackGroupId: string
   possibleOptions: string[]
@@ -130,11 +131,22 @@ export interface EventFallback extends HtBaseEventProps {
   fallbackMessageId: string
 }
 
-export interface EventWebview extends HtBaseEventProps {
-  action: EventAction.WebviewStep | EventAction.WebviewEnd
+export interface EventWebviewStep extends HtBaseEventProps {
+  action: EventAction.WebviewStep
+  flowThreadId?: string
+  webviewThreadId: string
+  webviewName: string
+  webviewStepName: string
+  webviewStepNumber?: number
+}
+
+export interface EventWebviewEnd extends HtBaseEventProps {
+  action: EventAction.WebviewEnd
+  flowThreadId?: string
   webviewThreadId: string
   webviewName: string
   webviewStepName?: string
+  webviewStepNumber?: number
   webviewEndFailType?: string
   webviewEndFailMessage?: string
 }
@@ -156,11 +168,13 @@ export type HtEventProps =
   | EventIntentSmart
   | EventKnowledgeBase
   | EventFallback
-  | EventWebview
+  | EventWebviewStep
+  | EventWebviewEnd
   | EventCustom
 
 export interface RequestData {
   language: string
   country: string
   userId: string
+  botInteractionId: string
 }

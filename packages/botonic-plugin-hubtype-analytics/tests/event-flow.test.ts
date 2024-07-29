@@ -26,6 +26,7 @@ describe('Create flow event', () => {
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
       flow_node_is_meaningful: false,
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })

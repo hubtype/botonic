@@ -39,6 +39,7 @@ export const Message = props => {
     isUnread = true,
     feedbackEnabled,
     inferenceId,
+    botInteractionId,
     ...otherProps
   } = props
 
@@ -269,6 +270,7 @@ export const Message = props => {
               sentBy={sentBy}
               feedbackEnabled={feedbackEnabled}
               inferenceId={inferenceId}
+              botInteractionId={botInteractionId}
             />
           ) : null}
         </>

@@ -26,6 +26,7 @@ describe('Create handoff events', () => {
       handoff_is_queue_open: true,
       handoff_is_available_agent: true,
       handoff_is_threshold_reached: false,
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
@@ -51,6 +52,7 @@ describe('Create handoff events', () => {
       handoff_is_queue_open: false,
       handoff_is_available_agent: false,
       handoff_is_threshold_reached: false,
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
@@ -70,6 +72,7 @@ describe('Create handoff events', () => {
       action: EventAction.HandoffOption,
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })

@@ -56,6 +56,7 @@ export class FlowHandoff extends ContentFieldsBase {
       handOffBuilder.withBotEvent({
         language: request.session.user.extra_data.language,
         country: request.session.user.extra_data.country,
+        bot_interaction_id: request.input.bot_interaction_id,
       })
       this.isTestIntegration = request.session.is_test_integration
       await handOffBuilder.handOff()

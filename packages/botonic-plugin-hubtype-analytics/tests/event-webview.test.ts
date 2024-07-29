@@ -9,6 +9,7 @@ describe('Create webview events', () => {
       webviewThreadId: '12345',
       webviewName: 'ADD_A_BAG',
       webviewStepName: 'step1',
+      webviewStepNumber: 1,
     })
 
     expect(htEvent).toEqual({
@@ -20,6 +21,7 @@ describe('Create webview events', () => {
       webview_thread_id: '12345',
       webview_name: 'ADD_A_BAG',
       webview_step_name: 'step1',
+      webview_step_n: 1,
       type: EventType.WebEvent,
     })
   })
@@ -29,6 +31,8 @@ describe('Create webview events', () => {
       action: EventAction.WebviewEnd,
       webviewThreadId: '12345',
       webviewName: 'ADD_A_BAG',
+      webviewStepName: 'summary_step',
+      webviewStepNumber: 3,
       webviewEndFailType: 'canceled_by_user',
       webviewEndFailMessage: 'Closed by user',
     })
@@ -41,6 +45,8 @@ describe('Create webview events', () => {
       action: EventAction.WebviewEnd,
       webview_thread_id: '12345',
       webview_name: 'ADD_A_BAG',
+      webview_end_step_name: 'summary_step',
+      webview_end_step_n: 3,
       webview_end_fail_type: 'canceled_by_user',
       webview_end_fail_message: 'Closed by user',
       type: EventType.WebEvent,

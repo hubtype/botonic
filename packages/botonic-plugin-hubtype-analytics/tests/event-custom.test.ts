@@ -26,6 +26,7 @@ describe('Create custom events', () => {
         value: '12345',
       },
       custom_sensitive_fields: { bank_account: '1234567890' },
+      bot_interaction_id: 'testInteractionId',
       type: EventType.WebEvent,
     })
   })

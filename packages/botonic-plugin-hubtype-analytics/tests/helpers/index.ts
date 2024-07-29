@@ -36,7 +36,12 @@ export function createRequest(args?: RequestArgs): BotRequest {
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
     },
-    input: { data: 'Hola', type: INPUT.TEXT },
+    input: {
+      data: 'Hola',
+      type: INPUT.TEXT,
+      bot_interaction_id: 'testInteractionId',
+      message_id: 'testMessageId',
+    },
     lastRoutePath: '',
   }
 }

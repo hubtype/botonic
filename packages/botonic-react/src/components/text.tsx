@@ -31,6 +31,7 @@ export const Text = (props: TextProps) => {
     markdown: props.markdown === undefined ? true : props.markdown,
     feedbackEnabled: props.feedbackEnabled,
     inferenceId: props.inferenceId,
+    botInteractionId: props.botInteractionId,
   }
 
   const textProps = mapObjectNonBooleanValues({

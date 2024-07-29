@@ -20,6 +20,7 @@ describe('Create fallback events', () => {
       user_input: 'userInputTest',
       fallback_out: 1,
       fallback_message_id: 'fallbackMessageIdTest',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
@@ -41,6 +42,7 @@ describe('Create fallback events', () => {
       user_input: 'userInputTest',
       fallback_out: 2,
       fallback_message_id: 'fallbackMessageIdTest',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
@@ -62,6 +64,7 @@ describe('Create fallback events', () => {
       user_input: 'userInputTest',
       fallback_out: 1,
       fallback_message_id: 'fallbackMessageIdTest',
+      bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
