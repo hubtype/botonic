@@ -59,7 +59,6 @@ export class FlowHandoff extends ContentFieldsBase {
       handOffBuilder.withBotEvent({
         language,
         country,
-        botInteractionId: request.input.bot_interaction_id,
       })
       handOffBuilder.withExtraData({
         language,

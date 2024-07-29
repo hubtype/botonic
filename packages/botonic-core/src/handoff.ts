@@ -32,7 +32,6 @@ export type HandoffExtraData = {
 interface BotEventData {
   language: string
   country: string
-  botInteractionId?: string
 }
 
 function contextDefaults(context: any): BackendContext {
@@ -184,11 +183,6 @@ export async function humanHandOff(session, queueNameOrId = '', onFinish) {
   return builder.handOff()
 }
 
-interface BotEventParams {
-  language: string
-  country: string
-  bot_interaction_id?: string
-}
 interface HubtypeHandoffParams {
   queue?: string
   agent_email?: string
@@ -201,7 +195,7 @@ interface HubtypeHandoffParams {
   shadowing?: boolean
   on_finish?: string
   case_extra_data?: HandoffExtraData
-  bot_event?: BotEventParams
+  bot_event?: BotEventData
 }
 async function _humanHandOff(
   session: Session,
@@ -253,11 +247,7 @@ async function _humanHandOff(
     params.case_extra_data = extraData
   }
   if (botEvent) {
-    params.bot_event = {
-      language: botEvent.language,
-      country: botEvent.country,
-      bot_interaction_id: botEvent.botInteractionId,
-    }
+    params.bot_event = botEvent
   }
   if (!session.is_test_integration) {
     session._botonic_action = `create_case:${JSON.stringify(params)}`
