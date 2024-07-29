@@ -31,6 +31,7 @@ describe('Create feedback knowledgebase event', () => {
       option: 'thumbs_down',
       value: 0,
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 })

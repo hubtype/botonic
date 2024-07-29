@@ -27,6 +27,7 @@ describe('Create feedback event', () => {
       option: '**',
       value: 2,
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 
@@ -57,6 +58,7 @@ describe('Create feedback event', () => {
       value: 2,
       comment: 'This is a comment',
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 })
