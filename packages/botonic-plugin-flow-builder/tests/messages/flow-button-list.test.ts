@@ -4,29 +4,17 @@ import { describe, test } from '@jest/globals'
 import { FlowWhatsappButtonList } from '../../src/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from '../helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
 describe('Check the contents of a WhatsApp Button List node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test('The contents of the WhatsApp Button List are displayed', async () => {
-    const request = createRequest({
-      input: { data: 'flowButtonList', type: INPUT.TEXT },
-      plugins: {
-        // @ts-ignore
-        flowBuilderPlugin,
-      },
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: { input: { data: 'flowButtonList', type: INPUT.TEXT } },
     })
 
-    const { contents } = await getContentsAfterPreAndBotonicInit(
-      request,
-      flowBuilderPlugin
-    )
     const buttonListContent = contents[0] as FlowWhatsappButtonList
     expect(buttonListContent.text).toBe('WhatsApp button list')
     expect(buttonListContent.listButtonText).toBe('Menu')

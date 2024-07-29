@@ -4,15 +4,10 @@ import { describe, test } from '@jest/globals'
 import { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
-import {
-  createFlowBuilderPlugin,
-  createRequest,
-  getContentsAfterPreAndBotonicInit,
-} from './helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
 describe('Check the contents returned by the plugin after conditional channel node', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-  const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
 
   test.each([
     [PROVIDER.WHATSAPP, 'Message only for WhatsApp'],
@@ -21,19 +16,13 @@ describe('Check the contents returned by the plugin after conditional channel no
   ])(
     'The content of the channel %s is displayed',
     async (provider: PROVIDER, messageExpected: string) => {
-      const request = createRequest({
-        input: { data: 'channelConditional', type: INPUT.TEXT },
-        plugins: {
-          // @ts-ignore
-          flowBuilderPlugin,
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'channelConditional', type: INPUT.TEXT },
+          provider: provider as ProviderType,
         },
-        provider: provider as ProviderType,
       })
-
-      const { contents } = await getContentsAfterPreAndBotonicInit(
-        request,
-        flowBuilderPlugin
-      )
 
       expect((contents[0] as FlowText).text).toBe(messageExpected)
     }
