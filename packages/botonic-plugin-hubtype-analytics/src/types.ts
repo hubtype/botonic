@@ -137,7 +137,7 @@ export interface EventWebviewStep extends HtBaseEventProps {
   webviewThreadId: string
   webviewName: string
   webviewStepName: string
-  webviewStepNumber?: number
+  webviewStepNumber: number
 }
 
 export interface EventWebviewEnd extends HtBaseEventProps {
