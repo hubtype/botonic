@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
-import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Audio, Document, Image, Text, Video } from '../components'
@@ -333,7 +332,7 @@ export const Webchat = forwardRef((props, ref) => {
     webchatState.lastMessageUpdate,
   ])
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!webchatState.online) {
       setError({
         message: getServerErrorMessage(props.server),

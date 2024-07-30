@@ -35,7 +35,6 @@
     "simplebar-react": "^2.4.3",
     "styled-components": "^5.3.0",
     "ua-parser-js": "^0.8.1",
-    "use-async-effect": "^2.2.7",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
