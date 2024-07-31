@@ -1,16 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { EventAction, EventType, HtEventProps, RequestData } from '../types'
 
-const excludedEvents = [
-  EventAction.FeedbackCase,
-  EventAction.FeedbackConversation,
-  EventAction.FeedbackKnowledgebase,
-  EventAction.FeedbackWebview,
-  EventAction.WebviewStep,
-  EventAction.WebviewEnd,
-]
-
 export class HtEvent {
-  chat_id: string
+  chat_id?: string
   type: EventType
   chat_language: string
   chat_country?: string
@@ -26,9 +18,6 @@ export class HtEvent {
     this.chat_country = requestData.country
     this.format_version = 2
     this.action = event.action
-
-    if (!excludedEvents.includes(event.action)) {
-      this.bot_interaction_id = requestData.botInteractionId
-    }
+    this.bot_interaction_id = requestData.botInteractionId
   }
 }

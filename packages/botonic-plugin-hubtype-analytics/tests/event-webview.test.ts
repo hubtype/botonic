@@ -23,6 +23,7 @@ describe('Create webview events', () => {
       webview_step_name: 'step1',
       webview_step_n: 1,
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 
@@ -50,6 +51,7 @@ describe('Create webview events', () => {
       webview_end_fail_type: 'canceled_by_user',
       webview_end_fail_message: 'Closed by user',
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 })

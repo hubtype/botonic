@@ -1,5 +1,6 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
+import { send } from 'process'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
@@ -19,33 +20,18 @@ function getDefaultCountry(request: BotRequest): string {
 }
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {
-  baseUrl: string
+  eventsBaseUrl: string
   getLanguage: (request: BotRequest) => string
   getCountry: (request: BotRequest) => string
   constructor(options?: HubtypeAnalyticsOptions) {
-    this.baseUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+    const hubtypeUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+    this.eventsBaseUrl = `${hubtypeUrl}/external/v2/conversational_apps`
     this.getLanguage = options?.getLanguage || getDefaultLanguage
     this.getCountry = options?.getCountry || getDefaultCountry
   }
 
   post(): void {
     return
-  }
-
-  getUrl(request: BotRequest, eventType: EventType) {
-    const endpoint =
-      eventType === EventType.BotEvent ? 'bot_event' : 'web_event'
-    const botId = request.session.bot.id
-    return `${this.baseUrl}/external/v2/conversational_apps/${botId}/${endpoint}/`
-  }
-
-  getRequestData(request: BotRequest): RequestData {
-    return {
-      language: this.getLanguage(request),
-      country: this.getCountry(request),
-      userId: request.session.user.id,
-      botInteractionId: request.input?.bot_interaction_id,
-    }
   }
 
   async trackEvent(request: BotRequest, htEventProps: HtEventProps) {
@@ -60,11 +46,57 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     return this.sendEvent(request, event)
   }
 
-  private sendEvent(request: BotRequest, event: HtEvent) {
-    const url = this.getUrl(request, event.type)
-    const headers = { Authorization: `Bearer ${request.session._access_token}` }
-    const config = event.type !== EventType.WebEvent ? { headers } : undefined
+  getRequestData(request: BotRequest): RequestData {
+    return {
+      language: this.getLanguage(request),
+      country: this.getCountry(request),
+      userId: this.isLambdaEvent(request) ? request.session.user.id : undefined,
+      botInteractionId: request.input?.bot_interaction_id,
+    }
+  }
 
+  private isLambdaEvent(request: BotRequest): boolean {
+    return request.session?.bot?.id !== undefined
+  }
+
+  private sendEvent(request: BotRequest, event: HtEvent) {
+    if (event.type === EventType.BotEvent) {
+      return this.sendBotEvent(request, event)
+    }
+
+    return this.sendWebEvent(request, event)
+  }
+
+  private sendBotEvent(request: BotRequest, event: HtEvent) {
+    const botId = request.session.bot.id
+    const url = `${this.eventsBaseUrl}/${botId}/bot_event/`
+    const config = {
+      headers: { Authorization: `Bearer ${request.session._access_token}` },
+    }
+    return axios.post(url, event, config)
+  }
+
+  private sendWebEvent(request: BotRequest, event: HtEvent) {
+    if (this.isLambdaEvent(request)) {
+      return this.sendWebEventByBotId(request, event)
+    }
+
+    return this.sendWebEventByProviderId(request, event)
+  }
+
+  private sendWebEventByBotId(request: BotRequest, event: HtEvent) {
+    const botId = request.session.bot.id
+    const url = `${this.eventsBaseUrl}/${botId}/web_event/`
+    return axios.post(url, event)
+  }
+
+  private sendWebEventByProviderId(request: BotRequest, event: HtEvent) {
+    const url = `${this.eventsBaseUrl}/web_event/`
+    const config = {
+      params: {
+        provider_id: request.session.user.id,
+      },
+    }
     return axios.post(url, event, config)
   }
 }

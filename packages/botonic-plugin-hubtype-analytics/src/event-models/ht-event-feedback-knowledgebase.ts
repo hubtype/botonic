@@ -8,7 +8,7 @@ import { HtEvent } from './ht-event'
 
 export class HtEventFeedbackKnowledgebase extends HtEvent {
   action: EventAction.FeedbackKnowledgebase
-  knowledgebase_inference_id: string
+  knowledge_base_inference_id: string
   feedback_target_bot_interaction_id: string
   feedback_target_id: string
   feedback_group_id: string
@@ -22,7 +22,7 @@ export class HtEventFeedbackKnowledgebase extends HtEvent {
     super(event, requestData)
     this.type = EventType.WebEvent
     this.action = event.action
-    this.knowledgebase_inference_id = event.knowledgebaseInferenceId
+    this.knowledge_base_inference_id = event.knowledgebaseInferenceId
     this.feedback_target_bot_interaction_id = event.feedbackBotInteractionId
     this.feedback_target_id = event.feedbackTargetId
     this.feedback_group_id = event.feedbackGroupId

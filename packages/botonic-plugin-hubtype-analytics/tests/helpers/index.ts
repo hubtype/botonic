@@ -35,6 +35,7 @@ export function createRequest(args?: RequestArgs): BotRequest {
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
+      flow_thread_id: 'testFlowThreadId',
     },
     input: {
       data: 'Hola',

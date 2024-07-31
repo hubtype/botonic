@@ -25,12 +25,13 @@ describe('Create feedback knowledgebase event', () => {
       feedback_target_id: 'messageIdTest',
       feedback_group_id: 'groupIdTest',
       feedback_target_bot_interaction_id: 'testInteractionId',
-      knowledgebase_inference_id: 'knowledgebaseInferenceIdTest',
+      knowledge_base_inference_id: 'knowledgebaseInferenceIdTest',
       possible_options: ['thumbs_down', 'thumbs_up'],
       possible_values: [0, 1],
       option: 'thumbs_down',
       value: 0,
       type: EventType.WebEvent,
+      bot_interaction_id: 'testInteractionId',
     })
   })
 })

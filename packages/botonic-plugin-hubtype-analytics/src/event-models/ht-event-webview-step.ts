@@ -6,8 +6,8 @@ export class HtEventWebviewStep extends HtEvent {
   flow_thread_id?: string
   webview_thread_id: string
   webview_name: string
-  webview_step_name?: string
-  webview_step_n?: number
+  webview_step_name: string
+  webview_step_n: number
 
   constructor(event: EventWebviewStep, requestData: RequestData) {
     super(event, requestData)

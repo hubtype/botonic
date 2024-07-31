@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 
 import ThumbsDown from '../../assets/thumbs-down.svg'
 import ThumbsUp from '../../assets/thumbs-up.svg'
-import { RequestContext, WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../contexts'
 import { ActionRequest } from '../../index-types'
 import { resolveImage } from '../../util'
 import { EventAction, FeedbackOption } from '../../webchat/tracking'
@@ -26,7 +26,6 @@ export const MessageFeedback = ({
   messageId,
 }: RatingProps) => {
   const { webchatState, updateMessage, trackEvent } = useContext(WebchatContext)
-  const request = useContext(RequestContext)
 
   const [className, setClassName] = useState('')
   const [disabled, setDisabled] = useState<ButtonsState>({
@@ -72,16 +71,19 @@ export const MessageFeedback = ({
       feedbackBotInteractionId: botInteractionId,
       feedbackTargetId: messageId,
       feedbackGroupId: uuid(),
-      possibleOptions: [FeedbackOption.ThumbsUp, FeedbackOption.ThumbsDown],
+      possibleOptions: [FeedbackOption.ThumbsDown, FeedbackOption.ThumbsUp],
       possibleValues: [0, 1],
       option: isUseful ? FeedbackOption.ThumbsUp : FeedbackOption.ThumbsDown,
       value: isUseful ? 1 : 0,
     }
-    await trackEvent(
-      request as ActionRequest,
-      EventAction.FeedbackKnowledgebase,
-      args
-    )
+
+    const request = {
+      session: {
+        ...webchatState.session,
+      },
+    } as unknown as ActionRequest
+
+    await trackEvent(request, EventAction.FeedbackKnowledgebase, args)
   }
 
   return (

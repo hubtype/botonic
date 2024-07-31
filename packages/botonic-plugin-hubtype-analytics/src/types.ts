@@ -137,7 +137,7 @@ export interface EventWebviewStep extends HtBaseEventProps {
   webviewThreadId: string
   webviewName: string
   webviewStepName: string
-  webviewStepNumber?: number
+  webviewStepNumber: number
 }
 
 export interface EventWebviewEnd extends HtBaseEventProps {
@@ -175,6 +175,6 @@ export type HtEventProps =
 export interface RequestData {
   language: string
   country: string
-  userId: string
+  userId?: string
   botInteractionId: string
 }
