@@ -10,9 +10,5 @@ export interface KnowledgeBaseResponse {
   answer: string
   hasKnowledge: boolean
   isFaithuful: boolean
-  sources: {
-    knowledgeBaseId: string
-    knowledgeSourceId: string
-    knowledgeChunkId: string
-  }[]
+  chunkIds: string[]
 }
