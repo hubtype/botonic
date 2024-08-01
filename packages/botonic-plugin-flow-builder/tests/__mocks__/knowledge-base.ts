@@ -18,13 +18,7 @@ export function mockKnowledgeBaseResponse({
       answer,
       hasKnowledge,
       isFaithuful,
-      sources: [
-        {
-          knowledgeBaseId: 'knowledgeBaseId',
-          knowledgeSourceId: 'knowledgeSourceId',
-          knowledgeChunkId: 'knowledgeChunkId',
-        },
-      ],
+      chunkIds: ['sourceChunkId1', 'sourceChunkId2'],
     })
   })
 }

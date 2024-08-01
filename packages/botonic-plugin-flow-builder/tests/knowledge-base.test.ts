@@ -52,29 +52,19 @@ describe('Check the contents returned by the plugin when it use a knowledge base
 
   test('When the knowledge base flow does not end with a knowledge base node', async () => {
     const userInput = 'What is Flow Builder?'
-    const mockKnowledgeBaseResponse = jest.fn(() => {
-      return Promise.resolve({
-        inferenceId: 'inferenceId',
-        question: userInput,
-        answer:
-          'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
-        hasKnowledge: true,
-        isFaithuful: true,
-        sources: [
-          {
-            knowledgeBaseId: 'knowledgeBaseId',
-            knowledgeSourceId: 'knowledgeSourceId',
-            knowledgeChunkId: 'knowledgeChunkId',
-          },
-        ],
-      })
-    })
+    const answer =
+      'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
 
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         locale: 'es-FR',
-        getKnowledgeBaseResponse: mockKnowledgeBaseResponse,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          userInput,
+          answer,
+          hasKnowledge: true,
+          isFaithuful: true,
+        }),
       },
       requestArgs: {
         input: {

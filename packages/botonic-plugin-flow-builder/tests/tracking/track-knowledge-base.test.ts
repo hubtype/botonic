@@ -52,9 +52,9 @@ describe('Check tracked events when a bot generates a response using a knowledge
       {
         knowledgebaseInferenceId: 'inferenceId',
         knowledgebaseFailReason: undefined,
-        knowledgebaseSourcesIds: ['knowledgeSourceId'],
-        knowledgebaseChunksIds: ['knowledgeChunkId'],
-        knowledgebaseMessageId: expect.anything(),
+        knowledgebaseSourcesIds: ['sourceId1'],
+        knowledgebaseChunksIds: ['sourceChunkId1', 'sourceChunkId2'],
+        knowledgebaseMessageId: 'testMessageId',
         userInput: 'What is Flow Builder?',
       }
     )

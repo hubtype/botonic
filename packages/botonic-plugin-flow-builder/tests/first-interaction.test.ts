@@ -14,6 +14,7 @@ import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 describe('Check the contents returned by the plugin in first interaction', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
+  beforeEach(() => mockSmartIntent('Other'))
   test('The start contents is displayed because user input no match with any keyword or intent', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: basicFlow },
@@ -104,6 +105,7 @@ describe('Check the contents returned by the plugin in first interaction with sm
 describe('Check the contents returned by the plugin in first interaction with knowledge base', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
+  beforeEach(() => mockSmartIntent('Other'))
   test('The start contents are displayed followed by more contents obtained from knowledge base', async () => {
     const userInput = 'What is Flow Builder?'
     const language = 'es'
