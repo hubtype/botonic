@@ -5,6 +5,9 @@ export interface HtKnowledgeBaseNode extends HtBaseNode {
   type: HtNodeWithContentType.KNOWLEDGE_BASE
   content: {
     feedback_enabled: boolean
-    sources: string[]
+    sources_data: {
+      id: string
+      name: string
+    }[]
   }
 }
