@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import Textarea from 'react-textarea-autosize'
 import styled, { StyleSheetManager } from 'styled-components'
 import { useAsyncEffect } from 'use-async-effect'
 import { v4 as uuidv4 } from 'uuid'
@@ -57,6 +56,7 @@ import {
 } from './hooks'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
+import { Textarea } from './textarea'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { WebviewContainer } from './webview'
@@ -91,12 +91,6 @@ const UserInputContainer = styled.div`
   padding: 0px 16px;
   z-index: 1;
   border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
-`
-
-const TextAreaContainer = styled.div`
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
 `
 
 const ErrorMessageContainer = styled.div`
@@ -654,45 +648,6 @@ export const Webchat = forwardRef((props, ref) => {
     textArea.current.value = ''
   }
 
-  let isTyping = false
-  let typingTimeout = null
-
-  function clearTimeoutWithReset(reset) {
-    const waitTime = 20 * 1000
-    if (typingTimeout) clearTimeout(typingTimeout)
-    if (reset) typingTimeout = setTimeout(stopTyping, waitTime)
-  }
-
-  function startTyping() {
-    isTyping = true
-    sendChatEvent('typing_on')
-  }
-
-  function stopTyping() {
-    clearTimeoutWithReset(false)
-    isTyping = false
-    sendChatEvent('typing_off')
-  }
-
-  const onKeyDown = event => {
-    if (event.keyCode === 13 && event.shiftKey === false) {
-      event.preventDefault()
-      sendTextAreaText()
-      stopTyping()
-    }
-  }
-
-  const onKeyUp = () => {
-    if (textArea.current.value === '') {
-      stopTyping()
-      return
-    }
-    if (!isTyping) {
-      startTyping()
-    }
-    clearTimeoutWithReset(true)
-  }
-
   const webviewRequestContext = {
     closeWebview: closeWebview,
     getString: stringId => props.getString(stringId, webchatState.session),
@@ -748,44 +703,13 @@ export const Webchat = forwardRef((props, ref) => {
             persistentMenu={props.persistentMenu}
           />
 
-          <TextAreaContainer>
-            <Textarea
-              ref={ref => (textArea.current = ref)}
-              name='text'
-              onFocus={() => {
-                deviceAdapter.onFocus()
-              }}
-              onBlur={() => {
-                deviceAdapter.onBlur()
-              }}
-              maxRows={4}
-              wrap='soft'
-              maxLength='1000'
-              placeholder={getThemeProperty(
-                WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder,
-                WEBCHAT.DEFAULTS.PLACEHOLDER
-              )}
-              autoFocus={false}
-              onKeyDown={e => onKeyDown(e)}
-              onKeyUp={onKeyUp}
-              style={{
-                display: 'flex',
-                fontSize: deviceAdapter.fontSize(14),
-                width: '100%',
-                border: 'none',
-                resize: 'none',
-                overflow: 'auto',
-                outline: 'none',
-                flex: '1 1 auto',
-                padding: 10,
-                paddingLeft: persistentMenuOptions ? 0 : 10,
-                fontFamily: 'inherit',
-                ...getThemeProperty(
-                  WEBCHAT.CUSTOM_PROPERTIES.userInputBoxStyle
-                ),
-              }}
-            />
-          </TextAreaContainer>
+          <Textarea
+            deviceAdapter={deviceAdapter}
+            persistentMenu={props.persistentMenu}
+            textareaRef={textArea}
+            sendChatEvent={sendChatEvent}
+            sendTextAreaText={sendTextAreaText}
+          />
 
           <EmojiPicker
             enableEmojiPicker={props.enableEmojiPicker}
