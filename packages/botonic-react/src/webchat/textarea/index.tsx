@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
+// import { PersistentMenuTheme } from '../../components/index-types'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { DeviceAdapter } from '../devices/device-adapter'
@@ -8,7 +9,7 @@ import { TextAreaContainer } from './styles'
 
 interface TextareaProps {
   deviceAdapter: DeviceAdapter
-  persistentMenu: any
+  persistentMenu: any //PersistentMenuTheme
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
   sendChatEvent: (event: string) => Promise<void>
   sendTextAreaText: (text: string) => Promise<void>
