@@ -198,7 +198,7 @@ export interface WebchatContextProps {
   sendAttachment: (attachment: File) => void
   sendInput: (input: CoreInput) => void
   sendPayload: (payload: string) => void
-  sendText: (text: string, payload?: string) => void
+  sendText: (text: string, payload?: string) => Promise<void>
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps
   toggleWebchat: (toggle: boolean) => void

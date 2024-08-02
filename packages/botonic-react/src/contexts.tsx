@@ -68,7 +68,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   sendPayload: () => {
     return
   },
-  sendText: () => {
+  sendText: async () => {
     return
   },
   theme: {},
