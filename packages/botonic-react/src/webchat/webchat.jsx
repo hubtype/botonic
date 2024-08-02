@@ -749,7 +749,7 @@ export const Webchat = forwardRef((props, ref) => {
 
           <TextAreaContainer>
             <Textarea
-              inputRef={textArea}
+              ref={ref => (textArea.current = ref)}
               name='text'
               onFocus={() => {
                 deviceAdapter.onFocus()
