@@ -195,9 +195,9 @@ export interface WebchatContextProps {
   openWebview: (webviewComponent: Webview) => void
   resetUnreadMessages: () => void
   resolveCase: () => void
-  sendAttachment: (attachment: File) => void
-  sendInput: (input: CoreInput) => void
-  sendPayload: (payload: string) => void
+  sendAttachment: (attachment: File) => Promise<void>
+  sendInput: (input: CoreInput) => Promise<void>
+  sendPayload: (payload: string) => Promise<void>
   sendText: (text: string, payload?: string) => Promise<void>
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps

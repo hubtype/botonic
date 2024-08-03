@@ -59,13 +59,13 @@ export const WebchatContext = createContext<WebchatContextProps>({
   setLastMessageVisible: () => {
     return
   },
-  sendAttachment: () => {
+  sendAttachment: async () => {
     return
   },
-  sendInput: () => {
+  sendInput: async () => {
     return
   },
-  sendPayload: () => {
+  sendPayload: async () => {
     return
   },
   sendText: async () => {
