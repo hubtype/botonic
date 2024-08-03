@@ -701,6 +701,8 @@ export const Webchat = forwardRef((props, ref) => {
         sendPayload,
         sendText,
         toggleWebchat,
+        toggleEmojiPicker,
+        togglePersistentMenu,
         updateLatestInput,
         updateMessage,
         updateReplies,
@@ -754,8 +756,6 @@ export const Webchat = forwardRef((props, ref) => {
               textareaRef={textareaRef}
               deviceAdapter={deviceAdapter}
               onUserInput={props.onUserInput}
-              togglePersistentMenu={togglePersistentMenu}
-              toggleEmojiPicker={toggleEmojiPicker}
             />
           )}
           {webchatState.webview && webchatWebview()}

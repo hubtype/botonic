@@ -21,8 +21,6 @@ interface WebchatInputPanelProps {
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
   deviceAdapter: DeviceAdapter
   onUserInput?: (event: any) => Promise<void>
-  togglePersistentMenu: (toggle: boolean) => void
-  toggleEmojiPicker: (toggle: boolean) => void
 }
 
 export const WebchatInputPanel = ({
@@ -33,11 +31,14 @@ export const WebchatInputPanel = ({
   textareaRef,
   deviceAdapter,
   onUserInput,
-  togglePersistentMenu,
-  toggleEmojiPicker,
 }: WebchatInputPanelProps) => {
-  const { getThemeProperty, sendText, webchatState } =
-    useContext(WebchatContext)
+  const {
+    getThemeProperty,
+    sendText,
+    togglePersistentMenu,
+    toggleEmojiPicker,
+    webchatState,
+  } = useContext(WebchatContext)
 
   const handleSelectedEmoji = event => {
     textareaRef.current.value += event.emoji

@@ -75,6 +75,12 @@ export const WebchatContext = createContext<WebchatContextProps>({
   toggleWebchat: () => {
     return
   },
+  toggleEmojiPicker: () => {
+    return
+  },
+  togglePersistentMenu: () => {
+    return
+  },
   updateLatestInput: () => {
     return
   },

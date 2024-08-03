@@ -202,6 +202,8 @@ export interface WebchatContextProps {
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps
   toggleWebchat: (toggle: boolean) => void
+  toggleEmojiPicker: (toggle: boolean) => void
+  togglePersistentMenu: (toggle: boolean) => void
   updateLatestInput: (input: CoreInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: boolean) => void
