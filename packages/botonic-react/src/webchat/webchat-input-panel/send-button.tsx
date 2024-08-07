@@ -6,7 +6,11 @@ import { WebchatContext } from '../../contexts'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
-export const SendButton = ({ onClick }) => {
+interface SendButtonProps {
+  onClick: () => Promise<void>
+}
+
+export const SendButton = ({ onClick }: SendButtonProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const sendButtonEnabled = getThemeProperty(

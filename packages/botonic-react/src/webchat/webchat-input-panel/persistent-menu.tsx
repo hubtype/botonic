@@ -6,7 +6,15 @@ import { WebchatContext } from '../../contexts'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
-export const PersistentMenu = ({ onClick, persistentMenu }) => {
+interface PersistentMenuProps {
+  persistentMenu: any
+  onClick: () => void
+}
+
+export const PersistentMenu = ({
+  onClick,
+  persistentMenu,
+}: PersistentMenuProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const persistentMenuOptions = getThemeProperty(

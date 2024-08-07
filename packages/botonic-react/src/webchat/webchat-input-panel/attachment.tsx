@@ -6,10 +6,20 @@ import { WebchatContext } from '../../contexts'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
-export const Attachment = ({ onChange, accept, enableAttachments }) => {
+interface AttachmentProps {
+  accept: string
+  enableAttachments: boolean
+  onChange: (event: any) => void
+}
+
+export const Attachment = ({
+  accept,
+  enableAttachments,
+  onChange,
+}: AttachmentProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
-  const fileInputRef = useRef(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const CustomAttachments = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.customAttachments,

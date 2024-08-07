@@ -9,7 +9,15 @@ import { ConditionalAnimation } from '../components/conditional-animation'
 import { useComponentVisible } from '../hooks'
 import { OpenedEmojiPickerContainer } from './styles'
 
-export const EmojiPicker = ({ enableEmojiPicker, onClick }) => {
+interface EmojiPickerProps {
+  enableEmojiPicker: boolean
+  onClick: () => void
+}
+
+export const EmojiPicker = ({
+  enableEmojiPicker,
+  onClick,
+}: EmojiPickerProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const CustomEmojiPicker = getThemeProperty(
