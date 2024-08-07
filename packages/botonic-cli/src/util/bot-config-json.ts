@@ -17,12 +17,14 @@ export class BotConfigJson {
     const packages = await this.readPackageJson()
     const nodeVersion = await this.getOutputByCommnd('node -v')
     const npmVersion = await this.getOutputByCommnd('npm -v')
+    const botonicCli = await this.getOutputByCommnd('botonic -v')
     const oldBotConfigJSON = await this.readOldBotConfigJSON()
     const newBotConfigJSON = {
       ...oldBotConfigJSON,
       build_info: {
         node_version: nodeVersion,
         npm_version: npmVersion,
+        botonic_cli_version: botonicCli,
       },
       packages,
     }
