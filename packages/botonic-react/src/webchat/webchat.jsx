@@ -38,7 +38,7 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
-import { OpenedPersistentMenu } from './components/persistent-menu'
+import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
