@@ -15,9 +15,11 @@ export class BotConfigJson {
 
   async updateBotConfigJson(): Promise<void> {
     const packages = await this.readPackageJson()
-    const nodeVersion = await this.getOutputByCommnd('node -v')
-    const npmVersion = await this.getOutputByCommnd('npm -v')
-    const botonicCli = await this.getOutputByCommnd('botonic -v')
+    const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
+      ['node -v', 'npm -v', 'botonic -v'].map(command =>
+        this.getOutputByCommnd(command)
+      )
+    )
     const oldBotConfigJSON = await this.readOldBotConfigJSON()
     const newBotConfigJSON = {
       ...oldBotConfigJSON,
