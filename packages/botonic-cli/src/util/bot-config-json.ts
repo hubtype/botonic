@@ -57,7 +57,7 @@ export class BotConfigJson {
           )
         })
       )
-    } catch (err) {
+    } catch (err: any) {
       console.error(`Error: ${err.message}`)
     }
     return packages
@@ -92,7 +92,7 @@ export class BotConfigJson {
       const oldBotConfigJSON = path.join(this.appDirectory, OUTPUT_JSON_NAME)
       const data = await fs.readFile(oldBotConfigJSON, 'utf8')
       return JSON.parse(data)
-    } catch (err) {
+    } catch (err: any) {
       console.error(
         `Error reading ${OUTPUT_JSON_NAME} in app directory: ${err.message}`
       )
@@ -108,7 +108,7 @@ export class BotConfigJson {
     try {
       const botConfigPath = path.join(this.appDirectory, ...paths)
       await fs.writeFile(botConfigPath, JSON.stringify(botConfig, null, 2))
-    } catch (err) {
+    } catch (err: any) {
       console.error(
         `Error writing ${OUTPUT_JSON_NAME} in ${this.appDirectory}/${paths.join('/')}: ${err.message}`
       )
