@@ -205,7 +205,7 @@ Deploying to AWS...
     try {
       await this.botonicApiService.login(email, password)
       await this.deployBotFlow()
-    } catch (err) {
+    } catch (err: any) {
       const axiosError = err as AxiosError<LoginErrorData>
       if (axiosError.response?.data?.error_description) {
         console.log(colors.red(axiosError.response.data.error_description))
@@ -231,7 +231,7 @@ Deploying to AWS...
     try {
       await this.botonicApiService.signup(email, password, orgName, campaign)
       await this.login(email, password)
-    } catch (err) {
+    } catch (err: any) {
       if (err.response?.data?.email) {
         console.log(colors.red(err.response.data.email[0]))
       }
@@ -287,7 +287,7 @@ Deploying to AWS...
     try {
       await this.botonicApiService.saveBot(inpBotName)
       this.deploy()
-    } catch (err) {
+    } catch (err: any) {
       console.log(
         colors.red(`There was an error saving the bot: ${String(err)}`)
       )
@@ -400,7 +400,7 @@ Deploying to AWS...
           } else throw deployStatus.data.error
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       spinner.fail()
       const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
