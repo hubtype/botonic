@@ -12,6 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
+import { BotConfigJson } from '../util/bot-config-json'
 import {
   copy,
   createDir,
@@ -455,6 +456,10 @@ Deploying to AWS...
         console.log(colors.red('There was a problem building the bot'))
         return
       }
+
+      const botConfigJson = new BotConfigJson(process.cwd())
+      await botConfigJson.updateBotConfigJson()
+
       await this.createBundle()
       const { hasDeployErrors } = await this.deployBundle()
       await this.displayDeployResults({ hasDeployErrors })
