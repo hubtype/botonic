@@ -5,13 +5,13 @@ import { v4 as uuidv4 } from 'uuid'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { getFullMimeWhitelist } from '../../message-utils'
-import { Attachment } from '../components/attachment'
-import { EmojiPicker, OpenedEmojiPicker } from '../components/emoji-picker'
-import { PersistentMenu } from '../components/persistent-menu'
-import { SendButton } from '../components/send-button'
 import { DeviceAdapter } from '../devices/device-adapter'
-import { Textarea } from '../textarea'
+import { Attachment } from './attachment'
+import { EmojiPicker, OpenedEmojiPicker } from './emoji-picker'
+import { PersistentMenu } from './persistent-menu'
+import { SendButton } from './send-button'
 import { UserInputContainer } from './styles'
+import { Textarea } from './textarea'
 
 interface WebchatInputPanelProps {
   persistentMenu: any
@@ -83,7 +83,7 @@ export const WebchatInputPanel = ({
     >
       {webchatState.isEmojiPickerOpen && (
         <OpenedEmojiPicker
-          // height={webchatState.theme.style.height} // Revisar si es necessari
+          // height={webchatState.theme.style.height} // Revisar si es necessari, en el WebchatStateTheme no hi ha style.height, pero en el Theme props style es any.
           onEmojiClick={handleSelectedEmoji}
           onClick={handleEmojiClick}
         />

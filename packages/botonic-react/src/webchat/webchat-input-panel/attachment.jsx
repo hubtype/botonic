@@ -3,8 +3,8 @@ import React, { useContext, useRef } from 'react'
 import AttachmentIcon from '../../assets/attachment-icon.svg'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
-import { Icon } from './common'
 
 export const Attachment = ({ onChange, accept, enableAttachments }) => {
   const { getThemeProperty } = useContext(WebchatContext)
