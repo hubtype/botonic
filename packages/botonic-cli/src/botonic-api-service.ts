@@ -4,7 +4,7 @@ import colors from 'colors'
 import FormData from 'form-data'
 import { createReadStream, unlinkSync } from 'fs'
 import ora from 'ora'
-import qs from 'qs'
+import { stringify } from 'qs'
 import * as util from 'util'
 
 import { BotInfo, OAuth } from './interfaces'
@@ -165,7 +165,7 @@ export class BotonicAPIService {
   }
 
   async refreshToken(): Promise<any> {
-    const data = qs.stringify({
+    const data = stringify({
       callback: 'none',
       grant_type: 'refresh_token',
       refresh_token: this.getOauth().refresh_token,
@@ -193,7 +193,7 @@ export class BotonicAPIService {
   }
 
   async login(email: string, password: string): Promise<any> {
-    const data = qs.stringify({
+    const data = stringify({
       username: email,
       password: password,
       grant_type: 'password',
@@ -222,12 +222,12 @@ export class BotonicAPIService {
   signup(
     email: string,
     password: string,
-    org_name: string,
+    orgName: string,
     campaign: any
   ): Promise<any> {
     const url = `${this.baseApiUrl}users/`
-    const signup_data = { email, password, org_name, campaign }
-    return axios({ method: 'post', url: url, data: signup_data })
+    const signupData = { email, password, org_name: orgName, campaign }
+    return axios({ method: 'post', url: url, data: signupData })
   }
 
   async saveBot(botName: string): Promise<AxiosPromise> {
