@@ -70,7 +70,7 @@ export class BotConfigJson {
       )
       const match = output.match(versionRegex)
       const installedVersion = match ? match[1] : ''
-      packages[botonicDependecy] = installedVersion
+      packages[botonicDependecy] = { version: installedVersion }
     } catch (error: any) {
       console.error(error)
     }
