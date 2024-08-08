@@ -50,7 +50,7 @@ export class BotConfigJson {
 
       await Promise.all(
         botonicDependecies.map(botonicDependecy => {
-          return this.getBotonicDependenciesWithoutDepth(
+          return this.setDependenciesVersion(
             botonicDependecy,
             packages,
             botonicDependecy === BOTONIC_CORE_PACKAGE ? 1 : 0
@@ -63,18 +63,18 @@ export class BotConfigJson {
     return packages
   }
 
-  private async getBotonicDependenciesWithoutDepth(
-    botonicDependecy: string,
+  private async setDependenciesVersion(
+    dependecy: string,
     packages: Record<string, any>,
     depth: number = 0
   ) {
     try {
       const output = await this.getOutputByCommnd(
-        `npm ls ${botonicDependecy} --depth=${depth}`
+        `npm ls ${dependecy} --depth=${depth}`
       )
       const match = output.match(versionRegex)
       const installedVersion = match ? match[1] : ''
-      packages[botonicDependecy] = { version: installedVersion }
+      packages[dependecy] = { version: installedVersion }
     } catch (error: any) {
       console.error(error)
     }
