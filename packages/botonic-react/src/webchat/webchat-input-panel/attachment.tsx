@@ -39,7 +39,9 @@ export const Attachment = ({
 
   const handleOnChange = event => {
     onChange(event)
-    fileInputRef.current.value = null
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   return (

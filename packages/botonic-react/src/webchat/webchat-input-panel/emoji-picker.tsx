@@ -69,7 +69,7 @@ export const OpenedEmojiPicker = props => {
             height='19rem'
             previewConfig={{ showPreview: false }}
             onEmojiClick={props.onEmojiClick}
-            disableAutoFocus={true}
+            autoFocusSearch={false}
           />
         </OpenedEmojiPickerContainer>
       )}
