@@ -1,13 +1,10 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import LogoMenu from '../../assets/menuButton.svg'
 import { Button } from '../../components/button'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { useComponentVisible } from '../hooks'
-import { Icon } from './common'
-import { ConditionalAnimation } from './conditional-animation'
 
 const ButtonsContainer = styled.div`
   position: absolute;
