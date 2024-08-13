@@ -31,16 +31,19 @@ export async function getContentsByKnowledgeBase({
     return contents
   }
 
+  const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
+
   if (
     flowBuilderPlugin.getKnowledgeBaseResponse &&
-    inputHasTextData(request.input)
+    inputHasTextData(request.input) &&
+    sourceIds.length > 0
   ) {
     const contentsWithKnowledgeResponse =
       await getContentsWithKnowledgeResponse(
         flowBuilderPlugin.getKnowledgeBaseResponse,
         request,
-        knowledgeBaseContent,
-        contents
+        contents,
+        sourceIds
       )
 
     if (contentsWithKnowledgeResponse) {
@@ -54,15 +57,15 @@ export async function getContentsByKnowledgeBase({
 async function getContentsWithKnowledgeResponse(
   getKnowledgeBaseResponse: KnowledgeBaseFunction,
   request: ActionRequest,
-  knowledgeBaseContent: FlowKnowledgeBase,
-  contents: FlowContent[]
+  contents: FlowContent[],
+  sourceIds: string[]
 ): Promise<FlowContent[] | undefined> {
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
     request.input.data!,
-    knowledgeBaseContent.sources
+    sourceIds
   )
-  await trackKnowledgeBase(knowledgeBaseResponse, request)
+  await trackKnowledgeBase(knowledgeBaseResponse, request, sourceIds)
 
   if (
     !knowledgeBaseResponse.hasKnowledge ||
@@ -90,15 +93,12 @@ function updateContentsWithResponse(
 
 async function trackKnowledgeBase(
   response: KnowledgeBaseResponse,
-  request: ActionRequest
+  request: ActionRequest,
+  sourceIds: string[]
 ) {
   const knowledgebaseInferenceId = response.inferenceId
-  const knowledgebaseSourcesIds = response.sources.map(
-    source => source.knowledgeSourceId
-  )
-  const knowledgebaseChunksIds = response.sources.map(
-    source => source.knowledgeChunkId
-  )
+  const knowledgebaseSourcesIds = sourceIds
+  const knowledgebaseChunksIds = response.chunkIds
   const knowledgebaseMessageId = request.input.message_id
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined

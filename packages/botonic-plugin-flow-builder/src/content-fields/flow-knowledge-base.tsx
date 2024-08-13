@@ -10,12 +10,13 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   public sources: string[] = []
   public text: string = ''
   public inferenceId?: string
+  public sourcesData: { id: string; name: string }[] = []
 
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)
     newKnowledgeBase.code = component.code
     newKnowledgeBase.feedbackEnabled = component.content.feedback_enabled
-    newKnowledgeBase.sources = component.content.sources
+    newKnowledgeBase.sourcesData = component.content.sources_data
 
     return newKnowledgeBase
   }

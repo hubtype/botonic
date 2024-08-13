@@ -617,7 +617,9 @@ export const knowledgeBaseTestFlow = {
       flow_id: '4c8acc81-accd-529e-8bb6-d17f4cafafea',
       type: 'knowledge-base',
       content: {
-        sources: ['Flow Builder - No images.pdf'],
+        sources_data: [
+          { id: 'sourceId1', name: 'Flow Builder - No images.pdf' },
+        ],
       },
     },
     {

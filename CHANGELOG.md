@@ -22,15 +22,15 @@ All notable changes to Botonic will be documented in this file.
 
 ## [0.29.0] - 2024-08-14
 
-### Added
-
 ### Changed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [Get source ids from source_data node attributes to knowledge base api call](https://github.com/hubtype/botonic/pull/2881)
 
 - [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
 
   - [Update inference endpoint to use source ids instead of source names](https://github.com/hubtype/botonic/pull/2880)
-
-### Fixed
 
 ## [0.28.0] - 2024-07-09
 
