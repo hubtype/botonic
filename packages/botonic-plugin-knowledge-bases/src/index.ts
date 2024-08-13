@@ -31,21 +31,13 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
       sources
     )
 
-    const responseSources = response.data.sources.map(source => {
-      return {
-        knowledgeBaseId: source.knowledge_base_id,
-        knowledgeSourceId: source.knowledge_source_id,
-        knowledgeChunkId: source.knowledge_chunk_id,
-      }
-    })
-
     return {
       inferenceId: response.data.inference_id,
       question: response.data.question,
       answer: response.data.answer,
       hasKnowledge: response.data.has_knowledge,
       isFaithuful: response.data.is_faithful,
-      sources: responseSources,
+      chunkIds: response.data.chunk_ids,
     }
   }
 }

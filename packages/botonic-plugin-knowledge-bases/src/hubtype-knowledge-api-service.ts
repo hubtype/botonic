@@ -23,16 +23,12 @@ export class HubtypeApiService {
       answer: string
       has_knowledge: boolean
       is_faithful: boolean
-      sources: {
-        knowledge_base_id: string
-        knowledge_source_id: string
-        knowledge_chunk_id: string
-      }[]
+      chunk_ids: string[]
     }>
   > {
     return await axios({
       method: 'POST',
-      url: `${this.host}/external/v1/ai/knowledge_bases/inference/`,
+      url: `${this.host}/external/v1/ai/knowledge_base/inference/`,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',

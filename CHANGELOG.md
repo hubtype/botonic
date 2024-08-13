@@ -10,7 +10,9 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.29.X] - aaaa-mm-dd
+## [0.30.X] - aaaa-mm-dd
+
+### Added
 
 ### Changed
 
@@ -18,9 +20,21 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.29.0] - 2024-08-14
+
+### Added
+
+### Changed
+
+- [@botonic/plugin-knowledge-bases](https://www.npmjs.com/package/@botonic/plugin-knowledge-bases)
+
+  - [Update inference endpoint to use source ids instead of source names](https://github.com/hubtype/botonic/pull/2880)
+
+### Fixed
+
 ## [0.28.0] - 2024-07-09
 
-### Added
+### Added
 
 - [Project](https://github.com/hubtype/botonic)
 
