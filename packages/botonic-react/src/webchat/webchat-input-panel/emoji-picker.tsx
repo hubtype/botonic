@@ -1,5 +1,5 @@
 import Picker from 'emoji-picker-react'
-import React, { useContext } from 'react'
+import React, { LegacyRef, useContext } from 'react'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
 import { ROLES, WEBCHAT } from '../../constants'
@@ -36,7 +36,7 @@ export const EmojiPicker = ({
   }
   const emojiPickerEnabled = isEmojiPickerEnabled()
 
-  const handleClick = event => {
+  const handleClick = (event: any) => {
     onClick()
     event.stopPropagation()
   }
@@ -58,17 +58,25 @@ export const EmojiPicker = ({
   )
 }
 
-export const OpenedEmojiPicker = props => {
-  const { ref, isComponentVisible } = useComponentVisible(true, props.onClick)
+interface OpenedEmojiPickerProps {
+  onClick: () => void
+  onEmojiClick: (event: any) => void
+}
+
+export const OpenedEmojiPicker = ({
+  onClick,
+  onEmojiClick,
+}: OpenedEmojiPickerProps) => {
+  const { ref, isComponentVisible } = useComponentVisible(true, onClick)
   return (
-    <div ref={ref}>
+    <div ref={ref as LegacyRef<HTMLDivElement>}>
       {isComponentVisible && (
         <OpenedEmojiPickerContainer role={ROLES.EMOJI_PICKER}>
           <Picker
             width='100%'
             height='19rem'
             previewConfig={{ showPreview: false }}
-            onEmojiClick={props.onEmojiClick}
+            onEmojiClick={onEmojiClick}
             autoFocusSearch={false}
           />
         </OpenedEmojiPickerContainer>
