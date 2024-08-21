@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, Method } from 'axios'
+import axios, { AxiosPromise, AxiosResponse } from 'axios'
 import childProcess from 'child_process'
 import colors from 'colors'
 import FormData from 'form-data'
@@ -7,7 +7,7 @@ import ora from 'ora'
 import { stringify } from 'qs'
 import * as util from 'util'
 
-import { BotInfo, OAuth } from './interfaces'
+import { AnalyticsInfo, BotInfo, BotsList, Me, OAuth } from './interfaces'
 
 const exec = util.promisify(childProcess.exec)
 import {
@@ -24,13 +24,12 @@ const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 export class BotonicAPIService {
   clientId: string = BOTONIC_CLIENT_ID
   baseUrl: string = BOTONIC_URL
-  baseApiUrl = this.baseUrl + '/v1/'
   loginUrl: string = this.baseUrl + '/o/token/'
   botCredentialsHandler = new BotCredentialsHandler()
   globalCredentialsHandler = new GlobalCredentialsHandler()
   oauth?: OAuth
-  me: any
-  analytics: any
+  me?: Me
+  analytics: AnalyticsInfo
   bot: BotInfo | null
   headers: Record<string, string> | null = null
 
@@ -232,7 +231,7 @@ export class BotonicAPIService {
       'content-type': 'application/json',
       'x-segment-anonymous-id': this.analytics.anonymous_id,
     }
-    resp = await this.api('users/me')
+    resp = await this.apiGet({ path: '/v1/users/me' })
     if (resp) this.me = resp.data
     return resp
   }
@@ -243,19 +242,21 @@ export class BotonicAPIService {
     orgName: string,
     campaign: any
   ): Promise<any> {
-    const url = `${this.baseApiUrl}users/`
     const signupData = { email, password, org_name: orgName, campaign }
-    return axios({ method: 'post', url: url, data: signupData })
+    return this.apiPost({ path: '/v1/users/', body: signupData })
   }
 
   async saveBot(botName: string): Promise<AxiosPromise> {
-    const resp = await this.api('bots/', { name: botName }, 'post')
+    const resp = await this.apiPost({
+      path: '/v2/bots/',
+      body: { name: botName },
+    })
     if (resp.data) this.setCurrentBot(resp.data)
     return resp
   }
 
   async getMe(): Promise<AxiosPromise> {
-    return this.api('users/me/')
+    return this.apiGet({ path: '/v1/users/me/' })
   }
 
   async getBots(): AxiosPromise<BotsList> {
@@ -264,20 +265,20 @@ export class BotonicAPIService {
 
   async getMoreBots(bots: any, nextBots: any) {
     if (!nextBots) return bots
-    const resp = await this.api(
-      nextBots.split(this.baseApiUrl)[1],
-      null,
-      'get',
-      null
-    )
+    const resp = await this.apiGet({
+      path: nextBots.split(this.baseUrl)[1],
+    })
     resp.data.results.map(b => bots.push(b))
     nextBots = resp.data.next
     return this.getMoreBots(bots, nextBots)
   }
 
   async getProviders(): Promise<AxiosPromise> {
-    return this.api('provider_accounts/', null, 'get', null, {
-      bot_id: this.botInfo().id,
+    return this.apiGet({
+      path: '/v1/provider_accounts/',
+      params: {
+        bot_id: this.botInfo().id,
+      },
     })
   }
 
@@ -314,10 +315,10 @@ export class BotonicAPIService {
     })
   }
 
-  async getHeaders(form: any): Promise<Record<string, any>> {
+  async getHeaders(form: FormData): Promise<Record<string, any>> {
     //https://github.com/axios/axios/issues/1006#issuecomment-352071490
     return new Promise((resolve, reject) => {
-      form.getLength((err: any, length: any) => {
+      form.getLength((err: any, length: number) => {
         if (err) {
           reject(err)
         }

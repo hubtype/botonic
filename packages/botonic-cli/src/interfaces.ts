@@ -18,7 +18,7 @@ export interface OAuth {
   refresh_token: string
 }
 
-interface Me {
+export interface Me {
   id: string
   username: string
   email: string
@@ -43,7 +43,7 @@ interface Me {
   managers_settings_json: any
 }
 
-interface AnalyticsInfo {
+export interface AnalyticsInfo {
   anonymous_id: string
 }
 
