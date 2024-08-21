@@ -367,14 +367,17 @@ Deploying to AWS...
   }
 
   /* istanbul ignore next */
-  async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
+  async deployBundle(
+    botConfigJson: BotConfigJson
+  ): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
     }).start()
     try {
       const deploy = await this.botonicApiService.deployBot(
-        join(process.cwd(), BOTONIC_BUNDLE_FILE)
+        join(process.cwd(), BOTONIC_BUNDLE_FILE),
+        botConfigJson
       )
       if (
         (deploy.response && deploy.response.status == 403) ||
@@ -448,11 +451,11 @@ Deploying to AWS...
         return
       }
 
-      const botConfigJson = new BotConfigJson(process.cwd())
-      await botConfigJson.updateBotConfigJson()
+      const botConfig = new BotConfig(process.cwd())
+      const botConfigJson = await botConfig.createJson()
 
       await this.createBundle()
-      const { hasDeployErrors } = await this.deployBundle()
+      const { hasDeployErrors } = await this.deployBundle(botConfigJson)
       await this.displayDeployResults({ hasDeployErrors })
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)

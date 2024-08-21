@@ -53,6 +53,13 @@ export interface GlobalCredentials {
   analytics: AnalyticsInfo
 }
 
+export interface BotsList {
+  count: number
+  next: string
+  previous: string
+  results: { id: string; name: string }[]
+}
+
 interface BotLastUpdate {
   version: string
   created_at: string

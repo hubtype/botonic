@@ -14,6 +14,7 @@ import {
   BotCredentialsHandler,
   GlobalCredentialsHandler,
 } from './analytics/credentials-handler'
+import { BotConfigJson } from './util/bot-config-json'
 import { pathExists } from './util/file-system'
 
 const BOTONIC_CLIENT_ID: string =
@@ -129,39 +130,56 @@ export class BotonicAPIService {
     if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
   }
 
-  async api(
-    path: string,
-    body: any = null,
-    method: Method = 'get',
-    headers: any = null,
-    params: any = null
-  ): Promise<any> {
-    let b = 0
-    try {
-      return await axios({
-        method: method,
-        url: this.baseApiUrl + path,
+  async apiPost({
+    path,
+    body,
+    headers,
+    params = null,
+  }: {
+    path: string
+    body?: any
+    headers?: any
+    params?: any
+  }): Promise<any> {
+    const requestFn = () =>
+      axios.post(`${this.baseUrl}${path}`, body, {
         headers: headers || this.headers,
-        data: body,
-        params: params,
+        params,
       })
-    } catch (e: any) {
-      if (e.response.status == 401) {
-        b = 1
+
+    return this.retryOnUnauthorized(requestFn)
+  }
+
+  async apiGet({
+    path,
+    headers,
+    params = null,
+  }: {
+    path: string
+    headers?: any
+    params?: any
+  }): Promise<any> {
+    const requestFn = () =>
+      axios.get(`${this.baseUrl}${path}`, {
+        headers: headers || this.headers,
+        params,
+      })
+    return this.retryOnUnauthorized(requestFn)
+  }
+
+  async retryOnUnauthorized(
+    requestFn: () => Promise<AxiosResponse<any>>
+  ): Promise<any> {
+    try {
+      return await requestFn()
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        await this.refreshToken()
+        return await requestFn()
       } else {
-        return e
+        throw error
       }
     }
-    if (b == 1) {
-      await this.refreshToken()
-    }
-    return axios({
-      method: method,
-      url: this.baseApiUrl + path,
-      headers: headers || this.headers,
-      data: body,
-      params: params,
-    })
   }
 
   async refreshToken(): Promise<any> {
@@ -240,10 +258,8 @@ export class BotonicAPIService {
     return this.api('users/me/')
   }
 
-  async getBots(): Promise<AxiosPromise> {
-    return this.api('bots/bots_paginator/', null, 'get', null, {
-      organization_id: this.me.organization_id,
-    })
+  async getBots(): AxiosPromise<BotsList> {
+    return this.apiGet({ path: '/v2/bots/' })
   }
 
   async getMoreBots(bots: any, nextBots: any) {
@@ -265,33 +281,37 @@ export class BotonicAPIService {
     })
   }
 
-  async deployBot(bundlePath: string): Promise<any> {
+  async deployBot(
+    bundlePath: string,
+    botConfigJson: BotConfigJson
+  ): Promise<any> {
     try {
       const _authenticated = await this.getMe()
     } catch (e) {
       console.log(`Error authenticating: ${String(e)}`)
     }
+
     const form = new FormData()
     const data = createReadStream(bundlePath)
     form.append('bundle', data, 'botonic_bundle.zip')
+    form.append('bot_config', JSON.stringify(botConfigJson))
     const headers = await this.getHeaders(form)
-    return await this.api(
-      `bots/${this.botInfo().id}/deploy_botonic_new/`,
-      form,
-      'post',
-      { ...this.headers, ...headers },
-      { version: '0.7' }
-    )
+
+    return await this.apiPost({
+      path: `/v2/bots/${this.botInfo().id}/deploy/`,
+      body: form,
+      headers: {
+        ...this.headers,
+        ...headers,
+      },
+    })
   }
 
   async deployStatus(deployId: string): Promise<AxiosPromise> {
-    return this.api(
-      `bots/${this.botInfo().id}/deploy_botonic_status/`,
-      null,
-      'get',
-      null,
-      { deploy_id: deployId }
-    )
+    return this.apiGet({
+      path: `/v2/bots/${this.botInfo().id}/deploy_status/`,
+      params: { deploy_id: deployId },
+    })
   }
 
   async getHeaders(form: any): Promise<Record<string, any>> {
