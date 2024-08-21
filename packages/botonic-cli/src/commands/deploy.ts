@@ -12,7 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
-import { BotConfigJson } from '../util/bot-config-json'
+import { BotConfig, BotConfigJson } from '../util/bot-config-json'
 import {
   copy,
   createDir,
@@ -108,7 +108,7 @@ Deploying to AWS...
       await this.botonicApiService.getMoreBots(bots, nextBots)
     }
     const bot = bots.filter(b => b.name === botName)[0]
-    if (bot == undefined && !botName) {
+    if (bot === undefined && !botName) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
       bots.map(b => console.log(` > ${String(b.name)}`))
@@ -193,10 +193,8 @@ Deploying to AWS...
       const bots = resp.data.results
       if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
       // Show the current bot in credentials at top of the list
-      const first_id = this.botonicApiService.bot.id
-      bots.sort(function (x, y) {
-        return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
-      })
+      const firstId = this.botonicApiService.bot.id
+      bots.sort((x, y) => (x.id === firstId ? -1 : y.id === firstId ? 1 : 0))
       return this.selectExistentBot(bots)
     }
   }

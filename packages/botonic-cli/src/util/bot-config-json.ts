@@ -6,18 +6,28 @@ import * as util from 'util'
 const OUTPUT_JSON_NAME = 'bot.config.json'
 const BOTONIC_PREFIX_PACKAGE = '@botonic'
 const BOTONIC_CORE_PACKAGE = `${BOTONIC_PREFIX_PACKAGE}/core`
+const NPM_DEPTH_1 = 1
+const NPM_DEPTH_0 = 0
 
 // Also get alpha and beta versions
 const versionRegex = /@botonic\/[^@]+@(\d+\.\d+\.\d+(-[a-zA-Z]+\.\d+)?)/
 
-export class BotConfigJson {
+export interface BotConfigJson {
+  build_info: {
+    node_version: string
+    npm_version: string
+    botonic_cli_version: string
+  }
+  packages: Record<string, any>
+}
+export class BotConfig {
   constructor(public appDirectory: string) {}
 
-  async updateBotConfigJson(): Promise<void> {
+  async createJson(): Promise<BotConfigJson> {
     const packages = await this.readPackageJson()
     const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
       ['node -v', 'npm -v', 'botonic -v'].map(command =>
-        this.getOutputByCommnd(command)
+        this.getOutputByCommand(command)
       )
     )
     const oldBotConfigJSON = await this.readOldBotConfigJSON()
@@ -31,7 +41,7 @@ export class BotConfigJson {
       packages,
     }
     await this.writeBotConfigJSON(newBotConfigJSON)
-    await this.writeBotConfigJSON(newBotConfigJSON, ['dist'])
+    return newBotConfigJSON
   }
 
   private async readPackageJson(): Promise<Record<string, any>> {
@@ -41,19 +51,21 @@ export class BotConfigJson {
       const data = await fs.readFile(packageJsonPath, 'utf8')
       const packageJson = JSON.parse(data)
 
-      const botonicDependecies = Object.keys(packageJson.dependencies).filter(
+      const botonicDependencies = Object.keys(packageJson.dependencies).filter(
         dependency => dependency.startsWith(BOTONIC_PREFIX_PACKAGE)
       )
-      if (!botonicDependecies.includes(BOTONIC_CORE_PACKAGE)) {
-        botonicDependecies.push(BOTONIC_CORE_PACKAGE)
+      if (!botonicDependencies.includes(BOTONIC_CORE_PACKAGE)) {
+        botonicDependencies.push(BOTONIC_CORE_PACKAGE)
       }
 
       await Promise.all(
-        botonicDependecies.map(botonicDependecy => {
+        botonicDependencies.map(botonicDependency => {
           return this.setDependenciesVersion(
-            botonicDependecy,
+            botonicDependency,
             packages,
-            botonicDependecy === BOTONIC_CORE_PACKAGE ? 1 : 0
+            botonicDependency === BOTONIC_CORE_PACKAGE
+              ? NPM_DEPTH_1
+              : NPM_DEPTH_0
           )
         })
       )
@@ -64,24 +76,24 @@ export class BotConfigJson {
   }
 
   private async setDependenciesVersion(
-    dependecy: string,
+    dependency: string,
     packages: Record<string, any>,
-    depth: number = 0
+    depth: number = NPM_DEPTH_0
   ) {
     try {
-      const output = await this.getOutputByCommnd(
-        `npm ls ${dependecy} --depth=${depth}`
+      const output = await this.getOutputByCommand(
+        `npm ls ${dependency} --depth=${depth}`
       )
       const match = output.match(versionRegex)
       const installedVersion = match ? match[1] : ''
-      packages[dependecy] = { version: installedVersion }
+      packages[dependency] = { version: installedVersion }
     } catch (error: any) {
       console.error(error)
     }
     return packages
   }
 
-  private async getOutputByCommnd(command: string): Promise<string> {
+  private async getOutputByCommand(command: string): Promise<string> {
     const exec = util.promisify(childProcess.exec)
     const { stdout } = await exec(command)
     return stdout.trim()
