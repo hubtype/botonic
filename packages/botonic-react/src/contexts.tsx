@@ -59,20 +59,26 @@ export const WebchatContext = createContext<WebchatContextProps>({
   setLastMessageVisible: () => {
     return
   },
-  sendAttachment: () => {
+  sendAttachment: async () => {
     return
   },
-  sendInput: () => {
+  sendInput: async () => {
     return
   },
-  sendPayload: () => {
+  sendPayload: async () => {
     return
   },
-  sendText: () => {
+  sendText: async () => {
     return
   },
   theme: {},
   toggleWebchat: () => {
+    return
+  },
+  toggleEmojiPicker: () => {
+    return
+  },
+  togglePersistentMenu: () => {
     return
   },
   updateLatestInput: () => {

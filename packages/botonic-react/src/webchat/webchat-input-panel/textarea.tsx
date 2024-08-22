@@ -12,7 +12,7 @@ interface TextareaProps {
   persistentMenu: any //PersistentMenuTheme
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
   sendChatEvent: (event: string) => Promise<void>
-  sendTextAreaText: (text: string) => Promise<void>
+  sendTextAreaText: () => Promise<void>
 }
 
 export const Textarea = ({
@@ -35,7 +35,7 @@ export const Textarea = ({
   const onKeyDown = event => {
     if (event.keyCode === 13 && event.shiftKey === false) {
       event.preventDefault()
-      sendTextAreaText(textareaRef.current.value)
+      sendTextAreaText()
       stopTyping()
     }
   }

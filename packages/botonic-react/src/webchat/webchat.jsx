@@ -17,7 +17,6 @@ import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
 import { WebchatContext, WebviewRequestContext } from '../contexts'
 import { SENDERS } from '../index-types'
 import {
-  getFullMimeWhitelist,
   getMediaType,
   isAllowedSize,
   isAudio,
@@ -38,13 +37,7 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
-import { Attachment } from './components/attachment'
-import { EmojiPicker, OpenedEmojiPicker } from './components/emoji-picker'
-import {
-  OpenedPersistentMenu,
-  PersistentMenu,
-} from './components/persistent-menu'
-import { SendButton } from './components/send-button'
+import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
@@ -55,9 +48,9 @@ import {
 } from './hooks'
 import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
-import { Textarea } from './textarea'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
+import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
 
 export const getParsedAction = botonicAction => {
@@ -78,18 +71,6 @@ const StyledWebchat = styled.div`
   box-shadow: ${COLORS.SOLID_BLACK_ALPHA_0_2} 0px 0px 12px;
   display: flex;
   flex-direction: column;
-`
-
-const UserInputContainer = styled.div`
-  min-height: 52px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  padding: 0px 16px;
-  z-index: 1;
-  border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
 `
 
 const ErrorMessageContainer = styled.div`
@@ -225,21 +206,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const sendChatEvent = async chatEvent => {
-    const chatEventInput = {
-      id: uuidv4(),
-      type: INPUT.CHAT_EVENT,
-      data: chatEvent,
-    }
-    props.onUserInput &&
-      props.onUserInput({
-        user: webchatState.session.user,
-        input: chatEventInput,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
-  }
-
   // Load styles stored in window._botonicInsertStyles by Webpack
   useComponentWillMount(() => {
     if (window._botonicInsertStyles && window._botonicInsertStyles.length) {
@@ -344,18 +310,16 @@ export const Webchat = forwardRef((props, ref) => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
   }, [props.theme, webchatState.themeUpdates])
 
-  const openWebview = (webviewComponent, params) =>
+  const openWebview = (webviewComponent, params) => {
     updateWebview(webviewComponent, params)
-
-  const handleSelectedEmoji = event => {
-    textArea.current.value += event.emoji
-    textArea.current.focus()
   }
+
+  const textareaRef = useRef(null)
 
   const closeWebview = options => {
     updateWebview()
     if (userInputEnabled) {
-      textArea.current.focus()
+      textareaRef.current.focus()
     }
     if (options?.payload) {
       sendPayload(options.payload)
@@ -363,14 +327,6 @@ export const Webchat = forwardRef((props, ref) => {
       const params = options.params ? params2queryString(options.params) : ''
       sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
     }
-  }
-
-  const handleMenu = () => {
-    togglePersistentMenu(!webchatState.isPersistentMenuOpen)
-  }
-
-  const handleEmojiClick = () => {
-    toggleEmojiPicker(!webchatState.isEmojiPickerOpen)
   }
 
   const persistentMenuOptions = getThemeProperty(
@@ -642,11 +598,6 @@ export const Webchat = forwardRef((props, ref) => {
     }
   }
 
-  const sendTextAreaText = () => {
-    sendText(textArea.current.value)
-    textArea.current.value = ''
-  }
-
   const webviewRequestContext = {
     closeWebview: closeWebview,
     getString: stringId => props.getString(stringId, webchatState.session),
@@ -678,54 +629,6 @@ export const Webchat = forwardRef((props, ref) => {
   }
 
   const userInputEnabled = isUserInputEnabled()
-
-  const textArea = useRef(null)
-  const userInputArea = () => {
-    return (
-      userInputEnabled && (
-        <UserInputContainer
-          style={{
-            ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputStyle),
-          }}
-          className='user-input-container'
-        >
-          {webchatState.isEmojiPickerOpen && (
-            <OpenedEmojiPicker
-              height={webchatState.theme.style.height}
-              onEmojiClick={handleSelectedEmoji}
-              onClick={handleEmojiClick}
-            />
-          )}
-
-          <PersistentMenu
-            onClick={handleMenu}
-            persistentMenu={props.persistentMenu}
-          />
-
-          <Textarea
-            deviceAdapter={deviceAdapter}
-            persistentMenu={props.persistentMenu}
-            textareaRef={textArea}
-            sendChatEvent={sendChatEvent}
-            sendTextAreaText={sendTextAreaText}
-          />
-
-          <EmojiPicker
-            enableEmojiPicker={props.enableEmojiPicker}
-            onClick={handleEmojiClick}
-          />
-
-          <Attachment
-            enableAttachments={props.enableAttachments}
-            onChange={handleAttachment}
-            accept={getFullMimeWhitelist().join(',')}
-          />
-
-          <SendButton onClick={sendTextAreaText} />
-        </UserInputContainer>
-      )
-    )
-  }
 
   const webchatWebview = () => (
     <WebviewRequestContext.Provider value={webviewRequestContext}>
@@ -797,6 +700,8 @@ export const Webchat = forwardRef((props, ref) => {
         sendPayload,
         sendText,
         toggleWebchat,
+        toggleEmojiPicker,
+        togglePersistentMenu,
         updateLatestInput,
         updateMessage,
         updateReplies,
@@ -841,7 +746,17 @@ export const Webchat = forwardRef((props, ref) => {
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
           )}
-          {!webchatState.handoff && userInputArea()}
+          {!webchatState.handoff && userInputEnabled && (
+            <WebchatInputPanel
+              persistentMenu={props.persistentMenu}
+              enableEmojiPicker={props.enableEmojiPicker}
+              enableAttachments={props.enableAttachments}
+              handleAttachment={handleAttachment}
+              textareaRef={textareaRef}
+              deviceAdapter={deviceAdapter}
+              onUserInput={props.onUserInput}
+            />
+          )}
           {webchatState.webview && webchatWebview()}
           {webchatState.isCoverComponentOpen && coverComponent()}
           {webchatState.isCustomComponentRendered &&
