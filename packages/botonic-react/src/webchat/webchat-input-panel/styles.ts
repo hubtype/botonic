@@ -13,3 +13,17 @@ export const UserInputContainer = styled.div`
   z-index: 1;
   border-top: 1px solid ${COLORS.SOLID_BLACK_ALPHA_0_5};
 `
+
+export const TextAreaContainer = styled.div`
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+`
+
+export const OpenedEmojiPickerContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 3px;
+  top: -324px;
+`
