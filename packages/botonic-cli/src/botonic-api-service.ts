@@ -171,8 +171,8 @@ export class BotonicAPIService {
   ): Promise<any> {
     try {
       return await requestFn()
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
+    } catch (error: any) {
+      if (error.response?.status === 401) {
         await this.refreshToken()
         return await requestFn()
       } else {
