@@ -1,15 +1,16 @@
 import React, { useContext } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
-// import { PersistentMenuTheme } from '../../components/index-types'
+import { PersistentMenuTheme } from '../../components/index-types'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { Typing } from '../../index-types'
 import { DeviceAdapter } from '../devices/device-adapter'
 import { TextAreaContainer } from './styles'
 
 interface TextareaProps {
   deviceAdapter: DeviceAdapter
-  persistentMenu: any //PersistentMenuTheme
+  persistentMenu: PersistentMenuTheme
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
   sendChatEvent: (event: string) => Promise<void>
   sendTextAreaText: () => Promise<void>
@@ -59,13 +60,13 @@ export const Textarea = ({
 
   const startTyping = () => {
     isTyping = true
-    sendChatEvent('typing_on')
+    sendChatEvent(Typing.On)
   }
 
   const stopTyping = () => {
     clearTimeoutWithReset(false)
     isTyping = false
-    sendChatEvent('typing_off')
+    sendChatEvent(Typing.Off)
   }
 
   return (

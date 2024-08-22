@@ -4,7 +4,7 @@ import React, { createRef } from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 
 import { WEBCHAT } from './constants'
-import { SENDERS } from './index-types'
+import { SENDERS, Typing } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { Webchat } from './webchat/webchat'
@@ -156,7 +156,7 @@ export class WebchatApp {
     } else if (event.message?.type === 'update_webchat_settings') {
       this.updateWebchatSettings(event.message.data)
     } else if (event.message?.type === 'sender_action') {
-      this.setTyping(event.message.data === 'typing_on')
+      this.setTyping(event.message.data === Typing.On)
     } else {
       this.onMessage &&
         this.onMessage(this, { sentBy: SENDERS.bot, message: event.message })
