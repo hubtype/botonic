@@ -15,7 +15,13 @@ it('Pre response is rejected when using fake credentials', async () => {
   }
 
   const request: PluginPreRequest = {
-    input: { data: 'hi', payload: 'payload', type: INPUT.AUDIO },
+    input: {
+      data: 'hi',
+      payload: 'payload',
+      type: INPUT.AUDIO,
+      message_id: 'testMessageId',
+      bot_interaction_id: 'testBotInteractionId',
+    },
     session: {
       bot: { id: 'test' },
       // @ts-ignore
