@@ -71,10 +71,16 @@ export class BotonicAPIService {
     const onRejected = async (error: any) => {
       const originalRequest = error.config
       const retry = originalRequest?._retry
+
       if (error.response?.status === 401 && !retry) {
         originalRequest._retry = true
         await this.refreshToken()
-        return this.apiClient.request(originalRequest)
+        const nextRequest = {
+          ...originalRequest,
+          headers: this.headers,
+        }
+
+        return this.apiClient.request(nextRequest)
       }
       return Promise.reject(error)
     }
@@ -274,7 +280,7 @@ export class BotonicAPIService {
     return resp
   }
 
-  async getMe(): Promise<AxiosPromise> {
+  private async getMe(): AxiosPromise<Me> {
     return this.apiGet({ path: 'users/me/' })
   }
 
