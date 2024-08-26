@@ -107,28 +107,16 @@ export class BotonicAPIService {
     return this.oauth
   }
 
-  loadGlobalCredentials(): void {
+  private loadGlobalCredentials(): void {
     const credentials = this.globalCredentialsHandler.load()
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
       this.analytics = credentials.analytics
-
-      this.setHeaders()
     }
   }
 
-  private setHeaders() {
-    if (this.oauth) {
-      this.headers = new AxiosHeaders({
-        Authorization: `Bearer ${this.oauth.access_token}`,
-        'content-type': 'application/json',
-        'x-segment-anonymous-id': this.analytics.anonymous_id,
-      })
-    }
-  }
-
-  loadBotCredentials(): void {
+  private loadBotCredentials(): void {
     const credentials = this.botCredentialsHandler.load()
 
     if (credentials?.bot) {
@@ -145,6 +133,8 @@ export class BotonicAPIService {
       })
     }
   }
+
+  private saveGlobalCredentials(): void {
     this.globalCredentialsHandler.createDirIfNotExists()
     this.globalCredentialsHandler.dump({
       oauth: this.oauth,
@@ -153,7 +143,7 @@ export class BotonicAPIService {
     })
   }
 
-  saveBotCredentials(): void {
+  private saveBotCredentials(): void {
     this.botCredentialsHandler.dump({
       bot: this.bot,
     })
@@ -187,7 +177,7 @@ export class BotonicAPIService {
     if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
   }
 
-  async apiPost({
+  private async apiPost({
     apiVersion = 'v1',
     path,
     body,
@@ -200,7 +190,7 @@ export class BotonicAPIService {
     })
   }
 
-  async apiGet({
+  private async apiGet({
     apiVersion = 'v1',
     path,
     headers,
@@ -212,7 +202,7 @@ export class BotonicAPIService {
     })
   }
 
-  async refreshToken(): Promise<any> {
+  private async refreshToken(): Promise<void> {
     const data = stringify({
       callback: 'none',
       grant_type: 'refresh_token',
@@ -293,11 +283,17 @@ export class BotonicAPIService {
   }
 
   async getMoreBots(bots: BotListItem[], nextBots?: string) {
+    if (!nextBots) {
+      return bots
+    }
+
     const resp = await this.apiGet({
-      path: nextBots.split(this.baseUrl)[1],
+      apiVersion: 'v2',
+      path: nextBots.split(`${this.baseUrl}/v2/`)[1],
     })
     resp.data.results.map(b => bots.push(b))
     nextBots = resp.data.next
+
     return this.getMoreBots(bots, nextBots)
   }
 
@@ -315,7 +311,7 @@ export class BotonicAPIService {
     botConfigJson: BotConfigJson
   ): Promise<any> {
     try {
-      const _authenticated = await this.getMe()
+      await this.getMe()
     } catch (e) {
       console.log(`Error authenticating: ${String(e)}`)
     }
@@ -345,7 +341,7 @@ export class BotonicAPIService {
     })
   }
 
-  async getHeaders(form: FormData): Promise<Record<string, any>> {
+  private async getHeaders(form: FormData): Promise<Record<string, any>> {
     //https://github.com/axios/axios/issues/1006#issuecomment-352071490
     return new Promise((resolve, reject) => {
       form.getLength((err: any, length: number) => {
