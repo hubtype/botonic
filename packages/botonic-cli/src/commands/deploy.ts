@@ -102,11 +102,8 @@ Deploying to AWS...
 
   async deployBotFromFlag(botName: string): Promise<void | undefined> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
     const bots = resp.data.results
-    if (nextBots) {
-      await this.botonicApiService.getMoreBots(bots, nextBots)
-    }
+
     const bot = bots.filter(b => b.name === botName)[0]
     if (bot === undefined && !botName) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
@@ -189,9 +186,8 @@ Deploying to AWS...
       return this.newBotFlow()
     else {
       const resp = await this.botonicApiService.getBots()
-      const nextBots = resp.data.next
       const bots = resp.data.results
-      if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
+
       // Show the current bot in credentials at top of the list
       const firstId = this.botonicApiService.bot.id
       bots.sort((x, y) => (x.id === firstId ? -1 : y.id === firstId ? 1 : 0))
@@ -247,10 +243,8 @@ Deploying to AWS...
 
   async getAvailableBots(): Promise<any> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
-    const bots = resp.data.results
-    if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
-    return bots
+
+    return resp.data.results
   }
 
   async newBotFlow(): Promise<void> {

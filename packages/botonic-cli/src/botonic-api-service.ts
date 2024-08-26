@@ -279,10 +279,16 @@ export class BotonicAPIService {
   }
 
   async getBots(): AxiosPromise<BotsList> {
-    return this.apiGet({ apiVersion: 'v2', path: 'bots/' })
+    const botsResponse = await this.apiGet({ apiVersion: 'v2', path: 'bots/' })
+
+    if (botsResponse.data.next) {
+      this.getMoreBots(botsResponse.data.results, botsResponse.data.next)
+    }
+
+    return botsResponse
   }
 
-  async getMoreBots(bots: BotListItem[], nextBots?: string) {
+  private async getMoreBots(bots: BotListItem[], nextBots?: string) {
     if (!nextBots) {
       return bots
     }
