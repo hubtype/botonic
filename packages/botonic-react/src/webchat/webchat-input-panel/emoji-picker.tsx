@@ -1,13 +1,10 @@
-import Picker from 'emoji-picker-react'
-import React, { LegacyRef, useContext } from 'react'
+import React, { useContext } from 'react'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
-import { useComponentVisible } from '../hooks'
-import { OpenedEmojiPickerContainer } from './styles'
 
 interface EmojiPickerProps {
   enableEmojiPicker: boolean
