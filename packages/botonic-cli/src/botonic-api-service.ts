@@ -17,7 +17,14 @@ import {
   BotCredentialsHandler,
   GlobalCredentialsHandler,
 } from './analytics/credentials-handler'
-import { AnalyticsInfo, BotInfo, BotsList, Me, OAuth } from './interfaces'
+import {
+  AnalyticsInfo,
+  BotDetail,
+  BotListItem,
+  BotsList,
+  Me,
+  OAuth,
+} from './interfaces'
 import { BotConfigJson } from './util/bot-config-json'
 import { pathExists } from './util/file-system'
 
@@ -43,7 +50,7 @@ export class BotonicAPIService {
   oauth?: OAuth
   me?: Me
   analytics: AnalyticsInfo
-  bot: BotInfo | null
+  bot: BotDetail | null
   headers: AxiosHeaders
   apiClient: AxiosInstance
 
@@ -80,7 +87,7 @@ export class BotonicAPIService {
     this.saveBotCredentials()
   }
 
-  botInfo(): BotInfo {
+  botInfo(): BotDetail {
     if (!this.bot) {
       throw new Error('Not bot info available')
     }
@@ -275,8 +282,7 @@ export class BotonicAPIService {
     return this.apiGet({ apiVersion: 'v2', path: 'bots/' })
   }
 
-  async getMoreBots(bots: any, nextBots: any) {
-    if (!nextBots) return bots
+  async getMoreBots(bots: BotListItem[], nextBots?: string) {
     const resp = await this.apiGet({
       path: nextBots.split(this.baseUrl)[1],
     })
