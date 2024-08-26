@@ -23,6 +23,7 @@ export const OpenedEmojiPicker = ({
             width='100%'
             height='19rem'
             previewConfig={{ showPreview: false }}
+            lazyLoadEmojis={true}
             onEmojiClick={onEmojiClick}
             autoFocusSearch={false}
           />
