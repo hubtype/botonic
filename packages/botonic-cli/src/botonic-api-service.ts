@@ -50,6 +50,7 @@ export class BotonicAPIService {
   constructor() {
     this.loadGlobalCredentials()
     this.loadBotCredentials()
+    this.setHeaders(this.oauth?.access_token)
 
     this.apiClient = axios.create({
       baseURL: BOTONIC_URL,
@@ -122,7 +123,15 @@ export class BotonicAPIService {
     }
   }
 
-  saveGlobalCredentials(): void {
+  private setHeaders(accessToken?: string) {
+    if (accessToken) {
+      this.headers = new AxiosHeaders({
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': 'application/json',
+        'x-segment-anonymous-id': this.analytics.anonymous_id,
+      })
+    }
+  }
     this.globalCredentialsHandler.createDirIfNotExists()
     this.globalCredentialsHandler.dump({
       oauth: this.oauth,
@@ -198,22 +207,20 @@ export class BotonicAPIService {
       client_id: this.clientId,
     })
 
-    const resp = await axios.post(this.loginUrl, data, {
+    const oauthResponse = await axios.post(this.loginUrl, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
 
-    if (!resp) return
-    this.oauth = resp.data
-    this.headers = new AxiosHeaders({
-      Authorization: `Bearer ${this.getOauth().access_token}`,
-      'content-type': 'application/json',
-      'x-segment-anonymous-id': this.analytics.anonymous_id,
-    })
+    if (oauthResponse.status !== 200) {
+      throw new Error('Error refreshing token')
+    }
+    this.oauth = oauthResponse.data
+
+    const accessToken = this.getOauth().access_token
+    this.setHeaders(accessToken)
     this.saveGlobalCredentials()
-    // eslint-disable-next-line consistent-return
-    return resp
   }
 
   async login(email: string, password: string): Promise<void> {
@@ -231,13 +238,13 @@ export class BotonicAPIService {
     })
     this.oauth = loginResponse.data
 
-    this.headers = new AxiosHeaders({
-      Authorization: `Bearer ${this.getOauth().access_token}`,
-      'content-type': 'application/json',
-      'x-segment-anonymous-id': this.analytics.anonymous_id,
-    })
+    const accessToken = this.getOauth().access_token
+    this.setHeaders(accessToken)
+
     const meResponse = await this.apiGet({ path: 'users/me' })
-    if (meResponse) this.me = meResponse.data
+    if (meResponse) {
+      this.me = meResponse.data
+    }
   }
 
   signup(
