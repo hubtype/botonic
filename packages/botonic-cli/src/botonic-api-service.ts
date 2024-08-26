@@ -270,13 +270,17 @@ export class BotonicAPIService {
     return this.apiPost({ path: 'users/', body: signupData })
   }
 
-  async saveBot(botName: string): Promise<AxiosPromise> {
+  async createBot(botName: string): Promise<AxiosPromise> {
     const resp = await this.apiPost({
       apiVersion: 'v2',
       path: 'bots/',
       body: { name: botName },
     })
-    if (resp.data) this.setCurrentBot(resp.data)
+
+    if (resp.data) {
+      this.setCurrentBot(resp.data)
+    }
+
     return resp
   }
 

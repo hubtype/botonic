@@ -283,7 +283,7 @@ Deploying to AWS...
     }
 
     try {
-      await this.botonicApiService.saveBot(inpBotName)
+      await this.botonicApiService.createBot(inpBotName)
       this.deploy()
     } catch (err: any) {
       console.log(
