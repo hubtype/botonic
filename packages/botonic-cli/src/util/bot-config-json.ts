@@ -105,9 +105,7 @@ export class BotConfig {
       const data = await fs.readFile(oldBotConfigJSON, 'utf8')
       return JSON.parse(data)
     } catch (err: any) {
-      console.error(
-        `Error reading ${OUTPUT_JSON_NAME} in app directory: ${err.message}`
-      )
+      console.error(`Cannot read ${OUTPUT_JSON_NAME} in app directory`)
       return {}
     }
   }
