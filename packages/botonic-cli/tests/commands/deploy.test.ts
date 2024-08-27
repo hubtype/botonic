@@ -43,7 +43,19 @@ describe('TEST: Deploy pipeline', () => {
         const onceBundled = readDir('.')
         expect(onceBundled).toContain('botonic_bundle.zip')
         expect(onceBundled).toContain('tmp')
-        const { hasDeployErrors } = await deployCommand.deployBundle()
+        const botConfigJson = {
+          build_info: {
+            node_version: 'v20.0.0',
+            npm_version: '10.0.0',
+            botonic_cli_version: '0.29.0',
+          },
+          packages: {
+            '@botonic/core': { version: '0.29.0' },
+            '@botonic/react': { version: '0.29.0' },
+          },
+        }
+        const { hasDeployErrors } =
+          await deployCommand.deployBundle(botConfigJson)
         expect(hasDeployErrors).toBe(false)
         removeRecursively(join('.', 'botonic_bundle.zip'))
         removeRecursively(join('.', 'tmp'))

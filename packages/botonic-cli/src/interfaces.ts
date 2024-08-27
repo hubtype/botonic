@@ -18,7 +18,7 @@ export interface OAuth {
   refresh_token: string
 }
 
-interface Me {
+export interface Me {
   id: string
   username: string
   email: string
@@ -43,7 +43,7 @@ interface Me {
   managers_settings_json: any
 }
 
-interface AnalyticsInfo {
+export interface AnalyticsInfo {
   anonymous_id: string
 }
 
@@ -51,6 +51,18 @@ export interface GlobalCredentials {
   oauth?: OAuth
   me?: Me
   analytics: AnalyticsInfo
+}
+
+export interface BotsList {
+  count: number
+  next: string
+  previous: string
+  results: BotListItem[]
+}
+
+export interface BotListItem {
+  id: string
+  name: string
 }
 
 interface BotLastUpdate {
@@ -61,7 +73,7 @@ interface BotLastUpdate {
   comment: string
 }
 
-export interface BotInfo {
+export interface BotDetail {
   id: string
   name: string
   organization: string
@@ -109,7 +121,7 @@ interface ProviderAccountsInfo {
 }
 
 export interface BotCredentials {
-  bot: BotInfo | null
+  bot: BotDetail | null
 }
 
 export interface TrackArgs {

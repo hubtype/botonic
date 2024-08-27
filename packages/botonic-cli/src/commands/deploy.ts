@@ -12,7 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
-import { BotConfigJson } from '../util/bot-config-json'
+import { BotConfig, BotConfigJSON } from '../util/bot-config'
 import {
   copy,
   createDir,
@@ -102,13 +102,10 @@ Deploying to AWS...
 
   async deployBotFromFlag(botName: string): Promise<void | undefined> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
     const bots = resp.data.results
-    if (nextBots) {
-      await this.botonicApiService.getMoreBots(bots, nextBots)
-    }
+
     const bot = bots.filter(b => b.name === botName)[0]
-    if (bot == undefined && !botName) {
+    if (bot === undefined && !botName) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
       bots.map(b => console.log(` > ${String(b.name)}`))
@@ -189,14 +186,11 @@ Deploying to AWS...
       return this.newBotFlow()
     else {
       const resp = await this.botonicApiService.getBots()
-      const nextBots = resp.data.next
       const bots = resp.data.results
-      if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
+
       // Show the current bot in credentials at top of the list
-      const first_id = this.botonicApiService.bot.id
-      bots.sort(function (x, y) {
-        return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
-      })
+      const firstId = this.botonicApiService.bot.id
+      bots.sort((x, y) => (x.id === firstId ? -1 : y.id === firstId ? 1 : 0))
       return this.selectExistentBot(bots)
     }
   }
@@ -249,10 +243,8 @@ Deploying to AWS...
 
   async getAvailableBots(): Promise<any> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
-    const bots = resp.data.results
-    if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
-    return bots
+
+    return resp.data.results
   }
 
   async newBotFlow(): Promise<void> {
@@ -285,7 +277,7 @@ Deploying to AWS...
     }
 
     try {
-      await this.botonicApiService.saveBot(inpBotName)
+      await this.botonicApiService.createBot(inpBotName)
       this.deploy()
     } catch (err: any) {
       console.log(
@@ -367,14 +359,17 @@ Deploying to AWS...
   }
 
   /* istanbul ignore next */
-  async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
+  async deployBundle(
+    botConfigJson: BotConfigJSON
+  ): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
     }).start()
     try {
       const deploy = await this.botonicApiService.deployBot(
-        join(process.cwd(), BOTONIC_BUNDLE_FILE)
+        join(process.cwd(), BOTONIC_BUNDLE_FILE),
+        botConfigJson
       )
       if (
         (deploy.response && deploy.response.status == 403) ||
@@ -448,11 +443,10 @@ Deploying to AWS...
         return
       }
 
-      const botConfigJson = new BotConfigJson(process.cwd())
-      await botConfigJson.updateBotConfigJson()
+      const botConfigJson = await BotConfig.get(process.cwd())
 
       await this.createBundle()
-      const { hasDeployErrors } = await this.deployBundle()
+      const { hasDeployErrors } = await this.deployBundle(botConfigJson)
       await this.displayDeployResults({ hasDeployErrors })
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
