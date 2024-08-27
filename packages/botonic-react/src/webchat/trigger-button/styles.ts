@@ -23,7 +23,7 @@ export const UnreadMessagesCounter = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 80px;
   width: 24px;
