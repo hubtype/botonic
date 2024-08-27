@@ -25,7 +25,7 @@ import {
   Me,
   OAuth,
 } from './interfaces'
-import { BotConfigJson } from './util/bot-config-json'
+import { BotConfigJSON } from './util/bot-config'
 import { pathExists } from './util/file-system'
 
 const exec = util.promisify(childProcess.exec)
@@ -314,7 +314,7 @@ export class BotonicAPIService {
 
   async deployBot(
     bundlePath: string,
-    botConfigJson: BotConfigJson
+    botConfigJson: BotConfigJSON
   ): Promise<any> {
     try {
       await this.getMe()

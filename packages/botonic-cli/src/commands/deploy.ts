@@ -12,7 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
-import { BotConfig, BotConfigJson } from '../util/bot-config-json'
+import { BotConfig, BotConfigJSON } from '../util/bot-config'
 import {
   copy,
   createDir,
@@ -360,7 +360,7 @@ Deploying to AWS...
 
   /* istanbul ignore next */
   async deployBundle(
-    botConfigJson: BotConfigJson
+    botConfigJson: BotConfigJSON
   ): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
@@ -443,8 +443,7 @@ Deploying to AWS...
         return
       }
 
-      const botConfig = new BotConfig(process.cwd())
-      const botConfigJson = await botConfig.createJson()
+      const botConfigJson = await BotConfig.get(process.cwd())
 
       await this.createBundle()
       const { hasDeployErrors } = await this.deployBundle(botConfigJson)
