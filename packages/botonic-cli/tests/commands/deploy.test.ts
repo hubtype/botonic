@@ -50,8 +50,8 @@ describe('TEST: Deploy pipeline', () => {
             botonic_cli_version: '0.29.0',
           },
           packages: {
-            '@botonic/core': '0.29.0',
-            '@botonic/react': '0.29.0',
+            '@botonic/core': { version: '0.29.0' },
+            '@botonic/react': { version: '0.29.0' },
           },
         }
         const { hasDeployErrors } =

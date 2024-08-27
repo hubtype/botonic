@@ -1,9 +1,9 @@
 import childProcess from 'child_process'
 import { promises as fs } from 'fs'
+import ora from 'ora'
 import path from 'path'
 import * as util from 'util'
 
-const OUTPUT_JSON_NAME = 'bot.config.json'
 const BOTONIC_PREFIX_PACKAGE = '@botonic'
 const BOTONIC_CORE_PACKAGE = `${BOTONIC_PREFIX_PACKAGE}/core`
 const NPM_DEPTH_1 = 1
@@ -12,27 +12,31 @@ const NPM_DEPTH_0 = 0
 // Also get alpha and beta versions
 const versionRegex = /@botonic\/[^@]+@(\d+\.\d+\.\d+(-[a-zA-Z]+\.\d+)?)/
 
-export interface BotConfigJson {
+type BotonicDependencies = Record<string, { version: string }>
+
+export interface BotConfigJSON {
   build_info: {
     node_version: string
     npm_version: string
     botonic_cli_version: string
   }
-  packages: Record<string, any>
+  packages: BotonicDependencies
 }
 export class BotConfig {
-  constructor(public appDirectory: string) {}
-
-  async createJson(): Promise<BotConfigJson> {
-    const packages = await this.readPackageJson()
+  static async get(appDirectory: string): Promise<BotConfigJSON> {
+    const spinner = ora({
+      text: 'Getting bot config...',
+      spinner: 'bouncingBar',
+    }).start()
+    const packages = await this.getBotonicDependencies(appDirectory)
     const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
       ['node -v', 'npm -v', 'botonic -v'].map(command =>
         this.getOutputByCommand(command)
       )
     )
-    const oldBotConfigJSON = await this.readOldBotConfigJSON()
-    const newBotConfigJSON = {
-      ...oldBotConfigJSON,
+    spinner.succeed()
+
+    return {
       build_info: {
         node_version: nodeVersion,
         npm_version: npmVersion,
@@ -40,14 +44,14 @@ export class BotConfig {
       },
       packages,
     }
-    await this.writeBotConfigJSON(newBotConfigJSON)
-    return newBotConfigJSON
   }
 
-  private async readPackageJson(): Promise<Record<string, any>> {
+  private static async getBotonicDependencies(
+    appDirectory: string
+  ): Promise<BotonicDependencies> {
     const packages = {}
     try {
-      const packageJsonPath = path.join(this.appDirectory, 'package.json')
+      const packageJsonPath = path.join(appDirectory, 'package.json')
       const data = await fs.readFile(packageJsonPath, 'utf8')
       const packageJson = JSON.parse(data)
 
@@ -75,11 +79,11 @@ export class BotConfig {
     return packages
   }
 
-  private async setDependenciesVersion(
+  private static async setDependenciesVersion(
     dependency: string,
     packages: Record<string, any>,
     depth: number = NPM_DEPTH_0
-  ) {
+  ): Promise<BotonicDependencies> {
     try {
       const output = await this.getOutputByCommand(
         `npm ls ${dependency} --depth=${depth}`
@@ -93,37 +97,9 @@ export class BotConfig {
     return packages
   }
 
-  private async getOutputByCommand(command: string): Promise<string> {
+  private static async getOutputByCommand(command: string): Promise<string> {
     const exec = util.promisify(childProcess.exec)
     const { stdout } = await exec(command)
     return stdout.trim()
-  }
-
-  private async readOldBotConfigJSON(): Promise<Record<string, any>> {
-    try {
-      const oldBotConfigJSON = path.join(this.appDirectory, OUTPUT_JSON_NAME)
-      const data = await fs.readFile(oldBotConfigJSON, 'utf8')
-      return JSON.parse(data)
-    } catch (err: any) {
-      console.error(
-        `Error reading ${OUTPUT_JSON_NAME} in app directory: ${err.message}`
-      )
-      return {}
-    }
-  }
-
-  private async writeBotConfigJSON(
-    botConfig: Record<string, any>,
-    paths: string[] = []
-  ): Promise<void> {
-    paths.push(OUTPUT_JSON_NAME)
-    try {
-      const botConfigPath = path.join(this.appDirectory, ...paths)
-      await fs.writeFile(botConfigPath, JSON.stringify(botConfig, null, 2))
-    } catch (err: any) {
-      console.error(
-        `Error writing ${OUTPUT_JSON_NAME} in ${this.appDirectory}/${paths.join('/')}: ${err.message}`
-      )
-    }
   }
 }
