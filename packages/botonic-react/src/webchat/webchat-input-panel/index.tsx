@@ -84,7 +84,6 @@ export const WebchatInputPanel = ({
     >
       {webchatState.isEmojiPickerOpen && (
         <OpenedEmojiPicker
-          // height={webchatState.theme.style.height} // Revisar si es necessari, en el WebchatStateTheme no hi ha style.height, pero en el Theme props style es any.
           onEmojiClick={handleSelectedEmoji}
           onClick={handleEmojiClick}
         />
