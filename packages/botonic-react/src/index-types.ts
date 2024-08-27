@@ -142,6 +142,11 @@ export enum SENDERS {
   agent = 'agent',
 }
 
+export enum Typing {
+  On = 'typing_on',
+  Off = 'typing_off',
+}
+
 export interface WebchatMessage {
   ack: 0 | 1
   blob: boolean
@@ -177,7 +182,7 @@ export interface OnStateChangeArgs {
 }
 
 export interface MessageInfo {
-  data: any | 'typing_on'
+  data: any | Typing.On
   id: string
   type: 'update_webchat_settings' | 'sender_action'
 }
@@ -191,17 +196,19 @@ export interface Event {
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
   closeWebview: () => void
-  getThemeProperty: (property: string, defaultValue?: string | boolean) => any
+  getThemeProperty: (property: string, defaultValue?: any) => any
   openWebview: (webviewComponent: Webview) => void
   resetUnreadMessages: () => void
   resolveCase: () => void
-  sendAttachment: (attachment: File) => void
-  sendInput: (input: CoreInput) => void
-  sendPayload: (payload: string) => void
-  sendText: (text: string, payload?: string) => void
+  sendAttachment: (attachment: File) => Promise<void>
+  sendInput: (input: CoreInput) => Promise<void>
+  sendPayload: (payload: string) => Promise<void>
+  sendText: (text: string, payload?: string) => Promise<void>
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps
   toggleWebchat: (toggle: boolean) => void
+  toggleEmojiPicker: (toggle: boolean) => void
+  togglePersistentMenu: (toggle: boolean) => void
   updateLatestInput: (input: CoreInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: boolean) => void

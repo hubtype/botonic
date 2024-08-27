@@ -1,15 +1,20 @@
-import Picker from 'emoji-picker-react'
 import React, { useContext } from 'react'
-import styled from 'styled-components'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
+import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
-import { useComponentVisible } from '../hooks'
-import { Icon } from './common'
 
-export const EmojiPicker = ({ enableEmojiPicker, onClick }) => {
+interface EmojiPickerProps {
+  enableEmojiPicker: boolean
+  onClick: () => void
+}
+
+export const EmojiPicker = ({
+  enableEmojiPicker,
+  onClick,
+}: EmojiPickerProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const CustomEmojiPicker = getThemeProperty(
@@ -28,7 +33,7 @@ export const EmojiPicker = ({ enableEmojiPicker, onClick }) => {
   }
   const emojiPickerEnabled = isEmojiPickerEnabled()
 
-  const handleClick = event => {
+  const handleClick = (event: any) => {
     onClick()
     event.stopPropagation()
   }
@@ -47,32 +52,5 @@ export const EmojiPicker = ({ enableEmojiPicker, onClick }) => {
         </ConditionalAnimation>
       ) : null}
     </>
-  )
-}
-
-const Container = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  right: 3px;
-  top: -324px;
-`
-
-export const OpenedEmojiPicker = props => {
-  const { ref, isComponentVisible } = useComponentVisible(true, props.onClick)
-  return (
-    <div ref={ref}>
-      {isComponentVisible && (
-        <Container role={ROLES.EMOJI_PICKER}>
-          <Picker
-            width='100%'
-            height='19rem'
-            previewConfig={{ showPreview: false }}
-            onEmojiClick={props.onEmojiClick}
-            disableAutoFocus={true}
-          />
-        </Container>
-      )}
-    </div>
   )
 }
