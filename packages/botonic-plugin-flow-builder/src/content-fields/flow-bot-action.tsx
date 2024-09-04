@@ -7,8 +7,6 @@ import { HtBotActionNode } from './hubtype-fields'
 export class FlowBotAction extends ContentFieldsBase {
   public code: string
   public payload: string
-  public payloadId: string
-  public payloadParams?: string
 
   static fromHubtypeCMS(
     cmsBotAction: HtBotActionNode,
@@ -17,8 +15,6 @@ export class FlowBotAction extends ContentFieldsBase {
   ): FlowBotAction {
     const newBotAction = new FlowBotAction(cmsBotAction.id)
     newBotAction.code = cmsBotAction.code
-    newBotAction.payloadId = cmsBotAction.content.payload_id
-    newBotAction.payloadParams = cmsBotAction.content.payload_params
     newBotAction.payload = cmsApi.createPayloadWithParams(cmsBotAction)
 
     return newBotAction
