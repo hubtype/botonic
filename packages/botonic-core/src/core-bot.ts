@@ -90,6 +90,15 @@ export class CoreBot {
     lastRoutePath,
   }: BotRequest): Promise<BotResponse> {
     const output = await this.runInput({ input, session, lastRoutePath })
+
+    if (session._botonic_action?.startsWith('flow_builder_bot_action:')) {
+      return await this.runFollowUpFlowBuilderBotAction(output, {
+        input,
+        session,
+        lastRoutePath,
+      })
+    }
+
     if (session._botonic_action?.startsWith('create_test_integration_case:')) {
       return await this.runFollowUpTestIntegrationInput(output, {
         input,
@@ -260,5 +269,50 @@ export class CoreBot {
       session,
       lastRoutePath: followUp.lastRoutePath,
     }
+  }
+
+  private async runFollowUpFlowBuilderBotAction(
+    previousResponse: BotResponse,
+    { input, session, lastRoutePath }: BotRequest
+  ) {
+    const nextPayload = session._botonic_action?.split(
+      'flow_builder_bot_action:'
+    )[1]
+
+    const inputWithBotActionPayload: Input = {
+      ...input,
+      payload: nextPayload,
+      type: INPUT.POSTBACK,
+      data: undefined,
+      text: undefined,
+    }
+
+    session._botonic_action = undefined
+
+    const followUp = await this.runInput({
+      input: inputWithBotActionPayload,
+      session,
+      lastRoutePath,
+    })
+
+    const response = {
+      input: followUp.input,
+      response: previousResponse.response.concat(followUp.response),
+      session,
+      lastRoutePath: followUp.lastRoutePath,
+    }
+
+    // Recursive call to handle multiple bot actions in a row
+    if (
+      response.session._botonic_action?.startsWith('flow_builder_bot_action:')
+    ) {
+      return await this.runFollowUpFlowBuilderBotAction(response, {
+        input,
+        session,
+        lastRoutePath,
+      })
+    }
+
+    return response
   }
 }
