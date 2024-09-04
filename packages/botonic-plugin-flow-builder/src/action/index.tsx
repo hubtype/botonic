@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
+import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
@@ -31,6 +32,14 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     if (handoffContent) {
       await handoffContent.doHandoff(request)
     }
+
+    const botActionContent = contents.find(
+      content => content instanceof FlowBotAction
+    ) as FlowBotAction
+    if (botActionContent) {
+      botActionContent.doBotAction(request)
+    }
+
     return { contents }
   }
 

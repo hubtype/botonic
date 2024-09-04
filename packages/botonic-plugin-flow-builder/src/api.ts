@@ -1,11 +1,7 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  BOT_ACTION_PAYLOAD_PREFIX,
-  KNOWLEDGE_BASE_FLOW_NAME,
-  SEPARATOR,
-} from './constants'
+import { KNOWLEDGE_BASE_FLOW_NAME, SEPARATOR } from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -163,10 +159,6 @@ export class FlowBuilderApi {
   getPayload(target?: HtNodeLink): string | undefined {
     if (!target) {
       return undefined
-    }
-
-    if (target.type === HtNodeWithoutContentType.BOT_ACTION) {
-      return `${BOT_ACTION_PAYLOAD_PREFIX}${target.id}`
     }
 
     return target.id

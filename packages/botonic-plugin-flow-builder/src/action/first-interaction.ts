@@ -1,5 +1,5 @@
 import { FlowBuilderApi } from '../api'
-import { BOT_ACTION_PAYLOAD_PREFIX, MAIN_FLOW_NAME } from '../constants'
+import { MAIN_FLOW_NAME } from '../constants'
 import { FlowContent } from '../content-fields'
 import BotonicPluginFlowBuilder from '../index'
 import { getNodeByUserInput } from '../user-input'
@@ -49,12 +49,6 @@ async function getContentsByUserInput({
 
   if (request.input.payload === conversationStartId) {
     return []
-  }
-
-  if (request.input.payload?.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
-    request.input.payload = flowBuilderPlugin.replaceBotActionPayload(
-      request.input.payload
-    )
   }
 
   const contentsByKeywordsOrIntents = await getContentsByPayload({
