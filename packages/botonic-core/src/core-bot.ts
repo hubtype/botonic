@@ -322,6 +322,16 @@ export class CoreBot {
       )
     }
 
+    if (
+      response.session._botonic_action?.startsWith(BotonicAction.CreateTestCase)
+    ) {
+      return await this.runFollowUpTestIntegrationInput(response, {
+        input,
+        session,
+        lastRoutePath,
+      })
+    }
+
     return response
   }
 }
