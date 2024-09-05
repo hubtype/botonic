@@ -1,3 +1,4 @@
+import { BotonicAction } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -21,7 +22,7 @@ export class FlowBotAction extends ContentFieldsBase {
   }
 
   doBotAction(request: ActionRequest): void {
-    request.session._botonic_action = `flow_builder_bot_action:${this.payload}`
+    request.session._botonic_action = `${BotonicAction.Redirect}${this.payload}`
   }
 
   toBotonic(): JSX.Element {

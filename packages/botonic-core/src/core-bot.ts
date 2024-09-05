@@ -1,6 +1,7 @@
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
+  BotonicAction,
   BotRequest,
   BotResponse,
   INPUT,
@@ -28,6 +29,7 @@ export interface CoreBotConfig {
   routes: Routes
   theme?: any
 }
+
 export class CoreBot {
   appId?: string
   defaultDelay?: number
@@ -91,15 +93,15 @@ export class CoreBot {
   }: BotRequest): Promise<BotResponse> {
     const output = await this.runInput({ input, session, lastRoutePath })
 
-    if (session._botonic_action?.startsWith('flow_builder_bot_action:')) {
-      return await this.runFollowUpFlowBuilderBotAction(output, {
+    if (session._botonic_action?.startsWith(BotonicAction.Redirect)) {
+      return await this.runRedirectAction(output, {
         input,
         session,
         lastRoutePath,
       })
     }
 
-    if (session._botonic_action?.startsWith('create_test_integration_case:')) {
+    if (session._botonic_action?.startsWith(BotonicAction.CreateTestCase)) {
       return await this.runFollowUpTestIntegrationInput(output, {
         input,
         session,
@@ -271,12 +273,12 @@ export class CoreBot {
     }
   }
 
-  private async runFollowUpFlowBuilderBotAction(
+  private async runRedirectAction(
     previousResponse: BotResponse,
     { input, session, lastRoutePath }: BotRequest
   ) {
     const nextPayload = session._botonic_action?.split(
-      'flow_builder_bot_action:'
+      BotonicAction.Redirect
     )[1]
 
     const inputWithBotActionPayload: Input = {
@@ -303,10 +305,8 @@ export class CoreBot {
     }
 
     // Recursive call to handle multiple bot actions in a row
-    if (
-      response.session._botonic_action?.startsWith('flow_builder_bot_action:')
-    ) {
-      return await this.runFollowUpFlowBuilderBotAction(response, {
+    if (response.session._botonic_action?.startsWith(BotonicAction.Redirect)) {
+      return await this.runRedirectAction(response, {
         input,
         session,
         lastRoutePath,

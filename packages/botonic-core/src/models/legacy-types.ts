@@ -316,3 +316,9 @@ export type MatchingProp =
   | 'request'
 
 export type Matcher = string | RegExp | ((args) => boolean)
+
+export enum BotonicAction {
+  Redirect = 'redirect_action:',
+  CreateCase = 'create_case:',
+  CreateTestCase = 'create_test_integration_case:',
+}
