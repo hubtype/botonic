@@ -79,8 +79,8 @@ export interface EventHandoff extends HtBaseEventProps {
 export interface EventHandoffOption extends HtBaseEventProps {
   action: EventAction.HandoffOption
   flowThreadId?: string
-  queueId: string
-  queueName: string
+  queueId?: string
+  queueName?: string
 }
 
 export interface EventIntent extends HtBaseEventProps {

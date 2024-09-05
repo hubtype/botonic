@@ -9,8 +9,8 @@ import { HtEvent } from './ht-event'
 export class HtEventHandoffOption extends HtEvent {
   action: EventAction.HandoffOption
   flow_thread_id?: string
-  handoff_queue_id: string
-  handoff_queue_name: string
+  handoff_queue_id?: string
+  handoff_queue_name?: string
 
   constructor(event: EventHandoffOption, requestData: RequestData) {
     super(event, requestData)

@@ -57,7 +57,7 @@ describe('Create handoff events', () => {
     })
   })
 
-  test('should create handoff option event', () => {
+  test('should create handoff option event, with all params', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffOption,
       queueId: 'handoffQueueIdTest',
@@ -72,6 +72,22 @@ describe('Create handoff events', () => {
       action: EventAction.HandoffOption,
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
+      bot_interaction_id: 'testInteractionId',
+      type: EventType.BotEvent,
+    })
+  })
+
+  test('should create handoff option event, without params', () => {
+    const htEvent = createHtEvent(requestData, {
+      action: EventAction.HandoffOption,
+    })
+
+    expect(htEvent).toEqual({
+      chat_id: 'chatIdTest',
+      chat_language: 'es',
+      chat_country: 'ES',
+      format_version: 2,
+      action: EventAction.HandoffOption,
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

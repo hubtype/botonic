@@ -1,6 +1,5 @@
 import { BotRequest, Plugin } from '@botonic/core'
 import axios from 'axios'
-import { send } from 'process'
 
 import { HtEvent } from './event-models'
 import { EventType, HtEventProps, RequestData } from './types'
