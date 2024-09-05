@@ -275,8 +275,13 @@ export class CoreBot {
 
   private async runRedirectAction(
     previousResponse: BotResponse,
-    { input, session, lastRoutePath }: BotRequest
+    { input, session, lastRoutePath }: BotRequest,
+    numOfRedirects: number = 0
   ) {
+    if (numOfRedirects > 10) {
+      throw new Error('Maximum BotAction recursive calls reached (10)')
+    }
+
     const nextPayload = session._botonic_action?.split(
       BotonicAction.Redirect
     )[1]
@@ -306,11 +311,15 @@ export class CoreBot {
 
     // Recursive call to handle multiple bot actions in a row
     if (response.session._botonic_action?.startsWith(BotonicAction.Redirect)) {
-      return await this.runRedirectAction(response, {
-        input,
-        session,
-        lastRoutePath,
-      })
+      return await this.runRedirectAction(
+        response,
+        {
+          input,
+          session,
+          lastRoutePath,
+        },
+        numOfRedirects + 1
+      )
     }
 
     return response
