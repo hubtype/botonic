@@ -22,7 +22,7 @@ export class FlowBotAction extends ContentFieldsBase {
   }
 
   doBotAction(request: ActionRequest): void {
-    request.session._botonic_action = `${BotonicAction.Redirect}${this.payload}`
+    request.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
   }
 
   toBotonic(): JSX.Element {

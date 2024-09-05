@@ -55,14 +55,9 @@ import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
+import { getParsedAction } from './utils'
 import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
-
-export const getParsedAction = botonicAction => {
-  const splittedAction = botonicAction.split(BotonicAction.CreateCase)
-  if (splittedAction.length <= 1) return undefined
-  return JSON.parse(splittedAction[1])
-}
 
 const StyledWebchat = styled.div`
   position: fixed;

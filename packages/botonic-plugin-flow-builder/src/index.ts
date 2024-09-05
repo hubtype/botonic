@@ -164,8 +164,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     if (content) {
       contents.push(content)
     }
+
+    // If node is BOT_ACTION not add more contents to render, next nodes render after execute action
+    if (node.type === HtNodeWithContentType.BOT_ACTION) {
+      return contents
+    }
+
     // TODO: prevent infinite recursive calls
-    if (node.follow_up && !(content instanceof FlowBotAction)) {
+    if (node.follow_up) {
       return this.getContentsById(node.follow_up.id, resolvedLocale, contents)
     }
 

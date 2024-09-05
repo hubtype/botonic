@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 import { HandOffBuilder } from '../../src'
+import { BotonicAction } from '../../src/models'
 import {
   developerLocales,
   developerRoutes,
@@ -223,7 +224,7 @@ it('input returns the follow up when a handoff is done in a test integration', a
   // Arrange
   const session = {
     is_test_integration: true,
-    _botonic_action: 'create_test_integration_case:payload1',
+    _botonic_action: `${BotonicAction.CreateTestCase}:payload1`,
   }
 
   const coreBot = initCoreBotWithDeveloperConfig({

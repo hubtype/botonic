@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import { BotonicAction, Session } from './models'
+import { BotonicAction, BotonicActionType, Session } from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
@@ -250,9 +250,9 @@ async function _humanHandOff(
     params.bot_event = botEvent
   }
   if (!session.is_test_integration) {
-    session._botonic_action = `${BotonicAction.CreateCase}${JSON.stringify(params)}`
+    session._botonic_action = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
   } else {
-    session._botonic_action = `${BotonicAction.CreateTestCase}${params.on_finish || ''}`
+    session._botonic_action = `${BotonicAction.CreateTestCase}:${params.on_finish || ''}`
   }
 }
 
@@ -330,11 +330,11 @@ export function cancelHandoff(
   session: Session,
   typification: string | null = null
 ): void {
-  let action = 'discard_case'
+  let action: BotonicActionType = BotonicAction.DiscardCase
   if (typification) action = `${action}:${JSON.stringify({ typification })}`
   session._botonic_action = action
 }
 
 export function deleteUser(session: Session): void {
-  session._botonic_action = `delete_user`
+  session._botonic_action = BotonicAction.DeleteUser
 }
