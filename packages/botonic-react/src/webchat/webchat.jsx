@@ -72,6 +72,7 @@ const StyledWebchat = styled.div`
   box-shadow: ${COLORS.SOLID_BLACK_ALPHA_0_2} 0px 0px 12px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `
 
 const ErrorMessageContainer = styled.div`
