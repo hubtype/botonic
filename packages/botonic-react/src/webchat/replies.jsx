@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
-import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import { ScrollableContent } from './components/scrollable-content'
 
 const RepliesContainer = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ export const WebchatReplies = props => {
       options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
 
   return (
-    <StyledScrollbar>
+    <ScrollableContent>
       <RepliesContainer
         className='replies-container'
         justify={justifyContent}
@@ -50,6 +50,6 @@ export const WebchatReplies = props => {
           <ReplyContainer key={i}>{r}</ReplyContainer>
         ))}
       </RepliesContainer>
-    </StyledScrollbar>
+    </ScrollableContent>
   )
 }

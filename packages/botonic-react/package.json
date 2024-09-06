@@ -31,7 +31,6 @@
     "react-json-tree": "^0.15.0",
     "react-router-dom": "^5.3.4",
     "react-textarea-autosize": "^8.5.3",
-    "simplebar-react": "^2.4.3",
     "styled-components": "^5.3.0",
     "ua-parser-js": "^0.8.1",
     "uuid": "^8.3.2"
