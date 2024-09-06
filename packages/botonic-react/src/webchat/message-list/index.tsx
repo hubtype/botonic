@@ -18,11 +18,6 @@ export const WebchatMessageList = () => {
     setLastMessageVisible,
   } = useContext(WebchatContext)
 
-  const scrollbarOptions = {
-    ...{ enable: true, autoHide: true },
-    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
-  }
-
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
   const lastMessageBottomRef = useRef<HTMLDivElement>(null)
@@ -109,8 +104,6 @@ export const WebchatMessageList = () => {
         // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
         id='botonic-scrollable-content'
         // @ts-ignore
-        scrollbar={scrollbarOptions}
-        autoHide={scrollbarOptions.autoHide}
         ismessagescontainer={true.toString()}
         style={{ flex: 1 }}
       >
