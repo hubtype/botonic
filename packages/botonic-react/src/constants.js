@@ -54,7 +54,6 @@ export const WEBCHAT = {
     },
   },
   SELECTORS: {
-    SCROLLABLE_CONTENT: '#botonic-scrollable-content',
     SIMPLEBAR_CONTENT: '.simplebar-content',
     SIMPLEBAR_WRAPPER: '.simplebar-content-wrapper',
   },

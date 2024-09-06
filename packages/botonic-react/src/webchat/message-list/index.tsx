@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { StyledScrollbar } from '../components/styled-scrollbar'
+import { BotonicContainerId } from '../constants'
 import { TypingIndicator } from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
@@ -11,12 +12,8 @@ import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
 export const WebchatMessageList = () => {
-  const {
-    webchatState,
-    getThemeProperty,
-    resetUnreadMessages,
-    setLastMessageVisible,
-  } = useContext(WebchatContext)
+  const { webchatState, resetUnreadMessages, setLastMessageVisible } =
+    useContext(WebchatContext)
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
@@ -100,9 +97,8 @@ export const WebchatMessageList = () => {
   return (
     <>
       <StyledScrollbar
+        id={BotonicContainerId.ScrollableContent}
         role={ROLES.MESSAGE_LIST}
-        // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
-        id='botonic-scrollable-content'
         // @ts-ignore
         ismessagescontainer={true.toString()}
         style={{ flex: 1 }}

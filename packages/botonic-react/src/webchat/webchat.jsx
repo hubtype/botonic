@@ -43,6 +43,7 @@ import {
   shouldKeepSessionOnReload,
 } from '../util/webchat'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
+import { BotonicContainerId } from './constants'
 import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
@@ -715,9 +716,9 @@ export const Webchat = forwardRef((props, ref) => {
 
       {webchatState.isWebchatOpen && (
         <StyledWebchat
+          id={BotonicContainerId.Webchat}
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
-          id={WEBCHAT.DEFAULTS.ID}
           width={webchatState.width}
           height={webchatState.height}
           style={{
@@ -726,6 +727,7 @@ export const Webchat = forwardRef((props, ref) => {
           }}
         >
           <StyledWebchatHeader
+            id={BotonicContainerId.Header}
             onCloseClick={() => {
               toggleWebchat(false)
             }}
