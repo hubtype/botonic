@@ -1,7 +1,10 @@
 import { WEBCHAT } from '../constants'
+import { BotonicContainerId } from '../webchat/constants'
 
 export const getScrollableContent = webchatElement => {
-  return webchatElement.querySelector(WEBCHAT.SELECTORS.SCROLLABLE_CONTENT)
+  return webchatElement.querySelector(
+    `#${BotonicContainerId.ScrollableContent}`
+  )
 }
 
 export const getScrollableArea = webchatElement => {

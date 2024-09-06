@@ -6,6 +6,7 @@ import { WebchatContext } from '../contexts'
 import { Scale } from '../shared/styles'
 import { resolveImage } from '../util/environment'
 import { ConditionalWrapper } from '../util/react'
+import { BotonicContainerId } from './constants'
 
 const Header = styled.div`
   display: flex;
@@ -84,6 +85,7 @@ export const DefaultHeader = props => {
 
   return (
     <Header
+      id={BotonicContainerId.Header}
       role={ROLES.HEADER}
       color={props.color}
       style={{ ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.headerStyle) }}

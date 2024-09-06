@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { getFullMimeWhitelist } from '../../message-utils'
+import { BotonicContainerId } from '../constants'
 import { DeviceAdapter } from '../devices/device-adapter'
 import { Attachment } from './attachment'
 import { EmojiPicker } from './emoji-picker'
@@ -77,6 +78,7 @@ export const WebchatInputPanel = ({
 
   return (
     <UserInputContainer
+      id={BotonicContainerId.InputPanel}
       style={{
         ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputStyle),
       }}
