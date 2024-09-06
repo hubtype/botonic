@@ -53,10 +53,6 @@ export const WEBCHAT = {
       pointerEvents: 'none',
     },
   },
-  SELECTORS: {
-    SIMPLEBAR_CONTENT: '.simplebar-content',
-    SIMPLEBAR_WRAPPER: '.simplebar-content-wrapper',
-  },
   CUSTOM_PROPERTIES: {
     // General
     enableAnimations: 'animations.enable',

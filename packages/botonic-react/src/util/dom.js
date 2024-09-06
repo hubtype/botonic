@@ -8,15 +8,9 @@ export const getScrollableContent = webchatElement => {
 }
 
 export const getScrollableArea = webchatElement => {
-  const getArea = area => {
-    const botonicScrollableContent = getScrollableContent(webchatElement)
-    const scrollableArea =
-      botonicScrollableContent && botonicScrollableContent.querySelector(area)
-    return scrollableArea
-  }
   return {
-    full: getArea(WEBCHAT.SELECTORS.SIMPLEBAR_CONTENT),
-    visible: getArea(WEBCHAT.SELECTORS.SIMPLEBAR_WRAPPER),
+    full: document.getElementById(BotonicContainerId.ScrollableContent),
+    visible: document.getElementById(BotonicContainerId.ChatArea),
   }
 }
 
@@ -27,7 +21,8 @@ export const scrollToBottom = ({
 } = {}) => {
   const webchatElement = getWebchatElement(host)
   if (!webchatElement) return
-  const frame = getScrollableArea(webchatElement).visible
+  const frame = getScrollableArea(webchatElement).full
+
   if (frame) {
     setTimeout(
       () => frame.scrollTo({ top: frame.scrollHeight, behavior: behavior }),
@@ -37,7 +32,7 @@ export const scrollToBottom = ({
 }
 
 export const getWebchatElement = host =>
-  host && host.querySelector(`#${WEBCHAT.DEFAULTS.ID}`)
+  host && host.querySelector(`#${BotonicContainerId.Webchat}`)
 
 // https://stackoverflow.com/questions/9457891/how-to-detect-if-domcontentloaded-was-fired
 export const onDOMLoaded = callback => {

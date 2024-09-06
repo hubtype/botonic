@@ -51,8 +51,10 @@ export class ScrollbarController {
 
   hasScrollbar() {
     const scrollableArea = getScrollableArea(this.webchat)
+
     const isScrollable =
-      scrollableArea.visible.clientHeight - scrollableArea.full.clientHeight < 0
+      scrollableArea.full.scrollHeight > scrollableArea.visible.clientHeight
+
     return isScrollable
   }
 

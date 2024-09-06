@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { StyledScrollbar } from '../components/styled-scrollbar'
+import { ScrollableContent } from '../components/scrollable-content'
 import { BotonicContainerId } from '../constants'
 import { TypingIndicator } from '../typing-indicator'
 import { IntroMessage } from './intro-message'
@@ -94,9 +94,34 @@ export const WebchatMessageList = () => {
   const showScrollButton =
     webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
 
+  const [chatAreaHeight, setChatAreaHeight] = useState(0)
+  useEffect(() => {
+    const webchatHeight = document.getElementById(
+      BotonicContainerId.Webchat
+    )?.clientHeight
+    const headerHeight = document.getElementById(
+      BotonicContainerId.Header
+    )?.clientHeight
+    const inputPanelHeight = document.getElementById(
+      BotonicContainerId.InputPanel
+    )?.clientHeight
+    if (webchatHeight && headerHeight && inputPanelHeight) {
+      setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
+    }
+  }, [webchatState.isWebchatOpen])
+
   return (
-    <>
-      <StyledScrollbar
+    <div
+      id={BotonicContainerId.ChatArea}
+      style={{
+        display: 'inherit',
+        flexDirection: 'inherit',
+        height: chatAreaHeight,
+        width: 'inherit',
+        overflow: 'inherit',
+      }}
+    >
+      <ScrollableContent
         id={BotonicContainerId.ScrollableContent}
         role={ROLES.MESSAGE_LIST}
         // @ts-ignore
@@ -125,8 +150,8 @@ export const WebchatMessageList = () => {
           )
         })}
         {webchatState.typing && <TypingIndicator />}
-      </StyledScrollbar>
+      </ScrollableContent>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}
-    </>
+    </div>
   )
 }
