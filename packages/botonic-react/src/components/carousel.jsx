@@ -62,10 +62,6 @@ const serialize = carouselProps => {
 export const Carousel = props => {
   const { getThemeProperty } = useContext(WebchatContext)
   let content = props.children
-  const scrollbarOptions = {
-    ...{ enable: true, autoHide: true },
-    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
-  }
   const [hasLeftArrow, setLeftArrow] = useState(false)
   const [hasRightArrow, setRightArrow] = useState(true)
   const carouselRef = useRef(null)
@@ -77,6 +73,7 @@ export const Carousel = props => {
     WEBCHAT.CUSTOM_PROPERTIES.customCarouselRightArrow,
     undefined
   )
+  // TODO: Investigate why when set to false, scroll is enabled via dragging the bar but not hovering the carousel elements
   const carouselArrowsEnabled = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.enableCarouselArrows,
     true
@@ -150,10 +147,7 @@ export const Carousel = props => {
 
   if (isBrowser()) {
     content = (
-      <StyledScrollbar
-        scrollbar={scrollbarOptions}
-        autoHide={scrollbarOptions.autoHide}
-      >
+      <StyledScrollbar>
         <StyledCarousel
           ref={carouselRef}
           carouselArrowsEnabled={carouselArrowsEnabled}

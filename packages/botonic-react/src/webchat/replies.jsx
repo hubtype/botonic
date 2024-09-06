@@ -29,10 +29,6 @@ const options = {
 
 export const WebchatReplies = props => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
-  const scrollbarOptions = {
-    ...{ enable: true, autoHide: true },
-    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
-  }
   let justifyContent = 'center'
   const flexWrap = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.wrapReplies,
@@ -44,10 +40,7 @@ export const WebchatReplies = props => {
       options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
 
   return (
-    <StyledScrollbar
-      scrollbar={scrollbarOptions}
-      autoHide={scrollbarOptions.autoHide}
-    >
+    <StyledScrollbar>
       <RepliesContainer
         className='replies-container'
         justify={justifyContent}
