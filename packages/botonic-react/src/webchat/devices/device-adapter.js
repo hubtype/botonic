@@ -31,7 +31,7 @@ export class DeviceAdapter {
 
   onBlur() {
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
-    this.webchatResizer.onBlur()
+    this.webchatResizer?.onBlur()
     this.scrollbarController.handleOnTouchMoveEvents()
   }
 
