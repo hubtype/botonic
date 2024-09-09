@@ -94,33 +94,8 @@ export const WebchatMessageList = () => {
   const showScrollButton =
     webchatState.numUnreadMessages > 0 && !webchatState.isLastMessageVisible
 
-  const [chatAreaHeight, setChatAreaHeight] = useState(0)
-  useEffect(() => {
-    const webchatHeight = document.getElementById(
-      BotonicContainerId.Webchat
-    )?.clientHeight
-    const headerHeight = document.getElementById(
-      BotonicContainerId.Header
-    )?.clientHeight
-    const inputPanelHeight = document.getElementById(
-      BotonicContainerId.InputPanel
-    )?.clientHeight
-    if (webchatHeight && headerHeight && inputPanelHeight) {
-      setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
-    }
-  }, [webchatState.isWebchatOpen])
-
   return (
-    <div
-      id={BotonicContainerId.ChatArea}
-      style={{
-        display: 'inherit',
-        flexDirection: 'inherit',
-        height: chatAreaHeight,
-        width: 'inherit',
-        overflow: 'inherit',
-      }}
-    >
+    <>
       <ScrollableContent
         id={BotonicContainerId.ScrollableContent}
         role={ROLES.MESSAGE_LIST}
@@ -152,6 +127,6 @@ export const WebchatMessageList = () => {
         {webchatState.typing && <TypingIndicator />}
       </ScrollableContent>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}
-    </div>
+    </>
   )
 }
