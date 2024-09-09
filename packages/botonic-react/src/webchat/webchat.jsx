@@ -110,6 +110,18 @@ const DarkBackgroundMenu = styled.div`
   height: 100%;
 `
 
+function useDeviceAdapter(host, isWebchatOpen) {
+  const [deviceAdapter] = useState(new DeviceAdapter())
+
+  useEffect(() => {
+    if (host && isWebchatOpen) {
+      deviceAdapter.init(host)
+    }
+  }, [host, isWebchatOpen, deviceAdapter])
+
+  return { deviceAdapter }
+}
+
 // eslint-disable-next-line complexity, react/display-name
 export const Webchat = forwardRef((props, ref) => {
   const {
@@ -159,7 +171,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const host = props.host || document.body
 
-  const deviceAdapter = new DeviceAdapter()
+  const { deviceAdapter } = useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   const saveWebchatState = webchatState => {
     storage &&
@@ -278,7 +290,6 @@ export const Webchat = forwardRef((props, ref) => {
       }
       return
     }
-    deviceAdapter.init(host)
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {

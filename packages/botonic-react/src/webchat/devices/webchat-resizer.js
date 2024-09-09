@@ -1,4 +1,5 @@
 import { getWebchatElement, scrollToBottom } from '../../util/dom'
+import { BotonicContainerId } from '../constants'
 import { DEVICES } from '.'
 
 export class WebchatResizer {
@@ -6,9 +7,14 @@ export class WebchatResizer {
     this.currentDevice = currentDevice
     this.host = host
     this.webchat = getWebchatElement(host)
+    this.chatArea = document.getElementById(BotonicContainerId.ChatArea)
+    this.originalChatAreaHeight = 0
   }
 
   onFocus(onKeyboardShownFn) {
+    if (!this.originalChatAreaHeight) {
+      this.originalChatAreaHeight = this.chatArea.clientHeight
+    }
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
     /*
       Based on Tip #4 from https://blog.opendigerati.com/the-eccentric-ways-of-ios-safari-with-the-keyboard-b5aa3f34228d,
@@ -28,7 +34,20 @@ export class WebchatResizer {
       return newWebchatPercentualHeight
     }
     setTimeout(() => {
-      this.setWebchatElementHeight(`${calculateNewWebchatElementHeight()}%`)
+      const newWebchatPercentualHeight = calculateNewWebchatElementHeight()
+      this.setWebchatElementHeight(`${newWebchatPercentualHeight}%`)
+      const webchatHeight = this.webchat.clientHeight
+      const headerHeight = document.getElementById(
+        BotonicContainerId.Header
+      )?.clientHeight
+      const inputPanelHeight = document.getElementById(
+        BotonicContainerId.InputPanel
+      )?.clientHeight
+      if (webchatHeight && headerHeight && inputPanelHeight) {
+        this.setChatAreaHeight(
+          `${webchatHeight - headerHeight - inputPanelHeight}px`
+        )
+      }
       // scrollToBottom(this.host)
       onKeyboardShownFn()
     }, waitUntilKeyboardIsShown)
@@ -37,6 +56,11 @@ export class WebchatResizer {
   onBlur() {
     if (this.currentDevice !== DEVICES.MOBILE.IPHONE) return
     this.setWebchatElementHeight('100%')
+    this.setChatAreaHeight(`${this.originalChatAreaHeight}px`)
+  }
+
+  setChatAreaHeight(newHeight) {
+    this.chatArea.style.height = newHeight
   }
 
   setWebchatElementHeight(newHeight) {
