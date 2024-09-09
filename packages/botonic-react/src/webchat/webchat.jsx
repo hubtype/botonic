@@ -682,6 +682,21 @@ export const Webchat = forwardRef((props, ref) => {
       </div>
     )
   }
+  const [chatAreaHeight, setChatAreaHeight] = useState(0)
+  useEffect(() => {
+    const webchatHeight = document.getElementById(
+      BotonicContainerId.Webchat
+    )?.clientHeight
+    const headerHeight = document.getElementById(
+      BotonicContainerId.Header
+    )?.clientHeight
+    const inputPanelHeight = document.getElementById(
+      BotonicContainerId.InputPanel
+    )?.clientHeight
+    if (webchatHeight && headerHeight && inputPanelHeight) {
+      setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
+    }
+  }, [webchatState.isWebchatOpen])
 
   const _renderCustomComponent = () => {
     if (!customComponent) return <></>
@@ -738,13 +753,22 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-
-          <WebchatMessageList />
-
-          {webchatState.replies &&
-            Object.keys(webchatState.replies).length > 0 && (
-              <WebchatReplies replies={webchatState.replies} />
-            )}
+          <div
+            id={BotonicContainerId.ChatArea}
+            style={{
+              display: 'inherit',
+              flexDirection: 'inherit',
+              height: chatAreaHeight,
+              width: 'inherit',
+              overflow: 'inherit',
+            }}
+          >
+            <WebchatMessageList />
+            {webchatState.replies &&
+              Object.keys(webchatState.replies).length > 0 && (
+                <WebchatReplies replies={webchatState.replies} />
+              )}
+          </div>
 
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
