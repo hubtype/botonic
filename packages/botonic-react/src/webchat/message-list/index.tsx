@@ -97,7 +97,7 @@ export const WebchatMessageList = () => {
   return (
     <>
       <ScrollableContent
-        id={BotonicContainerId.ScrollableContent}
+        id={BotonicContainerId.ScrollableMessagesList}
         role={ROLES.MESSAGE_LIST}
         // @ts-ignore
         ismessagescontainer={true.toString()}

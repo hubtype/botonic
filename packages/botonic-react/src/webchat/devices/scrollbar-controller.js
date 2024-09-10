@@ -1,9 +1,10 @@
 import {
-  getScrollableArea,
-  getScrollableContent,
+  getScrollableChatArea,
+  getScrollableMessagesListContent,
   getWebchatElement,
 } from '../../util/dom'
 import { DEVICES, isMobileDevice } from '.'
+import { BotonicContainerId } from '../constants'
 
 const debounced = (delay, fn) => {
   let timerId
@@ -50,12 +51,19 @@ export class ScrollbarController {
   }
 
   hasScrollbar() {
-    const scrollableArea = getScrollableArea(this.webchat)
-
-    const isScrollable =
-      scrollableArea.full.scrollHeight > scrollableArea.visible.clientHeight
-
-    return isScrollable
+    const scrollableArea = getScrollableChatArea(this.webchat)
+    const repliesContainer = document.getElementById(
+      BotonicContainerId.RepliesContainer
+    )
+    if (!repliesContainer) {
+      return (
+        scrollableArea.full.scrollHeight > scrollableArea.visible.clientHeight
+      )
+    }
+    return (
+      scrollableArea.full.scrollHeight >
+      scrollableArea.visible.clientHeight - repliesContainer.clientHeight
+    )
   }
 
   handleOnMouseOverEvents(e) {
@@ -67,7 +75,7 @@ export class ScrollbarController {
   }
 
   toggleOnMouseWheelEvents() {
-    const scrollableContent = getScrollableContent(this.webchat)
+    const scrollableContent = getScrollableMessagesListContent(this.webchat)
     if (this.hasScrollbar()) {
       scrollableContent.onmousewheel = {}
       return
@@ -96,7 +104,7 @@ export class ScrollbarController {
       It adds a bounce effect when top or bottom limits of the scrollbar are reached for iOS,
       as an alternative of overscroll-behavior (https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior)
     */
-    const frame = getScrollableArea(this.webchat).visible
+    const frame = getScrollableChatArea(this.webchat).visible
     const dStopAtScrollLimit = debounced(100, stopAtScrollLimit)
     if (frame) {
       if (window.addEventListener) {

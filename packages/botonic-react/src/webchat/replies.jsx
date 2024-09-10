@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { ScrollableContent } from './components/scrollable-content'
+import { BotonicContainerId } from './constants'
 
 const RepliesContainer = styled.div`
   display: flex;
@@ -43,6 +44,7 @@ export const WebchatReplies = props => {
   return (
     <ScrollableContent>
       <RepliesContainer
+        id={BotonicContainerId.RepliesContainer}
         className='replies-container'
         justify={justifyContent}
         wrap={flexWrap}
