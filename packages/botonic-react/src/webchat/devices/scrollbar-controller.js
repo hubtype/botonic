@@ -3,8 +3,8 @@ import {
   getScrollableMessagesListContent,
   getWebchatElement,
 } from '../../util/dom'
-import { DEVICES, isMobileDevice } from '.'
 import { BotonicContainerId } from '../constants'
+import { DEVICES, isMobileDevice } from './index'
 
 const debounced = (delay, fn) => {
   let timerId

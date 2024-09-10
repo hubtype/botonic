@@ -47,10 +47,9 @@ import {
   useTyping,
   useWebchat,
 } from './hooks'
-import { WebchatMessageList } from './message-list'
-import { WebchatReplies } from './replies'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
+import { WebchatChatArea } from './webchat-chat-area'
 import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
 
@@ -693,21 +692,6 @@ export const Webchat = forwardRef((props, ref) => {
       </div>
     )
   }
-  const [chatAreaHeight, setChatAreaHeight] = useState(0)
-  useEffect(() => {
-    const webchatHeight = document.getElementById(
-      BotonicContainerId.Webchat
-    )?.clientHeight
-    const headerHeight = document.getElementById(
-      BotonicContainerId.Header
-    )?.clientHeight
-    const inputPanelHeight = document.getElementById(
-      BotonicContainerId.InputPanel
-    )?.clientHeight
-    if (webchatHeight && headerHeight && inputPanelHeight) {
-      setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
-    }
-  }, [webchatState.isWebchatOpen])
 
   const _renderCustomComponent = () => {
     if (!customComponent) return <></>
@@ -764,22 +748,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-          <div
-            id={BotonicContainerId.ChatArea}
-            style={{
-              display: 'inherit',
-              flexDirection: 'inherit',
-              height: chatAreaHeight,
-              width: 'inherit',
-              overflow: 'inherit',
-            }}
-          >
-            <WebchatMessageList />
-            {webchatState.replies &&
-              Object.keys(webchatState.replies).length > 0 && (
-                <WebchatReplies replies={webchatState.replies} />
-              )}
-          </div>
+          <WebchatChatArea />
 
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
