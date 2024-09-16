@@ -3,8 +3,12 @@ import styled from 'styled-components'
 
 import { WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
-import { ScrollableContent } from './components/scrollable-content'
 import { BotonicContainerId } from './constants'
+
+const ScrollableReplies = styled.div`
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+`
 
 const RepliesContainer = styled.div`
   display: flex;
@@ -42,7 +46,7 @@ export const WebchatReplies = props => {
       options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
 
   return (
-    <ScrollableContent>
+    <ScrollableReplies>
       <RepliesContainer
         id={BotonicContainerId.RepliesContainer}
         className='replies-container'
@@ -53,6 +57,6 @@ export const WebchatReplies = props => {
           <ReplyContainer key={i}>{r}</ReplyContainer>
         ))}
       </RepliesContainer>
-    </ScrollableContent>
+    </ScrollableReplies>
   )
 }

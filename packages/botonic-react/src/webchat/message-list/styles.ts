@@ -47,3 +47,13 @@ export const ContainerUnreadMessagesBanner = styled.div`
     width: 10px;
   }
 `
+
+export const ScrollableMessageList = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain; // https://css-tricks.com/almanac/properties/o/overscroll-behavior/
+  -webkit-overflow-scrolling: touch;
+`

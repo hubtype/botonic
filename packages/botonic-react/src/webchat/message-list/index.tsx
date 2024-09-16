@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { ScrollableContent } from '../components/scrollable-content'
 import { TypingIndicator } from '../components/typing-indicator'
 import { BotonicContainerId } from '../constants'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
-import { ContainerMessage } from './styles'
+import { ContainerMessage, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
@@ -96,12 +95,9 @@ export const WebchatMessageList = () => {
 
   return (
     <>
-      <ScrollableContent
+      <ScrollableMessageList
         id={BotonicContainerId.ScrollableMessagesList}
         role={ROLES.MESSAGE_LIST}
-        // @ts-ignore
-        ismessagescontainer={true.toString()}
-        style={{ flex: 1 }}
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
@@ -125,7 +121,7 @@ export const WebchatMessageList = () => {
           )
         })}
         {webchatState.typing && <TypingIndicator />}
-      </ScrollableContent>
+      </ScrollableMessageList>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}
     </>
   )

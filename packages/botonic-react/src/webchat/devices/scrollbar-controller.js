@@ -29,6 +29,7 @@ export class ScrollbarController {
   constructor(currentDevice, host) {
     this.currentDevice = currentDevice
     this.webchat = getWebchatElement(host)
+    this.scrollableArea = getScrollableChatArea(this.webchat)
   }
 
   handleScrollEvents() {
@@ -80,7 +81,9 @@ export class ScrollbarController {
       scrollableContent.onmousewheel = {}
       return
     }
-    scrollableContent.onmousewheel = e => e.preventDefault()
+    scrollableContent.onmousewheel = e => {
+      e.preventDefault()
+    }
   }
 
   handleOnTouchMoveEvents(e) {
@@ -89,12 +92,21 @@ export class ScrollbarController {
 
   toggleOnTouchMoveEvents() {
     if (this.hasScrollbar()) {
+      this.scrollableArea.full.style.touchAction = 'auto'
       this.webchat.ontouchmove = {}
       this.webchat.ontouchstart = {}
       return
     }
+    this.scrollableArea.full.style.touchAction = 'none'
+    this.webchat.ontouchstart = e => {
+      if (e.target === e.currentTarget) {
+        e.preventDefault()
+      }
+    }
     this.webchat.ontouchmove = e => {
-      if (e.target === e.currentTarget) e.preventDefault()
+      if (e.target === e.currentTarget) {
+        e.preventDefault()
+      }
     }
   }
 

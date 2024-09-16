@@ -1,5 +1,6 @@
 export { useComponentVisible } from './use-component-visible'
 export { useComponentWillMount } from './use-component-will-mount'
+export { useDeviceAdapter } from './use-device-adapter'
 export { usePrevious } from './use-previous'
 export { useTyping } from './use-typing'
 export { useWebchat, webchatInitialState } from './use-webchat'

@@ -39,10 +39,10 @@ import {
 } from '../util/webchat'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
-import { DeviceAdapter } from './devices/device-adapter'
 import { StyledWebchatHeader } from './header'
 import {
   useComponentWillMount,
+  useDeviceAdapter,
   usePrevious,
   useTyping,
   useWebchat,
@@ -108,18 +108,6 @@ const DarkBackgroundMenu = styled.div`
   width: 100%;
   height: 100%;
 `
-
-function useDeviceAdapter(host, isWebchatOpen) {
-  const [deviceAdapter] = useState(new DeviceAdapter())
-
-  useEffect(() => {
-    if (host && isWebchatOpen) {
-      deviceAdapter.init(host)
-    }
-  }, [host, isWebchatOpen, deviceAdapter])
-
-  return { deviceAdapter }
-}
 
 // eslint-disable-next-line complexity, react/display-name
 export const Webchat = forwardRef((props, ref) => {

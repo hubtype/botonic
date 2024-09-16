@@ -3,7 +3,6 @@ export const BotonicContainerId = {
   Webchat: 'botonic-webchat',
   Header: 'botonic-header',
   ChatArea: 'botonic-chat-area',
-  ScrollableContent: 'botonic-scrollable-content',
   ScrollableMessagesList: 'botonic-scrollable-messages-list',
   RepliesContainer: 'botonic-replies-container',
   InputPanel: 'botonic-input-panel',
