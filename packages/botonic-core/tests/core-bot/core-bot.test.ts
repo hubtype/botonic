@@ -323,3 +323,41 @@ it('input returns two actions when first returen a _botonic_action redirect', as
     null,
   ])
 })
+
+it('core throws an error after maximum number of redirects are executed', async () => {
+  const redirect = `${BotonicAction.Redirect}:after-rating|'{"value:":5}'`
+  // Arrange
+  const session = {
+    _botonic_action: redirect,
+  }
+
+  const coreBot = initCoreBotWithDeveloperConfig({
+    routes: request => {
+      request.session._botonic_action = redirect
+      return [
+        {
+          path: 'rating-action',
+          text: 'rating',
+          action: 'Can you rate the agent?',
+        },
+        {
+          path: 'after-rating-action',
+          payload: /^after-rating.*/,
+          action: 'Thanks for your rating',
+        },
+      ]
+    },
+  })
+
+  // Act
+  const botResponse = coreBot.input({
+    input: { type: 'text', data: 'rating' },
+    session,
+    lastRoutePath: 'rating-action',
+  })
+
+  // Assert
+  await expect(botResponse).rejects.toThrow(
+    'Maximum BotAction recursive calls reached (10)'
+  )
+})
