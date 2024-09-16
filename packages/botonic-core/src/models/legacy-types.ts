@@ -317,6 +317,14 @@ export type MatchingProp =
 
 export type Matcher = string | RegExp | ((args) => boolean)
 
+export type BotonicActionType =
+  | `${BotonicAction.CreateCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.CreateTestCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.Redirect}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.DiscardCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.DiscardCase}`
+  | `${BotonicAction.DeleteUser}`
+
 type BotonicActionSeparator = ':'
 
 export enum BotonicAction {
@@ -326,13 +334,3 @@ export enum BotonicAction {
   DeleteUser = 'delete_user',
   DiscardCase = 'discard_case',
 }
-
-export enum BotonicActionWithoutParams {}
-
-export type BotonicActionType =
-  | `${BotonicAction.CreateCase}${BotonicActionSeparator}${string}`
-  | `${BotonicAction.CreateTestCase}${BotonicActionSeparator}${string}`
-  | `${BotonicAction.Redirect}${BotonicActionSeparator}${string}`
-  | `${BotonicAction.DiscardCase}${BotonicActionSeparator}${string}`
-  | BotonicAction.DiscardCase
-  | BotonicAction.DeleteUser

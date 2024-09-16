@@ -283,7 +283,7 @@ export class CoreBot {
     }
 
     const nextPayload = session._botonic_action?.split(
-      BotonicAction.Redirect
+      `${BotonicAction.Redirect}:`
     )[1]
 
     const inputWithBotActionPayload: Input = {
