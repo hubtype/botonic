@@ -371,10 +371,7 @@ Deploying to AWS...
         join(process.cwd(), BOTONIC_BUNDLE_FILE),
         botConfigJson
       )
-      if (
-        (deploy.response && deploy.response.status == 403) ||
-        !deploy.data.deploy_id
-      ) {
+      if (deploy.response?.status === 403 || !deploy.data.deploy_id) {
         const error = `Deploy Botonic Error: ${String(
           deploy.response.data.status
         )}`
