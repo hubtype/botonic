@@ -6,6 +6,7 @@ import * as util from 'util'
 
 const BOTONIC_PREFIX_PACKAGE = '@botonic'
 const BOTONIC_CORE_PACKAGE = `${BOTONIC_PREFIX_PACKAGE}/core`
+const botonicCliVersionRegex = /@botonic\/cli\/([\d.]+-[\w.]+)/
 const NPM_DEPTH_1 = 1
 const NPM_DEPTH_0 = 0
 
@@ -34,13 +35,15 @@ export class BotConfig {
         this.getOutputByCommand(command)
       )
     )
+    const botonicCliVersion =
+      botonicCli.match(botonicCliVersionRegex)?.[1] || ''
     spinner.succeed()
 
     return {
       build_info: {
         node_version: nodeVersion,
         npm_version: npmVersion,
-        botonic_cli_version: botonicCli,
+        botonic_cli_version: botonicCliVersion,
       },
       packages,
     }
