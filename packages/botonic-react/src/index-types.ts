@@ -55,51 +55,6 @@ export interface CustomMessageType {
   customTypeName: string
 }
 
-// TODO: Reuse types to be reused in respective components
-// export class WebchatApp {
-//   constructor(options: WebchatAppArgs)
-//   addBotMessage(message: WebchatMessage): void
-//   addBotText(text: string): void
-//   addUserMessage(message: WebchatMessage): void
-//   addUserPayload(payload: string): void
-//   addUserText(text: string): void
-//   clearMessages(): void
-//   close(): void
-//   closeCoverComponent(): void
-//   destroy(): void
-//   getComponent(
-//     host: HTMLElement,
-//     optionsAtRuntime?: WebchatAppArgs
-//   ): React.ForwardRefExoticComponent<any>
-//   getLastMessageUpdate(): string
-//   getMessages(): WebchatMessage[]
-//   getVisibility(): Promise<boolean>
-//   isWebchatVisible({ appId: string }): Promise<boolean>
-//   onCloseWebchat(args: any): void
-//   onInitWebchat(args: any): void
-//   onOpenWebchat(args: any): void
-//   onServiceEvent(event: Event): void
-//   onStateChange(args: OnStateChangeArgs): void
-//   onUserInput(args: OnUserInputArgs): Promise<void>
-//   open(): void
-//   openCoverComponent(): void
-//   render(dest?: HTMLElement, optionsAtRuntime?: WebchatAppArgs): void
-//   resendUnsentInputs(): Promise<void>
-//   resolveWebchatVisibility(optionsAtRuntime: {
-//     appId: string
-//     visibility: () => boolean
-//   }): Promise<boolean>
-//   setTyping(enable: boolean): void
-//   toggle(): void
-//   toggleCoverComponent(): void
-//   updateMessageInfo(msgId: string, messageInfo: MessageInfo): void
-//   updateLastMessageDate(date: string): void
-//   updateUser(user: Partial<CoreSessionUser>): void
-//   updateWebchatSettings(settings: WebchatSettingsProps): void
-//   renderCustomComponent(customComponent: React.ReactNode): void
-//   unmountCustomComponent(): void
-// }
-
 export interface WebchatArgs {
   blockInputs?: BlockInputOption[]
   coverComponent?: CoverComponentOptions
@@ -216,10 +171,10 @@ export interface WebchatContextProps {
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   webchatState: WebchatState
   trackEvent: TrackEventFunction
+  webchatRef: React.MutableRefObject<HTMLDivElement | null>
+  chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
+  inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
+  headerRef: React.MutableRefObject<HTMLDivElement | null>
+  scrollableMessagesListRef: React.MutableRefObject<HTMLDivElement | null>
+  repliesRef: React.MutableRefObject<HTMLDivElement | null>
 }
-
-// export class DevApp extends WebchatApp {
-//   constructor(args: WebchatAppArgs)
-//   onUserInput(args: OnUserInputArgs): Promise<void>
-//   render(dest: HTMLElement, optionsAtRuntime: WebchatAppArgs): void
-// }

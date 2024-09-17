@@ -11,8 +11,12 @@ import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
 export const WebchatMessageList = () => {
-  const { webchatState, resetUnreadMessages, setLastMessageVisible } =
-    useContext(WebchatContext)
+  const {
+    webchatState,
+    resetUnreadMessages,
+    setLastMessageVisible,
+    scrollableMessagesListRef,
+  } = useContext(WebchatContext)
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
@@ -97,6 +101,7 @@ export const WebchatMessageList = () => {
     <>
       <ScrollableMessageList
         id={BotonicContainerId.ScrollableMessagesList}
+        ref={scrollableMessagesListRef}
         role={ROLES.MESSAGE_LIST}
       >
         <IntroMessage />

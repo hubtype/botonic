@@ -34,7 +34,8 @@ const options = {
 }
 
 export const WebchatReplies = props => {
-  const { webchatState, getThemeProperty } = useContext(WebchatContext)
+  const { webchatState, getThemeProperty, repliesRef } =
+    useContext(WebchatContext)
   let justifyContent = 'center'
   const flexWrap = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.wrapReplies,
@@ -49,6 +50,7 @@ export const WebchatReplies = props => {
     <ScrollableReplies>
       <RepliesContainer
         id={BotonicContainerId.RepliesContainer}
+        ref={repliesRef}
         className='replies-container'
         justify={justifyContent}
         wrap={flexWrap}

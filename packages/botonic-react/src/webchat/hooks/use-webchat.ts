@@ -1,5 +1,5 @@
 import { Input, Session } from '@botonic/core'
-import { useReducer } from 'react'
+import { useReducer, useRef } from 'react'
 
 import { ThemeProps, Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
@@ -52,6 +52,13 @@ export function useWebchat() {
     webchatReducer,
     webchatInitialState
   )
+
+  const webchatRef = useRef<HTMLDivElement | null>(null)
+  const chatAreaRef = useRef<HTMLDivElement | null>(null)
+  const inputPanelRef = useRef<HTMLDivElement | null>(null)
+  const headerRef = useRef<HTMLDivElement | null>(null)
+  const scrollableMessagesListRef = useRef<HTMLDivElement | null>(null)
+  const repliesRef = useRef<HTMLDivElement | null>(null)
 
   const addMessage = (message: WebchatMessage) =>
     webchatDispatch({ type: WebchatAction.ADD_MESSAGE, payload: message })
@@ -225,5 +232,11 @@ export function useWebchat() {
     updateWebview,
     webchatDispatch,
     webchatState,
+    webchatRef,
+    headerRef,
+    chatAreaRef,
+    scrollableMessagesListRef,
+    repliesRef,
+    inputPanelRef,
   }
 }

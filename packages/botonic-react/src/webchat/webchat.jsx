@@ -39,7 +39,7 @@ import {
 } from '../util/webchat'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
-import { StyledWebchatHeader } from './header'
+import { WebchatHeader } from './header'
 import {
   useComponentWillMount,
   useDeviceAdapter,
@@ -138,6 +138,12 @@ export const Webchat = forwardRef((props, ref) => {
     updateTyping,
     updateWebview,
     webchatState,
+    webchatRef,
+    chatAreaRef,
+    inputPanelRef,
+    headerRef,
+    scrollableMessagesListRef,
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
@@ -157,8 +163,6 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState] = useStorageState(storage, storageKey)
 
   const host = props.host || document.body
-
-  const { deviceAdapter } = useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   const saveWebchatState = webchatState => {
     storage &&
@@ -709,6 +713,11 @@ export const Webchat = forwardRef((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         webchatState,
         trackEvent: props.onTrackEvent,
+        webchatRef,
+        chatAreaRef,
+        inputPanelRef,
+        headerRef,
+        scrollableMessagesListRef,
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}
@@ -716,6 +725,7 @@ export const Webchat = forwardRef((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           id={BotonicContainerId.Webchat}
+          ref={webchatRef}
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
           width={webchatState.width}
@@ -725,8 +735,9 @@ export const Webchat = forwardRef((props, ref) => {
             ...mobileStyle,
           }}
         >
-          <StyledWebchatHeader
+          <WebchatHeader
             id={BotonicContainerId.Header}
+            ref={headerRef}
             onCloseClick={() => {
               toggleWebchat(false)
             }}
@@ -748,7 +759,7 @@ export const Webchat = forwardRef((props, ref) => {
               enableAttachments={props.enableAttachments}
               handleAttachment={handleAttachment}
               textareaRef={textareaRef}
-              deviceAdapter={deviceAdapter}
+              host={host}
               onUserInput={props.onUserInput}
             />
           )}

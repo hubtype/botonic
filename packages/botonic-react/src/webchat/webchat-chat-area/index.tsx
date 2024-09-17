@@ -4,42 +4,41 @@ import { WebchatContext } from '../../contexts'
 import { BotonicContainerId } from '../constants'
 import { WebchatMessageList } from '../message-list'
 import { WebchatReplies } from '../replies'
-import { StyledWebchatChatChatArea } from './styles'
+import { StyledWebchatChatArea } from './styles'
 
 export const WebchatChatArea = () => {
-  const { webchatState } = useContext(WebchatContext)
+  const {
+    webchatState: { isWebchatOpen, replies },
+    webchatRef,
+    headerRef,
+    inputPanelRef,
+    chatAreaRef,
+  } = useContext(WebchatContext)
 
   const [chatAreaHeight, setChatAreaHeight] = useState(0)
 
   useEffect(() => {
-    if (webchatState.isWebchatOpen) {
-      const webchatHeight = document.getElementById(
-        BotonicContainerId.Webchat
-      )?.clientHeight
-
-      const headerHeight = document.getElementById(
-        BotonicContainerId.Header
-      )?.clientHeight
-
-      const inputPanelHeight = document.getElementById(
-        BotonicContainerId.InputPanel
-      )?.clientHeight
-
-      if (webchatHeight && headerHeight && inputPanelHeight) {
-        setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
+    if (isWebchatOpen) {
+      if (webchatRef.current && headerRef.current && inputPanelRef.current) {
+        const newHeight =
+          webchatRef.current.clientHeight -
+          headerRef.current.clientHeight -
+          inputPanelRef.current.clientHeight
+        setChatAreaHeight(newHeight)
       }
     }
-  }, [webchatState.isWebchatOpen])
+  }, [isWebchatOpen, webchatRef, headerRef, inputPanelRef])
 
   return (
-    <StyledWebchatChatChatArea
+    <StyledWebchatChatArea
       id={BotonicContainerId.ChatArea}
+      ref={chatAreaRef}
       height={chatAreaHeight}
     >
       <WebchatMessageList />
-      {webchatState.replies && Object.keys(webchatState.replies).length > 0 && (
-        <WebchatReplies replies={webchatState.replies} />
+      {replies && Object.keys(replies).length > 0 && (
+        <WebchatReplies replies={replies} />
       )}
-    </StyledWebchatChatChatArea>
+    </StyledWebchatChatArea>
   )
 }

@@ -5,11 +5,11 @@ import { PersistentMenuTheme } from '../../components/index-types'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { Typing } from '../../index-types'
-import { DeviceAdapter } from '../devices/device-adapter'
+import { useDeviceAdapter } from '../hooks'
 import { TextAreaContainer } from './styles'
 
 interface TextareaProps {
-  deviceAdapter: DeviceAdapter
+  host: HTMLElement
   persistentMenu: PersistentMenuTheme
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
   sendChatEvent: (event: string) => Promise<void>
@@ -17,13 +17,14 @@ interface TextareaProps {
 }
 
 export const Textarea = ({
-  deviceAdapter,
+  host,
   persistentMenu,
   textareaRef,
   sendChatEvent,
   sendTextAreaText,
 }: TextareaProps) => {
-  const { getThemeProperty } = useContext(WebchatContext)
+  const { getThemeProperty, webchatState } = useContext(WebchatContext)
+  const { onFocus, onBlur } = useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   let isTyping = false
   let typingTimeout
@@ -74,12 +75,8 @@ export const Textarea = ({
       <TextareaAutosize
         ref={(ref: HTMLTextAreaElement) => (textareaRef.current = ref)}
         name='text'
-        onFocus={() => {
-          deviceAdapter.onFocus()
-        }}
-        onBlur={() => {
-          deviceAdapter.onBlur()
-        }}
+        onFocus={onFocus}
+        onBlur={onBlur}
         maxRows={4}
         wrap='soft'
         maxLength={1000}
@@ -92,7 +89,7 @@ export const Textarea = ({
         onKeyUp={onKeyUp}
         style={{
           display: 'flex',
-          fontSize: deviceAdapter.fontSize(14),
+          fontSize: 16,
           width: '100%',
           border: 'none',
           resize: 'none',
