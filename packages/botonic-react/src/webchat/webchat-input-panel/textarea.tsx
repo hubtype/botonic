@@ -24,7 +24,8 @@ export const Textarea = ({
   sendTextAreaText,
 }: TextareaProps) => {
   const { getThemeProperty, webchatState } = useContext(WebchatContext)
-  const { onFocus, onBlur } = useDeviceAdapter(host, webchatState.isWebchatOpen)
+
+  useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   let isTyping = false
   let typingTimeout
@@ -75,8 +76,6 @@ export const Textarea = ({
       <TextareaAutosize
         ref={(ref: HTMLTextAreaElement) => (textareaRef.current = ref)}
         name='text'
-        onFocus={onFocus}
-        onBlur={onBlur}
         maxRows={4}
         wrap='soft'
         maxLength={1000}

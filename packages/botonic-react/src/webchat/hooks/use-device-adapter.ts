@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 
 import { DEVICES } from '../devices'
 import { useScrollbarController } from './use-scrollbar-controller'
+import { useVirtualKeyboardDetection } from './use-virtual-keyboard-detection'
 import { useWebchatResizer } from './use-webchat-resizer'
 
 function getCurrentDevice() {
@@ -12,29 +13,27 @@ function getCurrentDevice() {
 
 export const useDeviceAdapter = (host, isWebchatOpen) => {
   const currentDevice = getCurrentDevice()
-  const webchatResizer = useWebchatResizer(currentDevice, host)
+
+  const { isVirtualKeyboardVisible } = useVirtualKeyboardDetection(
+    window.innerHeight
+  )
+
+  const { handleKeyboardShown, handleKeyboardHidden } = useWebchatResizer(host)
+
   const { handleOnTouchMoveEvents, handleScrollEvents } =
     useScrollbarController(currentDevice, host)
 
-  const onFocus = useCallback(
-    e => {
-      setTimeout(() => {
-        webchatResizer.onFocus(() => {
-          handleOnTouchMoveEvents(e)
-        })
-      }, 0)
-    },
-    [handleOnTouchMoveEvents, webchatResizer]
-  )
-
-  const onBlur = useCallback(
-    e => {
-      if (currentDevice !== DEVICES.MOBILE.IPHONE) return
-      webchatResizer.onBlur()
-      handleOnTouchMoveEvents(e)
-    },
-    [currentDevice, webchatResizer, handleOnTouchMoveEvents]
-  )
+  useEffect(() => {
+    if (currentDevice !== DEVICES.MOBILE.IPHONE) return
+    if (isVirtualKeyboardVisible) {
+      handleKeyboardShown()
+      // handleOnTouchMoveEvents(() => {})
+    } else {
+      handleKeyboardHidden()
+      // handleOnTouchMoveEvents(() => {})
+    }
+    return
+  }, [isVirtualKeyboardVisible])
 
   useEffect(() => {
     if (host && isWebchatOpen) {
@@ -44,7 +43,5 @@ export const useDeviceAdapter = (host, isWebchatOpen) => {
 
   return {
     currentDevice,
-    onFocus,
-    onBlur,
   }
 }

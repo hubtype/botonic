@@ -17,6 +17,7 @@ const Header = styled.div`
   );
   border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
   z-index: 2;
+  height: inherit;
 `
 
 const ImageContainer = styled.div`

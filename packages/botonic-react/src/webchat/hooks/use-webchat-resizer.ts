@@ -1,88 +1,48 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 
 import { WebchatContext } from '../../contexts'
 import { scrollToBottom } from '../../util/dom'
-import { DEVICES } from '../devices'
 
-export const useWebchatResizer = (currentDevice, host) => {
+export const useWebchatResizer = host => {
   const { webchatRef, chatAreaRef, inputPanelRef, headerRef } =
     useContext(WebchatContext)
 
-  const initialChatAreaHeight = chatAreaRef.current?.clientHeight
+  const handleKeyboardShown = () => {
+    const calculateNewWebchatElementHeight = () => {
+      const webchatHeight = webchatRef.current?.clientHeight || 0
+      const keyboardOffset =
+        (window.visualViewport && window.visualViewport.height) ||
+        window.innerHeight
 
-  const setChatAreaHeight = useCallback(
-    newHeight => {
-      if (chatAreaRef.current) {
-        chatAreaRef.current.style.height = newHeight
-      }
-    },
-    [chatAreaRef]
-  )
+      let newWebchatPercentualHeight = keyboardOffset / webchatHeight
+      newWebchatPercentualHeight =
+        Math.round(newWebchatPercentualHeight * 100 * 100) / 100 // Two decimal places
+      return newWebchatPercentualHeight
+    }
 
-  const setWebchatElementHeight = useCallback(
-    newHeight => {
-      if (webchatRef.current) {
-        webchatRef.current.style.height = newHeight
-      }
-    },
-    [webchatRef]
-  )
+    if (
+      webchatRef.current &&
+      chatAreaRef.current &&
+      headerRef.current &&
+      inputPanelRef.current
+    ) {
+      const newWebchatPercentualHeight = `${calculateNewWebchatElementHeight()}%`
+      webchatRef.current.style.height = newWebchatPercentualHeight
+      const newChatAreaHeight = `${webchatRef.current.clientHeight - headerRef.current.clientHeight - inputPanelRef.current.clientHeight}px`
+      chatAreaRef.current.style.height = newChatAreaHeight
+      scrollToBottom(host)
+    }
+  }
 
-  const onFocus = useCallback(
-    onKeyboardShownFn => {
-      if (currentDevice !== DEVICES.MOBILE.IPHONE) return
-
-      const waitUntilKeyboardIsShown = 500
-
-      const calculateNewWebchatElementHeight = () => {
-        const webchatHeight = webchatRef.current?.clientHeight || 0
-        const keyboardOffset =
-          (window.visualViewport && window.visualViewport.height) ||
-          window.innerHeight
-
-        let newWebchatPercentualHeight = keyboardOffset / webchatHeight
-        newWebchatPercentualHeight =
-          Math.round(newWebchatPercentualHeight * 100 * 100) / 100 // Two decimal places
-        return newWebchatPercentualHeight
-      }
-
-      setTimeout(() => {
-        const newWebchatPercentualHeight = calculateNewWebchatElementHeight()
-        setWebchatElementHeight(`${newWebchatPercentualHeight}%`)
-        if (webchatRef.current && headerRef.current && inputPanelRef.current) {
-          setChatAreaHeight(
-            `${webchatRef.current.clientHeight - headerRef.current.clientHeight - inputPanelRef.current.clientHeight}px`
-          )
-        }
-        scrollToBottom(host)
-        onKeyboardShownFn()
-      }, waitUntilKeyboardIsShown)
-    },
-    [
-      currentDevice,
-      host,
-      setWebchatElementHeight,
-      setChatAreaHeight,
-      headerRef,
-      inputPanelRef,
-      webchatRef,
-    ]
-  )
-
-  // Handle onBlur, typically when the keyboard is hidden on mobile devices
-  const onBlur = useCallback(() => {
-    if (currentDevice !== DEVICES.MOBILE.IPHONE) return
-    setWebchatElementHeight('100%')
-    setChatAreaHeight(`${initialChatAreaHeight}px`)
-  }, [
-    currentDevice,
-    setWebchatElementHeight,
-    setChatAreaHeight,
-    initialChatAreaHeight,
-  ])
+  const handleKeyboardHidden = () => {
+    if (webchatRef.current && chatAreaRef.current) {
+      webchatRef.current.style.height = '100%'
+      chatAreaRef.current.style.height = '100%'
+    }
+  }
 
   return {
-    onFocus,
-    onBlur,
+    handleKeyboardShown,
+    handleKeyboardHidden,
   }
 }
