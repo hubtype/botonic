@@ -28,7 +28,6 @@ import {
   readDataURL,
 } from '../message-utils'
 import { msgToBotonic } from '../msg-to-botonic'
-import { scrollToBottom } from '../util/dom'
 import { isDev } from '../util/environment'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
@@ -42,8 +41,8 @@ import { BotonicContainerId } from './constants'
 import { WebchatHeader } from './header'
 import {
   useComponentWillMount,
-  useDeviceAdapter,
   usePrevious,
+  useScrollToBottom,
   useTyping,
   useWebchat,
 } from './hooks'
@@ -163,6 +162,8 @@ export const Webchat = forwardRef((props, ref) => {
   const [botonicState, saveState] = useStorageState(storage, storageKey)
 
   const host = props.host || document.body
+
+  const { scrollToBottom } = useScrollToBottom({ host })
 
   const saveWebchatState = webchatState => {
     storage &&

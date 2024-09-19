@@ -1,11 +1,12 @@
 import { useContext } from 'react'
 
 import { WebchatContext } from '../../contexts'
-import { scrollToBottom } from '../../util/dom'
+import { useScrollToBottom } from './use-scroll-to-bottom'
 
 export const useWebchatResizer = host => {
   const { webchatRef, chatAreaRef, inputPanelRef, headerRef } =
     useContext(WebchatContext)
+  const { scrollToBottom } = useScrollToBottom({ host })
 
   const handleKeyboardShown = () => {
     const calculateNewWebchatElementHeight = () => {
@@ -30,7 +31,7 @@ export const useWebchatResizer = host => {
       webchatRef.current.style.height = newWebchatPercentualHeight
       const newChatAreaHeight = `${webchatRef.current.clientHeight - headerRef.current.clientHeight - inputPanelRef.current.clientHeight}px`
       chatAreaRef.current.style.height = newChatAreaHeight
-      scrollToBottom(host)
+      scrollToBottom()
     }
   }
 

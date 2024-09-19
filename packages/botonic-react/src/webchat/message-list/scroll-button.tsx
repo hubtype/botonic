@@ -1,8 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import ArrowScrollDown from '../../assets/arrow-scroll-down.svg'
-import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
 import { ContainerScrollButton } from './styles'
 import { useDebounce } from './use-debounce'

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { WebchatContext } from '../../contexts'
 import { DEVICES, isMobileDevice } from '../devices'
@@ -31,9 +31,7 @@ export const useScrollbarController = (currentDevice, host) => {
     scrollableMessagesListRef,
   } = useContext(WebchatContext)
 
-  const [chatAreaSizeChanged, setChatAreaSizeChanged] = useState(false)
-
-  const hasScrollbar = useCallback(() => {
+  const hasScrollbar = () => {
     if (chatAreaRef.current && scrollableMessagesListRef.current) {
       if (!repliesRef) {
         return (
@@ -48,10 +46,11 @@ export const useScrollbarController = (currentDevice, host) => {
         )
       }
     }
-    return false
-  }, [])
 
-  const toggleOnMouseWheelEvents = useCallback(() => {
+    return false
+  }
+
+  const toggleOnMouseWheelEvents = () => {
     if (scrollableMessagesListRef.current) {
       if (hasScrollbar()) {
         // @ts-ignore
@@ -63,20 +62,17 @@ export const useScrollbarController = (currentDevice, host) => {
         e.preventDefault()
       }
     }
-  }, [hasScrollbar])
+  }
 
-  const handleOnMouseOverEvents = useCallback(
-    e => {
-      let target = e.currentTarget
-      while (target) {
-        toggleOnMouseWheelEvents()
-        target = target.parentNode
-      }
-    },
-    [toggleOnMouseWheelEvents]
-  )
+  const handleOnMouseOverEvents = e => {
+    let target = e.currentTarget
+    while (target) {
+      toggleOnMouseWheelEvents()
+      target = target.parentNode
+    }
+  }
 
-  const toggleOnTouchMoveEvents = useCallback(() => {
+  const toggleOnTouchMoveEvents = () => {
     if (webchatRef.current && scrollableMessagesListRef.current) {
       if (hasScrollbar()) {
         scrollableMessagesListRef.current.style.touchAction = 'auto'
@@ -101,16 +97,13 @@ export const useScrollbarController = (currentDevice, host) => {
         }
       }
     }
-  }, [])
+  }
 
-  const handleOnTouchMoveEvents = useCallback(
-    _e => {
-      toggleOnTouchMoveEvents()
-    },
-    [toggleOnTouchMoveEvents]
-  )
+  const handleOnTouchMoveEvents = () => {
+    toggleOnTouchMoveEvents()
+  }
 
-  const limitScrollBoundaries = useCallback(() => {
+  const limitScrollBoundaries = () => {
     if (currentDevice !== DEVICES.MOBILE.IPHONE) return
     const chatArea = chatAreaRef.current
     const dStopAtScrollLimit = debounced(100, stopAtScrollLimit)
@@ -129,31 +122,22 @@ export const useScrollbarController = (currentDevice, host) => {
         chatAreaRef.attachEvent('scroll', () => dStopAtScrollLimit(chatArea))
       }
     }
-  }, [currentDevice])
+  }
 
-  const handleScrollEvents = useCallback(() => {
+  const handleScrollEvents = () => {
     if (webchatRef.current) {
       if (isMobileDevice()) {
         if (currentDevice !== DEVICES.MOBILE.IPHONE) return
+
         limitScrollBoundaries()
 
-        webchatRef.current.ontouchstart = e => {
-          handleOnTouchMoveEvents(e)
-        }
-        webchatRef.current.ontouchmove = e => {
-          handleOnTouchMoveEvents(e)
-        }
+        webchatRef.current.ontouchstart = handleOnTouchMoveEvents
+        webchatRef.current.ontouchmove = handleOnTouchMoveEvents
       } else {
         webchatRef.current.onmouseover = e => handleOnMouseOverEvents(e)
       }
     }
-  }, [
-    webchatRef,
-    currentDevice,
-    handleOnTouchMoveEvents,
-    handleOnMouseOverEvents,
-    limitScrollBoundaries,
-  ])
+  }
 
   useEffect(() => {
     const webchat = webchatRef.current
@@ -167,14 +151,7 @@ export const useScrollbarController = (currentDevice, host) => {
         webchat.ontouchmove = null
       }
     }
-  }, [
-    currentDevice,
-    host,
-    handleScrollEvents,
-    handleOnMouseOverEvents,
-    handleOnTouchMoveEvents,
-    limitScrollBoundaries,
-  ])
+  }, [currentDevice, host])
 
   return {
     handleScrollEvents,

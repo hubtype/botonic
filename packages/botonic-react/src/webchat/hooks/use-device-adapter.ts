@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { DEVICES } from '../devices'
+import { useScrollToBottom } from './use-scroll-to-bottom'
 import { useScrollbarController } from './use-scrollbar-controller'
 import { useVirtualKeyboardDetection } from './use-virtual-keyboard-detection'
 import { useWebchatResizer } from './use-webchat-resizer'
@@ -13,6 +14,8 @@ function getCurrentDevice() {
 
 export const useDeviceAdapter = (host, isWebchatOpen) => {
   const currentDevice = getCurrentDevice()
+
+  const { scrollToBottom } = useScrollToBottom({ host })
 
   const { isVirtualKeyboardVisible } = useVirtualKeyboardDetection(
     window.innerHeight
@@ -27,11 +30,11 @@ export const useDeviceAdapter = (host, isWebchatOpen) => {
     if (currentDevice !== DEVICES.MOBILE.IPHONE) return
     if (isVirtualKeyboardVisible) {
       handleKeyboardShown()
-      // handleOnTouchMoveEvents(() => {})
+      scrollToBottom()
     } else {
       handleKeyboardHidden()
-      // handleOnTouchMoveEvents(() => {})
     }
+    // handleOnTouchMoveEvents()
     return
   }, [isVirtualKeyboardVisible])
 
