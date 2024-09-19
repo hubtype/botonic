@@ -3,6 +3,8 @@ import { useContext, useEffect } from 'react'
 import { WebchatContext } from '../../contexts'
 import { DEVICES, isMobileDevice } from '../devices'
 
+// TODO: Investigate why when we have some messages, scroll actions are not disabled properly
+
 const debounced = (delay, fn) => {
   let timerId
   return function (...args) {

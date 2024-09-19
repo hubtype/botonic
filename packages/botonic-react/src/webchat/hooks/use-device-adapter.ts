@@ -23,8 +23,7 @@ export const useDeviceAdapter = (host, isWebchatOpen) => {
 
   const { handleKeyboardShown, handleKeyboardHidden } = useWebchatResizer()
 
-  const { handleOnTouchMoveEvents, handleScrollEvents } =
-    useScrollbarController(currentDevice, host)
+  const { handleScrollEvents } = useScrollbarController(currentDevice, host)
 
   useEffect(() => {
     if (currentDevice !== DEVICES.MOBILE.IPHONE) return
@@ -34,12 +33,13 @@ export const useDeviceAdapter = (host, isWebchatOpen) => {
     } else {
       handleKeyboardHidden()
     }
-    // handleOnTouchMoveEvents()
+
     return
   }, [isVirtualKeyboardVisible])
 
   useEffect(() => {
     if (host && isWebchatOpen) {
+      if (currentDevice !== DEVICES.MOBILE.IPHONE) return
       handleScrollEvents()
     }
   }, [host, isWebchatOpen, handleScrollEvents])
