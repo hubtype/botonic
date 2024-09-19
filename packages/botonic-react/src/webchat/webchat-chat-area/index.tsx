@@ -2,32 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { WebchatContext } from '../../contexts'
 import { BotonicContainerId } from '../constants'
+import { useWebchatDimensions } from '../hooks'
 import { WebchatMessageList } from '../message-list'
 import { WebchatReplies } from '../replies'
 import { StyledWebchatChatArea } from './styles'
 
 export const WebchatChatArea = () => {
   const {
-    webchatState: { isWebchatOpen, replies },
-    webchatRef,
-    headerRef,
-    inputPanelRef,
+    webchatState: { replies },
     chatAreaRef,
   } = useContext(WebchatContext)
 
+  const { calculateResizedPxChatAreaHeight } = useWebchatDimensions()
   const [chatAreaHeight, setChatAreaHeight] = useState(0)
 
   useEffect(() => {
-    if (isWebchatOpen) {
-      if (webchatRef.current && headerRef.current && inputPanelRef.current) {
-        const newHeight =
-          webchatRef.current.clientHeight -
-          headerRef.current.clientHeight -
-          inputPanelRef.current.clientHeight
-        setChatAreaHeight(newHeight)
-      }
-    }
-  }, [isWebchatOpen, webchatRef, headerRef, inputPanelRef])
+    setChatAreaHeight(calculateResizedPxChatAreaHeight())
+  }, [])
 
   return (
     <StyledWebchatChatArea

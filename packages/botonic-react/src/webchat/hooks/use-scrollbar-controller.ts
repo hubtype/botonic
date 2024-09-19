@@ -25,13 +25,8 @@ const stopAtScrollLimit = element => {
 }
 
 export const useScrollbarController = (currentDevice, host) => {
-  const {
-    webchatState: { isWebchatOpen },
-    webchatRef,
-    chatAreaRef,
-    repliesRef,
-    scrollableMessagesListRef,
-  } = useContext(WebchatContext)
+  const { webchatRef, chatAreaRef, repliesRef, scrollableMessagesListRef } =
+    useContext(WebchatContext)
 
   const hasScrollbar = () => {
     if (chatAreaRef.current && scrollableMessagesListRef.current) {
