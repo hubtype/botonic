@@ -5,8 +5,8 @@ export const useVirtualKeyboardDetection = originalHeight => {
     useState(false)
   useEffect(() => {
     const handleResize = () => {
-      if (visualViewport) {
-        if (visualViewport.height < originalHeight) {
+      if (window.visualViewport) {
+        if (window.visualViewport.height < originalHeight) {
           setIsVirtualKeyboardVisible(true)
           return
         }
@@ -14,11 +14,12 @@ export const useVirtualKeyboardDetection = originalHeight => {
         return
       }
     }
-    visualViewport && visualViewport.addEventListener('resize', handleResize)
+    window.visualViewport &&
+      window.visualViewport.addEventListener('resize', handleResize)
 
     return () => {
-      visualViewport &&
-        visualViewport.removeEventListener('resize', handleResize)
+      window.visualViewport &&
+        window.visualViewport.removeEventListener('resize', handleResize)
     }
   }, [originalHeight])
 
