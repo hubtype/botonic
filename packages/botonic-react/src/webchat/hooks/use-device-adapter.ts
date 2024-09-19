@@ -21,7 +21,7 @@ export const useDeviceAdapter = (host, isWebchatOpen) => {
     window.innerHeight
   )
 
-  const { handleKeyboardShown, handleKeyboardHidden } = useWebchatResizer(host)
+  const { handleKeyboardShown, handleKeyboardHidden } = useWebchatResizer()
 
   const { handleOnTouchMoveEvents, handleScrollEvents } =
     useScrollbarController(currentDevice, host)
