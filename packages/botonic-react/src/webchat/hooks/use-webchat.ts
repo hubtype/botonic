@@ -42,7 +42,6 @@ export const webchatInitialState: WebchatState = {
   isCustomComponentRendered: false,
   lastMessageUpdate: undefined,
   currentAttachment: undefined,
-  jwt: undefined,
   numUnreadMessages: 0,
   isLastMessageVisible: true,
 }
@@ -177,13 +176,6 @@ export function useWebchat() {
     })
   }
 
-  const updateJwt = (jwt: string) => {
-    webchatDispatch({
-      type: WebchatAction.UPDATE_JWT,
-      payload: jwt,
-    })
-  }
-
   const resetUnreadMessages = () => {
     webchatDispatch({
       type: WebchatAction.RESET_UNREAD_MESSAGES,
@@ -213,7 +205,6 @@ export function useWebchat() {
     toggleWebchat,
     updateDevSettings,
     updateHandoff,
-    updateJwt,
     updateLastMessageDate,
     updateLastRoutePath,
     updateLatestInput,

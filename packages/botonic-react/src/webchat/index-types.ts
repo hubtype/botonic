@@ -47,7 +47,6 @@ export interface WebchatState {
   isCustomComponentRendered: boolean
   lastMessageUpdate?: string
   currentAttachment?: File
-  jwt?: string
   numUnreadMessages: number
   isLastMessageVisible: boolean
 }
