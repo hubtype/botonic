@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react'
-import Frame from 'react-frame-component'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
@@ -35,31 +34,19 @@ const StyledWebviewContent = styled.div`
   overflow: auto;
 `
 
-const StyledFrame = styled.iframe`
+const FrameStyles = `
   border-style: none;
   width: 100%;
   height: 100%;
 `
 
-const WebviewMode = props => {
-  /*
-    Default mode is with divs.
-    Setting the prop "asframe" will render the webview inside an iframe.
-    Pros and Cons of this "asframe" mode are:
-    Pros: OAuth2 flows can be tested locally with an iframe.
-    Cons: We won't be able to visualize correctly css styles in botonic serve (although styles will work in production).
-   */
+const StyledFrame = styled.iframe`
+  ${FrameStyles}
+`
 
-  const style = {
-    borderStyle: 'none',
-    width: '100%',
-    height: '100%',
-  }
-  if (props.asframe) {
-    return <Frame style={style}>{props.children}</Frame>
-  }
-  return <div style={style}>{props.children}</div>
-}
+const StyledFrameAsDiv = styled.div`
+  ${FrameStyles}
+`
 
 export const WebviewHeader = () => {
   const { closeWebview } = useContext(WebviewRequestContext)
@@ -104,9 +91,9 @@ export const WebviewContainer = props => {
         {typeof Webview === 'string' ? (
           <StyledFrame src={Webview} />
         ) : (
-          <WebviewMode>
+          <StyledFrameAsDiv>
             <Webview />
-          </WebviewMode>
+          </StyledFrameAsDiv>
         )}
       </StyledWebviewContent>
     </StyledWebview>
