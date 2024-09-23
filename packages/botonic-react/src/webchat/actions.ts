@@ -14,7 +14,6 @@ export enum WebchatAction {
   TOGGLE_WEBCHAT = 'toggleWebchat',
   UPDATE_DEV_SETTINGS = 'updateDevSettings',
   UPDATE_HANDOFF = 'updateHandoff',
-  UPDATE_JWT = 'updateJwt',
   UPDATE_LAST_MESSAGE_DATE = 'updateLastMessageDate',
   UPDATE_LAST_ROUTE_PATH = 'updateLastRoutePath',
   UPDATE_LATEST_INPUT = 'updateLatestInput',
