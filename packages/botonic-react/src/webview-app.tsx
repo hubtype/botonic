@@ -12,35 +12,40 @@ class App extends React.Component {
     super(props)
     const url = new URL(window.location.href)
     const params = Array.from(url.searchParams.entries())
-      .filter(([key, value]) => key != 'context')
+      .filter(([key, value]) => key !== 'context')
       .reduce((o, [key, value]) => {
         o[key] = value
         return o
       }, {})
-    const session = JSON.parse(url.searchParams.get('context') || {})
+    const urlContext = url.searchParams.get('context')
+    const session = JSON.parse(urlContext || '{}')
     this.state = { session, params }
   }
 
   async close(options?: CloseWebviewOptions) {
     let payload = options ? options.payload : null
-    if (options?.path) payload = `__PATH_PAYLOAD__${options.path}`
+
+    if (options?.path) {
+      payload = `__PATH_PAYLOAD__${options.path}`
+    }
+
     if (payload) {
       if (options?.params) {
         payload = `${payload}?${params2queryString(options.params)}`
       }
-      const s = this.state.session
+
+      const session = this.state.session
       try {
-        const baseUrl = s._hubtype_api || 'https://api.hubtype.com'
-        const resp = await axios({
-          method: 'post',
-          url: `${baseUrl}/v1/bots/${s.bot.id}/send_postback/`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          data: { payload: payload, chat_id: s.user.id },
-        })
+        const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+        const url = `${baseUrl}/v1/bots/${session.bot.id}/send_postback/`
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const data = { payload: payload, chat_id: session.user.id }
+        await axios.post(url, data)
       } catch (e) {
         console.log(e)
       }
     }
+
     const provider = this.state.session.user.provider
     const impId = this.state.session.user.imp_id
     if (provider === PROVIDER.WHATSAPP) {

@@ -316,16 +316,16 @@ export const Webchat = forwardRef((props, ref) => {
 
   const textareaRef = useRef(null)
 
-  const closeWebview = options => {
+  const closeWebview = async options => {
     updateWebview()
     if (userInputEnabled) {
       textareaRef.current.focus()
     }
     if (options?.payload) {
-      sendPayload(options.payload)
+      await sendPayload(options.payload)
     } else if (options?.path) {
       const params = options.params ? params2queryString(options.params) : ''
-      sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
+      await sendPayload(`__PATH_PAYLOAD__${options.path}?${params}`)
     }
   }
 

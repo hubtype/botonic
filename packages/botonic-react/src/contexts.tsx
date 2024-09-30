@@ -26,12 +26,12 @@ export interface CloseWebviewOptions {
 }
 
 export const WebviewRequestContext = createContext<{
-  closeWebview: (options?: CloseWebviewOptions) => undefined
+  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
   getString: (stringId: string) => string
   params: Record<string, any>
   session: CoreSession
 }>({
-  closeWebview: () => undefined,
+  closeWebview: async () => undefined,
   getString: () => '',
   params: {} as Record<string, any>,
   session: {} as CoreSession,
@@ -41,7 +41,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   addMessage: () => {
     return
   },
-  closeWebview: () => {
+  closeWebview: async () => {
     return
   },
   getThemeProperty: () => {
