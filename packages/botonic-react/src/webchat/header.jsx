@@ -121,10 +121,16 @@ export const WebchatHeader = forwardRef((props, ref) => {
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
+
   const CustomHeader = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customHeader)
   if (CustomHeader) {
-    return <CustomHeader onCloseClick={handleCloseWebchat} />
+    return (
+      <div id={BotonicContainerId.Header} ref={ref}>
+        <CustomHeader onCloseClick={handleCloseWebchat} />
+      </div>
+    )
   }
+
   return (
     <StyledWebchatHeader id={BotonicContainerId.Header} ref={ref}>
       <DefaultHeader
