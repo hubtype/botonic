@@ -10,11 +10,15 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.30.X] - aaaa-mm-dd
+## [0.30.X] - 2024-10-03
 
 ### Added
 
 ### Changed
+
+- [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
+
+  - [use new endpoint v2 to deploy bots](https://github.com/hubtype/botonic/pull/2884)
 
 ### Fixed
 

@@ -8,14 +8,16 @@ Build Chatbots Using React
 [![License](https://img.shields.io/npm/l/@botonic/cli.svg)](https://github.com/hubtype/botonic/blob/master/package.json)
 
 <!-- toc -->
-* [@botonic/cli](#botoniccli)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [@botonic/cli](#botoniccli)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @botonic/cli
 $ botonic COMMAND
@@ -27,19 +29,21 @@ USAGE
   $ botonic COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`botonic deploy [PROVIDER]`](#botonic-deploy-provider)
-* [`botonic destroy [PROVIDER]`](#botonic-destroy-provider)
-* [`botonic help [COMMAND]`](#botonic-help-command)
-* [`botonic login`](#botonic-login)
-* [`botonic logout`](#botonic-logout)
-* [`botonic new NAME [PROJECTNAME]`](#botonic-new-name-projectname)
-* [`botonic serve`](#botonic-serve)
-* [`botonic test`](#botonic-test)
+
+- [`botonic deploy [PROVIDER]`](#botonic-deploy-provider)
+- [`botonic destroy [PROVIDER]`](#botonic-destroy-provider)
+- [`botonic help [COMMAND]`](#botonic-help-command)
+- [`botonic login`](#botonic-login)
+- [`botonic logout`](#botonic-logout)
+- [`botonic new NAME [PROJECTNAME]`](#botonic-new-name-projectname)
+- [`botonic serve`](#botonic-serve)
+- [`botonic test`](#botonic-test)
 
 ## `botonic deploy [PROVIDER]`
 
@@ -192,4 +196,5 @@ EXAMPLE
 ```
 
 _See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.30.0/lib/commands/test.js)_
+
 <!-- commandsstop -->

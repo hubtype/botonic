@@ -10,7 +10,7 @@
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "npm i && npm run build",
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json",
-    "build:watch": "rm -rf lib && ./node_modules/.bin/tsc -w",
+    "build:watch": "rm -rf lib && ../../node_modules/.bin/tsc -w",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",

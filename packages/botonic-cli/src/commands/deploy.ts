@@ -12,6 +12,7 @@ import { ZipAFolder } from 'zip-a-folder'
 import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
+import { BotConfig, BotConfigJSON } from '../util/bot-config'
 import {
   copy,
   createDir,
@@ -101,13 +102,10 @@ Deploying to AWS...
 
   async deployBotFromFlag(botName: string): Promise<void | undefined> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
     const bots = resp.data.results
-    if (nextBots) {
-      await this.botonicApiService.getMoreBots(bots, nextBots)
-    }
+
     const bot = bots.filter(b => b.name === botName)[0]
-    if (bot == undefined && !botName) {
+    if (bot === undefined && !botName) {
       console.log(colors.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
       bots.map(b => console.log(` > ${String(b.name)}`))
@@ -119,29 +117,28 @@ Deploying to AWS...
         this.botonicApiService.setCurrentBot(bot)
         return await this.deploy()
       }
-      return prompt([
+      const res = await prompt([
         {
           type: 'confirm',
           name: 'create_bot_confirm',
           message: 'Do you want to create a new Bot?',
         },
-      ]).then((res: any) => {
-        const confirm = res.create_bot_confirm
-        if (confirm) return this.createNewBot(botName)
-        return undefined
-      })
+      ])
+      const confirm = res.create_bot_confirm
+      if (confirm) return this.createNewBot(botName)
+      return undefined
     } else {
       this.botonicApiService.setCurrentBot(bot)
       return await this.deploy()
     }
   }
 
-  signupFlow(): Promise<void> {
+  async signupFlow(): Promise<void> {
     const choices = [
       'No, I need to create a new one (Signup)',
       'Yes, I do. (Login)',
     ]
-    return prompt([
+    const inp = await prompt([
       {
         type: 'list',
         name: 'signupConfirmation',
@@ -149,13 +146,12 @@ Deploying to AWS...
           'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
         choices: choices,
       },
-    ]).then((inp: any) => {
-      if (inp.signupConfirmation == choices[1]) return this.askLogin()
-      else return this.askSignup()
-    })
+    ])
+    if (inp.signupConfirmation == choices[1]) return this.askLogin()
+    else return this.askSignup()
   }
 
-  askEmailPassword(): Promise<{ email: string; password: string }> {
+  async askEmailPassword(): Promise<{ email: string; password: string }> {
     return prompt([
       {
         type: 'input',
@@ -172,15 +168,13 @@ Deploying to AWS...
   }
 
   async askLogin(): Promise<void> {
-    await this.askEmailPassword().then(inp =>
-      this.login(inp.email, inp.password)
-    )
+    const inp = await this.askEmailPassword()
+    this.login(inp.email, inp.password)
   }
 
   async askSignup(): Promise<void> {
-    await this.askEmailPassword().then(inp =>
-      this.signup(inp.email, inp.password)
-    )
+    const inp = await this.askEmailPassword()
+    this.signup(inp.email, inp.password)
   }
 
   async deployBotFlow(): Promise<void> {
@@ -192,74 +186,65 @@ Deploying to AWS...
       return this.newBotFlow()
     else {
       const resp = await this.botonicApiService.getBots()
-      const nextBots = resp.data.next
       const bots = resp.data.results
-      if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
+
       // Show the current bot in credentials at top of the list
-      const first_id = this.botonicApiService.bot.id
-      bots.sort(function (x, y) {
-        return x.id == first_id ? -1 : y.id == first_id ? 1 : 0
-      })
+      const firstId = this.botonicApiService.bot.id
+      bots.sort((x, y) => (x.id === firstId ? -1 : y.id === firstId ? 1 : 0))
       return this.selectExistentBot(bots)
     }
   }
 
   async login(email: string, password: string): Promise<void> {
-    return this.botonicApiService.login(email, password).then(
-      ({}) => this.deployBotFlow(),
-      async (err: AxiosError<LoginErrorData>) => {
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.error_description
-        ) {
-          console.log(colors.red(err.response.data.error_description))
-        } else {
-          console.log(
-            colors.red(
-              'There was an error when trying to log in. Please, try again:'
-            )
+    try {
+      await this.botonicApiService.login(email, password)
+      await this.deployBotFlow()
+    } catch (err: any) {
+      const axiosError = err as AxiosError<LoginErrorData>
+      if (axiosError.response?.data?.error_description) {
+        console.log(colors.red(axiosError.response.data.error_description))
+      } else {
+        console.log(
+          colors.red(
+            'There was an error when trying to log in. Please, try again:'
           )
-          if (err.response && err.response.status && err.response.statusText) {
-            console.error(
-              `Error ${err.response.status}: ${err.response.statusText}`
-            )
-          }
+        )
+        if (axiosError.response?.status && axiosError.response?.statusText) {
+          console.error(
+            `Error ${axiosError.response.status}: ${axiosError.response.statusText}`
+          )
         }
-        await this.askLogin()
       }
-    )
+      await this.askLogin()
+    }
   }
 
   async signup(email: string, password: string): Promise<void> {
-    const org_name = email.split('@')[0]
+    const orgName = email.split('@')[0]
     const campaign = { product: 'botonic' }
-    return this.botonicApiService
-      .signup(email, password, org_name, campaign)
-      .then(
-        ({}) => this.login(email, password),
-        async err => {
-          if (err.response.data.email)
-            console.log(colors.red(err.response.data.email[0]))
-          if (err.response.data.password)
-            console.log(colors.red(err.response.data.password[0]))
-          if (!err.response.data.email && !err.response.data.password)
-            console.log(
-              colors.red(
-                'There was an error trying to signup. Please, try again:'
-              )
-            )
-          await this.askSignup()
-        }
-      )
+    try {
+      await this.botonicApiService.signup(email, password, orgName, campaign)
+      await this.login(email, password)
+    } catch (err: any) {
+      if (err.response?.data?.email) {
+        console.log(colors.red(err.response.data.email[0]))
+      }
+      if (err.response?.data?.password) {
+        console.log(colors.red(err.response.data.password[0]))
+      }
+      if (!err.response?.data?.email && !err.response?.data?.password) {
+        console.log(
+          colors.red('There was an error trying to signup. Please, try again:')
+        )
+      }
+      await this.askSignup()
+    }
   }
 
   async getAvailableBots(): Promise<any> {
     const resp = await this.botonicApiService.getBots()
-    const nextBots = resp.data.next
-    const bots = resp.data.results
-    if (nextBots) await this.botonicApiService.getMoreBots(bots, nextBots)
-    return bots
+
+    return resp.data.results
   }
 
   async newBotFlow(): Promise<void> {
@@ -267,65 +252,64 @@ Deploying to AWS...
     if (!bots.length) {
       return this.createNewBot()
     } else {
-      return prompt([
+      const res = await prompt([
         {
           type: 'confirm',
           name: 'create_bot_confirm',
           message: 'Do you want to create a new Bot?',
         },
-      ]).then((res: any) => {
-        const confirm = res.create_bot_confirm
-        if (confirm) {
-          return this.createNewBot()
-        } else {
-          return this.selectExistentBot(bots)
-        }
-      })
+      ])
+      const confirm = res.create_bot_confirm
+      if (confirm) {
+        return this.createNewBot()
+      } else {
+        return this.selectExistentBot(bots)
+      }
     }
   }
 
-  createNewBotWithName(inpBotName: string): Promise<void> {
+  async createNewBotWithName(inpBotName: string): Promise<void> {
     const MAX_ALLOWED_CHARS_FOR_BOT_NAME = 25
     if (inpBotName.length > MAX_ALLOWED_CHARS_FOR_BOT_NAME) {
       throw new Error(
         `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`
       )
     }
-    return this.botonicApiService.saveBot(inpBotName).then(
-      ({}) => this.deploy(),
-      err =>
-        console.log(
-          colors.red(`There was an error saving the bot: ${String(err)}`)
-        )
-    )
+
+    try {
+      await this.botonicApiService.createBot(inpBotName)
+      this.deploy()
+    } catch (err: any) {
+      console.log(
+        colors.red(`There was an error saving the bot: ${String(err)}`)
+      )
+    }
   }
 
-  createNewBot(botName?: string): Promise<void> {
+  async createNewBot(botName?: string): Promise<void> {
     if (botName) return this.createNewBotWithName(botName)
-    return prompt([
+    const inp = await prompt([
       {
         type: 'input',
         name: 'bot_name',
         message: 'Bot name:',
       },
-    ]).then((inp: any) => {
-      return this.createNewBotWithName(inp.bot_name)
-    })
+    ])
+    return await this.createNewBotWithName(inp.bot_name)
   }
 
-  selectExistentBot(bots: any[]): Promise<void> {
-    return prompt([
+  async selectExistentBot(bots: any[]): Promise<void> {
+    const inp = await prompt([
       {
         type: 'list',
         name: 'bot_name',
         message: 'Please, select a bot',
         choices: bots.map(b => b.name),
       },
-    ]).then((inp: { bot_name: string }) => {
-      const bot = bots.filter(b => b.name === inp.bot_name)[0]
-      this.botonicApiService.setCurrentBot(bot)
-      return this.deploy()
-    })
+    ])
+    const bot = bots.filter(b_1 => b_1.name === inp.bot_name)[0]
+    this.botonicApiService.setCurrentBot(bot)
+    return await this.deploy()
   }
 
   displayProviders(providers: { username: string; provider: string }[]): void {
@@ -375,19 +359,19 @@ Deploying to AWS...
   }
 
   /* istanbul ignore next */
-  async deployBundle(): Promise<{ hasDeployErrors: boolean }> {
+  async deployBundle(
+    botConfigJson: BotConfigJSON
+  ): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
     }).start()
     try {
       const deploy = await this.botonicApiService.deployBot(
-        join(process.cwd(), BOTONIC_BUNDLE_FILE)
+        join(process.cwd(), BOTONIC_BUNDLE_FILE),
+        botConfigJson
       )
-      if (
-        (deploy.response && deploy.response.status == 403) ||
-        !deploy.data.deploy_id
-      ) {
+      if (deploy.response?.status === 403 || !deploy.data.deploy_id) {
         const error = `Deploy Botonic Error: ${String(
           deploy.response.data.status
         )}`
@@ -408,7 +392,7 @@ Deploying to AWS...
           } else throw deployStatus.data.error
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       spinner.fail()
       const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
@@ -455,8 +439,11 @@ Deploying to AWS...
         console.log(colors.red('There was a problem building the bot'))
         return
       }
+
+      const botConfigJson = await BotConfig.get(process.cwd())
+
       await this.createBundle()
-      const { hasDeployErrors } = await this.deployBundle()
+      const { hasDeployErrors } = await this.deployBundle(botConfigJson)
       await this.displayDeployResults({ hasDeployErrors })
     } catch (e) {
       console.log(colors.red('Deploy Error'), e)
