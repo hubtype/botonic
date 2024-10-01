@@ -195,7 +195,7 @@ export interface Event {
 
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
-  closeWebview: () => void
+  closeWebview: () => Promise<void>
   getThemeProperty: (property: string, defaultValue?: any) => any
   openWebview: (webviewComponent: Webview) => void
   resetUnreadMessages: () => void
