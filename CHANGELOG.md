@@ -31,6 +31,7 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [can resolve `bot-action` nodes at any point of the flow](https://github.com/hubtype/botonic/pull/2898)
+  - [when user clicks on old button send fallback](https://github.com/hubtype/botonic/pull/2909)
 
 ### Fixed
 
