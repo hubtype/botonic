@@ -84,7 +84,12 @@ async function getContents(
   }
 
   if (request.input.payload || contentID) {
-    return await getContentsByPayload(context)
+    const contentsByPayload = await getContentsByPayload(context)
+    if (contentsByPayload.length > 0) {
+      return contentsByPayload
+    }
+
+    return await getContentsByFallback(context)
   }
 
   if (inputHasTextData(request.input)) {
