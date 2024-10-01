@@ -4,12 +4,12 @@ import { v4 as uuid } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
-  BOT_ACTION_PAYLOAD_PREFIX,
   FLOW_BUILDER_API_URL_PROD,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
 import {
+  FlowBotAction,
   FlowCarousel,
   FlowContent,
   FlowHandoff,
@@ -21,7 +21,6 @@ import {
   FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
 import {
-  HtBotActionNode,
   HtFlowBuilderData,
   HtFunctionArgument,
   HtFunctionArguments,
@@ -43,7 +42,6 @@ import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { inputHasTextData, resolveGetAccessToken } from './utils'
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
-  private flowUrl: string
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
@@ -112,23 +110,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private updateRequestBeforeRoutes(request: PluginPreRequest) {
     if (request.input.payload) {
       request.input.payload = this.removeSourceSufix(request.input.payload)
-
-      if (request.input.payload.startsWith(BOT_ACTION_PAYLOAD_PREFIX)) {
-        request.input.payload = this.replaceBotActionPayload(
-          request.input.payload
-        )
-      }
     }
   }
 
   private removeSourceSufix(payload: string): string {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
-  }
-
-  public replaceBotActionPayload(payload: string): string {
-    const botActionId = payload.split(SEPARATOR)[1]
-    const botActionNode = this.cmsApi.getNodeById<HtBotActionNode>(botActionId)
-    return this.cmsApi.createPayloadWithParams(botActionNode)
   }
 
   async getContentsByContentID(
@@ -178,8 +164,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     if (content) {
       contents.push(content)
     }
-    // TODO: prevent infinite recursive calls
 
+    // If node is BOT_ACTION not add more contents to render, next nodes render after execute action
+    if (node.type === HtNodeWithContentType.BOT_ACTION) {
+      return contents
+    }
+
+    // TODO: prevent infinite recursive calls
     if (node.follow_up) {
       return this.getContentsById(node.follow_up.id, resolvedLocale, contents)
     }
@@ -217,6 +208,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
       case HtNodeWithContentType.KNOWLEDGE_BASE:
         return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.BOT_ACTION:
+        return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
+
       default:
         return undefined
     }
@@ -284,7 +279,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 }
 
 export * from './action'
-export { BOT_ACTION_PAYLOAD_PREFIX } from './constants'
 export * from './content-fields'
 export { trackFlowContent } from './tracking'
 export {

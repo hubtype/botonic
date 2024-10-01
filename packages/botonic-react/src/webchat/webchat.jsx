@@ -1,4 +1,9 @@
-import { INPUT, isMobile, params2queryString } from '@botonic/core'
+import {
+  BotonicAction,
+  INPUT,
+  isMobile,
+  params2queryString,
+} from '@botonic/core'
 import merge from 'lodash.merge'
 import React, {
   forwardRef,
@@ -50,14 +55,9 @@ import { WebchatMessageList } from './message-list'
 import { WebchatReplies } from './replies'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
+import { getParsedAction } from './utils'
 import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
-
-export const getParsedAction = botonicAction => {
-  const splittedAction = botonicAction.split('create_case:')
-  if (splittedAction.length <= 1) return undefined
-  return JSON.parse(splittedAction[1])
-}
 
 const StyledWebchat = styled.div`
   position: fixed;
@@ -502,7 +502,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (session) {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
-        const handoff = action.startsWith('create_case')
+        const handoff = action.startsWith(BotonicAction.CreateCase)
         if (handoff && isDev) addMessageComponent(<Handoff />)
         updateHandoff(handoff)
       }

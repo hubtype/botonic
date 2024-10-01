@@ -1,6 +1,7 @@
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
+  BotonicAction,
   BotRequest,
   BotResponse,
   INPUT,
@@ -28,6 +29,7 @@ export interface CoreBotConfig {
   routes: Routes
   theme?: any
 }
+
 export class CoreBot {
   appId?: string
   defaultDelay?: number
@@ -90,7 +92,16 @@ export class CoreBot {
     lastRoutePath,
   }: BotRequest): Promise<BotResponse> {
     const output = await this.runInput({ input, session, lastRoutePath })
-    if (session._botonic_action?.startsWith('create_test_integration_case:')) {
+
+    if (session._botonic_action?.startsWith(BotonicAction.Redirect)) {
+      return await this.runRedirectAction(output, {
+        input,
+        session,
+        lastRoutePath,
+      })
+    }
+
+    if (session._botonic_action?.startsWith(BotonicAction.CreateTestCase)) {
       return await this.runFollowUpTestIntegrationInput(output, {
         input,
         session,
@@ -260,5 +271,67 @@ export class CoreBot {
       session,
       lastRoutePath: followUp.lastRoutePath,
     }
+  }
+
+  private async runRedirectAction(
+    previousResponse: BotResponse,
+    { input, session, lastRoutePath }: BotRequest,
+    numOfRedirects: number = 0
+  ) {
+    if (numOfRedirects > 10) {
+      throw new Error('Maximum BotAction recursive calls reached (10)')
+    }
+
+    const nextPayload = session._botonic_action?.split(
+      `${BotonicAction.Redirect}:`
+    )[1]
+
+    const inputWithBotActionPayload: Input = {
+      ...input,
+      payload: nextPayload,
+      type: INPUT.POSTBACK,
+      data: undefined,
+      text: undefined,
+    }
+
+    session._botonic_action = undefined
+
+    const followUp = await this.runInput({
+      input: inputWithBotActionPayload,
+      session,
+      lastRoutePath,
+    })
+
+    const response = {
+      input: followUp.input,
+      response: previousResponse.response.concat(followUp.response),
+      session,
+      lastRoutePath: followUp.lastRoutePath,
+    }
+
+    // Recursive call to handle multiple bot actions in a row
+    if (response.session._botonic_action?.startsWith(BotonicAction.Redirect)) {
+      return await this.runRedirectAction(
+        response,
+        {
+          input,
+          session,
+          lastRoutePath,
+        },
+        numOfRedirects + 1
+      )
+    }
+
+    if (
+      response.session._botonic_action?.startsWith(BotonicAction.CreateTestCase)
+    ) {
+      return await this.runFollowUpTestIntegrationInput(response, {
+        input,
+        session,
+        lastRoutePath,
+      })
+    }
+
+    return response
   }
 }

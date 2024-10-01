@@ -1,3 +1,4 @@
+import { FlowBotAction } from './flow-bot-action'
 import { FlowCarousel } from './flow-carousel'
 import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
@@ -11,6 +12,7 @@ export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
 export { FlowElement } from './flow-element'
 export {
+  FlowBotAction,
   FlowCarousel,
   FlowImage,
   FlowKnowledgeBase,
@@ -30,3 +32,4 @@ export type FlowContent =
   | FlowWhatsappCtaUrlButtonNode
   | FlowHandoff
   | FlowKnowledgeBase
+  | FlowBotAction

@@ -196,7 +196,7 @@ export interface Session {
   organization: string
   user: SessionUser
   // after handoff
-  _botonic_action?: string
+  _botonic_action?: BotonicActionType
   _hubtype_case_status?: CaseStatusType
   _hubtype_case_id?: string
   _hubtype_case_typification?: string
@@ -316,3 +316,21 @@ export type MatchingProp =
   | 'request'
 
 export type Matcher = string | RegExp | ((args) => boolean)
+
+export type BotonicActionType =
+  | `${BotonicAction.CreateCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.CreateTestCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.Redirect}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.DiscardCase}${BotonicActionSeparator}${string}`
+  | `${BotonicAction.DiscardCase}`
+  | `${BotonicAction.DeleteUser}`
+
+type BotonicActionSeparator = ':'
+
+export enum BotonicAction {
+  Redirect = 'redirect_action',
+  CreateCase = 'create_case',
+  CreateTestCase = 'create_test_integration_case',
+  DeleteUser = 'delete_user',
+  DiscardCase = 'discard_case',
+}

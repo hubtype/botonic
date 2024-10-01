@@ -18,11 +18,19 @@ All notable changes to Botonic will be documented in this file.
 
 - [@botonic/cli](https://www.npmjs.com/package/@botonic/cli)
 
-  - [use new endpoint v2 to deploy bots](https://github.com/hubtype/botonic/pull/2884)
+  - [use new `endpoint v2 to deploy` bots](https://github.com/hubtype/botonic/pull/2884)
+
+- [@botonic/core](https://www.npmjs.com/package/@botonic/core)
+
+  - [after resolving an input the `core-bot can redirect to another action, with a maximum of 10 times`](https://github.com/hubtype/botonic/pull/2898)
 
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
-  - [remove getConfig function](https://github.com/hubtype/botonic/pull/2902)
+  - [remove `getConfig` function](https://github.com/hubtype/botonic/pull/2902)
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [can resolve `bot-action` nodes at any point of the flow](https://github.com/hubtype/botonic/pull/2898)
 
 ### Fixed
 

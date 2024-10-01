@@ -1,6 +1,5 @@
 // @ts-nocheck
-
-import { HandOffBuilder } from '../../src'
+import { BotonicAction } from '../../src/models'
 import {
   developerLocales,
   developerRoutes,
@@ -223,7 +222,7 @@ it('input returns the follow up when a handoff is done in a test integration', a
   // Arrange
   const session = {
     is_test_integration: true,
-    _botonic_action: 'create_test_integration_case:payload1',
+    _botonic_action: `${BotonicAction.CreateTestCase}:payload1`,
   }
 
   const coreBot = initCoreBotWithDeveloperConfig({
@@ -269,4 +268,96 @@ it('input returns the follow up when a handoff is done in a test integration', a
     'Follow up action',
     null,
   ])
+})
+
+it('input returns two actions when first returen a _botonic_action redirect', async () => {
+  // Arrange
+  const session = {
+    _botonic_action: `${BotonicAction.Redirect}:after-rating|'{"value:":5}'`,
+  }
+
+  const coreBot = initCoreBotWithDeveloperConfig({
+    routes: [
+      {
+        path: 'rating-action',
+        text: 'rating',
+        action: 'Can you rate the agent?',
+      },
+      {
+        path: 'after-rating-action',
+        payload: /^after-rating.*/,
+        action: 'Thanks for your rating',
+      },
+    ],
+  })
+
+  // Act
+  const botResponse = await coreBot.input({
+    input: { type: 'text', data: 'rating' },
+    session,
+    lastRoutePath: 'rating-action',
+  })
+  console.log({ botResponse })
+  // Assert
+  expect(botResponse.input).toEqual({
+    type: 'postback',
+    data: undefined,
+    payload: `after-rating|'{"value:":5}'`,
+    text: undefined,
+  })
+  expect(botResponse.session).toEqual({
+    _botonic_action: undefined,
+    __locale: 'en',
+    __retries: 0,
+    is_first_interaction: false,
+  })
+  expect(botResponse.lastRoutePath).toEqual('after-rating-action')
+  expect(botResponse.response[0].actions).toEqual([
+    null,
+    'Can you rate the agent?',
+    null,
+  ])
+  expect(botResponse.response[1].actions).toEqual([
+    null,
+    'Thanks for your rating',
+    null,
+  ])
+})
+
+it('core throws an error after maximum number of redirects are executed', async () => {
+  const redirect = `${BotonicAction.Redirect}:after-rating|'{"value:":5}'`
+  // Arrange
+  const session = {
+    _botonic_action: redirect,
+  }
+
+  const coreBot = initCoreBotWithDeveloperConfig({
+    routes: request => {
+      request.session._botonic_action = redirect
+      return [
+        {
+          path: 'rating-action',
+          text: 'rating',
+          action: 'Can you rate the agent?',
+        },
+        {
+          path: 'after-rating-action',
+          payload: /^after-rating.*/,
+          action: 'Thanks for your rating',
+        },
+      ]
+    },
+  })
+
+  // Act
+  const botResponse = coreBot.input({
+    input: { type: 'text', data: 'rating' },
+    session,
+    lastRoutePath: 'rating-action',
+  })
+
+  // Assert
+  await expect(botResponse).rejects.toThrow(
+    'Maximum BotAction recursive calls reached (10)'
+  )
 })

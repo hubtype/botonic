@@ -30,11 +30,8 @@ export type HtNodeWithContent =
   | HtWhatsappCTAUrlButtonNode
   | HtSmartIntentNode
   | HtKnowledgeBaseNode
-
-export type HtNodeWithoutContent =
-  | HtUrlNode
-  | HtPayloadNode
-  | HtGoToFlow
   | HtBotActionNode
+
+export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 
 export type HtNodeComponent = HtNodeWithContent | HtNodeWithoutContent

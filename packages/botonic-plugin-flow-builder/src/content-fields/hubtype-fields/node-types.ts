@@ -12,13 +12,13 @@ export enum HtNodeWithContentType {
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
   KNOWLEDGE_BASE = 'knowledge-base',
+  BOT_ACTION = 'bot-action',
 }
 
 export enum HtNodeWithoutContentType {
   URL = 'url',
   PAYLOAD = 'payload',
   GO_TO_FLOW = 'go-to-flow',
-  BOT_ACTION = 'bot-action',
 }
 
 export enum HtButtonStyle {

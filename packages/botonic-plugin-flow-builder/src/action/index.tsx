@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
+import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
@@ -20,9 +21,10 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
   static async botonicInit(
-    request: ActionRequest
+    request: ActionRequest,
+    contentID?: string
   ): Promise<FlowBuilderActionProps> {
-    const contents = await getContents(request)
+    const contents = await getContents(request, contentID)
     await trackFlowContent(request, contents)
 
     const handoffContent = contents.find(
@@ -31,6 +33,14 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     if (handoffContent) {
       await handoffContent.doHandoff(request)
     }
+
+    const botActionContent = contents.find(
+      content => content instanceof FlowBotAction
+    ) as FlowBotAction
+    if (botActionContent) {
+      botActionContent.doBotAction(request)
+    }
+
     return { contents }
   }
 
@@ -53,7 +63,10 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   }
 }
 
-async function getContents(request: ActionRequest): Promise<FlowContent[]> {
+async function getContents(
+  request: ActionRequest,
+  contentID?: string
+): Promise<FlowContent[]> {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
   const locale = flowBuilderPlugin.getLocale(request.session)
@@ -63,13 +76,14 @@ async function getContents(request: ActionRequest): Promise<FlowContent[]> {
     flowBuilderPlugin,
     request,
     resolvedLocale,
+    contentID,
   }
 
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
   }
 
-  if (request.input.payload) {
+  if (request.input.payload || contentID) {
     return await getContentsByPayload(context)
   }
 
@@ -88,4 +102,5 @@ export interface FlowBuilderContext {
   flowBuilderPlugin: BotonicPluginFlowBuilder
   request: ActionRequest
   resolvedLocale: string
+  contentID?: string
 }
