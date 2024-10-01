@@ -19,10 +19,4 @@ export class NodeApp {
   input(args) {
     return this.bot.input(args)
   }
-
-  getConfig() {
-    return Object.entries(this.bot.plugins).map(([_, plugin]) => {
-      return { id: plugin.id, name: plugin.name, config: plugin.config }
-    })
-  }
 }
