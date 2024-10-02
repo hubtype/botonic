@@ -29,6 +29,7 @@ export type KnowledgeBaseFunction = (
 
 export interface FlowBuilderApiOptions {
   url: string
+  flowUrl: string
   flow?: HtFlowBuilderData
   accessToken: string
   request: PluginPreRequest
