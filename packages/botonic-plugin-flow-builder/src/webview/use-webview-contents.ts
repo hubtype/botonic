@@ -31,6 +31,28 @@ export function useWebviewContents<T extends MapContentsType>({
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
+  const updateCurrentLocale = (textContents?: WebviewTextContent[]) => {
+    if (
+      textContents &&
+      textContents?.length > 0 &&
+      textContents[0].content.text.some(text => text.locale === currentLocale)
+    ) {
+      setCurrentLocale(currentLocale)
+      return
+    }
+
+    const language = currentLocale.split('-')[0]
+    if (textContents?.[0].content.text.some(text => text.locale === language)) {
+      setCurrentLocale(language)
+      return
+    }
+
+    console.error(
+      `locale: ${currentLocale} cannot be resolved with: ${textContents?.[0].content.text.map(text => text.locale).join(', ')}`
+    )
+    return
+  }
+
   const getTextContent = (contentID: string): string => {
     return (
       textContents
@@ -76,6 +98,8 @@ export function useWebviewContents<T extends MapContentsType>({
           webviewContent => webviewContent.type === WebviewContentType.IMAGE
         ) as WebviewImageContent[]
         setImageContents(imageResponseContents)
+
+        updateCurrentLocale(textResponseContents)
       } catch (error) {
         console.error('Error fetching webview contents:', error)
         setError(true)
