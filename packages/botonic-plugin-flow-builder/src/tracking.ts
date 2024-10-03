@@ -61,6 +61,8 @@ function getContentEventArgs(
   }
 ) {
   const flowThreadId = request.session.flow_thread_id ?? uuid()
+  request.session.flow_thread_id = flowThreadId
+
   return {
     flowThreadId,
     flowId: contentInfo.flowId,
