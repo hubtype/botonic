@@ -14,7 +14,7 @@ import { SendButton } from './send-button'
 import { UserInputContainer } from './styles'
 import { Textarea } from './textarea'
 
-interface WebchatInputPanelProps {
+interface InputPanelProps {
   persistentMenu: any
   enableEmojiPicker: boolean
   enableAttachments: boolean
@@ -24,7 +24,7 @@ interface WebchatInputPanelProps {
   onUserInput?: (event: any) => Promise<void>
 }
 
-export const WebchatInputPanel = ({
+export const InputPanel = ({
   persistentMenu,
   enableEmojiPicker,
   enableAttachments,
@@ -32,7 +32,7 @@ export const WebchatInputPanel = ({
   textareaRef,
   host,
   onUserInput,
-}: WebchatInputPanelProps) => {
+}: InputPanelProps) => {
   const {
     getThemeProperty,
     sendText,

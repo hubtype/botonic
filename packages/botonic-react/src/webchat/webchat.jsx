@@ -41,6 +41,7 @@ import {
   initSession,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
+import { ChatArea } from './chat-area'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
 import { WebchatHeader } from './header'
@@ -51,11 +52,10 @@ import {
   useTyping,
   useWebchat,
 } from './hooks'
+import { InputPanel } from './input-panel'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
-import { WebchatChatArea } from './webchat-chat-area'
-import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
 
 const StyledWebchat = styled.div`
@@ -727,7 +727,7 @@ export const Webchat = forwardRef((props, ref) => {
         <StyledWebchat
           id={BotonicContainerId.Webchat}
           ref={webchatRef}
-          // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
+          // TODO: Distinguish between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
           width={webchatState.width}
           height={webchatState.height}
@@ -748,13 +748,13 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-          <WebchatChatArea />
+          <ChatArea />
 
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
           )}
           {!webchatState.handoff && userInputEnabled && (
-            <WebchatInputPanel
+            <InputPanel
               persistentMenu={props.persistentMenu}
               enableEmojiPicker={props.enableEmojiPicker}
               enableAttachments={props.enableAttachments}
