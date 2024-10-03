@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
+import { getFlowBuilderPlugin } from '../helpers'
 import { EventAction, trackEvent } from '../tracking'
 import { SmartIntentResponse } from '../types'
 
@@ -66,11 +67,14 @@ export class SmartIntentsApi {
   private async getInference(
     inferenceParams: SmartIntentsInferenceParams
   ): Promise<SmartIntentResponse> {
+    const pluginFlowBuilder = getFlowBuilderPlugin(this.currentRequest.plugins)
+    const token = pluginFlowBuilder.getAccessToken(this.currentRequest.session)
+
     return await axios({
       method: 'POST',
       url: `${process.env.HUBTYPE_API_URL}/external/v2/ai/smart_intents/inference/`,
       headers: {
-        Authorization: `Bearer ${this.currentRequest.session._access_token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       data: inferenceParams,
