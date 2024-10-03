@@ -39,6 +39,7 @@ export class FlowText extends ContentFieldsBase {
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? match
           : getValueFromKeyPath(request, keyPath)
+        // TODO In local if change variable and render multiple times the value is always the last update
         replacedText = replacedText.replace(
           match,
           this.isValidType(botVariable) ? botVariable : match
