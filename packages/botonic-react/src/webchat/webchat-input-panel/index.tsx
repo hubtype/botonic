@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
 import { getFullMimeWhitelist } from '../../message-utils'
-import { DeviceAdapter } from '../devices/device-adapter'
+import { BotonicContainerId } from '../constants'
 import { Attachment } from './attachment'
 import { EmojiPicker } from './emoji-picker'
 import { OpenedEmojiPicker } from './opened-emoji-picker'
@@ -20,7 +20,7 @@ interface WebchatInputPanelProps {
   enableAttachments: boolean
   handleAttachment: (event: any) => void
   textareaRef: React.MutableRefObject<HTMLTextAreaElement>
-  deviceAdapter: DeviceAdapter
+  host: HTMLElement
   onUserInput?: (event: any) => Promise<void>
 }
 
@@ -30,7 +30,7 @@ export const WebchatInputPanel = ({
   enableAttachments,
   handleAttachment,
   textareaRef,
-  deviceAdapter,
+  host,
   onUserInput,
 }: WebchatInputPanelProps) => {
   const {
@@ -39,6 +39,7 @@ export const WebchatInputPanel = ({
     togglePersistentMenu,
     toggleEmojiPicker,
     webchatState,
+    inputPanelRef,
   } = useContext(WebchatContext)
 
   const handleSelectedEmoji = event => {
@@ -77,6 +78,8 @@ export const WebchatInputPanel = ({
 
   return (
     <UserInputContainer
+      id={BotonicContainerId.InputPanel}
+      ref={inputPanelRef}
       style={{
         ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputStyle),
       }}
@@ -92,7 +95,7 @@ export const WebchatInputPanel = ({
       <PersistentMenu onClick={handleMenu} persistentMenu={persistentMenu} />
 
       <Textarea
-        deviceAdapter={deviceAdapter}
+        host={host}
         persistentMenu={persistentMenu}
         textareaRef={textareaRef}
         sendChatEvent={sendChatEvent}

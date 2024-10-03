@@ -1,27 +1,22 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { StyledScrollbar } from '../components/styled-scrollbar'
+import { BotonicContainerId } from '../constants'
 import { TypingIndicator } from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
-import { ContainerMessage } from './styles'
+import { ContainerMessage, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
 export const WebchatMessageList = () => {
   const {
     webchatState,
-    getThemeProperty,
     resetUnreadMessages,
     setLastMessageVisible,
+    scrollableMessagesListRef,
   } = useContext(WebchatContext)
-
-  const scrollbarOptions = {
-    ...{ enable: true, autoHide: true },
-    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
-  }
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
@@ -104,15 +99,10 @@ export const WebchatMessageList = () => {
 
   return (
     <>
-      <StyledScrollbar
+      <ScrollableMessageList
+        id={BotonicContainerId.ScrollableMessagesList}
+        ref={scrollableMessagesListRef}
         role={ROLES.MESSAGE_LIST}
-        // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-scrollable`
-        id='botonic-scrollable-content'
-        // @ts-ignore
-        scrollbar={scrollbarOptions}
-        autoHide={scrollbarOptions.autoHide}
-        ismessagescontainer={true.toString()}
-        style={{ flex: 1 }}
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
@@ -136,7 +126,7 @@ export const WebchatMessageList = () => {
           )
         })}
         {webchatState.typing && <TypingIndicator />}
-      </StyledScrollbar>
+      </ScrollableMessageList>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}
     </>
   )

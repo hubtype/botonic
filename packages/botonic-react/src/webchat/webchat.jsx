@@ -33,7 +33,6 @@ import {
   readDataURL,
 } from '../message-utils'
 import { msgToBotonic } from '../msg-to-botonic'
-import { scrollToBottom } from '../util/dom'
 import { isDev } from '../util/environment'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
@@ -43,19 +42,19 @@ import {
   shouldKeepSessionOnReload,
 } from '../util/webchat'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
-import { DeviceAdapter } from './devices/device-adapter'
-import { StyledWebchatHeader } from './header'
+import { BotonicContainerId } from './constants'
+import { WebchatHeader } from './header'
 import {
   useComponentWillMount,
   usePrevious,
+  useScrollToBottom,
   useTyping,
   useWebchat,
 } from './hooks'
-import { WebchatMessageList } from './message-list'
-import { WebchatReplies } from './replies'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
+import { WebchatChatArea } from './webchat-chat-area'
 import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
 
@@ -71,6 +70,7 @@ const StyledWebchat = styled.div`
   box-shadow: ${COLORS.SOLID_BLACK_ALPHA_0_2} 0px 0px 12px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 `
 
 const ErrorMessageContainer = styled.div`
@@ -137,6 +137,12 @@ export const Webchat = forwardRef((props, ref) => {
     updateTyping,
     updateWebview,
     webchatState,
+    webchatRef,
+    chatAreaRef,
+    inputPanelRef,
+    headerRef,
+    scrollableMessagesListRef,
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
@@ -157,7 +163,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const host = props.host || document.body
 
-  const deviceAdapter = new DeviceAdapter()
+  const { scrollToBottom } = useScrollToBottom({ host })
 
   const saveWebchatState = webchatState => {
     storage &&
@@ -276,7 +282,6 @@ export const Webchat = forwardRef((props, ref) => {
       }
       return
     }
-    deviceAdapter.init(host)
   }, [webchatState.isWebchatOpen])
 
   useEffect(() => {
@@ -709,15 +714,21 @@ export const Webchat = forwardRef((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         webchatState,
         trackEvent: props.onTrackEvent,
+        webchatRef,
+        chatAreaRef,
+        inputPanelRef,
+        headerRef,
+        scrollableMessagesListRef,
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}
 
       {webchatState.isWebchatOpen && (
         <StyledWebchat
+          id={BotonicContainerId.Webchat}
+          ref={webchatRef}
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
-          id={WEBCHAT.DEFAULTS.ID}
           width={webchatState.width}
           height={webchatState.height}
           style={{
@@ -725,7 +736,9 @@ export const Webchat = forwardRef((props, ref) => {
             ...mobileStyle,
           }}
         >
-          <StyledWebchatHeader
+          <WebchatHeader
+            id={BotonicContainerId.Header}
+            ref={headerRef}
             onCloseClick={() => {
               toggleWebchat(false)
             }}
@@ -735,13 +748,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-
-          <WebchatMessageList />
-
-          {webchatState.replies &&
-            Object.keys(webchatState.replies).length > 0 && (
-              <WebchatReplies replies={webchatState.replies} />
-            )}
+          <WebchatChatArea />
 
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
@@ -753,7 +760,7 @@ export const Webchat = forwardRef((props, ref) => {
               enableAttachments={props.enableAttachments}
               handleAttachment={handleAttachment}
               textareaRef={textareaRef}
-              deviceAdapter={deviceAdapter}
+              host={host}
               onUserInput={props.onUserInput}
             />
           )}

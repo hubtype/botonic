@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { forwardRef, useContext } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
@@ -6,6 +6,7 @@ import { WebchatContext } from '../contexts'
 import { Scale } from '../shared/styles'
 import { resolveImage } from '../util/environment'
 import { ConditionalWrapper } from '../util/react'
+import { BotonicContainerId } from './constants'
 
 const Header = styled.div`
   display: flex;
@@ -14,9 +15,9 @@ const Header = styled.div`
     ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
     ${props => props.color} 100%
   );
-  height: 55px;
   border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
   z-index: 2;
+  height: inherit;
 `
 
 const ImageContainer = styled.div`
@@ -107,32 +108,42 @@ export const DefaultHeader = props => {
   )
 }
 
-export const WebchatHeader = props => {
+const StyledWebchatHeader = styled.div`
+  border-radius: 8px 8px 0px 0px;
+  box-shadow: ${COLORS.PIGEON_POST_BLUE_ALPHA_0_5} 0px 2px 5px;
+  height: 55px;
+  flex: none;
+`
+
+export const WebchatHeader = forwardRef((props, ref) => {
   const { webchatState, getThemeProperty } = useContext(WebchatContext)
 
   const handleCloseWebchat = event => {
     props.onCloseClick(event.target.value)
   }
+
   const CustomHeader = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customHeader)
   if (CustomHeader) {
-    return <CustomHeader onCloseClick={handleCloseWebchat} />
+    return (
+      <div id={BotonicContainerId.Header} ref={ref}>
+        <CustomHeader onCloseClick={handleCloseWebchat} />
+      </div>
+    )
   }
-  return (
-    <DefaultHeader
-      webchatState={webchatState}
-      getThemeProperty={getThemeProperty}
-      color={getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-        COLORS.BOTONIC_BLUE
-      )}
-      onCloseClick={handleCloseWebchat}
-    />
-  )
-}
 
-export const StyledWebchatHeader = styled(WebchatHeader)`
-  border-radius: 8px 8px 0px 0px;
-  box-shadow: ${COLORS.PIGEON_POST_BLUE_ALPHA_0_5} 0px 2px 5px;
-  height: 36px;
-  flex: none;
-`
+  return (
+    <StyledWebchatHeader id={BotonicContainerId.Header} ref={ref}>
+      <DefaultHeader
+        webchatState={webchatState}
+        getThemeProperty={getThemeProperty}
+        color={getThemeProperty(
+          WEBCHAT.CUSTOM_PROPERTIES.brandColor,
+          COLORS.BOTONIC_BLUE
+        )}
+        onCloseClick={handleCloseWebchat}
+      />
+    </StyledWebchatHeader>
+  )
+})
+
+WebchatHeader.displayName = 'WebchatHeader'

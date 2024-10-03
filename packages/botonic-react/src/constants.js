@@ -53,16 +53,10 @@ export const WEBCHAT = {
       pointerEvents: 'none',
     },
   },
-  SELECTORS: {
-    SCROLLABLE_CONTENT: '#botonic-scrollable-content',
-    SIMPLEBAR_CONTENT: '.simplebar-content',
-    SIMPLEBAR_WRAPPER: '.simplebar-content-wrapper',
-  },
   CUSTOM_PROPERTIES: {
     // General
     enableAnimations: 'animations.enable',
     markdownStyle: 'markdownStyle',
-    scrollbar: 'scrollbar',
     imagePreviewer: 'imagePreviewer',
     // Mobile
     mobileBreakpoint: 'mobileBreakpoint',

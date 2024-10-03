@@ -3,7 +3,12 @@ import styled from 'styled-components'
 
 import { WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
-import { StyledScrollbar } from '../webchat/components/styled-scrollbar'
+import { BotonicContainerId } from './constants'
+
+const ScrollableReplies = styled.div`
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+`
 
 const RepliesContainer = styled.div`
   display: flex;
@@ -13,6 +18,7 @@ const RepliesContainer = styled.div`
   padding-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
+  overflow-x: scroll;
 `
 
 const ReplyContainer = styled.div`
@@ -28,11 +34,8 @@ const options = {
 }
 
 export const WebchatReplies = props => {
-  const { webchatState, getThemeProperty } = useContext(WebchatContext)
-  const scrollbarOptions = {
-    ...{ enable: true, autoHide: true },
-    ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.scrollbar),
-  }
+  const { webchatState, getThemeProperty, repliesRef } =
+    useContext(WebchatContext)
   let justifyContent = 'center'
   const flexWrap = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.wrapReplies,
@@ -44,11 +47,10 @@ export const WebchatReplies = props => {
       options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
 
   return (
-    <StyledScrollbar
-      scrollbar={scrollbarOptions}
-      autoHide={scrollbarOptions.autoHide}
-    >
+    <ScrollableReplies>
       <RepliesContainer
+        id={BotonicContainerId.RepliesContainer}
+        ref={repliesRef}
         className='replies-container'
         justify={justifyContent}
         wrap={flexWrap}
@@ -57,6 +59,6 @@ export const WebchatReplies = props => {
           <ReplyContainer key={i}>{r}</ReplyContainer>
         ))}
       </RepliesContainer>
-    </StyledScrollbar>
+    </ScrollableReplies>
   )
 }
