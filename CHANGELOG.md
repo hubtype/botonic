@@ -9,8 +9,16 @@ All notable changes to Botonic will be documented in this file.
     Changes that have landed in master but are not yet released.
     Click to see more.
   </summary>
-  
-## [0.30.X] - 2024-10-03
+## [0.31.0] - 2024-mm-dd
+
+### Added
+
+### Changed
+
+### Fixed
+
+</details>
+## [0.30.0] - 2024-10-03
 
 ### Added
 
@@ -40,8 +48,6 @@ All notable changes to Botonic will be documented in this file.
 
   - [set `bot.id and organization_id in session` in local development](https://github.com/hubtype/botonic/pull/2913)
   - [`smart intents` work in local](https://github.com/hubtype/botonic/pull/2915)
-
-</details>
 
 ## [0.29.0] - 2024-08-13
 
