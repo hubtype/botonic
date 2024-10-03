@@ -72,6 +72,7 @@ export enum INPUT {
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
+  EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
 }
 
 export interface Locales {
@@ -112,6 +113,7 @@ export type InputType =
   | INPUT.CHAT_EVENT
   | INPUT.WHATSAPP_BUTTON_LIST
   | INPUT.WHATSAPP_CTA_URL_BUTTON
+  | INPUT.EVENT_AGENT_MESSAGE_CREATED
 
 export interface IntentResult {
   intent: string
@@ -149,6 +151,12 @@ export interface Input extends Partial<NluResult> {
   }
   message_id: string
   bot_interaction_id: string
+  agent_id?: string
+  agent_name?: string
+  message?: {
+    type: string
+    data: string
+  }
 }
 
 export interface Campaign {
