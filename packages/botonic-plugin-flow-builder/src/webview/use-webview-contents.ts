@@ -32,9 +32,12 @@ export function useWebviewContents<T extends MapContentsType>({
   const [error, setError] = useState(false)
 
   const updateCurrentLocale = (textContents?: WebviewTextContent[]) => {
+    if (!textContents || textContents.length === 0) {
+      console.log('There is no text contents to check the locale')
+      return
+    }
+
     if (
-      textContents &&
-      textContents?.length > 0 &&
       textContents[0].content.text.some(text => text.locale === currentLocale)
     ) {
       setCurrentLocale(currentLocale)
@@ -42,7 +45,7 @@ export function useWebviewContents<T extends MapContentsType>({
     }
 
     const language = currentLocale.split('-')[0]
-    if (textContents?.[0].content.text.some(text => text.locale === language)) {
+    if (textContents[0].content.text.some(text => text.locale === language)) {
       setCurrentLocale(language)
       return
     }
