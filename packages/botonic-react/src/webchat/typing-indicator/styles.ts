@@ -12,7 +12,11 @@ const bulge = keyframes`
   }
 `
 
-export const TypingIndicatorWrapper = styled.div`
+interface TypingIndicatorWrapperProps {
+  backgroundColor: string
+}
+
+export const TypingIndicatorWrapper = styled.div<TypingIndicatorWrapperProps>`
   will-change: transform;
   width: 44px;
   line-height: 0px;
@@ -23,6 +27,7 @@ export const TypingIndicatorWrapper = styled.div`
   margin: 8px;
   position: relative;
   animation: 2s ${bulge} infinite ease-out;
+  background-color: ${props => props.backgroundColor};
 `
 
 export const Dot = styled.span`
