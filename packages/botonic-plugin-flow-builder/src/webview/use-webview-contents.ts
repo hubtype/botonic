@@ -37,23 +37,22 @@ export function useWebviewContents<T extends MapContentsType>({
       return
     }
 
-    if (
-      textContents[0].content.text.some(text => text.locale === currentLocale)
-    ) {
+    const locales = textContents[0].content.text.map(text => text.locale)
+    const language = currentLocale.split('-')[0]
+
+    if (locales.includes(currentLocale)) {
       setCurrentLocale(currentLocale)
       return
     }
 
-    const language = currentLocale.split('-')[0]
-    if (textContents[0].content.text.some(text => text.locale === language)) {
+    if (locales.includes(language)) {
       setCurrentLocale(language)
       return
     }
 
     console.error(
-      `locale: ${currentLocale} cannot be resolved with: ${textContents?.[0].content.text.map(text => text.locale).join(', ')}`
+      `locale: ${currentLocale} cannot be resolved with: ${locales.join(', ')}`
     )
-    return
   }
 
   const getTextContent = (contentID: string): string => {
