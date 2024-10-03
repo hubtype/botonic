@@ -2,18 +2,21 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
 import { WebchatContext } from '../../contexts'
-import { ScrollableContent } from '../components/scrollable-content'
 import { BotonicContainerId } from '../constants'
 import { TypingIndicator } from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
-import { ContainerMessage } from './styles'
+import { ContainerMessage, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
 export const WebchatMessageList = () => {
-  const { webchatState, resetUnreadMessages, setLastMessageVisible } =
-    useContext(WebchatContext)
+  const {
+    webchatState,
+    resetUnreadMessages,
+    setLastMessageVisible,
+    scrollableMessagesListRef,
+  } = useContext(WebchatContext)
 
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState()
 
@@ -96,12 +99,10 @@ export const WebchatMessageList = () => {
 
   return (
     <>
-      <ScrollableContent
-        id={BotonicContainerId.ScrollableContent}
+      <ScrollableMessageList
+        id={BotonicContainerId.ScrollableMessagesList}
+        ref={scrollableMessagesListRef}
         role={ROLES.MESSAGE_LIST}
-        // @ts-ignore
-        ismessagescontainer={true.toString()}
-        style={{ flex: 1 }}
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
@@ -125,7 +126,7 @@ export const WebchatMessageList = () => {
           )
         })}
         {webchatState.typing && <TypingIndicator />}
-      </ScrollableContent>
+      </ScrollableMessageList>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}
     </>
   )

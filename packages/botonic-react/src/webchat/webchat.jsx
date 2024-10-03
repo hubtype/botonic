@@ -33,7 +33,6 @@ import {
   readDataURL,
 } from '../message-utils'
 import { msgToBotonic } from '../msg-to-botonic'
-import { scrollToBottom } from '../util/dom'
 import { isDev } from '../util/environment'
 import { deserializeRegex, stringifyWithRegexs } from '../util/regexs'
 import {
@@ -44,19 +43,18 @@ import {
 } from '../util/webchat'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
-import { DeviceAdapter } from './devices/device-adapter'
-import { StyledWebchatHeader } from './header'
+import { WebchatHeader } from './header'
 import {
   useComponentWillMount,
   usePrevious,
+  useScrollToBottom,
   useTyping,
   useWebchat,
 } from './hooks'
-import { WebchatMessageList } from './message-list'
-import { WebchatReplies } from './replies'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
+import { WebchatChatArea } from './webchat-chat-area'
 import { WebchatInputPanel } from './webchat-input-panel'
 import { WebviewContainer } from './webview'
 
@@ -110,18 +108,6 @@ const DarkBackgroundMenu = styled.div`
   height: 100%;
 `
 
-function useDeviceAdapter(host, isWebchatOpen) {
-  const [deviceAdapter] = useState(new DeviceAdapter())
-
-  useEffect(() => {
-    if (host && isWebchatOpen) {
-      deviceAdapter.init(host)
-    }
-  }, [host, isWebchatOpen, deviceAdapter])
-
-  return { deviceAdapter }
-}
-
 // eslint-disable-next-line complexity, react/display-name
 export const Webchat = forwardRef((props, ref) => {
   const {
@@ -151,6 +137,12 @@ export const Webchat = forwardRef((props, ref) => {
     updateTyping,
     updateWebview,
     webchatState,
+    webchatRef,
+    chatAreaRef,
+    inputPanelRef,
+    headerRef,
+    scrollableMessagesListRef,
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat()
   const firstUpdate = useRef(true)
@@ -171,7 +163,7 @@ export const Webchat = forwardRef((props, ref) => {
 
   const host = props.host || document.body
 
-  const { deviceAdapter } = useDeviceAdapter(host, webchatState.isWebchatOpen)
+  const { scrollToBottom } = useScrollToBottom({ host })
 
   const saveWebchatState = webchatState => {
     storage &&
@@ -693,21 +685,6 @@ export const Webchat = forwardRef((props, ref) => {
       </div>
     )
   }
-  const [chatAreaHeight, setChatAreaHeight] = useState(0)
-  useEffect(() => {
-    const webchatHeight = document.getElementById(
-      BotonicContainerId.Webchat
-    )?.clientHeight
-    const headerHeight = document.getElementById(
-      BotonicContainerId.Header
-    )?.clientHeight
-    const inputPanelHeight = document.getElementById(
-      BotonicContainerId.InputPanel
-    )?.clientHeight
-    if (webchatHeight && headerHeight && inputPanelHeight) {
-      setChatAreaHeight(webchatHeight - headerHeight - inputPanelHeight)
-    }
-  }, [webchatState.isWebchatOpen])
 
   const _renderCustomComponent = () => {
     if (!customComponent) return <></>
@@ -737,6 +714,11 @@ export const Webchat = forwardRef((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         webchatState,
         trackEvent: props.onTrackEvent,
+        webchatRef,
+        chatAreaRef,
+        inputPanelRef,
+        headerRef,
+        scrollableMessagesListRef,
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}
@@ -744,6 +726,7 @@ export const Webchat = forwardRef((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           id={BotonicContainerId.Webchat}
+          ref={webchatRef}
           // TODO: Distinguis between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
           width={webchatState.width}
@@ -753,8 +736,9 @@ export const Webchat = forwardRef((props, ref) => {
             ...mobileStyle,
           }}
         >
-          <StyledWebchatHeader
+          <WebchatHeader
             id={BotonicContainerId.Header}
+            ref={headerRef}
             onCloseClick={() => {
               toggleWebchat(false)
             }}
@@ -764,22 +748,7 @@ export const Webchat = forwardRef((props, ref) => {
               <ErrorMessage>{webchatState.error.message}</ErrorMessage>
             </ErrorMessageContainer>
           )}
-          <div
-            id={BotonicContainerId.ChatArea}
-            style={{
-              display: 'inherit',
-              flexDirection: 'inherit',
-              height: chatAreaHeight,
-              width: 'inherit',
-              overflow: 'inherit',
-            }}
-          >
-            <WebchatMessageList />
-            {webchatState.replies &&
-              Object.keys(webchatState.replies).length > 0 && (
-                <WebchatReplies replies={webchatState.replies} />
-              )}
-          </div>
+          <WebchatChatArea />
 
           {webchatState.isPersistentMenuOpen && (
             <DarkenBackground component={persistentMenu()} />
@@ -791,7 +760,7 @@ export const Webchat = forwardRef((props, ref) => {
               enableAttachments={props.enableAttachments}
               handleAttachment={handleAttachment}
               textareaRef={textareaRef}
-              deviceAdapter={deviceAdapter}
+              host={host}
               onUserInput={props.onUserInput}
             />
           )}

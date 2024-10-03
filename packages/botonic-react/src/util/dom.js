@@ -1,35 +1,4 @@
-import { WEBCHAT } from '../constants'
 import { BotonicContainerId } from '../webchat/constants'
-
-export const getScrollableContent = webchatElement => {
-  return webchatElement.querySelector(
-    `#${BotonicContainerId.ScrollableContent}`
-  )
-}
-
-export const getScrollableArea = webchatElement => {
-  return {
-    full: document.getElementById(BotonicContainerId.ScrollableContent),
-    visible: document.getElementById(BotonicContainerId.ChatArea),
-  }
-}
-
-export const scrollToBottom = ({
-  timeout = 200,
-  behavior = 'smooth',
-  host,
-} = {}) => {
-  const webchatElement = getWebchatElement(host)
-  if (!webchatElement) return
-  const frame = getScrollableArea(webchatElement).full
-
-  if (frame) {
-    setTimeout(
-      () => frame.scrollTo({ top: frame.scrollHeight, behavior: behavior }),
-      timeout
-    )
-  }
-}
 
 export const getWebchatElement = host =>
   host && host.querySelector(`#${BotonicContainerId.Webchat}`)

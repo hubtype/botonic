@@ -100,4 +100,10 @@ export const WebchatContext = createContext<WebchatContextProps>({
   trackEvent: async () => {
     return
   },
+  webchatRef: { current: null },
+  chatAreaRef: { current: null },
+  inputPanelRef: { current: null },
+  headerRef: { current: null },
+  scrollableMessagesListRef: { current: null },
+  repliesRef: { current: null },
 })

@@ -7,9 +7,13 @@ import RightArrow from '../assets/rightArrow.svg'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
-import { ScrollableContent } from '../webchat/components/scrollable-content'
 import { ButtonsDisabler } from './buttons-disabler'
 import { Message } from './message'
+
+const ScrollableCarousel = styled.div`
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+`
 
 const StyledCarousel = styled.div`
   padding: 10px 0px;
@@ -147,7 +151,7 @@ export const Carousel = props => {
 
   if (isBrowser()) {
     content = (
-      <ScrollableContent>
+      <ScrollableCarousel>
         <StyledCarousel
           ref={carouselRef}
           carouselArrowsEnabled={carouselArrowsEnabled}
@@ -155,7 +159,7 @@ export const Carousel = props => {
           <StyledItems>{carouselProps.children}</StyledItems>
           {carouselArrowsEnabled && getArrows()}
         </StyledCarousel>
-      </ScrollableContent>
+      </ScrollableCarousel>
     )
   }
 
