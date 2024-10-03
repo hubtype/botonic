@@ -45,7 +45,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
-  private getAccessToken: (session: Session) => string
+  public getAccessToken: (session: Session) => string
   public getLocale: (session: Session) => string
   public trackEvent?: TrackEventFunction
   public getKnowledgeBaseResponse?: KnowledgeBaseFunction
