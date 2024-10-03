@@ -27,6 +27,7 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/react](https://www.npmjs.com/package/@botonic/react)
 
   - [remove `getConfig` function](https://github.com/hubtype/botonic/pull/2902)
+  - [remove `simplebar` dependency](https://github.com/hubtype/botonic/pull/2900)
 
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
@@ -34,6 +35,11 @@ All notable changes to Botonic will be documented in this file.
   - [when user clicks on old button send fallback](https://github.com/hubtype/botonic/pull/2909)
 
 ### Fixed
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [set `bot.id and organization_id in session` in local development](https://github.com/hubtype/botonic/pull/2913)
+  - [`smart intents` work in local](https://github.com/hubtype/botonic/pull/2915)
 
 </details>
 
