@@ -17,10 +17,11 @@ import {
   HtPayloadNode,
 } from './content-fields/hubtype-fields'
 import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
-import { FlowBuilderApiOptions } from './types'
+import { FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
 
 export class FlowBuilderApi {
   url: string
+  flowUrl: string
   flow: HtFlowBuilderData
   request: PluginPreRequest
 
@@ -30,17 +31,31 @@ export class FlowBuilderApi {
     const newApi = new FlowBuilderApi()
 
     newApi.url = options.url
+    newApi.flowUrl = options.flowUrl
     newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
     newApi.request = options.request
+
+    if (process.env.NODE_ENV === ProcessEnvNodeEnvs.DEVELOPMENT) {
+      await newApi.updateSessionWithUserInfo(options.accessToken)
+    }
 
     return newApi
   }
 
   private async getFlow(token: string): Promise<HtFlowBuilderData> {
-    const { data } = await axios.get(this.url, {
+    const { data } = await axios.get(this.flowUrl, {
       headers: { Authorization: `Bearer ${token}` },
     })
     return data as HtFlowBuilderData
+  }
+
+  private async updateSessionWithUserInfo(token: string) {
+    const url = `${this.url}/get-user-info`
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    this.request.session.organization_id = response.data.organization_id
+    this.request.session.bot.id = response.data.bot_id
   }
 
   getNodeByFlowId(id: string): HtNodeWithContent {

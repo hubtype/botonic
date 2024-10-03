@@ -64,6 +64,7 @@ All notable changes to Botonic will be documented in this file.
 - [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
 
   - [Use `message feedback` in knowledge base messages](https://github.com/hubtype/botonic/pull/2859)
+  - [improve `flowbuilder webview contents`](https://github.com/hubtype/botonic/pull/2913)
 
 - [@botonic/plugin-hubtype-analytics](https://www.npmjs.com/package/@botonic/plugin-hubtype-analytics)
 
