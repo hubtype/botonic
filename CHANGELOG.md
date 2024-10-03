@@ -9,6 +9,7 @@ All notable changes to Botonic will be documented in this file.
     Changes that have landed in master but are not yet released.
     Click to see more.
   </summary>
+  
 ## [0.31.0] - 2024-mm-dd
 
 ### Added
@@ -18,6 +19,7 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
 ## [0.30.0] - 2024-10-03
 
 ### Added
@@ -1151,3 +1153,4 @@ Currently we are working on Botonic 1.0 which will come with several improvement
 [0.19.0]: https://github.com/hubtype/botonic/releases/tag/v0.19.0
 [0.20.0]: https://github.com/hubtype/botonic/releases/tag/v0.20.0
 [0.21.0]: https://github.com/hubtype/botonic/releases/tag/v0.21.0
+[0.30.0]: https://github.com/hubtype/botonic/releases/tag/v0.30.0
