@@ -55,12 +55,3 @@ export class BotonicQueue implements Queue {
     })
   }
 }
-
-const newDeskQueue = (queue: ApiDeskQueue) => new BotonicQueue(queue)
-
-newDeskQueue({
-  id: '1',
-  name: 'queue1',
-  status: 'status_open',
-  project_id: '1',
-})

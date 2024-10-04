@@ -1,7 +1,13 @@
-import axios from 'axios'
+import axios, {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from 'axios'
 
 export type ApiOptions = {
+  headers?: AxiosRequestHeaders
   timeout?: number
+  retries?: number
 }
 
 enum Methods {
@@ -11,65 +17,109 @@ enum Methods {
   PUT = 'put',
 }
 
+type DoCallOptions = {
+  data?: Record<string, any>
+  headers?: AxiosRequestHeaders
+  timeout?: number
+  retries?: number
+}
+
+type ApiCallOptionsBase = {
+  headers?: AxiosRequestHeaders
+  timeout?: number
+  retries?: number
+}
+
+type ApiGetOptions = ApiCallOptionsBase & {
+  params?: Record<string, any>
+}
+
+type ApiPostOptions = ApiCallOptionsBase & {
+  data: Record<string, any>
+}
+
+type ApiDeleteOptions = ApiCallOptionsBase & {
+  data?: Record<string, any>
+}
+
+type ApiPutOptions = ApiCallOptionsBase & {
+  data?: Record<string, any>
+}
+
 export const DEFAULT_API_CALL_TIMEOUT_MS = 28000
+export const DEFAULT_API_CALL_RETRIES = 5
 
 export default class Api {
-  protected headers: Record<string, string>
+  protected headers: AxiosRequestHeaders
   protected readonly timeout
+  protected readonly retries
 
   constructor(options?: ApiOptions) {
     this.headers = {
       'Content-Type': 'application/json',
-    }
+      ...options?.headers,
+    } as AxiosRequestHeaders
     this.timeout = options?.timeout ?? DEFAULT_API_CALL_TIMEOUT_MS
+    this.retries = options?.retries ?? DEFAULT_API_CALL_RETRIES
   }
 
-  async get<T>(
-    endpoint: string,
-    params?: Record<string, any>,
-    headers?: Record<string, string>
-  ): Promise<T> {
-    return this.doCall<T>(endpoint, Methods.GET, params, headers)
+  async get<T>(endpoint: string, options: ApiGetOptions = {}): Promise<T> {
+    return this.doCall<T>(endpoint, Methods.GET, {
+      data: options.params,
+      ...options,
+    })
   }
 
-  async post<T>(
-    endpoint: string,
-    data: Record<string, any>,
-    headers?: Record<string, string>
-  ): Promise<T> {
-    return this.doCall<T>(endpoint, Methods.POST, data, headers)
+  async post<T>(endpoint: string, options: ApiPostOptions): Promise<T> {
+    return this.doCall<T>(endpoint, Methods.POST, options)
   }
 
   async delete<T>(
     endpoint: string,
-    data?: Record<string, any>,
-    headers?: Record<string, string>
+    options: ApiDeleteOptions = {}
   ): Promise<T> {
-    return this.doCall<T>(endpoint, Methods.DELETE, data, headers)
+    return this.doCall<T>(endpoint, Methods.DELETE, options)
   }
 
-  async put<T>(
-    endpoint: string,
-    data?: Record<string, any>,
-    headers?: Record<string, string>
-  ): Promise<T> {
-    return this.doCall<T>(endpoint, Methods.PUT, data, headers)
+  async put<T>(endpoint: string, options: ApiPutOptions = {}): Promise<T> {
+    return this.doCall<T>(endpoint, Methods.PUT, options)
   }
 
   protected async doCall<T>(
     endpoint: string,
     method: Methods,
-    data?: Record<string, any>,
-    headers?: Record<string, string>
+    options: DoCallOptions
   ): Promise<T> {
-    const resp = await axios({
-      method: method,
-      url: endpoint,
-      params: method === Methods.POST ? undefined : data,
-      data: method === Methods.POST ? data : undefined,
-      headers: { ...this.headers, ...headers },
-      timeout: this.timeout,
-    })
-    return resp.data
+    const result = await this.axiosRequestWithRetry<T>(
+      {
+        method: method,
+        url: endpoint,
+        params: method === Methods.POST ? undefined : options.data,
+        data: method === Methods.POST ? options.data : undefined,
+        headers: { ...this.headers, ...options.headers },
+        timeout: options.timeout ?? this.timeout,
+      },
+      options.retries ?? this.retries
+    )
+
+    return result.data
+  }
+
+  protected async axiosRequestWithRetry<T>(
+    requestConfig: AxiosRequestConfig,
+    maxTry: number,
+    retryCount = 1
+  ): Promise<AxiosResponse<T, any>> {
+    try {
+      const result = await axios(requestConfig)
+      return result
+    } catch (e) {
+      console.warn(`Retry ${retryCount} failed.`)
+      if (retryCount > maxTry - 1) {
+        console.warn(`All ${maxTry} retry attempts exhausted`)
+        throw e
+      }
+      return this.axiosRequestWithRetry(requestConfig, maxTry, retryCount + 1)
+    }
   }
 }
