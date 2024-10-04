@@ -3,6 +3,9 @@ import { BotonicContainerId } from '../webchat/constants'
 export const getWebchatElement = host =>
   host && host.querySelector(`#${BotonicContainerId.Webchat}`)
 
+export const getScrollableMessagesListElement = host =>
+  host && host.querySelector(`#${BotonicContainerId.ScrollableMessagesList}`)
+
 // https://stackoverflow.com/questions/9457891/how-to-detect-if-domcontentloaded-was-fired
 export const onDOMLoaded = callback => {
   if (/complete|interactive|loaded/.test(document.readyState)) {
