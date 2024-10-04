@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { BotonicAction, PATH_PAYLOAD_IDENTIFIER } from '../src'
-import { HandOffBuilder, humanHandOff } from '../src/handoff'
+import { HandOffBuilder, HelpdeskEvent, humanHandOff } from '../src/handoff'
 
 describe('Handoff', () => {
   test.each([
@@ -135,6 +135,15 @@ describe('Handoff', () => {
     }).withOnFinishPayload('payload1')
     builder.handOff()
     const expectedBotonicAction = `${BotonicAction.CreateTestCase}:payload1`
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
+
+  test('Create a handoff and subscribe to agent_messsage_created', () => {
+    const builder = new HandOffBuilder({})
+      .withSubscribeHelpdeskEvents([HelpdeskEvent.AgentMessageCreated])
+      .withOnFinishPayload('payload1')
+    builder.handOff()
+    const expectedBotonicAction = `${BotonicAction.CreateCase}:{"force_assign_if_not_available":true,"on_finish":"payload1","subscribe_helpdesk_events":["agent_message_created"]}`
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 })

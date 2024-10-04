@@ -34,6 +34,11 @@ interface BotEventData {
   country: string
 }
 
+export enum HelpdeskEvent {
+  StatusChanged = 'status_changed',
+  AgentMessageCreated = 'agent_message_created',
+}
+
 function contextDefaults(context: any): BackendContext {
   return {
     timeoutMs: context.timeoutMs || 10000,
@@ -74,6 +79,7 @@ export class HandOffBuilder {
   _shadowing: boolean
   _extraData: HandoffExtraData
   _bot_event: BotEventData
+  _subscribeHelpdeskEvents: HelpdeskEvent[]
 
   constructor(session: Session) {
     this._session = session
@@ -144,6 +150,11 @@ export class HandOffBuilder {
     return this
   }
 
+  withSubscribeHelpdeskEvents(events: HelpdeskEvent[]): this {
+    this._subscribeHelpdeskEvents = events
+    return this
+  }
+
   async handOff(): Promise<void> {
     return _humanHandOff(
       this._session,
@@ -158,7 +169,8 @@ export class HandOffBuilder {
       this._autoIdleMessage,
       this._shadowing,
       this._extraData,
-      this._bot_event
+      this._bot_event,
+      this._subscribeHelpdeskEvents
     )
   }
 }
@@ -196,6 +208,7 @@ interface HubtypeHandoffParams {
   on_finish?: string
   case_extra_data?: HandoffExtraData
   bot_event?: BotEventData
+  subscribe_helpdesk_events?: HelpdeskEvent[]
 }
 async function _humanHandOff(
   session: Session,
@@ -210,7 +223,8 @@ async function _humanHandOff(
   autoIdleMessage = '',
   shadowing = false,
   extraData: HandoffExtraData | undefined = undefined,
-  botEvent: BotEventData
+  botEvent: BotEventData,
+  subscribeHelpdeskEvents: HelpdeskEvent[] = []
 ) {
   const params: HubtypeHandoffParams = {}
 
@@ -248,6 +262,9 @@ async function _humanHandOff(
   }
   if (botEvent) {
     params.bot_event = botEvent
+  }
+  if (subscribeHelpdeskEvents.length > 0) {
+    params.subscribe_helpdesk_events = subscribeHelpdeskEvents
   }
   if (!session.is_test_integration) {
     session._botonic_action = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
