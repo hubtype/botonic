@@ -6,7 +6,7 @@ import * as util from 'util'
 
 const BOTONIC_PREFIX_PACKAGE = '@botonic'
 const BOTONIC_CORE_PACKAGE = `${BOTONIC_PREFIX_PACKAGE}/core`
-const botonicCliVersionRegex = /@botonic\/cli\/([\d.]+-[\w.]+)/
+const botonicCliVersionRegex = /@botonic\/cli\/([^ ]+)/
 const NPM_DEPTH_1 = 1
 const NPM_DEPTH_0 = 0
 
