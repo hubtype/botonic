@@ -1,4 +1,9 @@
-import { createHtEvent, EventAction, EventType } from '../src'
+import {
+  createHtEvent,
+  EventAction,
+  EventType,
+  WebviewEndFailType,
+} from '../src'
 import { getRequestData } from './helpers'
 
 describe('Create webview events', () => {
@@ -34,7 +39,7 @@ describe('Create webview events', () => {
       webviewName: 'ADD_A_BAG',
       webviewStepName: 'summary_step',
       webviewStepNumber: 3,
-      webviewEndFailType: 'canceled_by_user',
+      webviewEndFailType: WebviewEndFailType.CanceledByUser,
       webviewEndFailMessage: 'Closed by user',
     })
 
@@ -48,7 +53,7 @@ describe('Create webview events', () => {
       webview_name: 'ADD_A_BAG',
       webview_end_step_name: 'summary_step',
       webview_end_step_n: 3,
-      webview_end_fail_type: 'canceled_by_user',
+      webview_end_fail_type: WebviewEndFailType.CanceledByUser,
       webview_end_fail_message: 'Closed by user',
       type: EventType.WebEvent,
       bot_interaction_id: 'testInteractionId',

@@ -147,8 +147,13 @@ export interface EventWebviewEnd extends HtBaseEventProps {
   webviewName: string
   webviewStepName?: string
   webviewStepNumber?: number
-  webviewEndFailType?: string
+  webviewEndFailType?: WebviewEndFailType
   webviewEndFailMessage?: string
+}
+
+export enum WebviewEndFailType {
+  CanceledByUser = 'canceled_by_user',
+  ApiError = 'api_error',
 }
 
 export interface EventCustom extends HtBaseEventProps {
