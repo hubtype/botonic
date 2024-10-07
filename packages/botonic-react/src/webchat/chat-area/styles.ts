@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledWebchatChatArea = styled.div<{ height: number }>`
+export const StyledChatArea = styled.div<{ height: number }>`
   display: inherit;
   flex-direction: inherit;
   height: ${props => props.height}px;

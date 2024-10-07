@@ -5,9 +5,9 @@ import { BotonicContainerId } from '../constants'
 import { useWebchatDimensions } from '../hooks'
 import { WebchatMessageList } from '../message-list'
 import { WebchatReplies } from '../replies'
-import { StyledWebchatChatArea } from './styles'
+import { StyledChatArea } from './styles'
 
-export const WebchatChatArea = () => {
+export const ChatArea = () => {
   const {
     webchatState: { replies },
     chatAreaRef,
@@ -21,7 +21,7 @@ export const WebchatChatArea = () => {
   }, [])
 
   return (
-    <StyledWebchatChatArea
+    <StyledChatArea
       id={BotonicContainerId.ChatArea}
       ref={chatAreaRef}
       height={chatAreaHeight}
@@ -30,6 +30,6 @@ export const WebchatChatArea = () => {
       {replies && Object.keys(replies).length > 0 && (
         <WebchatReplies replies={replies} />
       )}
-    </StyledWebchatChatArea>
+    </StyledChatArea>
   )
 }
