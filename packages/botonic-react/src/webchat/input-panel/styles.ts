@@ -18,6 +18,7 @@ export const TextAreaContainer = styled.div`
   display: flex;
   flex: 1 1 auto;
   align-items: center;
+  padding: 5px 0px;
 `
 
 export const OpenedEmojiPickerContainer = styled.div`
