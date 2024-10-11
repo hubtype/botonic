@@ -285,7 +285,7 @@ export class BotonicAPIService {
   async getBots(): Promise<AxiosResponse<PaginatedResponse<BotListItem>, any>> {
     const botsResponse = await this.apiGet<PaginatedResponse<BotListItem>>({
       apiVersion: 'v2',
-      path: 'bots/?page_size=20',
+      path: 'bots/?page_size=100',
     })
 
     if (botsResponse.data.next) {
@@ -295,7 +295,7 @@ export class BotonicAPIService {
     return botsResponse
   }
 
-  private async getMoreBots(bots: BotListItem[], nextUrl?: string) {
+  private async getMoreBots(bots: BotListItem[], nextUrl: string | null) {
     if (!nextUrl) {
       return bots
     }
@@ -305,7 +305,7 @@ export class BotonicAPIService {
       path: nextUrl.split(`${this.baseUrl}/v2/`)[1],
     })
     resp.data.results.forEach(bot => bots.push(bot))
-    nextUrl = resp.data.next || undefined
+    nextUrl = resp.data.next
 
     return this.getMoreBots(bots, nextUrl)
   }
