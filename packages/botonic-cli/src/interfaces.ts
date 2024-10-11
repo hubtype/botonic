@@ -52,12 +52,11 @@ export interface GlobalCredentials {
   me?: Me
   analytics: AnalyticsInfo
 }
-
-export interface BotsList {
+export interface PaginatedResponse<T> {
   count: number
-  next: string
-  previous: string
-  results: BotListItem[]
+  next: string | null
+  previous: string | null
+  results: T[]
 }
 
 export interface BotListItem {

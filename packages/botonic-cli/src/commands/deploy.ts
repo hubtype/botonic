@@ -101,8 +101,7 @@ Deploying to AWS...
   }
 
   async deployBotFromFlag(botName: string): Promise<void | undefined> {
-    const resp = await this.botonicApiService.getBots()
-    const bots = resp.data.results
+    const bots = await this.getAvailableBots()
 
     const bot = bots.filter(b => b.name === botName)[0]
     if (bot === undefined && !botName) {
@@ -111,7 +110,6 @@ Deploying to AWS...
       bots.map(b => console.log(` > ${String(b.name)}`))
       return undefined
     } else if (botName) {
-      const bots = await this.getAvailableBots()
       const botByBotName = bots.find(bot => bot.name === botName)
       if (botByBotName) {
         this.botonicApiService.setCurrentBot(bot)
@@ -178,13 +176,16 @@ Deploying to AWS...
   }
 
   async deployBotFlow(): Promise<void> {
-    if (this.botName) return this.deployBotFromFlag(this.botName)
+    if (this.botName) {
+      return this.deployBotFromFlag(this.botName)
+    }
+
     if (
       !this.botonicApiService.bot ||
       !Object.keys(this.botonicApiService.bot).length
-    )
+    ) {
       return this.newBotFlow()
-    else {
+    } else {
       const resp = await this.botonicApiService.getBots()
       const bots = resp.data.results
 
