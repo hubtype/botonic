@@ -43,6 +43,7 @@
     "@types/parse5": "^7.0.0",
     "@types/react": "^16.14.56",
     "@types/styled-components": "^5.1.34",
+    "@types/uuid": "^10.0.0",
     "babel-plugin-add-module-exports": "^1.0.4",
     "copyfiles": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",

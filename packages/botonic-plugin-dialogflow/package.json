@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/jsrsasign": "^10.5.12",
+    "@types/uuid": "^10.0.0",
     "core-js": "^3.35.1"
   },
   "keywords": [
