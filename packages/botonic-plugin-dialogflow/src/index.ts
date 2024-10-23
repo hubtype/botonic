@@ -1,7 +1,7 @@
 import type { Plugin, PluginPreRequest } from '@botonic/core'
 import axios, { AxiosResponse } from 'axios'
 import jsrsasign from 'jsrsasign'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { Credentials, Options } from './types'
 
@@ -12,7 +12,7 @@ export default class BotonicPluginDialogflow implements Plugin {
   defaultQueryData: Options['queryData']
   constructor(options: Options) {
     const { credentials, queryData } = options
-    this.sessionId = uuidv4()
+    this.sessionId = uuidv7()
     this.creds = credentials
     this.defaultQueryData = queryData || {}
   }

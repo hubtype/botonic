@@ -1,5 +1,5 @@
 import { ActionRequest } from '@botonic/react'
-import { v4 as uuid } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { FlowContent } from './content-fields'
 import { HtNodeWithContent } from './content-fields/hubtype-fields'
@@ -60,7 +60,7 @@ function getContentEventArgs(
     isMeaningful: boolean
   }
 ) {
-  const flowThreadId = request.session.flow_thread_id ?? uuid()
+  const flowThreadId = request.session.flow_thread_id ?? uuidv7()
   request.session.flow_thread_id = flowThreadId
 
   return {

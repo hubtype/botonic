@@ -19,7 +19,7 @@
     "@botonic/core": "^0.30.0",
     "axios": "^1.7.2",
     "jsrsasign": "^10.9.0",
-    "uuid": "^8.3.2"
+    "uuid": "^11.0.0-0"
   },
   "devDependencies": {
     "@types/jsrsasign": "^10.5.12",

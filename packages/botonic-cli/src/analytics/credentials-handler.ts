@@ -1,5 +1,5 @@
 import { join, resolve } from 'path'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import {
   BOT_CREDS_FILENAME,
@@ -36,7 +36,7 @@ export class CredentialsHandler {
   }
 
   generateId(): string {
-    return uuidv4()
+    return uuidv7()
   }
 
   createDirIfNotExists(): void {

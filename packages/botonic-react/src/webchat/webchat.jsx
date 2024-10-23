@@ -13,7 +13,7 @@ import React, {
   useState,
 } from 'react'
 import styled, { StyleSheetManager } from 'styled-components'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { Audio, Document, Image, Text, Video } from '../components'
 import { Handoff } from '../components/handoff'
@@ -467,7 +467,7 @@ export const Webchat = forwardRef((props, ref) => {
     if (!input || Object.keys(input).length == 0) return
     if (isText(input) && (!input.data || !input.data.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
     if (isText(input) && checkBlockInput(input)) return
-    if (!input.id) input.id = uuidv4()
+    if (!input.id) input.id = uuidv7()
     const messageComponent = messageComponentFromInput(input)
     if (messageComponent) addMessageComponent(messageComponent)
     if (isMedia(input)) input.data = await readDataURL(input.data)
