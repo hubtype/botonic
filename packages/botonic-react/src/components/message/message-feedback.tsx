@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { v4 as uuid } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import ThumbsDown from '../../assets/thumbs-down.svg'
 import ThumbsUp from '../../assets/thumbs-up.svg'
@@ -70,7 +70,7 @@ export const MessageFeedback = ({
       knowledgebaseInferenceId: inferenceId,
       feedbackBotInteractionId: botInteractionId,
       feedbackTargetId: messageId,
-      feedbackGroupId: uuid(),
+      feedbackGroupId: uuidv7(),
       possibleOptions: [FeedbackOption.ThumbsDown, FeedbackOption.ThumbsUp],
       possibleValues: [0, 1],
       option: isUseful ? FeedbackOption.ThumbsUp : FeedbackOption.ThumbsDown,

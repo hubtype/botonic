@@ -1,6 +1,6 @@
 import { Plugin, PluginPreRequest, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import { v4 as uuid } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
@@ -144,7 +144,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async getStartContents(locale: string): Promise<FlowContent[]> {
     const resolvedLocale = this.cmsApi.getResolvedLocale(locale)
     const startNode = this.cmsApi.getStartNode()
-    this.currentRequest.session.flow_thread_id = uuid()
+    this.currentRequest.session.flow_thread_id = uuidv7()
     return await this.getContentsByNode(startNode, resolvedLocale)
   }
 

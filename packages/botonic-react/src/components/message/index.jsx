@@ -1,6 +1,6 @@
 import { INPUT, isBrowser } from '@botonic/core'
 import React, { useContext, useEffect, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext, WebchatContext } from '../../contexts'
@@ -49,7 +49,7 @@ export const Message = props => {
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
   const [state, setState] = useState({
-    id: props.id || uuidv4(),
+    id: props.id || uuidv7(),
   })
 
   const [disabled, setDisabled] = useState(false)

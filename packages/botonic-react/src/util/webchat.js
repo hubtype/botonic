@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
 import UAParser from 'ua-parser-js'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../constants'
 import { getProperty } from './objects'
@@ -31,7 +31,7 @@ export const createUser = () => {
   let name = `${ua.os.name} ${ua.browser.name}`
   if (ua.device && ua.device.type) name = `${ua.device.type} ${name}`
   return {
-    id: uuidv4(),
+    id: uuidv7(),
     name,
   }
 }

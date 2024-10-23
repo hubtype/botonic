@@ -1,6 +1,6 @@
 import { INPUT } from '@botonic/core'
 import React, { useContext } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../contexts'
@@ -62,7 +62,7 @@ export const InputPanel = ({
 
   const sendChatEvent = async chatEvent => {
     const chatEventInput = {
-      id: uuidv4(),
+      id: uuidv7(),
       type: INPUT.CHAT_EVENT,
       data: chatEvent,
     }
