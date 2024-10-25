@@ -28,18 +28,17 @@ export const useWebchatDimensions = () => {
     const headerElement = headerRef.current
     const inputPanelElement = inputPanelRef.current
 
-    if (
-      !isWebchatOpen ||
-      !webchatElement ||
-      !headerElement ||
-      !inputPanelElement
-    )
-      return 0
+    if (!isWebchatOpen || !webchatElement) return 0
+
+    const headerElementHeight = headerElement ? headerElement.clientHeight : 0
+    const inputPanelElementHeight = inputPanelElement
+      ? inputPanelElement.clientHeight
+      : 0
 
     return (
       webchatElement.clientHeight -
-      headerElement.clientHeight -
-      inputPanelElement.clientHeight
+      headerElementHeight -
+      inputPanelElementHeight
     )
   }, [isWebchatOpen])
 
