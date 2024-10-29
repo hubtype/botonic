@@ -21,9 +21,9 @@ import {
   AnalyticsInfo,
   BotDetail,
   BotListItem,
-  BotsList,
   Me,
   OAuth,
+  PaginatedResponse,
 } from './interfaces'
 import { BotConfigJSON } from './util/bot-config'
 import { pathExists } from './util/file-system'
@@ -177,26 +177,30 @@ export class BotonicAPIService {
     if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
   }
 
-  private async apiPost({
+  private async apiPost<T>({
     apiVersion = 'v1',
     path,
     body,
     headers,
     params,
-  }: RequestArgs): Promise<any> {
-    return this.apiClient.post(`${this.baseUrl}/${apiVersion}/${path}`, body, {
-      headers: headers || this.headers,
-      params,
-    })
+  }: RequestArgs): Promise<AxiosResponse<T, any>> {
+    return this.apiClient.post<T>(
+      `${this.baseUrl}/${apiVersion}/${path}`,
+      body,
+      {
+        headers: headers || this.headers,
+        params,
+      }
+    )
   }
 
-  private async apiGet({
+  private async apiGet<T>({
     apiVersion = 'v1',
     path,
     headers,
     params,
-  }: RequestArgs): Promise<any> {
-    return this.apiClient.get(`${this.baseUrl}/${apiVersion}/${path}`, {
+  }: RequestArgs): Promise<AxiosResponse<T, any>> {
+    return this.apiClient.get<T>(`${this.baseUrl}/${apiVersion}/${path}`, {
       headers: headers || this.headers,
       params,
     })
@@ -244,7 +248,7 @@ export class BotonicAPIService {
     const accessToken = this.getOauth().access_token
     this.setHeaders(accessToken)
 
-    const meResponse = await this.apiGet({ path: 'users/me' })
+    const meResponse = await this.apiGet<Me>({ path: 'users/me' })
     if (meResponse) {
       this.me = meResponse.data
     }
@@ -278,29 +282,32 @@ export class BotonicAPIService {
     return this.apiGet({ path: 'users/me/' })
   }
 
-  async getBots(): AxiosPromise<BotsList> {
-    const botsResponse = await this.apiGet({ apiVersion: 'v2', path: 'bots/' })
+  async getBots(): Promise<AxiosResponse<PaginatedResponse<BotListItem>, any>> {
+    const botsResponse = await this.apiGet<PaginatedResponse<BotListItem>>({
+      apiVersion: 'v2',
+      path: 'bots/?page_size=100',
+    })
 
     if (botsResponse.data.next) {
-      this.getMoreBots(botsResponse.data.results, botsResponse.data.next)
+      await this.getMoreBots(botsResponse.data.results, botsResponse.data.next)
     }
 
     return botsResponse
   }
 
-  private async getMoreBots(bots: BotListItem[], nextBots?: string) {
-    if (!nextBots) {
+  private async getMoreBots(bots: BotListItem[], nextUrl: string | null) {
+    if (!nextUrl) {
       return bots
     }
 
-    const resp = await this.apiGet({
+    const resp = await this.apiGet<PaginatedResponse<BotListItem>>({
       apiVersion: 'v2',
-      path: nextBots.split(`${this.baseUrl}/v2/`)[1],
+      path: nextUrl.split(`${this.baseUrl}/v2/`)[1],
     })
-    resp.data.results.map(b => bots.push(b))
-    nextBots = resp.data.next
+    resp.data.results.forEach(bot => bots.push(bot))
+    nextUrl = resp.data.next
 
-    return this.getMoreBots(bots, nextBots)
+    return this.getMoreBots(bots, nextUrl)
   }
 
   async getProviders(): Promise<AxiosPromise> {
