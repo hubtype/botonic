@@ -287,12 +287,15 @@ export const MultichannelText = props => {
     return (
       <>
         {texts &&
-          texts.map((e, i) => (
+          texts.map((message, i) => (
             <Text key={i} {...propsWithoutChildren}>
-              {e}
+              {whatsappMarkdown(text)}
             </Text>
           ))}
-        <Text {...propsLastText}>{propsLastText.children}</Text>
+        <Text {...propsLastText}>
+          {/* TODO: Review how render buttons and replies in Facebook with markdown */}
+          {whatsappMarkdown(propsLastText.children)}
+        </Text>
       </>
     )
   }
