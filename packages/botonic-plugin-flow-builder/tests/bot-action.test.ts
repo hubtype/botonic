@@ -34,7 +34,7 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
     expect(nextPaylod).toBe(botActionUuid)
   })
 
-  test('The request.session._botonic_action have redirect:nextPayload', async () => {
+  test('The request.input.payload after execute pre function of the plugin is nextPayload with params', async () => {
     const flowBuilderPlugin = createFlowBuilderPlugin({
       flow: basicFlow,
     })
