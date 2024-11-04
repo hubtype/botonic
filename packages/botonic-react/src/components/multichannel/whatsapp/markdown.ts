@@ -15,6 +15,11 @@ const MARKDOWN_BOLD_AND_ITALIC_OPTION2 = /(\*__)(.*?)(__\*)/g
 const MARKDOWN_BOLD_AND_ITALIC_OPTION3 = /(__\*)(.*?)(\*__)/g
 
 export function whatsappMarkdown(text: string) {
+  const textWithItalicAndBold = replaceItalicAndBold(text)
+  return replaceMarkdownLinks(textWithItalicAndBold)
+}
+
+export function replaceItalicAndBold(text: string) {
   const textNormalized = normalizeMarkdown(text)
   const matches = textNormalized.match(MARKDOWN_BOLD_OR_ITALIC_REGEX)
   if (matches) {
@@ -26,6 +31,7 @@ export function whatsappMarkdown(text: string) {
           MARKDOWN_WHATSAPP_BOLD
         )
       }
+
       if (match.startsWith(MARKDOWN_BOLD_OPTION_2)) {
         return replaceAllOccurrences(
           match,
@@ -33,6 +39,7 @@ export function whatsappMarkdown(text: string) {
           MARKDOWN_WHATSAPP_BOLD
         )
       }
+
       if (match.startsWith(MARKDOWN_ITALIC_OPTION_1)) {
         return replaceAllOccurrences(
           match,
@@ -40,8 +47,10 @@ export function whatsappMarkdown(text: string) {
           MARKDOWN_WHATSAPP_ITALIC
         )
       }
+
       return match
     })
+
     let textWhatsapp = textNormalized
     for (let i = 0; i < matches.length; i++) {
       textWhatsapp = replaceAllOccurrences(
@@ -50,8 +59,10 @@ export function whatsappMarkdown(text: string) {
         matchesResult[i]
       )
     }
+
     return textWhatsapp
   }
+
   return text
 }
 
@@ -85,4 +96,10 @@ function replaceAllOccurrences(
   replaceValue: string
 ) {
   return text.split(searchValue).join(replaceValue)
+}
+
+const REGEX_MARKDOWN_LINK = /\[([^\]]+)\]\(([^)]+)\)/g
+
+function replaceMarkdownLinks(markdown: string) {
+  return markdown.replace(REGEX_MARKDOWN_LINK, '$1: $2')
 }
