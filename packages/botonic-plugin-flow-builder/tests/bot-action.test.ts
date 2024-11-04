@@ -1,4 +1,4 @@
-import { BotonicAction, INPUT } from '@botonic/core'
+import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
@@ -7,6 +7,7 @@ import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
   createFlowBuilderPluginAndGetContents,
+  createRequest,
 } from './helpers/utils'
 
 describe('The user clicks on a button that is connected to a BotActionNode', () => {
@@ -34,20 +35,27 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
   })
 
   test('The request.session._botonic_action have redirect:nextPayload', async () => {
-    const { contents, request } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: basicFlow },
-      requestArgs: {
-        input: {
-          type: INPUT.POSTBACK,
-          payload: botActionUuid,
-        },
-      },
+    const flowBuilderPlugin = createFlowBuilderPlugin({
+      flow: basicFlow,
     })
 
-    expect(contents.length).toBe(1)
-    expect(request.session._botonic_action).toBe(
-      `${BotonicAction.Redirect}:${ratingPayloadWithParams}`
-    )
+    const requestArgs = {
+      input: {
+        type: INPUT.POSTBACK,
+        payload: botActionUuid,
+      },
+    }
+
+    const request = createRequest({
+      ...requestArgs,
+      plugins: {
+        // @ts-ignore
+        flowBuilderPlugin,
+      },
+    })
+    await flowBuilderPlugin.pre(request)
+
+    expect(request.input.payload).toBe(ratingPayloadWithParams)
   })
 
   test('In the custom action the payloadParmas defined in the BotActionNode are obtained', async () => {

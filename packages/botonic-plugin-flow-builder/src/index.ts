@@ -21,6 +21,7 @@ import {
   FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
 import {
+  HtBotActionNode,
   HtFlowBuilderData,
   HtFunctionArgument,
   HtFunctionArguments,
@@ -108,14 +109,27 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.updateRequestBeforeRoutes(request)
   }
 
-  private updateRequestBeforeRoutes(request: PluginPreRequest) {
+  private updateRequestBeforeRoutes(request: PluginPreRequest): void {
     if (request.input.payload) {
       request.input.payload = this.removeSourceSufix(request.input.payload)
+    }
+
+    if (request.input.payload && this.isBotAction(request.input.payload)) {
+      const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
+        request.input.payload
+      )
+
+      request.input.payload = this.cmsApi.createPayloadWithParams(cmsBotAction)
     }
   }
 
   private removeSourceSufix(payload: string): string {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
+  }
+
+  private isBotAction(payload: string): boolean {
+    const botActionNode = this.cmsApi.getNodeById(payload)
+    return botActionNode?.type === HtNodeWithContentType.BOT_ACTION
   }
 
   async getContentsByContentID(
