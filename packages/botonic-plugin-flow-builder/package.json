@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.30.3",
+  "version": "0.30.4-alpha.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
