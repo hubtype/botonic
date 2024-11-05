@@ -284,17 +284,18 @@ export const MultichannelText = props => {
     const multichannelFacebook = new MultichannelFacebook()
     const { texts, propsLastText, propsWithoutChildren } =
       multichannelFacebook.convertText(props, text[0])
+
+    const [lastText, ...buttonsAndReplies] = propsLastText.children
     return (
       <>
-        {texts &&
-          texts.map((message, i) => (
-            <Text key={i} {...propsWithoutChildren}>
-              {convertToMarkdownMeta(message)}
-            </Text>
-          ))}
+        {texts?.map((message, i) => (
+          <Text key={i} {...propsWithoutChildren}>
+            {convertToMarkdownMeta(message)}
+          </Text>
+        ))}
         <Text {...propsLastText}>
-          {/* TODO: Review how render buttons and replies in Facebook with markdown */}
-          {propsLastText.children}
+          {convertToMarkdownMeta(lastText)}
+          {buttonsAndReplies}
         </Text>
       </>
     )
