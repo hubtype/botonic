@@ -1,105 +1,66 @@
-const MARKDOWN_BOLD_OPTION_1 = '**'
-const MARKDOWN_BOLD_OPTION_2 = '__'
-const MARKDOWN_WHATSAPP_BOLD = '*'
+const REGEX_MARKDOWN_BOLD = /(\*\*|__)(.*?)\1/g
+const REGEX_MARKDOWN_ITALIC = /(\*|_)(.*?)\1/g
+const REGEX_MARKDOWN_LINK = /\[([^\]]+)\]\(([^)]+)\)/g
 
-const MARKDOWN_ITALIC_OPTION_1 = '*'
-const MARKDOWN_WHATSAPP_ITALIC = '_'
+const NORMALIZED_BOLD = '&%BOLD%&'
+const REGEX_NORMALIZED_BOLD = new RegExp(
+  `${NORMALIZED_BOLD}(.*?)${NORMALIZED_BOLD}`,
+  'g'
+)
+const NORMALIZED_ITALIC = '&%ITALIC%&'
+const REGEX_NORMALIZED_ITALIC = new RegExp(
+  `${NORMALIZED_ITALIC}(.*?)${NORMALIZED_ITALIC}`,
+  'g'
+)
 
-const MARKDOWN_BOLD_OR_ITALIC_REGEX = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3/g
+const WHATSAPP_BOLD = '*'
+const WHATSAPP_ITALIC = '_'
 
-const MARKDOWN_NORMALIZED_BOLD_ITALIC_OPEN = '**_'
-const MARKDOWN_NORMALIZED_BOLD_ITALIC_CLOSE = '_**'
-
-const MARKDOWN_BOLD_AND_ITALIC_OPTION1 = /(_\*\*)(.*?)(\*\*_)/g
-const MARKDOWN_BOLD_AND_ITALIC_OPTION2 = /(\*__)(.*?)(__\*)/g
-const MARKDOWN_BOLD_AND_ITALIC_OPTION3 = /(__\*)(.*?)(\*__)/g
-
-export function whatsappMarkdown(text: string) {
+// Convert markdown to WhatsApp and Facebook format
+export function convertToMarkdownMeta(text: string): string {
   const textWithItalicAndBold = replaceItalicAndBold(text)
+
   return replaceMarkdownLinks(textWithItalicAndBold)
 }
 
-export function replaceItalicAndBold(text: string) {
-  const textNormalized = normalizeMarkdown(text)
-  const matches = textNormalized.match(MARKDOWN_BOLD_OR_ITALIC_REGEX)
-  if (matches) {
-    const matchesResult = matches.map(match => {
-      if (match.startsWith(MARKDOWN_BOLD_OPTION_1)) {
-        return replaceAllOccurrences(
-          match,
-          MARKDOWN_BOLD_OPTION_1,
-          MARKDOWN_WHATSAPP_BOLD
-        )
-      }
+function replaceItalicAndBold(text: string) {
+  const normalizedText = normalizeMarkdown(text)
+  const boldAndItalicText = convertNormalizedToWhatsApp(normalizedText)
 
-      if (match.startsWith(MARKDOWN_BOLD_OPTION_2)) {
-        return replaceAllOccurrences(
-          match,
-          MARKDOWN_BOLD_OPTION_2,
-          MARKDOWN_WHATSAPP_BOLD
-        )
-      }
-
-      if (match.startsWith(MARKDOWN_ITALIC_OPTION_1)) {
-        return replaceAllOccurrences(
-          match,
-          MARKDOWN_ITALIC_OPTION_1,
-          MARKDOWN_WHATSAPP_ITALIC
-        )
-      }
-
-      return match
-    })
-
-    let textWhatsapp = textNormalized
-    for (let i = 0; i < matches.length; i++) {
-      textWhatsapp = replaceAllOccurrences(
-        textWhatsapp,
-        matches[i],
-        matchesResult[i]
-      )
-    }
-
-    return textWhatsapp
-  }
-
-  return text
+  return boldAndItalicText
 }
 
-function normalizeMarkdown(text: string) {
-  text = replaceBoldItalic(text, MARKDOWN_BOLD_AND_ITALIC_OPTION1)
-  text = replaceBoldItalic(text, MARKDOWN_BOLD_AND_ITALIC_OPTION2)
-  text = replaceBoldItalic(text, MARKDOWN_BOLD_AND_ITALIC_OPTION3)
-  return text
-}
-
-function replaceBoldItalic(text: string, regex: RegExp) {
-  return text.replace(
-    regex,
-    (
-      match: string,
-      markdownOpen: string,
-      textInsideMarkdown: string,
-      markdownClose: string
-    ) => {
-      if (match.startsWith(markdownOpen) && match.endsWith(markdownClose)) {
-        return `${MARKDOWN_NORMALIZED_BOLD_ITALIC_OPEN}${textInsideMarkdown}${MARKDOWN_NORMALIZED_BOLD_ITALIC_CLOSE}`
-      }
-      return match
-    }
+function normalizeMarkdown(text: string): string {
+  // Normalize bold
+  text = text.replace(
+    REGEX_MARKDOWN_BOLD,
+    `${NORMALIZED_BOLD}$2${NORMALIZED_BOLD}`
   )
+  // Normalize italic
+  text = text.replace(
+    REGEX_MARKDOWN_ITALIC,
+    `${NORMALIZED_ITALIC}$2${NORMALIZED_ITALIC}`
+  )
+
+  return text
 }
 
-function replaceAllOccurrences(
-  text: string,
-  searchValue: string,
-  replaceValue: string
-) {
-  return text.split(searchValue).join(replaceValue)
+function convertNormalizedToWhatsApp(text: string): string {
+  // convert &%BOLD%&text&%BOLD%& to *text*
+  text = text.replace(
+    REGEX_NORMALIZED_BOLD,
+    `${WHATSAPP_BOLD}$1${WHATSAPP_BOLD}`
+  )
+  // convert &%ITALIC%&text&%ITALIC%& to _text_
+  text = text.replace(
+    REGEX_NORMALIZED_ITALIC,
+    `${WHATSAPP_ITALIC}$1${WHATSAPP_ITALIC}`
+  )
+
+  return text
 }
 
-const REGEX_MARKDOWN_LINK = /\[([^\]]+)\]\(([^)]+)\)/g
-
-function replaceMarkdownLinks(markdown: string) {
-  return markdown.replace(REGEX_MARKDOWN_LINK, '$1: $2')
+function replaceMarkdownLinks(text: string) {
+  // $1 = textUrl, $2 = linkUrl
+  return text.replace(REGEX_MARKDOWN_LINK, '$1: $2')
 }

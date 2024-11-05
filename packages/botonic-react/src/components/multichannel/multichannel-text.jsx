@@ -21,7 +21,7 @@ import {
   WHATSAPP_LIST_MAX_BUTTONS,
   WHATSAPP_MAX_BUTTONS,
 } from './multichannel-utils'
-import { whatsappMarkdown } from './whatsapp/markdown'
+import { convertToMarkdownMeta } from './whatsapp/markdown'
 
 export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)
@@ -116,7 +116,7 @@ export const MultichannelText = props => {
     const { postbackButtons, urlButtons, webviewButtons } = getWhatsappButtons()
 
     const textElements = texts.map(text => {
-      const textWithMarkdown = whatsappMarkdown(text)
+      const textWithMarkdown = convertToMarkdownMeta(text)
       return (props.newline || '') + textWithMarkdown
     })
 
@@ -289,12 +289,12 @@ export const MultichannelText = props => {
         {texts &&
           texts.map((message, i) => (
             <Text key={i} {...propsWithoutChildren}>
-              {whatsappMarkdown(text)}
+              {convertToMarkdownMeta(message)}
             </Text>
           ))}
         <Text {...propsLastText}>
           {/* TODO: Review how render buttons and replies in Facebook with markdown */}
-          {whatsappMarkdown(propsLastText.children)}
+          {propsLastText.children}
         </Text>
       </>
     )
