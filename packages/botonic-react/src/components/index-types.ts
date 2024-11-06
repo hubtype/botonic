@@ -100,21 +100,6 @@ export interface BlobProps {
   imageStyle?: any
 }
 
-export interface ScrollbarProps {
-  autoHide?: boolean
-  thumb?: {
-    bgcolor?: string
-    border?: string
-    color?: string
-    opacity?: string
-  }
-  track?: {
-    bgcolor?: string
-    border?: string
-    color?: string
-  }
-}
-
 export interface ThemeProps extends StyleProp {
   mobileBreakpoint?: number
   mobileStyle?: any
@@ -165,7 +150,6 @@ export interface ThemeProps extends StyleProp {
   }
   scrollButton?: EnableProp & CustomProp
   markdownStyle?: string // string template with css styles
-  scrollbar?: ScrollbarProps & EnableProp
   userInput?: {
     attachments?: EnableProp & CustomProp
     blockInputs?: BlockInputOption[]
