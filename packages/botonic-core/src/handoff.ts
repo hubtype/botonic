@@ -195,7 +195,7 @@ export async function humanHandOff(session, queueNameOrId = '', onFinish) {
   return builder.handOff()
 }
 
-interface HubtypeHandoffParams {
+export interface HubtypeHandoffParams {
   queue?: string
   agent_email?: string
   agent_id?: string
