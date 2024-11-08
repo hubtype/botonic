@@ -1,0 +1,35 @@
+{
+  "name": "@botonic/dx-bundler-rspack",
+  "version": "0.30.0-alpha.2",
+  "description": "Build Botonic bots with RSPack",
+  "type": "commonjs",
+  "scripts": {
+    "build": "echo Skipping build...",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@rspack/cli": "^1.0.4",
+    "@rspack/core": "^1.0.4",
+    "@rspack/plugin-react-refresh": "^1.0.0",
+    "@swc/core": "1.4.0",
+    "@swc/helpers": "^0.5.13",
+    "@swc/plugin-styled-components": "^3.0.1",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.3",
+    "node-polyfill-webpack-plugin": "^3.0.0",
+    "null-loader": "^4.0.1",
+    "react-refresh": "^0.14.2",
+    "sass-loader": "^14.1.1",
+    "style-loader": "^3.3.4"
+  },
+  "author": "",
+  "license": "MIT",
+  "keywords": [
+    "bot-framework",
+    "javascript",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
