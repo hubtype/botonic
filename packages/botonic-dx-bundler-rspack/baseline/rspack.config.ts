@@ -250,7 +250,7 @@ function botonicDevConfig(mode: Mode): Configuration {
     },
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBCHAT),
-      new NodePolyfillPlugin({ includeAliases: ['stream'] }),
+      new NodePolyfillPlugin({ onlyAliases: ['stream'] }),
       new rspack.NormalModuleReplacementPlugin(/node:stream/, resource => {
         resource.request = resource.request.replace(/^node:/, '')
       }),

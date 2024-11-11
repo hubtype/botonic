@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-rspack",
-  "version": "0.30.0-alpha.2",
+  "version": "0.30.0-alpha.3",
   "description": "Build Botonic bots with RSPack",
   "type": "commonjs",
   "scripts": {
@@ -11,15 +11,15 @@
     "@rspack/cli": "^1.1.0",
     "@rspack/core": "^1.1.0",
     "@rspack/plugin-react-refresh": "^1.0.0",
-    "@swc/core": "1.9.1",
-    "@swc/helpers": "^0.5.13",
-    "css-loader": "^6.10.0",
+    "@swc/core": "^1.9.1",
+    "@swc/helpers": "^0.5.15",
+    "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
-    "node-polyfill-webpack-plugin": "^3.0.0",
+    "node-polyfill-webpack-plugin": "^4.0.0",
     "null-loader": "^4.0.1",
     "react-refresh": "^0.14.2",
-    "sass-loader": "^14.1.1",
-    "style-loader": "^3.3.4"
+    "sass-loader": "^16.0.3",
+    "style-loader": "^4.0.0"
   },
   "author": "",
   "license": "MIT",
