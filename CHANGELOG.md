@@ -28,6 +28,11 @@ All notable changes to Botonic will be documented in this file.
 
   - [`mixed bold and ialic markdown` for whastapp and facebook](https://github.com/hubtype/botonic/pull/2931)
   - [`replace markdown links` for whastapp and facebook](https://github.com/hubtype/botonic/pull/2930)
+
+- [@botonic/plugin-flow-builder](https://www.npmjs.com/package/@botonic/plugin-flow-builder)
+
+  - [replace `bot action node id` for payload with params in pre funtion](https://github.com/hubtype/botonic/pull/2929)
+
 ## [0.30.0] - 2024-10-03
 
 ### Added
