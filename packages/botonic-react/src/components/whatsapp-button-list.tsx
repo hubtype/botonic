@@ -5,7 +5,7 @@ import { truncateText } from '../util'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
 import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel/multichannel-utils'
-import { whatsappMarkdown } from './multichannel/whatsapp/markdown'
+import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 
 // TODO: Add validation in component
 
@@ -85,7 +85,7 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
-        body={whatsappMarkdown(props.body)}
+        body={convertToMarkdownMeta(props.body)}
         button={truncateText(props.button, WHATSAPP_MAX_BUTTON_CHARS)}
         sections={JSON.stringify(trucateSectionsContents(props.sections))}
         type={INPUT.WHATSAPP_BUTTON_LIST}
