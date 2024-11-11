@@ -34,7 +34,7 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
     expect(nextPaylod).toBe(botActionUuid)
   })
 
-  test('The request.input.payload after execute pre function of the plugin is nextPayload with params', async () => {
+  test('When the request.input.payload is a UUID of a bot action node it is replaced by the payload with parameters defined in the node', async () => {
     const flowBuilderPlugin = createFlowBuilderPlugin({
       flow: basicFlow,
     })
