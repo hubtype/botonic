@@ -11,7 +11,7 @@ import {
   WHATSAPP_MAX_FOOTER_CHARS,
   WHATSAPP_MAX_HEADER_CHARS,
 } from './multichannel/multichannel-utils'
-import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown'
+import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 
 export interface WhatsappCTAUrlButtonCommonProps {
   header?: string

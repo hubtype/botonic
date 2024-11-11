@@ -18,19 +18,19 @@ const WHATSAPP_ITALIC = '_'
 
 // Convert markdown to WhatsApp and Facebook format
 export function convertToMarkdownMeta(text: string): string {
-  const textWithItalicAndBold = replaceItalicAndBold(text)
+  const textWithBoldAndItalic = replaceBoldAndItalic(text)
 
-  return replaceMarkdownLinks(textWithItalicAndBold)
+  return replaceMarkdownLinks(textWithBoldAndItalic)
 }
 
-function replaceItalicAndBold(text: string) {
-  const normalizedText = normalizeMarkdown(text)
-  const boldAndItalicText = convertNormalizedToWhatsApp(normalizedText)
+function replaceBoldAndItalic(text: string) {
+  const normalizedText = normalizeBoldAndItalic(text)
+  const boldAndItalicText = normalizedToMarkdownMeta(normalizedText)
 
   return boldAndItalicText
 }
 
-function normalizeMarkdown(text: string): string {
+function normalizeBoldAndItalic(text: string): string {
   // Normalize bold
   text = text.replace(
     REGEX_MARKDOWN_BOLD,
@@ -45,7 +45,7 @@ function normalizeMarkdown(text: string): string {
   return text
 }
 
-function convertNormalizedToWhatsApp(text: string): string {
+function normalizedToMarkdownMeta(text: string): string {
   // convert &%BOLD%&text&%BOLD%& to *text*
   text = text.replace(
     REGEX_NORMALIZED_BOLD,

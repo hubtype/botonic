@@ -1,4 +1,4 @@
-import { convertToMarkdownMeta } from '../../../src/components/multichannel/whatsapp/markdown'
+import { convertToMarkdownMeta } from '../../../src/components/multichannel/whatsapp/markdown-meta'
 
 describe('Markdown to WhatsApp conversion', () => {
   test('convert bold markdown to WhatsApp format', () => {

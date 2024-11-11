@@ -21,7 +21,7 @@ import {
   WHATSAPP_LIST_MAX_BUTTONS,
   WHATSAPP_MAX_BUTTONS,
 } from './multichannel-utils'
-import { convertToMarkdownMeta } from './whatsapp/markdown'
+import { convertToMarkdownMeta } from './whatsapp/markdown-meta'
 
 export const MultichannelText = props => {
   const requestContext = useContext(RequestContext)
