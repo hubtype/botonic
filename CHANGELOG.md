@@ -20,6 +20,14 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.30.4] - 2024-11-11
+
+### Fixed
+
+- [@botonic/react](https://www.npmjs.com/package/@botonic/react)
+
+  - [`mixed bold and ialic markdown` for whastapp and facebook](https://github.com/hubtype/botonic/pull/2931)
+  - [`replace markdown links` for whastapp and facebook](https://github.com/hubtype/botonic/pull/2930)
 ## [0.30.0] - 2024-10-03
 
 ### Added
