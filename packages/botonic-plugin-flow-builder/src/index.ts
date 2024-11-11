@@ -128,8 +128,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   private isBotAction(payload: string): boolean {
-    const botActionNode = this.cmsApi.getNodeById(payload)
-    return botActionNode?.type === HtNodeWithContentType.BOT_ACTION
+    const node = this.cmsApi.getNodeById(payload)
+    return node?.type === HtNodeWithContentType.BOT_ACTION
   }
 
   async getContentsByContentID(
