@@ -19,7 +19,8 @@
     "null-loader": "^4.0.1",
     "react-refresh": "^0.14.2",
     "sass-loader": "^16.0.3",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "ts-node": "^10.9.2"
   },
   "author": "",
   "license": "MIT",
