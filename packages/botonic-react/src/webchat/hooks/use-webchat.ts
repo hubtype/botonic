@@ -3,7 +3,7 @@ import { useReducer, useRef } from 'react'
 
 import { ThemeProps, Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
-import { WebchatMessage } from '../../index-types'
+import { ClientInput, WebchatMessage } from '../../index-types'
 import { WebchatAction } from '../actions'
 import { DevSettings, ErrorMessage, WebchatState } from '../index-types'
 import { webchatReducer } from '../webchat-reducer'
@@ -74,7 +74,7 @@ export function useWebchat() {
   const updateReplies = replies =>
     webchatDispatch({ type: WebchatAction.UPDATE_REPLIES, payload: replies })
 
-  const updateLatestInput = (input: Input) =>
+  const updateLatestInput = (input: ClientInput) =>
     webchatDispatch({ type: WebchatAction.UPDATE_LATEST_INPUT, payload: input })
 
   const updateTyping = (typing: boolean) =>

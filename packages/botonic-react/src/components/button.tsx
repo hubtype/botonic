@@ -8,6 +8,7 @@ import { resolveImage } from '../util/environment'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
 import { ButtonsDisabler } from './buttons-disabler'
+import { ButtonProps } from './index-types'
 
 const StyledButton = styled.button`
   display: flex;
@@ -24,10 +25,10 @@ const StyledButton = styled.button`
   border: 1px solid ${COLORS.SEASHELL_WHITE};
   cursor: pointer;
   outline: 0;
-  border-top-right-radius: ${props => props.top || '0px'};
-  border-top-left-radius: ${props => props.top || '0px'};
-  border-bottom-right-radius: ${props => props.bottom || '0px'};
-  border-bottom-left-radius: ${props => props.bottom || '0px'};
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
   overflow: hidden;
 `
 
@@ -35,7 +36,7 @@ export const StyledUrlImage = styled.img`
   width: 20px;
 `
 
-export const Button = props => {
+export const Button = (props: ButtonProps) => {
   const {
     webchatState,
     openWebview,
@@ -50,15 +51,19 @@ export const Button = props => {
     webchatState.theme,
     props
   )
+
   const handleClick = event => {
     event.preventDefault()
+
     const type = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.buttonMessageType,
       INPUT.TEXT
     )
-    if (props.webview) openWebview(props.webview, props.params)
-    else if (props.path) {
-      type == INPUT.POSTBACK
+
+    if (props.webview) {
+      openWebview(props.webview, props.params)
+    } else if (props.path) {
+      type === INPUT.POSTBACK
         ? sendPayload(`__PATH_PAYLOAD__${props.path}`)
         : sendInput({
             type: INPUT.TEXT,
@@ -67,7 +72,7 @@ export const Button = props => {
             payload: `__PATH_PAYLOAD__${props.path}`,
           })
     } else if (props.payload) {
-      type == INPUT.POSTBACK
+      type === INPUT.POSTBACK
         ? sendPayload(props.payload)
         : sendInput({
             type: INPUT.TEXT,
@@ -78,11 +83,15 @@ export const Button = props => {
     } else if (props.url) {
       window.open(props.url, props.target || '_blank')
     }
-    if (props.onClick) props.onClick()
+
+    if (props.onClick) {
+      props.onClick()
+    }
+
     if (props.setDisabled) {
       props.setDisabled(true)
       const messageToUpdate = webchatState.messagesJSON.filter(
-        m => m.id == props.parentId
+        m => m.id === props.parentId
       )[0]
       const updatedMsg = ButtonsDisabler.getUpdatedMessage(messageToUpdate, {
         autoDisable,
@@ -116,6 +125,7 @@ export const Button = props => {
     const CustomButton = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.customButton
     )
+
     if (CustomButton) {
       return (
         <div className={getClassName(true)} onClick={e => handleClick(e)}>
@@ -133,6 +143,7 @@ export const Button = props => {
           WEBCHAT.CUSTOM_PROPERTIES.buttonStyleBackground,
           COLORS.SOLID_WHITE
         )
+
     const buttonTextColor = hover
       ? getThemeProperty(
           WEBCHAT.CUSTOM_PROPERTIES.buttonHoverTextColor,
@@ -169,7 +180,6 @@ export const Button = props => {
           backgroundColor: buttonBgColor,
           ...(props.disabled && autoDisable && disabledStyle),
         }}
-        bottom={props.bottomRadius}
       >
         {props.children}
         {props.url && urlIcon && (
@@ -187,43 +197,62 @@ export const Button = props => {
     if (props.webview) {
       return (
         <button
+          // @ts-ignore
+          // eslint-disable-next-line react/no-unknown-property
           url={generateWebviewUrlWithParams(props.webview, props.params)}
           {...disabledProps}
         >
           {props.children}
         </button>
       )
-    } else if (props.path) {
+    }
+
+    if (props.path) {
       const payload = `__PATH_PAYLOAD__${props.path}`
       return (
+        // @ts-ignore
+        // eslint-disable-next-line react/no-unknown-property
         <button payload={payload} {...disabledProps}>
           {props.children}
         </button>
       )
-    } else if (props.payload) {
+    }
+
+    if (props.payload) {
       return (
+        // @ts-ignore
+        // eslint-disable-next-line react/no-unknown-property
         <button payload={props.payload} {...disabledProps}>
           {props.children}
         </button>
       )
-    } else if (props.url) {
+    }
+
+    if (props.url) {
       return (
+        // @ts-ignore
+        // eslint-disable-next-line react/no-unknown-property
         <button url={props.url} target={props.target} {...disabledProps}>
           {props.children}
         </button>
       )
-    } else if (props.onClick) {
+    }
+
+    if (props.onClick) {
       return null
     }
-    throw new Error('Button missing payload, path, webviews, url or onClick')
+
+    throw new Error('Button missing payload, path, webview, url or onClick')
   }
 
   return renderComponent({ renderBrowser, renderNode })
 }
 
-Button.serialize = buttonProps => {
-  let payload = buttonProps.payload
-  if (buttonProps.path) payload = `__PATH_PAYLOAD__${buttonProps.path}`
+Button.serialize = (buttonProps: ButtonProps) => {
+  const payload = buttonProps.path
+    ? `__PATH_PAYLOAD__${buttonProps.path}`
+    : buttonProps.payload
+
   return {
     button: {
       payload,
