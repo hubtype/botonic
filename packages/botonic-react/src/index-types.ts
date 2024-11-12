@@ -148,15 +148,18 @@ export interface Event {
   message?: MessageInfo
 }
 
+// ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
+export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
+
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
   closeWebview: () => Promise<void>
   getThemeProperty: (property: string, defaultValue?: any) => any
-  openWebview: (webviewComponent: Webview) => void
+  openWebview: (webviewComponent: Webview, params?: any) => void
   resetUnreadMessages: () => void
   resolveCase: () => void
   sendAttachment: (attachment: File) => Promise<void>
-  sendInput: (input: CoreInput) => Promise<void>
+  sendInput: (input: ClientInput) => Promise<void>
   sendPayload: (payload: string) => Promise<void>
   sendText: (text: string, payload?: string) => Promise<void>
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
@@ -164,7 +167,7 @@ export interface WebchatContextProps {
   toggleWebchat: (toggle: boolean) => void
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
-  updateLatestInput: (input: CoreInput) => void
+  updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: boolean) => void
   updateUser: (user: Partial<CoreSessionUser>) => void

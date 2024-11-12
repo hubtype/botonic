@@ -49,6 +49,9 @@ export interface ButtonProps {
   autodisable?: boolean
   disabled?: boolean
   disabledstyle?: boolean
+  children: string
+  setDisabled?: (disabled: boolean) => void
+  parentId?: string
 }
 
 export interface ReplyProps {
