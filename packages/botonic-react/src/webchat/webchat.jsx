@@ -44,6 +44,7 @@ import {
 import { ChatArea } from './chat-area'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
+import { CoverComponent } from './cover-component'
 import { WebchatHeader } from './header'
 import {
   useComponentWillMount,
@@ -407,36 +408,16 @@ export const Webchat = forwardRef((props, ref) => {
         (props.coverComponent.component || props.coverComponent)
     )
   }
-  const CoverComponent = getCoverComponent()
-
-  const closeCoverComponent = () => {
-    toggleCoverComponent(false)
-  }
+  const coverComponent = getCoverComponent()
 
   useEffect(() => {
-    if (!CoverComponent) return
+    if (!coverComponent) return
     if (
       !botonicState ||
-      (botonicState.messages && botonicState.messages.length == 0)
+      (botonicState.messages && botonicState.messages.length === 0)
     )
       toggleCoverComponent(true)
   }, [])
-
-  const coverComponent = () => {
-    const coverComponentProps = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.coverComponentProps,
-      props.coverComponent && props.coverComponent.props
-    )
-
-    if (CoverComponent && webchatState.isCoverComponentOpen)
-      return (
-        <CoverComponent
-          closeComponent={closeCoverComponent}
-          {...coverComponentProps}
-        />
-      )
-    return null
-  }
 
   const messageComponentFromInput = input => {
     let messageComponent = null
@@ -708,6 +689,7 @@ export const Webchat = forwardRef((props, ref) => {
         toggleWebchat,
         toggleEmojiPicker,
         togglePersistentMenu,
+        toggleCoverComponent,
         updateLatestInput,
         updateMessage,
         updateReplies,
@@ -744,36 +726,50 @@ export const Webchat = forwardRef((props, ref) => {
               toggleWebchat(false)
             }}
           />
-          {webchatState.error.message && (
-            <ErrorMessageContainer>
-              <ErrorMessage>{webchatState.error.message}</ErrorMessage>
-            </ErrorMessageContainer>
-          )}
-          <ChatArea />
 
-          {webchatState.isPersistentMenuOpen && (
-            <DarkenBackground component={persistentMenu()} />
-          )}
-          {!webchatState.handoff && userInputEnabled && (
-            <InputPanel
-              persistentMenu={props.persistentMenu}
-              enableEmojiPicker={props.enableEmojiPicker}
-              enableAttachments={props.enableAttachments}
-              handleAttachment={handleAttachment}
-              textareaRef={textareaRef}
-              host={host}
-              onUserInput={props.onUserInput}
+          {webchatState.isCoverComponentOpen ? (
+            <CoverComponent
+              component={coverComponent}
+              componentProps={props.coverComponent.props}
             />
+          ) : (
+            <>
+              {webchatState.error.message && (
+                <ErrorMessageContainer>
+                  <ErrorMessage>{webchatState.error.message}</ErrorMessage>
+                </ErrorMessageContainer>
+              )}
+
+              <ChatArea />
+
+              {webchatState.isPersistentMenuOpen && (
+                <DarkenBackground component={persistentMenu()} />
+              )}
+
+              {!webchatState.handoff && userInputEnabled && (
+                <InputPanel
+                  persistentMenu={props.persistentMenu}
+                  enableEmojiPicker={props.enableEmojiPicker}
+                  enableAttachments={props.enableAttachments}
+                  handleAttachment={handleAttachment}
+                  textareaRef={textareaRef}
+                  host={host}
+                  onUserInput={props.onUserInput}
+                />
+              )}
+
+              {webchatState.webview && webchatWebview()}
+
+              {webchatState.isCustomComponentRendered &&
+                customComponent &&
+                _renderCustomComponent()}
+            </>
           )}
-          {webchatState.webview && webchatWebview()}
-          {webchatState.isCoverComponentOpen && coverComponent()}
-          {webchatState.isCustomComponentRendered &&
-            customComponent &&
-            _renderCustomComponent()}
         </StyledWebchat>
       )}
     </WebchatContext.Provider>
   )
+
   return props.shadowDOM ? (
     <StyleSheetManager target={host}>{WebchatComponent}</StyleSheetManager>
   ) : (
