@@ -104,6 +104,7 @@ export interface BlobProps {
 }
 
 export interface ThemeProps extends StyleProp {
+  coverComponent?: CoverComponentOptions
   mobileBreakpoint?: number
   mobileStyle?: any
   webview?: StyleProp & { header?: StyleProp }
