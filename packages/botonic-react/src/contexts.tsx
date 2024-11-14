@@ -72,6 +72,9 @@ export const WebchatContext = createContext<WebchatContextProps>({
     return
   },
   theme: {},
+  toggleCoverComponent: () => {
+    return
+  },
   toggleWebchat: () => {
     return
   },
