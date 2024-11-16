@@ -127,6 +127,7 @@ export class WebchatApp {
   createRootElement(host: HTMLElement | null) {
     // Create root element <div id='root'> if not exists
     // Create shadowDOM to root element if needed
+    console.log('createRootElement', host)
     if (host) {
       if (host.id && this.hostId) {
         if (host.id != this.hostId) {
