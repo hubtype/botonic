@@ -1,5 +1,5 @@
 import React from 'react'
-import JSONTree from 'react-json-tree'
+import { JSONTree } from 'react-json-tree'
 import styled from 'styled-components'
 
 import { COLORS } from '../constants'
