@@ -1,7 +1,7 @@
 import { HubtypeService, INPUT } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { WEBCHAT } from './constants'
 import { SENDERS, Typing } from './index-types'
@@ -65,11 +65,13 @@ export class WebchatApp {
     this.server = server
     this.webchatRef = createRef()
     this.appId = appId
+    this.reactRoot = null
   }
 
   createRootElement(host) {
     // Create root element <div id='root'> if not exists
     // Create shadowDOM to root element if needed
+    console.log('createRootElement', host)
     if (host) {
       if (host.id && this.hostId) {
         if (host.id != this.hostId) {
@@ -94,7 +96,9 @@ export class WebchatApp {
   }
 
   getReactMountNode(node) {
-    if (!node) node = this.host
+    if (!node) {
+      node = this.host
+    }
     return node.shadowRoot ? node.shadowRoot : node
   }
 
@@ -372,18 +376,19 @@ export class WebchatApp {
 
   destroy() {
     if (this.hubtypeService) this.hubtypeService.destroyPusher()
-    unmountComponentAtNode(this.host)
+    this.reactRoot?.unmount()
     if (this.storage) this.storage.removeItem(this.storageKey)
   }
 
   async render(dest, optionsAtRuntime = {}) {
     onDOMLoaded(async () => {
       const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
-      if (isVisible)
-        render(
-          this.getComponent(dest, optionsAtRuntime),
-          this.getReactMountNode(dest)
-        )
+      if (isVisible) {
+        const webchatComponent = this.getComponent(dest, optionsAtRuntime)
+        const container = this.getReactMountNode(dest)
+        this.reactRoot = createRoot(container) // createRoot(container!) if you use TypeScript
+        this.reactRoot.render(webchatComponent)
+      }
     })
   }
 }
