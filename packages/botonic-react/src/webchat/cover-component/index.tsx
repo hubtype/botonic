@@ -23,11 +23,9 @@ export const CoverComponent = ({ component, componentProps }: Props) => {
     toggleCoverComponent(false)
   }
 
-  if (!Cover) {
+  if (!Cover || !webchatState.isCoverComponentOpen) {
     return null
   }
 
-  return Cover && webchatState.isCoverComponentOpen ? (
-    <Cover closeComponent={closeCoverComponent} {...coverComponentProps} />
-  ) : null
+  return <Cover closeComponent={closeCoverComponent} {...coverComponentProps} />
 }
