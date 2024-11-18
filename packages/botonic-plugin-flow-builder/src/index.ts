@@ -112,24 +112,20 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private updateRequestBeforeRoutes(request: PluginPreRequest): void {
     if (request.input.payload) {
       request.input.payload = this.removeSourceSufix(request.input.payload)
-    }
 
-    if (request.input.payload && this.isBotAction(request.input.payload)) {
-      const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
-        request.input.payload
-      )
+      if (this.cmsApi.isBotAction(request.input.payload)) {
+        const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
+          request.input.payload
+        )
 
-      request.input.payload = this.cmsApi.createPayloadWithParams(cmsBotAction)
+        request.input.payload =
+          this.cmsApi.createPayloadWithParams(cmsBotAction)
+      }
     }
   }
 
   private removeSourceSufix(payload: string): string {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
-  }
-
-  private isBotAction(payload: string): boolean {
-    const node = this.cmsApi.getNodeById(payload)
-    return node?.type === HtNodeWithContentType.BOT_ACTION
   }
 
   async getContentsByContentID(

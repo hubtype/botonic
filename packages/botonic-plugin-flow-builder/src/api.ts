@@ -1,7 +1,7 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import { KNOWLEDGE_BASE_FLOW_NAME, SEPARATOR } from './constants'
+import { KNOWLEDGE_BASE_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -177,6 +177,18 @@ export class FlowBuilderApi {
     }
 
     return target.id
+  }
+
+  isBotAction(id: string): boolean {
+    if (!this.isUUID(id)) {
+      return false
+    }
+    const node = this.getNodeById(id)
+    return node?.type === HtNodeWithContentType.BOT_ACTION
+  }
+
+  private isUUID(str: string): boolean {
+    return UUID_REGEXP.test(str)
   }
 
   createPayloadWithParams(botActionNode: HtBotActionNode): string {
