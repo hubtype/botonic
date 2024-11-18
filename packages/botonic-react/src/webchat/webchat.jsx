@@ -409,6 +409,7 @@ export const Webchat = forwardRef((props, ref) => {
     )
   }
   const coverComponent = getCoverComponent()
+  const coverComponentProps = props.coverComponent?.props
 
   useEffect(() => {
     if (!coverComponent) return
@@ -730,7 +731,7 @@ export const Webchat = forwardRef((props, ref) => {
           {webchatState.isCoverComponentOpen ? (
             <CoverComponent
               component={coverComponent}
-              componentProps={props.coverComponent.props}
+              componentProps={coverComponentProps}
             />
           ) : (
             <>
