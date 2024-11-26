@@ -1,8 +1,7 @@
 {
   "name": "@botonic/dx-bundler-rspack",
-  "version": "0.30.0-alpha.3",
+  "version": "0.30.0-alpha.4",
   "description": "Build Botonic bots with RSPack",
-  "type": "commonjs",
   "scripts": {
     "build": "echo Skipping build...",
     "test": "echo \"Error: no test specified\" && exit 1"
