@@ -4,6 +4,10 @@
 
 This package simplifies the configuration of a rspack bundler to build a Botonic project.
 
+## IMPORTANT
+
+- Webviews imported inside the webviews/index.ts must be classes or functions but cannot be arrow functions.
+
 ## Setup
 
 - Install this package.
