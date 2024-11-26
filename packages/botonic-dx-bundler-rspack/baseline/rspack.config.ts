@@ -34,13 +34,17 @@ const TEMPLATES = {
 
 const UMD_LIBRARY_TARGET = 'umd'
 
-const BOTONIC_LIBRARY_NAME = 'Botonic'
-const WEBVIEW_LIBRARY_NAME = 'BotonicWebview'
-const BOT_LIBRARY_NAME = 'bot'
+const LIBRARY_NAME = {
+  BOTONIC: 'Botonic',
+  WEBVIEW: 'BotonicWebview',
+  BOT: 'bot',
+}
 
-const WEBCHAT_FILENAME = 'webchat.botonic.js'
-const WEBVIEWS_FILENAME = 'webviews.js'
-const BOT_FILENAME = 'bot.js'
+const FILENAME = {
+  WEBCHAT: 'webchat.botonic.js',
+  WEBVIEWS: 'webviews.js',
+  BOT: 'bot.js',
+}
 
 enum Mode {
   development = 'development',
@@ -49,7 +53,7 @@ enum Mode {
 
 const HUBTYPE_DEFAULTS = {
   API_URL: 'https://api.hubtype.com',
-  WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c',
+  WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c', // pragma: allowlist secret
 }
 
 const CONFIG_ENVIRONMENTS = ['production', 'staging', 'local']
@@ -235,8 +239,8 @@ function botonicDevConfig(mode: Mode): Configuration {
     },
     output: {
       path: OUTPUT_PATH,
-      filename: WEBCHAT_FILENAME,
-      library: BOTONIC_LIBRARY_NAME,
+      filename: FILENAME.WEBCHAT,
+      library: LIBRARY_NAME.BOTONIC,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
@@ -271,8 +275,8 @@ function botonicWebchatConfig(mode: Mode): Configuration {
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBCHAT),
     output: {
       path: OUTPUT_PATH,
-      filename: WEBCHAT_FILENAME,
-      library: BOTONIC_LIBRARY_NAME,
+      filename: FILENAME.WEBCHAT,
+      library: LIBRARY_NAME.BOTONIC,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
@@ -306,8 +310,8 @@ function botonicWebviewsConfig(mode: Mode): Configuration {
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBVIEWS),
     output: {
       path: WEBVIEWS_PATH,
-      filename: WEBVIEWS_FILENAME,
-      library: WEBVIEW_LIBRARY_NAME,
+      filename: FILENAME.WEBVIEWS,
+      library: LIBRARY_NAME.WEBVIEW,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: '../assets/[hash][ext][query]',
@@ -339,8 +343,8 @@ function botonicServerConfig(mode: string): Configuration {
     target: 'node',
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.NODE),
     output: {
-      filename: BOT_FILENAME,
-      library: BOT_LIBRARY_NAME,
+      filename: FILENAME.BOT,
+      library: LIBRARY_NAME.BOT,
       libraryTarget: 'umd',
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
