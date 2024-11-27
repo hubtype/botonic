@@ -12,16 +12,20 @@ const bulge = keyframes`
   }
 `
 
-interface TypingIndicatorWrapperProps {
+export const TypingContainer = styled.div`
+  padding: 0px 8px 8px 8px;
+`
+
+interface TypingMsgWrapperProps {
   backgroundColor: string
 }
 
-export const TypingIndicatorWrapper = styled.div<TypingIndicatorWrapperProps>`
+export const TypingMsgWrapper = styled.div<TypingMsgWrapperProps>`
   will-change: transform;
   width: 44px;
   line-height: 0px;
   border-radius: 20px;
-  padding: 8px 2px 8px;
+  padding: 8px 2px;
   text-align: center;
   display: block;
   margin: 8px;
