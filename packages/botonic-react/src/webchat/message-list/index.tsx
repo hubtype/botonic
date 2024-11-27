@@ -71,10 +71,14 @@ export const WebchatMessageList = () => {
     scrollToBottom()
   }
 
-  const showUnreadMessagesBanner = (messageComponentId: string) =>
-    firstUnreadMessageId &&
-    messageComponentId === firstUnreadMessageId &&
-    webchatState.numUnreadMessages > 0
+  const showUnreadMessagesBanner = (messageComponentId: string) => {
+    return (
+      !webchatState.isInputFocus &&
+      firstUnreadMessageId &&
+      messageComponentId === firstUnreadMessageId &&
+      webchatState.numUnreadMessages > 0
+    )
+  }
 
   useEffect(() => {
     const firstUnreadMessage = webchatState.messagesComponents.find(

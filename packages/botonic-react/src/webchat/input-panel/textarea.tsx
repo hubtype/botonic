@@ -23,7 +23,8 @@ export const Textarea = ({
   sendChatEvent,
   sendTextAreaText,
 }: TextareaProps) => {
-  const { getThemeProperty, webchatState } = useContext(WebchatContext)
+  const { getThemeProperty, webchatState, setIsInputFocus } =
+    useContext(WebchatContext)
 
   useDeviceAdapter(host, webchatState.isWebchatOpen)
 
@@ -71,10 +72,20 @@ export const Textarea = ({
     sendChatEvent(Typing.Off)
   }
 
+  const handleFocus = () => {
+    setIsInputFocus(true)
+  }
+
+  const handleBlur = () => {
+    setIsInputFocus(false)
+  }
+
   return (
     <TextAreaContainer>
       <TextareaAutosize
         ref={(ref: HTMLTextAreaElement) => (textareaRef.current = ref)}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         name='text'
         maxRows={4}
         wrap='soft'

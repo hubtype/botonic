@@ -48,6 +48,8 @@ export function webchatReducer(
       return { ...state, lastRoutePath: action.payload }
     case WebchatAction.SET_CURRENT_ATTACHMENT:
       return { ...state, currentAttachment: action.payload }
+    case WebchatAction.SET_IS_INPUT_FOCUS:
+      return { ...state, isInputFocus: action.payload }
     default:
       return messagesReducer(state, action)
   }
