@@ -54,20 +54,14 @@ export const WebchatMessageList = () => {
     }, SCROLL_TIMEOUT)
   }
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      if (webchatState.isLastMessageVisible && webchatState.typing) {
-        scrollToTyping()
-        return
-      }
-
-      scrollToLastMessage()
-    }, SCROLL_TIMEOUT)
-  }
-
   const handleScrollToBottom = () => {
     resetUnreadMessages()
-    scrollToBottom()
+    if (webchatState.typing) {
+      scrollToTyping()
+      return
+    }
+
+    scrollToLastMessage()
   }
 
   const showUnreadMessagesBanner = (messageComponentId: string) => {
@@ -99,8 +93,12 @@ export const WebchatMessageList = () => {
 
   useEffect(() => {
     if (!notificationsEnabled) {
-      scrollToBottom()
-      return
+      if (webchatState.typing) {
+        scrollToTyping()
+        return
+      }
+
+      scrollToLastMessage()
     }
   }, [webchatState.typing, webchatState.messagesComponents])
 
