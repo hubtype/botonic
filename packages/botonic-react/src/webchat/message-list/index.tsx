@@ -117,8 +117,6 @@ export const WebchatMessageList = () => {
       }
 
       scrollToLastMessage()
-      // Another option to do scroll to bottom of scrollableMessagesListRef without smoth effect
-      //scrollableMessagesListRef.current?.scrollTo(0, scrollableMessagesListRef.current.scrollHeight)
     }
   }, [
     firstUnreadMessageId,
