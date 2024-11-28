@@ -7,7 +7,9 @@ import { MultichannelText } from './multichannel-text'
 import {
   getFilteredElements,
   isMultichannelButton,
-  isNodeKind,
+  isPic,
+  isSubtitle,
+  isTitle,
 } from './multichannel-utils'
 
 export const MultichannelCarousel = props => {
@@ -26,17 +28,17 @@ export const MultichannelCarousel = props => {
         const buttons = []
 
         for (const node of element) {
-          if (isNodeKind(node, 'Pic')) {
+          if (isPic(node)) {
             imageProps = node.props
           }
-          if (isNodeKind(node, 'Title')) {
+          if (isTitle(node)) {
             title = node.props.children
           }
-          if (isNodeKind(node, 'Subtitle')) {
+          if (isSubtitle(node)) {
             subtitle = node.props.children
           }
 
-          if (isNodeKind(node, 'MultichannelButton')) {
+          if (isMultichannelButton(node)) {
             buttons.push(node)
           }
           //TODO support fragment containing an array

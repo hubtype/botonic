@@ -9,18 +9,20 @@ import { MultichannelButton } from './multichannel-button'
 import { MultichannelContext } from './multichannel-context'
 import {
   buttonTypes,
-  DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR,
   elementHasPostback,
   elementHasUrl,
   elementHasWebview,
   getButtonType,
   getMultichannelButtons,
   getMultichannelReplies,
+} from './multichannel-utils'
+import {
+  DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR,
   MENU_BUTTON_WHATSAPP_BUTTON_LIST,
   MULTICHANNEL_WHATSAPP_PROPS,
   WHATSAPP_LIST_MAX_BUTTONS,
   WHATSAPP_MAX_BUTTONS,
-} from './multichannel-utils'
+} from './whatsapp/constants'
 import { convertToMarkdownMeta } from './whatsapp/markdown-meta'
 
 export const MultichannelText = props => {

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
+import { Button } from './button'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -38,21 +39,13 @@ Element.serialize = elementProps => {
     ...elementProps.children
       .filter(c => {
         if (c instanceof Array) return true
-        return c && c.type && c.type.name == 'Button'
+        return c?.type?.name === Button.name
       })
       .map(b => {
         if (b instanceof Array) {
-          return b.map(
-            bb =>
-              bb &&
-              bb.type &&
-              bb.type.serialize &&
-              bb.type.serialize(bb.props).button
-          )
+          b.map(bb => bb?.type?.serialize?.(bb.props)?.button)
         }
-        return (
-          b && b.type && b.type.serialize && b.type.serialize(b.props).button
-        )
+        return b?.type?.serialize(b.props).button
       }),
   ]
   // When we have the buttons from backend, we have all buttons inside an array on the first position

@@ -5,7 +5,7 @@ import { RequestContext } from '../../contexts'
 import { truncateText } from '../../util'
 import { Button } from '../button'
 import { MultichannelContext } from './multichannel-context'
-import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel-utils'
+import { WHATSAPP_MAX_BUTTON_CHARS } from './whatsapp/constants'
 
 export const MultichannelButton = props => {
   const requestContext = useContext(RequestContext)
