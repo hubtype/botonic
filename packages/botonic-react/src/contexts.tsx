@@ -56,7 +56,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   resetUnreadMessages: () => {
     return
   },
-  setIsInputFocus: () => {
+  setIsInputFocused: () => {
     return
   },
   setLastMessageVisible: () => {

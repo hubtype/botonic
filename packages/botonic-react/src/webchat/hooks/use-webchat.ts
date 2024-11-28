@@ -44,7 +44,7 @@ export const webchatInitialState: WebchatState = {
   currentAttachment: undefined,
   numUnreadMessages: 0,
   isLastMessageVisible: true,
-  isInputFocus: false,
+  isInputFocused: false,
 }
 
 export function useWebchat() {
@@ -197,10 +197,10 @@ export function useWebchat() {
     })
   }
 
-  const setIsInputFocus = (isInputFocus: boolean) => {
+  const setIsInputFocused = (isInputFocused: boolean) => {
     webchatDispatch({
-      type: WebchatAction.SET_IS_INPUT_FOCUS,
-      payload: isInputFocus,
+      type: WebchatAction.SET_IS_INPUT_FOCUSED,
+      payload: isInputFocused,
     })
   }
 
@@ -212,7 +212,7 @@ export function useWebchat() {
     resetUnreadMessages,
     setCurrentAttachment,
     setError,
-    setIsInputFocus,
+    setIsInputFocused,
     setLastMessageVisible,
     setOnline,
     toggleCoverComponent,

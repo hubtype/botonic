@@ -11,6 +11,14 @@ import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
 const SCROLL_TIMEOUT = 100
+const scrollOptionsEnd: ScrollIntoViewOptions = {
+  behavior: 'smooth',
+  block: 'end',
+}
+const scrollOptionsCenter: ScrollIntoViewOptions = {
+  behavior: 'smooth',
+  block: 'center',
+}
 
 export const WebchatMessageList = () => {
   const {
@@ -30,28 +38,19 @@ export const WebchatMessageList = () => {
 
   const scrollToTyping = () => {
     setTimeout(() => {
-      typingRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      })
+      typingRef.current?.scrollIntoView(scrollOptionsEnd)
     }, SCROLL_TIMEOUT)
   }
 
   const scrollToLastMessage = () => {
     setTimeout(() => {
-      lastMessageRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-      })
+      lastMessageRef.current?.scrollIntoView(scrollOptionsEnd)
     }, SCROLL_TIMEOUT)
   }
 
   const scrollToBanner = () => {
     setTimeout(() => {
-      unreadMessagesBannerRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      })
+      unreadMessagesBannerRef.current?.scrollIntoView(scrollOptionsCenter)
     }, SCROLL_TIMEOUT)
   }
 
@@ -73,7 +72,7 @@ export const WebchatMessageList = () => {
 
   const showUnreadMessagesBanner = (messageComponentId: string) => {
     return (
-      !webchatState.isInputFocus &&
+      !webchatState.isInputFocused &&
       firstUnreadMessageId &&
       messageComponentId === firstUnreadMessageId &&
       webchatState.numUnreadMessages > 0

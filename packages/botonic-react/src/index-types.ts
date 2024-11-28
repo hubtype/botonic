@@ -162,7 +162,7 @@ export interface WebchatContextProps {
   sendInput: (input: ClientInput) => Promise<void>
   sendPayload: (payload: string) => Promise<void>
   sendText: (text: string, payload?: string) => Promise<void>
-  setIsInputFocus: (isInputFocus: boolean) => void
+  setIsInputFocused: (isInputFocused: boolean) => void
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
   theme: ThemeProps
   toggleWebchat: (toggle: boolean) => void
