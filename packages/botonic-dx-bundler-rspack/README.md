@@ -8,12 +8,32 @@ This package simplifies the configuration of a rspack bundler to build a Botonic
 
 - Webviews imported inside the webviews/index.ts must be classes or functions but cannot be arrow functions.
 
+Do:
+
+````
+export function MyWebview(){
+  ...
+  return
+}
+```
+
+instead of:
+````
+
+export const MyWebview = () => {
+...
+return
+}
+
+```
 ## Setup
 
 - Install this package.
 
 ```
+
 npm install -D @botonic/dx-bundler-rspack
+
 ```
 
 - Copy `baseline/rspack.config.js` file to the root of your project.
@@ -21,11 +41,15 @@ npm install -D @botonic/dx-bundler-rspack
 - Add this script to your package.json to build for production and start for development in local.
 
 ```
+
 ...
 "scipts": {
-    ...
-    "build_production": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
-    "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
-    ...
+...
+"build_production": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
+"start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
+...
 }
+
+```
+
 ```

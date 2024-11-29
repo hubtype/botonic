@@ -10,7 +10,7 @@ import {
   WHATSAPP_MAX_BUTTON_CHARS,
   WHATSAPP_MAX_FOOTER_CHARS,
   WHATSAPP_MAX_HEADER_CHARS,
-} from './multichannel/multichannel-utils'
+} from './multichannel/whatsapp/constants'
 import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 
 export interface WhatsappCTAUrlButtonCommonProps {

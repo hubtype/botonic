@@ -1,45 +1,63 @@
-/**
- *
- * Whatsapp does not support Markdown
- * (its markup syntax is different)
- */
-export const MULTICHANNEL_WHATSAPP_PROPS = { markdown: false }
+import { Button } from '../button'
+import { Carousel } from '../carousel'
+import { Pic } from '../pic'
+import { Reply } from '../reply'
+import { Subtitle } from '../subtitle'
+import { Text } from '../text'
+import { Title } from '../title'
+import { MultichannelButton } from './multichannel-button'
+import { MultichannelReply } from './multichannel-reply'
 
-export const WHATSAPP_MAX_BUTTONS = 3
-export const WHATSAPP_LIST_MAX_BUTTONS = 10
-export const WHATSAPP_MAX_BUTTON_CHARS = 20
-export const WHATSAPP_MAX_HEADER_CHARS = 60
-export const WHATSAPP_MAX_BODY_CHARS = 1024
-export const WHATSAPP_MAX_FOOTER_CHARS = 60
-export const DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR = 'More options:'
-export const MENU_BUTTON_WHATSAPP_BUTTON_LIST = 'Show options'
+function isNodeKind(node, kind) {
+  return node?.type?.name === kind
+}
 
 export function isMultichannelButton(node) {
-  return isNodeKind(node, 'MultichannelButton')
+  return isNodeKind(node, MultichannelButton.name)
 }
 
 export function isMultichannelReply(node) {
-  return isNodeKind(node, 'MultichannelReply')
+  return isNodeKind(node, MultichannelReply.name)
 }
 
-export function isButton(node) {
-  return isNodeKind(node, 'Button')
+export function isNodeText(node) {
+  return isNodeKind(node, Text.name)
 }
 
-export function isNodeKind(node, kind) {
-  return node.type && node.type.name == kind
+export function isNodeButton(node) {
+  return isNodeKind(node, Button.name)
 }
+
+export function isNodeCarousel(node) {
+  return isNodeKind(node, Carousel.name)
+}
+
+export function isNodeReply(node) {
+  return isNodeKind(node, Reply.name)
+}
+
+export function isNodePic(node) {
+  return isNodeKind(node, Pic.name)
+}
+
+export function isNodeTitle(node) {
+  return isNodeKind(node, Title.name)
+}
+
+export function isNodeSubtitle(node) {
+  return isNodeKind(node, Subtitle.name)
+}
+
 export function elementHasUrl(element) {
-  return element.props && element.props.url
+  return element?.props?.url
 }
+
 export function elementHasPostback(element) {
-  return (
-    (element.props && element.props.payload) ||
-    (element.props && element.props.path)
-  )
+  return element?.props?.payload || element?.props?.path
 }
+
 export function elementHasWebview(element) {
-  return element.props && element.props.webview
+  return element?.props?.webview
 }
 
 export const buttonTypes = {

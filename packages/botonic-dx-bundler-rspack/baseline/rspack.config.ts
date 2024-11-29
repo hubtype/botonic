@@ -70,54 +70,52 @@ const resolveConfig = {
 
 const isDev = String(process.env.ENVIRONMENT) === 'local'
 
-const typescriptLoaderConfig =
-  // exclude: /node_modules[/\\](?!(@botonic\/(core|react))[/\\])/,
-  [
-    {
-      test: /\.tsx?$/,
-      exclude: [/node_modules/],
-      use: {
-        loader: 'builtin:swc-loader',
-        options: {
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              tsx: true,
-            },
-            keepClassNames: true,
+const typescriptLoaderConfig = [
+  {
+    test: /\.tsx?$/,
+    exclude: [/node_modules/],
+    use: {
+      loader: 'builtin:swc-loader',
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
           },
+          keepClassNames: true,
         },
       },
-      type: 'javascript/auto',
     },
-    {
-      test: /\.jsx?$/,
-      exclude: [/node_modules/],
-      use: {
-        loader: 'builtin:swc-loader',
-        options: {
-          jsc: {
-            parser: {
-              syntax: 'ecmascript',
-              jsx: true,
-            },
-            transform: {
-              react: {
-                pragma: 'React.createElement',
-                pragmaFrag: 'React.Fragment',
-                throwIfNamespace: true,
-                development: isDev,
-                refresh: isDev,
-                useBuiltins: false,
-              },
-            },
-            keepClassNames: true,
+    type: 'javascript/auto',
+  },
+  {
+    test: /\.jsx?$/,
+    exclude: [/node_modules/],
+    use: {
+      loader: 'builtin:swc-loader',
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'ecmascript',
+            jsx: true,
           },
+          transform: {
+            react: {
+              pragma: 'React.createElement',
+              pragmaFrag: 'React.Fragment',
+              throwIfNamespace: true,
+              development: isDev,
+              refresh: isDev,
+              useBuiltins: false,
+            },
+          },
+          keepClassNames: true,
         },
       },
-      type: 'javascript/auto',
     },
-  ]
+    type: 'javascript/auto',
+  },
+]
 
 const fileLoaderConfig = [
   {
@@ -144,7 +142,7 @@ const stylesLoaderConfig = [
 ]
 
 function log(message: string) {
-  // using errors to avoid screwing up webpack-bundle-analyzer when running with --profile
+  // using errors to avoid screwing up rspack-bundle-analyzer when running with --profile
   console.error(message)
 }
 
@@ -170,7 +168,7 @@ function getConfigEnvironment() {
 function getPlugins(mode: string, target: string) {
   const environment = getConfigEnvironment()
   log(
-    `Generating bundle for: ${target}\nWebpack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
+    `Generating bundle for: ${target}\nRspack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
   )
 
   const plugins = [

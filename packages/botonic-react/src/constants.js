@@ -189,10 +189,3 @@ export const ROLES = {
   DOCUMENT_MESSAGE: 'document-message',
   RAW_MESSAGE: 'raw-message',
 }
-
-export const COMPONENT_TYPE = {
-  TEXT: 'Text',
-  BUTTON: 'Button',
-  REPLY: 'Reply',
-  CAROUSEL: 'Carousel',
-}

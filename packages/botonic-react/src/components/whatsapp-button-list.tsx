@@ -4,7 +4,7 @@ import React from 'react'
 import { truncateText } from '../util'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
-import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel/multichannel-utils'
+import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel/whatsapp/constants'
 import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 
 // TODO: Add validation in component

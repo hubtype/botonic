@@ -1,7 +1,6 @@
 import { isFacebook, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
-import { COMPONENT_TYPE } from '../../constants'
 import { RequestContext } from '../../contexts'
 import { deepMapWithIndex } from '../../util/react'
 import { Text } from '../text'
@@ -10,7 +9,13 @@ import { MultichannelCarousel } from './multichannel-carousel'
 import { MultichannelContext } from './multichannel-context'
 import { MultichannelReply } from './multichannel-reply'
 import { MultichannelText } from './multichannel-text'
-import { MULTICHANNEL_WHATSAPP_PROPS } from './multichannel-utils'
+import {
+  isNodeButton,
+  isNodeCarousel,
+  isNodeReply,
+  isNodeText,
+} from './multichannel-utils'
+import { MULTICHANNEL_WHATSAPP_PROPS } from './whatsapp/constants'
 
 export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
@@ -22,7 +27,7 @@ export const Multichannel = props => {
   }
   if (isFacebook(requestContext.session)) {
     const newChildren = deepMapWithIndex(props.children, child => {
-      if (child && child.type && child.type.name === COMPONENT_TYPE.TEXT) {
+      if (isNodeText(child)) {
         return (
           <MultichannelText {...child.props} key={child.key}>
             {child.props.children}
@@ -35,21 +40,21 @@ export const Multichannel = props => {
   }
 
   let newChildren = deepMapWithIndex(props.children, (child, index) => {
-    if (child && child.type && child.type.name === COMPONENT_TYPE.BUTTON) {
+    if (isNodeButton(child)) {
       return (
         <MultichannelButton {...child.props} key={child.key}>
           {child.props.children}
         </MultichannelButton>
       )
     }
-    if (child && child.type && child.type.name === COMPONENT_TYPE.REPLY) {
+    if (isNodeReply(child)) {
       return (
         <MultichannelReply {...child.props} key={child.key}>
           {child.props.children}
         </MultichannelReply>
       )
     }
-    if (child && child.type && child.type.name === COMPONENT_TYPE.TEXT) {
+    if (isNodeText(child)) {
       return (
         <MultichannelText
           {...child.props}
@@ -62,7 +67,7 @@ export const Multichannel = props => {
         </MultichannelText>
       )
     }
-    if (child && child.type && child.type.name === COMPONENT_TYPE.CAROUSEL) {
+    if (isNodeCarousel(child)) {
       return (
         <MultichannelCarousel
           {...child.props}
