@@ -20,6 +20,15 @@ export type FlowBuilderActionProps = {
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
 
+  static async executeConversationStart(
+    request: ActionRequest
+  ): Promise<FlowBuilderActionProps> {
+    const context = getContext(request)
+    const contents = await getContentsByFirstInteraction(context)
+    const contentID = contents[0]?.code
+    return await FlowBuilderAction.botonicInit(request, contentID)
+  }
+
   static async botonicInit(
     request: ActionRequest,
     contentID?: string
@@ -67,17 +76,7 @@ async function getContents(
   request: ActionRequest,
   contentID?: string
 ): Promise<FlowContent[]> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const cmsApi = flowBuilderPlugin.cmsApi
-  const locale = flowBuilderPlugin.getLocale(request.session)
-  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale(locale)
-  const context = {
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-    contentID,
-  }
+  const context = getContext(request, contentID)
 
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
@@ -108,4 +107,21 @@ export interface FlowBuilderContext {
   request: ActionRequest
   resolvedLocale: string
   contentID?: string
+}
+
+function getContext(
+  request: ActionRequest,
+  contentID?: string
+): FlowBuilderContext {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const cmsApi = flowBuilderPlugin.cmsApi
+  const locale = flowBuilderPlugin.getLocale(request.session)
+  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale(locale)
+  return {
+    cmsApi,
+    flowBuilderPlugin,
+    request,
+    resolvedLocale,
+    contentID,
+  }
 }
