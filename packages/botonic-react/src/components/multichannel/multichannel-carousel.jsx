@@ -7,9 +7,9 @@ import { MultichannelText } from './multichannel-text'
 import {
   getFilteredElements,
   isMultichannelButton,
-  isPic,
-  isSubtitle,
-  isTitle,
+  isNodePic,
+  isNodeSubtitle,
+  isNodeTitle,
 } from './multichannel-utils'
 
 export const MultichannelCarousel = props => {
@@ -28,13 +28,13 @@ export const MultichannelCarousel = props => {
         const buttons = []
 
         for (const node of element) {
-          if (isPic(node)) {
+          if (isNodePic(node)) {
             imageProps = node.props
           }
-          if (isTitle(node)) {
+          if (isNodeTitle(node)) {
             title = node.props.children
           }
-          if (isSubtitle(node)) {
+          if (isNodeSubtitle(node)) {
             subtitle = node.props.children
           }
 
