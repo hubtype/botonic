@@ -15,9 +15,9 @@ export const DefaultIntroImage = styled.img`
 `
 
 export const ContainerScrollButton = styled.div`
-  position: absolute;
-  right: 10px;
-  bottom: 65px;
+  position: sticky;
+  left: 85%;
+  bottom: 15px;
 
   background-color: #6d6a78;
   cursor: pointer;
