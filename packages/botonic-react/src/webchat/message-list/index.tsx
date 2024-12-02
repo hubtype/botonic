@@ -10,7 +10,7 @@ import { ContainerMessage, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 
-const SCROLL_TIMEOUT = 100
+const SCROLL_TIMEOUT = 200
 const scrollOptionsEnd: ScrollIntoViewOptions = {
   behavior: 'smooth',
   block: 'end',
