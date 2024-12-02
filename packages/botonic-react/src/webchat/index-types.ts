@@ -49,6 +49,7 @@ export interface WebchatState {
   currentAttachment?: File
   numUnreadMessages: number
   isLastMessageVisible: boolean
+  isInputFocused: boolean
 }
 
 // export interface WebchatProps extends WebchatArgs {

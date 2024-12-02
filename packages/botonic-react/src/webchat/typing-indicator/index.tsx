@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { ForwardedRef, forwardRef } from 'react'
 
 import { COLORS, ROLES } from '../../constants'
-import { Dot, TypingIndicatorWrapper } from './styles'
+import { Dot, TypingContainer, TypingMsgWrapper } from './styles'
 
-export const TypingIndicator = () => (
-  <TypingIndicatorWrapper
-    role={ROLES.TYPING_INDICATOR}
-    className='typing-indicator'
-    backgroundColor={COLORS.SEASHELL_WHITE}
-  >
-    <Dot />
-    <Dot />
-    <Dot />
-  </TypingIndicatorWrapper>
+const TypingIndicator = forwardRef<HTMLDivElement, any>(
+  (_props, ref: ForwardedRef<HTMLDivElement>) => (
+    <TypingContainer ref={ref}>
+      <TypingMsgWrapper
+        role={ROLES.TYPING_INDICATOR}
+        className='typing-indicator'
+        backgroundColor={COLORS.SEASHELL_WHITE}
+      >
+        <Dot />
+        <Dot />
+        <Dot />
+      </TypingMsgWrapper>
+    </TypingContainer>
+  )
 )
+
+TypingIndicator.displayName = 'TypingIndicator'
+
+export default TypingIndicator
