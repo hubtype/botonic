@@ -1,15 +1,128 @@
-import { HubtypeService, INPUT } from '@botonic/core'
+import { HubtypeService, INPUT, Input, ServerConfig } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, { createRef } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
 
+import {
+  BlockInputOption,
+  CoverComponentOptions,
+  PersistentMenuTheme,
+  ThemeProps,
+  WebchatSettingsProps,
+} from './components/index-types'
 import { WEBCHAT } from './constants'
-import { SENDERS, Typing } from './index-types'
+import { CloseWebviewOptions } from './contexts'
+import {
+  ActionRequest,
+  EventArgs,
+  SENDERS,
+  Typing,
+  WebchatMessage,
+} from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
+import { ErrorMessage } from './webchat/index-types'
 import { Webchat } from './webchat/webchat'
 
+export interface WebchatAppProps {
+  theme?: ThemeProps
+  persistentMenu?: PersistentMenuTheme
+  coverComponent?: CoverComponentOptions
+  blockInputs?: BlockInputOption[]
+  enableEmojiPicker?: boolean
+  enableAttachments?: boolean
+  enableUserInput?: boolean
+  enableAnimations?: boolean
+  hostId?: string
+  shadowDOM?: boolean | (() => boolean)
+  defaultDelay?: number
+  defaultTyping?: number
+  storage?: Storage | null
+  storageKey?: string
+  onInit?: (app: WebchatApp, args: any) => void
+  onOpen?: (app: WebchatApp, args: any) => void
+  onClose?: (app: WebchatApp, args: any) => void
+  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+  onTrackEvent?: (
+    request: ActionRequest,
+    eventName: string,
+    args?: EventArgs
+  ) => Promise<void>
+  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  appId?: string
+  visibility?: boolean | (() => void) | 'dynamic'
+  server?: ServerConfig
+}
+
+interface WebchatRef {
+  addBotResponse: ({
+    response,
+    session,
+    lastRoutePath,
+  }: AddBotResponseArgs) => void
+  setTyping: (typing: boolean) => void
+  addUserMessage: (message: any) => Promise<void>
+  updateUser: (userToUpdate: any) => void
+  openWebchat: () => void
+  closeWebchat: () => void
+  toggleWebchat: () => void
+  openCoverComponent: () => void
+  closeCoverComponent: () => void
+  renderCustomComponent: (customComponent: any) => void
+  unmountCustomComponent: () => void
+  toggleCoverComponent: () => void
+  openWebviewApi: (component: any) => void
+  setError: (error: ErrorMessage) => void
+  setOnline: (online: boolean) => void
+  getMessages: () => { id: string; ack: number; unsentInput: Input }[] // TODO: define MessagesJSON
+  isOnline: () => boolean
+  clearMessages: () => void
+  getLastMessageUpdate: () => string
+  updateMessageInfo: (msgId: string, messageInfo: any) => void
+  updateWebchatSettings: (settings: WebchatSettingsProps) => void
+  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
+}
+
+interface AddBotResponseArgs {
+  response: any
+  session: any
+  lastRoutePath: any
+}
+
 export class WebchatApp {
+  public theme?: ThemeProps
+  public persistentMenu?: PersistentMenuTheme
+  public coverComponent?: CoverComponentOptions
+  public blockInputs?: BlockInputOption[]
+  public enableEmojiPicker?: boolean
+  public enableAttachments?: boolean
+  public enableUserInput?: boolean
+  public enableAnimations?: boolean
+  public hostId?: string
+  public shadowDOM?: boolean | (() => boolean)
+  public defaultDelay?: number
+  public defaultTyping?: number
+  public storage?: Storage | null
+  public storageKey: string
+  public onInit?: (app: WebchatApp, args: any) => void
+  public onOpen?: (app: WebchatApp, args: any) => void
+  public onClose?: (app: WebchatApp, args: any) => void
+  public onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+  public onTrackEvent?: (
+    request: ActionRequest,
+    eventName: string,
+    args?: EventArgs
+  ) => Promise<void>
+  public onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  public appId?: string
+  public visibility?: boolean | (() => void) | 'dynamic'
+  public server?: ServerConfig
+  public webchatRef: React.RefObject<WebchatRef | null>
+
+  private reactRoot: Root | null = null
+  private host: (HTMLElement | null) | ShadowRoot = null
+  private hubtypeService: HubtypeService
+
   constructor({
     theme = {},
     persistentMenu,
@@ -19,8 +132,8 @@ export class WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
-    hostId,
-    shadowDOM,
+    hostId = 'root',
+    shadowDOM = false,
     defaultDelay,
     defaultTyping,
     storage,
@@ -34,7 +147,7 @@ export class WebchatApp {
     appId,
     visibility,
     server,
-  }) {
+  }: WebchatAppProps) {
     this.theme = theme
     this.persistentMenu = persistentMenu
     this.coverComponent = coverComponent
@@ -43,13 +156,15 @@ export class WebchatApp {
     this.enableAttachments = enableAttachments
     this.enableUserInput = enableUserInput
     this.enableAnimations = enableAnimations
+
     this.shadowDOM = Boolean(
       typeof shadowDOM === 'function' ? shadowDOM() : shadowDOM
     )
     if (this.shadowDOM && !isShadowDOMSupported()) {
       console.warn('[botonic] ShadowDOM not supported on this browser')
       this.shadowDOM = false
-    }
+    } // Review this
+
     this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
@@ -63,12 +178,14 @@ export class WebchatApp {
     this.onConnectionChange = onConnectionChange
     this.visibility = visibility
     this.server = server
-    this.webchatRef = createRef()
+    this.webchatRef = createRef<WebchatRef>()
     this.appId = appId
+
+    this.host = null
     this.reactRoot = null
   }
 
-  createRootElement(host) {
+  createRootElement(host: HTMLElement | null) {
     // Create root element <div id='root'> if not exists
     // Create shadowDOM to root element if needed
     if (host) {
@@ -94,22 +211,33 @@ export class WebchatApp {
     this.host = this.shadowDOM ? host.attachShadow({ mode: 'open' }) : host
   }
 
-  getReactMountNode(node) {
-    if (!node) {
+  getReactMountNode(
+    node: (HTMLElement | null) | ShadowRoot
+  ): Element | DocumentFragment {
+    if (node === null) {
       node = this.host
     }
-    return node.shadowRoot ? node.shadowRoot : node
+
+    if (node === null) {
+      throw new Error('Host element not found')
+    }
+
+    if ('shadowRoot' in node && node.shadowRoot !== null) {
+      return node.shadowRoot
+    }
+
+    return node
   }
 
-  onInitWebchat(...args) {
+  onInitWebchat(...args: [any]) {
     this.onInit && this.onInit(this, ...args)
   }
 
-  onOpenWebchat(...args) {
+  onOpenWebchat(...args: [any]) {
     this.onOpen && this.onOpen(this, ...args)
   }
 
-  onCloseWebchat(...args) {
+  onCloseWebchat(...args: [any]) {
     this.onClose && this.onClose(this, ...args)
   }
 
@@ -140,11 +268,11 @@ export class WebchatApp {
         user,
         lastMessageId,
         lastMessageUpdateDate,
-        onEvent: event => this.onServiceEvent(event),
+        onEvent: (event: any) => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
-            .getMessages()
-            .filter(msg => msg.ack === 0 && msg.unsentInput),
+            ?.getMessages()
+            .filter(msg => msg.ack === 0 && msg.unsentInput) || [],
         server: this.server,
       })
     }
@@ -153,7 +281,7 @@ export class WebchatApp {
   onServiceEvent(event) {
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
-      this.webchatRef.current.setOnline(event.online)
+      this.webchatRef.current?.setOnline(event.online)
     } else if (event.action === 'update_message_info') {
       this.updateMessageInfo(event.message.id, event.message)
     } else if (event.message?.type === 'update_webchat_settings') {
@@ -167,87 +295,90 @@ export class WebchatApp {
     }
   }
 
-  updateUser(user) {
-    this.webchatRef.current.updateUser(user)
+  updateUser(user: any) {
+    this.webchatRef.current?.updateUser(user)
   }
 
-  addBotMessage(message) {
+  addBotMessage(message: any) {
     message.ack = 0
     message.isUnread = true
     message.sentBy = message.sent_by?.split('message_sent_by_')[1]
     delete message.sent_by
     const response = msgToBotonic(
       message,
-      this.theme.message?.customTypes || this.theme.customMessageTypes
+      // TODO: Review if is neded allow declar customTypes inseide and ouside theme
+      this.theme?.message?.customTypes || this.theme?.customMessageTypes || []
     )
 
-    this.webchatRef.current.addBotResponse({
+    this.webchatRef.current?.addBotResponse({
       response,
     })
   }
 
-  addBotText(text) {
+  addBotText(text: string) {
     this.addBotMessage({ type: INPUT.TEXT, data: text })
   }
 
-  addUserMessage(message) {
-    this.webchatRef.current.addUserMessage(message)
+  addUserMessage(message: any) {
+    this.webchatRef.current?.addUserMessage(message)
   }
 
-  addUserText(text) {
+  addUserText(text: string) {
     this.addUserMessage({ type: INPUT.TEXT, data: text })
   }
 
-  addUserPayload(payload) {
+  addUserPayload(payload: string) {
     this.addUserMessage({ type: INPUT.POSTBACK, payload })
   }
 
-  setTyping(typing) {
-    this.webchatRef.current.setTyping(typing)
+  setTyping(typing: boolean) {
+    this.webchatRef.current?.setTyping(typing)
   }
 
   open() {
-    this.webchatRef.current.openWebchat()
+    this.webchatRef.current?.openWebchat()
   }
 
   close() {
-    this.webchatRef.current.closeWebchat()
+    this.webchatRef.current?.closeWebchat()
   }
 
-  async closeWebview() {
-    await this.webchatRef.current.closeWebview()
+  async closeWebview(options?: CloseWebviewOptions) {
+    await this.webchatRef.current?.closeWebview(options)
   }
 
+  // TODO: Remove this function because we have open and close functions
   toggle() {
-    this.webchatRef.current.toggleWebchat()
+    this.webchatRef.current?.toggleWebchat()
   }
 
   openCoverComponent() {
-    this.webchatRef.current.openCoverComponent()
+    this.webchatRef.current?.openCoverComponent()
   }
 
   closeCoverComponent() {
-    this.webchatRef.current.closeCoverComponent()
+    this.webchatRef.current?.closeCoverComponent()
   }
 
-  renderCustomComponent(_customComponent) {
-    this.webchatRef.current.renderCustomComponent(_customComponent)
+  renderCustomComponent(_customComponent: any) {
+    this.webchatRef.current?.renderCustomComponent(_customComponent)
   }
 
   unmountCustomComponent() {
-    this.webchatRef.current.unmountCustomComponent()
+    this.webchatRef.current?.unmountCustomComponent()
   }
 
+  // TODO: Remove this function because we have openCoverComponent and closeCoverComponent functions
   toggleCoverComponent() {
-    this.webchatRef.current.toggleCoverComponent()
+    this.webchatRef.current?.toggleCoverComponent()
   }
 
   getMessages() {
-    return this.webchatRef.current.getMessages()
+    return this.webchatRef.current?.getMessages()
   }
 
   clearMessages() {
-    this.webchatRef.current.clearMessages()
+    this.webchatRef.current?.clearMessages()
   }
 
   async getVisibility() {
@@ -258,19 +389,19 @@ export class WebchatApp {
   }
 
   getLastMessageUpdate() {
-    return this.webchatRef.current.getLastMessageUpdate()
+    return this.webchatRef.current?.getLastMessageUpdate()
   }
 
-  updateMessageInfo(msgId, messageInfo) {
-    return this.webchatRef.current.updateMessageInfo(msgId, messageInfo)
+  updateMessageInfo(msgId: string, messageInfo: any) {
+    return this.webchatRef.current?.updateMessageInfo(msgId, messageInfo)
   }
 
-  updateWebchatSettings(settings) {
-    return this.webchatRef.current.updateWebchatSettings(settings)
+  updateWebchatSettings(settings: WebchatSettingsProps) {
+    return this.webchatRef.current?.updateWebchatSettings(settings)
   }
 
   // eslint-disable-next-line complexity
-  getComponent(host, optionsAtRuntime = {}) {
+  getComponent(host, optionsAtRuntime: WebchatAppProps = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -319,6 +450,7 @@ export class WebchatApp {
     this.appId = appId || this.appId
     this.hostId = hostId || this.hostId
     this.createRootElement(host)
+
     return (
       <Webchat
         {...webchatOptions}
@@ -337,12 +469,16 @@ export class WebchatApp {
         storageKey={this.storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
-        onInit={(...args) => this.onInitWebchat(...args)}
-        onOpen={(...args) => this.onOpenWebchat(...args)}
-        onClose={(...args) => this.onCloseWebchat(...args)}
-        onUserInput={(...args) => this.onUserInput(...args)}
+        onInit={(...args: [any]) => this.onInitWebchat(...args)}
+        onOpen={(...args: [any]) => this.onOpenWebchat(...args)}
+        onClose={(...args: [any]) => this.onCloseWebchat(...args)}
+        onUserInput={(...args: [any]) => this.onUserInput(...args)}
         onStateChange={webchatState => this.onStateChange(webchatState)}
-        onTrackEvent={(...args) => this.onTrackEvent(...args)}
+        onTrackEvent={(
+          request: ActionRequest,
+          eventName: string,
+          args?: EventArgs
+        ) => this.onTrackEvent && this.onTrackEvent(request, eventName, args)}
         server={server}
       />
     )
@@ -360,10 +496,15 @@ export class WebchatApp {
   }
 
   isOnline() {
-    return this.webchatRef.current.isOnline()
+    return this.webchatRef.current?.isOnline()
   }
 
-  async resolveWebchatVisibility(optionsAtRuntime) {
+  async resolveWebchatVisibility(optionsAtRuntime?: {
+    appId: string
+    visibility: boolean | (() => void) | 'dynamic' | undefined
+  }) {
+    if (!optionsAtRuntime) return true // If optionsAtRuntime is not provided, always render the webchat
+
     let { appId, visibility } = optionsAtRuntime
     visibility = visibility || this.visibility
     if (visibility === undefined || visibility === true) return true
@@ -379,7 +520,7 @@ export class WebchatApp {
     if (this.storage) this.storage.removeItem(this.storageKey)
   }
 
-  async render(dest, optionsAtRuntime = {}) {
+  async render(dest: HTMLDivElement, optionsAtRuntime: any = undefined) {
     onDOMLoaded(async () => {
       const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
       if (isVisible) {

@@ -114,10 +114,13 @@ export interface ThemeProps extends StyleProp {
   header?: { title?: string; subtitle?: string } & ImageProp &
     StyleProp &
     CustomProp
+  // TODO: Review if this is needed hear, or only in message.customTypes? use the same type in both places
+  customMessageTypes?: React.ComponentType[]
   message?: {
     bot?: BlobProps & ImageProp & StyleProp
     agent?: ImageProp
     user?: BlobProps & StyleProp
+    // TODO: Review type used in cutomTypes should be a component exported by default with customMessage function
     customTypes?: React.ComponentType[]
   } & StyleProp & {
       timestamps?: {

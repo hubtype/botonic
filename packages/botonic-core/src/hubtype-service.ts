@@ -15,7 +15,7 @@ interface BotonicHeaders {
   'X-BOTONIC-LAST-MESSAGE-ID': string
   'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': string
 }
-interface ServerConfig {
+export interface ServerConfig {
   activityTimeout?: number
   pongTimeout?: number
 }
