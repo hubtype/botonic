@@ -50,7 +50,7 @@ export interface WebchatAppProps {
   ) => Promise<void>
   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   appId?: string
-  visibility?: boolean | (() => void) | 'dynamic'
+  visibility?: boolean | (() => boolean) | 'dynamic'
   server?: ServerConfig
 }
 
@@ -85,8 +85,8 @@ interface WebchatRef {
 
 interface AddBotResponseArgs {
   response: any
-  session: any
-  lastRoutePath: any
+  session?: any
+  lastRoutePath?: any
 }
 
 export class WebchatApp {
@@ -115,7 +115,7 @@ export class WebchatApp {
   ) => Promise<void>
   public onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   public appId?: string
-  public visibility?: boolean | (() => void) | 'dynamic'
+  public visibility?: boolean | (() => boolean) | 'dynamic'
   public server?: ServerConfig
   public webchatRef: React.RefObject<WebchatRef | null>
 
@@ -196,25 +196,31 @@ export class WebchatApp {
           )
           this.hostId = host.id
         }
-      } else if (host.id) this.hostId = host.id
-      else if (this.hostId) host.id = this.hostId
+      } else if (host.id) {
+        this.hostId = host.id
+      } else if (this.hostId) {
+        host.id = this.hostId
+      }
     } else {
-      host = document.getElementById(this.hostId)
+      host = this.hostId ? document.getElementById(this.hostId) : null
     }
+
     if (!host) {
       host = document.createElement('div')
-      host.id = this.hostId
-      if (document.body.firstChild)
+      host.id = this.hostId!
+      if (document.body.firstChild) {
         document.body.insertBefore(host, document.body.firstChild)
-      else document.body.appendChild(host)
+      } else {
+        document.body.appendChild(host)
+      }
     }
     this.host = this.shadowDOM ? host.attachShadow({ mode: 'open' }) : host
   }
 
   getReactMountNode(
-    node: (HTMLElement | null) | ShadowRoot
+    node?: (HTMLElement | null) | ShadowRoot
   ): Element | DocumentFragment {
-    if (node === null) {
+    if (!node) {
       node = this.host
     }
 
@@ -222,6 +228,7 @@ export class WebchatApp {
       throw new Error('Host element not found')
     }
 
+    // TODO: Review logic of ShadowRoot
     if ('shadowRoot' in node && node.shadowRoot !== null) {
       return node.shadowRoot
     }
@@ -244,8 +251,8 @@ export class WebchatApp {
   async onUserInput({ user, input }) {
     this.onMessage &&
       this.onMessage(this, {
+        ...input,
         sentBy: SENDERS.user,
-        message: input,
         isUnread: false,
       })
     return this.hubtypeService.postMessage(user, input)
@@ -261,19 +268,19 @@ export class WebchatApp {
     const lastMessageUpdateDate = this.getLastMessageUpdate()
     if (this.hubtypeService) {
       this.hubtypeService.lastMessageId = lastMessageId
-      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate
+      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate!
     } else if (!this.hubtypeService && user) {
       this.hubtypeService = new HubtypeService({
-        appId: this.appId,
+        appId: this.appId!,
         user,
         lastMessageId,
-        lastMessageUpdateDate,
+        lastMessageUpdateDate: lastMessageUpdateDate!,
         onEvent: (event: any) => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
             ?.getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput) || [],
-        server: this.server,
+        server: this.server!,
       })
     }
   }
@@ -290,7 +297,10 @@ export class WebchatApp {
       this.setTyping(event.message.data === Typing.On)
     } else {
       this.onMessage &&
-        this.onMessage(this, { sentBy: SENDERS.bot, message: event.message })
+        this.onMessage(this, {
+          sentBy: SENDERS.bot,
+          ...event.message,
+        } as WebchatMessage)
       this.addBotMessage(event.message)
     }
   }
@@ -307,6 +317,7 @@ export class WebchatApp {
     const response = msgToBotonic(
       message,
       // TODO: Review if is neded allow declar customTypes inseide and ouside theme
+      // @ts-ignore
       this.theme?.message?.customTypes || this.theme?.customMessageTypes || []
     )
 
@@ -383,7 +394,7 @@ export class WebchatApp {
 
   async getVisibility() {
     return this.resolveWebchatVisibility({
-      appId: this.appId,
+      appId: this.appId!,
       visibility: this.visibility,
     })
   }
@@ -455,6 +466,7 @@ export class WebchatApp {
       <Webchat
         {...webchatOptions}
         ref={this.webchatRef}
+        // @ts-ignore
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
@@ -501,7 +513,7 @@ export class WebchatApp {
 
   async resolveWebchatVisibility(optionsAtRuntime?: {
     appId: string
-    visibility: boolean | (() => void) | 'dynamic' | undefined
+    visibility: boolean | (() => boolean) | 'dynamic' | undefined
   }) {
     if (!optionsAtRuntime) return true // If optionsAtRuntime is not provided, always render the webchat
 

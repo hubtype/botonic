@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.31.0-alpha.2",
+  "version": "0.31.0-alpha.3",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -20,13 +20,13 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "^0.30.2",
+    "@botonic/core": "0.31.0-alpha.0",
     "axios": "^1.7.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.3.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-json-tree": "^0.18.0",
     "react-router-dom": "^5.3.4",
     "react-textarea-autosize": "^8.5.5",
