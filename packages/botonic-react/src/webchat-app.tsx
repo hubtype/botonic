@@ -55,7 +55,7 @@ export interface WebchatAppProps {
   ) => Promise<void>
   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
   appId?: string
-  visibility?: boolean | (() => void) | 'dynamic'
+  visibility?: boolean | (() => boolean) | 'dynamic'
   server?: ServerConfig
 }
 
@@ -90,8 +90,8 @@ interface WebchatRef {
 
 interface AddBotResponseArgs {
   response: any
-  session: any
-  lastRoutePath: any
+  session?: any
+  lastRoutePath?: any
 }
 
 export class WebchatApp {
@@ -296,13 +296,13 @@ export class WebchatApp {
         appId: this.appId!,
         user,
         lastMessageId,
-        lastMessageUpdateDate,
+        lastMessageUpdateDate: lastMessageUpdateDate!,
         onEvent: (event: any) => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
             ?.getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput) || [],
-        server: this.server,
+        server: this.server!,
       })
     }
   }
@@ -491,6 +491,7 @@ export class WebchatApp {
       <Webchat
         {...webchatOptions}
         ref={this.webchatRef}
+        // @ts-ignore
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
