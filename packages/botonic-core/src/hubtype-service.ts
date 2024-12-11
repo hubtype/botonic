@@ -247,11 +247,9 @@ export class HubtypeService {
     return Promise.resolve()
   }
 
-  static async getWebchatVisibility({
-    appId,
-  }: {
+  static async getWebchatVisibility(
     appId: string
-  }): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<any>> {
     return axios.get(
       `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
     )

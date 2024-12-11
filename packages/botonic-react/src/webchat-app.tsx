@@ -319,7 +319,7 @@ export class WebchatApp {
     delete message.sent_by
     const response = msgToBotonic(
       message,
-      // TODO: Review if is neded allow declar customTypes inseide and ouside theme
+      // TODO: Review if is neded allow declar customTypes inside and ouside theme
       // @ts-ignore
       this.theme?.message?.customTypes || this.theme?.customMessageTypes || []
     )
@@ -415,7 +415,7 @@ export class WebchatApp {
   }
 
   // eslint-disable-next-line complexity
-  getComponent(host, optionsAtRuntime: WebchatAppProps = {}) {
+  getComponent(host: HTMLDivElement, optionsAtRuntime: WebchatAppProps = {}) {
     let {
       theme = {},
       persistentMenu,
@@ -499,11 +499,9 @@ export class WebchatApp {
     )
   }
 
-  async isWebchatVisible({ appId }) {
+  async isWebchatVisible(appId: string): Promise<boolean> {
     try {
-      const { status } = await HubtypeService.getWebchatVisibility({
-        appId,
-      })
+      const { status } = await HubtypeService.getWebchatVisibility(appId)
       return status === 200
     } catch (e) {
       return false
@@ -514,18 +512,33 @@ export class WebchatApp {
     return this.webchatRef.current?.isOnline()
   }
 
-  async resolveWebchatVisibility(optionsAtRuntime?: {
-    appId: string
-    visibility: boolean | (() => boolean) | 'dynamic' | undefined
-  }) {
-    if (!optionsAtRuntime) return true // If optionsAtRuntime is not provided, always render the webchat
+  async resolveWebchatVisibility(
+    optionsAtRuntime?: WebchatAppProps
+  ): Promise<boolean> {
+    if (!optionsAtRuntime) {
+      // If optionsAtRuntime is not provided, always render the webchat
+      return true
+    }
 
     let { appId, visibility } = optionsAtRuntime
     visibility = visibility || this.visibility
-    if (visibility === undefined || visibility === true) return true
-    if (typeof visibility === 'function' && visibility()) return true
-    if (visibility === 'dynamic' && (await this.isWebchatVisible({ appId })))
+
+    if (visibility === undefined || visibility === true) {
       return true
+    }
+
+    if (typeof visibility === 'function' && visibility()) {
+      return true
+    }
+
+    if (
+      appId &&
+      visibility === 'dynamic' &&
+      (await this.isWebchatVisible(appId))
+    ) {
+      return true
+    }
+
     return false
   }
 
@@ -535,7 +548,7 @@ export class WebchatApp {
     if (this.storage) this.storage.removeItem(this.storageKey)
   }
 
-  async render(dest: HTMLDivElement, optionsAtRuntime: any = undefined) {
+  async render(dest: HTMLDivElement, optionsAtRuntime?: WebchatAppProps) {
     onDOMLoaded(async () => {
       const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
       if (isVisible) {
