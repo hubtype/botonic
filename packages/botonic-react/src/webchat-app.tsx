@@ -230,13 +230,13 @@ export class WebchatApp {
         appId: this.appId!,
         user,
         lastMessageId,
-        lastMessageUpdateDate: lastMessageUpdateDate!,
+        lastMessageUpdateDate,
         onEvent: (event: any) => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
             ?.getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput) || [],
-        server: this.server!,
+        server: this.server,
       })
     }
   }
