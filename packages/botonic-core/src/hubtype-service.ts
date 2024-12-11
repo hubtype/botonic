@@ -37,7 +37,6 @@ const WEBCHAT_PUSHER_KEY =
 
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
-const PUSHER_CONNECT_TIMEOUT_MS = 10000
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
 
@@ -126,7 +125,7 @@ export class HubtypeService {
       }
       const connectTimeout = setTimeout(
         () => cleanAndReject('Connection Timeout'),
-        PUSHER_CONNECT_TIMEOUT_MS
+        this.PUSHER_CONNECT_TIMEOUT_MS
       )
       this.channel.bind('pusher:subscription_succeeded', () => {
         // Once subscribed, we know that authentication has been done: https://pusher.com/docs/channels/server_api/authenticating-users
