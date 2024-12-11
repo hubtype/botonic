@@ -291,6 +291,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
 export * from './action'
 export * from './content-fields'
+export { HtBotActionNode } from './content-fields/hubtype-fields'
 export { trackFlowContent } from './tracking'
 export {
   BotonicPluginFlowBuilderOptions,
