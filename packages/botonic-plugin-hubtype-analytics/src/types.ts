@@ -154,6 +154,7 @@ export interface EventWebviewEnd extends HtBaseEventProps {
 export enum WebviewEndFailType {
   CanceledByUser = 'canceled_by_user',
   ApiError = 'api_error',
+  NeedsEscalation = 'needs_escalation',
 }
 
 export interface EventCustom extends HtBaseEventProps {
