@@ -512,7 +512,6 @@ export class WebchatApp {
     return this.webchatRef.current?.isOnline()
   }
 
-<<<<<<< HEAD
   async resolveWebchatVisibility(
     optionsAtRuntime?: WebchatAppProps
   ): Promise<boolean> {
@@ -520,13 +519,6 @@ export class WebchatApp {
       // If optionsAtRuntime is not provided, always render the webchat
       return true
     }
-=======
-  async resolveWebchatVisibility(optionsAtRuntime?: {
-    appId: string
-    visibility: boolean | (() => boolean) | 'dynamic' | undefined
-  }) {
-    if (!optionsAtRuntime) return true // If optionsAtRuntime is not provided, always render the webchat
->>>>>>> 925c2303 (WIP)
 
     let { appId, visibility } = optionsAtRuntime
     visibility = visibility || this.visibility
