@@ -227,7 +227,7 @@ export class HubtypeService {
     })
   }
 
-  async postMessage(user: SessionUser, message: any) {
+  async postMessage(user: SessionUser, message: any): Promise<void> {
     try {
       await this.init(user)
       await axios.post(
@@ -257,6 +257,7 @@ export class HubtypeService {
 
   destroyPusher(): void {
     if (!this.pusher) return
+
     this.pusher.disconnect()
     this.pusher.unsubscribe(this.pusherChannel)
     this.pusher.unbind_all()
