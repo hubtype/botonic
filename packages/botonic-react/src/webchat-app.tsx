@@ -266,26 +266,29 @@ export class WebchatApp {
     const lastMessage = messagesJSON[messagesJSON.length - 1]
     const lastMessageId = lastMessage && lastMessage.id
     const lastMessageUpdateDate = this.getLastMessageUpdate()
+
     if (this.hubtypeService) {
       this.hubtypeService.lastMessageId = lastMessageId
-      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate!
-    } else if (!this.hubtypeService && user) {
+      this.hubtypeService.lastMessageUpdateDate = lastMessageUpdateDate
+    }
+
+    if (!this.hubtypeService && user) {
       this.hubtypeService = new HubtypeService({
         appId: this.appId!,
         user,
         lastMessageId,
-        lastMessageUpdateDate: lastMessageUpdateDate!,
+        lastMessageUpdateDate,
         onEvent: (event: any) => this.onServiceEvent(event),
         unsentInputs: () =>
           this.webchatRef.current
             ?.getMessages()
             .filter(msg => msg.ack === 0 && msg.unsentInput) || [],
-        server: this.server!,
+        server: this.server,
       })
     }
   }
 
-  onServiceEvent(event) {
+  onServiceEvent(event: any) {
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current?.setOnline(event.online)
