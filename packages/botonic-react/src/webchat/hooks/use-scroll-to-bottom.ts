@@ -3,7 +3,17 @@ import {
   getWebchatElement,
 } from '../../util/dom'
 
-export const useScrollToBottom = ({ host, timeout = 200 }) => {
+interface UseScrollToBottom {
+  host: any
+  behavior?: ScrollBehavior
+  timeout?: number
+}
+
+export const useScrollToBottom = ({
+  host,
+  behavior = 'smooth',
+  timeout = 200,
+}: UseScrollToBottom) => {
   const scrollToBottom = () => {
     const webchatElement = getWebchatElement(host)
     if (!webchatElement) return
@@ -13,6 +23,7 @@ export const useScrollToBottom = ({ host, timeout = 200 }) => {
     setTimeout(() => {
       scrollableMessagesListElement.scrollTo({
         top: scrollableMessagesListElement.scrollHeight,
+        behavior: behavior,
       })
     }, timeout)
   }

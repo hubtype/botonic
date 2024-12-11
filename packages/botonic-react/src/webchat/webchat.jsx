@@ -205,7 +205,7 @@ export const Webchat = forwardRef((props, ref) => {
   const sendUserInput = async input => {
     if (props.onUserInput) {
       resetUnreadMessages()
-      scrollToBottom({ host }) // TODO: Remove param {host}
+      scrollToBottom()
       props.onUserInput({
         user: webchatState.session.user,
         input: input,
