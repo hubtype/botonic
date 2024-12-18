@@ -30,7 +30,7 @@ export const useScrollbarController = (currentDevice, host) => {
 
   const hasScrollbar = () => {
     if (chatAreaRef.current && scrollableMessagesListRef.current) {
-      if (!repliesRef) {
+      if (!repliesRef?.current) {
         return (
           scrollableMessagesListRef.current?.scrollHeight >
           chatAreaRef.current?.clientHeight
