@@ -26,73 +26,7 @@ import {
 } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
-import { ErrorMessage } from './webchat/index-types'
 import { Webchat } from './webchat/webchat'
-
-export interface WebchatAppProps {
-  theme?: ThemeProps
-  persistentMenu?: PersistentMenuTheme
-  coverComponent?: CoverComponentOptions
-  blockInputs?: BlockInputOption[]
-  enableEmojiPicker?: boolean
-  enableAttachments?: boolean
-  enableUserInput?: boolean
-  enableAnimations?: boolean
-  hostId?: string
-  shadowDOM?: boolean | (() => boolean)
-  defaultDelay?: number
-  defaultTyping?: number
-  storage?: Storage | null
-  storageKey?: string
-  onInit?: (app: WebchatApp, args: any) => void
-  onOpen?: (app: WebchatApp, args: any) => void
-  onClose?: (app: WebchatApp, args: any) => void
-  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
-  onTrackEvent?: (
-    request: ActionRequest,
-    eventName: string,
-    args?: EventArgs
-  ) => Promise<void>
-  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
-  appId?: string
-  visibility?: boolean | (() => boolean) | 'dynamic'
-  server?: ServerConfig
-}
-
-interface WebchatRef {
-  addBotResponse: ({
-    response,
-    session,
-    lastRoutePath,
-  }: AddBotResponseArgs) => void
-  setTyping: (typing: boolean) => void
-  addUserMessage: (message: any) => Promise<void>
-  updateUser: (userToUpdate: any) => void
-  openWebchat: () => void
-  closeWebchat: () => void
-  toggleWebchat: () => void
-  openCoverComponent: () => void
-  closeCoverComponent: () => void
-  renderCustomComponent: (customComponent: any) => void
-  unmountCustomComponent: () => void
-  toggleCoverComponent: () => void
-  openWebviewApi: (component: any) => void
-  setError: (error: ErrorMessage) => void
-  setOnline: (online: boolean) => void
-  getMessages: () => { id: string; ack: number; unsentInput: Input }[] // TODO: define MessagesJSON
-  isOnline: () => boolean
-  clearMessages: () => void
-  getLastMessageUpdate: () => string
-  updateMessageInfo: (msgId: string, messageInfo: any) => void
-  updateWebchatSettings: (settings: WebchatSettingsProps) => void
-  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
-}
-
-interface AddBotResponseArgs {
-  response: any
-  session?: any
-  lastRoutePath?: any
-}
 
 export class WebchatApp {
   public theme?: ThemeProps
@@ -491,7 +425,6 @@ export class WebchatApp {
       <Webchat
         {...webchatOptions}
         ref={this.webchatRef}
-        // @ts-ignore
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
