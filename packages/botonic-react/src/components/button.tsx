@@ -46,7 +46,6 @@ export const Button = (props: ButtonProps) => {
     updateMessage,
   } = useContext(WebchatContext)
   const [hover, setHover] = useState(false)
-  const { theme } = webchatState
   const { autoDisable, disabledStyle } = ButtonsDisabler.resolveDisabling(
     webchatState.theme,
     props
@@ -170,7 +169,6 @@ export const Button = (props: ButtonProps) => {
     return (
       <StyledButton
         className={getClassName()}
-        theme={theme}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
