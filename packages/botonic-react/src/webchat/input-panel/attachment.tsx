@@ -8,7 +8,7 @@ import { ConditionalAnimation } from '../components/conditional-animation'
 
 interface AttachmentProps {
   accept: string
-  enableAttachments: boolean
+  enableAttachments?: boolean
   onChange: (event: any) => void
 }
 
