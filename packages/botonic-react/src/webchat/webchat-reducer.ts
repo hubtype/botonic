@@ -10,6 +10,8 @@ export function webchatReducer(
   switch (action.type) {
     case WebchatAction.UPDATE_WEBVIEW:
       return { ...state, ...action.payload }
+    case WebchatAction.REMOVE_WEBVIEW:
+      return { ...state, webview: null, webviewParams: null }
     case WebchatAction.UPDATE_SESSION:
       return { ...state, session: { ...action.payload } }
     case WebchatAction.UPDATE_TYPING:
