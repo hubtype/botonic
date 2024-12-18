@@ -103,6 +103,12 @@ export interface BlobProps {
   imageStyle?: any
 }
 
+export interface CustomMessageType {
+  (props: any): JSX.Element
+  customTypeName: string
+  deserialize(msg: any): JSX.Element
+}
+
 export interface ThemeProps extends StyleProp {
   coverComponent?: CoverComponentOptions
   mobileBreakpoint?: number
@@ -115,13 +121,13 @@ export interface ThemeProps extends StyleProp {
     StyleProp &
     CustomProp
   // TODO: Review if this is needed hear, or only in message.customTypes? use the same type in both places
-  customMessageTypes?: React.ComponentType[]
+  customMessageTypes?: CustomMessageType[]
   message?: {
     bot?: BlobProps & ImageProp & StyleProp
     agent?: ImageProp
     user?: BlobProps & StyleProp
     // TODO: Review type used in cutomTypes should be a component exported by default with customMessage function
-    customTypes?: React.ComponentType[]
+    customTypes?: CustomMessageType[]
   } & StyleProp & {
       timestamps?: {
         withImage?: boolean
