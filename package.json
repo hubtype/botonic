@@ -6,7 +6,9 @@
     "clean": "rimraf packages/**/lib"
   },
   "dependencies": {
-    "axios": "^1.7.2"
+    "axios": "^1.7.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.9",
@@ -17,9 +19,11 @@
     "@babel/runtime": "^7.23.9",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.19",
+    "@types/react-dom": "^18.0.0",
+    "@types/react": "^18.0.0",
     "@types/rimraf": "^3.0.0",
-    "@typescript-eslint/parser": "^6.21.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "babel-plugin-add-module-exports": "^1.0.4",
     "cloc": "^2.7.0",
     "eslint": "^8.56.0",
