@@ -425,7 +425,6 @@ export class WebchatApp {
       <Webchat
         {...webchatOptions}
         ref={this.webchatRef}
-        // @ts-ignore
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
