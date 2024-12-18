@@ -1,4 +1,4 @@
-import { Input, Session } from '@botonic/core'
+import { Session } from '@botonic/core'
 import { useReducer, useRef } from 'react'
 
 import { ThemeProps, Webview } from '../../components/index-types'
@@ -19,7 +19,7 @@ export const webchatInitialState: WebchatState = {
   webview: null,
   webviewParams: null,
   session: { user: undefined },
-  lastRoutePath: null,
+  lastRoutePath: undefined,
   handoff: false,
   theme: {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
@@ -47,7 +47,43 @@ export const webchatInitialState: WebchatState = {
   isInputFocused: false,
 }
 
-export function useWebchat() {
+export interface UseWebchat {
+  addMessage: (message: WebchatMessage) => void
+  addMessageComponent: (message: { props: WebchatMessage }) => void
+  clearMessages: () => void
+  doRenderCustomComponent: (toggle: boolean) => void
+  resetUnreadMessages: () => void
+  setCurrentAttachment: (attachment?: File) => void
+  setError: (error?: ErrorMessage) => void
+  setIsInputFocused: (isInputFocused: boolean) => void
+  setLastMessageVisible: (isLastMessageVisible: boolean) => void
+  setOnline: (online: boolean) => void
+  toggleCoverComponent: (toggle: boolean) => void
+  toggleEmojiPicker: (toggle: boolean) => void
+  togglePersistentMenu: (toggle: boolean) => void
+  toggleWebchat: (toggle: boolean) => void
+  updateDevSettings: (settings: DevSettings) => void
+  updateHandoff: (handoff: boolean) => void
+  updateLastMessageDate: (date: string) => void
+  updateLastRoutePath: (path: string) => void
+  updateLatestInput: (input: ClientInput) => void
+  updateMessage: (message: WebchatMessage) => void
+  updateReplies: (replies: any) => void
+  updateSession: (session: Partial<Session>) => void
+  updateTheme: (theme: ThemeProps, themeUpdates?: ThemeProps) => void
+  updateTyping: (typing: boolean) => void
+  updateWebview: (webview: Webview, params: Record<string, string>) => void
+  removeWebview: () => void
+  webchatState: WebchatState
+  webchatRef: React.MutableRefObject<HTMLDivElement | null> // TODO: Change name, already exists WebchatRef for useImperativeHandle
+  headerRef: React.MutableRefObject<HTMLDivElement | null>
+  chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
+  scrollableMessagesListRef: React.MutableRefObject<HTMLDivElement | null>
+  repliesRef: React.MutableRefObject<HTMLDivElement | null>
+  inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
+}
+
+export function useWebchat(): UseWebchat {
   const [webchatState, webchatDispatch] = useReducer(
     webchatReducer,
     webchatInitialState
@@ -87,7 +123,12 @@ export function useWebchat() {
       payload: { webview, webviewParams: params },
     })
 
-  const updateSession = (session: Session) => {
+  const removeWebview = () =>
+    webchatDispatch({
+      type: WebchatAction.REMOVE_WEBVIEW,
+    })
+
+  const updateSession = (session: Partial<Session>) => {
     webchatDispatch({
       type: WebchatAction.UPDATE_SESSION,
       payload: session,
@@ -152,7 +193,7 @@ export function useWebchat() {
       payload: toggle,
     })
 
-  const setError = (error: ErrorMessage) =>
+  const setError = (error?: ErrorMessage) =>
     webchatDispatch({
       type: WebchatAction.SET_ERROR,
       payload: error,
@@ -177,7 +218,7 @@ export function useWebchat() {
     })
   }
 
-  const setCurrentAttachment = (attachment: File) => {
+  const setCurrentAttachment = (attachment?: File) => {
     webchatDispatch({
       type: WebchatAction.SET_CURRENT_ATTACHMENT,
       payload: attachment,
@@ -230,7 +271,7 @@ export function useWebchat() {
     updateTheme,
     updateTyping,
     updateWebview,
-    webchatDispatch,
+    removeWebview,
     webchatState,
     webchatRef,
     headerRef,
