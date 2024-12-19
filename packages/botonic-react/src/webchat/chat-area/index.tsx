@@ -27,9 +27,7 @@ export const ChatArea = () => {
       height={chatAreaHeight}
     >
       <WebchatMessageList />
-      {replies && Object.keys(replies).length > 0 && (
-        <WebchatReplies replies={replies} />
-      )}
+      {replies && replies.length > 0 && <WebchatReplies />}
     </StyledChatArea>
   )
 }

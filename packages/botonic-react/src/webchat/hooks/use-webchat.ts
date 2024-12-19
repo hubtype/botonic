@@ -1,7 +1,8 @@
 import { Session } from '@botonic/core'
 import { useReducer, useRef } from 'react'
 
-import { ReplyProps, ThemeProps, Webview } from '../../components/index-types'
+import { Reply } from '../../components'
+import { ThemeProps, Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
 import { ClientInput, WebchatMessage } from '../../index-types'
 import { WebchatAction } from '../actions'
@@ -68,7 +69,7 @@ export interface UseWebchat {
   updateLastRoutePath: (path: string) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
-  updateReplies: (replies: ReplyProps[]) => void
+  updateReplies: (replies: (typeof Reply)[]) => void
   updateSession: (session: Partial<Session>) => void
   updateTheme: (theme: ThemeProps, themeUpdates?: ThemeProps) => void
   updateTyping: (typing: boolean) => void
@@ -109,7 +110,7 @@ export function useWebchat(): UseWebchat {
   const updateMessage = (message: WebchatMessage) =>
     webchatDispatch({ type: WebchatAction.UPDATE_MESSAGE, payload: message })
 
-  const updateReplies = (replies: ReplyProps[]) =>
+  const updateReplies = (replies: (typeof Reply)[]) =>
     webchatDispatch({ type: WebchatAction.UPDATE_REPLIES, payload: replies })
 
   const removeReplies = () =>

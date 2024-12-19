@@ -11,6 +11,7 @@ import {
 } from '@botonic/core'
 import React from 'react'
 
+import { Reply } from './components'
 import {
   BlockInputOption,
   ButtonProps,
@@ -236,7 +237,7 @@ export interface WebchatContextProps {
   toggleCoverComponent: (toggle: boolean) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
-  updateReplies: (replies: boolean) => void
+  updateReplies: (replies: (typeof Reply)[]) => void
   updateUser: (user: Partial<CoreSessionUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction

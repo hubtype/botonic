@@ -10,7 +10,12 @@ const ScrollableReplies = styled.div`
   -webkit-overflow-scrolling: touch;
 `
 
-const RepliesContainer = styled.div`
+interface RepliesContainerProps {
+  justify: string
+  wrap: string
+}
+
+const RepliesContainer = styled.div<RepliesContainerProps>`
   display: flex;
   text-align: center;
   justify-content: ${props => props.justify};
@@ -33,18 +38,22 @@ const options = {
   right: 'flex-end',
 }
 
-export const WebchatReplies = props => {
+export const WebchatReplies = () => {
   const { webchatState, getThemeProperty, repliesRef } =
     useContext(WebchatContext)
+
   let justifyContent = 'center'
   const flexWrap = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.wrapReplies,
     'wrap'
   )
-  if (flexWrap == 'nowrap') justifyContent = 'flex-start'
-  else if (getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies))
+
+  if (flexWrap === 'nowrap') {
+    justifyContent = 'flex-start'
+  } else if (getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)) {
     justifyContent =
       options[getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.alignReplies)]
+  }
 
   return (
     <ScrollableReplies>
@@ -55,8 +64,9 @@ export const WebchatReplies = props => {
         justify={justifyContent}
         wrap={flexWrap}
       >
-        {webchatState.replies.map((r, i) => (
-          <ReplyContainer key={i}>{r}</ReplyContainer>
+        {webchatState.replies?.map((reply, i) => (
+          // @ts-ignore TODO: In this point reply is the the component to render
+          <ReplyContainer key={`reply-${i}`}>{reply}</ReplyContainer>
         ))}
       </RepliesContainer>
     </ScrollableReplies>
