@@ -24,6 +24,7 @@ export enum WebchatAction {
   UPDATE_THEME = 'updateTheme',
   UPDATE_TYPING = 'updateTyping',
   UPDATE_WEBVIEW = 'updateWebview',
+  REMOVE_REPLIES = 'removeReplies',
   REMOVE_WEBVIEW = 'removeWebview',
   SET_IS_INPUT_FOCUSED = 'setIsInputFocused',
 }

@@ -1,7 +1,7 @@
 import { Session } from '@botonic/core'
 import { useReducer, useRef } from 'react'
 
-import { ThemeProps, Webview } from '../../components/index-types'
+import { ReplyProps, ThemeProps, Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
 import { ClientInput, WebchatMessage } from '../../index-types'
 import { WebchatAction } from '../actions'
@@ -68,11 +68,12 @@ export interface UseWebchat {
   updateLastRoutePath: (path: string) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
-  updateReplies: (replies: any) => void
+  updateReplies: (replies: ReplyProps[]) => void
   updateSession: (session: Partial<Session>) => void
   updateTheme: (theme: ThemeProps, themeUpdates?: ThemeProps) => void
   updateTyping: (typing: boolean) => void
   updateWebview: (webview: Webview, params: Record<string, string>) => void
+  removeReplies: () => void
   removeWebview: () => void
   webchatState: WebchatState
   webchatRef: React.MutableRefObject<HTMLDivElement | null> // TODO: Change name, already exists WebchatRef for useImperativeHandle
@@ -108,8 +109,11 @@ export function useWebchat(): UseWebchat {
   const updateMessage = (message: WebchatMessage) =>
     webchatDispatch({ type: WebchatAction.UPDATE_MESSAGE, payload: message })
 
-  const updateReplies = replies =>
+  const updateReplies = (replies: ReplyProps[]) =>
     webchatDispatch({ type: WebchatAction.UPDATE_REPLIES, payload: replies })
+
+  const removeReplies = () =>
+    webchatDispatch({ type: WebchatAction.REMOVE_REPLIES, payload: [] })
 
   const updateLatestInput = (input: ClientInput) =>
     webchatDispatch({ type: WebchatAction.UPDATE_LATEST_INPUT, payload: input })
@@ -271,6 +275,7 @@ export function useWebchat(): UseWebchat {
     updateTheme,
     updateTyping,
     updateWebview,
+    removeReplies,
     removeWebview,
     webchatState,
     webchatRef,

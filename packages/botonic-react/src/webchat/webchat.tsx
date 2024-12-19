@@ -107,6 +107,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     updateTyping,
     updateWebview,
     removeWebview,
+    removeReplies,
     webchatState,
     webchatRef,
     chatAreaRef,
@@ -170,12 +171,13 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     }
   }, [webchatState.currentAttachment])
 
-  const sendUserInput = async input => {
+  const sendUserInput = async (input: any) => {
     if (props.onUserInput) {
       resetUnreadMessages()
       scrollToBottom()
       props.onUserInput({
         user: webchatState.session.user,
+        // TODO: Review if this input.sentBy exists in the frontend
         input: input,
         //@ts-ignore
         session: webchatState.session,
@@ -363,7 +365,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
             {rule.message}
           </Text>
         )
-        updateReplies(false)
+        removeReplies()
         return true
       }
     }
@@ -454,7 +456,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     sendUserInput(input)
     updateLatestInput(input)
     isOnline() && updateLastMessageDate(currentDateString())
-    updateReplies(false)
+    removeReplies()
     togglePersistentMenu(false)
     toggleEmojiPicker(false)
   }
@@ -516,7 +518,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     isOnline,
     clearMessages: () => {
       clearMessages()
-      updateReplies(false)
+      removeReplies()
     },
     getLastMessageUpdate: () => webchatState.lastMessageUpdate,
     updateMessageInfo: (msgId: string, messageInfo: any) => {

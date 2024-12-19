@@ -1,6 +1,6 @@
 import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 
-import { Webview } from '../components/index-types'
+import { ReplyProps, Webview } from '../components/index-types'
 import { WebchatArgs } from '../index-types'
 
 export interface WebchatStateTheme {
@@ -28,7 +28,7 @@ export interface WebchatState {
   height: number
   messagesJSON: any[]
   messagesComponents: any[]
-  replies: any[]
+  replies?: ReplyProps[]
   latestInput: Partial<CoreInput>
   typing: boolean
   webview: Webview | null

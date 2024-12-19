@@ -15,6 +15,8 @@ export const messagesReducer = (
       return updateMessageReducer(state, action)
     case WebchatAction.UPDATE_REPLIES:
       return { ...state, replies: action.payload }
+    case WebchatAction.REMOVE_REPLIES:
+      return { ...state, replies: undefined }
     case WebchatAction.CLEAR_MESSAGES:
       return {
         ...state,
