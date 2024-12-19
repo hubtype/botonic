@@ -9,7 +9,7 @@
     "sourceMap": true,
     "target": "ES2015",
     "module": "Node16",
-    "moduleResolution": "Node16",
+    "moduleResolution": "nodenext",
     "baseUrl": "src",
     "paths": {
       "*": ["src/*", "lib/*", "types/*"]
