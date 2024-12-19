@@ -18,7 +18,7 @@ const RepliesContainer = styled.div`
   padding-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
-  overflow-x: scroll;
+  overflow-x: auto;
 `
 
 const ReplyContainer = styled.div`
