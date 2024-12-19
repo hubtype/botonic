@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
+import { ReplyProps } from './index-types'
 
 const StyledButton = styled.button`
   width: 100%;
@@ -14,9 +15,10 @@ const StyledButton = styled.button`
   outline: 0;
 `
 
-export const Reply = props => {
+export const Reply = (props: ReplyProps) => {
   const { sendText, getThemeProperty } = useContext(WebchatContext)
-  const handleClick = event => {
+
+  const handleClick = (event: any) => {
     event.preventDefault()
     if (props.children) {
       let payload = props.payload
@@ -59,15 +61,19 @@ export const Reply = props => {
   const renderNode = () => {
     if (props.path) {
       const payload = `__PATH_PAYLOAD__${props.path}`
+      // @ts-ignore
+      // eslint-disable-next-line react/no-unknown-property
       return <reply payload={payload}>{props.children}</reply>
     }
+    // @ts-ignore
+    // eslint-disable-next-line react/no-unknown-property
     return <reply payload={props.payload}>{props.children}</reply>
   }
 
   return renderComponent({ renderBrowser, renderNode })
 }
 
-Reply.serialize = replyProps => {
+Reply.serialize = (replyProps: ReplyProps) => {
   let payload = replyProps.payload
   if (replyProps.path) payload = `__PATH_PAYLOAD__${replyProps.path}`
   return { reply: { title: replyProps.children, payload } }
