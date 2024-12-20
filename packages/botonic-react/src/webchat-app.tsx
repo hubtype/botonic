@@ -196,7 +196,11 @@ export class WebchatApp {
         sentBy: SENDERS.user,
         isUnread: false,
       } as unknown as WebchatMessage)
-    this.hubtypeService.postMessage(user, input)
+    this.hubtypeService.postMessage(user, {
+      ...input,
+      // TODO: Review if this is correct add sent_by or this is added in backend
+      // sent_by: 'message_sent_by_user',
+    })
     return
   }
 
