@@ -12,11 +12,9 @@ import { useNotifications } from './use-notifications'
 
 const SCROLL_TIMEOUT = 200
 const scrollOptionsEnd: ScrollIntoViewOptions = {
-  behavior: 'smooth',
   block: 'end',
 }
 const scrollOptionsCenter: ScrollIntoViewOptions = {
-  behavior: 'smooth',
   block: 'center',
 }
 
