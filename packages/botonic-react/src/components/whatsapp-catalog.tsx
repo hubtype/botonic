@@ -6,7 +6,7 @@ import { Message } from './message'
 
 export interface WhatsappCatalogProps {
   body: string
-  footer: string
+  footer?: string
   thumbnailProductId?: string
 }
 
