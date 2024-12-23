@@ -30,6 +30,7 @@ export {
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
 } from './whatsapp-button-list'
+export { WhatsappCatalog, WhatsappCatalogProps } from './whatsapp-catalog'
 export {
   WhatsappCTAUrlButton,
   WhatsappCTAUrlButtonProps,
