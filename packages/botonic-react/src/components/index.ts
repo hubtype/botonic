@@ -31,4 +31,10 @@ export {
   WhatsappCTAUrlButtonProps,
 } from './whatsapp-cta-url-button'
 export { WhatsappProduct } from './whatsapp-product'
+export {
+  ProductItem,
+  WhatsappProductList,
+  WhatsappProductListProps,
+  WhatsappProductListSection,
+} from './whatsapp-product-list'
 export { WhatsappTemplate } from './whatsapp-template'
