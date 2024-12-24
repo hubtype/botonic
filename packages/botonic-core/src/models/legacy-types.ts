@@ -74,6 +74,8 @@ export enum INPUT {
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
   EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
   WHATSAPP_CATALOG = 'whatsapp-catalog',
+  WHATSAPP_PRODUCT = 'whatsapp-product',
+  WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
 }
 
 export interface Locales {
