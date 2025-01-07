@@ -55,5 +55,6 @@ export const ScrollableMessageList = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain; // https://css-tricks.com/almanac/properties/o/overscroll-behavior/
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 `
