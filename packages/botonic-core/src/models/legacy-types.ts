@@ -76,6 +76,7 @@ export enum INPUT {
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
+  WHATSAPP_PRODUCT_CAROUSEL = 'whatsapp-product-carousel',
 }
 
 export interface Locales {

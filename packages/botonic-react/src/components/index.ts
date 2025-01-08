@@ -32,6 +32,10 @@ export {
 } from './whatsapp-cta-url-button'
 export { WhatsappProduct } from './whatsapp-product'
 export {
+  WhatsappProductCarousel,
+  WhatsappProductCarouselProps,
+} from './whatsapp-product-carousel'
+export {
   ProductItem,
   WhatsappProductList,
   WhatsappProductListProps,
