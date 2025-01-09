@@ -77,6 +77,7 @@ export enum INPUT {
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
   WHATSAPP_PRODUCT_CAROUSEL = 'whatsapp-product-carousel',
+  WHATSAPP_MEDIA_CAROUSEL = 'whatsapp-media-carousel',
   WHATSAPP_ORDER = 'whatsapp_order',
 }
 
@@ -123,6 +124,7 @@ export type InputType =
   | INPUT.WHATSAPP_PRODUCT
   | INPUT.WHATSAPP_PRODUCT_LIST
   | INPUT.WHATSAPP_PRODUCT_CAROUSEL
+  | INPUT.WHATSAPP_MEDIA_CAROUSEL
   | INPUT.WHATSAPP_ORDER
 
 export interface IntentResult {
