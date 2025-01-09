@@ -2,7 +2,7 @@
 import { getString, params2queryString, PROVIDER } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 
 import { CloseWebviewOptions, WebviewRequestContext } from './contexts'
@@ -110,11 +110,13 @@ export class WebviewApp {
   }
 
   render(dest) {
-    render(
+    const component = (
       <BrowserRouter>
         <App webviews={this.webviews} locales={this.locales} />
-      </BrowserRouter>,
-      dest
+      </BrowserRouter>
     )
+    const container = dest
+    const reactRoot = createRoot(container)
+    reactRoot.render(component)
   }
 }

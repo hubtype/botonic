@@ -1,6 +1,6 @@
 import merge from 'lodash.merge'
 import React from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
@@ -119,10 +119,10 @@ export class DevApp extends WebchatApp {
 
   render(dest, optionsAtRuntime = {}) {
     onDOMLoaded(() => {
-      render(
-        this.getComponent(dest, optionsAtRuntime),
-        this.getReactMountNode(dest)
-      )
+      const devAppComponent = this.getComponent(dest, optionsAtRuntime)
+      const container = this.getReactMountNode(dest)
+      const reactRoot = createRoot(container)
+      reactRoot.render(devAppComponent)
     })
   }
 

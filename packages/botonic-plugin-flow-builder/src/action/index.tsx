@@ -55,7 +55,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
   render(): JSX.Element | JSX.Element[] {
     const { contents } = this.props
-    const request = this.context
+    const request = this.context as ActionRequest
     return contents.map(content => content.toBotonic(content.id, request))
   }
 }
@@ -63,7 +63,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
     const { contents } = this.props
-    const request = this.context
+    const request = this.context as ActionRequest
     return (
       <Multichannel text={{ buttonsAsText: false }}>
         {contents.map(content => content.toBotonic(content.id, request))}

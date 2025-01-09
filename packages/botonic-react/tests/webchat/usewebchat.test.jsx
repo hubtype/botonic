@@ -1,4 +1,8 @@
-import { act } from '@testing-library/react-hooks'
+/**
+ * @jest-environment jsdom
+ */
+
+import { act } from '@testing-library/react'
 import React from 'react'
 
 import { Message } from '../../src/components'

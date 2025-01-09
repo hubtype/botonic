@@ -3,7 +3,7 @@
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
-import { screen } from '@testing-library/react'
+import { act, screen } from '@testing-library/react'
 
 import { ROLES } from '../../src/constants'
 import { WebchatApp } from '../../src/webchat-app'
@@ -32,16 +32,22 @@ describe('TEST: Webchat App', () => {
 
   it('TEST: WebchatApp renders webchat', async () => {
     const webchatApp = new WebchatApp({})
-    await webchatApp.render()
+    await act(async () => {
+      await webchatApp.render()
+    })
+
     expectToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
     expectNotToHaveRoles([ROLES.WEBCHAT], screen)
-    const root = document.body.querySelector('#root')
-    expect(root.shadowRoot).toBeFalsy()
+    const rootElement = document.getElementById('root')
+    expect(rootElement.shadowRoot).toBeFalsy()
   })
 
   it('TEST: WebchatApp renders webchat in shadowDOM', async () => {
     const webchatApp = new WebchatApp({ shadowDOM: true })
-    await webchatApp.render()
+    await act(async () => {
+      await webchatApp.render()
+    })
+
     expectNotToHaveRoles([ROLES.TRIGGER_BUTTON], screen)
     expectNotToHaveRoles([ROLES.WEBCHAT], screen)
     const root = document.body.querySelector('#root')
