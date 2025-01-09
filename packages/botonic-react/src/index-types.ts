@@ -79,17 +79,12 @@ export interface WebchatArgs {
   theme?: ThemeProps
 }
 
-type EventArgs = { [key: string]: any }
-type TrackEventFunction = (
+export type EventArgs = { [key: string]: any }
+export type TrackEventFunction = (
   request: ActionRequest,
   eventName: string,
   args?: EventArgs
 ) => Promise<void>
-
-export interface WebchatAppArgs {
-  appId?: string
-  visibility?: () => boolean
-}
 
 export enum SENDERS {
   bot = 'bot',

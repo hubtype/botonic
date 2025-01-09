@@ -205,7 +205,7 @@ export const Webchat = forwardRef((props, ref) => {
   const sendUserInput = async input => {
     if (props.onUserInput) {
       resetUnreadMessages()
-      scrollToBottom({ host })
+      scrollToBottom()
       props.onUserInput({
         user: webchatState.session.user,
         input: input,
@@ -369,7 +369,7 @@ export const Webchat = forwardRef((props, ref) => {
       if (getBlockInputs(rule, input.data)) {
         addMessageComponent(
           <Text
-            id={input.id}
+            id={input.id} //TODO: Remove id from Text component
             sentBy={SENDERS.user}
             blob={false}
             style={{
@@ -425,6 +425,7 @@ export const Webchat = forwardRef((props, ref) => {
     let messageComponent = null
     if (isText(input)) {
       messageComponent = (
+        //TODO: Remove id and payload from Text component
         <Text id={input.id} payload={input.payload} sentBy={SENDERS.user}>
           {input.data}
         </Text>

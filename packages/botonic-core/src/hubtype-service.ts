@@ -10,23 +10,26 @@ interface UnsentInput {
   ack: number
   unsentInput: Input
 }
+
 interface BotonicHeaders {
   'X-BOTONIC-USER-ID': string
   'X-BOTONIC-LAST-MESSAGE-ID': string
   'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': string
 }
-interface ServerConfig {
+
+export interface ServerConfig {
   activityTimeout?: number
   pongTimeout?: number
 }
+
 interface HubtypeServiceArgs {
   appId: string
   user: SessionUser
-  lastMessageId: string
-  lastMessageUpdateDate: string
+  lastMessageId?: string
+  lastMessageUpdateDate?: string
   onEvent: any
   unsentInputs: () => UnsentInput[]
-  server: ServerConfig
+  server?: ServerConfig
 }
 
 const WEBCHAT_PUSHER_KEY =
@@ -41,16 +44,17 @@ const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels
  * Calls Hubtype APIs from Webchat
  */
 export class HubtypeService {
-  appId: string
-  user: SessionUser
-  lastMessageId: string
-  lastMessageUpdateDate: string
-  onEvent: any
-  unsentInputs: () => UnsentInput[]
-  pusher: Pusher | null
-  channel: Channel
-  server: ServerConfig
-  PUSHER_CONNECT_TIMEOUT_MS = 10000
+  public appId: string
+  public user: SessionUser
+  public lastMessageId?: string
+  public lastMessageUpdateDate?: string
+  public onEvent: (event: any) => void
+  public unsentInputs: () => UnsentInput[]
+  public pusher: Pusher | null
+  public channel: Channel
+  public server?: ServerConfig
+  public PUSHER_CONNECT_TIMEOUT_MS = 10000
+
   constructor({
     appId,
     user,
@@ -67,29 +71,35 @@ export class HubtypeService {
     this.onEvent = onEvent
     this.unsentInputs = unsentInputs
     this.server = server
+
     if (this.user.id && (lastMessageId || lastMessageUpdateDate)) {
       // It's safe not awaiting Promise because:
       // * it will never be called from AWS lambda
       // * though init() is called again from postMesage, it does nothing if Pusher already created
-      // @ts-ignore
       this.init()
     }
   }
 
-  /**
-   * @returns {Promise<void>}
-   */
-  init(user, lastMessageId, lastMessageUpdateDate): Promise<void> {
-    if (user) this.user = user
-    if (lastMessageId) this.lastMessageId = lastMessageId
-    if (lastMessageUpdateDate)
+  init(
+    user?: SessionUser,
+    lastMessageId?: string,
+    lastMessageUpdateDate?: string
+  ): Promise<void> {
+    if (user) {
+      this.user = user
+    }
+
+    if (lastMessageId) {
+      this.lastMessageId = lastMessageId
+    }
+
+    if (lastMessageUpdateDate) {
       this.lastMessageUpdateDate = lastMessageUpdateDate
+    }
+
     return this._initPusher()
   }
 
-  /**
-   * @returns {Promise<void>}
-   */
   _initPusher(): Promise<void> {
     if (this.pusher) return Promise.resolve()
     if (!this.user.id || !this.appId) {
@@ -157,11 +167,18 @@ export class HubtypeService {
 
   constructHeaders(): BotonicHeaders {
     const headers = {}
-    if (this.user && this.user.id) headers['X-BOTONIC-USER-ID'] = this.user.id
-    if (this.lastMessageId)
+    if (this.user && this.user.id) {
+      headers['X-BOTONIC-USER-ID'] = this.user.id
+    }
+
+    if (this.lastMessageId) {
       headers['X-BOTONIC-LAST-MESSAGE-ID'] = this.lastMessageId
-    if (this.lastMessageUpdateDate)
+    }
+
+    if (this.lastMessageUpdateDate) {
       headers['X-BOTONIC-LAST-MESSAGE-UPDATE-DATE'] = this.lastMessageUpdateDate
+    }
+
     return headers as BotonicHeaders
   }
 
@@ -210,12 +227,8 @@ export class HubtypeService {
     })
   }
 
-  /**
-   * @return {Promise<void>}
-   */
   async postMessage(user: SessionUser, message: any): Promise<void> {
     try {
-      // @ts-ignore
       await this.init(user)
       await axios.post(
         `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
@@ -234,11 +247,9 @@ export class HubtypeService {
     return Promise.resolve()
   }
 
-  static async getWebchatVisibility({
-    appId,
-  }: {
+  static async getWebchatVisibility(
     appId: string
-  }): Promise<AxiosResponse<any>> {
+  ): Promise<AxiosResponse<any>> {
     return axios.get(
       `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
     )
@@ -246,6 +257,7 @@ export class HubtypeService {
 
   destroyPusher(): void {
     if (!this.pusher) return
+
     this.pusher.disconnect()
     this.pusher.unsubscribe(this.pusherChannel)
     this.pusher.unbind_all()
