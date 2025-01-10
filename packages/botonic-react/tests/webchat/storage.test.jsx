@@ -29,7 +29,7 @@ describe('TEST: storage', () => {
     expect(botonicState.session.user).toHaveProperty('id' && 'name')
     expect(botonicState).toHaveProperty('messages', [])
     expect(botonicState).toHaveProperty('session')
-    expect(botonicState).toHaveProperty('lastRoutePath', null)
+    expect(botonicState.lastRoutePath).toBe(undefined)
     expect(botonicState).toHaveProperty('devSettings', {
       keepSessionOnReload: false,
     })

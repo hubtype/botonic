@@ -5,6 +5,7 @@ import {
   Plugin as CorePlugin,
   Route as CoreRoute,
   Routes as CoreRoutes,
+  ServerConfig,
   Session as CoreSession,
   SessionUser as CoreSessionUser,
 } from '@botonic/core'
@@ -20,6 +21,8 @@ import {
   WebchatSettingsProps,
   Webview,
 } from './components/index-types'
+import { CloseWebviewOptions } from './contexts'
+import { UseWebchat } from './webchat/hooks/use-webchat'
 import { WebchatState } from './webchat/index-types'
 import { WebchatApp } from './webchat-app'
 
@@ -51,32 +54,91 @@ export interface RequestContextInterface extends ActionRequest {
   setLocale: (locale: string) => string
 }
 
-export interface CustomMessageType {
-  customTypeName: string
+export interface WebchatRef {
+  addBotResponse: ({
+    response,
+    session,
+    lastRoutePath,
+  }: AddBotResponseArgs) => void
+  setTyping: (typing: boolean) => void
+  addUserMessage: (message: any) => Promise<void>
+  updateUser: (userToUpdate: any) => void
+  openWebchat: () => void
+  closeWebchat: () => void
+  toggleWebchat: () => void
+  openCoverComponent: () => void
+  closeCoverComponent: () => void
+  toggleCoverComponent: () => void
+  renderCustomComponent: (customComponent: any) => void
+  unmountCustomComponent: () => void
+  isOnline: () => boolean
+  setOnline: (online: boolean) => void
+  getMessages: () => { id: string; ack: number; unsentInput: CoreInput }[] // TODO: define MessagesJSON
+  clearMessages: () => void
+  getLastMessageUpdate: () => string | undefined
+  updateMessageInfo: (msgId: string, messageInfo: any) => void
+  updateWebchatSettings: (settings: WebchatSettingsProps) => void
+  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
+}
+
+interface AddBotResponseArgs {
+  response: any
+  session?: any
+  lastRoutePath?: any
 }
 
 export interface WebchatArgs {
-  blockInputs?: BlockInputOption[]
+  theme?: ThemeProps
+  persistentMenu?: PersistentMenuTheme
   coverComponent?: CoverComponentOptions
+  blockInputs?: BlockInputOption[]
+  enableEmojiPicker?: boolean
+  enableAttachments?: boolean
+  enableUserInput?: boolean
+  enableAnimations?: boolean
+  hostId?: string
+  shadowDOM?: boolean | (() => boolean)
   defaultDelay?: number
   defaultTyping?: number
-  enableAnimations?: boolean
-  enableAttachments?: boolean
-  enableEmojiPicker?: boolean
-  enableUserInput?: boolean
-  shadowDOM?: boolean | (() => boolean)
-  hostId?: string
-  getString?: (stringId: string, session: CoreSession) => string
-  onClose?: (app: WebchatApp, args: any) => void
-  onInit?: (app: WebchatApp, args: any) => void
-  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
-  onOpen?: (app: WebchatApp, args: any) => void
-  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
-  onTrackEvent?: TrackEventFunction
-  persistentMenu?: PersistentMenuTheme
   storage?: Storage | null
-  storageKey?: any
+  storageKey?: string
+  onInit?: (app: WebchatApp, args: any) => void
+  onOpen?: (app: WebchatApp, args: any) => void
+  onClose?: (app: WebchatApp, args: any) => void
+  onMessage?: (app: WebchatApp, message: WebchatMessage) => void
+  onTrackEvent?: TrackEventFunction
+  onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  appId?: string
+  visibility?: boolean | (() => boolean) | 'dynamic'
+  server?: ServerConfig
+}
+
+export interface WebchatProps {
+  webchatHooks?: UseWebchat
+  initialSession?: any
+  initialDevSettings?: any
+  onStateChange: (args: OnStateChangeArgs) => void
+
+  shadowDOM?: any
   theme?: ThemeProps
+  persistentMenu?: PersistentMenuTheme
+  coverComponent?: any
+  blockInputs?: any
+  enableEmojiPicker?: boolean
+  enableAttachments?: boolean
+  enableUserInput?: boolean
+  enableAnimations?: boolean
+  storage?: Storage | null
+  storageKey?: string | (() => string)
+  defaultDelay?: number
+  defaultTyping?: number
+  onInit?: (args?: any) => void
+  onOpen?: (args?: any) => void
+  onClose?: (args?: any) => void
+  onUserInput(args: OnUserInputArgs): Promise<void> // TODO: Review this function and params types
+  onTrackEvent?: TrackEventFunction
+  host?: any
+  server?: ServerConfig
 }
 
 export type EventArgs = { [key: string]: any }
@@ -123,7 +185,7 @@ export interface OnUserInputArgs {
   input: CoreInput
   lastRoutePath?: string
   session?: CoreSession
-  user: CoreSessionUser
+  user?: CoreSessionUser
 }
 
 export interface OnStateChangeArgs {
@@ -137,10 +199,19 @@ export interface MessageInfo {
   type: 'update_webchat_settings' | 'sender_action'
 }
 
-export interface Event {
-  action?: 'update_message_info'
+export type Event = ConnectionChangeEvent | UpdateMessageInfoEvent
+
+interface ConnectionChangeEvent {
+  action: 'connectionChange'
+  online: boolean
   isError?: boolean
   message?: MessageInfo
+}
+
+interface UpdateMessageInfoEvent {
+  action: 'update_message_info'
+  message: MessageInfo
+  isError?: boolean
 }
 
 // ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
@@ -148,7 +219,6 @@ export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
 
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
-  closeWebview: () => Promise<void>
   getThemeProperty: (property: string, defaultValue?: any) => any
   openWebview: (webviewComponent: Webview, params?: any) => void
   resetUnreadMessages: () => void
@@ -159,7 +229,7 @@ export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => Promise<void>
   setIsInputFocused: (isInputFocused: boolean) => void
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
-  theme: ThemeProps
+  theme: ThemeProps // TODO: Review if theme is needed and used from WebchatContext
   toggleWebchat: (toggle: boolean) => void
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
@@ -169,9 +239,9 @@ export interface WebchatContextProps {
   updateReplies: (replies: boolean) => void
   updateUser: (user: Partial<CoreSessionUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
+  trackEvent?: TrackEventFunction
   webchatState: WebchatState
-  trackEvent: TrackEventFunction
-  webchatRef: React.MutableRefObject<HTMLDivElement | null>
+  webchatRef: React.MutableRefObject<HTMLDivElement | null> // Rename this to webchatContainerRef
   chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
   inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
   headerRef: React.MutableRefObject<HTMLDivElement | null>

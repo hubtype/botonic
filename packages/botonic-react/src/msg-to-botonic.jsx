@@ -32,7 +32,7 @@ import {
  * @param customMessageTypes {{customTypeName}[]?}
  * @return {React.ReactNode}
  */
-export function msgToBotonic(msg, customMessageTypes) {
+export function msgToBotonic(msg, customMessageTypes = []) {
   delete msg.display
   if (isCustom(msg)) {
     try {
@@ -97,10 +97,6 @@ export function msgToBotonic(msg, customMessageTypes) {
   }
   console.warn(`Not converting message of type ${msg.type}`)
   return null
-}
-
-function rndStr() {
-  return Math.random().toString()
 }
 
 /**
