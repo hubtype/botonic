@@ -20,6 +20,7 @@ All notable changes to Botonic will be documented in this file.
 - [`WebchatApp` with typescript](https://github.com/hubtype/botonic/pull/2945)
 - [`Webchat` component with typescript](https://github.com/hubtype/botonic/pull/2947)
 - [`Header` component with typescript](https://github.com/hubtype/botonic/pull/2949)
+- [fix types and tests](https://github.com/hubtype/botonic/pull/2950)
 
 ### Fixed
 
