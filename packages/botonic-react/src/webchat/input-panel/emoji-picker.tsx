@@ -7,7 +7,7 @@ import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
 interface EmojiPickerProps {
-  enableEmojiPicker: boolean
+  enableEmojiPicker?: boolean
   onClick: () => void
 }
 

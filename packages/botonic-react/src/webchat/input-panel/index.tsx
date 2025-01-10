@@ -16,10 +16,10 @@ import { Textarea } from './textarea'
 
 interface InputPanelProps {
   persistentMenu: any
-  enableEmojiPicker: boolean
-  enableAttachments: boolean
+  enableEmojiPicker?: boolean
+  enableAttachments?: boolean
   handleAttachment: (event: any) => void
-  textareaRef: React.MutableRefObject<HTMLTextAreaElement>
+  textareaRef: React.MutableRefObject<HTMLTextAreaElement | undefined>
   host: HTMLElement
   onUserInput?: (event: any) => Promise<void>
 }
@@ -43,6 +43,8 @@ export const InputPanel = ({
   } = useContext(WebchatContext)
 
   const handleSelectedEmoji = event => {
+    if (!textareaRef.current) return
+
     textareaRef.current.value += event.emoji
     textareaRef.current.focus()
   }
@@ -56,7 +58,9 @@ export const InputPanel = ({
   }
 
   const sendTextAreaText = async () => {
-    await sendText(textareaRef.current.value)
+    if (!textareaRef.current) return
+
+    await sendText(textareaRef.current?.value)
     textareaRef.current.value = ''
   }
 

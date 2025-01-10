@@ -11,7 +11,7 @@ import { TextAreaContainer } from './styles'
 interface TextareaProps {
   host: HTMLElement
   persistentMenu: PersistentMenuTheme
-  textareaRef: React.MutableRefObject<HTMLTextAreaElement>
+  textareaRef: React.MutableRefObject<HTMLTextAreaElement | undefined>
   sendChatEvent: (event: string) => Promise<void>
   sendTextAreaText: () => Promise<void>
 }
@@ -45,6 +45,8 @@ export const Textarea = ({
   }
 
   const onKeyUp = () => {
+    if (!textareaRef.current) return
+
     if (textareaRef.current.value === '') {
       stopTyping()
       return

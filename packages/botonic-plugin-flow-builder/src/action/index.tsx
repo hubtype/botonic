@@ -19,6 +19,7 @@ export type FlowBuilderActionProps = {
 
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static contextType = RequestContext
+  declare context: React.ContextType<typeof RequestContext>
 
   static async executeConversationStart(
     request: ActionRequest
