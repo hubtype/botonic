@@ -11,6 +11,7 @@ import {
 } from '@botonic/core'
 import React from 'react'
 
+import { Reply } from './components'
 import {
   BlockInputOption,
   ButtonProps,
@@ -122,8 +123,8 @@ export interface WebchatProps {
   shadowDOM?: any
   theme?: ThemeProps
   persistentMenu?: PersistentMenuTheme
-  coverComponent?: any
-  blockInputs?: any
+  coverComponent?: CoverComponentOptions
+  blockInputs?: BlockInputOption[]
   enableEmojiPicker?: boolean
   enableAttachments?: boolean
   enableUserInput?: boolean
@@ -135,7 +136,7 @@ export interface WebchatProps {
   onInit?: (args?: any) => void
   onOpen?: (args?: any) => void
   onClose?: (args?: any) => void
-  onUserInput(args: OnUserInputArgs): Promise<void> // TODO: Review this function and params types
+  onUserInput(args: OnUserInputArgs): Promise<void>
   onTrackEvent?: TrackEventFunction
   host?: any
   server?: ServerConfig
@@ -163,19 +164,19 @@ export interface WebchatMessage {
   ack: 0 | 1
   blob: boolean
   buttons: ButtonProps[]
-  children: any
-  data: any
+  children: any // messageJSON don't have children prop
+  data: any // if message.type === 'text' => message.data = {text: string}
   delay: number
   display: boolean
-  enabletimestamps: boolean
+  enabletimestamps?: boolean
   id: string
-  imagestyle: any
+  imagestyle?: any
   isUnread: boolean
   json: any
-  markdown: boolean
+  markdown: boolean // 0 | 1
   replies: ReplyProps[]
   sentBy: SENDERS
-  style: any
+  style?: any
   timestamp: string
   type: CoreInputType
   typing: number
@@ -236,7 +237,7 @@ export interface WebchatContextProps {
   toggleCoverComponent: (toggle: boolean) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
-  updateReplies: (replies: boolean) => void
+  updateReplies: (replies: (typeof Reply)[]) => void
   updateUser: (user: Partial<CoreSessionUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction

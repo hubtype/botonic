@@ -134,8 +134,8 @@ export const WebchatMessageList = () => {
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
           return (
-            <>
-              <ContainerMessage role={ROLES.MESSAGE} key={index}>
+            <React.Fragment key={messageComponent.props.id}>
+              <ContainerMessage role={ROLES.MESSAGE}>
                 {showUnreadMessagesBanner(messageComponent.props.id) && (
                   <UnreadMessagesBanner
                     unreadMessagesBannerRef={unreadMessagesBannerRef}
@@ -151,7 +151,7 @@ export const WebchatMessageList = () => {
                   }}
                 ></div>
               )}
-            </>
+            </React.Fragment>
           )
         })}
         {webchatState.typing && <TypingIndicator ref={typingRef} />}
