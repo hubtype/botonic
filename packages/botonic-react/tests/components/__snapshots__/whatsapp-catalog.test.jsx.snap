@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Whatsapp Catalog component 1`] = `
+<message
+  body="Catalog sent from test"
+  footer="Catalog footer"
+  thumbnailProductId="fake-id"
+  type="whatsapp-catalog"
+/>
+`;
