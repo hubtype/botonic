@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Whatsapp Product List component 1`] = `
+<message
+  body="Product list sent from test"
+  catalogId="fake-catalog-id"
+  footer="Don't miss our products"
+  header="Take a look to our products"
+  sections="[{"title":"section one","product_items":[{"product_retailer_id":"fake-product-id-1"},{"product_retailer_id":"fake-product-id-2"}]},{"title":"section two","product_items":[{"product_retailer_id":"fake-product-id-3"}]}]"
+  type="whatsapp-product-list"
+/>
+`;

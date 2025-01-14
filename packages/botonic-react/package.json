@@ -20,6 +20,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
+    "@babel/helper-simple-access": "^7.25.9",
     "@botonic/core": "0.31.0-alpha.1",
     "axios": "^1.7.2",
     "emoji-picker-react": "^4.12.0",
