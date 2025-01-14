@@ -2,7 +2,10 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { REG_EXP_PATTERN } from '../constants'
-import { HtKeywordNode } from '../content-fields/hubtype-fields'
+import {
+  HtKeywordNode,
+  HtNodeWithContent,
+} from '../content-fields/hubtype-fields'
 import { EventAction, trackEvent } from '../tracking'
 
 interface KeywordProps {
@@ -17,6 +20,7 @@ export class KeywordMatcher {
   public isRegExp: boolean
   public matchedKeyword?: string
   public keywordNodeId?: string
+  public flowId?: string
 
   constructor({ cmsApi, locale, request }: KeywordProps) {
     this.cmsApi = cmsApi
@@ -50,6 +54,9 @@ export class KeywordMatcher {
     const result = node.content.keywords.find(keywords => {
       if (keywords.locale === this.locale) {
         this.keywordNodeId = node.id
+        this.flowId = this.cmsApi.getNodeById<HtNodeWithContent>(
+          node.id
+        ).flow_id
         return this.inputMatchesAnyKeyword(userInput, keywords.values)
       }
 
@@ -87,11 +94,13 @@ export class KeywordMatcher {
 
   private async trackKeywordEvent() {
     const eventArgs = {
-      nluKeywordId: this.keywordNodeId,
       nluKeywordName: this.matchedKeyword,
       nluKeywordIsRegex: this.isRegExp,
       nluKeywordMessageId: this.request.input.message_id,
       userInput: this.request.input.data,
+      flowThreadId: this.request.session.flow_thread_id,
+      flowId: this.flowId,
+      flowNodeId: this.keywordNodeId,
     }
     await trackEvent(this.request, EventAction.Keyword, eventArgs)
   }

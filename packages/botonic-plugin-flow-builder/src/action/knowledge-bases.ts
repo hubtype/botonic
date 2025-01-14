@@ -1,6 +1,7 @@
 import { ActionRequest } from '@botonic/react'
 
 import { FlowContent, FlowKnowledgeBase } from '../content-fields'
+import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
 import { inputHasTextData } from '../utils'
@@ -32,6 +33,9 @@ export async function getContentsByKnowledgeBase({
   }
 
   const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
+  const flowId = cmsApi.getNodeById<HtNodeWithContent>(
+    knowledgeBaseContent.id
+  ).flow_id
 
   if (
     flowBuilderPlugin.getKnowledgeBaseResponse &&
@@ -43,7 +47,8 @@ export async function getContentsByKnowledgeBase({
         flowBuilderPlugin.getKnowledgeBaseResponse,
         request,
         contents,
-        sourceIds
+        knowledgeBaseContent,
+        flowId
       )
 
     if (contentsWithKnowledgeResponse) {
@@ -58,14 +63,21 @@ async function getContentsWithKnowledgeResponse(
   getKnowledgeBaseResponse: KnowledgeBaseFunction,
   request: ActionRequest,
   contents: FlowContent[],
-  sourceIds: string[]
+  knowledgeBaseContent: FlowKnowledgeBase,
+  flowId: string
 ): Promise<FlowContent[] | undefined> {
+  const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
     request.input.data!,
     sourceIds
   )
-  await trackKnowledgeBase(knowledgeBaseResponse, request, sourceIds)
+  await trackKnowledgeBase(
+    knowledgeBaseResponse,
+    request,
+    knowledgeBaseContent,
+    flowId
+  )
 
   if (
     !knowledgeBaseResponse.hasKnowledge ||
@@ -94,12 +106,16 @@ function updateContentsWithResponse(
 async function trackKnowledgeBase(
   response: KnowledgeBaseResponse,
   request: ActionRequest,
-  sourceIds: string[]
+  knowledgeBaseContent: FlowKnowledgeBase,
+  flowId: string
 ) {
+  const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
   const knowledgebaseInferenceId = response.inferenceId
   const knowledgebaseSourcesIds = sourceIds
   const knowledgebaseChunksIds = response.chunkIds
   const knowledgebaseMessageId = request.input.message_id
+  const flowThreadId = request.session.flow_thread_id
+  const flowNodeId = knowledgeBaseContent.id
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
 
@@ -118,5 +134,8 @@ async function trackKnowledgeBase(
     knowledgebaseChunksIds,
     knowledgebaseMessageId,
     userInput: request.input.data,
+    flowThreadId,
+    flowId,
+    flowNodeId,
   })
 }

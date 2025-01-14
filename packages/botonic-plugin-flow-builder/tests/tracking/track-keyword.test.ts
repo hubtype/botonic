@@ -32,7 +32,9 @@ describe('Check tracked events when a contents are displayed', () => {
       expect.anything(),
       'nlu_keyword',
       {
-        nluKeywordId: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
+        flowId: '43a736f8-4837-4fbb-a661-021291749b4f',
+        flowNodeId: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
+        flowThreadId: 'testFlowThreadId',
         nluKeywordName: 'flowText',
         nluKeywordIsRegex: false,
         nluKeywordMessageId: expect.anything(),

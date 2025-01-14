@@ -23,7 +23,8 @@ export class SmartIntentsApi {
   constructor(
     public cmsApi: FlowBuilderApi,
     public currentRequest: ActionRequest,
-    public smartIntentsConfig: SmartIntentsInferenceConfig
+    public smartIntentsConfig: SmartIntentsInferenceConfig,
+    public flowId?: string
   ) {}
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {
@@ -50,6 +51,9 @@ export class SmartIntentsApi {
           nluIntentSmartNumUsed: response.data.smart_intents_used.length,
           nluIntentSmartMessageId: this.currentRequest.input.message_id,
           userInput: this.currentRequest.input.data,
+          flowThreadId: this.currentRequest.session.flow_thread_id,
+          flowId: smartIntentNode.flow_id,
+          flowNodeId: smartIntentNode.id,
         })
         return smartIntentNode
       }

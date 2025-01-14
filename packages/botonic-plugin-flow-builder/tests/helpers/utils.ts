@@ -72,6 +72,7 @@ export function createRequest({
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
+      flow_thread_id: 'testFlowThreadId',
     },
     input: {
       bot_interaction_id: 'testInteractionId',

@@ -32,6 +32,9 @@ async function trackIntentEvent(
     nluIntentThreshold: intentNode?.content.confidence,
     nluIntentMessageId: request.input.message_id,
     userInput: request.input.data,
+    flowThreadId: request.session.flow_thread_id,
+    flowId: intentNode.flow_id,
+    flowNodeId: intentNode.id,
   }
   await trackEvent(request, EventAction.Intent, eventArgs)
 }
