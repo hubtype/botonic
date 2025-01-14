@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Whatsapp Product Carousel component with card indexes 1`] = `
+<message
+  bodyParameters="[{"type":"text","text":"Pepito"},{"type":"text","text":"Test"}]"
+  cards="[{"card_index":1,"catalog_id":"fake-catalog-id","product_retailer_id":"fake-product-id-2"},{"card_index":1,"catalog_id":"fake-catalog-id","product_retailer_id":"fake-product-id-1"}]"
+  templateLanguage="en_US"
+  templateName="fake-template-name"
+  type="whatsapp-product-carousel"
+/>
+`;
+
+exports[`renders Whatsapp Product Carousel component without card indexes 1`] = `
+<message
+  bodyParameters="[{"type":"text","text":"Pepito"},{"type":"text","text":"Test"}]"
+  cards="[{"card_index":0,"catalog_id":"fake-catalog-id","product_retailer_id":"fake-product-id-2"},{"card_index":1,"catalog_id":"fake-catalog-id","product_retailer_id":"fake-product-id-1"}]"
+  templateLanguage="en_US"
+  templateName="fake-template-name"
+  type="whatsapp-product-carousel"
+/>
+`;
