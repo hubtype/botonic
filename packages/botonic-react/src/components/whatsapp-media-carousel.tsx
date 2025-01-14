@@ -29,7 +29,7 @@ type CardButton = QuickReplyButton | UrlButton
 
 interface Button {
   type: 'quick_reply' | 'url'
-  button_index: number
+  button_index?: number
 }
 
 interface QuickReplyButton extends Button {
@@ -41,9 +41,9 @@ interface UrlButton extends Button {
 }
 
 interface Card {
-  card_index: number
   file_type: 'image' | 'video'
   file_id: string
+  card_index?: number
   body_parameters?: Parameters[]
   buttons?: CardButton[]
   extra_components?: Record<string, any>[]
@@ -72,6 +72,20 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
     )
   }
 
+  const getCards = (cards: Card[]) => {
+    cards.forEach((card, index) => {
+      if (!card.card_index) {
+        card.card_index = index
+      }
+      card.buttons?.forEach((button, index) => {
+        if (!button.button_index) {
+          button.button_index = index
+        }
+      })
+    })
+    return cards
+  }
+
   const renderNode = () => {
     return (
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
@@ -79,7 +93,7 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
         {...props}
         bodyParameters={JSON.stringify(props.bodyParameters)}
         extraComponents={JSON.stringify(props.extraComponents)}
-        cards={JSON.stringify(props.cards)}
+        cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
         type={INPUT.WHATSAPP_MEDIA_CAROUSEL}
