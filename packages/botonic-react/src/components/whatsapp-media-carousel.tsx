@@ -54,7 +54,6 @@ export interface WhatsappMediaCarouselProps {
   templateLanguage: string
   cards: Card[]
   bodyParameters?: Parameters[]
-  extraComponents?: Record<string, any>
 }
 
 const serialize = (message: string) => {
@@ -92,7 +91,6 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
       <message
         {...props}
         bodyParameters={JSON.stringify(props.bodyParameters)}
-        extraComponents={JSON.stringify(props.extraComponents)}
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
