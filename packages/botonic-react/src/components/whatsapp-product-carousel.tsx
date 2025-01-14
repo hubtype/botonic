@@ -26,9 +26,9 @@ interface DateTimeParameter {
 }
 
 interface Card {
-  card_index: number
   product_retailer_id: string
   catalog_id: string
+  card_index?: number
 }
 
 export interface WhatsappProductCarouselProps {
@@ -55,13 +55,22 @@ export const WhatsappProductCarousel = (
     )
   }
 
+  const getCards = (cards: Card[]) => {
+    cards.forEach((card, index) => {
+      if (!card.card_index) {
+        card.card_index = index
+      }
+    })
+    return cards
+  }
+
   const renderNode = () => {
     return (
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
         bodyParameters={JSON.stringify(props.bodyParameters)}
-        cards={JSON.stringify(props.cards)}
+        cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
         type={INPUT.WHATSAPP_PRODUCT_CAROUSEL}
