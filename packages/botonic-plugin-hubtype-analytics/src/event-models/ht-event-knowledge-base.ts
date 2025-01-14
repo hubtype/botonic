@@ -13,6 +13,9 @@ export class HtEventKnowledgeBase extends HtEvent {
   knowledgebase_chunks_ids: string[]
   knowledgebase_message_id: string
   user_input: string
+  flow_thread_id: string
+  flow_id: string
+  flow_node_id: string
 
   constructor(event: EventKnowledgeBase, requestData: RequestData) {
     super(event, requestData)
@@ -24,5 +27,8 @@ export class HtEventKnowledgeBase extends HtEvent {
     this.knowledgebase_chunks_ids = event.knowledgebaseChunksIds
     this.knowledgebase_message_id = event.knowledgebaseMessageId
     this.user_input = event.userInput
+    this.flow_thread_id = event.flowThreadId
+    this.flow_id = event.flowId
+    this.flow_node_id = event.flowNodeId
   }
 }
