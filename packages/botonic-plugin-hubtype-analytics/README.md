@@ -17,17 +17,19 @@ npm i @botonic/plugin-hubtype-analytics
 You can define two optional functions to obtain the language and the country.
 By default if you do not define these functions it will use the language defined in request.session.user.extra_data.language and country defined in request.session.user.extra_data.country
 
-```
-  export const plugins = [
-    {
-      id: 'hubtype-analytics',
-      resolve: require('@botonic/plugin-hubtype-analytics'),
-      options: {
-        getLaguange?: (request: BotRequest) => request.session.user.extra_data.lang
-        getCountry?: (request: BotRequest) => request.session.user.extra_data.store
-      },
+```typescript
+export const plugins = [
+  {
+    id: 'hubtype-analytics',
+    resolve: require('@botonic/plugin-hubtype-analytics'),
+    options: {
+      getLaguange: (request: BotRequest) =>
+        request.session.user.extra_data.lang,
+      getCountry: (request: BotRequest) =>
+        request.session.user.extra_data.store,
     },
-  ]
+  },
+]
 ```
 
 ## Plugin Options
@@ -60,7 +62,7 @@ export class WelcomeAction extends FlowBuilderMultichannelAction {
 }
 ```
 
-- To track a handoff, you can use an instance of `HandOffBuilder` from `@botonic/core` `handoffBuilder.withBotEvent()` so thaht the backend will create the event after the handoff has been done correctly.
+- To track a handoff, you can use an instance of `HandOffBuilder` from `@botonic/core` `handoffBuilder.withBotEvent()` so that the backend will create the event after the handoff has been done correctly.
 
 ```typescript
 const handOffBuilder = new HandOffBuilder(request.session)
