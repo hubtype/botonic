@@ -71,10 +71,18 @@ export interface ImageProps extends MessageProps {
 
 export interface VideoProps extends MessageProps {
   src: string
+  input?: { data: string }
 }
 
 export interface AudioProps extends MessageProps {
   src: string
+  input?: { data: string }
+}
+
+export interface DocumentProps extends MessageProps {
+  src: string
+  input?: { data: string }
+  from?: any
 }
 
 export interface TitleProps {
