@@ -1,5 +1,6 @@
 import { INPUT } from '@botonic/core'
 import React from 'react'
+import snakecaseKeys from 'snakecase-keys'
 
 import { renderComponent } from '../util/react'
 import { Message } from './message'
@@ -14,21 +15,21 @@ interface TextParameter {
 interface CurrencyParameter {
   type: 'currency'
   currency: {
-    fallback_value: string
+    fallbackValue: string
     code: string
-    amount_1000: number
+    amount1000: number
   }
 }
 
 interface DateTimeParameter {
   type: 'date_time'
-  date_time: { fallback_value: string }
+  dateTime: { fallbackValue: string }
 }
 
 interface Card {
-  product_retailer_id: string
-  catalog_id: string
-  card_index?: number
+  productRetailerId: string
+  catalogId: string
+  cardIndex?: number
 }
 
 export interface WhatsappProductCarouselProps {
@@ -57,11 +58,11 @@ export const WhatsappProductCarousel = (
 
   const getCards = (cards: Card[]) => {
     cards.forEach((card, index) => {
-      if (!card.card_index) {
-        card.card_index = index
+      if (!card.cardIndex) {
+        card.cardIndex = index
       }
     })
-    return cards
+    return snakecaseKeys(cards as unknown as Record<string, unknown>[])
   }
 
   const renderNode = () => {
@@ -69,7 +70,11 @@ export const WhatsappProductCarousel = (
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
-        bodyParameters={JSON.stringify(props.bodyParameters)}
+        bodyParameters={JSON.stringify(
+          snakecaseKeys(
+            props.bodyParameters as unknown as Record<string, unknown>[]
+          )
+        )}
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
