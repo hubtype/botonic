@@ -56,7 +56,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
       <Image
         key={msg.key}
         {...msg}
-        src={msg.data.image != undefined ? msg.data.image : msg.data}
+        src={msg.data.image !== undefined ? msg.data.image : msg.data}
       />
     )
   } else if (isVideo(msg)) {
