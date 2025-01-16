@@ -1,5 +1,6 @@
 import { INPUT } from '@botonic/core'
 import React from 'react'
+import snakecaseKeys from 'snakecase-keys'
 
 import { renderComponent } from '../util/react'
 import { Message } from './message'
@@ -14,22 +15,22 @@ interface TextParameter {
 interface CurrencyParameter {
   type: 'currency'
   currency: {
-    fallback_value: string
+    fallbackValue: string
     code: string
-    amount_1000: number
+    amount1000: number
   }
 }
 
 interface DateTimeParameter {
   type: 'date_time'
-  date_time: { fallback_value: string }
+  dateTime: { fallbackValue: string }
 }
 
 type CardButton = QuickReplyButton | UrlButton
 
 interface Button {
   type: 'quick_reply' | 'url'
-  button_index?: number
+  buttonIndex?: number
 }
 
 interface QuickReplyButton extends Button {
@@ -37,16 +38,16 @@ interface QuickReplyButton extends Button {
 }
 
 interface UrlButton extends Button {
-  url_variable: string
+  urlVariable: string
 }
 
 interface Card {
-  file_type: 'image' | 'video'
-  file_id: string
-  card_index?: number
-  body_parameters?: Parameters[]
+  fileType: 'image' | 'video'
+  fileId: string
+  cardIndex?: number
+  bodyParameters?: Parameters[]
   buttons?: CardButton[]
-  extra_components?: Record<string, any>[]
+  extraComponents?: Record<string, any>[]
 }
 
 export interface WhatsappMediaCarouselProps {
@@ -73,16 +74,16 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
 
   const getCards = (cards: Card[]) => {
     cards.forEach((card, index) => {
-      if (!card.card_index) {
-        card.card_index = index
+      if (!card.cardIndex) {
+        card.cardIndex = index
       }
       card.buttons?.forEach((button, index) => {
-        if (!button.button_index) {
-          button.button_index = index
+        if (!button.buttonIndex) {
+          button.buttonIndex = index
         }
       })
     })
-    return cards
+    return snakecaseKeys(cards as unknown as Record<string, unknown>[])
   }
 
   const renderNode = () => {
@@ -90,7 +91,11 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
-        bodyParameters={JSON.stringify(props.bodyParameters)}
+        bodyParameters={JSON.stringify(
+          snakecaseKeys(
+            props.bodyParameters as unknown as Record<string, unknown>[]
+          )
+        )}
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
