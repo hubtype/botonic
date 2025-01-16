@@ -70,7 +70,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
     return (
       <Audio
         {...msg}
-        src={msg.data.audio != undefined ? msg.data.audio : msg.data}
+        src={msg.data.audio !== undefined ? msg.data.audio : msg.data}
       />
     )
   } else if (isDocument(msg)) {
