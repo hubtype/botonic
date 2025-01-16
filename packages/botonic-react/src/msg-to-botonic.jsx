@@ -63,7 +63,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
     return (
       <Video
         {...msg}
-        src={msg.data.video != undefined ? msg.data.video : msg.data}
+        src={msg.data.video !== undefined ? msg.data.video : msg.data}
       />
     )
   } else if (isAudio(msg)) {
