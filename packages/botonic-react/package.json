@@ -31,6 +31,7 @@
     "react-json-tree": "^0.18.0",
     "react-router-dom": "^5.3.4",
     "react-textarea-autosize": "^8.5.5",
+    "snakecase-keys": "^8.0.1",
     "styled-components": "^5.3.11",
     "ua-parser-js": "^1.0.39",
     "uuid": "^10.0.0"
