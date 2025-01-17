@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import React from 'react'
-import snakecaseKeys from 'snakecase-keys'
 
+import { toSnakeCaseKeys } from '../util/functional'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
 
@@ -45,9 +45,7 @@ export const WhatsappProductList = (props: WhatsappProductListProps) => {
         body={props.body}
         footer={props.footer}
         header={props.header}
-        sections={JSON.stringify(
-          snakecaseKeys(props.sections as unknown as Record<string, unknown>[])
-        )}
+        sections={JSON.stringify(toSnakeCaseKeys(props.sections))}
         catalogId={props.catalogId}
         type={INPUT.WHATSAPP_PRODUCT_LIST}
       />

@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import React from 'react'
-import snakecaseKeys from 'snakecase-keys'
 
+import { toSnakeCaseKeys } from '../util/functional'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
 
@@ -83,7 +83,7 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
         }
       })
     })
-    return snakecaseKeys(cards as unknown as Record<string, unknown>[])
+    return toSnakeCaseKeys(cards)
   }
 
   const renderNode = () => {
@@ -91,11 +91,7 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
       // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
-        bodyParameters={JSON.stringify(
-          snakecaseKeys(
-            props.bodyParameters as unknown as Record<string, unknown>[]
-          )
-        )}
+        bodyParameters={JSON.stringify(toSnakeCaseKeys(props.bodyParameters))}
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
