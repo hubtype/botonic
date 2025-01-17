@@ -1,23 +1,29 @@
 import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
+import styled from 'styled-components'
 
 import { ROLES } from '../constants'
 import { staticAsset } from '../util/environment'
+import { AudioProps } from './index-types'
 import { Message } from './message'
 
-const serialize = audioProps => {
+const StyledAudio = styled.audio`
+  max-width: 100%;
+`
+
+const serialize = (audioProps: { src: string }) => {
   return { audio: audioProps.src }
 }
 
-export const Audio = props => {
+export const Audio = (props: AudioProps) => {
   props = { ...props, src: staticAsset(props.src) }
   let content = props.children
   if (isBrowser())
     content = (
-      <audio style={{ maxWidth: '100%' }} id='myAudio' controls>
+      <StyledAudio id='myAudio' controls>
         <source src={props.src} type='audio/mpeg' />
         Your browser does not support this audio format.
-      </audio>
+      </StyledAudio>
     )
   return (
     <Message
