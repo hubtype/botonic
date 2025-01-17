@@ -16,7 +16,7 @@ export type MessageType =
 
 export interface MessageProps {
   blob?: boolean
-  children: React.ReactNode
+  children?: React.ReactNode
   delay?: number
   enabletimestamps?: boolean
   sentBy?: SENDERS
@@ -64,7 +64,26 @@ export interface PicProps {
   src: string
 }
 
-export type ImageProps = PicProps
+export interface ImageProps extends MessageProps {
+  src: string
+  input?: { data: string }
+}
+
+export interface VideoProps extends MessageProps {
+  src: string
+  input?: { data: string }
+}
+
+export interface AudioProps extends MessageProps {
+  src: string
+  input?: { data: string }
+}
+
+export interface DocumentProps extends MessageProps {
+  src: string
+  input?: { data: string }
+  from?: any
+}
 
 export interface TitleProps {
   children: React.ReactNode

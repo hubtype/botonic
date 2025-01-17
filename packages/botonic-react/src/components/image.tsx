@@ -5,9 +5,14 @@ import styled from 'styled-components'
 import { ROLES, WEBCHAT } from '../constants'
 import { WebchatContext } from '../contexts'
 import { staticAsset } from '../util/environment'
+import { ImageProps } from './index-types'
 import { Message } from './message'
 
-const StyledImage = styled.img`
+interface StyledImageProps {
+  hasPreviewer: boolean
+}
+
+const StyledImage = styled.img<StyledImageProps>`
   border-radius: 8px;
   max-width: 150px;
   max-height: 150px;
@@ -15,14 +20,15 @@ const StyledImage = styled.img`
   cursor: ${({ hasPreviewer }) => (hasPreviewer ? 'pointer' : 'auto')};
 `
 
-const serialize = imageProps => {
+const serialize = (imageProps: { src: string }) => {
   return { image: imageProps.src }
 }
 
-export const Image = props => {
+export const Image = (props: ImageProps) => {
   props = props.input?.data
     ? { ...props, src: props.input.data }
     : { ...props, src: staticAsset(props.src) }
+
   let content = props.children
 
   const [isPreviewerOpened, setIsPreviewerOpened] = useState(false)

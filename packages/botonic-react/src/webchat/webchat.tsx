@@ -414,7 +414,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
           // to keep the input.id generated in the frontend as id of the message
           // @ts-ignore
           id={input.id}
-          // TODO: Review when it is necessary to add the payload
+          // Is necessary to add the payload of the input when user clicks a button
           // @ts-ignore
           payload={input.payload}
           sentBy={SENDERS.user}
@@ -424,6 +424,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       )
     } else if (isMedia(input)) {
       const temporaryDisplayUrl = URL.createObjectURL(input.data)
+      // TODO: We sould use URL.revokeObjectURL(temporaryDisplayUrl) when the component is unmounted
+      // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static#memory_management
       const mediaProps: {
         id: string
         sentBy: SENDERS
