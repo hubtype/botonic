@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { Button } from '../../components/button'
 import { ROLES, WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../context'
 import { useComponentVisible } from '../hooks'
 
 const ButtonsContainer = styled.div`

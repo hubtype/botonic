@@ -3,8 +3,8 @@ import TextareaAutosize from 'react-textarea-autosize'
 
 import { PersistentMenuTheme } from '../../components/index-types'
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { Typing } from '../../index-types'
+import { WebchatContext } from '../../webchat/context'
 import { useDeviceAdapter } from '../hooks'
 import { TextAreaContainer } from './styles'
 

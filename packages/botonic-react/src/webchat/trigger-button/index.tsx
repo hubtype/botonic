@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
+import { WebchatContext } from '../../webchat/context'
 import {
   StyledTriggerButton,
   TriggerImage,

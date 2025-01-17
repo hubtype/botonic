@@ -4,7 +4,7 @@ import React, { forwardRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
-import { useWebchat } from './hooks'
+import { useWebchat } from './context/use-webchat'
 import { SessionView } from './session-view'
 import { Webchat } from './webchat'
 

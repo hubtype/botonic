@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { SENDERS } from '../../index-types'
 import { resolveImage } from '../../util'
+import { WebchatContext } from '../../webchat/context'
 import { TimestampContainer, TimestampText } from './styles'
 
 export const resolveMessageTimestamps = (

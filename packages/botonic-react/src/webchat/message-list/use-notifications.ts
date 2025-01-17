@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../webchat/context'
 
 export function useNotifications() {
   const { getThemeProperty } = useContext(WebchatContext)

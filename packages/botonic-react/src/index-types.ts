@@ -11,7 +11,6 @@ import {
 } from '@botonic/core'
 import React from 'react'
 
-import { Reply } from './components'
 import {
   BlockInputOption,
   ButtonProps,
@@ -20,11 +19,9 @@ import {
   ReplyProps,
   ThemeProps,
   WebchatSettingsProps,
-  Webview,
 } from './components/index-types'
 import { CloseWebviewOptions } from './contexts'
-import { UseWebchat } from './webchat/hooks/use-webchat'
-import { WebchatState } from './webchat/index-types'
+import { UseWebchat } from './webchat/context/use-webchat'
 import { WebchatApp } from './webchat-app'
 
 /**
@@ -213,39 +210,4 @@ interface UpdateMessageInfoEvent {
   action: 'update_message_info'
   message: MessageInfo
   isError?: boolean
-}
-
-// ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
-export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
-
-export interface WebchatContextProps {
-  addMessage: (message: WebchatMessage) => void
-  getThemeProperty: (property: string, defaultValue?: any) => any
-  openWebview: (webviewComponent: Webview, params?: any) => void
-  resetUnreadMessages: () => void
-  resolveCase: () => void
-  sendAttachment: (attachment: File) => Promise<void>
-  sendInput: (input: ClientInput) => Promise<void>
-  sendPayload: (payload: string) => Promise<void>
-  sendText: (text: string, payload?: string) => Promise<void>
-  setIsInputFocused: (isInputFocused: boolean) => void
-  setLastMessageVisible: (isLastMessageVisible: boolean) => void
-  theme: ThemeProps // TODO: Review if theme is needed and used from WebchatContext
-  toggleWebchat: (toggle: boolean) => void
-  toggleEmojiPicker: (toggle: boolean) => void
-  togglePersistentMenu: (toggle: boolean) => void
-  toggleCoverComponent: (toggle: boolean) => void
-  updateLatestInput: (input: ClientInput) => void
-  updateMessage: (message: WebchatMessage) => void
-  updateReplies: (replies: (typeof Reply)[]) => void
-  updateUser: (user: Partial<CoreSessionUser>) => void
-  updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
-  trackEvent?: TrackEventFunction
-  webchatState: WebchatState
-  webchatRef: React.MutableRefObject<HTMLDivElement | null> // Rename this to webchatContainerRef
-  chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
-  inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
-  headerRef: React.MutableRefObject<HTMLDivElement | null>
-  scrollableMessagesListRef: React.MutableRefObject<HTMLDivElement | null>
-  repliesRef: React.MutableRefObject<HTMLDivElement | null>
 }

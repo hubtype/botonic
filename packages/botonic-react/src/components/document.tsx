@@ -3,8 +3,8 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { ROLES, WEBCHAT } from '../constants'
-import { WebchatContext } from '../contexts'
 import { staticAsset } from '../util/environment'
+import { WebchatContext } from '../webchat/context'
 import { DocumentProps } from './index-types'
 import { Message } from './message'
 

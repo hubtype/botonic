@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { Scale } from '../../shared/styles'
 import { ConditionalWrapper } from '../../util/react'
+import { WebchatContext } from '../context'
 
 export const ConditionalAnimation = props => {
   const { getThemeProperty } = useContext(WebchatContext)

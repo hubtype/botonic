@@ -5,9 +5,8 @@
 
 import 'intersection-observer'
 
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import React from 'react'
-import { act } from 'react-test-renderer'
 
 import { Audio, Document, Image, Video } from '../../src/components'
 import { ROLES } from '../../src/constants'

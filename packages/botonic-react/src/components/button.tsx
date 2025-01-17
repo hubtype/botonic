@@ -3,10 +3,10 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
-import { WebchatContext } from '../contexts'
 import { resolveImage } from '../util/environment'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
+import { WebchatContext } from '../webchat/context'
 import { ButtonsDisabler } from './buttons-disabler'
 import { ButtonProps } from './index-types'
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { WebchatMessage } from '../../index-types'
-import { WebchatState } from '../index-types'
+import { WebchatState } from '../context'
 
 interface UseTyping {
   webchatState: WebchatState

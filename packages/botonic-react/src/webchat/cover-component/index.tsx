@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../context'
 
 interface Props {
   component: any
