@@ -3,8 +3,8 @@
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
+import { act, render } from '@testing-library/react'
 import React from 'react'
-import TestRenderer, { act } from 'react-test-renderer'
 
 import { WEBCHAT } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'
@@ -18,7 +18,7 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the localStorage by default with its default values', async () => {
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat
           storage={localStorage}
           storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
@@ -38,7 +38,7 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the localStorage', async () => {
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat
           storage={localStorage}
           storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
@@ -51,7 +51,7 @@ describe('TEST: storage', () => {
 
   it('Stores botonicState in the sessionStorage', async () => {
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat
           storage={sessionStorage}
           storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
@@ -65,7 +65,7 @@ describe('TEST: storage', () => {
   it('Stores botonicState in the memory storage', async () => {
     const inMemoryStorage = new InMemoryStorage()
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat
           storage={inMemoryStorage}
           storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
@@ -81,7 +81,7 @@ describe('TEST: storage', () => {
 
   it('Does not store botonicState', async () => {
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat storage={null} storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY} />
       )
     })
@@ -98,9 +98,7 @@ describe('TEST: storageKey', () => {
 
   it('Stores botonicState in the localStorage key defined in the settings', async () => {
     await act(async () => {
-      TestRenderer.create(
-        <Webchat storage={localStorage} storageKey='myCustomKey' />
-      )
+      render(<Webchat storage={localStorage} storageKey='myCustomKey' />)
     })
     expect(localStorage.getItem('botonicState')).toBeNull()
     expect(localStorage.getItem('myCustomKey')).not.toBeNull()
@@ -108,7 +106,7 @@ describe('TEST: storageKey', () => {
 
   it('Stores botonicState in the localStorage key returned if storageKey is a function', async () => {
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat storage={localStorage} storageKey={() => 'myCustomKey'} />
       )
     })
@@ -122,7 +120,7 @@ describe('TEST: storageKey', () => {
       '{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}},"messages":[],"session":{"user":{"extra_data":{"url":"https://www.some-domain.com/","lang":"GB_en"}}},"lastRoutePath":null,"devSettings":{},"lastMessageUpdate":"2020-12-04T16:30:11.833Z"}'
     )
     await act(async () => {
-      TestRenderer.create(
+      render(
         <Webchat
           storage={localStorage}
           storageKey={WEBCHAT.DEFAULTS.STORAGE_KEY}
