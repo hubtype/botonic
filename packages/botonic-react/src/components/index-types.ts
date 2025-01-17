@@ -69,6 +69,22 @@ export interface ImageProps extends MessageProps {
   input?: { data: string }
 }
 
+export interface VideoProps extends MessageProps {
+  src: string
+  input?: { data: string }
+}
+
+export interface AudioProps extends MessageProps {
+  src: string
+  input?: { data: string }
+}
+
+export interface DocumentProps extends MessageProps {
+  src: string
+  input?: { data: string }
+  from?: any
+}
+
 export interface TitleProps {
   children: React.ReactNode
   style: string

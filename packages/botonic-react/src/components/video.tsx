@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { COLORS, ROLES } from '../constants'
 import { staticAsset } from '../util/environment'
+import { VideoProps } from './index-types'
 import { Message } from './message'
 
 const StyledVideo = styled.video`
@@ -14,11 +15,11 @@ const StyledVideo = styled.video`
   margin: 10px;
 `
 
-const serialize = videoProps => {
+const serialize = (videoProps: { src: string }) => {
   return { video: videoProps.src }
 }
 
-export const Video = props => {
+export const Video = (props: VideoProps) => {
   props = { ...props, src: staticAsset(props.src) }
   let content = props.children
   if (isBrowser())

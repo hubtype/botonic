@@ -63,21 +63,21 @@ export function msgToBotonic(msg, customMessageTypes = []) {
     return (
       <Video
         {...msg}
-        src={msg.data.video != undefined ? msg.data.video : msg.data}
+        src={msg.data.video !== undefined ? msg.data.video : msg.data}
       />
     )
   } else if (isAudio(msg)) {
     return (
       <Audio
         {...msg}
-        src={msg.data.audio != undefined ? msg.data.audio : msg.data}
+        src={msg.data.audio !== undefined ? msg.data.audio : msg.data}
       />
     )
   } else if (isDocument(msg)) {
     return (
       <Document
         {...msg}
-        src={msg.data.document != undefined ? msg.data.document : msg.data}
+        src={msg.data.document !== undefined ? msg.data.document : msg.data}
       />
     )
   } else if (isLocation(msg)) {
