@@ -4,13 +4,9 @@ import {
   SessionUser as CoreSessionUser,
 } from '@botonic/core'
 
-import { Reply } from '../../components'
-import {
-  ThemeProps,
-  WebchatSettingsProps,
-  Webview,
-} from '../../components/index-types'
+import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
+import { ThemeProps } from '../theme/types'
 import { WebchatStateTheme } from '../index-types'
 
 export interface ErrorMessage {
