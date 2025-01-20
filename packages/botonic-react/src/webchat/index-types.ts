@@ -18,7 +18,3 @@ export interface WebchatDevProps extends WebchatArgs {
     showSessionView?: boolean
   }
 }
-
-export interface CoverComponentProps {
-  closeComponent: () => void
-}

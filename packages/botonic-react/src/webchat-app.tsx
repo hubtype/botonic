@@ -3,13 +3,7 @@ import merge from 'lodash.merge'
 import React, { createRef } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 
-import {
-  BlockInputOption,
-  CoverComponentOptions,
-  PersistentMenuTheme,
-  ThemeProps,
-  WebchatSettingsProps,
-} from './components/index-types'
+import { BlockInputOption, WebchatSettingsProps } from './components'
 import { WEBCHAT } from './constants'
 import { CloseWebviewOptions } from './contexts'
 import {
@@ -26,11 +20,16 @@ import {
 } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
+import {
+  CoverComponentOptions,
+  PersistentMenuOptionsTheme,
+  ThemeProps,
+} from './webchat/theme/types'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
   public theme?: ThemeProps
-  public persistentMenu?: PersistentMenuTheme
+  public persistentMenu?: PersistentMenuOptionsTheme
   public coverComponent?: CoverComponentOptions
   public blockInputs?: BlockInputOption[]
   public enableEmojiPicker?: boolean

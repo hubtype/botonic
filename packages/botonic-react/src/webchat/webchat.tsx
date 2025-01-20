@@ -19,13 +19,13 @@ import { v7 as uuidv7 } from 'uuid'
 import {
   Audio,
   Document,
+  Handoff,
   Image,
+  normalizeWebchatSettings,
   Text,
   Video,
   WebchatSettingsProps,
 } from '../components'
-import { Handoff } from '../components/handoff'
-import { normalizeWebchatSettings } from '../components/webchat-settings'
 import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
 import { CloseWebviewOptions, WebviewRequestContext } from '../contexts'
 import { SENDERS, WebchatProps, WebchatRef } from '../index-types'

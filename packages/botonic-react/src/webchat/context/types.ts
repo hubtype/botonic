@@ -6,8 +6,8 @@ import {
 
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
-import { ThemeProps } from '../theme/types'
 import { WebchatStateTheme } from '../index-types'
+import { ThemeProps } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string
