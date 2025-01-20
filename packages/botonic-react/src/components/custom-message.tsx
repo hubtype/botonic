@@ -6,7 +6,7 @@ import { SENDERS } from '../index-types'
 import { createErrorBoundary } from '../util/error-boundary'
 import { warnDeprecatedProps } from '../util/logs'
 import { mapObjectNonBooleanValues } from '../util/react'
-import { CustomMessageType } from '../webchat/theme/types'
+import { CustomMessageType } from './index-types'
 import { Message } from './message'
 import { Reply } from './reply'
 

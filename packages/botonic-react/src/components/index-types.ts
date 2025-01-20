@@ -91,6 +91,12 @@ export interface TitleProps {
 
 export type SubtitleProps = TitleProps
 
+export interface CustomMessageType {
+  (props: any): JSX.Element
+  customTypeName: string
+  deserialize(msg: any): JSX.Element
+}
+
 export type BlockInputOption = {
   preprocess?: (message: string) => string
   match: RegExp[]

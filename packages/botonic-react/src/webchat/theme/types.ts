@@ -1,4 +1,8 @@
-import { BlockInputOption, ButtonProps } from '../../components/index-types'
+import {
+  BlockInputOption,
+  ButtonProps,
+  CustomMessageType,
+} from '../../components/index-types'
 
 interface ImagePreviewerProps {
   src: string
@@ -32,12 +36,6 @@ export interface BlobProps {
   blobTickStyle?: any
   blobWidth?: string
   imageStyle?: any
-}
-
-export interface CustomMessageType {
-  (props: any): JSX.Element
-  customTypeName: string
-  deserialize(msg: any): JSX.Element
 }
 
 export interface ThemeProps {
