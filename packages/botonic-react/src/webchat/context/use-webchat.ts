@@ -23,6 +23,7 @@ export const webchatInitialState: WebchatState = {
   session: { user: undefined },
   lastRoutePath: undefined,
   handoff: false,
+  // TODO: type create a defaultTheme using ThemeProps, and put this in initialState
   theme: {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
     brandColor: COLORS.BOTONIC_BLUE,
