@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.31.0-alpha.0",
+  "version": "0.31.0-alpha.2",
   "description": "Continuous integration for botonic packages",
   "scripts": {
     "build": "echo Skipping build..."
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@botonic/dx-bundler-rspack": "0.31.0-alpha.0",
-    "@botonic/eslint-config": "0.31.0-alpha.0",
+    "@botonic/eslint-config": "0.31.0-alpha.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.14",
     "eslint": "^8.57.1",

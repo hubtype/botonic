@@ -12,6 +12,8 @@ module.exports = {
     // typescript
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
   ],
   plugins: [
     '@typescript-eslint',
@@ -37,6 +39,9 @@ module.exports = {
       typescript: {
         alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
       },
+    },
+    react: {
+      version: 'detect',
     },
   },
   // npm run lint runs eslint with --quiet --fix so that only errors are fixed
@@ -98,6 +103,8 @@ module.exports = {
     'unicorn/filename-case': 'off', // React convention is in CamelCase
     'valid-jsdoc': 'off', // function comments hide code complexity (and typescript already have type specifications),
     '@typescript-eslint/no-explicit-any': 'warn',
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
   overrides: [
     {
@@ -128,9 +135,4 @@ module.exports = {
     browser: true,
     node: true,
   },
-}
-// eslint-disable-next-line no-undef
-if (typeof AVOID_IMPORT_CRASH !== 'undefined' && AVOID_IMPORT_CRASH) {
-  // avoid eslint-plugin-import crash https://github.com/benmosher/eslint-plugin-import/issues/1818#issuecomment-651547125
-  delete module.exports['settings']['import/parsers']
 }
