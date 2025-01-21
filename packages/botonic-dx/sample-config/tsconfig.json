@@ -1,8 +1,6 @@
 {
   "extends": "@botonic/dx/baseline/tsconfig.json",
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "compilerOptions": {
     "rootDir": "src"
   }
