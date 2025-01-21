@@ -93,7 +93,7 @@ const typescriptLoaderConfig = {
         '@babel/typescript',
       ],
       plugins: [
-        // require('babel-plugin-add-module-exports'),
+        require('babel-plugin-add-module-exports'),
         // require('@babel/plugin-transform-runtime'),
       ],
     },
