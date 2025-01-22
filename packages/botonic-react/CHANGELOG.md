@@ -6,7 +6,7 @@ All notable changes to Botonic will be documented in this file.
 
 <details>
   <summary>
-    Changes that have landed in master but are not yet released.
+    Changes that have landed in master-lts but are not yet released.
     Click to see more.
   </summary>
   
