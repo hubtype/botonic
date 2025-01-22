@@ -11,6 +11,9 @@ describe('Create nlu intent classic events', () => {
       nluIntentThreshold: 0.6,
       nluIntentMessageId: 'nluIntentMessageId',
       userInput: 'Add a bag',
+      flowThreadId: 'flowThreadId',
+      flowId: 'flowId',
+      flowNodeId: 'nluIntentNodeId',
     })
 
     expect(htEvent).toEqual({
@@ -24,6 +27,9 @@ describe('Create nlu intent classic events', () => {
       nlu_intent_threshold: 0.6,
       nlu_intent_message_id: 'nluIntentMessageId',
       user_input: 'Add a bag',
+      flow_thread_id: 'flowThreadId',
+      flow_id: 'flowId',
+      flow_node_id: 'nluIntentNodeId',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

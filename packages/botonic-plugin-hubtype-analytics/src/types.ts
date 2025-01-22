@@ -85,6 +85,9 @@ export interface EventHandoffOption extends HtBaseEventProps {
 
 export interface EventIntent extends HtBaseEventProps {
   action: EventAction.Intent
+  flowThreadId: string
+  flowId: string
+  flowNodeId: string
   nluIntentLabel: string
   nluIntentConfidence: number
   nluIntentThreshold: number
@@ -94,7 +97,9 @@ export interface EventIntent extends HtBaseEventProps {
 
 export interface EventKeyword extends HtBaseEventProps {
   action: EventAction.Keyword
-  nluKeywordId: string
+  flowThreadId: string
+  flowId: string
+  flowNodeId: string
   nluKeywordName: string
   nluKeywordIsRegex?: boolean
   nluKeywordMessageId: string
@@ -103,6 +108,9 @@ export interface EventKeyword extends HtBaseEventProps {
 
 export interface EventIntentSmart extends HtBaseEventProps {
   action: EventAction.IntentSmart
+  flowThreadId: string
+  flowId: string
+  flowNodeId: string
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
@@ -111,6 +119,9 @@ export interface EventIntentSmart extends HtBaseEventProps {
 
 export interface EventKnowledgeBase extends HtBaseEventProps {
   action: EventAction.Knowledgebase
+  flowThreadId: string
+  flowId: string
+  flowNodeId: string
   knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]

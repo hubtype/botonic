@@ -56,6 +56,9 @@ describe('Check tracked events when a bot generates a response using a knowledge
         knowledgebaseChunksIds: ['sourceChunkId1', 'sourceChunkId2'],
         knowledgebaseMessageId: 'testMessageId',
         userInput: 'What is Flow Builder?',
+        flowId: '4c8acc81-accd-529e-8bb6-d17f4cafafea',
+        flowNodeId: 'b2ac9457-6928-41ea-9474-911133a75ff4',
+        flowThreadId: 'testFlowThreadId',
       }
     )
   })
