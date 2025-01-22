@@ -4,7 +4,19 @@ import React, { useContext } from 'react'
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
 import { WebchatContext } from '../webchat/context'
-import { WebchatSettingsProps } from './index-types'
+import { PersistentMenuOptionsTheme, ThemeProps } from '../webchat/theme/types'
+import { BlockInputOption } from './index-types'
+
+export interface WebchatSettingsProps {
+  blockInputs?: BlockInputOption[]
+  enableAnimations?: boolean
+  enableAttachments?: boolean
+  enableEmojiPicker?: boolean
+  enableUserInput?: boolean
+  persistentMenu?: PersistentMenuOptionsTheme
+  theme?: ThemeProps
+  user?: { extra_data?: any }
+}
 
 export const WebchatSettings = ({
   theme,

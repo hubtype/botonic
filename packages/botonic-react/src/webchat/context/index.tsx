@@ -40,7 +40,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   sendText: async () => {
     return
   },
-  theme: {},
+  theme: {}, // TODO: Remove this attribute and use allways webchatState.theme
   toggleCoverComponent: () => {
     return
   },

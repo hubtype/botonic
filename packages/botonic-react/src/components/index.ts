@@ -4,6 +4,7 @@ export { Carousel } from './carousel'
 export { customMessage } from './custom-message'
 export { Document } from './document'
 export { Element } from './element'
+export { Handoff } from './handoff'
 export { Image } from './image'
 export * from './index-types'
 export { Location } from './location'
@@ -18,7 +19,11 @@ export { Subtitle } from './subtitle'
 export { Text } from './text'
 export { Title } from './title'
 export { Video } from './video'
-export { WebchatSettings } from './webchat-settings'
+export {
+  normalizeWebchatSettings,
+  WebchatSettings,
+  WebchatSettingsProps,
+} from './webchat-settings'
 export {
   WhatsappButtonList,
   WhatsappButtonListProps,

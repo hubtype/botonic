@@ -14,14 +14,16 @@ import React from 'react'
 import {
   BlockInputOption,
   ButtonProps,
-  CoverComponentOptions,
-  PersistentMenuTheme,
   ReplyProps,
-  ThemeProps,
   WebchatSettingsProps,
-} from './components/index-types'
+} from './components'
 import { CloseWebviewOptions } from './contexts'
 import { UseWebchat } from './webchat/context/use-webchat'
+import {
+  CoverComponentOptions,
+  PersistentMenuOptionsTheme,
+  ThemeProps,
+} from './webchat/theme/types'
 import { WebchatApp } from './webchat-app'
 
 /**
@@ -87,7 +89,7 @@ interface AddBotResponseArgs {
 
 export interface WebchatArgs {
   theme?: ThemeProps
-  persistentMenu?: PersistentMenuTheme
+  persistentMenu?: PersistentMenuOptionsTheme
   coverComponent?: CoverComponentOptions
   blockInputs?: BlockInputOption[]
   enableEmojiPicker?: boolean
@@ -119,7 +121,7 @@ export interface WebchatProps {
 
   shadowDOM?: any
   theme?: ThemeProps
-  persistentMenu?: PersistentMenuTheme
+  persistentMenu?: PersistentMenuOptionsTheme
   coverComponent?: CoverComponentOptions
   blockInputs?: BlockInputOption[]
   enableEmojiPicker?: boolean

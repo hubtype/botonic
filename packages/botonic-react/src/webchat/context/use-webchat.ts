@@ -2,9 +2,10 @@ import { Session } from '@botonic/core'
 import { useReducer, useRef } from 'react'
 
 import { Reply } from '../../components'
-import { ThemeProps, Webview } from '../../components/index-types'
+import { Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
 import { WebchatMessage } from '../../index-types'
+import { ThemeProps } from '../theme/types'
 import { WebchatAction } from './actions'
 import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
 import { webchatReducer } from './webchat-reducer'
@@ -22,6 +23,7 @@ export const webchatInitialState: WebchatState = {
   session: { user: undefined },
   lastRoutePath: undefined,
   handoff: false,
+  // TODO: type create a defaultTheme using ThemeProps, and put this in initialState
   theme: {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
     brandColor: COLORS.BOTONIC_BLUE,

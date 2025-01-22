@@ -4,14 +4,10 @@ import {
   SessionUser as CoreSessionUser,
 } from '@botonic/core'
 
-import { Reply } from '../../components'
-import {
-  ThemeProps,
-  WebchatSettingsProps,
-  Webview,
-} from '../../components/index-types'
+import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
 import { WebchatStateTheme } from '../index-types'
+import { ThemeProps } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string
@@ -23,8 +19,8 @@ export interface DevSettings {
 }
 
 export interface WebchatState {
-  width: number
-  height: number
+  width: number // TODO: move this inside webchatState.theme.style
+  height: number // TODO: move this inside webchatState.theme.style
   messagesJSON: any[]
   messagesComponents: any[]
   replies?: (typeof Reply)[]
@@ -35,8 +31,8 @@ export interface WebchatState {
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
-  theme: WebchatStateTheme
-  themeUpdates: Partial<WebchatStateTheme>
+  theme: WebchatStateTheme // TODO: type this as ThemeProps
+  themeUpdates: Partial<WebchatStateTheme> // TODO: type this as Partial<ThemeProps>
   error: ErrorMessage
   online: boolean
   devSettings: DevSettings
@@ -67,7 +63,7 @@ export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => Promise<void>
   setIsInputFocused: (isInputFocused: boolean) => void
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
-  theme: ThemeProps // TODO: Review if theme is needed and used from WebchatContext
+  theme: ThemeProps // TODO: Remove this attribute and use allways webchatState.theme
   toggleWebchat: (toggle: boolean) => void
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void

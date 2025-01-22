@@ -2,8 +2,8 @@ import merge from 'lodash.merge'
 import UAParser from 'ua-parser-js'
 import { v7 as uuidv7 } from 'uuid'
 
-import { ThemeProps } from '../components'
 import { WEBCHAT } from '../constants'
+import { ThemeProps } from '../webchat/theme/types'
 import { getProperty } from './objects'
 
 /**
