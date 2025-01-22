@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
-import { WebchatContext } from '../../contexts'
 import { resolveImage } from '../../util/environment'
+import { WebchatContext } from '../../webchat/context'
 import { ContainerUnreadMessagesBanner } from './styles'
 import { useNotifications } from './use-notifications'
 

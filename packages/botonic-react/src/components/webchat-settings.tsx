@@ -1,10 +1,10 @@
 import { INPUT } from '@botonic/core'
 import React, { useContext } from 'react'
 
-import { WebchatContext } from '../contexts'
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
-import { WebchatSettingsProps } from '.'
+import { WebchatContext } from '../webchat/context'
+import { WebchatSettingsProps } from './index-types'
 
 export const WebchatSettings = ({
   theme,

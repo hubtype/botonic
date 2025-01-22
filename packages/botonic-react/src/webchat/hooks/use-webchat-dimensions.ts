@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react'
 
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../webchat/context'
 
 export const useWebchatDimensions = () => {
   const {

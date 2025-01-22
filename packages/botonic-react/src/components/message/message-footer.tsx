@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
-import { WebchatContext } from '../../contexts'
 import { SENDERS } from '../../index-types'
+import { WebchatContext } from '../../webchat/context'
 import { MessageFeedback } from './message-feedback'
 import { MessageFooterContainer } from './styles'
 import { MessageTimestamp, resolveMessageTimestamps } from './timestamps'

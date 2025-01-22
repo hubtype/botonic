@@ -3,9 +3,9 @@ import { v7 as uuidv7 } from 'uuid'
 
 import ThumbsDown from '../../assets/thumbs-down.svg'
 import ThumbsUp from '../../assets/thumbs-up.svg'
-import { WebchatContext } from '../../contexts'
 import { ActionRequest } from '../../index-types'
 import { resolveImage } from '../../util'
+import { WebchatContext } from '../../webchat/context'
 import { EventAction, FeedbackOption } from '../../webchat/tracking'
 import { FeedbackButton, FeedbackMessageContainer } from './styles'
 

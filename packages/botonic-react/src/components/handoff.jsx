@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../constants'
-import { WebchatContext } from '../contexts'
+import { WebchatContext } from '../webchat/context'
 
 const Container = styled.div`
   display: flex;

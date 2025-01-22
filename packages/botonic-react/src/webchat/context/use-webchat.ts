@@ -4,10 +4,10 @@ import { useReducer, useRef } from 'react'
 import { Reply } from '../../components'
 import { ThemeProps, Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
-import { ClientInput, WebchatMessage } from '../../index-types'
-import { WebchatAction } from '../actions'
-import { DevSettings, ErrorMessage, WebchatState } from '../index-types'
-import { webchatReducer } from '../webchat-reducer'
+import { WebchatMessage } from '../../index-types'
+import { WebchatAction } from './actions'
+import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
+import { webchatReducer } from './webchat-reducer'
 
 export const webchatInitialState: WebchatState = {
   width: WEBCHAT.DEFAULTS.WIDTH,

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { WebchatContext } from '../../contexts'
 import { BotonicContainerId } from '../constants'
+import { WebchatContext } from '../context'
 import { useWebchatDimensions } from '../hooks'
 import { WebchatMessageList } from '../message-list'
 import { WebchatReplies } from '../replies'

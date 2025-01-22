@@ -27,11 +27,7 @@ import {
 import { Handoff } from '../components/handoff'
 import { normalizeWebchatSettings } from '../components/webchat-settings'
 import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
-import {
-  CloseWebviewOptions,
-  WebchatContext,
-  WebviewRequestContext,
-} from '../contexts'
+import { CloseWebviewOptions, WebviewRequestContext } from '../contexts'
 import { SENDERS, WebchatProps, WebchatRef } from '../index-types'
 import {
   getMediaType,
@@ -56,6 +52,7 @@ import {
 import { ChatArea } from './chat-area'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
+import { useWebchat, WebchatContext, WebchatState } from './context'
 import { CoverComponent } from './cover-component'
 import { WebchatHeader } from './header'
 import {
@@ -63,9 +60,7 @@ import {
   usePrevious,
   useScrollToBottom,
   useTyping,
-  useWebchat,
 } from './hooks'
-import { WebchatState } from './index-types'
 import { InputPanel } from './input-panel'
 import {
   DarkBackgroundMenu,

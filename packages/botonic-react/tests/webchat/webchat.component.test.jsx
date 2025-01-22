@@ -3,9 +3,8 @@
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import React from 'react'
-import { act } from 'react-test-renderer'
 
 import { ROLES } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'

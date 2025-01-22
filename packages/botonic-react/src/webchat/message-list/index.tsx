@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../webchat/context'
 import { BotonicContainerId } from '../constants'
 import TypingIndicator from '../typing-indicator'
 import { IntroMessage } from './intro-message'

@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef, useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../webchat/context'
 import { BotonicContainerId } from '../constants'
 import { DefaultHeader } from './default-header'
 import { StyledWebchatHeader } from './styles'

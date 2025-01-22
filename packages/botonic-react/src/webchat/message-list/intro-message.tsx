@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
-import { WebchatContext } from '../../contexts'
 import { Fade } from '../../shared/styles'
 import { resolveImage } from '../../util/environment'
 import { ConditionalWrapper } from '../../util/react'
+import { WebchatContext } from '../../webchat/context'
 import { DefaultIntroImage } from './styles'
 
 export const IntroMessage = () => {

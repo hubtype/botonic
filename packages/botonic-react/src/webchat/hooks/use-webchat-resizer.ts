@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { WebchatContext } from '../../contexts'
+import { WebchatContext } from '../../webchat/context'
 import { useWebchatDimensions } from './use-webchat-dimensions'
 
 export const useWebchatResizer = () => {

@@ -2,7 +2,8 @@ import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES, WEBCHAT } from '../constants'
-import { WebchatContext, WebviewRequestContext } from '../contexts'
+import { WebviewRequestContext } from '../contexts'
+import { WebchatContext } from '../webchat/context'
 
 const StyledWebview = styled.div`
   position: absolute;

@@ -1,10 +1,6 @@
 export { BotonicInputTester, BotonicOutputTester } from './botonic-tester'
 export * from './components'
-export {
-  RequestContext,
-  WebchatContext,
-  WebviewRequestContext,
-} from './contexts'
+export { RequestContext, WebviewRequestContext } from './contexts'
 export { DevApp } from './dev-app'
 export * from './index-types'
 export { msgsToBotonic, msgToBotonic } from './msg-to-botonic'
