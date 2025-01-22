@@ -21,15 +21,16 @@
     "# version issue": "See https://github.com/npm/cli/issues/2010. Temporarily checking all files have been git-added",
     "version": "git add package.json && git diff --exit-code && git commit",
     "postversion": "git push && git push --tags"
-    },
-    "engines": {
-      "node": ">=20.0.0"
-    },
-    "########## files": [
-      "bin/**",
-      "doc/**",
-      "lib/**",
-      "src/**",
-      "README.md"
-    ]
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "########## files": [
+    "bin/**",
+    "doc/**",
+    "lib/**",
+    "src/**",
+    "README.md"
+  ]
 }

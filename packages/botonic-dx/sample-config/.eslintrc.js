@@ -1,3 +1,3 @@
 module.exports = {
-  extends: '@botonic/eslint-config/index.js'
+  extends: '@botonic/eslint-config/index.js',
 }

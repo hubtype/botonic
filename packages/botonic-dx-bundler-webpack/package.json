@@ -1,0 +1,57 @@
+{
+  "name": "@botonic/dx-bundler-webpack",
+  "version": "0.31.0-alpha.1",
+  "description": "Build Botonic bots with Webpack",
+  "scripts": {
+    "build": "echo Skipping build..."
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/plugin-transform-runtime": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "babel-loader": "^8.4.1",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "crypto-browserify": "^3.12.1",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.6.3",
+    "image-minimizer-webpack-plugin": "^4.1.3",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-jpegtran": "^8.0.0",
+    "imagemin-optipng": "^8.0.0",
+    "imagemin-svgo": "^11.0.1",
+    "imagemin": "^9.0.0",
+    "node-polyfill-webpack-plugin": "^4.1.0",
+    "nodemon-webpack-plugin": "^4.8.2",
+    "nodemon": "^3.1.9",
+    "null-loader": "^4.0.1",
+    "sass-loader": "^16.0.4",
+    "sass": "^1.83.4",
+    "stream-browserify": "^3.0.0",
+    "style-loader": "^4.0.0",
+    "svgo": "^3.2.2",
+    "terser-webpack-plugin": "^5.3.11",
+    "terser": "^5.37.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.2",
+    "webpack": "^5.90.3",
+    "webpackbar": "^5.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "README.md",
+    "baseline/*"
+  ],
+  "keywords": [
+    "bot-framework",
+    "javascript",
+    "typescript"
+  ]
+}
