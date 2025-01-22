@@ -52,7 +52,7 @@ const MODE_DEV = 'development'
 const MODE_PROD = 'production'
 const hubtypeDefaults = {
   API_URL: 'https://api.hubtype.com',
-  WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c',
+  WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c', // pragma: allowlist secret
 }
 
 const CONFIG_ENVIRONMENTS = ['production', 'staging', 'local']
