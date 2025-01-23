@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-watson",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -11,8 +11,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.23.9",
-    "axios": "^1.7.2"
+    "@babel/runtime": "^7.26.0",
+    "axios": "^1.7.9"
   },
   "devDependencies": {},
   "keywords": [

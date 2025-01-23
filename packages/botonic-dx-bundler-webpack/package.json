@@ -43,7 +43,8 @@
     "webpackbar": "^5.0.2"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "files": [
     "README.md",

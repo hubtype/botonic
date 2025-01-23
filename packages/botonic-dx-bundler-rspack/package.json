@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-rspack",
-  "version": "0.31.0-alpha.0",
+  "version": "0.31.0",
   "description": "Build Botonic bots with RSPack",
   "scripts": {
     "build": "echo Skipping build...",
@@ -40,6 +40,7 @@
     "typescript"
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-babel",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "license": "MIT",
   "description": "Use Hubtype Babel to predict Intents.",
   "main": "./lib/cjs/index.js",
@@ -15,9 +15,9 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.23.9",
-    "@botonic/core": "^0.30.0",
-    "axios": "^1.7.2",
+    "@babel/runtime": "^7.26.0",
+    "@botonic/core": "^0.31.0",
+    "axios": "^1.7.9",
     "process": "^0.11.10"
   },
   "devDependencies": {
@@ -26,7 +26,8 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "author": "",
   "repository": {
