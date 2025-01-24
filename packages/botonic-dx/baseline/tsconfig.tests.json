@@ -4,17 +4,19 @@
   "extends": "./tsconfig.json",
   // include: [] makes jest faster,
   // but it needs to be set for tsc to find the files to verify them. See https://www.notion.so/Typescript-performance-7aa77701970d4d49b8399efcee1b0754
-  "include": ["**/*.[jt]s", "**/*.[jt]sx", "../src/**/*.[jt]s", "../src/**/*.[jt]sx"],
+  "include": [
+    "**/*.[jt]s",
+    "**/*.[jt]sx",
+    "../src/**/*.[jt]s",
+    "../src/**/*.[jt]sx"
+  ],
   "compilerOptions": {
     "rootDir": "../",
+    "jsx": "react-jsx",
     // Options below are for compiling @botonic js/jsx files
     "declaration": false,
     "declarationDir": null,
     "noEmit": true,
-    "types": [
-      "@types/jest",
-      "@types/node"
-    ]
-
+    "types": ["@types/jest", "@types/node"]
   }
 }

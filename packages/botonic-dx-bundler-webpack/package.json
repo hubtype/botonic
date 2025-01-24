@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-webpack",
-  "version": "0.31.0-alpha.1",
+  "version": "0.31.0-alpha.2",
   "description": "Build Botonic bots with Webpack",
   "scripts": {
     "build": "echo Skipping build..."
@@ -8,13 +8,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
-    "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/preset-env": "^7.26.0",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
-    "babel-loader": "^8.4.1",
-    "babel-plugin-add-module-exports": "^1.0.4",
     "clean-webpack-plugin": "^4.0.0",
     "crypto-browserify": "^3.12.1",
     "css-loader": "^7.1.2",

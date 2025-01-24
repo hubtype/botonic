@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.31.0",
+  "version": "0.31.1",
   "description": "Continuous integration for botonic packages",
   "scripts": {
     "build": "echo Skipping build..."
@@ -13,10 +13,17 @@
     "typescript"
   ],
   "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/plugin-transform-runtime": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
     "@botonic/dx-bundler-rspack": "^0.31.0",
     "@botonic/eslint-config": "^0.31.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.14",
+    "babel-loader": "^8.4.1",
+    "babel-plugin-add-module-exports": "^1.0.4",
     "eslint": "^8.57.1",
     "eslint_d": "^13.1.2",
     "eslint-config-prettier": "^8.10.0",
