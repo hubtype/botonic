@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-contentful",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "license": "MIT",
   "main": "lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -72,7 +72,8 @@
     "identity-obj-proxy": "^3.0.0"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "keywords": [
     "bot-framework",

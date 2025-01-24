@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.31.0-alpha.6",
+  "version": "0.31.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -20,8 +20,8 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "0.31.0-alpha.1",
-    "axios": "^1.7.2",
+    "@botonic/core": "^0.31.0",
+    "axios": "^1.7.9",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.3.2",
@@ -36,13 +36,13 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.25.9",
-    "@babel/preset-react": "^7.25.9",
+    "@babel/preset-react": "^7.26.3",
     "@testing-library/react": "^16.0.1",
     "@types/jest": "^29.5.14",
     "@types/lodash.merge": "^4.6.9",
     "@types/parse5": "^7.0.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@types/styled-components": "^5.1.34",
     "@types/ua-parser-js": "^0.7.39",
     "@types/uuid": "^10.0.0",
@@ -50,11 +50,12 @@
     "copyfiles": "^2.4.1",
     "identity-obj-proxy": "^3.0.0",
     "intersection-observer": "^0.12.2",
-    "react-test-renderer": "^18.0.0",
+    "react-test-renderer": "^18.3.1",
     "typescript": "5.0.4"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "sideEffects": [
     "*.scss",
