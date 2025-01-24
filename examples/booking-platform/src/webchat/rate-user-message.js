@@ -11,7 +11,7 @@ class RateUserMessage extends React.Component {
         size={24}
         value={parseFloat(this.props.rate)}
         edit={false}
-        color2={'#ffffff'}
+        color1={'#ffffff'}
       />
     )
   }

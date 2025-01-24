@@ -1,8 +1,8 @@
-import { RequestContext } from '@botonic/react'
+import { WebviewRequestContext } from '@botonic/react'
 import React from 'react'
 
 export class MyWebview extends React.Component {
-  static contextType = RequestContext
+  static contextType = WebviewRequestContext
   state = {
     counter: 0,
   }

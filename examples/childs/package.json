@@ -1,18 +1,18 @@
 {
   "name": "@botonic/example-childs",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "scripts": {
-    "build": "webpack --env target=all --mode=production",
-    "start": "webpack-dev-server --env target=dev --mode=development",
+    "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
+    "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
     "deploy": "botonic deploy -c build",
     "test": "jest"
   },
   "dependencies": {
-    "@babel/runtime": "^7.23.9",
-    "@botonic/react": "^0.30.0"
+    "@babel/runtime": "^7.26.0",
+    "@botonic/react": "^0.31.0"
   },
   "devDependencies": {
-    "@botonic/dx": "^0.30.0"
+    "@botonic/dx": "^0.31.1"
   },
   "engines": {
     "node": ">=20.0.0"
