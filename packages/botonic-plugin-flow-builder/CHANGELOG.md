@@ -10,14 +10,18 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.31.0] - 2024-mm-dd
+## [0.31.x] - 2025-mm-dd
 
 ### Added
 
 ### Changed
 
-- [create nlu and knowledgebase events with `flow_thread_id, flow_node_id and flow_id attributes`](https://github.com/hubtype/botonic/pull/2960)
-
 ### Fixed
 
 </details>
+
+## [0.31.0] - 2025-01-22
+
+### Changed
+
+- Create nlu and knowledgebase events with [flow_thread_id, flow_node_id and flow_id attributes](https://github.com/hubtype/botonic/pull/2960)

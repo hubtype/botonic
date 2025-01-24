@@ -19,9 +19,3 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
-
-## [0.31.0] - 2025-01-22
-
-### Changed
-
-- Use [rspack](https://github.com/hubtype/botonic/pull/2968) to build a bot
