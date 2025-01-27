@@ -50,7 +50,7 @@ export class FlowBuilderApi {
   }
 
   private async updateSessionWithUserInfo(token: string) {
-    const url = `${this.url}/get-user-info`
+    const url = `${this.url}/v1/flow_builder/user_info/`
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     })

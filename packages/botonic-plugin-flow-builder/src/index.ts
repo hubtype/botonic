@@ -74,9 +74,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   resolveFlowUrl(request: PluginPreRequest): string {
     if (request.session.is_test_integration) {
-      return `${this.apiUrl}/flow/${FlowBuilderJSONVersion.DRAFT}`
+      return `${this.apiUrl}/v1/bot_flows/${request.session.bot.id}/versions/${FlowBuilderJSONVersion.DRAFT}`
     }
-    return `${this.apiUrl}/flow/${this.jsonVersion}`
+    return `${this.apiUrl}/v1/bot_flows/${request.session.bot.id}/versions/${this.jsonVersion}`
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
