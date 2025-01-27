@@ -1,33 +1,30 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
-const rspack = require('@rspack/core')
-const ReactRefreshPlugin = require('@rspack/plugin-react-refresh')
+import { Configuration } from '@rspack/cli'
+import * as rspack from '@rspack/core'
+import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
+import path from 'path'
+
 const ROOT_PATH = path.resolve(__dirname, 'src')
 const OUTPUT_PATH = path.resolve(__dirname, 'dist')
+const NODE_MODULES_PATH = path.resolve(__dirname, 'node_modules')
 const WEBVIEWS_PATH = path.resolve(OUTPUT_PATH, 'webviews')
-const BOTONIC_PATH = path.resolve(
-  __dirname,
-  'node_modules',
-  '@botonic',
-  'react'
-)
+const BOTONIC_PATH = path.resolve(NODE_MODULES_PATH, '@botonic', 'react')
 
-const BOTONIC_TARGET = Object.freeze({
-  ALL: 'all',
-  DEV: 'dev',
-  NODE: 'node',
-  WEBVIEWS: 'webviews',
-  WEBCHAT: 'webchat',
-})
+enum BotonicTarget {
+  ALL = 'all',
+  DEV = 'dev',
+  NODE = 'node',
+  WEBVIEWS = 'webviews',
+  WEBCHAT = 'webchat',
+}
 
 const WEBPACK_ENTRIES_DIRNAME = 'webpack-entries'
 const WEBPACK_ENTRIES = {
-  DEV: 'dev-entry.ts',
-  NODE: 'node-entry.ts',
-  WEBCHAT: 'webchat-entry.ts',
-  WEBVIEWS: 'webviews-entry.ts',
+  DEV: 'dev-entry.js',
+  NODE: 'node-entry.js',
+  WEBCHAT: 'webchat-entry.js',
+  WEBVIEWS: 'webviews-entry.js',
 }
 
 const TEMPLATES = {
@@ -37,18 +34,25 @@ const TEMPLATES = {
 
 const UMD_LIBRARY_TARGET = 'umd'
 
-const BOTONIC_LIBRARY_NAME = 'Botonic'
-const WEBVIEW_LIBRARY_NAME = 'BotonicWebview'
-const BOT_LIBRARY_NAME = 'bot'
+const LIBRARY_NAME = {
+  BOTONIC: 'Botonic',
+  WEBVIEW: 'BotonicWebview',
+  BOT: 'bot',
+}
 
-const WEBCHAT_FILENAME = 'webchat.botonic.js'
-const WEBVIEWS_FILENAME = 'webviews.js'
-const BOT_FILENAME = 'bot.js'
+const FILENAME = {
+  WEBCHAT: 'webchat.botonic.js',
+  WEBVIEWS: 'webviews.js',
+  BOT: 'bot.js',
+}
 
-const MODE_DEV = 'development'
-const MODE_PROD = 'production'
-const hubtypeDefaults = {
-  API_URL: 'https://api.hubtype.com', // pragma: allowlist secret
+enum Mode {
+  development = 'development',
+  production = 'production',
+}
+
+const HUBTYPE_DEFAULTS = {
+  API_URL: 'https://api.hubtype.com',
   WEBCHAT_PUSHER_KEY: '434ca667c8e6cb3f641c', // pragma: allowlist secret
 }
 
@@ -57,7 +61,7 @@ const CONFIG_ENVIRONMENTS = ['production', 'staging', 'local']
 const resolveConfig = {
   extensions: ['.*', '.js', '.jsx', '.ts', '.tsx'],
   alias: {
-    BotonicProject: path.resolve(__dirname, 'src'),
+    BotonicProject: ROOT_PATH,
     react: path.resolve('./node_modules/react'),
     // 'styled-components': path.resolve('./node_modules/styled-components'),
     '@botonic/react': BOTONIC_PATH,
@@ -66,54 +70,57 @@ const resolveConfig = {
 
 const isDev = String(process.env.ENVIRONMENT) === 'local'
 
-const typescriptLoaderConfig =
-  // exclude: /node_modules[/\\](?!(@botonic\/(core|react))[/\\])/,
-  [
-    {
-      test: /\.tsx?$/,
-      exclude: [/node_modules/],
-      use: {
-        loader: 'builtin:swc-loader',
-        options: {
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              tsx: true,
-            },
-            keepClassNames: true,
+const typescriptLoaderConfig = [
+  {
+    test: /\.tsx?$/,
+    exclude: [/node_modules/],
+    use: {
+      loader: 'builtin:swc-loader',
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: true,
           },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+          keepClassNames: true,
         },
       },
-      type: 'javascript/auto',
     },
-    {
-      test: /\.jsx?$/,
-      exclude: [/node_modules/],
-      use: {
-        loader: 'builtin:swc-loader',
-        options: {
-          jsc: {
-            parser: {
-              syntax: 'ecmascript',
-              jsx: true,
-            },
-            transform: {
-              react: {
-                pragma: 'React.createElement',
-                pragmaFrag: 'React.Fragment',
-                throwIfNamespace: true,
-                development: isDev,
-                refresh: isDev,
-                useBuiltins: false,
-              },
-            },
-            keepClassNames: true,
+    type: 'javascript/auto',
+  },
+  {
+    test: /\.jsx?$/,
+    exclude: [/node_modules/],
+    use: {
+      loader: 'builtin:swc-loader',
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'ecmascript',
+            jsx: true,
           },
+          transform: {
+            react: {
+              pragma: 'React.createElement',
+              pragmaFrag: 'React.Fragment',
+              throwIfNamespace: true,
+              development: isDev,
+              refresh: isDev,
+              useBuiltins: false,
+            },
+          },
+          keepClassNames: true,
         },
       },
-      type: 'javascript/auto',
     },
-  ]
+    type: 'javascript/auto',
+  },
+]
 
 const fileLoaderConfig = [
   {
@@ -139,12 +146,12 @@ const stylesLoaderConfig = [
   },
 ]
 
-function log(message) {
-  // using errors to avoid screwing up webpack-bundle-analyzer when running with --profile
+function log(message: string) {
+  // using errors to avoid screwing up rspack-bundle-analyzer when running with --profile
   console.error(message)
 }
 
-function getHtmlWebpackPlugin(templateName) {
+function getHtmlWebpackPlugin(templateName: string) {
   return new HtmlWebpackPlugin({
     template: path.resolve(BOTONIC_PATH, 'src', templateName),
     filename: 'index.html',
@@ -163,35 +170,36 @@ function getConfigEnvironment() {
   return configEnvironment
 }
 
-function getPlugins(mode, target) {
+function getPlugins(mode: string, target: string) {
   const environment = getConfigEnvironment()
   log(
-    `Generating bundle for: ${target}\nWebpack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
+    `Generating bundle for: ${target}\nRspack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
   )
 
   const plugins = [
     new rspack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
-      HUBTYPE_API_URL: process.env.HUBTYPE_API_URL || hubtypeDefaults.API_URL,
-      BOTONIC_TARGET: 'node',
+      HUBTYPE_API_URL: process.env.HUBTYPE_API_URL || HUBTYPE_DEFAULTS.API_URL,
+      BOTONIC_TARGET: BotonicTarget.NODE,
       WEBCHAT_PUSHER_KEY:
-        process.env.WEBCHAT_PUSHER_KEY || hubtypeDefaults.WEBCHAT_PUSHER_KEY,
+        process.env.WEBCHAT_PUSHER_KEY || HUBTYPE_DEFAULTS.WEBCHAT_PUSHER_KEY,
       ENVIRONMENT: process.env.ENVIRONMENT,
     }),
     new rspack.ProgressPlugin(),
   ]
 
   if (isDev) {
+    // @ts-ignore
     plugins.push(new ReactRefreshPlugin())
   }
 
   return plugins
 }
 
-function sourceMap(mode) {
-  if (mode === MODE_PROD) {
+function sourceMap(mode: string) {
+  if (mode === Mode.production) {
     return 'hidden-source-map'
-  } else if (mode === MODE_DEV) {
+  } else if (mode === Mode.development) {
     return 'eval-cheap-source-map'
   } else {
     throw new Error(
@@ -216,7 +224,7 @@ const minimizerPlugin = new rspack.SwcJsMinimizerRspackPlugin({
   },
 })
 
-function botonicDevConfig(mode) {
+function botonicDevConfig(mode: Mode): Configuration {
   return {
     optimization: {
       minimize: false,
@@ -234,8 +242,8 @@ function botonicDevConfig(mode) {
     },
     output: {
       path: OUTPUT_PATH,
-      filename: WEBCHAT_FILENAME,
-      library: BOTONIC_LIBRARY_NAME,
+      filename: FILENAME.WEBCHAT,
+      library: LIBRARY_NAME.BOTONIC,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
@@ -249,16 +257,16 @@ function botonicDevConfig(mode) {
     },
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBCHAT),
-      new NodePolyfillPlugin({ includeAliases: ['stream'] }),
+      new NodePolyfillPlugin({ onlyAliases: ['stream'] }),
       new rspack.NormalModuleReplacementPlugin(/node:stream/, resource => {
         resource.request = resource.request.replace(/^node:/, '')
       }),
-      ...getPlugins(mode, BOTONIC_TARGET.DEV),
+      ...getPlugins(mode, BotonicTarget.DEV),
     ],
   }
 }
 
-function botonicWebchatConfig(mode) {
+function botonicWebchatConfig(mode: Mode): Configuration {
   return {
     optimization: {
       minimize: true,
@@ -270,8 +278,8 @@ function botonicWebchatConfig(mode) {
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBCHAT),
     output: {
       path: OUTPUT_PATH,
-      filename: WEBCHAT_FILENAME,
-      library: BOTONIC_LIBRARY_NAME,
+      filename: FILENAME.WEBCHAT,
+      library: LIBRARY_NAME.BOTONIC,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
@@ -286,18 +294,18 @@ function botonicWebchatConfig(mode) {
     resolve: resolveConfig,
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBCHAT),
-      ...getPlugins(mode, BOTONIC_TARGET.WEBCHAT),
+      ...getPlugins(mode, BotonicTarget.WEBCHAT),
     ],
   }
 }
 
-function botonicWebviewsConfig(mode) {
+function botonicWebviewsConfig(mode: Mode): Configuration {
   return {
     optimization: {
       sideEffects: true, // critical so that tree-shaking discards browser code from @botonic/react
       usedExports: true,
       minimize: true,
-      minimizer: mode === MODE_PROD ? [minimizerPlugin] : [],
+      minimizer: mode === Mode.production ? [minimizerPlugin] : [],
     },
     mode,
     devtool: sourceMap(mode),
@@ -305,8 +313,8 @@ function botonicWebviewsConfig(mode) {
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBVIEWS),
     output: {
       path: WEBVIEWS_PATH,
-      filename: WEBVIEWS_FILENAME,
-      library: WEBVIEW_LIBRARY_NAME,
+      filename: FILENAME.WEBVIEWS,
+      library: LIBRARY_NAME.WEBVIEW,
       libraryTarget: UMD_LIBRARY_TARGET,
       libraryExport: 'app',
       assetModuleFilename: '../assets/[hash][ext][query]',
@@ -321,25 +329,25 @@ function botonicWebviewsConfig(mode) {
     resolve: resolveConfig,
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBVIEWS),
-      ...getPlugins(mode, BOTONIC_TARGET.WEBVIEWS),
+      ...getPlugins(mode, BotonicTarget.WEBVIEWS),
     ],
   }
 }
 
-function botonicServerConfig(mode) {
+function botonicServerConfig(mode: string): Configuration {
   return {
     optimization: {
       sideEffects: true, // critical so that tree-shaking discards browser code from @botonic/react
       minimize: true,
-      minimizer: mode === MODE_PROD ? [minimizerPlugin] : [],
+      minimizer: mode === Mode.production ? [minimizerPlugin] : [],
     },
     context: ROOT_PATH,
     // 'mode' removed so that we're forced to be explicit
     target: 'node',
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.NODE),
     output: {
-      filename: BOT_FILENAME,
-      library: BOT_LIBRARY_NAME,
+      filename: FILENAME.BOT,
+      library: LIBRARY_NAME.BOT,
       libraryTarget: 'umd',
       libraryExport: 'app',
       assetModuleFilename: 'assets/[hash][ext][query]',
@@ -348,24 +356,27 @@ function botonicServerConfig(mode) {
       rules: [...typescriptLoaderConfig, ...fileLoaderConfig, nullLoaderConfig],
     },
     resolve: resolveConfig,
-    plugins: getPlugins(mode, BOTONIC_TARGET.NODE),
+    plugins: getPlugins(mode, BotonicTarget.NODE),
   }
 }
 
-module.exports = function (env, argv) {
-  if (env.target === BOTONIC_TARGET.ALL) {
+export default function (
+  env: { target: string },
+  argv: { mode: Mode }
+): Configuration[] {
+  if (env.target === BotonicTarget.ALL) {
     return [
       botonicServerConfig(argv.mode),
       botonicWebviewsConfig(argv.mode),
       botonicWebchatConfig(argv.mode),
     ]
-  } else if (env.target === BOTONIC_TARGET.DEV) {
+  } else if (env.target === BotonicTarget.DEV) {
     return [botonicDevConfig(argv.mode)]
-  } else if (env.target === BOTONIC_TARGET.NODE) {
+  } else if (env.target === BotonicTarget.NODE) {
     return [botonicServerConfig(argv.mode)]
-  } else if (env.target === BOTONIC_TARGET.WEBVIEWS) {
+  } else if (env.target === BotonicTarget.WEBVIEWS) {
     return [botonicWebviewsConfig(argv.mode)]
-  } else if (env.target === BOTONIC_TARGET.WEBCHAT) {
+  } else if (env.target === BotonicTarget.WEBCHAT) {
     return [botonicWebchatConfig(argv.mode)]
   }
   throw new Error(`Invalid target ${env.target}`)

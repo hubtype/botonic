@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.30.3",
+  "version": "0.31.0",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run"
@@ -21,39 +21,40 @@
     "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
-    "@oclif/command": "^1.8.32",
-    "@oclif/config": "^1.18.10",
-    "@oclif/plugin-help": "^3.2.2",
+    "@oclif/command": "^1.8.36",
+    "@oclif/config": "^1.18.17",
+    "@oclif/plugin-help": "^3.3.1",
     "analytics-node": "^3.5.0",
     "axios": "^1.7.9",
     "colors": "^1.4.0",
-    "concurrently": "^6.2.1",
+    "concurrently": "^6.5.1",
     "fetch-repo-dir": "^1.0.6",
-    "form-data": "^3.0.1",
+    "form-data": "^3.0.2",
     "fs-extra": "^10.1.0",
     "inquirer": "^7.3.3",
     "kill-port": "^1.6.1",
     "localtunnel": "^2.0.2",
     "ora": "^5.4.1",
-    "qs": "^6.11.2",
-    "tar": "^6.2.0",
-    "tslib": "^2.6.2",
+    "qs": "^6.14.0",
+    "tar": "^6.2.1",
+    "tslib": "^2.8.1",
     "uuid": "^10.0.0",
-    "zip-a-folder": "3.1.7"
+    "zip-a-folder": "3.1.8"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.0",
-    "@types/analytics-node": "^3.1.4",
-    "@types/concurrently": "^6.2.1",
-    "@types/fs-extra": "^9.0.11",
-    "@types/inquirer": "^7.3.1",
-    "@types/localtunnel": "^2.0.1",
-    "@types/tar": "^6.1.11",
+    "@oclif/dev-cli": "^1.26.10",
+    "@types/analytics-node": "^3.1.14",
+    "@types/concurrently": "^6.4.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^7.3.3",
+    "@types/localtunnel": "^2.0.4",
+    "@types/tar": "^6.1.13",
     "@types/uuid": "^10.0.0",
-    "globby": "^11.0.3"
+    "globby": "^11.1.0"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "files": [
