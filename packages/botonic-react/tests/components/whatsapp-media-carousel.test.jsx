@@ -12,42 +12,42 @@ const getProps = withIndexes => {
     templateLanguage: 'en_US',
     cards: [
       {
-        card_index: withIndexes ? 1 : undefined,
-        file_type: 'image',
-        file_id: 'fake-file-id-1',
+        cardIndex: withIndexes ? 1 : undefined,
+        fileType: 'image',
+        fileId: 'fake-file-id-1',
         buttons: [
           {
-            button_index: withIndexes ? 1 : undefined,
+            buttonIndex: withIndexes ? 1 : undefined,
             type: 'quick_reply',
             payload: 'payload-1',
           },
           {
-            button_index: withIndexes ? 0 : undefined,
+            buttonIndex: withIndexes ? 0 : undefined,
             type: 'url',
-            url_variable: 'a',
+            urlVariable: 'a',
           },
         ],
-        body_parameters: [{ type: 'text', text: 'classic' }],
-        extra_components: [{}],
+        bodyParameters: [{ type: 'text', text: 'classic' }],
+        extraComponents: [{}],
       },
       {
-        card_index: withIndexes ? 1 : undefined,
-        file_type: 'image',
-        file_id: 'fake-file-id-2',
+        cardIndex: withIndexes ? 1 : undefined,
+        fileType: 'image',
+        fileId: 'fake-file-id-2',
         buttons: [
           {
-            button_index: withIndexes ? 1 : undefined,
+            buttonIndex: withIndexes ? 1 : undefined,
             type: 'quick_reply',
             payload: 'payload-2',
           },
           {
-            button_index: withIndexes ? 0 : undefined,
+            buttonIndex: withIndexes ? 0 : undefined,
             type: 'url',
-            url_variable: 'b',
+            urlVariable: 'b',
           },
         ],
-        body_parameters: [{ type: 'text', text: 'premium' }],
-        extra_components: [{}],
+        bodyParameters: [{ type: 'text', text: 'premium' }],
+        extraComponents: [{}],
       },
     ],
     bodyParameters: [

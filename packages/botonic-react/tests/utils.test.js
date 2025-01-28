@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import { isURL, staticAsset } from '../src/util/environment'
+import { toSnakeCaseKeys } from '../src/util/functional'
 import { deserializeRegex, stringifyWithRegexs } from '../src/util/regexs'
 describe('Regex serialization / deserialization', () => {
   const regexsItems = [
@@ -125,4 +126,50 @@ describe('staticAsset function', () => {
     consoleErrorSpy.mockRestore()
     removeScript(script)
   })
+})
+
+test('toSnakeCase function converts object keys from camelCase to snake_case', () => {
+  const obj = {
+    camelCase: 'value',
+    anotherCamelCase: 'anotherValue',
+  }
+  const expected = {
+    camel_case: 'value',
+    another_camel_case: 'anotherValue',
+  }
+  expect(toSnakeCaseKeys(obj)).toEqual(expected)
+})
+
+test('toSnakeCase function converts array of objects keys from camelCase to snake_case', () => {
+  const obj = {
+    arrayCamelCase: [
+      { camelCase: 'value', anotherCamelCase: 'anotherValue', numberValue: 5 },
+      {
+        camelCase2: 'value',
+        anotherCamelCase2: 'anotherValue',
+        anotherArray: [{ camelCase3: 'value' }],
+      },
+    ],
+  }
+  const expected = {
+    array_camel_case: [
+      {
+        camel_case: 'value',
+        another_camel_case: 'anotherValue',
+        number_value: 5,
+      },
+      {
+        camel_case_2: 'value',
+        another_camel_case_2: 'anotherValue',
+        another_array: [{ camel_case_3: 'value' }],
+      },
+    ],
+  }
+  expect(toSnakeCaseKeys(obj)).toEqual(expected)
+})
+
+test('toSnakeCase function returns undefined when object is undefined', () => {
+  const obj = undefined
+  const expected = undefined
+  expect(toSnakeCaseKeys(obj)).toEqual(expected)
 })

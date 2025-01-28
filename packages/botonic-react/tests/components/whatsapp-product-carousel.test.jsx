@@ -12,14 +12,14 @@ const getProps = withIndexes => {
     templateLanguage: 'en_US',
     cards: [
       {
-        card_index: withIndexes ? 1 : undefined,
-        catalog_id: 'fake-catalog-id',
-        product_retailer_id: 'fake-product-id-2',
+        cardIndex: withIndexes ? 1 : undefined,
+        catalogId: 'fake-catalog-id',
+        productRetailerId: 'fake-product-id-2',
       },
       {
-        card_index: withIndexes ? 0 : undefined,
-        catalog_id: 'fake-catalog-id',
-        product_retailer_id: 'fake-product-id-1',
+        cardIndex: withIndexes ? 0 : undefined,
+        catalogId: 'fake-catalog-id',
+        productRetailerId: 'fake-product-id-1',
       },
     ],
     bodyParameters: [
