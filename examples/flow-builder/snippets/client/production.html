@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root-botonic-button" />
+    <div id="root-botonic" />
+    <script type="text/javascript">
+      async function fetchVersion() {
+        const response = await fetch(
+          'https://webchat-sdk.hubtype.com/bot_name/webchat_version'
+        )
+        if (!response.ok) {
+          throw new Error('Failed to fetch version file')
+        }
+        const webchatVersion = await response.text()
+        return webchatVersion.trim()
+      }
+
+      async function loadTriggerButton() {
+        let triggerButtonFileName = ''
+        let webchatFileName = ''
+        try {
+          const version = await fetchVersion()
+          triggerButtonFileName = `${version}.webchat-button.botonic.js`
+          webchatFileName = `${version}.webchat.botonic.js`
+        } catch (error) {
+          triggerButtonFileName = 'webchat-button.botonic.js'
+          webchatFileName = 'webchat.botonic.js'
+        }
+
+        const script = document.createElement('script')
+        script.src = `https://webchat-sdk.hubtype.com/bot_name/${triggerButtonFileName}`
+        script.onload = () =>
+          initializeBotonic(
+            `https://webchat-sdk.hubtype.com/bot_name/${webchatFileName}`
+          )
+        document.body.appendChild(script)
+      }
+
+      function initializeBotonic(webchatUrl) {
+        const country = 'COUNTRY'
+        const language = 'LANGUAGE'
+
+        const webchatConfig = {
+          appId: 'APP_ID',
+          onInit: async app => {
+            app.updateUser({
+              extra_data: {
+                country,
+                language,
+              },
+            })
+            const buttonElement = document.getElementById(buttonElementId)
+            if (buttonElement) {
+              app.open()
+              buttonElement.remove()
+            }
+
+            await window.botonicOnInit(app)
+          },
+          onOpen: async app => {
+            await window.botonicOnOpen(app)
+          },
+          onClose: async app => {
+            await window.botonicOnClose(app)
+          },
+          onMessage: async (app, message) => {
+            await window.botonicOnMessage(app, message)
+          },
+        }
+
+        const buttonElementId = 'root-botonic-button'
+        const botonicElementId = 'root-botonic'
+
+        BotonicTriggerButton.render(
+          buttonElementId,
+          botonicElementId,
+          webchatUrl,
+          webchatConfig,
+          language
+        )
+      }
+      document.addEventListener('DOMContentLoaded', loadTriggerButton)
+    </script>
+  </body>
+</html>

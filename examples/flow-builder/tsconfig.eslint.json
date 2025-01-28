@@ -1,0 +1,7 @@
+{
+  "extends": "@botonic/dx/baseline/tsconfig.eslint.json",
+  // include required to avoid this error (probably otherwise it uses baseline as root folder)
+  // Parsing error: "parserOptions.project" has been set for @typescript-eslint/parser.
+  //  The file does not match your project config
+  "include": ["src", "tests"]
+}

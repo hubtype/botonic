@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root-botonic-button" />
+    <div id="root-botonic" />
+    <script type="text/javascript">
+      function startBotonic() {
+        const country = 'COUNTRY'
+        const language = 'LANGUAGE'
+
+        const webchatConfig = {
+          appId: 'APP_ID',
+          onInit: async app => {
+            app.updateUser({
+              extra_data: {
+                country,
+                language,
+              },
+            })
+
+            const buttonElement = document.getElementById(buttonElementId)
+            if (buttonElement) {
+              app.open()
+              buttonElement.remove()
+            }
+
+            await window.botonicOnInit(app)
+          },
+          onOpen: async app => {
+            await window.botonicOnOpen(app)
+          },
+          onClose: async app => {
+            await window.botonicOnClose(app)
+          },
+          onMessage: async (app, message) => {
+            await window.botonicOnMessage(app, message)
+          },
+        }
+
+        const buttonElementId = 'root-botonic-button'
+        const botonicElementId = 'root-botonic'
+        const botonicUrl = 'STAGING_BOT_NETLIFY_URL/webchat.botonic.js'
+
+        BotonicTriggerButton.render(
+          buttonElementId,
+          botonicElementId,
+          botonicUrl,
+          webchatConfig,
+          language
+        )
+      }
+    </script>
+    <script
+      type="text/javascript"
+      src="STAGING_BOT_NETLIFY_URL/webchat-button.botonic.js"
+      onload="startBotonic()"
+    ></script>
+  </body>
+</html>
