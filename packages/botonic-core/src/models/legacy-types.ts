@@ -76,6 +76,9 @@ export enum INPUT {
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
+  WHATSAPP_PRODUCT_CAROUSEL = 'whatsapp-product-carousel',
+  WHATSAPP_MEDIA_CAROUSEL = 'whatsapp-media-carousel',
+  WHATSAPP_ORDER = 'whatsapp_order',
 }
 
 export interface Locales {
@@ -118,6 +121,11 @@ export type InputType =
   | INPUT.WHATSAPP_CTA_URL_BUTTON
   | INPUT.EVENT_AGENT_MESSAGE_CREATED
   | INPUT.WHATSAPP_CATALOG
+  | INPUT.WHATSAPP_PRODUCT
+  | INPUT.WHATSAPP_PRODUCT_LIST
+  | INPUT.WHATSAPP_PRODUCT_CAROUSEL
+  | INPUT.WHATSAPP_MEDIA_CAROUSEL
+  | INPUT.WHATSAPP_ORDER
 
 export interface IntentResult {
   intent: string
@@ -161,6 +169,15 @@ export interface Input extends Partial<NluResult> {
     type: string
     data: string
   }
+  catalog_id?: string
+  product_items?: ProductItem[]
+}
+
+interface ProductItem {
+  product_retailer_id: string
+  quantity: number
+  item_price: number
+  currency: string
 }
 
 export interface Campaign {
