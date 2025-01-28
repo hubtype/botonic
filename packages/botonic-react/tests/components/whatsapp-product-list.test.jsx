@@ -15,14 +15,14 @@ test('renders Whatsapp Product List component', () => {
     sections: [
       {
         title: 'section one',
-        product_items: [
-          { product_retailer_id: 'fake-product-id-1' },
-          { product_retailer_id: 'fake-product-id-2' },
+        productItems: [
+          { productRetailerId: 'fake-product-id-1' },
+          { productRetailerId: 'fake-product-id-2' },
         ],
       },
       {
         title: 'section two',
-        product_items: [{ product_retailer_id: 'fake-product-id-3' }],
+        productItems: [{ productRetailerId: 'fake-product-id-3' }],
       },
     ],
   }

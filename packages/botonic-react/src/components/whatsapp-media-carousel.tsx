@@ -26,13 +26,31 @@ interface DateTimeParameter {
   dateTime: { fallbackValue: string }
 }
 
-interface Card {
-  productRetailerId: string
-  catalogId: string
-  cardIndex?: number
+type CardButton = QuickReplyButton | UrlButton
+
+interface Button {
+  type: 'quick_reply' | 'url'
+  buttonIndex?: number
 }
 
-export interface WhatsappProductCarouselProps {
+interface QuickReplyButton extends Button {
+  payload: string
+}
+
+interface UrlButton extends Button {
+  urlVariable: string
+}
+
+interface Card {
+  fileType: 'image' | 'video'
+  fileId: string
+  cardIndex?: number
+  bodyParameters?: Parameters[]
+  buttons?: CardButton[]
+  extraComponents?: Record<string, any>[]
+}
+
+export interface WhatsappMediaCarouselProps {
   templateName: string
   templateLanguage: string
   cards: Card[]
@@ -43,12 +61,10 @@ const serialize = (message: string) => {
   return { text: message }
 }
 
-export const WhatsappProductCarousel = (
-  props: WhatsappProductCarouselProps
-) => {
+export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
   const renderBrowser = () => {
     // Return a dummy message for browser
-    const message = `WhatsApp Product Carousel would be sent to the user.`
+    const message = `WhatsApp Media Carousel would be sent to the user.`
     return (
       <Message json={serialize(message)} {...props} type={INPUT.TEXT}>
         {message}
@@ -61,6 +77,11 @@ export const WhatsappProductCarousel = (
       if (!card.cardIndex) {
         card.cardIndex = index
       }
+      card.buttons?.forEach((button, index) => {
+        if (!button.buttonIndex) {
+          button.buttonIndex = index
+        }
+      })
     })
     return toSnakeCaseKeys(cards)
   }
@@ -74,7 +95,7 @@ export const WhatsappProductCarousel = (
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}
         templateLanguage={props.templateLanguage}
-        type={INPUT.WHATSAPP_PRODUCT_CAROUSEL}
+        type={INPUT.WHATSAPP_MEDIA_CAROUSEL}
       />
     )
   }
