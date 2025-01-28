@@ -30,7 +30,15 @@ export {
   WhatsappCTAUrlButton,
   WhatsappCTAUrlButtonProps,
 } from './whatsapp-cta-url-button'
+export {
+  WhatsappMediaCarousel,
+  WhatsappMediaCarouselProps,
+} from './whatsapp-media-carousel'
 export { WhatsappProduct } from './whatsapp-product'
+export {
+  WhatsappProductCarousel,
+  WhatsappProductCarouselProps,
+} from './whatsapp-product-carousel'
 export {
   ProductItem,
   WhatsappProductList,

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Whatsapp Media Carousel component with indexes 1`] = `
+<message
+  bodyParameters="[{"type":"text","text":"Pepito Grillo"},{"type":"text","text":"Test"}]"
+  cards="[{"card_index":1,"file_type":"image","file_id":"fake-file-id-1","buttons":[{"button_index":1,"type":"quick_reply","payload":"payload-1"},{"button_index":1,"type":"url","url_variable":"a"}],"body_parameters":[{"type":"text","text":"classic"}],"extra_components":[{}]},{"card_index":1,"file_type":"image","file_id":"fake-file-id-2","buttons":[{"button_index":1,"type":"quick_reply","payload":"payload-2"},{"button_index":1,"type":"url","url_variable":"b"}],"body_parameters":[{"type":"text","text":"premium"}],"extra_components":[{}]}]"
+  templateLanguage="en_US"
+  templateName="fake-template-name"
+  type="whatsapp-media-carousel"
+/>
+`;
+
+exports[`renders Whatsapp Media Carousel component without indexes 1`] = `
+<message
+  bodyParameters="[{"type":"text","text":"Pepito Grillo"},{"type":"text","text":"Test"}]"
+  cards="[{"card_index":0,"file_type":"image","file_id":"fake-file-id-1","buttons":[{"button_index":0,"type":"quick_reply","payload":"payload-1"},{"button_index":1,"type":"url","url_variable":"a"}],"body_parameters":[{"type":"text","text":"classic"}],"extra_components":[{}]},{"card_index":1,"file_type":"image","file_id":"fake-file-id-2","buttons":[{"button_index":0,"type":"quick_reply","payload":"payload-2"},{"button_index":1,"type":"url","url_variable":"b"}],"body_parameters":[{"type":"text","text":"premium"}],"extra_components":[{}]}]"
+  templateLanguage="en_US"
+  templateName="fake-template-name"
+  type="whatsapp-media-carousel"
+/>
+`;
