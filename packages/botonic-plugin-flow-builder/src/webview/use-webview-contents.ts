@@ -28,7 +28,6 @@ export function useWebviewContents<T extends MapContentsType>({
     {} as Record<keyof T, string>
   )
   const [currentLocale, setCurrentLocale] = useState(locale)
-  const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   const updateCurrentLocale = (textContents?: WebviewTextContent[]) => {
@@ -105,15 +104,13 @@ export function useWebviewContents<T extends MapContentsType>({
       } catch (error) {
         console.error('Error fetching webview contents:', error)
         setError(true)
-      } finally {
-        setLoading(false)
       }
     }
     getResponseContents()
   }, [])
 
   return {
-    isLoading,
+    isLoading: Object.keys(contents).length === 0,
     error,
     webviewContentsContext: {
       getTextContent,
