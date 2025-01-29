@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 
-//import { MyWebviewContentsContext } from '../../constants'
+import { MyWebviewContentsContext } from '../../constants'
 import { Footer } from '../shared-components/footer'
 import { Header } from '../shared-components/header'
 import { WebviewModal } from '../shared-components/webview-modal'
@@ -13,7 +13,7 @@ interface ExampleAppProps {
 }
 
 export const ExampleApp = (props: ExampleAppProps) => {
-  //const { contents } = useContext(MyWebviewContentsContext)
+  const { contents } = useContext(MyWebviewContentsContext)
 
   const viewState = { isWhatsAppDesktop: false }
   const currentStep = steps[0]
@@ -22,6 +22,7 @@ export const ExampleApp = (props: ExampleAppProps) => {
   return (
     <WebviewContainer>
       <Header title={'WEBVIEW HEADER TITLE'} />
+      {contents.myContent}
       {currentStep.compontent}
       <Footer {...footerProps} />
 

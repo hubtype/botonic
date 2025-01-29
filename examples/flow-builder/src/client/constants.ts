@@ -7,7 +7,7 @@ export const FLOW_BUILDER_API_URL =
 
 export const WEBVIEW_ID = 'WEBVIEW_ID'
 
-export const MAP_CONTENTS = {}
+export const MAP_CONTENTS = { myContent: 'MY_CONTENT_ID' }
 
 export const MyWebviewContentsContext =
   createWebviewContentsContext<typeof MAP_CONTENTS>()

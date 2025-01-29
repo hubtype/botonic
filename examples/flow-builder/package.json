@@ -1,13 +1,6 @@
 {
   "scripts": {
-    "deploy_production": "bash ../bin/deploy.sh true bot_name BOT_PRODUCTION_NAME",
-    "quick_deploy_production": "bash ../bin/deploy.sh false bot_name BOT_PRODUCTION_NAME",
-    "deploy_staging": "botonic deploy -c build_staging -b BOT_STAGING_NAME",
-    "build": "exit 1; Use `npm run deploy_staging` or `npm run deploy_production` instead",
-    "build_webchat": "ENVIRONMENT=production rspack build --env target=webchat --mode=production",
-    "build_production": "ENVIRONMENT=production rspack build --env target=all --mode=production",
-    "build_staging": "ENVIRONMENT=staging rspack build --env target=all --mode=production",
-    "build_local": "ENVIRONMENT=local rspack build --env target=all --mode=development",
+    "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "lint": "npm run lint-core -- --fix && npm run prettier",
     "lint-ci": "npm run lint-core -- -c .eslintrc-ci.js && npm run prettier",
     "lint-core": "npm run lint-test && eslint_d --cache --quiet '{src,tests}/**/*.[t]{s,sx}'",
