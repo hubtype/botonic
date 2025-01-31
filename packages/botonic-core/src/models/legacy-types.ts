@@ -73,6 +73,7 @@ export enum INPUT {
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
   EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
+  EVENT_INITIAL_QUEUE_POSITION = 'case_event_initial_queue_position',
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
