@@ -3,7 +3,6 @@ import {
   INPUT,
   isMobile,
   params2queryString,
-  Session as CoreSession,
 } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, {
@@ -27,7 +26,7 @@ import {
   WebchatSettingsProps,
 } from '../components'
 import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
-import { CloseWebviewOptions, WebviewRequestContext } from '../contexts'
+import { CloseWebviewOptions } from '../contexts'
 import { SENDERS, WebchatProps, WebchatRef } from '../index-types'
 import {
   getMediaType,
@@ -71,7 +70,7 @@ import {
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
-import { WebviewContainer } from './webview'
+import { WebchatWebview } from './webchat-webview'
 
 // eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
@@ -319,8 +318,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   )
 
   const darkBackgroundMenu = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.darkBackgroundMenu,
-    false
+    WEBCHAT.CUSTOM_PROPERTIES.darkBackgroundMenu
   )
 
   const getBlockInputs = (rule, inputData) => {
@@ -577,13 +575,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     }
   }
 
-  const webviewRequestContext = {
-    closeWebview: async (options?: CloseWebviewOptions) =>
-      await closeWebview(options),
-    params: webchatState.webviewParams || ({} as Record<string, any>),
-    session: webchatState.session || ({} as Partial<CoreSession>),
-  }
-
   useEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false
@@ -609,18 +600,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  const webchatWebview = () => (
-    <WebviewRequestContext.Provider value={webviewRequestContext}>
-      <WebviewContainer
-        style={{
-          ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
-          ...mobileStyle,
-        }}
-        webview={webchatState.webview}
-      />
-    </WebviewRequestContext.Provider>
-  )
-
+  // TODO: Create a default theme that include mobileStyle
   let mobileStyle = {}
   if (isMobile(getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileBreakpoint))) {
     mobileStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileStyle) || {
@@ -671,6 +651,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       value={{
         addMessage,
         getThemeProperty,
+        closeWebview,
         openWebview,
         resolveCase,
         resetUnreadMessages,
@@ -691,7 +672,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         trackEvent: props.onTrackEvent,
         webchatState,
-        // TODO: Review if need theme inside Context, already exist innside webchatState
+        // TODO: Review if need theme inside Context, already exist inside webchatState
         theme,
         webchatContainerRef,
         chatAreaRef,
@@ -749,7 +730,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                 />
               )}
 
-              {webchatState.webview && webchatWebview()}
+              {webchatState.webview && <WebchatWebview />}
 
               {webchatState.isCustomComponentRendered &&
                 customComponent &&
