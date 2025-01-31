@@ -1,4 +1,4 @@
-import { HandOffBuilder, isDev, isWebchat } from '@botonic/core'
+import { HandOffBuilder, HelpdeskEvent, isDev, isWebchat } from '@botonic/core'
 import {
   ActionRequest,
   Multichannel,
@@ -16,6 +16,7 @@ export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
   public onFinishPayload?: string
   public handoffAutoAssign: boolean
+  public hasInitialQueuePositionEnabled: boolean
   public isTestIntegration: boolean
 
   static fromHubtypeCMS(
@@ -28,7 +29,8 @@ export class FlowHandoff extends ContentFieldsBase {
     newHandoff.queue = this.getQueueByLocale(locale, cmsHandoff.content.queue)
     newHandoff.onFinishPayload = this.getOnFinishPayload(cmsHandoff, cmsApi)
     newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
-
+    newHandoff.hasInitialQueuePositionEnabled =
+      cmsHandoff.content.has_initial_queue_position_enabled
     return newHandoff
   }
 
@@ -46,6 +48,12 @@ export class FlowHandoff extends ContentFieldsBase {
   async doHandoff(request: ActionRequest): Promise<void> {
     const handOffBuilder = new HandOffBuilder(request.session)
     handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
+
+    if (this.hasInitialQueuePositionEnabled) {
+      handOffBuilder.withSubscribeHelpdeskEvents([
+        HelpdeskEvent.InitialQueuePosition,
+      ])
+    }
 
     if (this.onFinishPayload) {
       handOffBuilder.withOnFinishPayload(this.onFinishPayload)

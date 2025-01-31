@@ -20,6 +20,16 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.32.0] - TBD
+
+### Added
+
+- [BLT-1369](https://hubtype.atlassian.net/browse/BLT-1369): Add logic to conditionally subscribe to `InitialQueuePosition` helpdesk event when doing a handoff.
+
+### Changed
+
+### Fixed
+
 ## [0.31.2] - 2025-02-07
 
 ### Changed
