@@ -12,6 +12,7 @@ import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
+import { INPUT } from '@botonic/core'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -81,6 +82,10 @@ async function getContents(
 
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
+  }
+
+  if (request.input.type === INPUT.EVENT_INITIAL_QUEUE_POSITION) {
+    // TODO: Think how we will get this content
   }
 
   if (request.input.payload || contentID) {
