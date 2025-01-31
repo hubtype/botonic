@@ -79,7 +79,7 @@ export interface UseWebchat {
   removeReplies: () => void
   removeWebview: () => void
   webchatState: WebchatState
-  webchatRef: React.MutableRefObject<HTMLDivElement | null> // TODO: Change name, already exists WebchatRef for useImperativeHandle
+  webchatContainerRef: React.MutableRefObject<HTMLDivElement | null>
   headerRef: React.MutableRefObject<HTMLDivElement | null>
   chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
   scrollableMessagesListRef: React.MutableRefObject<HTMLDivElement | null>
@@ -93,7 +93,7 @@ export function useWebchat(): UseWebchat {
     webchatInitialState
   )
 
-  const webchatRef = useRef<HTMLDivElement | null>(null)
+  const webchatContainerRef = useRef<HTMLDivElement | null>(null)
   const chatAreaRef = useRef<HTMLDivElement | null>(null)
   const inputPanelRef = useRef<HTMLDivElement | null>(null)
   const headerRef = useRef<HTMLDivElement | null>(null)
@@ -281,7 +281,7 @@ export function useWebchat(): UseWebchat {
     removeReplies,
     removeWebview,
     webchatState,
-    webchatRef,
+    webchatContainerRef,
     headerRef,
     chatAreaRef,
     scrollableMessagesListRef,

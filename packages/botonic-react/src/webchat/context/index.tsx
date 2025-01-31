@@ -72,7 +72,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   trackEvent: async () => {
     return
   },
-  webchatRef: { current: null },
+  webchatContainerRef: { current: null },
   chatAreaRef: { current: null },
   inputPanelRef: { current: null },
   headerRef: { current: null },

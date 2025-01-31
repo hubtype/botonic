@@ -104,7 +104,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     removeWebview,
     removeReplies,
     webchatState,
-    webchatRef,
+    webchatContainerRef,
     chatAreaRef,
     inputPanelRef,
     headerRef,
@@ -693,7 +693,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         webchatState,
         // TODO: Review if need theme inside Context, already exist innside webchatState
         theme,
-        webchatRef,
+        webchatContainerRef,
         chatAreaRef,
         inputPanelRef,
         headerRef,
@@ -706,7 +706,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           id={BotonicContainerId.Webchat}
-          ref={webchatRef}
+          ref={webchatContainerRef}
           // TODO: Distinguish between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
           role={ROLES.WEBCHAT}
           width={webchatState.width}

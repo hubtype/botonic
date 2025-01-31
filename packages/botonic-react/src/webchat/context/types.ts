@@ -75,7 +75,7 @@ export interface WebchatContextProps {
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState
-  webchatRef: React.MutableRefObject<HTMLDivElement | null> // Rename this to webchatContainerRef
+  webchatContainerRef: React.MutableRefObject<HTMLDivElement | null>
   chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
   inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
   headerRef: React.MutableRefObject<HTMLDivElement | null>

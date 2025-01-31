@@ -25,8 +25,12 @@ const stopAtScrollLimit = element => {
 }
 
 export const useScrollbarController = (currentDevice, host) => {
-  const { webchatRef, chatAreaRef, repliesRef, scrollableMessagesListRef } =
-    useContext(WebchatContext)
+  const {
+    webchatContainerRef,
+    chatAreaRef,
+    repliesRef,
+    scrollableMessagesListRef,
+  } = useContext(WebchatContext)
 
   const hasScrollbar = () => {
     if (chatAreaRef.current && scrollableMessagesListRef.current) {
@@ -70,25 +74,25 @@ export const useScrollbarController = (currentDevice, host) => {
   }
 
   const toggleOnTouchMoveEvents = () => {
-    if (webchatRef.current && scrollableMessagesListRef.current) {
+    if (webchatContainerRef.current && scrollableMessagesListRef.current) {
       if (hasScrollbar()) {
         scrollableMessagesListRef.current.style.touchAction = 'auto'
-        webchatRef.current.style.touchAction = 'auto'
-        webchatRef.current.ontouchmove = null
-        webchatRef.current.ontouchstart = null
+        webchatContainerRef.current.style.touchAction = 'auto'
+        webchatContainerRef.current.ontouchmove = null
+        webchatContainerRef.current.ontouchstart = null
         return
       }
 
       scrollableMessagesListRef.current.style.touchAction = 'none'
-      webchatRef.current.style.touchAction = 'none'
+      webchatContainerRef.current.style.touchAction = 'none'
     }
-    if (webchatRef.current) {
-      webchatRef.current.ontouchstart = e => {
+    if (webchatContainerRef.current) {
+      webchatContainerRef.current.ontouchstart = e => {
         if (e.target === e.currentTarget) {
           e.preventDefault()
         }
       }
-      webchatRef.current.ontouchmove = e => {
+      webchatContainerRef.current.ontouchmove = e => {
         if (e.target === e.currentTarget) {
           e.preventDefault()
         }
@@ -122,22 +126,23 @@ export const useScrollbarController = (currentDevice, host) => {
   }
 
   const handleScrollEvents = () => {
-    if (webchatRef.current) {
+    if (webchatContainerRef.current) {
       if (isMobileDevice()) {
         if (currentDevice !== DEVICES.MOBILE.IPHONE) return
 
         limitScrollBoundaries()
 
-        webchatRef.current.ontouchstart = handleOnTouchMoveEvents
-        webchatRef.current.ontouchmove = handleOnTouchMoveEvents
+        webchatContainerRef.current.ontouchstart = handleOnTouchMoveEvents
+        webchatContainerRef.current.ontouchmove = handleOnTouchMoveEvents
       } else {
-        webchatRef.current.onmouseover = e => handleOnMouseOverEvents(e)
+        webchatContainerRef.current.onmouseover = e =>
+          handleOnMouseOverEvents(e)
       }
     }
   }
 
   useEffect(() => {
-    const webchat = webchatRef.current
+    const webchat = webchatContainerRef.current
 
     handleScrollEvents()
 
