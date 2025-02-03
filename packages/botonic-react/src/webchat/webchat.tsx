@@ -70,7 +70,7 @@ import {
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
-import { WebchatWebview } from './webchat-webview'
+import { WebviewContainer } from './webview/index'
 
 // eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
@@ -730,7 +730,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                 />
               )}
 
-              {webchatState.webview && <WebchatWebview />}
+              {webchatState.webview && <WebviewContainer />}
 
               {webchatState.isCustomComponentRendered &&
                 customComponent &&
