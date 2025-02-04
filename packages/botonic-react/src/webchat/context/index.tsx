@@ -13,6 +13,9 @@ export const WebchatContext = createContext<WebchatContextProps>({
   getThemeProperty: () => {
     return
   }, // used to retrieve a specific property of the theme defined by the developer in his 'webchat/index.js'
+  closeWebview: async () => {
+    return
+  },
   openWebview: () => {
     return
   },
@@ -72,7 +75,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   trackEvent: async () => {
     return
   },
-  webchatRef: { current: null },
+  webchatContainerRef: { current: null },
   chatAreaRef: { current: null },
   inputPanelRef: { current: null },
   headerRef: { current: null },

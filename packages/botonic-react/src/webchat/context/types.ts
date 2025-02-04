@@ -5,6 +5,7 @@ import {
 } from '@botonic/core'
 
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
+import { CloseWebviewOptions } from '../../contexts'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
 import { WebchatStateTheme } from '../index-types'
 import { ThemeProps } from '../theme/types'
@@ -54,6 +55,7 @@ export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
   getThemeProperty: (property: string, defaultValue?: any) => any
+  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
   openWebview: (webviewComponent: Webview, params?: any) => void
   resetUnreadMessages: () => void
   resolveCase: () => void
@@ -75,7 +77,7 @@ export interface WebchatContextProps {
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState
-  webchatRef: React.MutableRefObject<HTMLDivElement | null> // Rename this to webchatContainerRef
+  webchatContainerRef: React.MutableRefObject<HTMLDivElement | null>
   chatAreaRef: React.MutableRefObject<HTMLDivElement | null>
   inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
   headerRef: React.MutableRefObject<HTMLDivElement | null>

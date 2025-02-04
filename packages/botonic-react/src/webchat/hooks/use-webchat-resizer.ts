@@ -4,7 +4,7 @@ import { WebchatContext } from '../../webchat/context'
 import { useWebchatDimensions } from './use-webchat-dimensions'
 
 export const useWebchatResizer = () => {
-  const { webchatRef, chatAreaRef, inputPanelRef, headerRef } =
+  const { webchatContainerRef, chatAreaRef, inputPanelRef, headerRef } =
     useContext(WebchatContext)
 
   const {
@@ -14,24 +14,24 @@ export const useWebchatResizer = () => {
 
   const handleKeyboardShown = () => {
     if (
-      webchatRef.current &&
+      webchatContainerRef.current &&
       chatAreaRef.current &&
       headerRef.current &&
       inputPanelRef.current
     ) {
-      webchatRef.current.style.height = `${calculateResizedPercentualWebchatHeight()}%`
+      webchatContainerRef.current.style.height = `${calculateResizedPercentualWebchatHeight()}%`
       chatAreaRef.current.style.height = `${calculateResizedPxChatAreaHeight()}px`
     }
   }
 
   const handleKeyboardHidden = () => {
     if (
-      webchatRef.current &&
+      webchatContainerRef.current &&
       chatAreaRef.current &&
       inputPanelRef.current &&
       headerRef.current
     ) {
-      webchatRef.current.style.height = '100%'
+      webchatContainerRef.current.style.height = '100%'
       chatAreaRef.current.style.height = `${calculateResizedPxChatAreaHeight()}px`
     }
   }

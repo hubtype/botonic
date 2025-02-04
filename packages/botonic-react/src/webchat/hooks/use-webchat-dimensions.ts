@@ -4,14 +4,14 @@ import { WebchatContext } from '../../webchat/context'
 
 export const useWebchatDimensions = () => {
   const {
-    webchatRef,
+    webchatContainerRef,
     headerRef,
     inputPanelRef,
     webchatState: { isWebchatOpen },
   } = useContext(WebchatContext)
 
   const calculateResizedPercentualWebchatHeight = useCallback(() => {
-    const webchatElement = webchatRef.current
+    const webchatElement = webchatContainerRef.current
     if (!isWebchatOpen || !webchatElement) return 0
     const webchatHeight = webchatElement.clientHeight || 0
     const keyboardOffset =
@@ -24,7 +24,7 @@ export const useWebchatDimensions = () => {
   }, [isWebchatOpen])
 
   const calculateResizedPxChatAreaHeight = useCallback(() => {
-    const webchatElement = webchatRef.current
+    const webchatElement = webchatContainerRef.current
     const headerElement = headerRef.current
     const inputPanelElement = inputPanelRef.current
 
