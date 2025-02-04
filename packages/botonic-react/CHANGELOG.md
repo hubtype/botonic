@@ -16,6 +16,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- Refactor components used to render a [webview inside the webchat](https://github.com/hubtype/botonic/pull/2976)
+
 ### Fixed
 
 </details>
