@@ -51,7 +51,9 @@ export const WebviewContainer = () => {
     return () => window.removeEventListener('message', close, false)
   }, [])
 
-  const isProduction = typeof Webview === 'string'
+  // TODO: Review how to split the logic of rendering a webview in local development and production
+  // In local development, Webview is a component. In production it is the URL of the webview
+  const isUrlToWebview = typeof Webview === 'string'
 
   return (
     <StyledWebview
@@ -63,7 +65,7 @@ export const WebviewContainer = () => {
     >
       <WebviewHeader />
       <StyledWebviewContent>
-        {isProduction ? (
+        {isUrlToWebview ? (
           <StyledFrame src={Webview} />
         ) : (
           <WebviewRequestContext.Provider value={webviewRequestContext}>
