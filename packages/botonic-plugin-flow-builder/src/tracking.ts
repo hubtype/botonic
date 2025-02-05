@@ -2,7 +2,11 @@ import { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
 import { FlowContent } from './content-fields'
-import { HtNodeWithContent } from './content-fields/hubtype-fields'
+import {
+  HtNodeWithContent,
+  HtNodeWithContentType,
+  HtNodeWithoutContentType,
+} from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 
 export enum EventAction {
@@ -39,14 +43,16 @@ export async function trackFlowContent(
   const cmsApi = flowBuilderPlugin.cmsApi
   for (const content of contents) {
     const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
-    const eventArgs = getContentEventArgs(request, {
-      code: nodeContent.code,
-      flowId: nodeContent.flow_id,
-      flowName: flowBuilderPlugin.getFlowName(nodeContent.flow_id),
-      id: nodeContent.id,
-      isMeaningful: nodeContent.is_meaningful ?? false,
-    })
-    await trackEvent(request, EventAction.FlowNode, eventArgs)
+    if (nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE) {
+      const eventArgs = getContentEventArgs(request, {
+        code: nodeContent.code,
+        flowId: nodeContent.flow_id,
+        flowName: flowBuilderPlugin.getFlowName(nodeContent.flow_id),
+        id: nodeContent.id,
+        isMeaningful: nodeContent.is_meaningful ?? false,
+      })
+      await trackEvent(request, EventAction.FlowNode, eventArgs)
+    }
   }
 }
 
