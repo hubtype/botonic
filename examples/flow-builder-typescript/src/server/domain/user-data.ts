@@ -1,8 +1,12 @@
 import { BotSession, ContextWithLocale } from '../types'
-import { empty } from '../utils/functional'
+
+export const empty = (object: Record<string, any>): boolean =>
+  Object.keys(object).length === 0
 
 const COUNTRIES = {
   spain: 'ES',
+  united_states: 'US',
+  united_kingdom: 'UK',
 } as const
 
 const LANGUAGES = {
@@ -31,8 +35,8 @@ export class UserData {
 
   static createWithDefaults(): UserData {
     return new UserData({
-      country: COUNTRIES.spain,
-      language: LANGUAGES.spanish,
+      country: COUNTRIES.united_states,
+      language: LANGUAGES.english,
     })
   }
 

@@ -1,17 +1,14 @@
 import { Route } from '@botonic/core'
+import { FlowBuilderMultichannelAction } from '@botonic/plugin-flow-builder'
 
-import { ExtendedFlowBuilderAction } from './actions/extended-flow-builder'
 import { StartConversationAction } from './actions/start-conversation'
-import { START_CONVERSATION_PAYLOAD_REGEX } from './constants'
-import { BotRequest } from './types'
+import { START_CONVERSATION_PAYLOAD } from './constants'
 
-export function routes(request: BotRequest): Route[] {
-  console.log('[User Input]', request.input)
-
+export function routes(): Route[] {
   const routes: Route[] = [
     {
       path: 'start-conversation',
-      payload: START_CONVERSATION_PAYLOAD_REGEX,
+      payload: START_CONVERSATION_PAYLOAD,
       action: StartConversationAction,
     },
     {
@@ -19,7 +16,7 @@ export function routes(request: BotRequest): Route[] {
       text: /.*/,
       payload: /.*/,
       type: /.*/,
-      action: ExtendedFlowBuilderAction,
+      action: FlowBuilderMultichannelAction,
     },
   ]
 

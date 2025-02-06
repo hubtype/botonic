@@ -10,7 +10,7 @@ import {
 import { ActionRequest } from '@botonic/react'
 
 import { context } from './domain/user-data'
-import { EventPropsMap, trackEvent } from './tracking'
+import { trackEvent } from './tracking'
 import { BotRequest, BotSession } from './types'
 import { ENVIRONMENT, isLocal, isProduction } from './utils/env-utils'
 
@@ -26,12 +26,9 @@ function getFlowBuilderConfig(
       : FlowBuilderJSONVersion.LATEST,
     getLocale: (session: Session) => context(session as BotSession).locale,
     getAccessToken: () => '', // Used locally,
-    trackEvent: async (request: ActionRequest, eventAction, args) => {
-      await trackEvent(
-        request as BotRequest,
-        eventAction as keyof EventPropsMap,
-        args as EventPropsMap[keyof EventPropsMap]
-      )
+    // @ts-ignore
+    trackEvent: async (request: BotRequest, eventName, args) => {
+      await trackEvent(request, eventName, args)
     },
     getKnowledgeBaseResponse: async (
       request: ActionRequest,

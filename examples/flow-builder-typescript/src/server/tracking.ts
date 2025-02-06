@@ -1,73 +1,44 @@
-import BotonicPluginHubtypeAnalytics, {
-  EventAction,
-  EventCustom,
-  EventFeedback,
-  EventHandoff,
-  EventHandoffOption,
-  EventWebviewEnd,
-  EventWebviewStep,
-  HtEventProps,
-} from '@botonic/plugin-hubtype-analytics'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, HtEventProps } from '@botonic/plugin-hubtype-analytics'
 
 import { BotRequest } from './types'
-import { isBrowser, isLocal } from './utils/env-utils'
+import { isLocal } from './utils/env-utils'
 
-export type EventPropsMap = {
-  [EventAction.FeedbackCase]: Omit<EventFeedback, 'action'>
-  [EventAction.FeedbackConversation]: Omit<EventFeedback, 'action'>
-  [EventAction.FeedbackWebview]: Omit<EventFeedback, 'action'>
-  [EventAction.HandoffOption]: Omit<EventHandoffOption, 'action'>
-  [EventAction.HandoffFail]: Omit<EventHandoff, 'action'>
-  [EventAction.WebviewStep]: Omit<EventWebviewStep, 'action'>
-  [EventAction.WebviewEnd]: Omit<EventWebviewEnd, 'action'>
-  [EventAction.Custom]: Omit<EventCustom, 'action'>
-}
+type EventArgs = { [key: string]: any }
 
-export async function trackEvent<T extends keyof EventPropsMap>(
+export async function trackEvent(
   request: BotRequest,
-  eventName: T,
-  eventProps?: EventPropsMap[T]
+  eventName: string,
+  args?: EventArgs
 ): Promise<void> {
-  if (isLocal()) {
-    console.log('Tracking event...', eventName, eventProps)
-    return
+  if (Object.values(EventAction).includes(eventName as EventAction)) {
+    const htEventProps = {
+      action: eventName as EventAction,
+      ...args,
+    }
+    await trackHtEvent(request, htEventProps as HtEventProps)
   }
-
-  const htEventProps = eventProps
-    ? {
-        action: eventName as EventAction,
-        ...eventProps,
-      }
-    : { action: eventName as EventAction }
-
-  await trackHtEvent(request, htEventProps as HtEventProps)
+  return
 }
 
 export async function trackHtEvent(
-  request: ActionRequest,
+  request: BotRequest,
   htEventProps: HtEventProps
 ) {
-  const printLogs = !isBrowser()
-  const hubtypeAnalyticsPlugin = isBrowser()
-    ? new BotonicPluginHubtypeAnalytics()
-    : (request.plugins.hubtypeAnalytics as BotonicPluginHubtypeAnalytics)
-  try {
-    const response = await hubtypeAnalyticsPlugin.trackEvent(
-      request,
-      htEventProps
-    )
-    printLogs && console.log('TrackHtEvent Success', { data: response.data })
-  } catch (error: any) {
-    printLogs &&
-      console.log(
-        'TrackHtEvent Error',
-        { error },
-        JSON.stringify(error.response?.data),
-        {
-          errorData: error.response?.data,
-        }
-      )
+  if (isLocal()) {
+    console.log('TrackHtEvent', { htEventProps })
+    return
   }
+  const hubtypeAnalytics = request.plugins.hubtypeAnalytics
+  try {
+    await hubtypeAnalytics.trackEvent(request, htEventProps)
+    console.log('TrackHtEvent Success', {
+      action: htEventProps.action,
+    })
+  } catch (error: unknown) {
+    console.error('TrackHtEvent Error', {
+      action: htEventProps.action,
+    })
+  }
+
   return
 }
