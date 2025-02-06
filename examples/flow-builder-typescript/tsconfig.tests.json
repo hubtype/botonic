@@ -3,6 +3,6 @@
   "include": ["src", "tests"],
   "compilerOptions": {
     "rootDir": ".",
-    "jsx": "react"
+    "jsx": "react-jsx"
   }
 }

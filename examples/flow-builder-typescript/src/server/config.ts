@@ -25,7 +25,7 @@ function getFlowBuilderConfig(
       ? FlowBuilderJSONVersion.DRAFT
       : FlowBuilderJSONVersion.LATEST,
     getLocale: (session: Session) => context(session as BotSession).locale,
-    getAccessToken: () => '', // Used locally,
+    getAccessToken: () => 'AUTH_TOKEN', // Used locally,
     // @ts-ignore
     trackEvent: async (request: BotRequest, eventName, args) => {
       await trackEvent(request, eventName, args)

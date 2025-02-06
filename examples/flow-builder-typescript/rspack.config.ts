@@ -82,6 +82,11 @@ const typescriptLoaderConfig = [
             syntax: 'typescript',
             tsx: true,
           },
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
           keepClassNames: true,
         },
       },
