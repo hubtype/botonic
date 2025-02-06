@@ -1,0 +1,53 @@
+{
+  "name": "@botonic/example-flow-builder-typescript",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
+    "lint": "npm run lint-core -- --fix && npm run prettier",
+    "lint-ci": "npm run lint-core -- -c .eslintrc-ci.js && npm run prettier",
+    "lint-core": "npm run lint-test && eslint_d --cache --quiet '{src,tests}/**/*.[t]{s,sx}'",
+    "lint-test": "tsc --project tsconfig.tests.json ",
+    "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
+    "start": "ENVIRONMENT=local rspack serve --env target=dev --mode=development",
+    "test": "jest  --passWithNoTests",
+    "preversion": "npm run lint-ci",
+    "# version issue": "See https://github.com/npm/cli/issues/2010. Temporarily checking all files have been git-added",
+    "postversion": "git add package.json package-lock.json && git diff --exit-code && git commit && git push && git push --tags"
+  },
+  "dependencies": {
+    "@botonic/plugin-flow-builder": "0.32.0-alpha.0",
+    "@botonic/plugin-hubtype-analytics": "^0.31.0",
+    "@botonic/plugin-knowledge-bases": "^0.31.0",
+    "@botonic/react": "^0.31.0",
+    "@reduxjs/toolkit": "1.9.7",
+    "axios": "^1.7.9",
+    "he": "^1.2.0",
+    "react-redux": "^7.2.9",
+    "styled-components": "^6.0.0",
+    "uuid": "^10.0.0",
+    "react-dom": "^18.3.1",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@botonic/dx": "^0.31.0",
+    "@types/react": "18.3.13",
+    "@types/react-dom": "18.3.1",
+    "@types/react-redux": "^7.1.34",
+    "@types/react-stars": "^2.2.4",
+    "@types/uuid": "^10.0.0",
+    "crypto-browserify": "^3.12.1",
+    "csstype": "^2.6.21",
+    "source-map-loader": "^0.2.4",
+    "unorm": "^1.6.0"
+  },
+  "files": [
+    "doc/**",
+    "lib/**",
+    "src/**",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

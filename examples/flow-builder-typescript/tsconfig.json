@@ -1,0 +1,9 @@
+{
+  "extends": "@botonic/dx/baseline/tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "rootDir": "src",
+    "types": ["node", "jest"]
+  }
+}
