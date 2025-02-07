@@ -30,8 +30,24 @@ export {
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
 } from './whatsapp-button-list'
+export { WhatsappCatalog, WhatsappCatalogProps } from './whatsapp-catalog'
 export {
   WhatsappCTAUrlButton,
   WhatsappCTAUrlButtonProps,
 } from './whatsapp-cta-url-button'
+export {
+  WhatsappMediaCarousel,
+  WhatsappMediaCarouselProps,
+} from './whatsapp-media-carousel'
+export { WhatsappProduct } from './whatsapp-product'
+export {
+  WhatsappProductCarousel,
+  WhatsappProductCarouselProps,
+} from './whatsapp-product-carousel'
+export {
+  ProductItem,
+  WhatsappProductList,
+  WhatsappProductListProps,
+  WhatsappProductListSection,
+} from './whatsapp-product-list'
 export { WhatsappTemplate } from './whatsapp-template'
