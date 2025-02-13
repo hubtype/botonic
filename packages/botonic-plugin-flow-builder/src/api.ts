@@ -32,7 +32,7 @@ export class FlowBuilderApi {
 
     newApi.url = options.url
     newApi.request = options.request
-
+    // TODO: Refactor later to combine logic from `FlowBuilderApi.create`, `resolveFlowUrl` and `getAccessToken` to be in one place
     if (process.env.NODE_ENV === ProcessEnvNodeEnvs.DEVELOPMENT) {
       await newApi.updateSessionWithUserInfo(options.accessToken)
     }

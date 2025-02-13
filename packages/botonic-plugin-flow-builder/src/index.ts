@@ -42,6 +42,8 @@ import { getNodeByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { inputHasTextData, resolveGetAccessToken } from './utils'
 
+// TODO: Create a proper service to wrap all calls and allow api versioning
+
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flow?: HtFlowBuilderData
