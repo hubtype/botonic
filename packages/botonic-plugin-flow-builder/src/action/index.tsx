@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
@@ -12,7 +13,6 @@ import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
-import { INPUT } from '@botonic/core'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
