@@ -20,6 +20,18 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.32.0] - TBD
+
+### Added
+
+- Add logic to conditionally [subscribe to `InitialQueuePosition` helpdesk event](https://github.com/hubtype/botonic/pull/2975) when doing a handoff.
+
+### Changed
+
+- Plugin endpoints to point to [new hubtype backend flow builder app](https://github.com/hubtype/botonic/pull/2972).
+
+### Fixed
+
 ## [0.31.2] - 2025-02-07
 
 ### Changed
@@ -30,7 +42,7 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
-- Fix isLoading in useWebviewContents[https://github.com/hubtype/botonic/issues/2973](https://github.com/hubtype/botonic/pull/2973)
+- Fix [isLoading in useWebviewContents](https://github.com/hubtype/botonic/pull/2973)
 
 ## [0.31.0] - 2025-01-22
 

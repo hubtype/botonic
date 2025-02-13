@@ -146,4 +146,12 @@ describe('Handoff', () => {
     const expectedBotonicAction = `${BotonicAction.CreateCase}:{"force_assign_if_not_available":true,"on_finish":"payload1","subscribe_helpdesk_events":["agent_message_created"]}`
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
+  test('Create a handoff and subscribe to initial_queue_position', () => {
+    const builder = new HandOffBuilder({})
+      .withSubscribeHelpdeskEvents([HelpdeskEvent.InitialQueuePosition])
+      .withOnFinishPayload('payload1')
+    builder.handOff()
+    const expectedBotonicAction = `${BotonicAction.CreateCase}:{"force_assign_if_not_available":true,"on_finish":"payload1","subscribe_helpdesk_events":["initial_queue_position"]}`
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 })

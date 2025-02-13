@@ -37,6 +37,7 @@ interface BotEventData {
 export enum HelpdeskEvent {
   StatusChanged = 'status_changed',
   AgentMessageCreated = 'agent_message_created',
+  InitialQueuePosition = 'initial_queue_position',
 }
 
 function contextDefaults(context: any): BackendContext {

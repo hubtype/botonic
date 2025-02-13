@@ -19,3 +19,13 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.32.0] - TBD
+
+### Added
+
+- [BLT-1369](https://hubtype.atlassian.net/browse/BLT-1369): Add new `SubscribeHelpdeskEvents` event `InitialQueuePosition`.
+
+### Changed
+
+### Fixed

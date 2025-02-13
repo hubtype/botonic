@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
@@ -81,6 +82,10 @@ async function getContents(
 
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
+  }
+  // TODO: Add needed logic when we can define contents for multilocale queue position message
+  if (request.input.type === INPUT.EVENT_INITIAL_QUEUE_POSITION) {
+    return []
   }
 
   if (request.input.payload || contentID) {

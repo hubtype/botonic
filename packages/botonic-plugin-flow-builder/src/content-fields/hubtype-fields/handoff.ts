@@ -7,5 +7,6 @@ export interface HtHandoffNode extends HtBaseNode {
     queue: HtQueueLocale[]
     payload: HtPayloadLocale[]
     has_auto_assign: boolean
+    has_initial_queue_position_enabled: boolean
   }
 }

@@ -258,6 +258,7 @@ export const knowledgeBaseTestFlow = {
         ],
         payload: [],
         has_auto_assign: false,
+        has_initial_queue_position_enabled: false,
       },
     },
     {
