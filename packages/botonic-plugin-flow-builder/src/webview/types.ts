@@ -5,9 +5,10 @@ export enum WebviewContentType {
   IMAGE = 'webview-image',
 }
 
-export interface WebviewContentsResponse {
-  webview_contents: (WebviewTextContent | WebviewImageContent)[]
-}
+export type WebviewContentsResponse = (
+  | WebviewTextContent
+  | WebviewImageContent
+)[]
 
 export interface WebviewTextContent {
   code: string

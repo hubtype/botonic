@@ -1,5 +1,5 @@
 export const FLOW_BUILDER_API_URL_PROD =
-  'https://api.ent0.flowbuilder.prod.hubtype.com'
+  process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 export const SEPARATOR = '|'
 export const SOURCE_INFO_SEPARATOR = `${SEPARATOR}source_`
 export const VARIABLE_PATTERN = /{([^}]+)}/g

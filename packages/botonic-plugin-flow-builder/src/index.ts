@@ -41,6 +41,9 @@ import {
 import { getNodeByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { inputHasTextData, resolveGetAccessToken } from './utils'
+
+// TODO: Create a proper service to wrap all calls and allow api versioning
+
 export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flow?: HtFlowBuilderData
@@ -74,9 +77,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   resolveFlowUrl(request: PluginPreRequest): string {
     if (request.session.is_test_integration) {
-      return `${this.apiUrl}/flow/${FlowBuilderJSONVersion.DRAFT}`
+      return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${FlowBuilderJSONVersion.DRAFT}`
     }
-    return `${this.apiUrl}/flow/${this.jsonVersion}`
+    return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${this.jsonVersion}`
   }
 
   async pre(request: PluginPreRequest): Promise<void> {

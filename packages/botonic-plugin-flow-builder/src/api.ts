@@ -31,14 +31,17 @@ export class FlowBuilderApi {
     const newApi = new FlowBuilderApi()
 
     newApi.url = options.url
-    newApi.flowUrl = options.flowUrl
-    newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
     newApi.request = options.request
-
+    // TODO: Refactor later to combine logic from `FlowBuilderApi.create`, `resolveFlowUrl` and `getAccessToken` to be in one place
     if (process.env.NODE_ENV === ProcessEnvNodeEnvs.DEVELOPMENT) {
       await newApi.updateSessionWithUserInfo(options.accessToken)
     }
-
+    const updatedRequest = newApi.request
+    newApi.flowUrl = options.flowUrl.replace(
+      '{bot_id}',
+      updatedRequest.session.bot.id
+    )
+    newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
     return newApi
   }
 
@@ -50,7 +53,7 @@ export class FlowBuilderApi {
   }
 
   private async updateSessionWithUserInfo(token: string) {
-    const url = `${this.url}/get-user-info`
+    const url = `${this.url}/v1/flow_builder/user_info/`
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     })

@@ -16,6 +16,7 @@ import {
 export function useWebviewContents<T extends MapContentsType>({
   apiUrl = FLOW_BUILDER_API_URL_PROD,
   version = FlowBuilderJSONVersion.LATEST,
+  // @ts-ignore
   orgId,
   botId,
   webviewId,
@@ -84,18 +85,16 @@ export function useWebviewContents<T extends MapContentsType>({
 
   useEffect(() => {
     const getResponseContents = async () => {
-      const url = `${apiUrl}/webview/${version}`
+      const url = `${apiUrl}/v1/bot_flows/${botId}/versions/${version}/webviews/${webviewId}/`
       try {
-        const response = await axios.get<WebviewContentsResponse>(url, {
-          params: { org: orgId, bot: botId, webview: webviewId },
-        })
+        const response = await axios.get<WebviewContentsResponse>(url)
 
-        const textResponseContents = response.data.webview_contents.filter(
+        const textResponseContents = response.data.filter(
           webviewContent => webviewContent.type === WebviewContentType.TEXT
         ) as WebviewTextContent[]
         setTextContents(textResponseContents)
 
-        const imageResponseContents = response.data.webview_contents.filter(
+        const imageResponseContents = response.data.filter(
           webviewContent => webviewContent.type === WebviewContentType.IMAGE
         ) as WebviewImageContent[]
         setImageContents(imageResponseContents)
