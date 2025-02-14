@@ -36,7 +36,7 @@ export type WhatsappCTAUrlButtonProps =
   | WhatsappCTAUrlButtonWebviewProps
 
 const serialize = _whatsappCTAUrlButtonProps => {
-  // TODO: Implement to have data persistance in localStorage, not needed for this WhatsApp development
+  // TODO: Implement to have data persistence in localStorage, not needed for this WhatsApp development
   return {}
 }
 
@@ -66,7 +66,10 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
         WHATSAPP_MAX_BODY_CHARS
       ),
       footer: props.footer
-        ? truncateText(props.footer, WHATSAPP_MAX_FOOTER_CHARS)
+        ? truncateText(
+            convertToMarkdownMeta(props.footer),
+            WHATSAPP_MAX_FOOTER_CHARS
+          )
         : undefined,
       displayText: truncateText(props.displayText, WHATSAPP_MAX_BUTTON_CHARS),
       url:

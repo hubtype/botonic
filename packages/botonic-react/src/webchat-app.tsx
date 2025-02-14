@@ -279,7 +279,7 @@ export class WebchatApp {
     delete message.sent_by
     const response = msgToBotonic(
       message,
-      // TODO: Review if is neded allow declar customTypes inside and ouside theme
+      // TODO: Review if is needed allow declar customTypes inside and outside theme
       this.theme?.message?.customTypes || this.theme?.customMessageTypes
     )
 
