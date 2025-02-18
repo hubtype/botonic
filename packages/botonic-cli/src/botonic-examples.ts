@@ -3,7 +3,7 @@ import path from 'path'
 import { BotonicProject } from './interfaces'
 
 const exampleTestPath = path.resolve(__dirname, '..', '..', '..', 'examples')
-const exampleVersion = '0.31.0'
+const exampleVersion = '0.32.0'
 
 export const EXAMPLES: BotonicProject[] = [
   {
@@ -17,6 +17,13 @@ export const EXAMPLES: BotonicProject[] = [
     description: 'Blank (TypeScript): A minimal template to start from scratch',
     version: exampleVersion,
     localTestPath: path.resolve(exampleTestPath, 'blank-typescript'),
+  },
+  {
+    name: 'flow-builder-typescript',
+    description:
+      'Flow Builder (TypeScript): A minimal template to start from scratch',
+    version: exampleVersion,
+    localTestPath: path.resolve(exampleTestPath, 'flow-builder-typescript'),
   },
   {
     name: 'booking-platform',
