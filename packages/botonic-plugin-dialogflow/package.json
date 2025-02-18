@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dialogflow",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "license": "MIT",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/core": "^0.31.0",
+    "@botonic/core": "^0.32.0",
     "axios": "^1.7.9",
     "jsrsasign": "^10.9.0",
     "uuid": "^10.0.0"
