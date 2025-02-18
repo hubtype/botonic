@@ -17,7 +17,6 @@ import {
 import { convertToMarkdownMeta } from './whatsapp/markdown-meta'
 
 export const MultichannelCarousel = props => {
-  console.log('MultichannelCarousel', props)
   const requestContext = useContext(RequestContext)
 
   if (isDev(requestContext.session) || isWebchat(requestContext.session)) {
@@ -28,46 +27,49 @@ export const MultichannelCarousel = props => {
   const childrenElements = props.children.map(e => e.props.children)
 
   childrenElements.forEach((element, i) => {
-    const {
-      imageProps,
-      title,
-      subtitle,
-      textButton,
-      payloadButton,
-      urlButton,
-    } = extractElementProperties(element)
+    const { imageProps, title, subtitle, buttons } =
+      extractElementProperties(element)
 
     const textMessage = getTextMessage(requestContext.session, title, subtitle)
 
     const messageWithImage = <Image src={imageProps.src} />
     messages.push(messageWithImage)
 
-    if (urlButton && isWhatsapp(requestContext.session)) {
+    if (
+      isWhatsapp(requestContext.session) &&
+      buttons.some(button => button.url)
+    ) {
       const messageWithButtonUrl = (
         <WhatsappCTAUrlButton
           key={`carousel-element-${i}-cta-url`}
           body={title}
           footer={`_${subtitle}_`}
-          displayText={textButton}
-          url={urlButton}
+          displayText={buttons[0].text}
+          url={buttons[0].url}
         />
       )
       messages.push(messageWithButtonUrl)
-    } else {
-      const messageWithButtonPayload = (
-        <Text key={`carousel-element-${i}-text`}>
-          {textMessage}
-          <Button
-            key={`carousel-element-${i}-button`}
-            payload={payloadButton}
-            url={urlButton}
-          >
-            {textButton}
-          </Button>
-        </Text>
-      )
-      messages.push(messageWithButtonPayload)
     }
+
+    const messageWithButtons = buttons.some(button => button.payload) ? (
+      <Text key={`carousel-element-${i}-text`}>
+        {textMessage}
+        {buttons
+          .filter(button => isWhatsapp(requestContext.session) && !button.url)
+          .map(button => (
+            <Button
+              key={`carousel-element-${i}-button`}
+              payload={button.payload}
+              url={button.url}
+            >
+              {button.text}
+            </Button>
+          ))}
+      </Text>
+    ) : (
+      []
+    )
+    messages.push(messageWithButtons)
   })
 
   return <>{messages}</>
@@ -89,12 +91,15 @@ function extractElementProperties(element) {
     if (Array.isArray(node)) buttonsChildren.push(...getButtons(node))
   }
 
-  // Carousel Element only allow one button
-  const textButton = buttonsChildren[0].props.children
-  const payloadButton = buttonsChildren[0].props.payload
-  const urlButton = buttonsChildren[0].props.url
+  const buttons = buttonsChildren.map(button => {
+    return {
+      text: button.props.children,
+      payload: button.props.payload,
+      url: button.props.url,
+    }
+  })
 
-  return { imageProps, title, subtitle, textButton, payloadButton, urlButton }
+  return { imageProps, title, subtitle, buttons }
 }
 
 function getTextMessage(session, title, subtitle) {
