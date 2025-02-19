@@ -14,11 +14,6 @@ import { Multichannel } from '../../../src/components/multichannel/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'
 
 const LEGACY_PROPS = {
-  carousel: {
-    indexMode: 'number',
-    showTitle: true,
-    showSubtitle: true,
-  },
   text: {
     indexMode: 'number',
   },
@@ -137,15 +132,7 @@ describe('Multichannel wrapper', () => {
 
   test('text and carousel only show button text, 1 single message', () => {
     const sut = (
-      <Multichannel
-        indexSeparator={'.'}
-        carousel={{
-          indexMode: 'letter',
-          showTitle: false,
-          showSubtitle: false,
-        }}
-        messageSeparator={'\n'}
-      >
+      <Multichannel indexSeparator={'.'} messageSeparator={'\n'}>
         <Text>This is a multichannel Carousel</Text>
 
         <Carousel>

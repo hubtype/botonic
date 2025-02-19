@@ -110,41 +110,68 @@ exports[`Multichannel wrapper text and carousel legacy 1`] = `
   </message>,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
     *Title1* _Subtitle1_
-    
-1. Previo a la compra
+    <button
+      payload="Payload1"
+    >
+      Previo a la compra
+    </button>
   </message>,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
     *Title2* _Subtitle2_
-    
-2. Durante la compra
-    
-3. Durante la compra2
+    <button
+      payload="Payload2.1"
+    >
+      Durante la compra
+    </button>
+    <button
+      payload="Payload2.2"
+    >
+      Durante la compra2
+    </button>
   </message>,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={2}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
     *Title3* _Subtitle3_
-    
-4. Posterior a la compra
+    <button
+      payload="Payload3"
+    >
+      Posterior a la compra
+    </button>
   </message>,
 ]
 `;
@@ -157,10 +184,32 @@ exports[`Multichannel wrapper text and carousel only show button text, 1 single 
   typing={0}
 >
   This is a multichannel Carousel
-  
-a. Previo
-  
-b. Durante
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    *undefined* _Subtitle will not appear_
+    <button
+      payload="Payload1"
+    >
+      Previo
+    </button>
+  </message>
+  <message
+    delay={0}
+    markdown={1}
+    type="text"
+    typing={0}
+  >
+    *undefined*
+    <button
+      payload="Payload2"
+    >
+      Durante
+    </button>
+  </message>
 </message>
 `;
 

@@ -4,27 +4,55 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just tex
 [
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
-    1. Previo a la compra
-    
-2. another button,0
+    *Title 1*
+    <button
+      payload="Payload1"
+    >
+      Previo a la compra
+    </button>
+    <button
+      payload="Payload1"
+    >
+      another button
+      0
+    </button>
   </message>,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
+    role="image-message"
+    src="https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA="
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
-    3. Durante la compra
-    
-4. another button,1
+    *Title 2*
+    <button
+      payload="Payload2"
+    >
+      Durante la compra
+    </button>
+    <button
+      payload="Payload2"
+    >
+      another button
+      1
+    </button>
   </message>,
 ]
 `;
@@ -32,11 +60,15 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just tex
 exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL and postback buttons N Buttons displaying only postback buttons as whatsapp buttons 1`] = `
 [
   <message
-    buttonsAsText={0}
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -54,11 +86,15 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL 
     </button>
   </message>,
   <message
-    buttonsAsText={0}
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
+    role="image-message"
+    src="https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA="
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
@@ -76,35 +112,33 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL 
     </button>
   </message>,
   <message
-    buttonsAsText={0}
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={2}
-    type="text"
+    role="image-message"
+    src="https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA="
+    type="image"
     typing={0}
-  >
-    *Snatch* _Five minutes, Turkish_
-    
-- Visit website: https://www.imdb.com/title/tt0208092
-    
-- Another website,0: anotherurl.com
-  </message>,
+  />,
   <message
-    buttonsAsText={0}
+    body="Snatch"
+    displayText="Visit website"
+    footer="_Five minutes, Turkish_"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0208092"
+  />,
+  <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={3}
-    type="text"
+    role="image-message"
+    src="https://m.media-amazon.com/images/M/MV5BMDBjOWYyMDQtOWRmOC00MDgxLWIxM2UtMTNjYzFiN2RkYTBlXkEyXkFqcGdeQXVyMTAyOTE2ODg0._V1_UY268_CR6,0,182,268_AL_.jpg"
+    type="image"
     typing={0}
-  >
-    *El laberinto del fauno* _2006_
-    
-- Visit website: https://www.imdb.com/title/tt0457430
-    
-- Another website,1: anotherurl.com
-  </message>,
+  />,
+  <message
+    body="El laberinto del fauno"
+    displayText="Visit website"
+    footer="_2006_"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0457430"
+  />,
 ]
 `;
 
@@ -112,31 +146,55 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payl
 [
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
+    role="image-message"
+    src="https://cdn.slidesharecdn.com/profile-photo-sumeet.moghe-48x48.jpg?cb=1527568614"
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
     *Title1* _Subtitle1_
-    
-1. Previo a la compra
-    
-2. another button,0
+    <button
+      payload="payload1"
+    >
+      Previo a la compra
+    </button>
+    <button
+      payload="payload2"
+    >
+      another button
+      0
+    </button>
   </message>,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
+    role="image-message"
+    src="https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA="
+    type="image"
+    typing={0}
+  />,
+  <message
+    delay={0}
+    markdown={1}
     type="text"
     typing={0}
   >
     *Title2* _Subtitle2_
-    
-3. Durante la compra
-    
-4. another button,1
+    <button
+      payload="payload1"
+    >
+      Durante la compra
+    </button>
+    <button
+      payload="payload2"
+    >
+      another button
+      1
+    </button>
   </message>,
 ]
 `;
@@ -145,31 +203,31 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with url 
 [
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={0}
-    type="text"
+    role="image-message"
+    src="https://nebula.wsimg.com/obj/NzQ3QUYxQzZBNzE4NjNFRTc1MTU6NmM4YjgzZWVlZTE2MGMzM2RkMTdlZjdjNGUyZmFhNDE6Ojo6OjA="
+    type="image"
     typing={0}
-  >
-    *Snatch* _Five minutes, Turkish_
-    
-- Visit website: https://www.imdb.com/title/tt0208092
-    
-- Another website: anotherurl.com
-  </message>,
+  />,
+  <message
+    body="Snatch"
+    displayText="Visit website"
+    footer="_Five minutes, Turkish_"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0208092"
+  />,
   <message
     delay={0}
-    indexMode="number"
-    markdown={0}
-    newkey={1}
-    type="text"
+    role="image-message"
+    src="https://m.media-amazon.com/images/M/MV5BMDBjOWYyMDQtOWRmOC00MDgxLWIxM2UtMTNjYzFiN2RkYTBlXkEyXkFqcGdeQXVyMTAyOTE2ODg0._V1_UY268_CR6,0,182,268_AL_.jpg"
+    type="image"
     typing={0}
-  >
-    *El laberinto del fauno* _2006_
-    
-- Visit website: https://www.imdb.com/title/tt0457430
-    
-- Another website: anotherurl.com
-  </message>,
+  />,
+  <message
+    body="El laberinto del fauno"
+    displayText="Visit website"
+    footer="_2006_"
+    type="whatsapp-cta-url-button"
+    url="https://www.imdb.com/title/tt0457430"
+  />,
 ]
 `;
