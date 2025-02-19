@@ -32,8 +32,10 @@ export const MultichannelCarousel = props => {
 
     const textMessage = getTextMessage(requestContext.session, title, subtitle)
 
-    const messageWithImage = <Image src={imageProps.src} />
-    messages.push(messageWithImage)
+    if (imageProps?.src) {
+      const messageWithImage = <Image src={imageProps.src} />
+      messages.push(messageWithImage)
+    }
 
     if (
       isWhatsapp(requestContext.session) &&
