@@ -8,6 +8,7 @@ import { COLORS, WEBCHAT } from '../constants'
 import { resolveImage } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
 import { ButtonsDisabler } from './buttons-disabler'
+import { CarouselProps } from './index-types'
 import { Message } from './message'
 
 const ScrollableCarousel = styled.div`
@@ -15,7 +16,11 @@ const ScrollableCarousel = styled.div`
   -webkit-overflow-scrolling: touch;
 `
 
-const StyledCarousel = styled.div`
+interface StyledCarouselProps {
+  carouselArrowsEnabled: boolean
+}
+
+const StyledCarousel = styled.div<StyledCarouselProps>`
   padding: 10px 0px;
   display: flex;
   flex-direction: row;
@@ -27,7 +32,14 @@ const StyledItems = styled.div`
   display: flex;
 `
 
-const StyledArrowContainer = styled.div`
+interface StyledArrowContainerProps {
+  left?: number
+  right?: number
+  arrow: 'right' | 'left'
+  justifyContent: string
+}
+
+const StyledArrowContainer = styled.div<StyledArrowContainerProps>`
   position: absolute;
   top: calc(50% - 20px);
   height: 40px;
@@ -37,10 +49,14 @@ const StyledArrowContainer = styled.div`
   align-items: center;
   cursor: pointer;
   justify-content: ${props => props.justifyContent};
-  left: ${props => props.left}px;
-  right: ${props => props.right}px;
-  border-top-${props => props.arrow}-radius: 30px;
-  border-bottom-${props => props.arrow}-radius: 30px;
+
+  ${props => (props.left ? ` left: ${props.left}px` : '')};
+  ${props => (props.right ? ` right: ${props.right}px` : '')};
+  ${props => (props.arrow === 'right' ? 'border-top-right-radius: 30px' : '')};
+  ${props =>
+    props.arrow === 'right' ? 'border-bottom-right-radius: 30px' : ''};
+  ${props => (props.arrow === 'left' ? 'border-top-left-radius: 30px' : '')};
+  ${props => (props.arrow === 'left' ? 'border-bottom-left-radius: 30px' : '')};
 `
 const StyledArrow = styled.img`
   width: 20px;
@@ -53,29 +69,22 @@ const serialize = carouselProps => {
   return {
     type: INPUT.CAROUSEL,
     elements: carouselChildren.map(
-      e => e && e.type && e.type.serialize && e.type.serialize(e.props)
+      e => e?.type?.serialize && e.type.serialize(e.props)
     ),
   }
 }
 
-/**
- *
- * @param {MessageProps} props
- * @returns {JSX.Element}
- */
-export const Carousel = props => {
+export const Carousel = (props: CarouselProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
-  let content = props.children
   const [hasLeftArrow, setLeftArrow] = useState(false)
   const [hasRightArrow, setRightArrow] = useState(true)
-  const carouselRef = useRef(null)
+  const carouselRef = useRef<HTMLDivElement>(null)
+
   const CustomCarouselLeftArrow = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customCarouselLeftArrow,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customCarouselLeftArrow
   )
   const CustomCarouselRightArrow = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customCarouselRightArrow,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customCarouselRightArrow
   )
   // TODO: Investigate why when set to false, scroll is enabled via dragging the bar but not hovering the carousel elements
   const carouselArrowsEnabled = getThemeProperty(
@@ -84,7 +93,7 @@ export const Carousel = props => {
   )
 
   const scrollCarouselBy = value => {
-    carouselRef.current.scrollBy({
+    carouselRef.current?.scrollBy({
       left: value,
       behavior: 'smooth',
     })
@@ -139,8 +148,12 @@ export const Carousel = props => {
     const carousel = carouselRef.current
     if (carousel && carousel.addEventListener) {
       carousel.addEventListener('scroll', setArrowsVisibility, false)
-    } else if (carousel && carousel.attachEvent) {
-      carousel.attachEvent('scroll', setArrowsVisibility)
+    }
+
+    return () => {
+      if (carousel && carousel.removeEventListener) {
+        carousel.removeEventListener('scroll', setArrowsVisibility, false)
+      }
     }
   }, [carouselRef.current])
 
@@ -150,16 +163,28 @@ export const Carousel = props => {
   }
 
   if (isBrowser()) {
-    content = (
-      <ScrollableCarousel>
-        <StyledCarousel
-          ref={carouselRef}
-          carouselArrowsEnabled={carouselArrowsEnabled}
-        >
-          <StyledItems>{carouselProps.children}</StyledItems>
-          {carouselArrowsEnabled && getArrows()}
-        </StyledCarousel>
-      </ScrollableCarousel>
+    return (
+      <Message
+        style={{
+          width: '85%',
+          padding: 0,
+          backgroundColor: COLORS.TRANSPARENT,
+        }}
+        blob={false}
+        json={serialize(carouselProps)}
+        type={INPUT.CAROUSEL}
+        {...carouselProps}
+      >
+        <ScrollableCarousel>
+          <StyledCarousel
+            ref={carouselRef}
+            carouselArrowsEnabled={carouselArrowsEnabled}
+          >
+            <StyledItems>{carouselProps.children}</StyledItems>
+            {carouselArrowsEnabled && getArrows()}
+          </StyledCarousel>
+        </ScrollableCarousel>
+      </Message>
     )
   }
 
@@ -171,7 +196,7 @@ export const Carousel = props => {
       type={INPUT.CAROUSEL}
       {...carouselProps}
     >
-      {content}
+      {props.children}
     </Message>
   )
 }
