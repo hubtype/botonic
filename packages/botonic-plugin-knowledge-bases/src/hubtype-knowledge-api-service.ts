@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import axios, { AxiosResponse } from 'axios'
 
+import { Chunk } from './types'
+
 const DEFAULT_TIMEOUT = 10000
 
 export class HubtypeApiService {
@@ -14,28 +16,33 @@ export class HubtypeApiService {
 
   async inference(
     authToken: string,
-    question: string,
-    sources: string[]
+    sources: string[],
+    instructions: string,
+    messageId: string,
+    memoryLength: number
   ): Promise<
     AxiosResponse<{
       inference_id: string
-      question: string
-      answer: string
+      query: string
+      chunks: Chunk[]
       has_knowledge: boolean
+      // raw_answer: string
       is_faithful: boolean
-      chunk_ids: string[]
+      answer: string
     }>
   > {
     return await axios({
       method: 'POST',
-      url: `${this.host}/external/v1/ai/knowledge_base/inference/`,
+      url: `${this.host}/external/v2/ai/knowledge_base/inference/`,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
       data: {
-        question,
         sources,
+        instructions,
+        message: messageId,
+        memory_length: memoryLength,
       },
       timeout: this.timeout,
     })

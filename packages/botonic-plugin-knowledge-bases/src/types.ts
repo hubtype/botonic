@@ -6,9 +6,13 @@ export interface PluginKnowledgeBaseOptions {
 
 export interface KnowledgeBaseResponse {
   inferenceId: string
-  question: string
-  answer: string
   hasKnowledge: boolean
-  isFaithuful: boolean
-  chunkIds: string[]
+  isFaithful: boolean
+  chunks: Chunk[]
+  answer: string
+}
+
+export interface Chunk {
+  id: string
+  text: string
 }
