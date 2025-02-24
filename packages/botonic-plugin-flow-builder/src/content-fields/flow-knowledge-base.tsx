@@ -11,12 +11,18 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   public text: string = ''
   public inferenceId?: string
   public sourcesData: { id: string; name: string }[] = []
+  public instructions: string
+  public hasMemory: boolean
+  public memoryLength?: number
 
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)
     newKnowledgeBase.code = component.code
     newKnowledgeBase.feedbackEnabled = component.content.feedback_enabled
     newKnowledgeBase.sourcesData = component.content.sources_data
+    newKnowledgeBase.instructions = component.content.instructions
+    newKnowledgeBase.hasMemory = component.content.has_memory || false
+    newKnowledgeBase.memoryLength = component.content.memory_length
 
     return newKnowledgeBase
   }

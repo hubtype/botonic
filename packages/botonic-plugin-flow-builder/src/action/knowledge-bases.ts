@@ -13,14 +13,14 @@ export async function getContentsByKnowledgeBase({
   request,
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
-  const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
+  const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
 
-  if (!startNodeKnowledeBaseFlow) {
+  if (!startNodeKnowledgeBaseFlow) {
     return []
   }
 
   const contents = await flowBuilderPlugin.getContentsByNode(
-    startNodeKnowledeBaseFlow,
+    startNodeKnowledgeBaseFlow,
     resolvedLocale
   )
 
@@ -67,10 +67,16 @@ async function getContentsWithKnowledgeResponse(
   flowId: string
 ): Promise<FlowContent[] | undefined> {
   const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
+  const instructions = knowledgeBaseContent.instructions
+  const messageId = request.input.message_id
+  const memoryLength = knowledgeBaseContent.memoryLength || 1
+
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
-    request.input.data!,
-    sourceIds
+    sourceIds,
+    instructions,
+    messageId,
+    memoryLength
   )
   await trackKnowledgeBase(
     knowledgeBaseResponse,
@@ -81,7 +87,7 @@ async function getContentsWithKnowledgeResponse(
 
   if (
     !knowledgeBaseResponse.hasKnowledge ||
-    !knowledgeBaseResponse.isFaithuful
+    !knowledgeBaseResponse.isFaithful
   ) {
     return undefined
   }
@@ -119,7 +125,7 @@ async function trackKnowledgeBase(
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
 
-  if (!response.isFaithuful) {
+  if (!response.isFaithful) {
     knowledgebaseFailReason = KnowledgebaseFailReason.Hallucination
   }
 
