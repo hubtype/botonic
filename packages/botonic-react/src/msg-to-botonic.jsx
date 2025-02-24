@@ -129,7 +129,7 @@ function textToBotonic(msg) {
     return (
       <Text {...msg} key={msg.key}>
         {txt}
-        {quickRepliesParse(msg)}
+        {parseQuickReplies(msg)}
       </Text>
     )
   if (msg.buttons && msg.buttons.length)
@@ -182,7 +182,7 @@ function buttonsParse(buttons) {
   })
 }
 
-function quickRepliesParse(msg) {
+function parseQuickReplies(msg) {
   let replies = null
   if (msg.replies) {
     replies = msg.replies.map((el, i) => {

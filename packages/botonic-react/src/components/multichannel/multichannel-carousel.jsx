@@ -28,7 +28,7 @@ export const MultichannelCarousel = props => {
 
   childrenElements.forEach((element, i) => {
     const { imageProps, title, subtitle, buttons } =
-      extractElementProperties(element)
+      parseCarouselElement(element)
 
     const textMessage = getTextMessage(requestContext.session, title, subtitle)
 
@@ -81,7 +81,7 @@ function getButtons(node) {
   return [].concat(getFilteredElements(node, isMultichannelButton))
 }
 
-function extractElementProperties(element) {
+function parseCarouselElement(element) {
   let imageProps, title, subtitle
   const buttonsChildren = []
 
@@ -105,8 +105,8 @@ function extractElementProperties(element) {
 }
 
 function getTextMessage(session, title, subtitle) {
-  const textMessage = `**${title}**${subtitle ? ` _${subtitle}_` : ''}`
+  const formattedTextMessage = `**${title}**${subtitle ? ` _${subtitle}_` : ''}`
   return isWhatsapp(session) || isFacebook(session)
-    ? convertToMarkdownMeta(textMessage)
-    : textMessage
+    ? convertToMarkdownMeta(formattedTextMessage)
+    : formattedTextMessage
 }
