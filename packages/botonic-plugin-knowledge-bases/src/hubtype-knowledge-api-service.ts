@@ -26,7 +26,6 @@ export class HubtypeApiService {
       query: string
       chunks: Chunk[]
       has_knowledge: boolean
-      // raw_answer: string
       is_faithful: boolean
       answer: string
     }>
