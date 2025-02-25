@@ -122,7 +122,7 @@ describe('Check the contents returned by the plugin in first interaction with kn
           userInput,
           answer,
           hasKnowledge: true,
-          isFaithuful: true,
+          isFaithful: true,
         }),
       },
       requestArgs: {

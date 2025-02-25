@@ -26,7 +26,7 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           answer:
             'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
           hasKnowledge: true,
-          isFaithuful: true,
+          isFaithful: true,
         }),
       },
       requestArgs: {
@@ -63,7 +63,7 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           userInput,
           answer,
           hasKnowledge: true,
-          isFaithuful: true,
+          isFaithful: true,
         }),
       },
       requestArgs: {
@@ -92,7 +92,7 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           userInput,
           answer: 'This answer is incorrect',
           hasKnowledge: false,
-          isFaithuful: true,
+          isFaithful: true,
         }),
       },
       requestArgs: {
