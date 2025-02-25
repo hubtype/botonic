@@ -32,15 +32,15 @@ export interface WhatsappButtonListProps {
 }
 
 const serialize = _whatsappButtonListProps => {
-  // TODO: Implement to have data persistance in localStorage, not needed for this WhatsApp development
+  // TODO: Implement to have data persistence in localStorage, not needed for this WhatsApp development
   return {}
 }
 
 export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
-  const trucateSectionsContents = (
+  const truncateSectionsContents = (
     sections: WhatsappButtonListSectionProps[]
   ): WhatsappButtonListSectionProps[] => {
-    const trucateRowContents = (
+    const truncateRowContents = (
       row: WhatsappButtonListRowProps
     ): WhatsappButtonListRowProps => {
       const title = truncateText(row.title, WHATSAPP_MAX_BUTTON_LIST_CHARS)
@@ -62,7 +62,7 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
       title: section.title
         ? truncateText(section.title, WHATSAPP_MAX_BUTTON_LIST_CHARS)
         : undefined,
-      rows: section.rows.map(trucateRowContents),
+      rows: section.rows.map(truncateRowContents),
     }))
   }
 
@@ -87,7 +87,7 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
         {...props}
         body={convertToMarkdownMeta(props.body)}
         button={truncateText(props.button, WHATSAPP_MAX_BUTTON_CHARS)}
-        sections={JSON.stringify(trucateSectionsContents(props.sections))}
+        sections={JSON.stringify(truncateSectionsContents(props.sections))}
         type={INPUT.WHATSAPP_BUTTON_LIST}
       />
     )

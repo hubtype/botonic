@@ -30,13 +30,13 @@ export const MessageFooter = ({
     enabletimestamps
   )
   const isSentByUser = sentBy === SENDERS.user
-  const messageFotterClass = isSentByUser
+  const messageFooterClass = isSentByUser
     ? 'message-footer-user'
     : 'message-footer-bot'
 
   return (
     <MessageFooterContainer
-      className={messageFotterClass}
+      className={messageFooterClass}
       isSentByUser={isSentByUser}
     >
       {timestampsEnabled ? (

@@ -10,18 +10,25 @@ const PicStyled = styled.img`
   border-top-right-radius: 8px;
   width: ${WEBCHAT.DEFAULTS.ELEMENT_WIDTH}px;
   height: 140px;
-  background: ${COLORS.SOLID_WHITE} url(${props => props.src}) no-repeat
-    center/cover;
+  background: ${COLORS.SOLID_WHITE};
+  object-fit: center/cover;
   border-bottom: 1px solid ${COLORS.SEASHELL_WHITE};
 `
+export interface PicProps {
+  src: string
+}
 
-export const Pic = props => {
+export const Pic = (props: PicProps) => {
   props = { ...props, src: staticAsset(props.src) }
+
   const renderBrowser = () => <PicStyled src={props.src} />
+
+  // @ts-ignore
   const renderNode = () => <pic>{props.src}</pic>
+
   return renderComponent({ renderBrowser, renderNode })
 }
 
-Pic.serialize = picProps => {
-  return { pic: picProps.src }
+Pic.serialize = (props: PicProps) => {
+  return { pic: props.src }
 }

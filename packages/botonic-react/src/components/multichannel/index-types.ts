@@ -25,10 +25,6 @@ export interface MultichannelTextProps extends MultichannelViewOptions {
 // Carousel
 export interface MultichannelCarouselProps extends MultichannelViewOptions {
   enableURL?: boolean
-  indexMode?: IndexMode
-  showTitle?: boolean
-  showSubtitle?: boolean
-  buttonsAsText?: boolean
 }
 
 // Button
