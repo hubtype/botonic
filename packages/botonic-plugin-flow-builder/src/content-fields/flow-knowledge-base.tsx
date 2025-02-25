@@ -4,6 +4,8 @@ import React from 'react'
 import { ContentFieldsBase } from './content-fields-base'
 import { HtKnowledgeBaseNode } from './hubtype-fields'
 
+export const DEFAULT_MEMORY_LENGTH = 1
+
 export class FlowKnowledgeBase extends ContentFieldsBase {
   public code: string = ''
   public feedbackEnabled: boolean = false
@@ -13,7 +15,7 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   public sourcesData: { id: string; name: string }[] = []
   public instructions: string
   public hasMemory: boolean
-  public memoryLength?: number
+  public memoryLength: number
 
   static fromHubtypeCMS(component: HtKnowledgeBaseNode): FlowKnowledgeBase {
     const newKnowledgeBase = new FlowKnowledgeBase(component.id)
@@ -22,7 +24,8 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
     newKnowledgeBase.sourcesData = component.content.sources_data
     newKnowledgeBase.instructions = component.content.instructions
     newKnowledgeBase.hasMemory = component.content.has_memory || false
-    newKnowledgeBase.memoryLength = component.content.memory_length
+    newKnowledgeBase.memoryLength =
+      component.content.memory_length || DEFAULT_MEMORY_LENGTH
 
     return newKnowledgeBase
   }

@@ -1,6 +1,10 @@
 import { ActionRequest } from '@botonic/react'
 
-import { FlowContent, FlowKnowledgeBase } from '../content-fields'
+import {
+  DEFAULT_MEMORY_LENGTH,
+  FlowContent,
+  FlowKnowledgeBase,
+} from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
@@ -69,7 +73,9 @@ async function getContentsWithKnowledgeResponse(
   const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
   const instructions = knowledgeBaseContent.instructions
   const messageId = request.input.message_id
-  const memoryLength = knowledgeBaseContent.memoryLength || 1
+  const memoryLength = knowledgeBaseContent.hasMemory
+    ? knowledgeBaseContent.memoryLength
+    : DEFAULT_MEMORY_LENGTH
 
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
