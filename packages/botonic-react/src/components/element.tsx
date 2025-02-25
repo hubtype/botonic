@@ -16,11 +16,16 @@ const ElementContainer = styled.div`
   justify-content: space-between;
 `
 
-export const Element = props => {
+export interface ElementProps {
+  children: React.ReactNode[]
+}
+
+export const Element = (props: ElementProps) => {
   const renderBrowser = () => (
     <ElementContainer>{props.children}</ElementContainer>
   )
 
+  // @ts-ignore
   const renderNode = () => <element>{props.children}</element>
 
   return renderComponent({ renderBrowser, renderNode })
@@ -30,8 +35,8 @@ Element.serialize = elementProps => {
   const element = Object.assign(
     {},
     ...elementProps.children
-      .filter(c => c && c.type && c.type.name != 'Button')
-      .map(c => c.type.serialize && c.type.serialize(c.props))
+      .filter(c => c?.type?.name !== Button.name)
+      .map(c => c?.type?.serialize && c.type.serialize(c.props))
   )
   // When we are serializer buttons from backend, we are receiving the data
   // as an array of buttons, so we have to keep robust with serve and deal with arrays

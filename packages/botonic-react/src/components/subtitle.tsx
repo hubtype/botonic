@@ -9,21 +9,21 @@ const SubtitleContainer = styled.div`
   padding: 0px 15px 10px 15px;
   color: ${COLORS.MID_GRAY};
 `
-export const Subtitle = props => {
+
+export interface SubtitleProps {
+  children: React.ReactNode
+}
+
+export const Subtitle = (props: SubtitleProps) => {
   const renderBrowser = () => (
-    <SubtitleContainer
-      style={{
-        ...props.style,
-      }}
-    >
-      {props.children}
-    </SubtitleContainer>
+    <SubtitleContainer>{props.children}</SubtitleContainer>
   )
+
   const renderNode = () => <desc>{props.children}</desc>
 
   return renderComponent({ renderBrowser, renderNode })
 }
 
-Subtitle.serialize = subtitleProps => {
-  return { subtitle: subtitleProps.children }
+Subtitle.serialize = (props: SubtitleProps) => {
+  return { subtitle: props.children }
 }

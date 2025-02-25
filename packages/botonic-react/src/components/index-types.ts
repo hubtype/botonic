@@ -33,6 +33,10 @@ export interface TextProps extends MessageProps {
   botInteractionId?: string
 }
 
+export interface CarouselProps extends MessageProps {
+  children: React.ReactNode[]
+}
+
 export interface Webview {
   name: string
 }
@@ -59,10 +63,6 @@ export interface ReplyProps {
   children: string
 }
 
-export interface PicProps {
-  src: string
-}
-
 export interface ImageProps extends MessageProps {
   src: string
   input?: { data: string }
@@ -83,13 +83,6 @@ export interface DocumentProps extends MessageProps {
   input?: { data: string }
   from?: any
 }
-
-export interface TitleProps {
-  children: React.ReactNode
-  style: string
-}
-
-export type SubtitleProps = TitleProps
 
 export interface CustomMessageType {
   (props: any): JSX.Element
