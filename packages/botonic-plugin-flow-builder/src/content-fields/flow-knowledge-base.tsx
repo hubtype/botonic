@@ -4,7 +4,7 @@ import React from 'react'
 import { ContentFieldsBase } from './content-fields-base'
 import { HtKnowledgeBaseNode } from './hubtype-fields'
 
-export const DEFAULT_MEMORY_LENGTH = 1
+export const DISABLED_MEMORY_LENGTH = 1
 
 export class FlowKnowledgeBase extends ContentFieldsBase {
   public code: string = ''
@@ -25,7 +25,7 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
     newKnowledgeBase.instructions = component.content.instructions
     newKnowledgeBase.hasMemory = component.content.has_memory || false
     newKnowledgeBase.memoryLength =
-      component.content.memory_length || DEFAULT_MEMORY_LENGTH
+      component.content.memory_length || DISABLED_MEMORY_LENGTH
 
     return newKnowledgeBase
   }

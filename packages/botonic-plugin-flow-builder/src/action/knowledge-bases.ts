@@ -1,7 +1,7 @@
 import { ActionRequest } from '@botonic/react'
 
 import {
-  DEFAULT_MEMORY_LENGTH,
+  DISABLED_MEMORY_LENGTH,
   FlowContent,
   FlowKnowledgeBase,
 } from '../content-fields'
@@ -75,7 +75,7 @@ async function getContentsWithKnowledgeResponse(
   const messageId = request.input.message_id
   const memoryLength = knowledgeBaseContent.hasMemory
     ? knowledgeBaseContent.memoryLength
-    : DEFAULT_MEMORY_LENGTH
+    : DISABLED_MEMORY_LENGTH
 
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
