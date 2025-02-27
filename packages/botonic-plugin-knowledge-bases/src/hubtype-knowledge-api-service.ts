@@ -5,6 +5,14 @@ import { Chunk } from './types'
 
 const DEFAULT_TIMEOUT = 10000
 
+export interface HtApiKnowledgeBaseResponse {
+  inference_id: string
+  query: string
+  chunks: Chunk[]
+  has_knowledge: boolean
+  is_faithful: boolean
+  answer: string
+}
 export class HubtypeApiService {
   private host: string
   private timeout: number
@@ -20,16 +28,7 @@ export class HubtypeApiService {
     instructions: string,
     messageId: string,
     memoryLength: number
-  ): Promise<
-    AxiosResponse<{
-      inference_id: string
-      query: string
-      chunks: Chunk[]
-      has_knowledge: boolean
-      is_faithful: boolean
-      answer: string
-    }>
-  > {
+  ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
     return await axios({
       method: 'POST',
       url: `${this.host}/external/v2/ai/knowledge_base/inference/`,
@@ -46,6 +45,29 @@ export class HubtypeApiService {
       timeout: this.timeout,
     })
   }
+
+  async testInference(
+    authToken: string,
+    instructions: string,
+    messages: any[],
+    sources: string[]
+  ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
+    return await axios({
+      method: 'POST',
+      url: `${this.host}/external/v1/ai/knowledge_base/test/`,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: {
+        sources,
+        instructions,
+        messages,
+      },
+      timeout: this.timeout,
+    })
+  }
+
   async inferenceV1(
     authToken: string,
     question: string,

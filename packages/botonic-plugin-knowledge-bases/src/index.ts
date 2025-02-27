@@ -1,9 +1,14 @@
 import type { BotRequest, Plugin, PluginPreRequest } from '@botonic/core'
+import { AxiosResponse } from 'axios'
 
-import { HubtypeApiService } from './hubtype-knowledge-api-service'
+import {
+  HtApiKnowledgeBaseResponse,
+  HubtypeApiService,
+} from './hubtype-knowledge-api-service'
 import { KnowledgeBaseResponse, PluginKnowledgeBaseOptions } from './types'
 
 const isProd = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'development'
 
 export default class BotonicPluginKnowledgeBases implements Plugin {
   private readonly apiService: HubtypeApiService
@@ -27,6 +32,10 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   ): Promise<KnowledgeBaseResponse> {
     const authToken = isProd ? request.session._access_token : this.authToken
 
+    if (isDev) {
+      return this.getTestInference(request, instructions, sources)
+    }
+
     if (!instructions) {
       return this.getInferenceV1(authToken, request, sources)
     }
@@ -38,6 +47,23 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
       messageId,
       memoryLength
     )
+  }
+
+  async getTestInference(
+    request: BotRequest,
+    instructions: string,
+    sources: string[]
+  ): Promise<KnowledgeBaseResponse> {
+    const messages = [{ role: 'human', content: request.input.data }]
+
+    const response = await this.apiService.testInference(
+      request.session._access_token,
+      instructions,
+      messages,
+      sources
+    )
+
+    return this.mapApiResponse(response)
   }
 
   async getInferenceV1(
@@ -74,6 +100,12 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
       memoryLength
     )
 
+    return this.mapApiResponse(response)
+  }
+
+  private mapApiResponse(
+    response: AxiosResponse<HtApiKnowledgeBaseResponse>
+  ): KnowledgeBaseResponse {
     return {
       inferenceId: response.data.inference_id,
       chunkIds: response.data.chunks.map(chunk => chunk.id),
