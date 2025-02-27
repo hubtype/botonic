@@ -54,7 +54,7 @@ export class HubtypeApiService {
   ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
     return await axios({
       method: 'POST',
-      url: `${this.host}/external/v1/ai/knowledge_base/test/`,
+      url: `${this.host}/external/v1/ai/knowledge_base/test_inference/`,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
