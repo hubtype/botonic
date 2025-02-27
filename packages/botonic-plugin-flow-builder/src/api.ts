@@ -230,7 +230,7 @@ export class FlowBuilderApi {
     return flow ? flow.name : ''
   }
 
-  getStartNodeKnowledeBaseFlow(): HtNodeWithContent | undefined {
+  getStartNodeKnowledgeBaseFlow(): HtNodeWithContent | undefined {
     const knowledgeBaseFlow = this.flow.flows.find(
       flow => flow.name === KNOWLEDGE_BASE_FLOW_NAME
     )

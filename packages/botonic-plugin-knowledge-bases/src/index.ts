@@ -1,9 +1,14 @@
-import type { Plugin, PluginPreRequest, Session } from '@botonic/core'
+import type { BotRequest, Plugin, PluginPreRequest } from '@botonic/core'
+import { AxiosResponse } from 'axios'
 
-import { HubtypeApiService } from './hubtype-knowledge-api-service'
+import {
+  HtApiKnowledgeBaseResponse,
+  HubtypeApiService,
+} from './hubtype-knowledge-api-service'
 import { KnowledgeBaseResponse, PluginKnowledgeBaseOptions } from './types'
 
 const isProd = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'development'
 
 export default class BotonicPluginKnowledgeBases implements Plugin {
   private readonly apiService: HubtypeApiService
@@ -19,25 +24,95 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   }
 
   async getInference(
-    session: Session,
-    userInput: string,
+    request: BotRequest,
+    sources: string[],
+    instructions: string,
+    messageId: string,
+    memoryLength: number
+  ): Promise<KnowledgeBaseResponse> {
+    const authToken = isProd ? request.session._access_token : this.authToken
+
+    if (isDev) {
+      return this.getTestInference(authToken, request, instructions, sources)
+    }
+
+    if (!instructions) {
+      return this.getInferenceV1(authToken, request, sources)
+    }
+
+    return this.getInferenceV2(
+      authToken,
+      sources,
+      instructions,
+      messageId,
+      memoryLength
+    )
+  }
+
+  async getTestInference(
+    authToken: string,
+    request: BotRequest,
+    instructions: string,
     sources: string[]
   ): Promise<KnowledgeBaseResponse> {
-    const authToken = isProd ? session._access_token : this.authToken
+    const messages = [{ role: 'human', content: request.input.data }]
 
-    const response = await this.apiService.inference(
+    const response = await this.apiService.testInference(
       authToken,
-      userInput,
+      instructions,
+      messages,
       sources
     )
 
+    return this.mapApiResponse(response)
+  }
+
+  async getInferenceV1(
+    authToken: string,
+    request: BotRequest,
+    sources: string[]
+  ): Promise<KnowledgeBaseResponse> {
+    const response = await this.apiService.inferenceV1(
+      authToken,
+      request.input.data!,
+      sources
+    )
     return {
       inferenceId: response.data.inference_id,
-      question: response.data.question,
       answer: response.data.answer,
       hasKnowledge: response.data.has_knowledge,
-      isFaithuful: response.data.is_faithful,
+      isFaithful: response.data.is_faithful,
       chunkIds: response.data.chunk_ids,
+    }
+  }
+
+  async getInferenceV2(
+    authToken: string,
+    sources: string[],
+    instructions: string,
+    messageId: string,
+    memoryLength: number
+  ): Promise<KnowledgeBaseResponse> {
+    const response = await this.apiService.inferenceV2(
+      authToken,
+      sources,
+      instructions,
+      messageId,
+      memoryLength
+    )
+
+    return this.mapApiResponse(response)
+  }
+
+  private mapApiResponse(
+    response: AxiosResponse<HtApiKnowledgeBaseResponse>
+  ): KnowledgeBaseResponse {
+    return {
+      inferenceId: response.data.inference_id,
+      chunkIds: response.data.chunks.map(chunk => chunk.id),
+      hasKnowledge: response.data.has_knowledge,
+      isFaithful: response.data.is_faithful,
+      answer: response.data.answer,
     }
   }
 }

@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import axios, { AxiosResponse } from 'axios'
 
+import { Chunk } from './types'
+
 const DEFAULT_TIMEOUT = 10000
 
+export interface HtApiKnowledgeBaseResponse {
+  inference_id: string
+  query: string
+  chunks: Chunk[]
+  has_knowledge: boolean
+  is_faithful: boolean
+  answer: string
+}
 export class HubtypeApiService {
   private host: string
   private timeout: number
@@ -12,7 +22,53 @@ export class HubtypeApiService {
     this.timeout = timeout || DEFAULT_TIMEOUT
   }
 
-  async inference(
+  async inferenceV2(
+    authToken: string,
+    sources: string[],
+    instructions: string,
+    messageId: string,
+    memoryLength: number
+  ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
+    return await axios({
+      method: 'POST',
+      url: `${this.host}/external/v2/ai/knowledge_base/inference/`,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: {
+        sources,
+        instructions,
+        message: messageId,
+        memory_length: memoryLength,
+      },
+      timeout: this.timeout,
+    })
+  }
+
+  async testInference(
+    authToken: string,
+    instructions: string,
+    messages: any[],
+    sources: string[]
+  ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
+    return await axios({
+      method: 'POST',
+      url: `${this.host}/external/v1/ai/knowledge_base/test_inference/`,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: {
+        sources,
+        instructions,
+        messages,
+      },
+      timeout: this.timeout,
+    })
+  }
+
+  async inferenceV1(
     authToken: string,
     question: string,
     sources: string[]

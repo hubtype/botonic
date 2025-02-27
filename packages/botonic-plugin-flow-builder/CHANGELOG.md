@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.33.0] - TBD
+
+### Added
+
+- Do call `getKnowledgeBaseResponse` with new knowledge base settings (memory + instructions).
+
 ## [0.32.0] - TBD
 
 ### Added

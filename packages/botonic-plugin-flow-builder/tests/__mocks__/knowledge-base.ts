@@ -2,14 +2,14 @@ interface MockKnowledgeBaseOptions {
   userInput: string
   answer: string
   hasKnowledge: boolean
-  isFaithuful: boolean
+  isFaithful: boolean
 }
 
 export function mockKnowledgeBaseResponse({
   userInput,
   answer,
   hasKnowledge,
-  isFaithuful,
+  isFaithful,
 }: MockKnowledgeBaseOptions) {
   return jest.fn(() => {
     return Promise.resolve({
@@ -17,7 +17,7 @@ export function mockKnowledgeBaseResponse({
       question: userInput,
       answer,
       hasKnowledge,
-      isFaithuful,
+      isFaithful,
       chunkIds: ['sourceChunkId1', 'sourceChunkId2'],
     })
   })

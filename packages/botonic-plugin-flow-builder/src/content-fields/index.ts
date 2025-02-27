@@ -2,7 +2,10 @@ import { FlowBotAction } from './flow-bot-action'
 import { FlowCarousel } from './flow-carousel'
 import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
-import { FlowKnowledgeBase } from './flow-knowledge-base'
+import {
+  DISABLED_MEMORY_LENGTH,
+  FlowKnowledgeBase,
+} from './flow-knowledge-base'
 import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
@@ -33,3 +36,5 @@ export type FlowContent =
   | FlowHandoff
   | FlowKnowledgeBase
   | FlowBotAction
+
+export { DISABLED_MEMORY_LENGTH }

@@ -23,8 +23,10 @@ export type TrackEventFunction = (
 
 export type KnowledgeBaseFunction = (
   request: ActionRequest,
-  userInput: string,
-  sources: string[]
+  sources: string[],
+  instructions: string,
+  messageId: string,
+  memoryLength: number
 ) => Promise<KnowledgeBaseResponse>
 
 export interface FlowBuilderApiOptions {
@@ -47,11 +49,10 @@ export enum FlowBuilderJSONVersion {
 
 export interface KnowledgeBaseResponse {
   inferenceId: string
-  question: string
-  answer: string
   hasKnowledge: boolean
-  isFaithuful: boolean
+  isFaithful: boolean
   chunkIds: string[]
+  answer: string
 }
 
 export interface SmartIntentResponse {

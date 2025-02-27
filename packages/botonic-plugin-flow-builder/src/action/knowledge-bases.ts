@@ -1,6 +1,10 @@
 import { ActionRequest } from '@botonic/react'
 
-import { FlowContent, FlowKnowledgeBase } from '../content-fields'
+import {
+  DISABLED_MEMORY_LENGTH,
+  FlowContent,
+  FlowKnowledgeBase,
+} from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
@@ -13,14 +17,14 @@ export async function getContentsByKnowledgeBase({
   request,
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
-  const startNodeKnowledeBaseFlow = cmsApi.getStartNodeKnowledeBaseFlow()
+  const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
 
-  if (!startNodeKnowledeBaseFlow) {
+  if (!startNodeKnowledgeBaseFlow) {
     return []
   }
 
   const contents = await flowBuilderPlugin.getContentsByNode(
-    startNodeKnowledeBaseFlow,
+    startNodeKnowledgeBaseFlow,
     resolvedLocale
   )
 
@@ -67,10 +71,18 @@ async function getContentsWithKnowledgeResponse(
   flowId: string
 ): Promise<FlowContent[] | undefined> {
   const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
+  const instructions = knowledgeBaseContent.instructions
+  const messageId = request.input.message_id
+  const memoryLength = knowledgeBaseContent.hasMemory
+    ? knowledgeBaseContent.memoryLength
+    : DISABLED_MEMORY_LENGTH
+
   const knowledgeBaseResponse = await getKnowledgeBaseResponse(
     request,
-    request.input.data!,
-    sourceIds
+    sourceIds,
+    instructions,
+    messageId,
+    memoryLength
   )
   await trackKnowledgeBase(
     knowledgeBaseResponse,
@@ -81,7 +93,7 @@ async function getContentsWithKnowledgeResponse(
 
   if (
     !knowledgeBaseResponse.hasKnowledge ||
-    !knowledgeBaseResponse.isFaithuful
+    !knowledgeBaseResponse.isFaithful
   ) {
     return undefined
   }
@@ -119,7 +131,7 @@ async function trackKnowledgeBase(
 
   let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
 
-  if (!response.isFaithuful) {
+  if (!response.isFaithful) {
     knowledgebaseFailReason = KnowledgebaseFailReason.Hallucination
   }
 

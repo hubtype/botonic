@@ -19,3 +19,9 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.33.0] - TBD
+
+### Added
+
+- Implement `getInference` logic to support inference v2 (memory + instructions), inference v1 and test inference for local development.

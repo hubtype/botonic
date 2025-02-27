@@ -11,5 +11,8 @@ export interface HtKnowledgeBaseNode extends HtBaseNode {
   content: {
     feedback_enabled: boolean
     sources_data: SourceData[]
+    instructions: string
+    has_memory: boolean
+    memory_length?: number
   }
 }
