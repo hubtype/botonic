@@ -49,11 +49,10 @@ export enum FlowBuilderJSONVersion {
 
 export interface KnowledgeBaseResponse {
   inferenceId: string
-  question: string
-  answer: string
   hasKnowledge: boolean
   isFaithful: boolean
   chunkIds: string[]
+  answer: string
 }
 
 export interface SmartIntentResponse {

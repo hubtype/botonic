@@ -14,7 +14,7 @@ export class HubtypeApiService {
     this.timeout = timeout || DEFAULT_TIMEOUT
   }
 
-  async inference(
+  async inferenceV2(
     authToken: string,
     sources: string[],
     instructions: string,
@@ -42,6 +42,34 @@ export class HubtypeApiService {
         instructions,
         message: messageId,
         memory_length: memoryLength,
+      },
+      timeout: this.timeout,
+    })
+  }
+  async inferenceV1(
+    authToken: string,
+    question: string,
+    sources: string[]
+  ): Promise<
+    AxiosResponse<{
+      inference_id: string
+      question: string
+      answer: string
+      has_knowledge: boolean
+      is_faithful: boolean
+      chunk_ids: string[]
+    }>
+  > {
+    return await axios({
+      method: 'POST',
+      url: `${this.host}/external/v1/ai/knowledge_base/inference/`,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: {
+        question,
+        sources,
       },
       timeout: this.timeout,
     })

@@ -8,7 +8,7 @@ export interface KnowledgeBaseResponse {
   inferenceId: string
   hasKnowledge: boolean
   isFaithful: boolean
-  chunks: Chunk[]
+  chunkIds: string[]
   answer: string
 }
 
