@@ -33,7 +33,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     const authToken = isProd ? request.session._access_token : this.authToken
 
     if (isDev) {
-      return this.getTestInference(request, instructions, sources)
+      return this.getTestInference(authToken, request, instructions, sources)
     }
 
     if (!instructions) {
@@ -50,6 +50,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   }
 
   async getTestInference(
+    authToken: string,
     request: BotRequest,
     instructions: string,
     sources: string[]
@@ -57,7 +58,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     const messages = [{ role: 'human', content: request.input.data }]
 
     const response = await this.apiService.testInference(
-      request.session._access_token,
+      authToken,
       instructions,
       messages,
       sources
