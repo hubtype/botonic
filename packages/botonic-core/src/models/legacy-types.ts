@@ -365,3 +365,13 @@ export enum BotonicAction {
   DeleteUser = 'delete_user',
   DiscardCase = 'discard_case',
 }
+
+export interface CaseEventQueuePositionChangedInput {
+  type: 'case_event_queue_position_changed'
+  case_id: string
+  prev_queue_position: number | null
+  prev_queue_position_notified_at: string | null
+  current_queue_position: number
+  current_queue_position_notified_at: string
+  total_queue_waiting_cases_number: number
+}
