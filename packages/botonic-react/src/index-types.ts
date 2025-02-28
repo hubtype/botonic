@@ -21,6 +21,7 @@ import { CloseWebviewOptions } from './contexts'
 import { UseWebchat } from './webchat/context/use-webchat'
 import {
   CoverComponentOptions,
+  HandoffState,
   PersistentMenuOptionsTheme,
   ThemeProps,
 } from './webchat/theme/types'
@@ -89,6 +90,7 @@ interface AddBotResponseArgs {
 
 export interface WebchatArgs {
   theme?: ThemeProps
+  handoffState?: Partial<HandoffState>
   persistentMenu?: PersistentMenuOptionsTheme
   coverComponent?: CoverComponentOptions
   blockInputs?: BlockInputOption[]
@@ -117,6 +119,7 @@ export interface WebchatProps {
   webchatHooks?: UseWebchat
   initialSession?: any
   initialDevSettings?: any
+  handoffState?: Partial<HandoffState>
   onStateChange: (args: OnStateChangeArgs) => void
 
   shadowDOM?: any

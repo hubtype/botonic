@@ -22,6 +22,7 @@ import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import {
   CoverComponentOptions,
+  HandoffState,
   PersistentMenuOptionsTheme,
   ThemeProps,
 } from './webchat/theme/types'
@@ -29,6 +30,7 @@ import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
   public theme?: ThemeProps
+  public handoffState?: Partial<HandoffState>
   public persistentMenu?: PersistentMenuOptionsTheme
   public coverComponent?: CoverComponentOptions
   public blockInputs?: BlockInputOption[]
@@ -63,6 +65,7 @@ export class WebchatApp {
 
   constructor({
     theme = {},
+    handoffState = {},
     persistentMenu,
     coverComponent,
     blockInputs,
@@ -87,6 +90,7 @@ export class WebchatApp {
     server,
   }: WebchatArgs) {
     this.theme = theme
+    this.handoffState = handoffState
     this.persistentMenu = persistentMenu
     this.coverComponent = coverComponent
     this.blockInputs = blockInputs
@@ -377,6 +381,7 @@ export class WebchatApp {
   getComponent(host: HTMLDivElement, optionsAtRuntime: WebchatArgs = {}) {
     let {
       theme = {},
+      handoffState = {},
       persistentMenu,
       coverComponent,
       blockInputs,
@@ -401,6 +406,7 @@ export class WebchatApp {
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
+    handoffState = merge(this.handoffState, handoffState)
     persistentMenu = persistentMenu || this.persistentMenu
     coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
@@ -431,6 +437,7 @@ export class WebchatApp {
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
+        handoffState={handoffState}
         persistentMenu={persistentMenu}
         coverComponent={coverComponent}
         blockInputs={blockInputs}

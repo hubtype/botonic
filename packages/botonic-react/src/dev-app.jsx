@@ -56,6 +56,7 @@ export class DevApp extends WebchatApp {
   getComponent(host, optionsAtRuntime = {}) {
     let {
       theme = {},
+      handoffState = {},
       persistentMenu,
       coverComponent,
       blockInputs,
@@ -74,6 +75,7 @@ export class DevApp extends WebchatApp {
       ...webchatOptions
     } = optionsAtRuntime
     theme = merge(this.theme, theme)
+    handoffState = merge(this.handoffState, handoffState)
     persistentMenu = persistentMenu || this.persistentMenu
     coverComponent = coverComponent || this.coverComponent
     blockInputs = blockInputs || this.blockInputs
@@ -97,6 +99,7 @@ export class DevApp extends WebchatApp {
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
+        handoffState={handoffState}
         persistentMenu={persistentMenu}
         coverComponent={coverComponent}
         blockInputs={blockInputs}

@@ -47,7 +47,7 @@ const initialSession = {
 // eslint-disable-next-line react/display-name
 export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()
-  const { webchatState, updateTheme } = webchatHooks
+  const { webchatState, updateTheme, updateHandoffState } = webchatHooks
 
   /* TODO: webchatState.theme should be included in the dependencies array
   together with props.theme. The problem is that this effect modifies webchatState
@@ -55,6 +55,10 @@ export const WebchatDev = forwardRef((props, ref) => {
   useEffect(() => {
     updateTheme(merge(webchatState.theme, props.theme))
   }, [props.theme])
+
+  useEffect(() => {
+    updateHandoffState(merge(webchatState.handoffState, props.handoffState))
+  }, [props.handoffState])
 
   return (
     <>

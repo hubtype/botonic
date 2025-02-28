@@ -117,3 +117,13 @@ export interface ThemeProps {
   }
   imagePreviewer?: React.ComponentType<ImagePreviewerProps>
 }
+
+export interface HandoffState {
+  isHandoff: boolean
+  previousQueuePosition: number | null
+  previousQueuePositionNotifiedAt: string | null
+  currentQueuePosition: number | null
+  currentQueuePositionNotifiedAt: string | null
+  agentName: string | null
+  agentImage: string | null
+}

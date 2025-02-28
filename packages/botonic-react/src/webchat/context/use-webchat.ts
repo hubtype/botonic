@@ -5,7 +5,7 @@ import { Reply } from '../../components'
 import { Webview } from '../../components/index-types'
 import { COLORS, WEBCHAT } from '../../constants'
 import { WebchatMessage } from '../../index-types'
-import { ThemeProps } from '../theme/types'
+import { HandoffState, ThemeProps } from '../theme/types'
 import { WebchatAction } from './actions'
 import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
 import { webchatReducer } from './webchat-reducer'
@@ -22,7 +22,16 @@ export const webchatInitialState: WebchatState = {
   webviewParams: null,
   session: { user: undefined },
   lastRoutePath: undefined,
-  handoff: false,
+  handoffState: {
+    isHandoff: false,
+    previousQueuePosition: null,
+    previousQueuePositionNotifiedAt: null,
+    currentQueuePosition: null,
+    currentQueuePositionNotifiedAt: null,
+    agentName: null,
+    agentImage: null,
+  },
+  handoffStateUpdates: {},
   // TODO: type create a defaultTheme using ThemeProps, and put this in initialState
   theme: {
     headerTitle: WEBCHAT.DEFAULTS.TITLE,
@@ -66,7 +75,10 @@ export interface UseWebchat {
   togglePersistentMenu: (toggle: boolean) => void
   toggleWebchat: (toggle: boolean) => void
   updateDevSettings: (settings: DevSettings) => void
-  updateHandoff: (handoff: boolean) => void
+  updateHandoffState: (
+    handoffState: Partial<HandoffState>,
+    handoffStateUpdates?: Partial<HandoffState>
+  ) => void
   updateLastMessageDate: (date: string) => void
   updateLastRoutePath: (path: string) => void
   updateLatestInput: (input: ClientInput) => void
@@ -148,11 +160,19 @@ export function useWebchat(): UseWebchat {
       payload: path,
     })
 
-  const updateHandoff = (handoff: boolean) =>
+  const updateHandoffState = (
+    handoffState: Partial<HandoffState>,
+    handoffStateUpdates?: Partial<HandoffState>
+  ) => {
+    const payload =
+      handoffStateUpdates !== undefined
+        ? { ...handoffState, ...handoffStateUpdates }
+        : handoffState
     webchatDispatch({
-      type: WebchatAction.UPDATE_HANDOFF,
-      payload: handoff,
+      type: WebchatAction.UPDATE_HANDOFF_STATE,
+      payload,
     })
+  }
 
   const updateTheme = (theme: ThemeProps, themeUpdates?: ThemeProps) => {
     const payload =
@@ -268,7 +288,7 @@ export function useWebchat(): UseWebchat {
     togglePersistentMenu,
     toggleWebchat,
     updateDevSettings,
-    updateHandoff,
+    updateHandoffState,
     updateLastMessageDate,
     updateLastRoutePath,
     updateLatestInput,

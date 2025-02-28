@@ -21,8 +21,11 @@ export function webchatReducer(
         ...state,
         ...action.payload,
       }
-    case WebchatAction.UPDATE_HANDOFF:
-      return { ...state, handoff: action.payload }
+    case WebchatAction.UPDATE_HANDOFF_STATE:
+      return {
+        ...state,
+        handoffState: { ...state.handoffState, ...action.payload },
+      }
     case WebchatAction.TOGGLE_WEBCHAT: {
       const isWebchatOpen = action.payload
       return {

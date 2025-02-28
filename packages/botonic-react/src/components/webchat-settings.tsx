@@ -4,7 +4,11 @@ import React, { useContext } from 'react'
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
 import { WebchatContext } from '../webchat/context'
-import { PersistentMenuOptionsTheme, ThemeProps } from '../webchat/theme/types'
+import {
+  HandoffState,
+  PersistentMenuOptionsTheme,
+  ThemeProps,
+} from '../webchat/theme/types'
 import { BlockInputOption } from './index-types'
 
 export interface WebchatSettingsProps {
@@ -15,11 +19,13 @@ export interface WebchatSettingsProps {
   enableUserInput?: boolean
   persistentMenu?: PersistentMenuOptionsTheme
   theme?: ThemeProps
+  handoffState?: Partial<HandoffState>
   user?: { extra_data?: any }
 }
 
 export const WebchatSettings = ({
   theme,
+  handoffState,
   blockInputs,
   persistentMenu,
   enableEmojiPicker,
@@ -51,12 +57,17 @@ export const WebchatSettings = ({
       enableAttachments,
       enableUserInput,
       enableAnimations,
+      handoffState,
     })
     return (
       //@ts-ignore
       <message
         type={INPUT.WEBCHAT_SETTINGS}
-        settings={stringifyWithRegexs({ theme: updatedTheme, user })}
+        settings={stringifyWithRegexs({
+          theme: updatedTheme,
+          user,
+          handoffState,
+        })}
       />
     )
   }
@@ -64,7 +75,7 @@ export const WebchatSettings = ({
 }
 
 export const normalizeWebchatSettings = (settings: WebchatSettingsProps) => {
-  let {
+  const {
     theme,
     blockInputs,
     persistentMenu,
@@ -72,28 +83,46 @@ export const normalizeWebchatSettings = (settings: WebchatSettingsProps) => {
     enableAttachments,
     enableUserInput,
     enableAnimations,
+    handoffState,
   } = settings
-  if (!theme) theme = {}
-  if (!theme.userInput) theme.userInput = {}
+
+  // Normalize theme settings
+  const normalizedTheme = theme || {}
+  if (!normalizedTheme.userInput) {
+    normalizedTheme.userInput = {}
+  }
+  if (!normalizedTheme.animations) {
+    normalizedTheme.animations = {}
+  }
+
   if (persistentMenu !== undefined) {
-    theme.userInput.persistentMenu = persistentMenu
+    normalizedTheme.userInput.persistentMenu = persistentMenu
   }
   if (enableEmojiPicker !== undefined) {
-    if (!theme.userInput.emojiPicker) theme.userInput.emojiPicker = {}
-    theme.userInput.emojiPicker.enable = enableEmojiPicker
+    if (!normalizedTheme.userInput.emojiPicker) {
+      normalizedTheme.userInput.emojiPicker = {}
+    }
+
+    normalizedTheme.userInput.emojiPicker.enable = enableEmojiPicker
   }
   if (enableAttachments !== undefined) {
-    if (!theme.userInput.attachments) theme.userInput.attachments = {}
-    theme.userInput.attachments.enable = enableAttachments
+    if (!normalizedTheme.userInput.attachments) {
+      normalizedTheme.userInput.attachments = {}
+    }
+    normalizedTheme.userInput.attachments.enable = enableAttachments
   }
   if (enableUserInput !== undefined) {
-    theme.userInput.enable = enableUserInput
+    normalizedTheme.userInput.enable = enableUserInput
   }
-  if (blockInputs !== undefined) theme.userInput.blockInputs = blockInputs
-
-  if (!theme.animations) theme.animations = {}
+  if (blockInputs !== undefined) {
+    normalizedTheme.userInput.blockInputs = blockInputs
+  }
   if (enableAnimations !== undefined) {
-    theme.animations.enable = enableAnimations
+    normalizedTheme.animations.enable = enableAnimations
   }
-  return theme
+
+  return {
+    updatedTheme: normalizedTheme,
+    updatedHandoffState: handoffState,
+  }
 }

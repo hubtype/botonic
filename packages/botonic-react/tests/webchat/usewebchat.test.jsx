@@ -121,12 +121,14 @@ describe('TEST: useWebchat', () => {
     expect(result.current.webchatState.lastRoutePath).toEqual('route_path')
   })
 
-  it('updateHandoff: assign true to webchatState.handoff', () => {
+  it('updateHandoffState: assign true to webchatState.handoffState', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
-      result.current.updateHandoff(true)
+      result.current.updateHandoffState({
+        isHandoff: true,
+      })
     })
-    expect(result.current.webchatState.handoff).toEqual(true)
+    expect(result.current.webchatState.handoffState.isHandoff).toEqual(true)
   })
 
   it('updateTheme: assign theme to webchatState.theme', () => {

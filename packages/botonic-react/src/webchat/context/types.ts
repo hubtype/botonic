@@ -8,7 +8,7 @@ import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { CloseWebviewOptions } from '../../contexts'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
 import { WebchatStateTheme } from '../index-types'
-import { ThemeProps } from '../theme/types'
+import { HandoffState, ThemeProps } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string
@@ -31,9 +31,10 @@ export interface WebchatState {
   webviewParams: null
   session: Partial<CoreSession>
   lastRoutePath?: string
-  handoff: boolean
+  handoffState: HandoffState
   theme: WebchatStateTheme // TODO: type this as ThemeProps
   themeUpdates: Partial<WebchatStateTheme> // TODO: type this as Partial<ThemeProps>
+  handoffStateUpdates: Partial<HandoffState>
   error: ErrorMessage
   online: boolean
   devSettings: DevSettings

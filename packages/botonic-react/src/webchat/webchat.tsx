@@ -90,7 +90,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     togglePersistentMenu,
     toggleWebchat,
     updateDevSettings,
-    updateHandoff,
+    updateHandoffState,
     updateLastMessageDate,
     updateLastRoutePath,
     updateLatestInput,
@@ -143,6 +143,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
             devSettings: webchatState.devSettings,
             lastMessageUpdate: webchatState.lastMessageUpdate,
             themeUpdates: webchatState.themeUpdates,
+            handoffState: webchatState.handoffState,
           })
         )
       )
@@ -218,6 +219,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       devSettings,
       lastMessageUpdate,
       themeUpdates,
+      handoffStateUpdates,
     } = botonicState || {}
     session = initSession(session)
     updateSession(session)
@@ -245,6 +247,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
     if (themeUpdates !== undefined) {
       updateTheme(merge(props.theme, themeUpdates), themeUpdates)
+    }
+
+    if (handoffStateUpdates !== undefined) {
+      updateHandoffState({ ...props.handoffState, ...handoffStateUpdates })
     }
 
     if (props.onInit) {
@@ -292,6 +298,14 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   useEffect(() => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
   }, [props.theme, webchatState.themeUpdates])
+
+  useEffect(() => {
+    updateHandoffState({
+      ...props.handoffState,
+      ...webchatState.handoffState,
+      ...webchatState.handoffStateUpdates,
+    })
+  }, [props.handoffState, webchatState.handoffStateUpdates])
 
   const openWebview = (webviewComponent, params) => {
     updateWebview(webviewComponent, params)
@@ -484,9 +498,15 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       if (session) {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
-        const handoff = action.startsWith(BotonicAction.CreateCase)
-        if (handoff && isDev) addMessageComponent(<Handoff />)
-        updateHandoff(handoff)
+        const isHandoff = action.startsWith(BotonicAction.CreateCase)
+        if (isHandoff && isDev) {
+          addMessageComponent(<Handoff />)
+        }
+        // TODO: Review after minimum time, handoff component disappears because of an empty message component
+        updateHandoffState({
+          ...webchatState.handoffState,
+          isHandoff,
+        })
       }
 
       if (lastRoutePath) updateLastRoutePath(lastRoutePath)
@@ -528,8 +548,17 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       if (settings.user) {
         updateSessionWithUser(settings.user)
       }
-      const themeUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+      const updatedWebchatSettings = normalizeWebchatSettings(settings)
+      updateTheme(
+        merge(webchatState.theme, updatedWebchatSettings.updatedTheme),
+        updatedWebchatSettings.updatedTheme
+      )
+
+      updateHandoffState({
+        ...webchatState.handoffState,
+        ...updatedWebchatSettings.updatedHandoffState,
+      })
+
       updateTyping(false)
     },
     closeWebview: async (options?: CloseWebviewOptions) =>
@@ -537,7 +566,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }))
 
   const resolveCase = () => {
-    updateHandoff(false)
+    updateHandoffState({
+      ...webchatState.handoffState,
+      isHandoff: false,
+    })
     updateSession({ ...webchatState.session, _botonic_action: undefined })
   }
 
@@ -621,8 +653,15 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const updateWebchatDevSettings = settings => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      const themeUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+      const updatedSettings = normalizeWebchatSettings(settings)
+      updateTheme(
+        merge(webchatState.theme, updatedSettings.updatedTheme),
+        updatedSettings.updatedTheme
+      )
+      updateHandoffState({
+        ...webchatState.handoffState,
+        ...updatedSettings.updatedHandoffState,
+      })
     }, [webchatState.messagesJSON])
   }
 
@@ -718,7 +757,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                 <DarkenBackground component={persistentMenu()} />
               )}
 
-              {!webchatState.handoff && userInputEnabled && (
+              {!webchatState.handoffState.isHandoff && userInputEnabled && (
                 <InputPanel
                   persistentMenu={props.persistentMenu}
                   enableEmojiPicker={props.enableEmojiPicker}
