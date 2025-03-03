@@ -26,6 +26,10 @@ All notable changes to Botonic will be documented in this file.
 
 - Do call `getKnowledgeBaseResponse` with new knowledge base settings (memory + instructions).
 
+### Changed
+
+- Use the queue's availability endpoint from external API instead of public API (deprecated)
+
 ## [0.32.0] - TBD
 
 ### Added
