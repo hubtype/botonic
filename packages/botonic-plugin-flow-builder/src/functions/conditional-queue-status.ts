@@ -38,7 +38,7 @@ export class HubtypeQueuesApi {
 
   async getAvailability(): Promise<AvailabilityData> {
     const response = await axios.get(
-      `${HUBTYPE_API_URL}/public/v1/queues/${this.queueId}/availability/`,
+      `${HUBTYPE_API_URL}/external/v1/queues/${this.queueId}/availability/`,
       // TODO: Make it configurable in the future
       {
         params: {
