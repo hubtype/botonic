@@ -49,7 +49,7 @@ export const WebchatSettings = ({
     return null
   }
   const renderNode = () => {
-    const updatedTheme = normalizeWebchatSettings({
+    const updatedSettings = normalizeWebchatSettings({
       theme,
       blockInputs,
       persistentMenu,
@@ -64,9 +64,9 @@ export const WebchatSettings = ({
       <message
         type={INPUT.WEBCHAT_SETTINGS}
         settings={stringifyWithRegexs({
-          theme: updatedTheme,
+          theme: updatedSettings.updatedTheme,
           user,
-          handoffState,
+          handoffState: updatedSettings.updatedHandoffState,
         })}
       />
     )

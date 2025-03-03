@@ -474,8 +474,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
-  const updateSessionWithUser = (userToUpdate: any) =>
+  const updateSessionWithUser = (userToUpdate: any) => {
     updateSession(merge(webchatState.session, { user: userToUpdate }))
+  }
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {
@@ -501,8 +502,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         const isHandoff = action.startsWith(BotonicAction.CreateCase)
         if (isHandoff && isDev) {
           addMessageComponent(<Handoff />)
+          // TODO: Review after minimum time, handoff component disappears because of an empty message component
         }
-        // TODO: Review after minimum time, handoff component disappears because of an empty message component
         updateHandoffState({
           ...webchatState.handoffState,
           isHandoff,
@@ -756,7 +757,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
               {webchatState.isPersistentMenuOpen && (
                 <DarkenBackground component={persistentMenu()} />
               )}
-
+              {/* TODO: Review this condition */}
               {!webchatState.handoffState.isHandoff && userInputEnabled && (
                 <InputPanel
                   persistentMenu={props.persistentMenu}
