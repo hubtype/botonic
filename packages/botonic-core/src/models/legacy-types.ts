@@ -367,7 +367,7 @@ export enum BotonicAction {
 }
 
 export interface CaseEventQueuePositionChangedInput {
-  type: 'case_event_queue_position_changed'
+  type: INPUT.EVENT_QUEUE_POSITION_CHANGED
   case_id: string
   prev_queue_position: number | null
   prev_queue_position_notified_at: string | null
