@@ -34,9 +34,6 @@ export const getEnvironment = (): ENVIRONMENT => {
 export const isLocal = (env?: ENVIRONMENT): boolean =>
   isExpectedEnvironemnt(env || getEnvironment(), ENVIRONMENT.LOCAL)
 
-export const isStaging = (env?: ENVIRONMENT): boolean =>
-  isExpectedEnvironemnt(env || getEnvironment(), ENVIRONMENT.STAGING)
-
 export const isProduction = (env?: ENVIRONMENT): boolean =>
   isExpectedEnvironemnt(env || getEnvironment(), ENVIRONMENT.PRODUCTION)
 
