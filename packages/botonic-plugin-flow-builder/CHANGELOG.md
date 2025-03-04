@@ -20,7 +20,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.33.0] - TBD
+## [0.33.0] - 2025-03-04
 
 ### Added
 
@@ -30,7 +30,7 @@ All notable changes to Botonic will be documented in this file.
 
 - Use the queue's availability endpoint from external API instead of public API (deprecated)
 
-## [0.32.0] - TBD
+## [0.32.0] - 2025-02-18
 
 ### Added
 

@@ -20,7 +20,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.33.0] - TBD
+## [0.33.0] - 2025-03-04
 
 ### Added
 
