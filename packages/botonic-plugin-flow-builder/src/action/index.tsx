@@ -84,7 +84,7 @@ async function getContents(
     return await getContentsByFirstInteraction(context)
   }
   // TODO: Add needed logic when we can define contents for multilocale queue position message
-  if (request.input.type === INPUT.EVENT_INITIAL_QUEUE_POSITION) {
+  if (request.input.type === INPUT.EVENT_QUEUE_POSITION_CHANGED) {
     return []
   }
 

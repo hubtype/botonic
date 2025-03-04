@@ -16,7 +16,7 @@ export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
   public onFinishPayload?: string
   public handoffAutoAssign: boolean
-  public hasInitialQueuePositionEnabled: boolean
+  public hasQueuePositionChangedNotificationsEnabled: boolean
   public isTestIntegration: boolean
 
   static fromHubtypeCMS(
@@ -29,8 +29,8 @@ export class FlowHandoff extends ContentFieldsBase {
     newHandoff.queue = this.getQueueByLocale(locale, cmsHandoff.content.queue)
     newHandoff.onFinishPayload = this.getOnFinishPayload(cmsHandoff, cmsApi)
     newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
-    newHandoff.hasInitialQueuePositionEnabled =
-      cmsHandoff.content.has_initial_queue_position_enabled
+    newHandoff.hasQueuePositionChangedNotificationsEnabled =
+      cmsHandoff.content.has_queue_position_changed_notifications_enabled
     return newHandoff
   }
 
@@ -49,9 +49,9 @@ export class FlowHandoff extends ContentFieldsBase {
     const handOffBuilder = new HandOffBuilder(request.session)
     handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
 
-    if (this.hasInitialQueuePositionEnabled) {
+    if (this.hasQueuePositionChangedNotificationsEnabled) {
       handOffBuilder.withSubscribeHelpdeskEvents([
-        HelpdeskEvent.InitialQueuePosition,
+        HelpdeskEvent.QueuePositionChanged,
       ])
     }
 

@@ -213,3 +213,5 @@ interface UpdateMessageInfoEvent {
   message: MessageInfo
   isError?: boolean
 }
+
+export { CaseEventQueuePositionChangedInput } from '@botonic/core'
