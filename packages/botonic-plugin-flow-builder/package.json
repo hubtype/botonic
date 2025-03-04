@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.33.0-alpha.2",
+  "version": "0.33.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -14,7 +14,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@botonic/react": "0.33.0-alpha.0",
+    "@botonic/react": "^0.33.0",
     "axios": "^1.7.9",
     "uuid": "^10.0.0"
   },

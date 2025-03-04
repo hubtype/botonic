@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-luis",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {

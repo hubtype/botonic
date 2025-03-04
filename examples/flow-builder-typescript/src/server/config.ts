@@ -7,7 +7,6 @@ import {
   KnowledgeBaseResponse,
   PluginKnowledgeBaseOptions,
 } from '@botonic/plugin-knowledge-bases/src/types'
-import { ActionRequest } from '@botonic/react'
 
 import { context } from './domain/user-data'
 import { trackEvent } from './tracking'
@@ -30,18 +29,23 @@ function getFlowBuilderConfig(
     trackEvent: async (request: BotRequest, eventName, args) => {
       await trackEvent(request, eventName, args)
     },
+    // @ts-ignore
     getKnowledgeBaseResponse: async (
-      request: ActionRequest,
-      userInput: string,
-      sources: string[]
+      request: BotRequest,
+      sources: string[],
+      instructions: string,
+      messageId: string,
+      memoryLength: number
     ): Promise<KnowledgeBaseResponse> => {
       try {
         const botRequest = request as unknown as BotRequest
         const knowledgeBasePlugin = botRequest.plugins.knowledgeBases
         const response = await knowledgeBasePlugin.getInference(
-          botRequest.session,
-          userInput,
-          sources
+          request,
+          sources,
+          instructions,
+          messageId,
+          memoryLength
         )
         if (!isProduction()) {
           console.log('knowledgeBasePlugin.getInference', { response })
@@ -53,10 +57,9 @@ function getFlowBuilderConfig(
         })
         return {
           inferenceId: '',
-          question: '',
           answer: '',
           hasKnowledge: false,
-          isFaithuful: false,
+          isFaithful: false,
           chunkIds: [],
         }
       }
