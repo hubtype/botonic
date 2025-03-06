@@ -38,12 +38,6 @@
     "source-map-loader": "^0.2.4",
     "unorm": "^1.6.0"
   },
-  "files": [
-    "doc/**",
-    "lib/**",
-    "src/**",
-    "README.md"
-  ],
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
