@@ -71,7 +71,7 @@ export class WebchatApp {
     enableAttachments,
     enableUserInput,
     enableAnimations,
-    hostId = 'root',
+    hostId = WEBCHAT.DEFAULTS.HOST_ID,
     shadowDOM = false,
     defaultDelay,
     defaultTyping,

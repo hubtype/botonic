@@ -33,25 +33,13 @@ export const COLORS = {
 
 export const WEBCHAT = {
   DEFAULTS: {
-    WIDTH: 300,
-    HEIGHT: 450,
-    TITLE: 'Botonic',
     LOGO: BotonicLogo,
     URL_ICON: UrlIcon,
-    PLACEHOLDER: 'Ask me something...',
-    FONT_FAMILY: "'Noto Sans JP', sans-serif",
-    BORDER_RADIUS_TOP_CORNERS: '6px 6px 0px 0px',
     ELEMENT_WIDTH: 222,
     ELEMENT_MARGIN_RIGHT: 6,
     STORAGE_KEY: 'botonicState',
     HOST_ID: 'root',
     ID: 'botonic-webchat',
-    BUTTON_AUTO_DISABLE: false,
-    BUTTON_DISABLED_STYLE: {
-      opacity: 0.5,
-      cursor: 'auto',
-      pointerEvents: 'none',
-    },
   },
   CUSTOM_PROPERTIES: {
     // General

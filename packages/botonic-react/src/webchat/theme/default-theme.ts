@@ -6,7 +6,7 @@ export const defaultTheme: WebchatTheme = {
     width: '300px',
     height: '450px',
     borderRadius: '10px',
-    fontFamily: WEBCHAT.DEFAULTS.FONT_FAMILY,
+    fontFamily: "'Noto Sans JP', sans-serif",
     fontSize: '16px',
     position: 'fixed',
     right: '20px',
@@ -25,7 +25,7 @@ export const defaultTheme: WebchatTheme = {
     bottom: '0px',
   },
   header: {
-    title: WEBCHAT.DEFAULTS.TITLE,
+    title: 'Botonic',
     subtitle: '',
     image: WEBCHAT.DEFAULTS.LOGO,
     style: {

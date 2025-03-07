@@ -49,7 +49,7 @@ export const ErrorMessage = styled.div`
   border-radius: 5px;
   align-items: center;
   justify-content: center;
-  font-family: ${WEBCHAT.DEFAULTS.FONT_FAMILY};
+  font-family: ${props => props.theme.style.fontFamily};
 `
 
 export const DarkBackgroundMenu = styled.div`
