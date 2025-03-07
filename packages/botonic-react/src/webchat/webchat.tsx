@@ -1,9 +1,4 @@
-import {
-  BotonicAction,
-  INPUT,
-  isMobile,
-  params2queryString,
-} from '@botonic/core'
+import { BotonicAction, INPUT, params2queryString } from '@botonic/core'
 import merge from 'lodash.merge'
 import React, {
   forwardRef,
@@ -12,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { StyleSheetManager } from 'styled-components'
+import { StyleSheetManager, ThemeProvider } from 'styled-components'
 import { v7 as uuidv7 } from 'uuid'
 
 import {
@@ -67,6 +62,7 @@ import {
   ErrorMessageContainer,
   StyledWebchat,
 } from './styles'
+import { WebchatTheme } from './theme/types'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
@@ -110,7 +106,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     repliesRef,
     scrollableMessagesListRef,
     // eslint-disable-next-line react-hooks/rules-of-hooks
-  } = props.webchatHooks || useWebchat()
+  } = props.webchatHooks || useWebchat(props.theme)
 
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
@@ -227,7 +223,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
           addMessage(message)
           const newMessageComponent = msgToBotonic(
             { ...message, delay: 0, typing: 0 },
-            props.theme?.message?.customTypes || props.theme?.customMessageTypes
+            props.theme?.message?.customTypes
           )
           //@ts-ignore
           if (newMessageComponent) addMessageComponent(newMessageComponent)
@@ -529,7 +525,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateSessionWithUser(settings.user)
       }
       const themeUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+      updateTheme(
+        merge(webchatState.theme, themeUpdates),
+        themeUpdates as WebchatTheme
+      )
       updateTyping(false)
     },
     closeWebview: async (options?: CloseWebviewOptions) =>
@@ -600,18 +599,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   const userInputEnabled = isUserInputEnabled()
 
-  // TODO: Create a default theme that include mobileStyle
-  let mobileStyle = {}
-  if (isMobile(getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileBreakpoint))) {
-    mobileStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileStyle) || {
-      width: '100%',
-      height: '100%',
-      right: 0,
-      bottom: 0,
-      borderRadius: 0,
-    }
-  }
-
   useEffect(() => {
     // Prod mode
     saveWebchatState(webchatState)
@@ -622,7 +609,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const themeUpdates = normalizeWebchatSettings(settings)
-      updateTheme(merge(webchatState.theme, themeUpdates), themeUpdates)
+      updateTheme(
+        merge(webchatState.theme, themeUpdates),
+        themeUpdates as WebchatTheme
+      )
     }, [webchatState.messagesJSON])
   }
 
@@ -672,8 +662,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         trackEvent: props.onTrackEvent,
         webchatState,
-        // TODO: Review if need theme inside Context, already exist inside webchatState
-        theme,
         webchatContainerRef,
         chatAreaRef,
         inputPanelRef,
@@ -682,63 +670,59 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         scrollableMessagesListRef,
       }}
     >
-      {!webchatState.isWebchatOpen && <TriggerButton />}
+      <ThemeProvider theme={webchatState.theme}>
+        {!webchatState.isWebchatOpen && <TriggerButton />}
 
-      {webchatState.isWebchatOpen && (
-        <StyledWebchat
-          id={BotonicContainerId.Webchat}
-          ref={webchatContainerRef}
-          // TODO: Distinguish between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
-          role={ROLES.WEBCHAT}
-          width={webchatState.width}
-          height={webchatState.height}
-          style={{
-            ...webchatState.theme.style,
-            ...mobileStyle,
-          }}
-        >
-          <WebchatHeader ref={headerRef} />
+        {webchatState.isWebchatOpen && (
+          <StyledWebchat
+            id={BotonicContainerId.Webchat}
+            ref={webchatContainerRef}
+            // TODO: Distinguish between multiple instances of webchat, e.g. `${uniqueId}-botonic-webchat`
+            role={ROLES.WEBCHAT}
+          >
+            <WebchatHeader ref={headerRef} />
 
-          {webchatState.isCoverComponentOpen ? (
-            <CoverComponent
-              component={coverComponent}
-              componentProps={coverComponentProps}
-            />
-          ) : (
-            <>
-              {webchatState.error.message && (
-                <ErrorMessageContainer>
-                  <ErrorMessage>{webchatState.error.message}</ErrorMessage>
-                </ErrorMessageContainer>
-              )}
+            {webchatState.isCoverComponentOpen ? (
+              <CoverComponent
+                component={coverComponent}
+                componentProps={coverComponentProps}
+              />
+            ) : (
+              <>
+                {webchatState.error.message && (
+                  <ErrorMessageContainer>
+                    <ErrorMessage>{webchatState.error.message}</ErrorMessage>
+                  </ErrorMessageContainer>
+                )}
 
-              <ChatArea />
+                <ChatArea />
 
-              {webchatState.isPersistentMenuOpen && (
-                <DarkenBackground component={persistentMenu()} />
-              )}
+                {webchatState.isPersistentMenuOpen && (
+                  <DarkenBackground component={persistentMenu()} />
+                )}
 
-              {!webchatState.handoff && userInputEnabled && (
-                <InputPanel
-                  persistentMenu={props.persistentMenu}
-                  enableEmojiPicker={props.enableEmojiPicker}
-                  enableAttachments={props.enableAttachments}
-                  handleAttachment={handleAttachment}
-                  textareaRef={textareaRef}
-                  host={host}
-                  onUserInput={props.onUserInput}
-                />
-              )}
+                {!webchatState.handoff && userInputEnabled && (
+                  <InputPanel
+                    persistentMenu={props.persistentMenu}
+                    enableEmojiPicker={props.enableEmojiPicker}
+                    enableAttachments={props.enableAttachments}
+                    handleAttachment={handleAttachment}
+                    textareaRef={textareaRef}
+                    host={host}
+                    onUserInput={props.onUserInput}
+                  />
+                )}
 
-              {webchatState.webview && <WebviewContainer />}
+                {webchatState.webview && <WebviewContainer />}
 
-              {webchatState.isCustomComponentRendered &&
-                customComponent &&
-                _renderCustomComponent()}
-            </>
-          )}
-        </StyledWebchat>
-      )}
+                {webchatState.isCustomComponentRendered &&
+                  customComponent &&
+                  _renderCustomComponent()}
+              </>
+            )}
+          </StyledWebchat>
+        )}
+      </ThemeProvider>
     </WebchatContext.Provider>
   )
 

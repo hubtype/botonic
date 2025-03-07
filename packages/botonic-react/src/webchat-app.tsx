@@ -20,15 +20,16 @@ import {
 } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
+import { defaultTheme } from './webchat/theme/default-theme'
 import {
   CoverComponentOptions,
   PersistentMenuOptionsTheme,
-  ThemeProps,
+  WebchatTheme,
 } from './webchat/theme/types'
 import { Webchat } from './webchat/webchat'
 
 export class WebchatApp {
-  public theme?: ThemeProps
+  public theme?: Partial<WebchatTheme>
   public persistentMenu?: PersistentMenuOptionsTheme
   public coverComponent?: CoverComponentOptions
   public blockInputs?: BlockInputOption[]
@@ -62,7 +63,7 @@ export class WebchatApp {
   private hubtypeService: HubtypeService
 
   constructor({
-    theme = {},
+    theme,
     persistentMenu,
     coverComponent,
     blockInputs,
@@ -277,11 +278,7 @@ export class WebchatApp {
     message.isUnread = true
     message.sentBy = message.sent_by?.split('message_sent_by_')[1]
     delete message.sent_by
-    const response = msgToBotonic(
-      message,
-      // TODO: Review if is needed allow declar customTypes inside and outside theme
-      this.theme?.message?.customTypes || this.theme?.customMessageTypes
-    )
+    const response = msgToBotonic(message, this.theme?.message?.customTypes)
 
     this.webchatRef.current?.addBotResponse({
       response,
@@ -376,7 +373,7 @@ export class WebchatApp {
   // eslint-disable-next-line complexity
   getComponent(host: HTMLDivElement, optionsAtRuntime: WebchatArgs = {}) {
     let {
-      theme = {},
+      theme = defaultTheme,
       persistentMenu,
       coverComponent,
       blockInputs,
@@ -430,7 +427,7 @@ export class WebchatApp {
         ref={this.webchatRef}
         host={this.host}
         shadowDOM={this.shadowDOM}
-        theme={theme}
+        theme={theme as WebchatTheme}
         persistentMenu={persistentMenu}
         coverComponent={coverComponent}
         blockInputs={blockInputs}

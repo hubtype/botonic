@@ -1,10 +1,9 @@
 import { createContext } from 'react'
 
-import { WebchatContextProps } from './types'
-import { webchatInitialState } from './use-webchat'
+import { WebchatContextProps, WebchatState } from './types'
 
 export { WebchatState } from './types'
-export { useWebchat, webchatInitialState } from './use-webchat'
+export { useWebchat } from './use-webchat'
 
 export const WebchatContext = createContext<WebchatContextProps>({
   addMessage: () => {
@@ -43,7 +42,6 @@ export const WebchatContext = createContext<WebchatContextProps>({
   sendText: async () => {
     return
   },
-  theme: {}, // TODO: Remove this attribute and use allways webchatState.theme
   toggleCoverComponent: () => {
     return
   },
@@ -71,7 +69,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   updateWebchatDevSettings: () => {
     return
   },
-  webchatState: webchatInitialState,
+  webchatState: {} as WebchatState,
   trackEvent: async () => {
     return
   },
