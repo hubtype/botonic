@@ -55,10 +55,13 @@ export const defaultTheme: WebchatTheme = {
   },
   triggerButton: { image: WEBCHAT.DEFAULTS.LOGO },
   userInput: {
+    attachments: { enable: false },
     box: {
       placeholder: 'Ask me something...',
     },
-    sendButton: { enable: true },
+    emojiPicker: { enable: false },
+    sendButton: { enable: false },
+    enable: true,
   },
   carousel: {
     enableArrows: true,

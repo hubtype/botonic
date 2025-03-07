@@ -1,30 +1,21 @@
 import React, { useContext } from 'react'
 
 import LogoMenu from '../../assets/menuButton.svg'
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
 interface PersistentMenuProps {
-  persistentMenu: any
   onClick: () => void
 }
 
-export const PersistentMenu = ({
-  onClick,
-  persistentMenu,
-}: PersistentMenuProps) => {
-  const { getThemeProperty } = useContext(WebchatContext)
+export const PersistentMenu = ({ onClick }: PersistentMenuProps) => {
+  const { webchatState } = useContext(WebchatContext)
 
-  const persistentMenuOptions = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
-    persistentMenu
-  )
+  const persistentMenuOptions = webchatState.theme.userInput?.persistentMenu
 
-  const CustomMenuButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customMenuButton
-  )
+  const CustomMenuButton = webchatState.theme.userInput?.menuButton?.custom
 
   return (
     <>

@@ -308,10 +308,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     }
   }
 
-  // TODO: Review why props.persistentMenu is not inside theme before render Webchat component
   const persistentMenuOptions = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
-    props.persistentMenu
+    WEBCHAT.CUSTOM_PROPERTIES.persistentMenu
   )
 
   const darkBackgroundMenu = getThemeProperty(
@@ -331,11 +329,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   const checkBlockInput = input => {
     // if is a text we check if it is a serialized RE
-    // TODO: Review why props.blockInputs is not inside theme before render Webchat component
-    const blockInputs = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.blockInputs,
-      props.blockInputs
-    )
+    const blockInputs = webchatState.theme.userInput?.blockInputs
     if (!Array.isArray(blockInputs)) return false
     for (const rule of blockInputs) {
       if (getBlockInputs(rule, input.data)) {
@@ -377,16 +371,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     )
   }
 
-  const getCoverComponent = () => {
-    // TODO: Review why props.coverComponent is not inside theme before render Webchat component
-    return getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.coverComponent,
-      props.coverComponent &&
-        (props.coverComponent.component || props.coverComponent)
-    )
-  }
-  const coverComponent = getCoverComponent()
-  const coverComponentProps = props.coverComponent?.props
+  const coverComponent = webchatState.theme.coverComponent
+  const coverComponentProps = webchatState.theme.coverComponent?.props
 
   useEffect(() => {
     if (!coverComponent) return
@@ -416,7 +402,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       )
     } else if (isMedia(input)) {
       const temporaryDisplayUrl = URL.createObjectURL(input.data)
-      // TODO: We sould use URL.revokeObjectURL(temporaryDisplayUrl) when the component is unmounted
+      // TODO: We should use URL.revokeObjectURL(temporaryDisplayUrl) when the component is unmounted
       // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static#memory_management
       const mediaProps: {
         id: string
@@ -593,10 +579,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   const isUserInputEnabled = () => {
-    // TODO: Review why props.enableUserInput is not inside theme before render Webchat component
     const isUserInputEnabled = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.enableUserInput,
-      props.enableUserInput !== undefined ? props.enableUserInput : true
+      WEBCHAT.CUSTOM_PROPERTIES.enableUserInput
     )
     return isUserInputEnabled && !webchatState.isCoverComponentOpen
   }
@@ -707,9 +691,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
                 {!webchatState.handoff && userInputEnabled && (
                   <InputPanel
-                    persistentMenu={props.persistentMenu}
-                    enableEmojiPicker={props.enableEmojiPicker}
-                    enableAttachments={props.enableAttachments}
                     handleAttachment={handleAttachment}
                     textareaRef={textareaRef}
                     host={host}

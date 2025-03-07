@@ -5,12 +5,10 @@ import { WEBCHAT } from '../../constants'
 import { Typing } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'
 import { useDeviceAdapter } from '../hooks'
-import { PersistentMenuOptionsTheme } from '../theme/types'
 import { TextAreaContainer } from './styles'
 
 interface TextareaProps {
   host: HTMLElement
-  persistentMenu: PersistentMenuOptionsTheme
   textareaRef: React.MutableRefObject<HTMLTextAreaElement | undefined>
   sendChatEvent: (event: string) => Promise<void>
   sendTextAreaText: () => Promise<void>
@@ -18,23 +16,20 @@ interface TextareaProps {
 
 export const Textarea = ({
   host,
-  persistentMenu,
   textareaRef,
   sendChatEvent,
   sendTextAreaText,
 }: TextareaProps) => {
-  const { getThemeProperty, webchatState, setIsInputFocused } =
-    useContext(WebchatContext)
+  const { webchatState, setIsInputFocused } = useContext(WebchatContext)
 
   useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   let isTyping = false
   let typingTimeout
 
-  const persistentMenuOptions = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
-    persistentMenu
-  )
+  const persistentMenuOptions = webchatState.theme.userInput?.persistentMenu
+
+  const placeholder = webchatState.theme.userInput?.box?.placeholder
 
   const onKeyDown = event => {
     if (event.keyCode === 13 && event.shiftKey === false) {
@@ -92,9 +87,7 @@ export const Textarea = ({
         maxRows={4}
         wrap='soft'
         maxLength={1000}
-        placeholder={getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder
-        )}
+        placeholder={placeholder}
         autoFocus={false}
         onKeyDown={e => onKeyDown(e)}
         onKeyUp={onKeyUp}
@@ -110,7 +103,7 @@ export const Textarea = ({
           padding: 10,
           paddingLeft: persistentMenuOptions ? 0 : 10,
           fontFamily: 'inherit',
-          ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.userInputBoxStyle),
+          ...webchatState.theme.userInput?.box?.style,
         }}
       />
     </TextAreaContainer>

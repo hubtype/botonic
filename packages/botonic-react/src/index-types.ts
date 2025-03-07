@@ -121,13 +121,6 @@ export interface WebchatProps {
 
   shadowDOM?: any
   theme?: WebchatTheme
-  persistentMenu?: PersistentMenuOptionsTheme
-  coverComponent?: CoverComponentOptions
-  blockInputs?: BlockInputOption[]
-  enableEmojiPicker?: boolean
-  enableAttachments?: boolean
-  enableUserInput?: boolean
-  enableAnimations?: boolean
   storage?: Storage | null
   storageKey?: string | (() => string)
   defaultDelay?: number

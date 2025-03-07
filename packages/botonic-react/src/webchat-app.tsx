@@ -88,7 +88,6 @@ export class WebchatApp {
     server,
   }: WebchatArgs) {
     this.theme = theme
-    // TODO: Review if is possible store persistentMenu, coverComponent, blockInputs, enableEmojiPicker, enableAttachments, enableUserInput, enableAnimations, etc as part of theme
     this.persistentMenu = persistentMenu
     this.coverComponent = coverComponent
     this.blockInputs = blockInputs
@@ -371,17 +370,86 @@ export class WebchatApp {
     return this.webchatRef.current?.updateWebchatSettings(settings)
   }
 
-  // eslint-disable-next-line complexity
+  createInitialTheme(optionsAtRuntime: WebchatArgs = {}) {
+    const theme = merge(defaultTheme, this.theme, optionsAtRuntime.theme)
+
+    if (theme.animations === undefined) {
+      theme.animations = {}
+    }
+
+    theme.animations.enable =
+      theme.animations.enable ??
+      optionsAtRuntime.enableAnimations ??
+      this.enableAnimations
+
+    theme.coverComponent =
+      theme.coverComponent ??
+      optionsAtRuntime.coverComponent ??
+      this.coverComponent
+
+    theme.userInput = this.createInitialThemUserInput(theme, optionsAtRuntime)
+
+    return theme
+  }
+
+  createInitialThemUserInput(
+    theme: WebchatTheme,
+    optionsAtRuntime: WebchatArgs = {}
+  ) {
+    if (theme.userInput === undefined) {
+      theme.userInput = {}
+    }
+
+    console.log(
+      'WebchatApp theme.userInput.enable',
+      theme.userInput.enable,
+      optionsAtRuntime.enableUserInput,
+      this.enableUserInput
+    )
+    theme.userInput.enable =
+      theme.userInput.enable ??
+      optionsAtRuntime.enableUserInput ??
+      this.enableUserInput
+
+    theme.userInput.persistentMenu =
+      theme.userInput.persistentMenu ??
+      optionsAtRuntime.persistentMenu ??
+      this.persistentMenu
+
+    theme.userInput.blockInputs =
+      theme.userInput.blockInputs ??
+      optionsAtRuntime.blockInputs ??
+      this.blockInputs
+
+    if (theme.userInput.emojiPicker === undefined) {
+      theme.userInput.emojiPicker = {}
+    }
+
+    theme.userInput.emojiPicker.enable =
+      theme.userInput.emojiPicker.enable ??
+      optionsAtRuntime.enableEmojiPicker ??
+      this.enableEmojiPicker
+
+    if (theme.userInput.attachments === undefined) {
+      theme.userInput.attachments = {}
+    }
+
+    theme.userInput.attachments.enable =
+      theme.userInput.attachments.enable ??
+      optionsAtRuntime.enableAttachments ??
+      this.enableAttachments
+
+    theme.userInput.blockInputs =
+      theme.userInput.blockInputs ??
+      optionsAtRuntime.blockInputs ??
+      this.blockInputs
+
+    return theme.userInput
+  }
+
   getComponent(host: HTMLDivElement, optionsAtRuntime: WebchatArgs = {}) {
     let {
-      theme = defaultTheme,
-      persistentMenu,
-      coverComponent,
-      blockInputs,
-      enableAttachments,
-      enableUserInput,
-      enableAnimations,
-      enableEmojiPicker,
+      theme = {},
       defaultDelay,
       defaultTyping,
       storage,
@@ -398,14 +466,7 @@ export class WebchatApp {
       hostId,
       ...webchatOptions
     } = optionsAtRuntime
-    theme = merge(this.theme, theme)
-    persistentMenu = persistentMenu || this.persistentMenu
-    coverComponent = coverComponent || this.coverComponent
-    blockInputs = blockInputs || this.blockInputs
-    enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
-    enableAttachments = enableAttachments || this.enableAttachments
-    enableUserInput = enableUserInput || this.enableUserInput
-    enableAnimations = enableAnimations || this.enableAnimations
+    theme = this.createInitialTheme(optionsAtRuntime)
     defaultDelay = defaultDelay || this.defaultDelay
     defaultTyping = defaultTyping || this.defaultTyping
     server = server || this.server
@@ -429,13 +490,6 @@ export class WebchatApp {
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme as WebchatTheme}
-        persistentMenu={persistentMenu}
-        coverComponent={coverComponent}
-        blockInputs={blockInputs}
-        enableEmojiPicker={enableEmojiPicker}
-        enableAttachments={enableAttachments}
-        enableUserInput={enableUserInput}
-        enableAnimations={enableAnimations}
         storage={this.storage}
         storageKey={this.storageKey}
         defaultDelay={defaultDelay}
@@ -443,7 +497,7 @@ export class WebchatApp {
         onInit={(...args: [any]) => this.onInitWebchat(...args)}
         onOpen={(...args: [any]) => this.onOpenWebchat(...args)}
         onClose={(...args: [any]) => this.onCloseWebchat(...args)}
-        onUserInput={(...args: [any]) => this.onUserInput(...args)} // TODO: Review this function, and his params
+        onUserInput={(...args: [any]) => this.onUserInput(...args)}
         onStateChange={(args: OnStateChangeArgs) => {
           this.onStateChange(args)
         }}
@@ -451,7 +505,7 @@ export class WebchatApp {
           request: ActionRequest,
           eventName: string,
           args?: EventArgs
-        ) => this.onTrackEventWebchat(request, eventName, args)} //TODO: Review if this implementation is correct
+        ) => this.onTrackEventWebchat(request, eventName, args)}
         server={server}
       />
     )
