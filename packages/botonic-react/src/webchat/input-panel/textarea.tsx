@@ -93,8 +93,7 @@ export const Textarea = ({
         wrap='soft'
         maxLength={1000}
         placeholder={getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder,
-          WEBCHAT.DEFAULTS.PLACEHOLDER
+          WEBCHAT.CUSTOM_PROPERTIES.textPlaceholder
         )}
         autoFocus={false}
         onKeyDown={e => onKeyDown(e)}

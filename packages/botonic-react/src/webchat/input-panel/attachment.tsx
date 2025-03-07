@@ -22,8 +22,7 @@ export const Attachment = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const CustomAttachments = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customAttachments
   )
 
   const isAttachmentsEnabled = () => {

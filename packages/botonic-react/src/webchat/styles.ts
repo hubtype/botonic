@@ -2,25 +2,31 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 
-interface StyledWebchatProps {
-  width: number
-  height: number
-}
-
-export const StyledWebchat = styled.div<StyledWebchatProps>`
+export const StyledWebchat = styled.div`
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
+  right: ${props => props.theme.style.right};
+  bottom: ${props => props.theme.style.bottom};
+  width: ${props => props.theme.style.width};
+  height: ${props => props.theme.style.height};
   margin: auto;
-  background-color: ${COLORS.SOLID_WHITE};
+  background-color: ${props => props.theme.style.backgroundColor};
   border-radius: 10px;
-  box-shadow: ${COLORS.SOLID_BLACK_ALPHA_0_2} 0px 0px 12px;
+  box-shadow: ${props => props.theme.style.boxShadow};
+  font-family: ${props => props.theme.style.fontFamily};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+
+  @media (max-width: ${props => props.theme.mobileBreakpoint}px) {
+    position: ${props => props.theme.mobileStyle.position};
+    right: ${props => props.theme.mobileStyle.right};
+    bottom: ${props => props.theme.mobileStyle.bottom};
+    width: ${props => props.theme.mobileStyle.width};
+    height: ${props => props.theme.mobileStyle.height};
+    border-radius: ${props => props.theme.mobileStyle.borderRadius};
+    font-size: ${props => props.theme.mobileStyle.fontSize};
+  }
 `
 
 export const ErrorMessageContainer = styled.div`

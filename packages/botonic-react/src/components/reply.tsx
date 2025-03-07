@@ -11,6 +11,8 @@ const StyledButton = styled.button`
   padding: 4px 8px;
   font-family: inherit;
   border-radius: 8px;
+  border: 1px solid ${props => props.theme.brand?.color};
+  color: ${props => props.theme.brand?.color};
   cursor: pointer;
   outline: 0;
 `
@@ -41,14 +43,6 @@ export const Reply = (props: ReplyProps) => {
     return (
       <StyledButton
         style={{
-          border: `1px solid ${getThemeProperty(
-            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-            COLORS.BOTONIC_BLUE
-          )}`,
-          color: getThemeProperty(
-            WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-            COLORS.BOTONIC_BLUE
-          ),
           ...replyStyle,
         }}
         onClick={e => handleClick(e)}

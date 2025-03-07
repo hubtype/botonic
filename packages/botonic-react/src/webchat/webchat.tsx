@@ -308,6 +308,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     }
   }
 
+  // TODO: Review why props.persistentMenu is not inside theme before render Webchat component
   const persistentMenuOptions = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.persistentMenu,
     props.persistentMenu
@@ -330,6 +331,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   const checkBlockInput = input => {
     // if is a text we check if it is a serialized RE
+    // TODO: Review why props.blockInputs is not inside theme before render Webchat component
     const blockInputs = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.blockInputs,
       props.blockInputs
@@ -376,6 +378,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }
 
   const getCoverComponent = () => {
+    // TODO: Review why props.coverComponent is not inside theme before render Webchat component
     return getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.coverComponent,
       props.coverComponent &&
@@ -590,6 +593,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }, [webchatState.isWebchatOpen])
 
   const isUserInputEnabled = () => {
+    // TODO: Review why props.enableUserInput is not inside theme before render Webchat component
     const isUserInputEnabled = getThemeProperty(
       WEBCHAT.CUSTOM_PROPERTIES.enableUserInput,
       props.enableUserInput !== undefined ? props.enableUserInput : true

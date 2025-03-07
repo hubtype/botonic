@@ -14,13 +14,11 @@ export const SendButton = ({ onClick }: SendButtonProps) => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const sendButtonEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableSendButton,
-    true
+    WEBCHAT.CUSTOM_PROPERTIES.enableSendButton
   )
 
   const CustomSendButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customSendButton,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customSendButton
   )
 
   return (

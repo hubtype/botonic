@@ -9,9 +9,9 @@ export const ConditionalAnimation = props => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const animationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
-    props.enableAnimations !== undefined ? props.enableAnimations : true
+    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations
   )
+
   return (
     <ConditionalWrapper
       condition={animationsEnabled}

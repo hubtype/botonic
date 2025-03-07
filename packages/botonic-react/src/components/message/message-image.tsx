@@ -23,10 +23,7 @@ export const MessageImage = ({ imagestyle, sentBy }: MessageImageProps) => {
 
   const BotMessageImage = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,
-    getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.brandImage,
-      WEBCHAT.DEFAULTS.LOGO
-    )
+    getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.brandImage)
   )
 
   const AgentMessageImage = getThemeProperty(

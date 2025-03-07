@@ -88,6 +88,7 @@ export class WebchatApp {
     server,
   }: WebchatArgs) {
     this.theme = theme
+    // TODO: Review if is possible store persistentMenu, coverComponent, blockInputs, enableEmojiPicker, enableAttachments, enableUserInput, enableAnimations, etc as part of theme
     this.persistentMenu = persistentMenu
     this.coverComponent = coverComponent
     this.blockInputs = blockInputs

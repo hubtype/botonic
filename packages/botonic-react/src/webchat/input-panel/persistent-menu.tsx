@@ -23,8 +23,7 @@ export const PersistentMenu = ({
   )
 
   const CustomMenuButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customMenuButton,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customMenuButton
   )
 
   return (

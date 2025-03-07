@@ -26,6 +26,7 @@ export const defaultTheme: WebchatTheme = {
   },
   header: {
     title: WEBCHAT.DEFAULTS.TITLE,
+    subtitle: '',
     image: WEBCHAT.DEFAULTS.LOGO,
     style: {
       borderRadius: '10px 10px 0px 0px',
@@ -53,5 +54,22 @@ export const defaultTheme: WebchatTheme = {
     },
   },
   triggerButton: { image: WEBCHAT.DEFAULTS.LOGO },
-  userInput: { box: { placeholder: 'Ask me something...' } },
+  userInput: {
+    box: {
+      placeholder: 'Ask me something...',
+    },
+    sendButton: { enable: true },
+  },
+  carousel: {
+    enableArrows: true,
+  },
+  animations: { enable: true },
+  notifications: {
+    enable: false,
+    banner: {
+      enable: false,
+      text: 'unread messages',
+    },
+    triggerButton: { enable: false },
+  },
 }
