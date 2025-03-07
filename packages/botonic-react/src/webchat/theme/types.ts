@@ -4,7 +4,7 @@ import {
   CustomMessageType,
 } from '../../components/index-types'
 
-interface ImagePreviewerProps {
+export interface ImagePreviewerProps {
   src: string
   isPreviewerOpened: boolean
   closePreviewer: () => void
@@ -38,29 +38,58 @@ export interface BlobProps {
   imageStyle?: any
 }
 
-export interface ThemeProps {
-  style?: any
+export interface WebchatTheme {
+  style: {
+    width?: string
+    height?: string
+    borderRadius?: string
+    fontFamily?: string
+    fontSize?: string
+    position?: 'fixed' | 'absolute'
+    right?: string
+    bottom?: string
+    backgroundColor?: string
+    boxShadow?: string
+  }
+  mobileBreakpoint: number
+  mobileStyle: {
+    width?: string
+    height?: string
+    borderRadius?: string
+    fontSize?: string
+    position?: 'fixed' | 'absolute'
+    right?: string
+    bottom?: string
+  }
+
   coverComponent?: CoverComponentOptions
-  mobileBreakpoint?: number
-  mobileStyle?: any
-  webview?: { style?: any; header?: { style?: any } }
+  webview?: {
+    style?: any
+    header?: {
+      style?: any
+    }
+  }
   animations?: { enable?: boolean }
-  intro?: { style?: any; image?: string; custom?: React.ComponentType }
+  intro?: {
+    style?: any
+    image?: string
+    custom?: React.ComponentType
+  }
   brand?: { color?: string; image?: string }
   header?: {
     title?: string
     subtitle?: string
     image?: string
-    style?: any
+    style?: {
+      borderRadius: string
+    }
     custom?: React.ComponentType
   }
-  // TODO: Review if this is needed hear, or only in message.customTypes? use the same type in both places
-  customMessageTypes?: CustomMessageType[]
   message?: {
     bot?: BlobProps & { image?: string; style?: any }
     agent?: { image?: string }
     user?: BlobProps & { style?: any }
-    // TODO: Review type used in cutomTypes should be a component exported by default with customMessage function
+    // TODO: Review type used in customTypes should be a component exported by default with customMessage function
     customTypes?: CustomMessageType[]
     style?: any
     timestamps?: {
@@ -76,7 +105,10 @@ export interface ThemeProps {
     hoverBackground?: string
     hoverTextColor?: string
     messageType?: 'text' | 'payload'
-    urlIcon?: { image?: string; enable?: boolean }
+    urlIcon?: {
+      image?: string
+      enable?: boolean
+    }
     style?: any
     custom?: React.ComponentType
   }
@@ -91,27 +123,53 @@ export interface ThemeProps {
     }
     enableArrows?: boolean
   }
-  reply?: { style?: any; custom?: React.ComponentType }
-  triggerButton?: { image?: string; style?: any; custom?: React.ComponentType }
+  reply?: {
+    style?: any
+    custom?: React.ComponentType
+  }
+  triggerButton: {
+    image?: string
+    style?: any
+    custom?: React.ComponentType
+  }
   notifications?: {
     enable?: boolean
-    banner?: { custom?: React.ComponentType; enable?: boolean; text?: string }
+    banner?: {
+      custom?: React.ComponentType
+      enable?: boolean
+      text?: string
+    }
     triggerButton?: { enable?: boolean }
   }
-  scrollButton?: { enable?: boolean; custom?: React.ComponentType }
+  scrollButton?: {
+    enable?: boolean
+    custom?: React.ComponentType
+  }
   markdownStyle?: string // string template with css styles
   userInput?: {
-    attachments?: { enable?: boolean; custom?: React.ComponentType }
+    attachments?: {
+      enable?: boolean
+      custom?: React.ComponentType
+    }
     blockInputs?: BlockInputOption[]
-    box?: { placeholder: string; style?: any }
-    emojiPicker?: { enable?: boolean; custom?: React.ComponentType }
+    box?: {
+      placeholder: string
+      style?: any
+    }
+    emojiPicker?: {
+      enable?: boolean
+      custom?: React.ComponentType
+    }
     menu?: {
       darkBackground?: boolean
       custom?: React.ComponentType<PersistentMenuOptionsProps>
     }
     menuButton?: { custom?: React.ComponentType }
     persistentMenu?: PersistentMenuOptionsTheme
-    sendButton?: { enable?: boolean; custom?: React.ComponentType }
+    sendButton?: {
+      enable?: boolean
+      custom?: React.ComponentType
+    }
     enable?: boolean
     style?: any
   }
