@@ -400,12 +400,6 @@ export class WebchatApp {
       theme.userInput = {}
     }
 
-    console.log(
-      'WebchatApp theme.userInput.enable',
-      theme.userInput.enable,
-      optionsAtRuntime.enableUserInput,
-      this.enableUserInput
-    )
     theme.userInput.enable =
       theme.userInput.enable ??
       optionsAtRuntime.enableUserInput ??

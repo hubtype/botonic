@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react'
 
 import AttachmentIcon from '../../assets/attachment-icon.svg'
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
@@ -21,7 +21,7 @@ export const Attachment = ({ accept, onChange }: AttachmentProps) => {
   const isAttachmentsEnabled = () => {
     const hasCustomAttachments = !!CustomAttachments
     return (
-      webchatState.theme.userInput?.attachments?.enable || hasCustomAttachments
+      webchatState.theme.userInput?.attachments?.enable ?? hasCustomAttachments
     )
   }
   const attachmentsEnabled = isAttachmentsEnabled()
