@@ -60,7 +60,7 @@ export const defaultTheme: WebchatTheme = {
       placeholder: 'Ask me something...',
     },
     emojiPicker: { enable: false },
-    sendButton: { enable: false },
+    sendButton: { enable: true },
     enable: true,
   },
   carousel: {

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS, WEBCHAT } from '../constants'
+import { COLORS } from '../constants'
 
 export const StyledWebchat = styled.div`
   position: fixed;
