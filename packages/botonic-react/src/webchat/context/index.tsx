@@ -68,6 +68,9 @@ export const WebchatContext = createContext<WebchatContextProps>({
   updateUser: () => {
     return
   },
+  updateHandoffState: () => {
+    return
+  },
   updateWebchatDevSettings: () => {
     return
   },

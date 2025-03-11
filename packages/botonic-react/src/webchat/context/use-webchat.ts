@@ -30,6 +30,10 @@ export const webchatInitialState: WebchatState = {
     currentQueuePositionNotifiedAt: null,
     agentName: null,
     agentImage: null,
+    caseId: null,
+    totalWaitingCases: null,
+    previousStatus: null,
+    nextStatus: null,
   },
   handoffStateUpdates: {},
   // TODO: type create a defaultTheme using ThemeProps, and put this in initialState

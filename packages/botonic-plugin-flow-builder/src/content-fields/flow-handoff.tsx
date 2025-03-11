@@ -52,6 +52,7 @@ export class FlowHandoff extends ContentFieldsBase {
     if (this.hasQueuePositionChangedNotificationsEnabled) {
       handOffBuilder.withSubscribeHelpdeskEvents([
         HelpdeskEvent.QueuePositionChanged,
+        HelpdeskEvent.StatusChanged,
       ])
     }
 

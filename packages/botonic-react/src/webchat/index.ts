@@ -1,8 +1,8 @@
 // @ts-nocheck
 export { WebchatContext } from './context'
+export * from './handoff'
 export { Webchat } from './webchat'
 export { WebchatDev } from './webchat-dev'
-
 export function getBotonicApp() {
   // Botonic is exported from your bot
   // eslint-disable-next-line no-undef

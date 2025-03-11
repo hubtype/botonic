@@ -71,6 +71,7 @@ import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
 import { WebviewContainer } from './webview/index'
+import { HandoffInformationBanner } from './handoff'
 
 // eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
@@ -712,6 +713,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateWebchatDevSettings: updateWebchatDevSettings,
         trackEvent: props.onTrackEvent,
         webchatState,
+        updateHandoffState,
         // TODO: Review if need theme inside Context, already exist inside webchatState
         theme,
         webchatContainerRef,
@@ -723,7 +725,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       }}
     >
       {!webchatState.isWebchatOpen && <TriggerButton />}
-
       {webchatState.isWebchatOpen && (
         <StyledWebchat
           id={BotonicContainerId.Webchat}
@@ -758,7 +759,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                 <DarkenBackground component={persistentMenu()} />
               )}
               {/* TODO: Review this condition */}
-              {!webchatState.handoffState.isHandoff && userInputEnabled && (
+              {/* {!webchatState.handoffState.isHandoff && userInputEnabled && ( */}
+              {userInputEnabled && (
                 <InputPanel
                   persistentMenu={props.persistentMenu}
                   enableEmojiPicker={props.enableEmojiPicker}

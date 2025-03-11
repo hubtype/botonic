@@ -120,10 +120,14 @@ export interface ThemeProps {
 
 export interface HandoffState {
   isHandoff: boolean
+  caseId: string | null
   previousQueuePosition: number | null
   previousQueuePositionNotifiedAt: string | null
   currentQueuePosition: number | null
   currentQueuePositionNotifiedAt: string | null
+  totalWaitingCases: number | null
   agentName: string | null
   agentImage: string | null
+  previousStatus: string | null
+  nextStatus: string | null
 }

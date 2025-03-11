@@ -74,6 +74,7 @@ export enum INPUT {
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
   EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
   EVENT_QUEUE_POSITION_CHANGED = 'case_event_queue_position_changed',
+  EVENT_STATUS_CHANGED = 'case_event_status_changed',
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
@@ -122,6 +123,7 @@ export type InputType =
   | INPUT.WHATSAPP_CTA_URL_BUTTON
   | INPUT.EVENT_AGENT_MESSAGE_CREATED
   | INPUT.EVENT_QUEUE_POSITION_CHANGED
+  | INPUT.EVENT_STATUS_CHANGED
   | INPUT.WHATSAPP_CATALOG
   | INPUT.WHATSAPP_PRODUCT
   | INPUT.WHATSAPP_PRODUCT_LIST
@@ -374,4 +376,11 @@ export interface CaseEventQueuePositionChangedInput {
   current_queue_position: number
   current_queue_position_notified_at: string
   total_queue_waiting_cases_number: number
+}
+
+export interface CaseEventStatusChangedInput {
+  type: INPUT.EVENT_STATUS_CHANGED
+  case_id: string
+  prev_status: CaseStatusType
+  next_status: CaseStatusType
 }

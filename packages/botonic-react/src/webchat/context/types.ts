@@ -75,6 +75,7 @@ export interface WebchatContextProps {
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void
   updateUser: (user: Partial<CoreSessionUser>) => void
+  updateHandoffState: (handoffState: Partial<HandoffState>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState
