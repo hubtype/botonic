@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { BotonicContainerId } from '../constants'
 import { WebchatContext } from '../context'
-import { HandoffInformationBanner } from '../handoff'
 import { useWebchatDimensions } from '../hooks'
 import { WebchatMessageList } from '../message-list'
 import { WebchatReplies } from '../replies'
@@ -25,9 +24,6 @@ export const ChatArea = () => {
       height={chatAreaHeight}
     >
       <WebchatMessageList />
-      {webchatState.isWebchatOpen && webchatState.handoffState.isHandoff && (
-        <HandoffInformationBanner />
-      )}
       {webchatState.replies && webchatState.replies.length > 0 && (
         <WebchatReplies />
       )}

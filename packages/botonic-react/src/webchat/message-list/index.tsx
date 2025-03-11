@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ROLES } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
 import { BotonicContainerId } from '../constants'
+import { HandoffInformationBanner } from '../handoff'
 import TypingIndicator from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
@@ -149,11 +150,14 @@ export const WebchatMessageList = () => {
                   style={{
                     content: '',
                   }}
-                ></div>
+                />
               )}
             </React.Fragment>
           )
         })}
+        {webchatState.isWebchatOpen && webchatState.handoffState.isHandoff && (
+          <HandoffInformationBanner />
+        )}
         {webchatState.typing && <TypingIndicator ref={typingRef} />}
       </ScrollableMessageList>
       {showScrollButton && <ScrollButton handleClick={handleScrollToBottom} />}

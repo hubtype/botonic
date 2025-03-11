@@ -71,7 +71,6 @@ import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
 import { WebviewContainer } from './webview/index'
-import { HandoffInformationBanner } from './handoff'
 
 // eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
