@@ -13,31 +13,34 @@ export function HandoffInformationBanner({}: HandoffInformationBannerProps) {
 
   console.log('handoffState', handoffState)
 
-  if (
-    handoffState.previousStatus === CASE_STATUS.WAITING &&
-    handoffState.nextStatus === CASE_STATUS.ATTENDING
-  ) {
-    return (
-      <BannerContainer>
-        <BannerText>An agent has joined the conversation</BannerText>
-      </BannerContainer>
-    )
-  }
+  const showPositionInQueueText = () => {
+    if (handoffState.currentQueuePosition === null || 0) {
+      return null
+    }
 
-  if (handoffState.previousStatus === CASE_STATUS.ATTENDING) {
     return (
-      <BannerContainer>
-        <BannerText>Chat with agent has ended</BannerText>
-      </BannerContainer>
-    )
-  }
-
-  return (
-    <BannerContainer>
       <BannerText>
         Position in queue{' '}
         <BannerTextStrong>{handoffState.currentQueuePosition}</BannerTextStrong>
       </BannerText>
+    )
+  }
+
+  const showAgentStatusText = () => {
+    if (handoffState.nextStatus === CASE_STATUS.ATTENDING) {
+      return <BannerText>An agent has joined the conversation</BannerText>
+    }
+
+    if (handoffState.previousStatus === CASE_STATUS.ATTENDING) {
+      return <BannerText>Chat with agent has ended</BannerText>
+    }
+    return null
+  }
+
+  return (
+    <BannerContainer>
+      {showPositionInQueueText()}
+      {showAgentStatusText()}
     </BannerContainer>
   )
 }

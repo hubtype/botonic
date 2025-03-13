@@ -11,13 +11,4 @@ export const plugins: PluginConfig<any>[] = [
     resolve: require('@botonic/plugin-flow-builder'),
     options: config.flowBuilder,
   },
-  {
-    id: 'hubtypeAnalytics',
-    resolve: require('@botonic/plugin-hubtype-analytics'),
-  },
-  {
-    id: 'knowledgeBases',
-    resolve: require('@botonic/plugin-knowledge-bases'),
-    options: config.knowledgeBases,
-  },
 ]

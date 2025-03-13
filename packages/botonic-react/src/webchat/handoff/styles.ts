@@ -11,10 +11,12 @@ export const BannerContainer = styled.div`
 `
 
 export const BannerText = styled.p`
-  margin: 0;
+  margin: 12px;
+  font-size: 12px;
 `
 
 export const BannerTextStrong = styled.strong`
   color: ${COLORS.GRAY};
   font-weight: 600;
+  font-size: 12px;
 `
