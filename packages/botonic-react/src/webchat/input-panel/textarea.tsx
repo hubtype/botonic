@@ -31,6 +31,8 @@ export const Textarea = ({
 
   const placeholder = webchatState.theme.userInput?.box?.placeholder
 
+  const userInputBoxStyle = webchatState.theme.userInput?.box?.style
+
   const onKeyDown = event => {
     if (event.keyCode === 13 && event.shiftKey === false) {
       event.preventDefault()
@@ -103,7 +105,7 @@ export const Textarea = ({
           padding: 10,
           paddingLeft: persistentMenuOptions ? 0 : 10,
           fontFamily: 'inherit',
-          ...webchatState.theme.userInput?.box?.style,
+          ...userInputBoxStyle,
         }}
       />
     </TextAreaContainer>

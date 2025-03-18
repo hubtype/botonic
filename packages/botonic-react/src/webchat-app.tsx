@@ -387,56 +387,51 @@ export class WebchatApp {
       optionsAtRuntime.coverComponent ??
       this.coverComponent
 
-    theme.userInput = this.createInitialThemUserInput(theme, optionsAtRuntime)
+    theme.userInput = this.createInitialThemeUserInput(theme, optionsAtRuntime)
 
     return theme
   }
 
-  createInitialThemUserInput(
+  createInitialThemeUserInput(
     theme: WebchatTheme,
     optionsAtRuntime: WebchatArgs = {}
   ) {
-    if (theme.userInput === undefined) {
-      theme.userInput = {}
+    if (!theme.userInput) theme.userInput = {}
+
+    // Set main userInput properties
+    theme.userInput = {
+      ...theme.userInput,
+      enable:
+        theme.userInput.enable ??
+        optionsAtRuntime.enableUserInput ??
+        this.enableUserInput,
+      persistentMenu:
+        theme.userInput.persistentMenu ??
+        optionsAtRuntime.persistentMenu ??
+        this.persistentMenu,
+      blockInputs:
+        theme.userInput.blockInputs ??
+        optionsAtRuntime.blockInputs ??
+        this.blockInputs,
     }
 
-    theme.userInput.enable =
-      theme.userInput.enable ??
-      optionsAtRuntime.enableUserInput ??
-      this.enableUserInput
-
-    theme.userInput.persistentMenu =
-      theme.userInput.persistentMenu ??
-      optionsAtRuntime.persistentMenu ??
-      this.persistentMenu
-
-    theme.userInput.blockInputs =
-      theme.userInput.blockInputs ??
-      optionsAtRuntime.blockInputs ??
-      this.blockInputs
-
-    if (theme.userInput.emojiPicker === undefined) {
-      theme.userInput.emojiPicker = {}
+    // Set emoji picker properties
+    theme.userInput.emojiPicker = {
+      ...(theme.userInput.emojiPicker || {}),
+      enable:
+        theme.userInput.emojiPicker?.enable ??
+        optionsAtRuntime.enableEmojiPicker ??
+        this.enableEmojiPicker,
     }
 
-    theme.userInput.emojiPicker.enable =
-      theme.userInput.emojiPicker.enable ??
-      optionsAtRuntime.enableEmojiPicker ??
-      this.enableEmojiPicker
-
-    if (theme.userInput.attachments === undefined) {
-      theme.userInput.attachments = {}
+    // Set attachments properties
+    theme.userInput.attachments = {
+      ...(theme.userInput.attachments || {}),
+      enable:
+        theme.userInput.attachments?.enable ??
+        optionsAtRuntime.enableAttachments ??
+        this.enableAttachments,
     }
-
-    theme.userInput.attachments.enable =
-      theme.userInput.attachments.enable ??
-      optionsAtRuntime.enableAttachments ??
-      this.enableAttachments
-
-    theme.userInput.blockInputs =
-      theme.userInput.blockInputs ??
-      optionsAtRuntime.blockInputs ??
-      this.blockInputs
 
     return theme.userInput
   }
