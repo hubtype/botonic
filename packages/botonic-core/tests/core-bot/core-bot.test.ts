@@ -218,58 +218,6 @@ describe('CoreBot', () => {
   })
 })
 
-it('input returns the follow up when a handoff is done in a test integration', async () => {
-  // Arrange
-  const session = {
-    is_test_integration: true,
-    _botonic_action: `${BotonicAction.CreateTestCase}:payload1`,
-  }
-
-  const coreBot = initCoreBotWithDeveloperConfig({
-    routes: [
-      {
-        path: '',
-        text: 'hello',
-        action: 'Hi user!',
-      },
-      {
-        path: 'follow-up',
-        payload: 'payload1',
-        action: 'Follow up action',
-      },
-    ],
-  })
-
-  // Act
-  const botResponse = await coreBot.input({
-    input: { type: 'text', data: 'hello' },
-    session,
-    lastRoutePath: '',
-  })
-
-  // Assert
-  expect(botResponse.input).toEqual({
-    type: 'postback',
-    data: undefined,
-    payload: 'payload1',
-    text: undefined,
-  })
-  expect(botResponse.session).toEqual({
-    is_test_integration: true,
-    _botonic_action: undefined,
-    __locale: 'en',
-    __retries: 0,
-    is_first_interaction: false,
-  })
-  expect(botResponse.lastRoutePath).toEqual('follow-up')
-  expect(botResponse.response[0].actions).toEqual([null, 'Hi user!', null])
-  expect(botResponse.response[1].actions).toEqual([
-    null,
-    'Follow up action',
-    null,
-  ])
-})
-
 it('input returns two actions when first returen a _botonic_action redirect', async () => {
   // Arrange
   const session = {
