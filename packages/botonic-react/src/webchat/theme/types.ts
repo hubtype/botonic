@@ -38,6 +38,32 @@ export interface BlobProps {
   imageStyle?: any
 }
 
+export interface CustomButtonProps {
+  children: React.ReactNode
+  onClick?: () => void
+}
+
+interface ButtonStyle {
+  width?: string
+  maxHeight?: string
+  height?: string
+  fontFamily?: string
+  fontSize?: string
+  fontWeight?: string
+  background?: string
+  color?: string
+  outline?: string
+  border?: string
+  borderRadius?: string
+  borderTopLeftRadius?: string
+  borderTopRightRadius?: string
+  borderBottomLeftRadius?: string
+  borderBottomRightRadius?: string
+  padding?: string
+  whiteSpace?: string
+  overflow?: string
+}
+
 export interface WebchatTheme {
   style: {
     width?: string
@@ -104,13 +130,13 @@ export interface WebchatTheme {
     disabledstyle?: any
     hoverBackground?: string
     hoverTextColor?: string
-    messageType?: 'text' | 'payload'
+    messageType?: 'text' | 'postback'
     urlIcon?: {
       image?: string
       enable?: boolean
     }
-    style?: any
-    custom?: React.ComponentType
+    style?: ButtonStyle
+    custom?: React.ComponentType<CustomButtonProps>
   }
   replies?: {
     align?: 'left' | 'center' | 'right'

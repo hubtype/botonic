@@ -1,51 +1,17 @@
 import { INPUT } from '@botonic/core'
-import React, { useContext, useState } from 'react'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
 
-import { COLORS, WEBCHAT } from '../constants'
-import { resolveImage } from '../util/environment'
-import { renderComponent } from '../util/react'
-import { generateWebviewUrlWithParams } from '../util/webviews'
-import { WebchatContext } from '../webchat/context'
-import { ButtonsDisabler } from './buttons-disabler'
-import { ButtonProps } from './index-types'
-
-const StyledButton = styled.button`
-  display: flex;
-  width: 100%;
-  max-height: 80px;
-  font-size: 14px;
-  text-align: center;
-  align-content: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 32px;
-  font-family: inherit;
-  border: none;
-  border: 1px solid ${COLORS.SEASHELL_WHITE};
-  cursor: pointer;
-  outline: 0;
-  border-top-right-radius: 0px;
-  border-top-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  overflow: hidden;
-`
-
-export const StyledUrlImage = styled.img`
-  width: 20px;
-`
+import { resolveImage } from '../../util/environment'
+import { renderComponent } from '../../util/react'
+import { generateWebviewUrlWithParams } from '../../util/webviews'
+import { WebchatContext } from '../../webchat/context'
+import { ButtonsDisabler } from '../buttons-disabler'
+import { ButtonProps } from '../index-types'
+import { StyledButton, StyledUrlImage } from './styles'
 
 export const Button = (props: ButtonProps) => {
-  const {
-    webchatState,
-    openWebview,
-    sendPayload,
-    sendInput,
-    getThemeProperty,
-    updateMessage,
-  } = useContext(WebchatContext)
-  const [hover, setHover] = useState(false)
+  const { webchatState, openWebview, sendPayload, sendInput, updateMessage } =
+    useContext(WebchatContext)
   const { autoDisable, disabledStyle } = ButtonsDisabler.resolveDisabling(
     webchatState.theme,
     props
@@ -54,10 +20,7 @@ export const Button = (props: ButtonProps) => {
   const handleClick = event => {
     event.preventDefault()
 
-    const type = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.buttonMessageType,
-      INPUT.TEXT
-    )
+    const type = webchatState.theme.button?.messageType
 
     if (props.webview) {
       openWebview(props.webview, props.params)
@@ -120,10 +83,12 @@ export const Button = (props: ButtonProps) => {
   }
 
   const renderBrowser = () => {
-    const buttonStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonStyle)
-    const CustomButton = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.customButton
-    )
+    const themeButton = webchatState.theme.button
+    const urlIconEnabledProp = themeButton?.urlIcon?.enable
+    const urlIconImage = themeButton?.urlIcon?.image
+    const urlIcon = urlIconEnabledProp ? urlIconImage : undefined
+
+    const CustomButton = themeButton?.custom
 
     if (CustomButton) {
       return (
@@ -133,51 +98,11 @@ export const Button = (props: ButtonProps) => {
       )
     }
 
-    const buttonBgColor = hover
-      ? getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.buttonHoverBackground,
-          COLORS.CONCRETE_WHITE
-        )
-      : getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.buttonStyleBackground,
-          COLORS.SOLID_WHITE
-        )
-
-    const buttonTextColor = hover
-      ? getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.buttonHoverTextColor,
-          COLORS.SOLID_BLACK
-        )
-      : getThemeProperty(
-          WEBCHAT.CUSTOM_PROPERTIES.buttonStyleColor,
-          COLORS.SOLID_BLACK
-        )
-
-    const urlIconEnabledProp = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.urlIconEnabled
-    )
-
-    const urlIconImageProp = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.urlIconImage
-    )
-
-    const urlIconImage = urlIconImageProp ?? WEBCHAT.DEFAULTS.URL_ICON
-
-    const urlIcon =
-      urlIconEnabledProp || urlIconImageProp ? urlIconImage : undefined
-
     return (
       <StyledButton
         className={getClassName()}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
         onClick={e => handleClick(e)}
-        style={{
-          ...buttonStyle,
-          color: buttonTextColor,
-          backgroundColor: buttonBgColor,
-          ...(props.disabled && autoDisable && disabledStyle),
-        }}
+        disabled={props.disabled && autoDisable}
       >
         {props.children}
         {props.url && urlIcon && (
