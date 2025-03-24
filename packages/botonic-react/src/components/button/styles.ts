@@ -20,8 +20,8 @@ export const StyledButton = styled.button`
     props.theme.button?.style?.borderTopRightRadius};
   border-top-left-radius: ${props =>
     props.theme.button?.style?.borderTopLeftRadius};
-  border-bottom-right-radius: ${porps =>
-    porps.theme.button?.style?.borderBottomRightRadius};
+  border-bottom-right-radius: ${props =>
+    props.theme.button?.style?.borderBottomRightRadius};
   border-bottom-left-radius: ${props =>
     props.theme.button?.style?.borderBottomLeftRadius};
   padding: ${props => props.theme.button?.style?.padding};
