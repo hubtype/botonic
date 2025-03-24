@@ -164,7 +164,7 @@ export const MultichannelText = props => {
             }
             return row
           })
-          const whatsbuttonlistProps = {
+          const whatsAppButtonListProps = {
             body: index === 0 ? texts.join('') : buttonsTextSeparator,
             button: menuButtonTextWhatsappList,
             sections: [{ rows }],
@@ -172,7 +172,7 @@ export const MultichannelText = props => {
 
           return {
             type: INPUT.WHATSAPP_BUTTON_LIST,
-            props: whatsbuttonlistProps,
+            props: whatsAppButtonListProps,
           }
         }
       )
@@ -239,10 +239,14 @@ export const MultichannelText = props => {
     )
 
     if (postbackButtonElements.length === 0) {
+      // Use texts[0] instead of textElements[0] as a body to avoid apply the markdownMeta function twice.
+      // If the markdownMeta function is applied twice, bold is replaced by italics.
+      const body = texts[0] || ''
+
       if (urlButtonElements.length === 1) {
         return (
           <WhatsappCTAUrlButton
-            body={textElements[0]}
+            body={body}
             displayText={urlButtonElements[0].props.children}
             url={urlButtonElements[0].props.url}
           />
@@ -252,7 +256,7 @@ export const MultichannelText = props => {
       if (webviewButtonElements.length === 1) {
         return (
           <WhatsappCTAUrlButton
-            body={textElements[0]}
+            body={body}
             displayText={webviewButtonElements[0].props.children}
             webview={webviewButtonElements[0].props.webview}
             params={webviewButtonElements[0].props.params}
