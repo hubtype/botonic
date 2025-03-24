@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
-import { Button } from './button'
+import { Button } from './button/index'
 
 const ElementContainer = styled.div`
   display: flex;
