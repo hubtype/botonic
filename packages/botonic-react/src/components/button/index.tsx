@@ -12,10 +12,8 @@ import { StyledButton, StyledUrlImage } from './styles'
 export const Button = (props: ButtonProps) => {
   const { webchatState, openWebview, sendPayload, sendInput, updateMessage } =
     useContext(WebchatContext)
-  const { autoDisable, disabledStyle } = ButtonsDisabler.resolveDisabling(
-    webchatState.theme,
-    props
-  )
+
+  const autoDisable = webchatState.theme.button?.autodisable
 
   const handleClick = event => {
     event.preventDefault()
@@ -55,10 +53,7 @@ export const Button = (props: ButtonProps) => {
       const messageToUpdate = webchatState.messagesJSON.filter(
         m => m.id === props.parentId
       )[0]
-      const updatedMsg = ButtonsDisabler.getUpdatedMessage(messageToUpdate, {
-        autoDisable,
-        disabledStyle,
-      })
+      const updatedMsg = ButtonsDisabler.getUpdatedMessage(messageToUpdate)
       updateMessage(updatedMsg)
     }
   }
@@ -116,7 +111,11 @@ export const Button = (props: ButtonProps) => {
   }
 
   const renderNode = () => {
-    const disabledProps = ButtonsDisabler.constructNodeProps(props)
+    const disabledProps = ButtonsDisabler.constructNodeProps({
+      disabled: props.disabled,
+      disabledstyle: props.disabledstyle,
+      autodisable: props.autodisable,
+    })
     if (props.webview) {
       return (
         <button
