@@ -1,4 +1,4 @@
-import { Button } from '../button'
+import { Button } from '../button/index'
 import { Carousel } from '../carousel'
 import { Pic } from '../pic'
 import { Reply } from '../reply'
