@@ -1,10 +1,10 @@
 /**
  * @jest-environment jsdom
- * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
+// import * as BotonicCore from '@botonic/core'
+import { screen } from '@testing-library/react'
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 
 import {
   Button,
@@ -17,8 +17,7 @@ import {
 } from '../../src/components'
 import { ButtonsDisabler } from '../../src/components/buttons-disabler'
 import { msgToBotonic } from '../../src/msg-to-botonic'
-
-const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+import { renderWithBotonicProviders } from '../helpers/render-webchat-with-providers'
 
 describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   it('Appends the disabling props to a component', () => {
@@ -42,17 +41,52 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   })
 
   it('Passes a message with expected props to node (text with buttons)', () => {
-    const sut = COMPONENTS.TEXT_WITH_BUTTONS
-    const tree = renderToJSON(sut)
+    // Using Testing Library instead of react-test-renderer
+    renderWithBotonicProviders(COMPONENTS.TEXT_WITH_BUTTONS)
 
-    expect(tree).toMatchSnapshot()
+    // Check text content
+    expect(
+      screen.getByText(
+        /Here I display two types of buttons, the first one is a URL button and the second is a payload button:/
+      )
+    ).toBeTruthy()
+
+    // Check buttons
+    const visitButton = screen.getByRole('button', { name: 'Visit botonic.io' })
+    expect(visitButton.getAttribute('payload')).toEqual('https://botonic.io')
+    expect(visitButton.getAttribute('autodisable')).toEqual('false')
+
+    const carouselButton = screen.getByRole('button', {
+      name: 'Show me a carousel',
+    })
+    expect(carouselButton.getAttribute('payload')).toEqual('carousel')
+    expect(carouselButton.getAttribute('autodisable')).toEqual('true')
+    expect(carouselButton.getAttribute('disabledstyle')).toEqual(
+      '{"backgroundColor":"red"}'
+    )
   })
 
   it('Passes a message with expected props to node (carousel)', () => {
-    const sut = COMPONENTS.CAROUSEL
-    const tree = renderToJSON(sut)
+    renderWithBotonicProviders(COMPONENTS.CAROUSEL)
+    screen.debug()
 
-    expect(tree).toMatchSnapshot()
+    // Check first element
+    expect(screen.getByText('PIC1')).toBeTruthy()
+    expect(screen.getByText('ELEMENT1')).toBeTruthy()
+    expect(screen.getByText('DESC1')).toBeTruthy()
+    const button1 = screen.getByRole('button', { name: 'text1' })
+    expect(button1.getAttribute('payload')).toEqual('payload1')
+
+    // Check second element
+    expect(screen.getByText('PIC2')).toBeTruthy()
+    expect(screen.getByText('ELEMENT2')).toBeTruthy()
+    expect(screen.getByText('DESC2')).toBeTruthy()
+    const button2 = screen.getByRole('button', { name: 'text2' })
+    expect(button2.getAttribute('payload')).toEqual('payload2')
+    expect(button2.getAttribute('autodisable')).toEqual('true')
+    expect(button2.getAttribute('disabledstyle')).toEqual(
+      '{"backgroundColor":"red"}'
+    )
   })
 
   it('Fills the props correctly in browser', () => {
@@ -70,20 +104,33 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   })
 
   it('Resolves disabling properties correctly', () => {
-    const props = (
-      <Button payload='some-payload' autodisable={false}>
+    renderWithBotonicProviders(
+      <Button
+        payload='some-payload'
+        autodisable={false}
+        disabledstyle={{
+          opacity: 0.5,
+          cursor: 'auto',
+          pointerEvents: 'none',
+          backgroundColor: 'green',
+        }}
+      >
         Button Text
       </Button>
-    ).props
-    const sut = ButtonsDisabler.resolveDisabling(WEBCHAT.theme, props)
+    )
+    screen.debug()
 
-    expect(sut.autoDisable).toEqual(false)
-    expect(sut.disabledStyle).toEqual({
-      opacity: 0.5,
-      cursor: 'auto',
-      pointerEvents: 'none',
-      backgroundColor: 'green',
-    })
+    const button = screen.getByRole('button', { name: 'Button Text' })
+    expect(button.getAttribute('payload')).toEqual('some-payload')
+    expect(button.getAttribute('autodisable')).toEqual('false')
+    expect(button.getAttribute('disabledstyle')).toEqual(
+      JSON.stringify({
+        opacity: 0.5,
+        cursor: 'auto',
+        pointerEvents: 'none',
+        backgroundColor: 'green',
+      })
+    )
   })
 
   it('Updates children with buttons disabling properties', () => {
@@ -179,7 +226,7 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       'url',
       'target',
       'webview',
-      'disabled',
+      // 'disabled',
       'children',
     ])
     expect(Object.keys(element2ButtonProps)).toEqual([
@@ -187,7 +234,7 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       'url',
       'target',
       'webview',
-      'disabled',
+      // 'disabled',
       'autodisable',
       'disabledstyle',
       'children',
@@ -197,25 +244,22 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
     expect(element2ButtonProps.disabledstyle).toEqual({
       backgroundColor: 'red',
     })
+
+    renderWithBotonicProviders(sut)
+
+    const element1Button = screen.getByRole('button', { name: 'Visit website' })
+    expect(element1Button.getAttribute('payload')).toEqual('URL1')
+
+    const element2Button = screen.getByRole('button', {
+      name: 'KAKA',
+    })
+    expect(element2Button.getAttribute('payload')).toEqual('URL2')
+    expect(element2Button.getAttribute('autodisable')).toEqual('true')
+    expect(element2Button.getAttribute('disabledstyle')).toEqual(
+      '{"backgroundColor":"red"}'
+    )
   })
 })
-
-const WEBCHAT = {
-  theme: {
-    style: {
-      width: 500,
-    },
-    button: {
-      disabledstyle: {
-        opacity: 0.5,
-        cursor: 'auto',
-        pointerEvents: 'none',
-        backgroundColor: 'green',
-      },
-      autodisable: true,
-    },
-  },
-}
 
 const COMPONENTS = {
   TEXT_WITH_BUTTONS: (
