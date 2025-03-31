@@ -131,6 +131,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
+  post(request: PluginPreRequest): void {
+    request.input.nluResult = undefined
+  }
+
   async getContentsByContentID(
     contentID: string,
     locale: string,
