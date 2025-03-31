@@ -13,8 +13,8 @@ describe('Check the contents returned by the plugin when match a smart intent', 
 
   beforeEach(() => mockSmartIntent('Add a bag'))
 
-  test('When the smart intent inference returns the intent_name Add a Bag, the contents of the add a bag use case are displayed', async () => {
-    const { contents } = await createFlowBuilderPluginAndGetContents({
+  test('When the smart intent inference returns the intent_name Add a bag, the contents of the add a bag use case are displayed', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: smartIntentsFlow },
       requestArgs: {
         input: {
@@ -27,6 +27,10 @@ describe('Check the contents returned by the plugin when match a smart intent', 
     expect((contents[0] as FlowText).text).toBe(
       'Message explaining how to add a bag'
     )
+    expect(request.input.nluResult).toEqual({
+      type: 'smart-intent',
+      match: 'Add a bag',
+    })
   })
 })
 
@@ -36,7 +40,7 @@ describe('Check the contents returned by the plugin when no match a smart intent
   beforeEach(() => mockSmartIntent('Other'))
 
   test('When the smart intent inference returns the intent_name Other, fallback content are displayed', async () => {
-    const { contents } = await createFlowBuilderPluginAndGetContents({
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: smartIntentsFlow },
       requestArgs: {
         input: {
@@ -47,5 +51,6 @@ describe('Check the contents returned by the plugin when no match a smart intent
     })
 
     expect((contents[0] as FlowText).text).toBe('fallback 1st message')
+    expect(request.input.nluResult).toEqual(undefined)
   })
 })
