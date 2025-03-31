@@ -12,20 +12,25 @@ describe('Check the contents returned by the plugin using keywords', () => {
   test.each(['reset', 'hola', 'HOLA'])(
     'The initial content is displayed when the user sends the %s text',
     async (inputData: string) => {
-      const { contents, request } = await createFlowBuilderPluginAndGetContents(
-        {
+      const { contents, request, flowBuilderPluginPost } =
+        await createFlowBuilderPluginAndGetContents({
           flowBuilderOptions: { flow: basicFlow },
           requestArgs: {
             input: { data: inputData, type: INPUT.TEXT },
           },
-        }
-      )
+        })
 
       expect((contents[0] as FlowText).text).toBe('Welcome message')
       expect(request.input.nluResult).toEqual({
         type: 'keyword',
         match: inputData,
       })
+
+      flowBuilderPluginPost({
+        ...request,
+        response: (contents[0] as FlowText).text,
+      })
+      expect(request.input.nluResult).toEqual(undefined)
     }
   )
 })
