@@ -36,9 +36,9 @@ export class KeywordMatcher {
     if (!keywordNode || !this.matchedKeyword) {
       return undefined
     }
-    this.request.input.nluResult = {
+    this.request.input.nluResolution = {
       type: NluType.Keyword,
-      match: this.matchedKeyword,
+      matchedValue: this.matchedKeyword,
     }
     await this.trackKeywordEvent()
     return keywordNode

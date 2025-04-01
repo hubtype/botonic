@@ -47,9 +47,9 @@ export class SmartIntentsApi {
           smartIntentNode.content.title === response.data.smart_intent_title
       )
       if (smartIntentNode) {
-        this.currentRequest.input.nluResult = {
+        this.currentRequest.input.nluResolution = {
           type: NluType.SmartIntent,
-          match: smartIntentNode.content.title,
+          matchedValue: smartIntentNode.content.title,
         }
         await trackEvent(this.currentRequest, EventAction.IntentSmart, {
           nluIntentSmartTitle: response.data.smart_intent_title,

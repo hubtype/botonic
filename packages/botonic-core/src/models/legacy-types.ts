@@ -174,9 +174,9 @@ export interface Input extends Partial<NluResult> {
   bot_interaction_id: string
   catalog_id?: string
   product_items?: ProductItem[]
-  nluResult?: {
+  nluResolution?: {
     type: NluType
-    match: string
+    matchedValue: string
   }
 }
 

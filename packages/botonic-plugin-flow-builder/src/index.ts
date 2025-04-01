@@ -132,7 +132,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   post(request: PluginPreRequest): void {
-    request.input.nluResult = undefined
+    request.input.nluResolution = undefined
   }
 
   async getContentsByContentID(
