@@ -28,16 +28,16 @@ describe('Check the contents returned by the plugin when match a smart intent', 
     expect((contents[0] as FlowText).text).toBe(
       'Message explaining how to add a bag'
     )
-    expect(request.input.nluResult).toEqual({
+    expect(request.input.nluResolution).toEqual({
       type: 'smart-intent',
-      match: 'Add a bag',
+      matchedValue: 'Add a bag',
     })
 
     flowBuilderPluginPost({
       ...request,
       response: (contents[0] as FlowText).text,
     })
-    expect(request.input.nluResult).toEqual(undefined)
+    expect(request.input.nluResolution).toEqual(undefined)
   })
 })
 
@@ -58,6 +58,6 @@ describe('Check the contents returned by the plugin when no match a smart intent
     })
 
     expect((contents[0] as FlowText).text).toBe('fallback 1st message')
-    expect(request.input.nluResult).toEqual(undefined)
+    expect(request.input.nluResolution).toEqual(undefined)
   })
 })

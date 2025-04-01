@@ -21,16 +21,16 @@ describe('Check the contents returned by the plugin using keywords', () => {
         })
 
       expect((contents[0] as FlowText).text).toBe('Welcome message')
-      expect(request.input.nluResult).toEqual({
+      expect(request.input.nluResolution).toEqual({
         type: 'keyword',
-        match: inputData,
+        matchedValue: inputData,
       })
 
       flowBuilderPluginPost({
         ...request,
         response: (contents[0] as FlowText).text,
       })
-      expect(request.input.nluResult).toEqual(undefined)
+      expect(request.input.nluResolution).toEqual(undefined)
     }
   )
 })
