@@ -104,7 +104,7 @@ export interface ResolvedPlugin extends Plugin {
 }
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
-type InputType =
+export type InputType =
   | INPUT.AUDIO
   | INPUT.BUTTON_MESSAGE
   | INPUT.CAROUSEL
@@ -154,6 +154,11 @@ export interface NluResult {
   translations: Translations
 }
 
+export enum NluType {
+  Keyword = 'keyword',
+  SmartIntent = 'smart-intent',
+}
+
 export interface Input extends Partial<NluResult> {
   text?: string
   src?: string
@@ -169,6 +174,10 @@ export interface Input extends Partial<NluResult> {
   bot_interaction_id: string
   catalog_id?: string
   product_items?: ProductItem[]
+  nluResolution?: {
+    type: NluType
+    matchedValue: string
+  }
 }
 
 export interface CaseEventQueuePositionChangedInput {

@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.33.1] - 2025-04-01
+
+### Added
+
+- [PR-2298](https://github.com/hubtype/botonic/pull/2998): set and unset `request.input.nluResult in Input`
+
 ## [0.33.0] - 2025-03-04
 
 ### Added

@@ -1,3 +1,4 @@
+import { NluType } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
@@ -46,6 +47,10 @@ export class SmartIntentsApi {
           smartIntentNode.content.title === response.data.smart_intent_title
       )
       if (smartIntentNode) {
+        this.currentRequest.input.nluResolution = {
+          type: NluType.SmartIntent,
+          matchedValue: smartIntentNode.content.title,
+        }
         await trackEvent(this.currentRequest, EventAction.IntentSmart, {
           nluIntentSmartTitle: response.data.smart_intent_title,
           nluIntentSmartNumUsed: response.data.smart_intents_used.length,

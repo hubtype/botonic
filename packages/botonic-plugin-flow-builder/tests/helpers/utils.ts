@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   Input,
+  PluginPostRequest,
   PluginPreRequest,
   PROVIDER,
   ProviderType,
@@ -113,6 +114,7 @@ export async function createFlowBuilderPluginAndGetContents({
 }: FlowBuilderPluginAndGetContentsArgs): Promise<{
   contents: FlowContent[]
   request: PluginPreRequest
+  flowBuilderPluginPost: (request: PluginPostRequest) => void
 }> {
   const flowBuilderPlugin = createFlowBuilderPlugin(flowBuilderOptions)
 
@@ -129,5 +131,9 @@ export async function createFlowBuilderPluginAndGetContents({
     flowBuilderPlugin
   )
 
-  return { contents, request }
+  const flowBuilderPluginPost = (request: PluginPostRequest) => {
+    flowBuilderPlugin.post(request)
+  }
+
+  return { contents, request, flowBuilderPluginPost }
 }
