@@ -1,3 +1,4 @@
+import { NluType } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -32,8 +33,12 @@ export class KeywordMatcher {
   async getNodeByInput(userInput: string): Promise<HtKeywordNode | undefined> {
     const keywordNodes = this.cmsApi.getKeywordNodes()
     const keywordNode = this.getNodeByKeyword(userInput, keywordNodes)
-    if (!keywordNode) {
+    if (!keywordNode || !this.matchedKeyword) {
       return undefined
+    }
+    this.request.input.nluResolution = {
+      type: NluType.Keyword,
+      matchedValue: this.matchedKeyword,
     }
     await this.trackKeywordEvent()
     return keywordNode
