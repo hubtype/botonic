@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.34.0] - 2025-04-01
+
+### Added
+
+- [PR-2292](https://github.com/hubtype/botonic/pull/2992): Allow create handoff test cases
+
 ## [0.33.1] - 2025-04-01
 
 ### Added

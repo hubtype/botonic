@@ -129,15 +129,6 @@ describe('Handoff', () => {
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 
-  test('defines create_test_integration_case_with_payload for test integrations', () => {
-    const builder = new HandOffBuilder({
-      is_test_integration: true,
-    }).withOnFinishPayload('payload1')
-    builder.handOff()
-    const expectedBotonicAction = `${BotonicAction.CreateTestCase}:payload1`
-    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
-  })
-
   test('Create a handoff and subscribe to agent_messsage_created', () => {
     const builder = new HandOffBuilder({})
       .withSubscribeHelpdeskEvents([HelpdeskEvent.AgentMessageCreated])

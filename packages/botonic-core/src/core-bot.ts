@@ -101,14 +101,6 @@ export class CoreBot {
       })
     }
 
-    if (session._botonic_action?.startsWith(BotonicAction.CreateTestCase)) {
-      return await this.runFollowUpTestIntegrationInput(output, {
-        input,
-        session,
-        lastRoutePath,
-      })
-    }
-
     return output
   }
 
@@ -242,37 +234,6 @@ export class CoreBot {
     }
   }
 
-  private async runFollowUpTestIntegrationInput(
-    previousResponse: BotResponse,
-    { input, session, lastRoutePath }: BotRequest
-  ) {
-    const [_, onFinishPayloadId] = session._botonic_action!.split(
-      'create_test_integration_case:'
-    )
-    const inputWithOnFinishPayload: Input = {
-      ...input,
-      payload: onFinishPayloadId,
-      type: INPUT.POSTBACK,
-      data: undefined,
-      text: undefined,
-    }
-
-    session._botonic_action = undefined
-
-    const followUp = await this.runInput({
-      input: inputWithOnFinishPayload,
-      session,
-      lastRoutePath,
-    })
-
-    return {
-      input: followUp.input,
-      response: previousResponse.response.concat(followUp.response),
-      session,
-      lastRoutePath: followUp.lastRoutePath,
-    }
-  }
-
   private async runRedirectAction(
     previousResponse: BotResponse,
     { input, session, lastRoutePath }: BotRequest,
@@ -320,16 +281,6 @@ export class CoreBot {
         },
         numOfRedirects + 1
       )
-    }
-
-    if (
-      response.session._botonic_action?.startsWith(BotonicAction.CreateTestCase)
-    ) {
-      return await this.runFollowUpTestIntegrationInput(response, {
-        input,
-        session,
-        lastRoutePath,
-      })
     }
 
     return response
