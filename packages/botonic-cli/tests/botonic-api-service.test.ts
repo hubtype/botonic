@@ -15,8 +15,6 @@ describe('TEST: BotonicApiService', () => {
 
   it('Builds correctly a project', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    console.log(BLANK_EXAMPLE)
-    // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     copy(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
