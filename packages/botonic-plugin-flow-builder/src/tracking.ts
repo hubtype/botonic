@@ -5,7 +5,6 @@ import { FlowContent } from './content-fields'
 import {
   HtNodeWithContent,
   HtNodeWithContentType,
-  HtNodeWithoutContentType,
 } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
 
