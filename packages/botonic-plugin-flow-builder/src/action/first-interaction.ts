@@ -64,7 +64,7 @@ async function getContentsByUserInput({
     resolvedLocale,
   })
 
-  const hasRepeatedContent = await checkRepetedContents(
+  const hasRepeatedContent = await checkRepeatedContents(
     flowBuilderPlugin,
     resolvedLocale,
     contentsByKeywordsOrIntents
@@ -94,7 +94,7 @@ function getConversationStartId(cmsApi: FlowBuilderApi) {
   return conversationStartId
 }
 
-async function checkRepetedContents(
+async function checkRepeatedContents(
   flowBuilderPlugin: BotonicPluginFlowBuilder,
   resolvedLocale: string,
   contentsByKeywordsOrIntents: FlowContent[]

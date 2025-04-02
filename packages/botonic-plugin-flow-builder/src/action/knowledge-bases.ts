@@ -8,7 +8,7 @@ import {
 import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { EventAction, KnowledgebaseFailReason, trackEvent } from '../tracking'
 import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
-import { inputHasTextData } from '../utils'
+import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
@@ -17,46 +17,48 @@ export async function getContentsByKnowledgeBase({
   request,
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
-  const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
+  if (isKnowledgeBasesAllowed(request)) {
+    const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
 
-  if (!startNodeKnowledgeBaseFlow) {
-    return []
-  }
+    if (!startNodeKnowledgeBaseFlow) {
+      return []
+    }
 
-  const contents = await flowBuilderPlugin.getContentsByNode(
-    startNodeKnowledgeBaseFlow,
-    resolvedLocale
-  )
+    const contents = await flowBuilderPlugin.getContentsByNode(
+      startNodeKnowledgeBaseFlow,
+      resolvedLocale
+    )
 
-  const knowledgeBaseContent = contents.find(
-    content => content instanceof FlowKnowledgeBase
-  ) as FlowKnowledgeBase
+    const knowledgeBaseContent = contents.find(
+      content => content instanceof FlowKnowledgeBase
+    ) as FlowKnowledgeBase
 
-  if (!knowledgeBaseContent) {
-    return contents
-  }
+    if (!knowledgeBaseContent) {
+      return contents
+    }
 
-  const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
-  const flowId = cmsApi.getNodeById<HtNodeWithContent>(
-    knowledgeBaseContent.id
-  ).flow_id
+    const sourceIds = knowledgeBaseContent.sourcesData.map(source => source.id)
+    const flowId = cmsApi.getNodeById<HtNodeWithContent>(
+      knowledgeBaseContent.id
+    ).flow_id
 
-  if (
-    flowBuilderPlugin.getKnowledgeBaseResponse &&
-    inputHasTextData(request.input) &&
-    sourceIds.length > 0
-  ) {
-    const contentsWithKnowledgeResponse =
-      await getContentsWithKnowledgeResponse(
-        flowBuilderPlugin.getKnowledgeBaseResponse,
-        request,
-        contents,
-        knowledgeBaseContent,
-        flowId
-      )
+    if (
+      flowBuilderPlugin.getKnowledgeBaseResponse &&
+      inputHasTextData(request.input) &&
+      sourceIds.length > 0
+    ) {
+      const contentsWithKnowledgeResponse =
+        await getContentsWithKnowledgeResponse(
+          flowBuilderPlugin.getKnowledgeBaseResponse,
+          request,
+          contents,
+          knowledgeBaseContent,
+          flowId
+        )
 
-    if (contentsWithKnowledgeResponse) {
-      return contentsWithKnowledgeResponse
+      if (contentsWithKnowledgeResponse) {
+        return contentsWithKnowledgeResponse
+      }
     }
   }
 

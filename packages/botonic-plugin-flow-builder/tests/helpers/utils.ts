@@ -14,13 +14,18 @@ import BotonicPluginFlowBuilder, {
   FlowBuilderActionProps,
   FlowContent,
 } from '../../src'
-import { KnowledgeBaseFunction, TrackEventFunction } from '../../src/types'
+import {
+  InShadowingConfig,
+  KnowledgeBaseFunction,
+  TrackEventFunction,
+} from '../../src/types'
 
 interface FlowBuilderOptions {
   flow: any
   locale?: string
   trackEvent?: TrackEventFunction
   getKnowledgeBaseResponse?: KnowledgeBaseFunction
+  inShadowing?: Partial<InShadowingConfig>
 }
 
 export function createFlowBuilderPlugin({
@@ -28,6 +33,7 @@ export function createFlowBuilderPlugin({
   locale = 'en',
   trackEvent,
   getKnowledgeBaseResponse,
+  inShadowing,
 }: FlowBuilderOptions) {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
@@ -35,6 +41,7 @@ export function createFlowBuilderPlugin({
     getAccessToken: () => 'fake_token',
     trackEvent,
     getKnowledgeBaseResponse,
+    inShadowing,
   })
 
   // @ts-ignore
@@ -53,6 +60,7 @@ interface RequestArgs {
   provider?: ProviderType
   isFirstInteraction?: boolean
   extraData?: any
+  shadowing?: boolean
 }
 
 export function createRequest({
@@ -61,6 +69,7 @@ export function createRequest({
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
   extraData = {},
+  shadowing = false,
 }: RequestArgs): PluginPreRequest {
   return {
     session: {
@@ -69,6 +78,7 @@ export function createRequest({
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
       user: { provider, id: 'uid1', extra_data: extraData },
+      _shadowing: shadowing,
       __retries: 0,
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',
