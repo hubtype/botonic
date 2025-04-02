@@ -2,7 +2,11 @@ import { INPUT, Input, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { getFlowBuilderPlugin } from './helpers'
-import { BotonicPluginFlowBuilderOptions, ProcessEnvNodeEnvs } from './types'
+import {
+  BotonicPluginFlowBuilderOptions,
+  InShadowingConfig,
+  ProcessEnvNodeEnvs,
+} from './types'
 
 function getAccessTokenFromSession(session: Session): string {
   if (!session._access_token) {
@@ -55,7 +59,7 @@ export function inputHasTextData(input: Input): boolean {
 
 function isNluAllowed(
   request: ActionRequest,
-  nluFlag: 'allowKeywords' | 'allowSmartIntents' | 'allowKnowledgeBases'
+  nluFlag: keyof InShadowingConfig
 ): boolean {
   const shadowing = Boolean(request.session._shadowing)
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
