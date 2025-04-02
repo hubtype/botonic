@@ -37,4 +37,36 @@ describe('Check the contents returned by the plugin using keywords', () => {
       expect(request.input.nluResolution).toEqual(undefined)
     }
   )
+
+  test('Keywords are not allowed by default when user is in handoff with shadowing', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: basicFlow,
+      },
+      requestArgs: {
+        input: { data: 'hola', type: INPUT.TEXT },
+        shadowing: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('fallback 1st message')
+    expect(request.input.nluResolution?.matchedValue).toEqual(undefined)
+  })
+
+  test('Keywords are allowed if inShadowing.allowKeywords is true when user is in handoff with shadowing', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: basicFlow,
+        inShadowing: { allowKeywords: true },
+      },
+      requestArgs: {
+        input: { data: 'hola', type: INPUT.TEXT },
+        shadowing: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(request.input.nluResolution?.type).toEqual('keyword')
+    expect(request.input.nluResolution?.matchedValue).toEqual('hola')
+  })
 })
