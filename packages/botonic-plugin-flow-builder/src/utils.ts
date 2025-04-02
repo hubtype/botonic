@@ -1,6 +1,7 @@
 import { INPUT, Input, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
+import { getFlowBuilderPlugin } from './helpers'
 import { BotonicPluginFlowBuilderOptions, ProcessEnvNodeEnvs } from './types'
 
 function getAccessTokenFromSession(session: Session): string {
@@ -50,4 +51,25 @@ function resolveObjectKey(object: any, key: string): any {
 
 export function inputHasTextData(input: Input): boolean {
   return input.data !== undefined && input.type === INPUT.TEXT
+}
+
+function isNluAllowed(
+  request: ActionRequest,
+  nluFlag: 'allowKeywords' | 'allowSmartIntents' | 'allowKnowledgeBases'
+): boolean {
+  const shadowing = Boolean(request.session._shadowing)
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  return !shadowing || (shadowing && flowBuilderPlugin.inShadowing[nluFlag])
+}
+
+export function isKeywordsAllowed(request: ActionRequest): boolean {
+  return isNluAllowed(request, 'allowKeywords')
+}
+
+export function isSmartIntentsAllowed(request: ActionRequest): boolean {
+  return isNluAllowed(request, 'allowSmartIntents')
+}
+
+export function isKnowledgeBasesAllowed(request: ActionRequest): boolean {
+  return isNluAllowed(request, 'allowKnowledgeBases')
 }
