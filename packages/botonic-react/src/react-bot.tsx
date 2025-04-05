@@ -45,7 +45,6 @@ export class ReactBot extends CoreBot {
         renderedActions.push(renderedAction)
       }
     }
-
     return renderedActions
   }
 }
