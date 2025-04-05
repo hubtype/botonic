@@ -3,19 +3,15 @@ import { createContext } from 'react'
 
 import { ActionRequest } from './index-types'
 
-export const RequestContext = createContext<
-  Partial<ActionRequest> & {
-    getString: () => string
-    setLocale: () => void
-  }
->({
+export const RequestContext = createContext<ActionRequest>({
   getString: () => '',
   setLocale: () => undefined,
-  session: {} as CoreSession,
   params: {},
-  input: {} as CoreInput,
   defaultDelay: 0,
   defaultTyping: 0,
+  input: {} as CoreInput,
+  session: {} as CoreSession,
+  lastRoutePath: '',
 })
 
 export interface CloseWebviewOptions {

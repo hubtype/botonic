@@ -100,7 +100,7 @@ export interface PluginConfig<T> {
 export interface ResolvedPlugin extends Plugin {
   id: string
   name: string
-  config: any
+  config?: any
 }
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
@@ -252,11 +252,13 @@ export interface HubtypeCaseContactReason {
   project_id: string
 }
 
+export interface SessionBot {
+  id: string
+  name?: string
+}
+
 export interface Session {
-  bot: {
-    id: string
-    name?: string
-  }
+  bot: SessionBot
   __locale?: string
   __retries: number
   _access_token: string
@@ -321,6 +323,15 @@ export interface BotRequest {
   input: Input
   lastRoutePath: RoutePath
   session: Session
+}
+
+export interface RequestCoreContext extends BotRequest {
+  getString: (stringId: string) => string
+  setLocale: (locale: string) => void
+  defaultDelay?: number
+  defaultTyping?: number
+  params: Record<string, string>
+  plugins?: ResolvedPlugins
 }
 
 /** The response of the bot for the triggered actions, which can be

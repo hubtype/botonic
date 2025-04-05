@@ -8,6 +8,7 @@ import {
   Input,
   Locales,
   ProcessInputResult,
+  RequestCoreContext,
   ResolvedPlugins,
   Route,
   RoutePath,
@@ -202,7 +203,7 @@ export class CoreBot {
   private createRequestFromOutput(
     { input, session, lastRoutePath }: BotRequest,
     output: ProcessInputResult
-  ) {
+  ): RequestCoreContext {
     return {
       getString: (stringId: string) => this.getString(stringId, session),
       setLocale: (locale: string) => this.setLocale(locale, session),
