@@ -328,10 +328,10 @@ export interface BotRequest {
 export interface RequestCoreContext extends BotRequest {
   getString: (stringId: string) => string
   setLocale: (locale: string) => void
-  defaultDelay?: number
-  defaultTyping?: number
+  defaultDelay: number
+  defaultTyping: number
   params: Record<string, string>
-  plugins?: ResolvedPlugins
+  plugins: ResolvedPlugins
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -342,11 +342,10 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export interface PluginPreRequest extends BotRequest {
-  plugins: ResolvedPlugins
-}
-export interface PluginPostRequest extends BotResponse {
-  plugins: ResolvedPlugins
+export type PluginPreRequest = RequestCoreContext
+
+export type PluginPostRequest = RequestCoreContext & {
+  response: string | null
 }
 
 export interface Plugin {

@@ -1,14 +1,19 @@
 import {
-  Input,
+  Plugin,
   PluginConfig,
+  RequestCoreContext,
   ResolvedPlugins,
-  RoutePath,
-  Session,
 } from './models'
+
+interface RunPluginArgs {
+  requestCoreContext: RequestCoreContext
+  mode: PluginMode
+  response?: string | null
+}
 
 type PluginMode = 'pre' | 'post'
 
-export function loadPlugins(plugins: PluginConfig<any>[]): ResolvedPlugins {
+export function loadPlugins(plugins?: PluginConfig<any>[]): ResolvedPlugins {
   if (!plugins) return {}
   const _plugins = {}
   const pluginsLength = plugins.length
@@ -26,27 +31,22 @@ export function loadPlugins(plugins: PluginConfig<any>[]): ResolvedPlugins {
   return _plugins
 }
 
-export async function runPlugins(
-  plugins: ResolvedPlugins,
-  mode: PluginMode,
-  input: Input,
-  session: Session,
-  lastRoutePath: RoutePath,
-  response: string | null = null
-): Promise<void> {
+export async function runPlugins({
+  requestCoreContext,
+  mode,
+  response = null,
+}: RunPluginArgs): Promise<void> {
+  const plugins = requestCoreContext.plugins
   for (const key in plugins) {
-    const p = await plugins[key]
+    const plugin: Plugin = await plugins[key]
     try {
-      if (mode === 'pre' && p.pre) {
-        await p.pre({ input, session, lastRoutePath, plugins })
+      if (mode === 'pre' && plugin.pre) {
+        await plugin.pre(requestCoreContext)
       }
-      if (mode === 'post' && p.post) {
-        await p.post({
-          input,
-          session,
-          lastRoutePath,
+      if (mode === 'post' && plugin.post) {
+        await plugin.post({
+          ...requestCoreContext,
           response,
-          plugins,
         })
       }
     } catch (e) {
