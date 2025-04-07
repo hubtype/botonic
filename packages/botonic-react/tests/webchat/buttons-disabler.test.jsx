@@ -68,7 +68,6 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
 
   it('Passes a message with expected props to node (carousel)', () => {
     renderWithBotonicProviders(COMPONENTS.CAROUSEL)
-    screen.debug()
 
     // Check first element
     expect(screen.getByText('PIC1')).toBeTruthy()
@@ -118,7 +117,6 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
         Button Text
       </Button>
     )
-    screen.debug()
 
     const button = screen.getByRole('button', { name: 'Button Text' })
     expect(button.getAttribute('payload')).toEqual('some-payload')
