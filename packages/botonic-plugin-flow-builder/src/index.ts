@@ -100,9 +100,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
 
     const checkUserTextInput =
-      inputHasTextData(request.input) &&
-      !request.input.payload &&
-      !request.session.is_first_interaction
+      inputHasTextData(request.input) && !request.input.payload
 
     if (checkUserTextInput) {
       const locale = this.getLocale(request.session)
