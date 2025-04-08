@@ -33,13 +33,17 @@ export class ReactBot extends CoreBot {
     const renderedActions: JSX.Element[] = []
 
     for (const Action of actions) {
-      const props = Action.botonicInit ? await Action.botonicInit(request) : {}
-      const renderedAction: JSX.Element = (
-        <RequestContext.Provider value={request}>
-          <Action {...props} />
-        </RequestContext.Provider>
-      )
-      renderedActions.push(renderedAction)
+      if (Action) {
+        const props = Action.botonicInit
+          ? await Action.botonicInit(request)
+          : {}
+        const renderedAction: JSX.Element = (
+          <RequestContext.Provider value={request}>
+            <Action {...props} />
+          </RequestContext.Provider>
+        )
+        renderedActions.push(renderedAction)
+      }
     }
 
     return renderedActions
