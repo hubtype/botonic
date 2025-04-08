@@ -178,7 +178,7 @@ export interface Input extends Partial<NluResult> {
   nluResolution?: {
     type: NluType
     matchedValue: string
-    payload: string
+    payload?: string
   }
 }
 

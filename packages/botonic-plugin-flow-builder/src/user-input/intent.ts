@@ -20,7 +20,7 @@ export async function getIntentNodeByInput(
 
       request.input.nluResolution = {
         type: NluType.Keyword,
-        matchedValue: intentNode.content.title,
+        matchedValue: request.input.intent,
         payload: targetPayload,
       }
       return intentNode
