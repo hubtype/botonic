@@ -12,6 +12,7 @@ export const RequestContext = createContext<ActionRequest>({
   input: {} as CoreInput,
   session: {} as CoreSession,
   lastRoutePath: '',
+  plugins: {},
 })
 
 export interface CloseWebviewOptions {
