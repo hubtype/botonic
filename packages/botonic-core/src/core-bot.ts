@@ -78,12 +78,19 @@ export class CoreBot {
   }
 
   getString(id: string, session: Session): string {
-    // @ts-ignore
-    return getString(this.locales, session.__locale, id)
+    return getString(this.locales, session.user.system_locale!, id)
   }
 
-  setLocale(locale: string, session: Session): void {
-    session.__locale = locale
+  setSystemLocale(locale: string, session: Session): void {
+    session.user.system_locale = locale
+  }
+
+  setUserLocale(locale: string, session: Session): void {
+    session.user.locale = locale
+  }
+
+  setUserCountry(country: string, session: Session): void {
+    session.user.country = country
   }
 
   async input({
@@ -93,7 +100,11 @@ export class CoreBot {
   }: BotRequest): Promise<BotResponse> {
     const botContext: BotContext = {
       getString: (stringId: string) => this.getString(stringId, session),
-      setLocale: (locale: string) => this.setLocale(locale, session),
+      setUserCountry: (country: string) =>
+        this.setUserCountry(country, session),
+      setUserLocale: (locale: string) => this.setUserLocale(locale, session),
+      setSystemLocale: (locale: string) =>
+        this.setSystemLocale(locale, session),
       params: {},
       lastRoutePath,
       plugins: this.plugins,
