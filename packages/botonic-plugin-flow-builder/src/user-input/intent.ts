@@ -19,7 +19,7 @@ export async function getIntentNodeByInput(
       const targetPayload = cmsApi.getPayload(intentNode.target)
 
       request.input.nluResolution = {
-        type: NluType.Keyword,
+        type: NluType.Intent,
         matchedValue: request.input.intent,
         payload: targetPayload,
       }
