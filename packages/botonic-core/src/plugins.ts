@@ -40,10 +40,10 @@ export async function runPlugins({
   for (const key in plugins) {
     const plugin: Plugin = await plugins[key]
     try {
-      if (mode === 'pre' && plugin.pre) {
+      if (mode === 'pre' && typeof plugin.pre === 'function') {
         await plugin.pre(requestCoreContext)
       }
-      if (mode === 'post' && plugin.post) {
+      if (mode === 'post' && typeof plugin.post === 'function') {
         await plugin.post({
           ...requestCoreContext,
           response,
