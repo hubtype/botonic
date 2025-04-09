@@ -3,6 +3,8 @@ import UAParser from 'ua-parser-js'
 import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../constants'
+import { timeZoneToCountryCode } from '../time-zone-to-country-code'
+import { ClientUser } from '../webchat/context/types'
 import { ThemeProps } from '../webchat/theme/types'
 import { getProperty } from './objects'
 
@@ -46,6 +48,24 @@ export const initSession = (
   if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
     session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
   return session
+}
+
+export function predictUserLocaleAndCountry(user: Partial<ClientUser>) {
+  if (!user.locale) {
+    user.locale = user.extra_data?.language
+      ? (user.extra_data.language as string)
+      : navigator.language
+  }
+
+  if (!user.country) {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const userCountry = timeZoneToCountryCode[timeZone]
+    user.country = user.extra_data?.country
+      ? (user.extra_data.country as string)
+      : userCountry
+  }
+
+  return user
 }
 
 export const shouldKeepSessionOnReload = ({

@@ -46,6 +46,7 @@ import {
   _getThemeProperty,
   getServerErrorMessage,
   initSession,
+  predictUserLocaleAndCountry,
   shouldKeepSessionOnReload,
 } from '../util/webchat'
 import { ChatArea } from './chat-area'
@@ -248,7 +249,13 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     }
 
     if (props.onInit) {
-      setTimeout(() => props.onInit && props.onInit(), 100)
+      setTimeout(() => {
+        if (typeof props.onInit === 'function') {
+          props.onInit()
+          session.user = predictUserLocaleAndCountry(session.user)
+          updateSession(session)
+        }
+      }, 100)
     }
   }, [])
 
@@ -460,8 +467,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   https://stackoverflow.com/questions/37949981/call-child-method-from-parent
   */
 
-  const updateSessionWithUser = (userToUpdate: any) =>
+  const updateSessionWithUser = (userToUpdate: any) => {
     updateSession(merge(webchatState.session, { user: userToUpdate }))
+  }
 
   useImperativeHandle(ref, () => ({
     addBotResponse: ({ response, session, lastRoutePath }) => {

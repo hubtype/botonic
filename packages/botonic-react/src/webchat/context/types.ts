@@ -1,8 +1,4 @@
-import {
-  Input as CoreInput,
-  Session as CoreSession,
-  SessionUser as CoreSessionUser,
-} from '@botonic/core'
+import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { CloseWebviewOptions } from '../../contexts'
@@ -51,6 +47,19 @@ export interface WebchatState {
 
 // ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
 export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
+// ClientSession: type for session in frontend when webchat is deployed
+export type ClientSession = {
+  user: ClientUser
+}
+// ClientUser: type for user in frontend when webchat is deployed
+export type ClientUser = {
+  id: string
+  name: string
+  locale: string
+  country: string
+  system_locale?: string
+  extra_data?: Record<string, any>
+}
 
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
@@ -73,7 +82,7 @@ export interface WebchatContextProps {
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void
-  updateUser: (user: Partial<CoreSessionUser>) => void
+  updateUser: (user: ClientUser) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState

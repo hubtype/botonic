@@ -106,8 +106,6 @@ export class DevApp extends WebchatApp {
         enableAnimations={enableAnimations}
         storage={storage}
         storageKey={storageKey}
-        getString={(stringId, session) => this.bot.getString(stringId, session)}
-        setLocale={(locale, session) => this.bot.setLocale(locale, session)}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}

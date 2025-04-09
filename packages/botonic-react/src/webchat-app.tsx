@@ -272,6 +272,18 @@ export class WebchatApp {
     this.webchatRef.current?.updateUser(user)
   }
 
+  setSystemLocale(locale: string) {
+    this.webchatRef.current?.updateUser({ system_locale: locale })
+  }
+
+  setUserLocale(locale: string) {
+    this.webchatRef.current?.updateUser({ locale })
+  }
+
+  setUserCountry(country: string) {
+    this.webchatRef.current?.updateUser({ country })
+  }
+
   addBotMessage(message: any) {
     message.ack = 0
     message.isUnread = true
