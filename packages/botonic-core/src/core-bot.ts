@@ -157,9 +157,7 @@ export class CoreBot {
   }
 
   private updateSession(session: Session) {
-    console.log('updateSession')
-
-    // set new fields from old fields in extra_data
+    // set new user fields (country, locale, system_locale) from old fields in extra_data
     if (!session.user.country) {
       const country = session.user.extra_data?.country
       this.setUserCountry(country, session)
@@ -172,7 +170,6 @@ export class CoreBot {
 
     if (!session.user.system_locale) {
       const locale = session.user.locale
-      console.log('locale', locale)
       if (locale) {
         this.setSystemLocale(locale, session)
       }
