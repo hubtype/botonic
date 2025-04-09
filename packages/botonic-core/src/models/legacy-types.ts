@@ -157,6 +157,7 @@ export interface NluResult {
 export enum NluType {
   Keyword = 'keyword',
   SmartIntent = 'smart-intent',
+  Intent = 'intent',
 }
 
 export interface Input extends Partial<NluResult> {
@@ -177,6 +178,7 @@ export interface Input extends Partial<NluResult> {
   nluResolution?: {
     type: NluType
     matchedValue: string
+    payload?: string
   }
 }
 

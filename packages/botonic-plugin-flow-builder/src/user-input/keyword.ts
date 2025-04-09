@@ -36,9 +36,12 @@ export class KeywordMatcher {
     if (!keywordNode || !this.matchedKeyword) {
       return undefined
     }
+    const targetPayload = this.cmsApi.getPayload(keywordNode.target)
+
     this.request.input.nluResolution = {
       type: NluType.Keyword,
       matchedValue: this.matchedKeyword,
+      payload: targetPayload,
     }
     await this.trackKeywordEvent()
     return keywordNode

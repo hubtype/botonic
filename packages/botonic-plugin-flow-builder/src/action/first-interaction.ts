@@ -2,18 +2,15 @@ import { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
 import { FlowBotAction, FlowContent } from '../content-fields'
 import BotonicPluginFlowBuilder from '../index'
-import { getNodeByUserInput } from '../user-input'
 import { inputHasTextData } from '../utils'
 import { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
 
-export async function getContentsByFirstInteraction({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
+export async function getContentsByFirstInteraction(
+  context: FlowBuilderContext
+): Promise<FlowContent[]> {
+  const { flowBuilderPlugin, request, resolvedLocale } = context
   const firstInteractionContents =
     await flowBuilderPlugin.getStartContents(resolvedLocale)
 
@@ -23,13 +20,8 @@ export async function getContentsByFirstInteraction({
     return firstInteractionContents
   }
 
-  if (inputHasTextData(request.input)) {
-    const contentsByUserInput = await getContentsByUserInput({
-      cmsApi,
-      flowBuilderPlugin,
-      request,
-      resolvedLocale,
-    })
+  if (request.input.nluResolution || inputHasTextData(request.input)) {
+    const contentsByUserInput = await getContentsByUserInput(context)
 
     return [...firstInteractionContents, ...contentsByUserInput]
   }
@@ -43,39 +35,36 @@ async function getContentsByUserInput({
   request,
   resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
-  const nodeByUserInput = await getNodeByUserInput(
-    cmsApi,
-    resolvedLocale,
-    request,
-    flowBuilderPlugin.smartIntentsConfig
-  )
+  const payloadByNlu = request.input.nluResolution?.payload
 
-  request.input.payload = cmsApi.getPayload(nodeByUserInput?.target)
-  const conversationStartId = getConversationStartId(cmsApi)
+  if (payloadByNlu) {
+    request.input.payload = payloadByNlu
+    const conversationStartId = getConversationStartId(cmsApi)
 
-  if (request.input.payload === conversationStartId) {
-    return []
-  }
+    if (request.input.payload === conversationStartId) {
+      return []
+    }
 
-  const contentsByKeywordsOrIntents = await getContentsByPayload({
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-  })
+    const contentsByKeywordsOrIntents = await getContentsByPayload({
+      cmsApi,
+      flowBuilderPlugin,
+      request,
+      resolvedLocale,
+    })
 
-  const hasRepeatedContent = await checkRepeatedContents(
-    flowBuilderPlugin,
-    resolvedLocale,
-    contentsByKeywordsOrIntents
-  )
+    const hasRepeatedContent = await checkRepeatedContents(
+      flowBuilderPlugin,
+      resolvedLocale,
+      contentsByKeywordsOrIntents
+    )
 
-  if (hasRepeatedContent) {
-    return []
-  }
+    if (hasRepeatedContent) {
+      return []
+    }
 
-  if (contentsByKeywordsOrIntents.length > 0) {
-    return contentsByKeywordsOrIntents
+    if (contentsByKeywordsOrIntents.length > 0) {
+      return contentsByKeywordsOrIntents
+    }
   }
 
   return await getContentsByKnowledgeBase({

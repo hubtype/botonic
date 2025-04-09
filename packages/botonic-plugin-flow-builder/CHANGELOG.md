@@ -20,6 +20,10 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.34.2] - 2025-04-02
+
+- [PR-3004](https://github.com/hubtype/botonic/pull/3004/files): nluResolution available in first interaction
+
 ## [0.34.1] - 2025-04-02
 
 ### Added
