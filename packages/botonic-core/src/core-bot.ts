@@ -1,6 +1,7 @@
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
+  BotContext,
   BotonicAction,
   BotRequest,
   BotResponse,
@@ -9,7 +10,6 @@ import {
   Locales,
   PluginConfig,
   ProcessInputResult,
-  RequestCoreContext,
   ResolvedPlugins,
   Route,
   Routes,
@@ -91,7 +91,7 @@ export class CoreBot {
     session,
     lastRoutePath,
   }: BotRequest): Promise<BotResponse> {
-    const requestCoreContext: RequestCoreContext = {
+    const botContext: BotContext = {
       getString: (stringId: string) => this.getString(stringId, session),
       setLocale: (locale: string) => this.setLocale(locale, session),
       params: {},
@@ -103,79 +103,71 @@ export class CoreBot {
       session,
     }
 
-    const output = await this.runInput(requestCoreContext)
+    const output = await this.runInput(botContext)
 
     if (session._botonic_action?.startsWith(BotonicAction.Redirect)) {
-      return await this.runRedirectAction(output, requestCoreContext)
+      return await this.runRedirectAction(output, botContext)
     }
 
     return output
   }
 
-  private async runInput(
-    requestCoreContext: RequestCoreContext
-  ): Promise<BotResponse> {
-    requestCoreContext.session = requestCoreContext.session || {}
-    if (!requestCoreContext.session.__locale)
-      requestCoreContext.session.__locale = 'en'
+  private async runInput(botContext: BotContext): Promise<BotResponse> {
+    botContext.session = botContext.session || {}
+    if (!botContext.session.__locale) botContext.session.__locale = 'en'
 
-    if (requestCoreContext.input.type === INPUT.CHAT_EVENT) {
+    if (botContext.input.type === INPUT.CHAT_EVENT) {
       return {
-        input: requestCoreContext.input,
-        session: requestCoreContext.session,
-        lastRoutePath: requestCoreContext.lastRoutePath,
+        input: botContext.input,
+        session: botContext.session,
+        lastRoutePath: botContext.lastRoutePath,
         response: [],
       }
     }
 
-    await this.runPrePlugins(requestCoreContext)
+    await this.runPrePlugins(botContext)
 
-    const output = await this.getOutput(requestCoreContext)
-    requestCoreContext = this.updateRequestFromOutput(
-      requestCoreContext,
-      output
-    )
+    const output = await this.getOutput(botContext)
+    botContext = this.updateRequestFromOutput(botContext, output)
     const response = await this.renderer({
-      request: requestCoreContext,
+      request: botContext,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
 
-    await this.runPostPlugins(requestCoreContext, response)
+    await this.runPostPlugins(botContext, response)
 
-    requestCoreContext.session.is_first_interaction = false
+    botContext.session.is_first_interaction = false
 
     return {
-      input: requestCoreContext.input,
+      input: botContext.input,
       response,
-      session: requestCoreContext.session,
-      lastRoutePath: requestCoreContext.lastRoutePath,
+      session: botContext.session,
+      lastRoutePath: botContext.lastRoutePath,
     }
   }
 
-  private async runPrePlugins(requestCoreContext: RequestCoreContext) {
+  private async runPrePlugins(botContext: BotContext) {
     if (this.plugins) {
-      await runPlugins({ requestCoreContext, mode: 'pre' })
+      await runPlugins({ botContext, mode: 'pre' })
     }
   }
 
-  private async getOutput(
-    requestCoreContext: RequestCoreContext
-  ): Promise<ProcessInputResult> {
-    await this.setRouter(requestCoreContext)
+  private async getOutput(botContext: BotContext): Promise<ProcessInputResult> {
+    await this.setRouter(botContext)
 
     const output = (this.router as Router).processInput(
-      requestCoreContext.input,
-      requestCoreContext.session,
-      requestCoreContext.lastRoutePath
+      botContext.input,
+      botContext.session,
+      botContext.lastRoutePath
     )
     return output
   }
 
-  private async setRouter(requestCoreContext: RequestCoreContext) {
+  private async setRouter(botContext: BotContext) {
     if (this.routes instanceof Function) {
       this.router = new Router(
         [
-          ...(await getComputedRoutes(this.routes, requestCoreContext)),
+          ...(await getComputedRoutes(this.routes, botContext)),
           ...this.defaultRoutes,
         ],
         this.inspector.routeInspector
@@ -184,23 +176,20 @@ export class CoreBot {
   }
 
   private updateRequestFromOutput(
-    requestCoreContext: RequestCoreContext,
+    botContext: BotContext,
     output: ProcessInputResult
-  ): RequestCoreContext {
+  ): BotContext {
     return {
-      ...requestCoreContext,
+      ...botContext,
       params: output.params || {},
       lastRoutePath: output.lastRoutePath,
     }
   }
 
-  private async runPostPlugins(
-    requestCoreContext: RequestCoreContext,
-    response: any
-  ) {
+  private async runPostPlugins(botContext: BotContext, response: any) {
     if (this.plugins) {
       await runPlugins({
-        requestCoreContext,
+        botContext,
         mode: 'post',
         response,
       })
@@ -209,34 +198,34 @@ export class CoreBot {
 
   private async runRedirectAction(
     previousResponse: BotResponse,
-    requestCoreContext: RequestCoreContext,
+    botContext: BotContext,
     numOfRedirects: number = 0
   ) {
     if (numOfRedirects > 10) {
       throw new Error('Maximum BotAction recursive calls reached (10)')
     }
 
-    const nextPayload = requestCoreContext.session._botonic_action?.split(
+    const nextPayload = botContext.session._botonic_action?.split(
       `${BotonicAction.Redirect}:`
     )[1]
 
     const inputWithBotActionPayload: Input = {
-      ...requestCoreContext.input,
+      ...botContext.input,
       payload: nextPayload,
       type: INPUT.POSTBACK,
       data: undefined,
       text: undefined,
     }
 
-    requestCoreContext.session._botonic_action = undefined
-    requestCoreContext.input = inputWithBotActionPayload
+    botContext.session._botonic_action = undefined
+    botContext.input = inputWithBotActionPayload
 
-    const followUp = await this.runInput(requestCoreContext)
+    const followUp = await this.runInput(botContext)
 
     const response = {
       input: followUp.input,
       response: previousResponse.response.concat(followUp.response),
-      session: requestCoreContext.session,
+      session: botContext.session,
       lastRoutePath: followUp.lastRoutePath,
     }
 
@@ -244,7 +233,7 @@ export class CoreBot {
     if (response.session._botonic_action?.startsWith(BotonicAction.Redirect)) {
       return await this.runRedirectAction(
         response,
-        requestCoreContext,
+        botContext,
         numOfRedirects + 1
       )
     }

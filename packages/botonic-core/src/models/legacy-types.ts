@@ -325,7 +325,7 @@ export interface BotRequest {
   session: Session
 }
 
-export interface RequestCoreContext extends BotRequest {
+export interface BotContext extends BotRequest {
   getString: (stringId: string) => string
   setLocale: (locale: string) => void
   defaultDelay: number
@@ -342,9 +342,9 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export type PluginPreRequest = RequestCoreContext
+export type PluginPreRequest = BotContext
 
-export type PluginPostRequest = RequestCoreContext & {
+export type PluginPostRequest = BotContext & {
   response: string | null
 }
 

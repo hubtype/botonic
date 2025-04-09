@@ -6,11 +6,10 @@ import {
 } from '../constants'
 import {
   Action,
-  BotRequest,
+  BotContext,
   Input,
   Params,
   PathParams,
-  RequestCoreContext,
   Route,
   Routes,
 } from '../models'
@@ -82,7 +81,7 @@ export function getNotFoundAction(input: Input, routes: Route[]): Action {
 
 export async function getComputedRoutes(
   routes: Routes,
-  requestCoreContext: RequestCoreContext
+  requestCoreContext: BotContext
 ): Promise<Route[]> {
   if (routes instanceof Function) {
     return await getComputedRoutes(

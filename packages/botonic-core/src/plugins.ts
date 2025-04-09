@@ -1,12 +1,7 @@
-import {
-  Plugin,
-  PluginConfig,
-  RequestCoreContext,
-  ResolvedPlugins,
-} from './models'
+import { BotContext, Plugin, PluginConfig, ResolvedPlugins } from './models'
 
 interface RunPluginArgs {
-  requestCoreContext: RequestCoreContext
+  botContext: BotContext
   mode: PluginMode
   response?: string | null
 }
@@ -32,20 +27,20 @@ export function loadPlugins(plugins?: PluginConfig<any>[]): ResolvedPlugins {
 }
 
 export async function runPlugins({
-  requestCoreContext,
+  botContext,
   mode,
   response = null,
 }: RunPluginArgs): Promise<void> {
-  const plugins = requestCoreContext.plugins
+  const plugins = botContext.plugins
   for (const key in plugins) {
     const plugin: Plugin = await plugins[key]
     try {
       if (mode === 'pre' && typeof plugin.pre === 'function') {
-        await plugin.pre(requestCoreContext)
+        await plugin.pre(botContext)
       }
       if (mode === 'post' && typeof plugin.post === 'function') {
         await plugin.post({
-          ...requestCoreContext,
+          ...botContext,
           response,
         })
       }
