@@ -309,3 +309,60 @@ it('core throws an error after maximum number of redirects are executed', async 
     'Maximum BotAction recursive calls reached (10)'
   )
 })
+
+describe('updateSession', () => {
+  it('When session arrives with only values in user.extra_data, user.country and user.locale are updated from user.extra_data', () => {
+    const coreBot = initCoreBotWithDeveloperConfig()
+    const session = {
+      user: {
+        extra_data: {
+          country: 'US',
+          language: 'en',
+        },
+      },
+    }
+
+    coreBot.updateSession(session)
+
+    expect(session.user.country).toEqual('US')
+    expect(session.user.locale).toEqual('en')
+    expect(session.user.system_locale).toEqual('en')
+  })
+
+  it('Session arrives with user locale, country', () => {
+    const coreBot = initCoreBotWithDeveloperConfig()
+    const session = {
+      user: {
+        locale: 'en',
+        country: 'GB',
+      },
+    }
+
+    coreBot.updateSession(session)
+
+    expect(session.user.country).toEqual('GB')
+    expect(session.user.locale).toEqual('en')
+    expect(session.user.system_locale).toEqual('en')
+  })
+
+  it('When session arrives with user locale, country, system_locale and extra_data with language and country, extra_data is ignored', () => {
+    const coreBot = initCoreBotWithDeveloperConfig()
+    const session = {
+      user: {
+        locale: 'es-ES',
+        country: 'ES',
+        system_locale: 'es',
+        extra_data: {
+          language: 'en',
+          country: 'GB',
+        },
+      },
+    }
+
+    coreBot.updateSession(session)
+
+    expect(session.user.country).toEqual('ES')
+    expect(session.user.locale).toEqual('es-ES')
+    expect(session.user.system_locale).toEqual('es')
+  })
+})

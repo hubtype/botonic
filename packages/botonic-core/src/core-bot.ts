@@ -124,8 +124,7 @@ export class CoreBot {
   }
 
   private async runInput(botContext: BotContext): Promise<BotResponse> {
-    botContext.session = botContext.session || {}
-    if (!botContext.session.__locale) botContext.session.__locale = 'en'
+    this.updateSession(botContext.session)
 
     if (botContext.input.type === INPUT.CHAT_EVENT) {
       return {
@@ -154,6 +153,29 @@ export class CoreBot {
       response,
       session: botContext.session,
       lastRoutePath: botContext.lastRoutePath,
+    }
+  }
+
+  private updateSession(session: Session) {
+    console.log('updateSession')
+
+    // set new fields from old fields in extra_data
+    if (!session.user.country) {
+      const country = session.user.extra_data?.country
+      this.setUserCountry(country, session)
+    }
+
+    if (!session.user.locale) {
+      const language = session.user.extra_data?.language
+      this.setUserLocale(language, session)
+    }
+
+    if (!session.user.system_locale) {
+      const locale = session.user.locale
+      console.log('locale', locale)
+      if (locale) {
+        this.setSystemLocale(locale, session)
+      }
     }
   }
 
