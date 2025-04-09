@@ -233,62 +233,6 @@ describe('CoreBot', () => {
     })
     expect(botResponse.response[0].actions).toEqual([null, 'Hi user!', null])
   })
-
-  //   it('input returns a response if test integration without _botonic_action', async () => {
-  //     // Arrange
-
-  //     // Act
-  //     const coreBot = initCoreBotWithDeveloperConfig()
-  //     const botResponse = await coreBot.input({
-  //       input: { type: 'text', data: 'hello' },
-  //       session: createSessionWithUser({
-  //         is_test_integration: true,
-  //         _botonic_action: undefined,
-  //       }),
-  //       lastRoutePath: '',
-  //     })
-
-  //     // Assert
-  //     expect(botResponse).toBeDefined()
-  //     expect(botResponse.input).toEqual({ type: 'text', data: 'hello' })
-  //     expect(botResponse.session).toEqual({
-  //       __retries: 0,
-  //       user: {
-  //         locale: LOCALE_EN,
-  //         country: COUNTRY_GB,
-  //         system_locale: LOCALE_EN,
-  //       },
-  //       is_first_interaction: false,
-  //       is_test_integration: true,
-  //       _botonic_action: undefined,
-  //     })
-  //     expect(botResponse.lastRoutePath).toEqual('')
-  //     expect(botResponse.response[0]).toBeDefined()
-  //     expect(botResponse.response[0].request).toEqual({
-  //       defaultDelay: 0.4,
-  //       defaultTyping: 0.6,
-  //       getString: expect.any(Function),
-  //       input: { data: 'hello', type: 'text' },
-  //       lastRoutePath: '',
-  //       params: {},
-  //       plugins: {},
-  //       session: {
-  //         __retries: 0,
-  //         user: {
-  //           locale: LOCALE_EN,
-  //           country: COUNTRY_GB,
-  //           system_locale: LOCALE_EN,
-  //         },
-  //         is_first_interaction: false,
-  //         is_test_integration: true,
-  //         _botonic_action: undefined,
-  //       },
-  //       setUserLocale: expect.any(Function),
-  //       setUserCountry: expect.any(Function),
-  //       setSystemLocale: expect.any(Function),
-  //     })
-  //     expect(botResponse.response[0].actions).toEqual([null, 'Hi user!', null])
-  //   })
 })
 
 it('input returns two actions when first return a _botonic_action redirect', async () => {
@@ -389,6 +333,7 @@ it('core throws an error after maximum number of redirects are executed', async 
 
 describe('updateSession', () => {
   it('When session arrives with only values in user.extra_data, user.country and user.locale are updated from user.extra_data', () => {
+    // Arrange
     const coreBot = initCoreBotWithDeveloperConfig()
     const session = {
       user: {
@@ -399,14 +344,17 @@ describe('updateSession', () => {
       },
     }
 
+    // Act
     coreBot.updateSession(session)
 
+    // Assert
     expect(session.user.country).toEqual('US')
     expect(session.user.locale).toEqual('en')
     expect(session.user.system_locale).toEqual('en')
   })
 
   it('Session arrives with user locale, country', () => {
+    // Arrange
     const coreBot = initCoreBotWithDeveloperConfig()
     const session = {
       user: {
@@ -415,14 +363,17 @@ describe('updateSession', () => {
       },
     }
 
+    // Act
     coreBot.updateSession(session)
 
+    // Assert
     expect(session.user.country).toEqual('GB')
     expect(session.user.locale).toEqual('en')
     expect(session.user.system_locale).toEqual('en')
   })
 
   it('When session arrives with user locale, country, system_locale and extra_data with language and country, extra_data is ignored', () => {
+    // Arrange
     const coreBot = initCoreBotWithDeveloperConfig()
     const session = {
       user: {
@@ -436,8 +387,10 @@ describe('updateSession', () => {
       },
     }
 
+    // Act
     coreBot.updateSession(session)
 
+    // Assert
     expect(session.user.country).toEqual('ES')
     expect(session.user.locale).toEqual('es-ES')
     expect(session.user.system_locale).toEqual('es')
