@@ -46,8 +46,8 @@ import {
   _getThemeProperty,
   getServerErrorMessage,
   initSession,
-  predictUserLocaleAndCountry,
   shouldKeepSessionOnReload,
+  updateUserLocaleAndCountry,
 } from '../util/webchat'
 import { ChatArea } from './chat-area'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
@@ -252,8 +252,8 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       setTimeout(() => {
         if (typeof props.onInit === 'function') {
           props.onInit()
-          session.user = predictUserLocaleAndCountry(session.user)
-          updateSession(session)
+          const user = updateUserLocaleAndCountry(session.user)
+          updateSession({ ...session, user })
         }
       }, 100)
     }

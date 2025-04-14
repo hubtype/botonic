@@ -50,22 +50,37 @@ export const initSession = (
   return session
 }
 
-export function predictUserLocaleAndCountry(user: Partial<ClientUser>) {
-  if (!user.locale) {
-    user.locale = user.extra_data?.language
-      ? (user.extra_data.language as string)
-      : navigator.language
+export function updateUserLocaleAndCountry(user: Partial<ClientUser>) {
+  const locale = getLocale(user)
+  const country = getCountry(user)
+
+  return {
+    ...user,
+    locale,
+    country,
+  }
+}
+
+function getLocale(user: Partial<ClientUser>) {
+  if (user.locale) {
+    return user.locale
   }
 
-  if (!user.country) {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    const userCountry = timeZoneToCountryCode[timeZone]
-    user.country = user.extra_data?.country
-      ? (user.extra_data.country as string)
-      : userCountry
-  }
+  return user.extra_data?.language
+    ? (user.extra_data?.language as string)
+    : navigator.language
+}
 
-  return user
+function getCountry(user: Partial<ClientUser>) {
+  if (user.country) {
+    return user.country
+  }
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const userCountry = timeZoneToCountryCode[timeZone]
+
+  return user.extra_data?.country
+    ? (user.extra_data?.country as string)
+    : userCountry
 }
 
 export const shouldKeepSessionOnReload = ({
