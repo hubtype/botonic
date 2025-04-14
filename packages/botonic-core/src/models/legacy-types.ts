@@ -249,9 +249,6 @@ export interface SessionUser {
   locale?: string
   country?: string
   system_locale?: string
-  // TODO: Rethink how declare a field to reuse after finish different flow actions
-  show_first_interaction?: boolean
-  show_content_after_flow?: string
 }
 
 export interface HubtypeCaseContactReason {
