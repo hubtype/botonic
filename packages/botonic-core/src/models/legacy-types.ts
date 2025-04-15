@@ -97,12 +97,7 @@ export interface PluginConfig<T> {
   resolve: { default: PluginConstructor<T> }
 }
 
-export interface ResolvedPlugin extends Plugin {
-  id: string
-  name: string
-  config?: any
-}
-export type ResolvedPlugins = Record<string, ResolvedPlugin>
+export type ResolvedPlugins = Record<string, Plugin>
 
 export type InputType =
   | INPUT.AUDIO

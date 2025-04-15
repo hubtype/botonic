@@ -8,14 +8,13 @@ import {
   INPUT,
   Input,
   Locales,
-  PluginConfig,
   ProcessInputResult,
   ResolvedPlugins,
   Route,
   Routes,
   Session,
 } from './models'
-import { loadPlugins, runPlugins } from './plugins'
+import { runPlugins } from './plugins'
 import { getComputedRoutes, Router } from './routing'
 
 export interface CoreBotConfig {
@@ -25,7 +24,7 @@ export interface CoreBotConfig {
   defaultTyping?: number
   inspector?: Inspector
   locales: Locales
-  plugins?: PluginConfig<any>[]
+  plugins?: ResolvedPlugins
   renderer: any
   routes: Routes
   theme?: any
@@ -58,7 +57,7 @@ export class CoreBot {
     inspector,
   }: CoreBotConfig) {
     this.renderer = renderer
-    this.plugins = loadPlugins(plugins)
+    this.plugins = plugins || {}
     this.theme = theme || {}
     this.defaultTyping = defaultTyping
     this.defaultDelay = defaultDelay
