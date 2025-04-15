@@ -1,16 +1,17 @@
 import { Inspector } from './debug'
 import { getString } from './i18n'
 import {
+  BotContext,
   BotonicAction,
   BotRequest,
   BotResponse,
   INPUT,
   Input,
   Locales,
+  PluginConfig,
   ProcessInputResult,
   ResolvedPlugins,
   Route,
-  RoutePath,
   Routes,
   Session,
 } from './models'
@@ -24,7 +25,7 @@ export interface CoreBotConfig {
   defaultTyping?: number
   inspector?: Inspector
   locales: Locales
-  plugins?: any
+  plugins?: PluginConfig<any>[]
   renderer: any
   routes: Routes
   theme?: any
@@ -32,12 +33,12 @@ export interface CoreBotConfig {
 
 export class CoreBot {
   appId?: string
-  defaultDelay?: number
+  defaultDelay: number
   defaultRoutes: Route[]
-  defaultTyping?: number
+  defaultTyping: number
   inspector: Inspector
   locales: Locales
-  plugins?: ResolvedPlugins
+  plugins: ResolvedPlugins
   renderer: any
   rootElement: any
   router: Router | null
@@ -51,17 +52,16 @@ export class CoreBot {
     theme,
     plugins,
     appId,
-    defaultTyping,
-    defaultDelay,
+    defaultTyping = 0.6,
+    defaultDelay = 0.4,
     defaultRoutes,
     inspector,
   }: CoreBotConfig) {
     this.renderer = renderer
     this.plugins = loadPlugins(plugins)
     this.theme = theme || {}
-    this.defaultTyping =
-      typeof defaultTyping !== 'undefined' ? defaultTyping : 0.6
-    this.defaultDelay = typeof defaultDelay !== 'undefined' ? defaultDelay : 0.4
+    this.defaultTyping = defaultTyping
+    this.defaultDelay = defaultDelay
     this.locales = locales
     this.appId = appId || undefined
     this.rootElement = null
@@ -91,107 +91,83 @@ export class CoreBot {
     session,
     lastRoutePath,
   }: BotRequest): Promise<BotResponse> {
-    const output = await this.runInput({ input, session, lastRoutePath })
+    const botContext: BotContext = {
+      getString: (stringId: string) => this.getString(stringId, session),
+      setLocale: (locale: string) => this.setLocale(locale, session),
+      params: {},
+      lastRoutePath,
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      input,
+      session,
+    }
+
+    const output = await this.runInput(botContext)
 
     if (session._botonic_action?.startsWith(BotonicAction.Redirect)) {
-      return await this.runRedirectAction(output, {
-        input,
-        session,
-        lastRoutePath,
-      })
+      return await this.runRedirectAction(output, botContext)
     }
 
     return output
   }
 
-  private async runInput({
-    input,
-    session,
-    lastRoutePath,
-  }: BotRequest): Promise<BotResponse> {
-    session = session || {}
-    if (!session.__locale) session.__locale = 'en'
+  private async runInput(botContext: BotContext): Promise<BotResponse> {
+    botContext.session = botContext.session || {}
+    if (!botContext.session.__locale) botContext.session.__locale = 'en'
 
-    if (input.type === INPUT.CHAT_EVENT) {
+    if (botContext.input.type === INPUT.CHAT_EVENT) {
       return {
-        input,
-        session,
-        lastRoutePath,
+        input: botContext.input,
+        session: botContext.session,
+        lastRoutePath: botContext.lastRoutePath,
         response: [],
       }
     }
 
-    await this.runPrePlugins(input, session, lastRoutePath)
+    await this.runPrePlugins(botContext)
 
-    const output = await this.getOutput(input, session, lastRoutePath)
-
+    const output = await this.getOutput(botContext)
+    botContext = this.updateRequestFromOutput(botContext, output)
     const response = await this.renderer({
-      request: this.createRequestFromOutput(
-        { input, session, lastRoutePath },
-        output
-      ),
+      request: botContext,
       actions: [output.fallbackAction, output.action, output.emptyAction],
     })
 
-    lastRoutePath = output.lastRoutePath
+    await this.runPostPlugins(botContext, response)
 
-    await this.runPostPlugins(input, session, lastRoutePath, response)
-
-    session.is_first_interaction = false
+    botContext.session.is_first_interaction = false
 
     return {
-      input,
+      input: botContext.input,
       response,
-      session,
-      lastRoutePath,
+      session: botContext.session,
+      lastRoutePath: botContext.lastRoutePath,
     }
   }
 
-  private async runPrePlugins(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
-  ) {
+  private async runPrePlugins(botContext: BotContext) {
     if (this.plugins) {
-      await runPlugins(
-        this.plugins,
-        'pre',
-        input,
-        session,
-        lastRoutePath,
-        undefined
-      )
+      await runPlugins({ botContext, mode: 'pre' })
     }
   }
 
-  private async getOutput(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
-  ): Promise<ProcessInputResult> {
-    await this.setRouter(input, session, lastRoutePath)
+  private async getOutput(botContext: BotContext): Promise<ProcessInputResult> {
+    await this.setRouter(botContext)
 
     const output = (this.router as Router).processInput(
-      input,
-      session,
-      lastRoutePath
+      botContext.input,
+      botContext.session,
+      botContext.lastRoutePath
     )
     return output
   }
 
-  private async setRouter(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath
-  ) {
+  private async setRouter(botContext: BotContext) {
     if (this.routes instanceof Function) {
       this.router = new Router(
         [
-          ...(await getComputedRoutes(this.routes, {
-            input,
-            session,
-            lastRoutePath,
-          })),
+          ...(await getComputedRoutes(this.routes, botContext)),
           ...this.defaultRoutes,
         ],
         this.inspector.routeInspector
@@ -199,74 +175,57 @@ export class CoreBot {
     }
   }
 
-  private createRequestFromOutput(
-    { input, session, lastRoutePath }: BotRequest,
+  private updateRequestFromOutput(
+    botContext: BotContext,
     output: ProcessInputResult
-  ) {
+  ): BotContext {
     return {
-      getString: (stringId: string) => this.getString(stringId, session),
-      setLocale: (locale: string) => this.setLocale(locale, session),
-      session: session || {},
+      ...botContext,
       params: output.params || {},
-      input,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
-      defaultDelay: this.defaultDelay,
-      lastRoutePath,
+      lastRoutePath: output.lastRoutePath,
     }
   }
 
-  private async runPostPlugins(
-    input: Input,
-    session: Session,
-    lastRoutePath: RoutePath,
-    response: any
-  ) {
+  private async runPostPlugins(botContext: BotContext, response: any) {
     if (this.plugins) {
-      await runPlugins(
-        this.plugins,
-        'post',
-        input,
-        session,
-        lastRoutePath,
-        response
-      )
+      await runPlugins({
+        botContext,
+        mode: 'post',
+        response,
+      })
     }
   }
 
   private async runRedirectAction(
     previousResponse: BotResponse,
-    { input, session, lastRoutePath }: BotRequest,
+    botContext: BotContext,
     numOfRedirects: number = 0
   ) {
     if (numOfRedirects > 10) {
       throw new Error('Maximum BotAction recursive calls reached (10)')
     }
 
-    const nextPayload = session._botonic_action?.split(
+    const nextPayload = botContext.session._botonic_action?.split(
       `${BotonicAction.Redirect}:`
     )[1]
 
     const inputWithBotActionPayload: Input = {
-      ...input,
+      ...botContext.input,
       payload: nextPayload,
       type: INPUT.POSTBACK,
       data: undefined,
       text: undefined,
     }
 
-    session._botonic_action = undefined
+    botContext.session._botonic_action = undefined
+    botContext.input = inputWithBotActionPayload
 
-    const followUp = await this.runInput({
-      input: inputWithBotActionPayload,
-      session,
-      lastRoutePath,
-    })
+    const followUp = await this.runInput(botContext)
 
     const response = {
       input: followUp.input,
       response: previousResponse.response.concat(followUp.response),
-      session,
+      session: botContext.session,
       lastRoutePath: followUp.lastRoutePath,
     }
 
@@ -274,11 +233,7 @@ export class CoreBot {
     if (response.session._botonic_action?.startsWith(BotonicAction.Redirect)) {
       return await this.runRedirectAction(
         response,
-        {
-          input,
-          session,
-          lastRoutePath,
-        },
+        botContext,
         numOfRedirects + 1
       )
     }

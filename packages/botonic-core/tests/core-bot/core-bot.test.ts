@@ -245,7 +245,7 @@ it('input returns two actions when first returen a _botonic_action redirect', as
     session,
     lastRoutePath: 'rating-action',
   })
-  console.log({ botResponse })
+
   // Assert
   expect(botResponse.input).toEqual({
     type: 'postback',

@@ -92,6 +92,13 @@ export function createRequest({
     },
     lastRoutePath: '',
     plugins,
+    getString: (_stringId: string) => '',
+    setLocale: (_locale: string) => {
+      return
+    },
+    params: {},
+    defaultDelay: 0,
+    defaultTyping: 0,
   }
 }
 

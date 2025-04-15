@@ -100,7 +100,7 @@ export interface PluginConfig<T> {
 export interface ResolvedPlugin extends Plugin {
   id: string
   name: string
-  config: any
+  config?: any
 }
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
@@ -252,11 +252,13 @@ export interface HubtypeCaseContactReason {
   project_id: string
 }
 
+export interface SessionBot {
+  id: string
+  name?: string
+}
+
 export interface Session {
-  bot: {
-    id: string
-    name?: string
-  }
+  bot: SessionBot
   __locale?: string
   __retries: number
   _access_token: string
@@ -323,6 +325,15 @@ export interface BotRequest {
   session: Session
 }
 
+export interface BotContext extends BotRequest {
+  getString: (stringId: string) => string
+  setLocale: (locale: string) => void
+  defaultDelay: number
+  defaultTyping: number
+  params: Record<string, string>
+  plugins: ResolvedPlugins
+}
+
 /** The response of the bot for the triggered actions, which can be
  * the one matched by the routes, the default action and the retry actions.
  * See Response at @botonic/react's index.d.ts for the React type
@@ -331,11 +342,10 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export interface PluginPreRequest extends BotRequest {
-  plugins: ResolvedPlugins
-}
-export interface PluginPostRequest extends BotResponse {
-  plugins: ResolvedPlugins
+export type PluginPreRequest = BotContext
+
+export type PluginPostRequest = BotContext & {
+  response: string | null
 }
 
 export interface Plugin {

@@ -248,11 +248,17 @@ export class FlowBuilderApi {
     if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
       return locale
     }
-    const language = locale.split('-')[0]
-    if (this.flow.locales.find(flowLocale => flowLocale === language)) {
+
+    const language = locale?.split('-')[0]
+
+    if (
+      language &&
+      this.flow.locales.find(flowLocale => flowLocale === language)
+    ) {
       console.log(`locale: ${locale} has been resolved as ${language}`)
       return language
     }
+
     throw new Error(
       `locale: ${locale} cannot be resolved in  ${this.flow.locales}`
     )
