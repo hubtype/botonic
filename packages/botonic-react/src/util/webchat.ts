@@ -3,7 +3,9 @@ import UAParser from 'ua-parser-js'
 import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../constants'
-import { ThemeProps } from '../webchat/theme/types'
+import { timeZoneToCountryCode } from '../time-zone-to-country-code'
+import { ClientUser } from '../webchat/context/types'
+import { WebchatTheme } from '../webchat/theme/types'
 import { getProperty } from './objects'
 
 /**
@@ -12,7 +14,7 @@ import { getProperty } from './objects'
  * If property doesn't exist, returns the defaultValue.
  */
 export const _getThemeProperty =
-  (theme: ThemeProps) => (property: string, defaultValue?: any) => {
+  (theme: WebchatTheme) => (property: string, defaultValue?: any) => {
     for (const [key, value] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
       if (value === property) {
         const nestedProperty = getProperty(theme, value)
@@ -46,6 +48,39 @@ export const initSession = (
   if (!session.user || Object.keys(session.user).length === 0 || !hasUserId)
     session.user = !hasUserId ? merge(session.user, createUser()) : createUser()
   return session
+}
+
+export function updateUserLocaleAndCountry(user: Partial<ClientUser>) {
+  const locale = getLocale(user)
+  const country = getCountry(user)
+
+  return {
+    ...user,
+    locale,
+    country,
+  }
+}
+
+function getLocale(user: Partial<ClientUser>) {
+  if (user.locale) {
+    return user.locale
+  }
+
+  return user.extra_data?.language
+    ? (user.extra_data?.language as string)
+    : navigator.language
+}
+
+function getCountry(user: Partial<ClientUser>) {
+  if (user.country) {
+    return user.country
+  }
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const userCountry = timeZoneToCountryCode[timeZone]
+
+  return user.extra_data?.country
+    ? (user.extra_data?.country as string)
+    : userCountry
 }
 
 export const shouldKeepSessionOnReload = ({

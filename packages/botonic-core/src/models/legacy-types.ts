@@ -136,6 +136,7 @@ export interface Translations {
   [languageCode: string]: string
 }
 
+// TODO: Remove when remove intent babel plugin
 /** Fields set by NLU plugins: Luis, Dialogflow, ... **/
 export interface NluResult {
   // the name of the highest confidence intent
@@ -240,7 +241,11 @@ export interface SessionUser {
   extra_data?: any
   imp_id?: string
   provider_id?: string
+  locale?: string
+  country?: string
+  system_locale?: string
 }
+
 export interface HubtypeCaseContactReason {
   id: string
   name: string
@@ -254,7 +259,6 @@ export interface SessionBot {
 
 export interface Session {
   bot: SessionBot
-  __locale?: string
   __retries: number
   _access_token: string
   _hubtype_api: string
@@ -323,7 +327,9 @@ export interface BotRequest {
 export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
   extends BotRequest {
   getString: (stringId: string) => string
-  setLocale: (locale: string) => void
+  setUserCountry: (country: string) => void
+  setUserLocale: (locale: string) => void
+  setSystemLocale: (locale: string) => void
   defaultDelay: number
   defaultTyping: number
   params: Record<string, string>

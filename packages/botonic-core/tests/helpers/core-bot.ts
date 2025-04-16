@@ -1,6 +1,9 @@
 import { CoreBot } from '../../src/core-bot'
+import { Session, SessionUser } from '../../src/models/legacy-types'
 
 export const LOCALE_EN = 'en'
+export const COUNTRY_GB = 'GB'
+export const SYSTEM_LOCALE_EN_GB = 'en-GB'
 export const developerRoutes = [{ path: '', text: 'hello', action: 'Hi user!' }]
 export const developerLocales = {
   [LOCALE_EN]: {
@@ -17,4 +20,16 @@ export function initCoreBotWithDeveloperConfig(extraConfig = {}) {
     locales: developerLocales,
     ...extraConfig,
   })
+}
+
+export function createSessionWithUser(session?: Partial<Session>) {
+  return {
+    ...session,
+    user: {
+      locale: LOCALE_EN,
+      country: COUNTRY_GB,
+      system_locale: LOCALE_EN,
+      ...session?.user,
+    },
+  }
 }

@@ -1,5 +1,5 @@
 export { Audio } from './audio'
-export { Button } from './button'
+export { Button } from './button/index'
 export { Carousel } from './carousel'
 export { customMessage } from './custom-message'
 export { Document } from './document'

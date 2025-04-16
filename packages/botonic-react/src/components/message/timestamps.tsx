@@ -62,8 +62,7 @@ export const MessageTimestamp = ({
   const isSentByAgent = sentBy === SENDERS.agent
 
   const BotMessageImage = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.botMessageImage,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.botMessageImage
   )
 
   const AgentMessageImage = getThemeProperty(

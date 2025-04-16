@@ -1,14 +1,9 @@
-import {
-  Input as CoreInput,
-  Session as CoreSession,
-  SessionUser as CoreSessionUser,
-} from '@botonic/core'
+import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { CloseWebviewOptions } from '../../contexts'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
-import { WebchatStateTheme } from '../index-types'
-import { ThemeProps } from '../theme/types'
+import { WebchatTheme } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string
@@ -20,8 +15,6 @@ export interface DevSettings {
 }
 
 export interface WebchatState {
-  width: number // TODO: move this inside webchatState.theme.style
-  height: number // TODO: move this inside webchatState.theme.style
   messagesJSON: any[]
   messagesComponents: any[]
   replies?: (typeof Reply)[]
@@ -32,8 +25,8 @@ export interface WebchatState {
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
-  theme: WebchatStateTheme // TODO: type this as ThemeProps
-  themeUpdates: Partial<WebchatStateTheme> // TODO: type this as Partial<ThemeProps>
+  theme: WebchatTheme
+  themeUpdates: Partial<WebchatTheme>
   error: ErrorMessage
   online: boolean
   devSettings: DevSettings
@@ -51,6 +44,19 @@ export interface WebchatState {
 
 // ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
 export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
+// ClientSession: type for session in frontend when webchat is deployed
+export type ClientSession = {
+  user: ClientUser
+}
+// ClientUser: type for user in frontend when webchat is deployed
+export type ClientUser = {
+  id: string
+  name: string
+  locale: string
+  country: string
+  system_locale?: string
+  extra_data?: Record<string, any>
+}
 
 export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
@@ -65,7 +71,6 @@ export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => Promise<void>
   setIsInputFocused: (isInputFocused: boolean) => void
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
-  theme: ThemeProps // TODO: Remove this attribute and use allways webchatState.theme
   toggleWebchat: (toggle: boolean) => void
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
@@ -73,7 +78,7 @@ export interface WebchatContextProps {
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void
-  updateUser: (user: Partial<CoreSessionUser>) => void
+  updateUser: (user: ClientUser) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS, WEBCHAT } from '../../constants'
+import { COLORS } from '../../constants'
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -9,9 +9,13 @@ export const HeaderContainer = styled.div`
     ${COLORS.BLEACHED_CEDAR_PURPLE} 0%,
     ${props => props.color} 100%
   );
-  border-radius: ${WEBCHAT.DEFAULTS.BORDER_RADIUS_TOP_CORNERS};
+  border-radius: ${props => props.theme.header?.style?.borderRadius};
   z-index: 2;
   height: inherit;
+
+  @media (max-width: ${props => props.theme.mobileBreakpoint}px) {
+    border-radius: ${props => props.theme.header?.mobileStyle?.borderRadius};
+  }
 `
 
 export const ImageContainer = styled.div`

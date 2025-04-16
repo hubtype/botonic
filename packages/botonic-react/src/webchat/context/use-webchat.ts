@@ -3,51 +3,41 @@ import { useReducer, useRef } from 'react'
 
 import { Reply } from '../../components'
 import { Webview } from '../../components/index-types'
-import { COLORS, WEBCHAT } from '../../constants'
 import { WebchatMessage } from '../../index-types'
-import { ThemeProps } from '../theme/types'
+import { defaultTheme } from '../theme/default-theme'
+import { WebchatTheme } from '../theme/types'
 import { WebchatAction } from './actions'
 import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
 import { webchatReducer } from './webchat-reducer'
 
-export const webchatInitialState: WebchatState = {
-  width: WEBCHAT.DEFAULTS.WIDTH,
-  height: WEBCHAT.DEFAULTS.HEIGHT,
-  messagesJSON: [],
-  messagesComponents: [],
-  replies: [],
-  latestInput: {},
-  typing: false,
-  webview: null,
-  webviewParams: null,
-  session: { user: undefined },
-  lastRoutePath: undefined,
-  handoff: false,
-  // TODO: type create a defaultTheme using ThemeProps, and put this in initialState
-  theme: {
-    headerTitle: WEBCHAT.DEFAULTS.TITLE,
-    brandColor: COLORS.BOTONIC_BLUE,
-    brandImage: WEBCHAT.DEFAULTS.LOGO,
-    triggerButtonImage: undefined,
-    textPlaceholder: WEBCHAT.DEFAULTS.PLACEHOLDER,
-    style: {
-      fontFamily: WEBCHAT.DEFAULTS.FONT_FAMILY,
-    },
-  },
-  themeUpdates: {},
-  error: {},
-  online: true,
-  devSettings: { keepSessionOnReload: false },
-  isWebchatOpen: false,
-  isEmojiPickerOpen: false,
-  isPersistentMenuOpen: false,
-  isCoverComponentOpen: false,
-  isCustomComponentRendered: false,
-  lastMessageUpdate: undefined,
-  currentAttachment: undefined,
-  numUnreadMessages: 0,
-  isLastMessageVisible: true,
-  isInputFocused: false,
+function getWebchatInitialState(initialTheme: WebchatTheme): WebchatState {
+  return {
+    replies: [],
+    messagesJSON: [],
+    messagesComponents: [],
+    latestInput: {},
+    typing: false,
+    webview: null,
+    webviewParams: null,
+    session: { user: undefined },
+    lastRoutePath: undefined,
+    handoff: false,
+    theme: initialTheme,
+    themeUpdates: {},
+    error: {},
+    online: true,
+    devSettings: { keepSessionOnReload: false },
+    isWebchatOpen: false,
+    isEmojiPickerOpen: false,
+    isPersistentMenuOpen: false,
+    isCoverComponentOpen: false,
+    isCustomComponentRendered: false,
+    lastMessageUpdate: undefined,
+    currentAttachment: undefined,
+    numUnreadMessages: 0,
+    isLastMessageVisible: true,
+    isInputFocused: false,
+  }
 }
 
 export interface UseWebchat {
@@ -73,7 +63,7 @@ export interface UseWebchat {
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void
   updateSession: (session: Partial<Session>) => void
-  updateTheme: (theme: ThemeProps, themeUpdates?: ThemeProps) => void
+  updateTheme: (theme: WebchatTheme, themeUpdates?: WebchatTheme) => void
   updateTyping: (typing: boolean) => void
   updateWebview: (webview: Webview, params: Record<string, string>) => void
   removeReplies: () => void
@@ -87,7 +77,10 @@ export interface UseWebchat {
   inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
 }
 
-export function useWebchat(): UseWebchat {
+export function useWebchat(theme?: WebchatTheme): UseWebchat {
+  const initialTheme = theme || defaultTheme
+  const webchatInitialState = getWebchatInitialState(initialTheme)
+
   const [webchatState, webchatDispatch] = useReducer(
     webchatReducer,
     webchatInitialState
@@ -154,7 +147,7 @@ export function useWebchat(): UseWebchat {
       payload: handoff,
     })
 
-  const updateTheme = (theme: ThemeProps, themeUpdates?: ThemeProps) => {
+  const updateTheme = (theme: WebchatTheme, themeUpdates?: WebchatTheme) => {
     const payload =
       themeUpdates !== undefined ? { theme, themeUpdates } : { theme }
     webchatDispatch({

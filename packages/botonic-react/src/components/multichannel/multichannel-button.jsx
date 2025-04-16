@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { truncateText } from '../../util'
-import { Button } from '../button'
+import { Button } from '../button/index'
 import { MultichannelContext } from './multichannel-context'
 import { WHATSAPP_MAX_BUTTON_CHARS } from './whatsapp/constants'
 

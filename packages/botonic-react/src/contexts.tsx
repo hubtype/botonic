@@ -5,7 +5,9 @@ import { ActionRequest } from './index-types'
 
 export const RequestContext = createContext<ActionRequest>({
   getString: () => '',
-  setLocale: () => undefined,
+  setUserCountry: () => undefined,
+  setUserLocale: () => undefined,
+  setSystemLocale: () => undefined,
   params: {},
   defaultDelay: 0,
   defaultTyping: 0,

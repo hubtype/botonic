@@ -1,34 +1,24 @@
 import React, { useContext } from 'react'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
 interface EmojiPickerProps {
-  enableEmojiPicker?: boolean
   onClick: () => void
 }
 
-export const EmojiPicker = ({
-  enableEmojiPicker,
-  onClick,
-}: EmojiPickerProps) => {
-  const { getThemeProperty } = useContext(WebchatContext)
+export const EmojiPicker = ({ onClick }: EmojiPickerProps) => {
+  const { webchatState } = useContext(WebchatContext)
 
-  const CustomEmojiPicker = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customEmojiPicker,
-    undefined
-  )
+  const CustomEmojiPicker = webchatState.theme.userInput?.emojiPicker?.custom
 
   const isEmojiPickerEnabled = () => {
     const hasCustomEmojiPicker = !!CustomEmojiPicker
     return (
-      getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.enableEmojiPicker,
-        enableEmojiPicker
-      ) ?? hasCustomEmojiPicker
+      webchatState.theme.userInput?.emojiPicker?.enable ?? hasCustomEmojiPicker
     )
   }
   const emojiPickerEnabled = isEmojiPickerEnabled()

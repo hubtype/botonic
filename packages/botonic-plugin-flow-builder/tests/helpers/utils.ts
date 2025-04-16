@@ -93,7 +93,13 @@ export function createRequest({
     lastRoutePath: '',
     plugins,
     getString: (_stringId: string) => '',
-    setLocale: (_locale: string) => {
+    setUserCountry: (_country: string) => {
+      return
+    },
+    setUserLocale: (_locale: string) => {
+      return
+    },
+    setSystemLocale: (_locale: string) => {
       return
     },
     params: {},

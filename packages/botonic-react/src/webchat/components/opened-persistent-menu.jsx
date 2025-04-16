@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { Button } from '../../components/button'
+import { Button } from '../../components/button/index'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../context'
 import { useComponentVisible } from '../hooks'
@@ -18,8 +18,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   const { ref, isComponentVisible } = useComponentVisible(true, onClick)
   const { getThemeProperty } = useContext(WebchatContext)
   const CustomPersistentMenu = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customPersistentMenu,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customPersistentMenu
   )
   let closeLabel = 'Cancel'
   try {

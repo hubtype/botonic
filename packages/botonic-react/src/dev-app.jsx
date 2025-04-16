@@ -1,4 +1,3 @@
-import merge from 'lodash.merge'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 
@@ -56,13 +55,6 @@ export class DevApp extends WebchatApp {
   getComponent(host, optionsAtRuntime = {}) {
     let {
       theme = {},
-      persistentMenu,
-      coverComponent,
-      blockInputs,
-      enableEmojiPicker,
-      enableAttachments,
-      enableUserInput,
-      enableAnimations,
       storage,
       storageKey,
       onInit,
@@ -73,14 +65,7 @@ export class DevApp extends WebchatApp {
       hostId,
       ...webchatOptions
     } = optionsAtRuntime
-    theme = merge(this.theme, theme)
-    persistentMenu = persistentMenu || this.persistentMenu
-    coverComponent = coverComponent || this.coverComponent
-    blockInputs = blockInputs || this.blockInputs
-    enableEmojiPicker = enableEmojiPicker || this.enableEmojiPicker
-    enableAttachments = enableAttachments || this.enableAttachments
-    enableUserInput = enableUserInput || this.enableUserInput
-    enableAnimations = enableAnimations || this.enableAnimations
+    theme = super.createInitialTheme(optionsAtRuntime)
     storage = storage || this.storage
     storageKey = storageKey || this.storageKey
     this.onInit = onInit || this.onInit
@@ -97,17 +82,8 @@ export class DevApp extends WebchatApp {
         host={this.host}
         shadowDOM={this.shadowDOM}
         theme={theme}
-        persistentMenu={persistentMenu}
-        coverComponent={coverComponent}
-        blockInputs={blockInputs}
-        enableEmojiPicker={enableEmojiPicker}
-        enableAttachments={enableAttachments}
-        enableUserInput={enableUserInput}
-        enableAnimations={enableAnimations}
         storage={storage}
         storageKey={storageKey}
-        getString={(stringId, session) => this.bot.getString(stringId, session)}
-        setLocale={(locale, session) => this.bot.setLocale(locale, session)}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}

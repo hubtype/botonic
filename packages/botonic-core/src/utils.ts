@@ -17,7 +17,7 @@ export const isBrowser = (): boolean => {
       IS_BROWSER
     : typeof window !== 'undefined' &&
         typeof window.document !== 'undefined' &&
-        !window.process?.versions?.node
+        !window.process?.versions?.node // In Jest window.process?.versions?.node is defined
 }
 
 export const isMobile = (mobileBreakpoint = 460): boolean => {

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { COLORS, ROLES, WEBCHAT } from '../../constants'
+import { ROLES, WEBCHAT } from '../../constants'
 import { Scale } from '../../shared/styles'
 import { resolveImage } from '../../util/environment'
 import { ConditionalWrapper } from '../../util/react'
@@ -18,36 +18,25 @@ export const DefaultHeader = () => {
   const { getThemeProperty, toggleWebchat } = useContext(WebchatContext)
 
   const animationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
-    true
+    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations
   )
 
   const headerImage = getThemeProperty(
     WEBCHAT.CUSTOM_PROPERTIES.headerImage,
-    getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.brandImage,
-      WEBCHAT.DEFAULTS.LOGO
-    )
+    getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.brandImage)
   )
 
-  const headerTitle = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.headerTitle,
-    WEBCHAT.DEFAULTS.TITLE
-  )
+  const headerTitle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.headerTitle)
 
   const headerSubtitle = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.headerSubtitle,
-    ''
+    WEBCHAT.CUSTOM_PROPERTIES.headerSubtitle
   )
 
   const handleCloseWebchat = () => {
     toggleWebchat(false)
   }
 
-  const color = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-    COLORS.BOTONIC_BLUE
-  )
+  const color = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.brandColor)
 
   return (
     <HeaderContainer

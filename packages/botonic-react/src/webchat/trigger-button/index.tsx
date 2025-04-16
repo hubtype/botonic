@@ -20,7 +20,7 @@ export const TriggerButton = (): JSX.Element => {
     )
 
     if (!image) {
-      webchatState.theme.triggerButtonImage = WEBCHAT.DEFAULTS.LOGO
+      webchatState.theme.triggerButton.image = WEBCHAT.DEFAULTS.LOGO
       return null
     }
     return image
@@ -33,8 +33,7 @@ export const TriggerButton = (): JSX.Element => {
   )
 
   const notificationsTriggerButtonEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsTriggerButtonEnabled,
-    false
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsTriggerButtonEnabled
   )
 
   const notificationsEnabled = getThemeProperty(
@@ -43,8 +42,7 @@ export const TriggerButton = (): JSX.Element => {
   )
 
   const CustomTriggerButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customTrigger,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customTrigger
   )
 
   const handleClick = (event: any) => {
