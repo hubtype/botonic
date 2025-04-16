@@ -22,7 +22,7 @@ import { UseWebchat } from './webchat/context/use-webchat'
 import {
   CoverComponentOptions,
   PersistentMenuOptionsTheme,
-  ThemeProps,
+  WebchatTheme,
 } from './webchat/theme/types'
 import { WebchatApp } from './webchat-app'
 
@@ -76,7 +76,7 @@ interface AddBotResponseArgs {
 }
 
 export interface WebchatArgs {
-  theme?: ThemeProps
+  theme?: Partial<WebchatTheme>
   persistentMenu?: PersistentMenuOptionsTheme
   coverComponent?: CoverComponentOptions
   blockInputs?: BlockInputOption[]
@@ -108,14 +108,7 @@ export interface WebchatProps {
   onStateChange: (args: OnStateChangeArgs) => void
 
   shadowDOM?: any
-  theme?: ThemeProps
-  persistentMenu?: PersistentMenuOptionsTheme
-  coverComponent?: CoverComponentOptions
-  blockInputs?: BlockInputOption[]
-  enableEmojiPicker?: boolean
-  enableAttachments?: boolean
-  enableUserInput?: boolean
-  enableAnimations?: boolean
+  theme?: WebchatTheme
   storage?: Storage | null
   storageKey?: string | (() => string)
   defaultDelay?: number
@@ -203,3 +196,4 @@ interface UpdateMessageInfoEvent {
 }
 
 export { CaseEventQueuePositionChangedInput } from '@botonic/core'
+export { WebchatTheme }

@@ -11,17 +11,11 @@ interface SendButtonProps {
 }
 
 export const SendButton = ({ onClick }: SendButtonProps) => {
-  const { getThemeProperty } = useContext(WebchatContext)
+  const { webchatState } = useContext(WebchatContext)
 
-  const sendButtonEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableSendButton,
-    true
-  )
+  const sendButtonEnabled = webchatState.theme.userInput?.sendButton?.enable
 
-  const CustomSendButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customSendButton,
-    undefined
-  )
+  const CustomSendButton = webchatState.theme.userInput?.sendButton?.custom
 
   return (
     <>

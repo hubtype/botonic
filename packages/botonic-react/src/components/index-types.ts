@@ -51,7 +51,7 @@ export interface ButtonProps {
   onClick?: () => void
   autodisable?: boolean
   disabled?: boolean
-  disabledstyle?: boolean
+  disabledstyle?: Record<string, string> | string
   children: string
   setDisabled?: (disabled: boolean) => void
   parentId?: string

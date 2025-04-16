@@ -88,8 +88,7 @@ export const Carousel = (props: CarouselProps) => {
   )
   // TODO: Investigate why when set to false, scroll is enabled via dragging the bar but not hovering the carousel elements
   const carouselArrowsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableCarouselArrows,
-    true
+    WEBCHAT.CUSTOM_PROPERTIES.enableCarouselArrows
   )
 
   const scrollCarouselBy = value => {

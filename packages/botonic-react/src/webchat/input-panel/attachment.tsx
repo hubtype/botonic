@@ -1,38 +1,27 @@
 import React, { useContext, useRef } from 'react'
 
 import AttachmentIcon from '../../assets/attachment-icon.svg'
-import { ROLES, WEBCHAT } from '../../constants'
+import { ROLES } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
 import { Icon } from '../components/common'
 import { ConditionalAnimation } from '../components/conditional-animation'
 
 interface AttachmentProps {
   accept: string
-  enableAttachments?: boolean
   onChange: (event: any) => void
 }
 
-export const Attachment = ({
-  accept,
-  enableAttachments,
-  onChange,
-}: AttachmentProps) => {
-  const { getThemeProperty } = useContext(WebchatContext)
+export const Attachment = ({ accept, onChange }: AttachmentProps) => {
+  const { webchatState } = useContext(WebchatContext)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const CustomAttachments = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customAttachments,
-    undefined
-  )
+  const CustomAttachments = webchatState.theme.userInput?.attachments?.custom
 
   const isAttachmentsEnabled = () => {
     const hasCustomAttachments = !!CustomAttachments
     return (
-      getThemeProperty(
-        WEBCHAT.CUSTOM_PROPERTIES.enableAttachments,
-        enableAttachments
-      ) ?? hasCustomAttachments
+      webchatState.theme.userInput?.attachments?.enable ?? hasCustomAttachments
     )
   }
   const attachmentsEnabled = isAttachmentsEnabled()

@@ -9,7 +9,7 @@ import { Fade } from '../../shared/styles'
 import { isDev } from '../../util/environment'
 import { ConditionalWrapper, renderComponent } from '../../util/react'
 import { WebchatContext } from '../../webchat/context'
-import { Button } from '../button'
+import { Button } from '../button/index'
 import { ButtonsDisabler } from '../buttons-disabler'
 import { getMarkdownStyle, renderLinks, renderMarkdown } from '../markdown'
 import { Reply } from '../reply'
@@ -49,7 +49,7 @@ export const Message = props => {
   const markdown = props.markdown
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
-  const [state, setState] = useState({
+  const [state] = useState({
     id: props.id || uuidv7(),
   })
 
@@ -139,10 +139,7 @@ export const Message = props => {
     }
   }, [webchatState.messagesJSON])
 
-  const brandColor = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.brandColor,
-    COLORS.BOTONIC_BLUE
-  )
+  const brandColor = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.brandColor)
 
   const getBgColor = () => {
     if (!blob) return COLORS.TRANSPARENT
@@ -165,7 +162,7 @@ export const Message = props => {
 
   const userOrBotMessage = isSentByUser ? SENDERS.user : SENDERS.bot
   const hasBlobTick = () =>
-    getThemeProperty(`message.${userOrBotMessage}.blobTick`, true)
+    getThemeProperty(`message.${userOrBotMessage}.blobTick`)
 
   const renderBrowser = () => {
     const messageJSON = webchatState.messagesJSON.find(m => m.id === state.id)
@@ -205,8 +202,7 @@ export const Message = props => {
     }
 
     const animationsEnabled = getThemeProperty(
-      WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
-      true
+      WEBCHAT.CUSTOM_PROPERTIES.enableAnimations
     )
 
     const resolveCustomTypeName = () =>

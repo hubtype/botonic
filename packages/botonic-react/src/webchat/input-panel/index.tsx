@@ -15,9 +15,6 @@ import { UserInputContainer } from './styles'
 import { Textarea } from './textarea'
 
 interface InputPanelProps {
-  persistentMenu: any
-  enableEmojiPicker?: boolean
-  enableAttachments?: boolean
   handleAttachment: (event: any) => void
   textareaRef: React.MutableRefObject<HTMLTextAreaElement | undefined>
   host: HTMLElement
@@ -25,9 +22,6 @@ interface InputPanelProps {
 }
 
 export const InputPanel = ({
-  persistentMenu,
-  enableEmojiPicker,
-  enableAttachments,
   handleAttachment,
   textareaRef,
   host,
@@ -96,23 +90,18 @@ export const InputPanel = ({
         />
       )}
 
-      <PersistentMenu onClick={handleMenu} persistentMenu={persistentMenu} />
+      <PersistentMenu onClick={handleMenu} />
 
       <Textarea
         host={host}
-        persistentMenu={persistentMenu}
         textareaRef={textareaRef}
         sendChatEvent={sendChatEvent}
         sendTextAreaText={sendTextAreaText}
       />
 
-      <EmojiPicker
-        enableEmojiPicker={enableEmojiPicker}
-        onClick={handleEmojiClick}
-      />
+      <EmojiPicker onClick={handleEmojiClick} />
 
       <Attachment
-        enableAttachments={enableAttachments}
         onChange={handleAttachment}
         accept={getFullMimeWhitelist().join(',')}
       />
