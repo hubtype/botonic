@@ -4,6 +4,7 @@
  */
 
 import { act, render, screen } from '@testing-library/react'
+import merge from 'lodash.merge'
 import React from 'react'
 
 import { ROLES } from '../../src/constants'
@@ -16,16 +17,18 @@ import {
 
 describe('TEST: Webchat Component', () => {
   const theme = {
-    persistentMenu: [
-      { label: 'Help', payload: 'help' },
-      {
-        label: 'See docs',
-        url: 'https://docs.botonic.io',
-      },
-      { closeLabel: 'Close' },
-    ],
-    enableEmojiPicker: true,
-    enableAttachments: true,
+    userInput: {
+      attachments: { enable: true },
+      emojiPicker: { enable: true },
+      persistentMenu: [
+        { label: 'Help', payload: 'help' },
+        {
+          label: 'See docs',
+          url: 'https://docs.botonic.io',
+        },
+        { closeLabel: 'Close' },
+      ],
+    },
   }
 
   // To avoid TypeError: frame.scrollTo is not a function
@@ -93,10 +96,11 @@ describe('TEST: Webchat Component', () => {
 
   it('TEST: Opened webchat has EmojiPickerIcon, AttachmentsIcon and PersistentMenuIcon when they are enabled in the theme', async () => {
     const { result } = renderUseWebchatHook()
-    Object.assign(theme, result.current.webchatState.theme)
+    const newTheme = merge(result.current.webchatState.theme, theme)
+
     act(() => {
       result.current.toggleWebchat(true)
-      result.current.updateTheme(theme)
+      result.current.updateTheme(newTheme)
     })
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
@@ -138,10 +142,11 @@ describe('TEST: Webchat Component', () => {
 
   it('TEST: Open PersistentMenu has PersistentMenuIcon, PersistentMenu, EmojiPickerIcon, AttachmentsIcon and SendButtonIcon', async () => {
     const { result } = renderUseWebchatHook()
-    Object.assign(theme, result.current.webchatState.theme)
+    const newTheme = merge(result.current.webchatState.theme, theme)
+
     act(() => {
       result.current.toggleWebchat(true)
-      result.current.updateTheme(theme)
+      result.current.updateTheme(newTheme)
       result.current.togglePersistentMenu(true)
     })
     await act(async () => {
@@ -161,11 +166,12 @@ describe('TEST: Webchat Component', () => {
 
   it('TEST: Opened webchat has no SendButton if we disable it in the theme', async () => {
     const { result } = renderUseWebchatHook()
-    Object.assign(theme, result.current.webchatState.theme)
-    theme.enableSendButton = false
+    theme.userInput.sendButton = { enable: false }
+    const newTheme = merge(result.current.webchatState.theme, theme)
+
     act(() => {
       result.current.toggleWebchat(true)
-      result.current.updateTheme(theme)
+      result.current.updateTheme(newTheme)
     })
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)
@@ -184,12 +190,13 @@ describe('TEST: Webchat Component', () => {
 
   it('TEST: If the UserInput is disabled opened webchat has no PersistentMenuIcon, EmojiPickerIcon, AttachmentIcon, SendButtonIcon and Textbox', async () => {
     const { result } = renderUseWebchatHook()
-    Object.assign(theme, result.current.webchatState.theme)
-    theme.enableSendButton = true
-    theme.enableUserInput = false
+    theme.userInput.enable = false
+    theme.userInput.sendButton = { enable: true }
+    const newTheme = merge(result.current.webchatState.theme, theme)
+
     act(() => {
       result.current.toggleWebchat(true)
-      result.current.updateTheme(theme)
+      result.current.updateTheme(newTheme)
     })
     await act(async () => {
       render(<Webchat webchatHooks={result.current} />)

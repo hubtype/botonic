@@ -7,13 +7,11 @@ export function useNotifications() {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const CustomUnreadMessagesBanner = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerCustom,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerCustom
   )
 
   const notificationsBannerEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerEnabled,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerEnabled
   )
 
   const notificationsEnabled = getThemeProperty(
@@ -22,13 +20,11 @@ export function useNotifications() {
   )
 
   const bannerText = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerText,
-    'unread messages'
+    WEBCHAT.CUSTOM_PROPERTIES.notificationsBannerText
   )
 
   const CustomScrollButton = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.scrollButtonCustom,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.scrollButtonCustom
   )
 
   const scrollButtonEnabled = getThemeProperty(

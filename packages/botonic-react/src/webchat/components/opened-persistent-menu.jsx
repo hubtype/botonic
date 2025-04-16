@@ -18,8 +18,7 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   const { ref, isComponentVisible } = useComponentVisible(true, onClick)
   const { getThemeProperty } = useContext(WebchatContext)
   const CustomPersistentMenu = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.customPersistentMenu,
-    undefined
+    WEBCHAT.CUSTOM_PROPERTIES.customPersistentMenu
   )
   let closeLabel = 'Cancel'
   try {

@@ -37,9 +37,9 @@ export const Image = (props: ImageProps) => {
 
   const { getThemeProperty } = useContext(WebchatContext)
   const ImagePreviewer = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.imagePreviewer,
-    null
+    WEBCHAT.CUSTOM_PROPERTIES.imagePreviewer
   )
+
   if (isBrowser()) {
     content = (
       <>
@@ -59,6 +59,7 @@ export const Image = (props: ImageProps) => {
       </>
     )
   }
+
   return (
     <Message
       role={ROLES.IMAGE_MESSAGE}

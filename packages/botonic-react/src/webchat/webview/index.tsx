@@ -23,19 +23,6 @@ export const WebviewContainer = () => {
     session: webchatState.session || ({} as Partial<CoreSession>),
   }
 
-  // TODO: Remove this code and use theme or webchatState.theme from the context,
-  // this code is duplicated from webchat.tsx
-  let mobileStyle = {}
-  if (isMobile(getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileBreakpoint))) {
-    mobileStyle = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.mobileStyle) || {
-      width: '100%',
-      height: '100%',
-      right: 0,
-      bottom: 0,
-      borderRadius: 0,
-    }
-  }
-
   const Webview = webchatState.webview as string | React.ComponentType
 
   const close = async (e: any) => {
@@ -61,7 +48,6 @@ export const WebviewContainer = () => {
         role={ROLES.WEBVIEW}
         style={{
           ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
-          ...mobileStyle,
         }}
       >
         <WebviewHeader />

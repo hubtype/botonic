@@ -11,8 +11,7 @@ export const IntroMessage = () => {
   const { getThemeProperty } = useContext(WebchatContext)
 
   const animationsEnabled = getThemeProperty(
-    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations,
-    true
+    WEBCHAT.CUSTOM_PROPERTIES.enableAnimations
   )
   const CustomIntro = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.customIntro)
   const introImage = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.introImage)

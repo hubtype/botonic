@@ -7,8 +7,7 @@ import {
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { CloseWebviewOptions } from '../../contexts'
 import { TrackEventFunction, WebchatMessage } from '../../index-types'
-import { WebchatStateTheme } from '../index-types'
-import { ThemeProps } from '../theme/types'
+import { WebchatTheme } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string
@@ -20,8 +19,6 @@ export interface DevSettings {
 }
 
 export interface WebchatState {
-  width: number // TODO: move this inside webchatState.theme.style
-  height: number // TODO: move this inside webchatState.theme.style
   messagesJSON: any[]
   messagesComponents: any[]
   replies?: (typeof Reply)[]
@@ -32,8 +29,8 @@ export interface WebchatState {
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
-  theme: WebchatStateTheme // TODO: type this as ThemeProps
-  themeUpdates: Partial<WebchatStateTheme> // TODO: type this as Partial<ThemeProps>
+  theme: WebchatTheme
+  themeUpdates: Partial<WebchatTheme>
   error: ErrorMessage
   online: boolean
   devSettings: DevSettings
@@ -65,7 +62,6 @@ export interface WebchatContextProps {
   sendText: (text: string, payload?: string) => Promise<void>
   setIsInputFocused: (isInputFocused: boolean) => void
   setLastMessageVisible: (isLastMessageVisible: boolean) => void
-  theme: ThemeProps // TODO: Remove this attribute and use allways webchatState.theme
   toggleWebchat: (toggle: boolean) => void
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void

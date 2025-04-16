@@ -3,7 +3,7 @@ import UAParser from 'ua-parser-js'
 import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../constants'
-import { ThemeProps } from '../webchat/theme/types'
+import { WebchatTheme } from '../webchat/theme/types'
 import { getProperty } from './objects'
 
 /**
@@ -12,7 +12,7 @@ import { getProperty } from './objects'
  * If property doesn't exist, returns the defaultValue.
  */
 export const _getThemeProperty =
-  (theme: ThemeProps) => (property: string, defaultValue?: any) => {
+  (theme: WebchatTheme) => (property: string, defaultValue?: any) => {
     for (const [key, value] of Object.entries(WEBCHAT.CUSTOM_PROPERTIES)) {
       if (value === property) {
         const nestedProperty = getProperty(theme, value)
