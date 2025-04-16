@@ -87,7 +87,11 @@ class App extends React.Component {
   render() {
     const webviewRequestContext = {
       getString: (stringId: string) =>
-        getString(this.props.locales, this.state.session.__locale, stringId),
+        getString(
+          this.props.locales,
+          this.state.session.user.system_locale,
+          stringId
+        ),
       session: this.state.session || {},
       params: this.state.params || {},
       closeWebview: this.close.bind(this),

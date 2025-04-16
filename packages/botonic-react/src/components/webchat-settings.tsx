@@ -18,7 +18,12 @@ export interface WebchatSettingsProps {
   enableUserInput?: boolean
   persistentMenu?: PersistentMenuOptionsTheme
   theme?: Partial<WebchatTheme>
-  user?: { extra_data?: any }
+  user?: {
+    extra_data?: any
+    country?: string
+    locale?: string
+    system_locale?: string
+  }
 }
 
 export const WebchatSettings = ({

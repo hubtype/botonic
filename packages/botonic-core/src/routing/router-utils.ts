@@ -81,19 +81,16 @@ export function getNotFoundAction(input: Input, routes: Route[]): Action {
 
 export async function getComputedRoutes(
   routes: Routes,
-  requestCoreContext: BotContext
+  botContext: BotContext
 ): Promise<Route[]> {
   if (routes instanceof Function) {
-    return await getComputedRoutes(
-      await routes(requestCoreContext),
-      requestCoreContext
-    )
+    return await getComputedRoutes(await routes(botContext), botContext)
   }
   for (const [key, route] of Object.entries(routes) as any) {
     if (route.childRoutes && route.childRoutes instanceof Function) {
       routes[key].childRoutes = await getComputedRoutes(
-        await route.childRoutes(requestCoreContext),
-        requestCoreContext
+        await route.childRoutes(botContext),
+        botContext
       )
     } else {
       routes[key] = route

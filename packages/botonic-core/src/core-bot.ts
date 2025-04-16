@@ -78,12 +78,19 @@ export class CoreBot {
   }
 
   getString(id: string, session: Session): string {
-    // @ts-ignore
-    return getString(this.locales, session.__locale, id)
+    return getString(this.locales, session.user.system_locale!, id)
   }
 
-  setLocale(locale: string, session: Session): void {
-    session.__locale = locale
+  setSystemLocale(locale: string, session: Session): void {
+    session.user.system_locale = locale
+  }
+
+  setUserLocale(locale: string, session: Session): void {
+    session.user.locale = locale
+  }
+
+  setUserCountry(country: string, session: Session): void {
+    session.user.country = country
   }
 
   async input({
@@ -93,7 +100,11 @@ export class CoreBot {
   }: BotRequest): Promise<BotResponse> {
     const botContext: BotContext = {
       getString: (stringId: string) => this.getString(stringId, session),
-      setLocale: (locale: string) => this.setLocale(locale, session),
+      setUserCountry: (country: string) =>
+        this.setUserCountry(country, session),
+      setUserLocale: (locale: string) => this.setUserLocale(locale, session),
+      setSystemLocale: (locale: string) =>
+        this.setSystemLocale(locale, session),
       params: {},
       lastRoutePath,
       plugins: this.plugins,
@@ -113,8 +124,7 @@ export class CoreBot {
   }
 
   private async runInput(botContext: BotContext): Promise<BotResponse> {
-    botContext.session = botContext.session || {}
-    if (!botContext.session.__locale) botContext.session.__locale = 'en'
+    this.updateSession(botContext.session)
 
     if (botContext.input.type === INPUT.CHAT_EVENT) {
       return {
@@ -143,6 +153,26 @@ export class CoreBot {
       response,
       session: botContext.session,
       lastRoutePath: botContext.lastRoutePath,
+    }
+  }
+
+  private updateSession(session: Session) {
+    // set new user fields (country, locale, system_locale) from old fields in extra_data
+    if (!session.user.country) {
+      const country = session.user.extra_data?.country
+      this.setUserCountry(country, session)
+    }
+
+    if (!session.user.locale) {
+      const language = session.user.extra_data?.language
+      this.setUserLocale(language, session)
+    }
+
+    if (!session.user.system_locale) {
+      const locale = session.user.locale
+      if (locale) {
+        this.setSystemLocale(locale, session)
+      }
     }
   }
 

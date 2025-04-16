@@ -38,7 +38,8 @@ export interface Route extends CoreRoute {
 }
 export type Routes = CoreRoutes<Route>
 
-// Parameters of the actions' botonicInit method
+// Parameters of the actions in botonicInit method
+// the ActionRequest is provided by the context of the core-bot
 export type ActionRequest = BotContext
 
 export interface WebchatRef {
