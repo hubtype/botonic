@@ -16,17 +16,9 @@ export const StyledButton = styled.button`
   color: ${props => props.theme.button?.style?.color};
   outline: ${props => props.theme.button?.style?.outline};
   border: ${props => props.theme.button?.style?.border};
-  border-top-right-radius: ${props =>
-    props.theme.button?.style?.borderTopRightRadius};
-  border-top-left-radius: ${props =>
-    props.theme.button?.style?.borderTopLeftRadius};
-  border-bottom-right-radius: ${props =>
-    props.theme.button?.style?.borderBottomRightRadius};
-  border-bottom-left-radius: ${props =>
-    props.theme.button?.style?.borderBottomLeftRadius};
+  border-radius: ${props => props.theme.button?.style?.borderRadius};
   padding: ${props => props.theme.button?.style?.padding};
   overflow: ${props => props.theme.button?.style?.overflow};
-  white-space: ${props => props.theme.button?.style?.whiteSpace};
 
   &:hover {
     background: ${props => props.theme.button?.hoverBackground};
