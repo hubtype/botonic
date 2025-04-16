@@ -1,14 +1,14 @@
-import {
-  Input,
-  PluginConfig,
-  ResolvedPlugins,
-  RoutePath,
-  Session,
-} from './models'
+import { BotContext, Plugin, PluginConfig, ResolvedPlugins } from './models'
+
+interface RunPluginArgs {
+  botContext: BotContext
+  mode: PluginMode
+  response?: string | null
+}
 
 type PluginMode = 'pre' | 'post'
 
-export function loadPlugins(plugins: PluginConfig<any>[]): ResolvedPlugins {
+export function loadPlugins(plugins?: PluginConfig<any>[]): ResolvedPlugins {
   if (!plugins) return {}
   const _plugins = {}
   const pluginsLength = plugins.length
@@ -26,27 +26,22 @@ export function loadPlugins(plugins: PluginConfig<any>[]): ResolvedPlugins {
   return _plugins
 }
 
-export async function runPlugins(
-  plugins: ResolvedPlugins,
-  mode: PluginMode,
-  input: Input,
-  session: Session,
-  lastRoutePath: RoutePath,
-  response: string | null = null
-): Promise<void> {
+export async function runPlugins({
+  botContext,
+  mode,
+  response = null,
+}: RunPluginArgs): Promise<void> {
+  const plugins = botContext.plugins
   for (const key in plugins) {
-    const p = await plugins[key]
+    const plugin: Plugin = await plugins[key]
     try {
-      if (mode === 'pre' && p.pre) {
-        await p.pre({ input, session, lastRoutePath, plugins })
+      if (mode === 'pre' && typeof plugin.pre === 'function') {
+        await plugin.pre(botContext)
       }
-      if (mode === 'post' && p.post) {
-        await p.post({
-          input,
-          session,
-          lastRoutePath,
+      if (mode === 'post' && typeof plugin.post === 'function') {
+        await plugin.post({
+          ...botContext,
           response,
-          plugins,
         })
       }
     } catch (e) {

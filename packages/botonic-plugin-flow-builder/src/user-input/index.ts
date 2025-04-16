@@ -1,4 +1,3 @@
-import { INPUT } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -7,7 +6,11 @@ import {
   HtKeywordNode,
   HtSmartIntentNode,
 } from '../content-fields/hubtype-fields'
-import { inputHasTextData } from '../utils'
+import {
+  inputHasTextData,
+  isKeywordsAllowed,
+  isSmartIntentsAllowed,
+} from '../utils'
 import { getIntentNodeByInput } from './intent'
 import { KeywordMatcher } from './keyword'
 import { SmartIntentsApi, SmartIntentsInferenceConfig } from './smart-intent'
@@ -19,29 +22,38 @@ export async function getNodeByUserInput(
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<HtSmartIntentNode | HtIntentNode | HtKeywordNode | undefined> {
   if (inputHasTextData(request.input)) {
-    const keywordMatcher = new KeywordMatcher({
-      cmsApi,
-      locale,
-      request,
-    })
-    const keywordNode = await keywordMatcher.getNodeByInput(request.input.data!)
-    if (keywordNode) {
-      return keywordNode
+    if (isKeywordsAllowed(request)) {
+      const keywordMatcher = new KeywordMatcher({
+        cmsApi,
+        locale,
+        request,
+      })
+      const keywordNode = await keywordMatcher.getNodeByInput(
+        request.input.data!
+      )
+      if (keywordNode) {
+        return keywordNode
+      }
     }
 
-    const smartIntentsApi = new SmartIntentsApi(
-      cmsApi,
-      request,
-      smartIntentsConfig
-    )
-    const smartIntentNode = await smartIntentsApi.getNodeByInput()
-    if (smartIntentNode) {
-      return smartIntentNode
+    if (isSmartIntentsAllowed(request)) {
+      const smartIntentsApi = new SmartIntentsApi(
+        cmsApi,
+        request,
+        smartIntentsConfig
+      )
+      const smartIntentNode = await smartIntentsApi.getNodeByInput()
+      if (smartIntentNode) {
+        return smartIntentNode
+      }
     }
 
-    const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
-    if (intentNode) {
-      return intentNode
+    // TODO: Remove this because frontend no allow create intents babel
+    if (isSmartIntentsAllowed(request)) {
+      const intentNode = await getIntentNodeByInput(cmsApi, locale, request)
+      if (intentNode) {
+        return intentNode
+      }
     }
   }
 

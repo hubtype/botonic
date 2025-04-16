@@ -137,7 +137,6 @@ describe('Check the contents returned by the plugin in first interaction with kn
         isFirstInteraction: true,
       },
     })
-    console.log({ contents })
 
     expect((contents[0] as FlowText).text).toBe('Welcome')
     expect(contents.length).toBe(4)

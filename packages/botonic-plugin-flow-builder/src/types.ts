@@ -3,6 +3,12 @@ import { ActionRequest } from '@botonic/react'
 
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
+export interface InShadowingConfig {
+  allowKeywords: boolean
+  allowSmartIntents: boolean
+  allowKnowledgeBases: boolean
+}
+
 export interface BotonicPluginFlowBuilderOptions {
   apiUrl?: string
   jsonVersion?: FlowBuilderJSONVersion
@@ -13,6 +19,7 @@ export interface BotonicPluginFlowBuilderOptions {
   trackEvent?: TrackEventFunction
   getKnowledgeBaseResponse?: KnowledgeBaseFunction
   smartIntentsConfig?: { numSmartIntentsToUse: number }
+  inShadowing?: Partial<InShadowingConfig>
 }
 
 export type TrackEventFunction = (
