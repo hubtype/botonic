@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Audio } from './components/audio'
-import { Button } from './components/button/index'
+import { Button } from './components/button'
 import { ButtonsDisabler } from './components/buttons-disabler'
 import { Carousel } from './components/carousel'
 import { Document } from './components/document'

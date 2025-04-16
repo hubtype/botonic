@@ -2,7 +2,7 @@ import { isDev, isFacebook, isWebchat, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
-import { Button } from '../button/index'
+import { Button } from '../button'
 import { Carousel } from '../carousel'
 import { Image } from '../image'
 import { Text } from '../text'

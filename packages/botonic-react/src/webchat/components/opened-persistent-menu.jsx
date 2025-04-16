@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { Button } from '../../components/button/index'
+import { Button } from '../../components/button'
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebchatContext } from '../context'
 import { useComponentVisible } from '../hooks'
