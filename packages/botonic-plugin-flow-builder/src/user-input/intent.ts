@@ -1,3 +1,4 @@
+import { NluType } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -15,6 +16,13 @@ export async function getIntentNodeByInput(
     await trackIntentEvent(request, intentNode)
 
     if (isIntentValid(intentNode, request, cmsApi)) {
+      const targetPayload = cmsApi.getPayload(intentNode.target)
+
+      request.input.nluResolution = {
+        type: NluType.Intent,
+        matchedValue: request.input.intent,
+        payload: targetPayload,
+      }
       return intentNode
     }
   }

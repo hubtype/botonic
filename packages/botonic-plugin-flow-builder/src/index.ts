@@ -34,6 +34,7 @@ import { DEFAULT_FUNCTIONS } from './functions'
 import {
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
+  InShadowingConfig,
   KnowledgeBaseFunction,
   PayloadParamsBase,
   TrackEventFunction,
@@ -54,12 +55,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public trackEvent?: TrackEventFunction
   public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
+  public inShadowing: InShadowingConfig
 
   // TODO: Rethink how we construct FlowBuilderApi to be simpler
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
 
-  constructor(readonly options: BotonicPluginFlowBuilderOptions) {
+  constructor(options: BotonicPluginFlowBuilderOptions) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
@@ -73,6 +75,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
     const customFunctions = options.customFunctions || {}
     this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
+    this.inShadowing = {
+      allowKeywords: options.inShadowing?.allowKeywords || false,
+      allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
+      allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
+    }
   }
 
   resolveFlowUrl(request: PluginPreRequest): string {
@@ -93,9 +100,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
 
     const checkUserTextInput =
-      inputHasTextData(request.input) &&
-      !request.input.payload &&
-      !request.session.is_first_interaction
+      inputHasTextData(request.input) && !request.input.payload
 
     if (checkUserTextInput) {
       const locale = this.getLocale(request.session)
@@ -129,6 +134,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   private removeSourceSufix(payload: string): string {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
+  }
+
+  post(request: PluginPreRequest): void {
+    request.input.nluResolution = undefined
   }
 
   async getContentsByContentID(

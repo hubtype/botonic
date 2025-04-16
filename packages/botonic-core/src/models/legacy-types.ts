@@ -72,14 +72,15 @@ export enum INPUT {
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
-  EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
-  EVENT_QUEUE_POSITION_CHANGED = 'case_event_queue_position_changed',
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
   WHATSAPP_PRODUCT_CAROUSEL = 'whatsapp-product-carousel',
   WHATSAPP_MEDIA_CAROUSEL = 'whatsapp-media-carousel',
   WHATSAPP_ORDER = 'whatsapp_order',
+  EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
+  EVENT_QUEUE_POSITION_CHANGED = 'case_event_queue_position_changed',
+  EVENT_CASE_STATUS_CHANGED = 'case_event_status_changed',
 }
 
 export interface Locales {
@@ -99,7 +100,7 @@ export interface PluginConfig<T> {
 export interface ResolvedPlugin extends Plugin {
   id: string
   name: string
-  config: any
+  config?: any
 }
 export type ResolvedPlugins = Record<string, ResolvedPlugin>
 
@@ -115,19 +116,20 @@ export type InputType =
   | INPUT.POSTBACK
   | INPUT.TEXT
   | INPUT.VIDEO
+  | INPUT.CHAT_EVENT
   | INPUT.WEBCHAT_SETTINGS
   | INPUT.WHATSAPP_TEMPLATE
-  | INPUT.CHAT_EVENT
   | INPUT.WHATSAPP_BUTTON_LIST
   | INPUT.WHATSAPP_CTA_URL_BUTTON
-  | INPUT.EVENT_AGENT_MESSAGE_CREATED
-  | INPUT.EVENT_QUEUE_POSITION_CHANGED
   | INPUT.WHATSAPP_CATALOG
   | INPUT.WHATSAPP_PRODUCT
   | INPUT.WHATSAPP_PRODUCT_LIST
   | INPUT.WHATSAPP_PRODUCT_CAROUSEL
   | INPUT.WHATSAPP_MEDIA_CAROUSEL
   | INPUT.WHATSAPP_ORDER
+  | INPUT.EVENT_AGENT_MESSAGE_CREATED
+  | INPUT.EVENT_QUEUE_POSITION_CHANGED
+  | INPUT.EVENT_CASE_STATUS_CHANGED
 
 export interface IntentResult {
   intent: string
@@ -152,6 +154,12 @@ export interface NluResult {
   translations: Translations
 }
 
+export enum NluType {
+  Keyword = 'keyword',
+  SmartIntent = 'smart-intent',
+  Intent = 'intent',
+}
+
 export interface Input extends Partial<NluResult> {
   text?: string
   src?: string
@@ -165,14 +173,47 @@ export interface Input extends Partial<NluResult> {
   }
   message_id: string
   bot_interaction_id: string
+  catalog_id?: string
+  product_items?: ProductItem[]
+  nluResolution?: {
+    type: NluType
+    matchedValue: string
+    payload?: string
+  }
+}
+
+export interface CaseEventQueuePositionChangedInput {
+  type: INPUT.EVENT_QUEUE_POSITION_CHANGED
+  case_id: string
+  prev_queue_position: number | null
+  prev_queue_position_notified_at: string | null
+  current_queue_position: number
+  current_queue_position_notified_at: string
+  total_queue_waiting_cases_number: number
+}
+
+export enum CaseStatus {
+  Waiting = 'status_waiting',
+  Attending = 'status_attending',
+  Idle = 'status_idle',
+  Resolved = 'status_resolved',
+}
+
+export interface CaseEventStatusChangedInput {
+  type: INPUT.EVENT_CASE_STATUS_CHANGED
+  case_id: string
+  prev_status: CaseStatus | null
+  next_status: CaseStatus
+}
+
+export interface CaseEventAgentMessageCreatedInput {
+  type: INPUT.EVENT_AGENT_MESSAGE_CREATED
   agent_id?: string
   agent_name?: string
   message?: {
     type: string
     data: string
   }
-  catalog_id?: string
-  product_items?: ProductItem[]
 }
 
 interface ProductItem {
@@ -211,11 +252,13 @@ export interface HubtypeCaseContactReason {
   project_id: string
 }
 
+export interface SessionBot {
+  id: string
+  name?: string
+}
+
 export interface Session {
-  bot: {
-    id: string
-    name?: string
-  }
+  bot: SessionBot
   __locale?: string
   __retries: number
   _access_token: string
@@ -282,6 +325,15 @@ export interface BotRequest {
   session: Session
 }
 
+export interface BotContext extends BotRequest {
+  getString: (stringId: string) => string
+  setLocale: (locale: string) => void
+  defaultDelay: number
+  defaultTyping: number
+  params: Record<string, string>
+  plugins: ResolvedPlugins
+}
+
 /** The response of the bot for the triggered actions, which can be
  * the one matched by the routes, the default action and the retry actions.
  * See Response at @botonic/react's index.d.ts for the React type
@@ -290,11 +342,10 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export interface PluginPreRequest extends BotRequest {
-  plugins: ResolvedPlugins
-}
-export interface PluginPostRequest extends BotResponse {
-  plugins: ResolvedPlugins
+export type PluginPreRequest = BotContext
+
+export type PluginPostRequest = BotContext & {
+  response: string | null
 }
 
 export interface Plugin {
@@ -350,7 +401,6 @@ export type Matcher = string | RegExp | ((args) => boolean)
 
 export type BotonicActionType =
   | `${BotonicAction.CreateCase}${BotonicActionSeparator}${string}`
-  | `${BotonicAction.CreateTestCase}${BotonicActionSeparator}${string}`
   | `${BotonicAction.Redirect}${BotonicActionSeparator}${string}`
   | `${BotonicAction.DiscardCase}${BotonicActionSeparator}${string}`
   | `${BotonicAction.DiscardCase}`
@@ -361,17 +411,6 @@ type BotonicActionSeparator = ':'
 export enum BotonicAction {
   Redirect = 'redirect_action',
   CreateCase = 'create_case',
-  CreateTestCase = 'create_test_integration_case',
   DeleteUser = 'delete_user',
   DiscardCase = 'discard_case',
-}
-
-export interface CaseEventQueuePositionChangedInput {
-  type: INPUT.EVENT_QUEUE_POSITION_CHANGED
-  case_id: string
-  prev_queue_position: number | null
-  prev_queue_position_notified_at: string | null
-  current_queue_position: number
-  current_queue_position_notified_at: string
-  total_queue_waiting_cases_number: number
 }

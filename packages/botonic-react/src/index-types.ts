@@ -1,8 +1,8 @@
 import {
+  BotContext,
   BotRequest as CoreBotRequest,
   Input as CoreInput,
   InputType as CoreInputType,
-  Plugin as CorePlugin,
   Route as CoreRoute,
   Routes as CoreRoutes,
   ServerConfig,
@@ -39,20 +39,7 @@ export interface Route extends CoreRoute {
 export type Routes = CoreRoutes<Route>
 
 // Parameters of the actions' botonicInit method
-export interface ActionRequest {
-  defaultDelay: number
-  defaultTyping: number
-  input: CoreInput
-  lastRoutePath: string
-  params: { [key: string]: string }
-  plugins: { [id: string]: CorePlugin }
-  session: CoreSession
-}
-
-export interface RequestContextInterface extends ActionRequest {
-  getString: (stringId: string) => string
-  setLocale: (locale: string) => string
-}
+export type ActionRequest = BotContext
 
 export interface WebchatRef {
   addBotResponse: ({

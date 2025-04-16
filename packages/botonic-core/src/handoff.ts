@@ -267,11 +267,7 @@ async function _humanHandOff(
   if (subscribeHelpdeskEvents.length > 0) {
     params.subscribe_helpdesk_events = subscribeHelpdeskEvents
   }
-  if (!session.is_test_integration) {
-    session._botonic_action = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
-  } else {
-    session._botonic_action = `${BotonicAction.CreateTestCase}:${params.on_finish || ''}`
-  }
+  session._botonic_action = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
 }
 
 export async function storeCaseRating(

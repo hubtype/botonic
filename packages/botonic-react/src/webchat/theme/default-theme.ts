@@ -31,6 +31,9 @@ export const defaultTheme: WebchatTheme = {
     style: {
       borderRadius: '10px 10px 0px 0px',
     },
+    mobileStyle: {
+      borderRadius: '0px',
+    },
   },
   brand: {
     color: COLORS.BOTONIC_BLUE,

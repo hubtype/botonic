@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-contentful",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "license": "MIT",
   "main": "lib/cjs/index.js",
   "module": "./lib/esm/index.js",

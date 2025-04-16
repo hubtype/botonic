@@ -6,7 +6,7 @@ import {
 } from '../constants'
 import {
   Action,
-  BotRequest,
+  BotContext,
   Input,
   Params,
   PathParams,
@@ -81,16 +81,19 @@ export function getNotFoundAction(input: Input, routes: Route[]): Action {
 
 export async function getComputedRoutes(
   routes: Routes,
-  request: BotRequest
+  requestCoreContext: BotContext
 ): Promise<Route[]> {
   if (routes instanceof Function) {
-    return await getComputedRoutes(await routes(request), request)
+    return await getComputedRoutes(
+      await routes(requestCoreContext),
+      requestCoreContext
+    )
   }
   for (const [key, route] of Object.entries(routes) as any) {
     if (route.childRoutes && route.childRoutes instanceof Function) {
       routes[key].childRoutes = await getComputedRoutes(
-        await route.childRoutes(request),
-        request
+        await route.childRoutes(requestCoreContext),
+        requestCoreContext
       )
     } else {
       routes[key] = route

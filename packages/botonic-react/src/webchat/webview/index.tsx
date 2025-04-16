@@ -43,24 +43,24 @@ export const WebviewContainer = () => {
   const isUrlToWebview = typeof Webview === 'string'
 
   return (
-    <StyledWebview
-      role={ROLES.WEBVIEW}
-      style={{
-        ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
-      }}
-    >
-      <WebviewHeader />
-      <StyledWebviewContent>
-        {isUrlToWebview ? (
-          <StyledFrame src={Webview} />
-        ) : (
-          <WebviewRequestContext.Provider value={webviewRequestContext}>
+    <WebviewRequestContext.Provider value={webviewRequestContext}>
+      <StyledWebview
+        role={ROLES.WEBVIEW}
+        style={{
+          ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
+        }}
+      >
+        <WebviewHeader />
+        <StyledWebviewContent>
+          {isUrlToWebview ? (
+            <StyledFrame src={Webview} />
+          ) : (
             <StyledFrameAsDiv>
               <Webview />
             </StyledFrameAsDiv>
-          </WebviewRequestContext.Provider>
-        )}
-      </StyledWebviewContent>
-    </StyledWebview>
+          )}
+        </StyledWebviewContent>
+      </StyledWebview>
+    </WebviewRequestContext.Provider>
   )
 }
