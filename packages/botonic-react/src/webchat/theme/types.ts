@@ -81,7 +81,10 @@ export interface WebchatTheme {
     subtitle?: string
     image?: string
     style?: {
-      borderRadius: string
+      borderRadius?: string
+    }
+    mobileStyle?: {
+      borderRadius?: string
     }
     custom?: React.ComponentType
   }

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS, WEBCHAT } from '../../constants'
+import { COLORS } from '../../constants'
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ export const HeaderContainer = styled.div`
   height: inherit;
 
   @media (max-width: ${props => props.theme.mobileBreakpoint}px) {
-    border-radius: 0px;
+    border-radius: ${props => props.theme.header?.mobileStyle?.borderRadius};
   }
 `
 
