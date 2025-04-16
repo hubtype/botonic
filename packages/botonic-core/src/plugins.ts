@@ -15,7 +15,7 @@ export async function runPlugins({
 }: RunPluginArgs): Promise<void> {
   const plugins = botContext.plugins
   for (const key in plugins) {
-    const plugin: Plugin = await plugins[key]
+    const plugin: Plugin = plugins[key]
     try {
       if (mode === 'pre' && typeof plugin.pre === 'function') {
         await plugin.pre(botContext)
