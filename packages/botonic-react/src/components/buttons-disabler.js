@@ -1,4 +1,4 @@
-import { Button } from '../components/button'
+import { Button } from '../components/button/index'
 import { WEBCHAT } from '../constants'
 import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'

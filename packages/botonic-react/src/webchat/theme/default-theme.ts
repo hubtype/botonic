@@ -47,6 +47,27 @@ export const defaultTheme: WebchatTheme = {
       pointerEvents: 'none',
     },
     messageType: 'text',
+    hoverBackground: COLORS.CONCRETE_WHITE,
+    hoverTextColor: COLORS.SOLID_BLACK,
+    style: {
+      width: '100%',
+      maxHeight: '80px',
+      height: 'auto',
+      fontFamily: 'inherit',
+      fontSize: '14px',
+      fontWeight: 'normal',
+      background: COLORS.SOLID_WHITE,
+      color: COLORS.SOLID_BLACK,
+      outline: '0',
+      border: ` 1px solid ${COLORS.SEASHELL_WHITE}`,
+      borderRadius: '0px',
+      padding: '12px 32px',
+      overflow: 'hidden',
+    },
+    urlIcon: {
+      enable: false,
+      image: WEBCHAT.DEFAULTS.URL_ICON,
+    },
   },
   message: {
     user: {
