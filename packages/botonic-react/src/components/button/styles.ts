@@ -38,6 +38,10 @@ export const StyledButton = styled.button`
     cursor: ${props => props.theme.button?.disabledstyle?.cursor};
     pointer-events: ${props =>
       props.theme.button?.disabledstyle?.pointerEvents};
+    ${props =>
+      props.theme.button?.disabledstyle?.backgroundColor
+        ? `background-color: ${props.theme.button?.disabledstyle?.backgroundColor}`
+        : ''};
   }
 `
 

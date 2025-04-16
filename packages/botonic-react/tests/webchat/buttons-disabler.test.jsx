@@ -224,7 +224,6 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       'url',
       'target',
       'webview',
-      // 'disabled',
       'children',
     ])
     expect(Object.keys(element2ButtonProps)).toEqual([
@@ -232,7 +231,6 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       'url',
       'target',
       'webview',
-      // 'disabled',
       'autodisable',
       'disabledstyle',
       'children',
