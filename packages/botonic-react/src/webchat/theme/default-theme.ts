@@ -31,6 +31,9 @@ export const defaultTheme: WebchatTheme = {
     style: {
       borderRadius: '10px 10px 0px 0px',
     },
+    mobileStyle: {
+      borderRadius: '0px',
+    },
   },
   brand: {
     color: COLORS.BOTONIC_BLUE,
@@ -57,13 +60,9 @@ export const defaultTheme: WebchatTheme = {
       color: COLORS.SOLID_BLACK,
       outline: '0',
       border: ` 1px solid ${COLORS.SEASHELL_WHITE}`,
-      borderTopLeftRadius: '0px',
-      borderTopRightRadius: '0px',
-      borderBottomLeftRadius: '0px',
-      borderBottomRightRadius: '0px',
+      borderRadius: '0px',
       padding: '12px 32px',
       overflow: 'hidden',
-      whiteSpace: 'pre-line',
     },
     urlIcon: {
       enable: false,

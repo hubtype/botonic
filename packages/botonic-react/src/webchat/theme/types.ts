@@ -55,12 +55,7 @@ interface ButtonStyle {
   outline?: string
   border?: string
   borderRadius?: string
-  borderTopLeftRadius?: string
-  borderTopRightRadius?: string
-  borderBottomLeftRadius?: string
-  borderBottomRightRadius?: string
   padding?: string
-  whiteSpace?: string
   overflow?: string
 }
 
@@ -107,7 +102,10 @@ export interface WebchatTheme {
     subtitle?: string
     image?: string
     style?: {
-      borderRadius: string
+      borderRadius?: string
+    }
+    mobileStyle?: {
+      borderRadius?: string
     }
     custom?: React.ComponentType
   }

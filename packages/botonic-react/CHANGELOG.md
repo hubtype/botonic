@@ -10,18 +10,32 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.32.0] - 2025-mm-dd
+## [0.35.0] - 2025-mm-dd
 
 ### Added
 
 ### Changed
 
-- Refactor components used to render a [webview inside the webchat](https://github.com/hubtype/botonic/pull/2976)
-- When channel is not a webchat [Multichannel Carousel](https://github.com/hubtype/botonic/pull/2979) displays an image followed by a text with buttons for each element.
+[PR-3003](https://github.com/hubtype/botonic/pull/3003): ReactBot class with typescript
+[PR-2991](https://github.com/hubtype/botonic/pull/2991): Create Provider WebchatTheme with typescript and add a default theme
+[PR-2995](https://github.com/hubtype/botonic/pull/2995): Add Button style in WebchatTheme
 
 ### Fixed
 
 </details>
+
+## [0.34.1] - 2025-04-03
+
+### Fixed
+
+- [PR-3002](https://github.com/hubtype/botonic/pull/3002): Fix close webview in default HeaderWebview
+
+## [0.32.0] - 2025-02-18
+
+### Changed
+
+- Refactor components used to render a [webview inside the webchat](https://github.com/hubtype/botonic/pull/2976)
+- When channel is not a webchat [Multichannel Carousel](https://github.com/hubtype/botonic/pull/2979) displays an image followed by a text with buttons for each element.
 
 ## [0.31.0] - 2025-01-22
 

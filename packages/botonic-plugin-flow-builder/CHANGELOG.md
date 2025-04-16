@@ -20,6 +20,28 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.34.2] - 2025-04-02
+
+- [PR-3004](https://github.com/hubtype/botonic/pull/3004/files): nluResolution available in first interaction
+
+## [0.34.1] - 2025-04-02
+
+### Added
+
+- [PR-3001](https://github.com/hubtype/botonic/pull/3001): Allow shadowing configuration
+
+## [0.34.0] - 2025-04-01
+
+### Added
+
+- [PR-2292](https://github.com/hubtype/botonic/pull/2992): Allow create handoff test cases
+
+## [0.33.1] - 2025-04-01
+
+### Added
+
+- [PR-2298](https://github.com/hubtype/botonic/pull/2998): set and unset `request.input.nluResult in Input`
+
 ## [0.33.0] - 2025-03-04
 
 ### Added

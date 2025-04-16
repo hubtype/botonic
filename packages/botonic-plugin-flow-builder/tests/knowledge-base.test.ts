@@ -50,6 +50,71 @@ describe('Check the contents returned by the plugin when it use a knowledge base
     )
   })
 
+  test('Knowledge base response is not allowed when user is in handoff with shadowing', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: knowledgeBaseTestFlow,
+        locale,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          userInput,
+          answer:
+            'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
+          hasKnowledge: true,
+          isFaithful: true,
+        }),
+      },
+      requestArgs: {
+        input: {
+          data: userInput,
+          type: INPUT.TEXT,
+        },
+        extraData: {
+          language,
+          country,
+        },
+        shadowing: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('fallback 1')
+  })
+
+  test('Knowledge base response is allowed if inShadowing.allowKnowledgeBases is true when user is in handoff with shadowing', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: knowledgeBaseTestFlow,
+        locale,
+        inShadowing: { allowKnowledgeBases: true },
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          userInput,
+          answer:
+            'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
+          hasKnowledge: true,
+          isFaithful: true,
+        }),
+      },
+      requestArgs: {
+        input: {
+          data: userInput,
+          type: INPUT.TEXT,
+        },
+        extraData: {
+          language,
+          country,
+        },
+        shadowing: true,
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe(
+      'message Spain before knowledge response'
+    )
+
+    expect((contents[1] as FlowText).text).toBe(
+      'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
+    )
+  })
+
   test('When the knowledge base flow does not end with a knowledge base node', async () => {
     const userInput = 'What is Flow Builder?'
     const answer =

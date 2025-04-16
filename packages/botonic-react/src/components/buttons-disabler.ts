@@ -4,7 +4,7 @@ import { WebchatMessage } from '../index-types'
 import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'
 import { deepMapWithIndex } from '../util/react'
-import { Button } from './button/index'
+import { Button } from './button'
 import { ButtonProps } from './index-types'
 
 interface DisabledProps {
