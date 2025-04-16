@@ -55,16 +55,15 @@ export class ButtonsDisabler {
     })
   }
 
-  static updateButtons(node: any, additionalProps: any): any {
-    if (!additionalProps) additionalProps = {}
-    else {
+  static updateButtons(node: any, additionalProps?: AdditionalProps): any {
+    if (additionalProps) {
       additionalProps = {
+        parentId: additionalProps.parentId,
         disabled:
           node.props.disabled === true
             ? node.props.disabled
             : additionalProps.disabled,
         setDisabled: additionalProps.setDisabled,
-        parentId: additionalProps.parentId,
       }
     }
     return {
