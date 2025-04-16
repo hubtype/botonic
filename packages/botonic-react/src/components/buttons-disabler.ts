@@ -1,21 +1,35 @@
-import { Button } from '../components/button/index'
-import { WEBCHAT } from '../constants'
+import React from 'react'
+
+import { WebchatMessage } from '../index-types'
 import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'
 import { deepMapWithIndex } from '../util/react'
-import { _getThemeProperty } from '../util/webchat'
+import { Button } from './button'
+import { ButtonProps } from './index-types'
 
+interface DisabledProps {
+  disabled?: boolean
+  autodisable?: boolean | string
+  disabledstyle?: Record<string, string> | string
+}
+
+interface AdditionalProps {
+  parentId: string
+  disabled?: boolean
+  setDisabled: (disabled: boolean) => void
+}
 export class ButtonsDisabler {
-  static constructBrowserProps(props) {
-    const disabledProps = { disabled: props.disabled }
+  static constructBrowserProps(props: DisabledProps): DisabledProps {
+    const disabledProps: DisabledProps = {}
     if (props.autodisable !== undefined)
       disabledProps.autodisable = strToBool(props.autodisable)
     if (props.disabledstyle !== undefined)
       disabledProps.disabledstyle = props.disabledstyle
     return disabledProps
   }
-  static constructNodeProps(props) {
-    const disabledProps = {}
+
+  static constructNodeProps(props: DisabledProps): DisabledProps {
+    const disabledProps: DisabledProps = {}
     if (props.autodisable !== undefined)
       disabledProps.autodisable = String(props.autodisable)
     if (props.disabledstyle !== undefined)
@@ -23,7 +37,7 @@ export class ButtonsDisabler {
     return disabledProps
   }
 
-  static withDisabledProps(props) {
+  static withDisabledProps(props: DisabledProps): DisabledProps {
     return {
       disabled: props.disabled,
       autodisable: props.autodisable,
@@ -31,37 +45,25 @@ export class ButtonsDisabler {
     }
   }
 
-  static resolveDisabling(theme, props) {
-    const getThemeProperty = _getThemeProperty(theme)
-    const autoDisable =
-      props.autodisable !== undefined
-        ? props.autodisable
-        : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonAutoDisable)
-    const disabledStyle =
-      props.disabledstyle !== undefined
-        ? props.disabledstyle
-        : getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.buttonDisabledStyle)
-
-    return { autoDisable, disabledStyle }
-  }
-
-  static updateChildrenButtons(children, additionalProps = undefined) {
-    return deepMapWithIndex(children, n => {
-      if (n.type === Button) return this.updateButtons(n, additionalProps)
-      return n
+  static updateChildrenButtons(
+    children: React.ReactNode,
+    additionalProps?: AdditionalProps
+  ): React.ReactNode {
+    return deepMapWithIndex(children, (node: any) => {
+      if (node.type === Button) return this.updateButtons(node, additionalProps)
+      return node
     })
   }
 
-  static updateButtons(node, additionalProps) {
-    if (!additionalProps) additionalProps = {}
-    else {
+  static updateButtons(node: any, additionalProps?: AdditionalProps): any {
+    if (additionalProps) {
       additionalProps = {
+        parentId: additionalProps.parentId,
         disabled:
           node.props.disabled === true
             ? node.props.disabled
             : additionalProps.disabled,
         setDisabled: additionalProps.setDisabled,
-        parentId: additionalProps.parentId,
       }
     }
     return {
@@ -73,8 +75,8 @@ export class ButtonsDisabler {
     }
   }
 
-  static getUpdatedMessage(messageToUpdate, { autoDisable, disabledStyle }) {
-    const updateMsgButton = button => {
+  static getUpdatedMessage(messageToUpdate: WebchatMessage): WebchatMessage {
+    const updateMsgButton = (button: ButtonProps) => {
       return {
         ...button,
         ...{
@@ -82,6 +84,7 @@ export class ButtonsDisabler {
         },
       }
     }
+
     if (
       isCarousel(messageToUpdate) &&
       messageToUpdate.data &&

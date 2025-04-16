@@ -125,7 +125,12 @@ export interface WebchatTheme {
   }
   button?: {
     autodisable?: boolean
-    disabledstyle?: any
+    disabledstyle?: {
+      opacity?: number
+      cursor?: string
+      pointerEvents?: string
+      backgroundColor?: string
+    }
     hoverBackground?: string
     hoverTextColor?: string
     messageType?: 'text' | 'postback'

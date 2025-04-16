@@ -19,6 +19,7 @@ All notable changes to Botonic will be documented in this file.
 [PR-3003](https://github.com/hubtype/botonic/pull/3003): ReactBot class with typescript
 [PR-2991](https://github.com/hubtype/botonic/pull/2991): Create Provider WebchatTheme with typescript and add a default theme
 [PR-2995](https://github.com/hubtype/botonic/pull/2995): Add Button style in WebchatTheme
+[PR-2996](https://github.com/hubtype/botonic/pull/2996): ButtonDisabler in typescript
 
 ### Fixed
 
