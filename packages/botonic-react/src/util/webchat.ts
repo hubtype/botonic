@@ -58,6 +58,7 @@ export function updateUserLocaleAndCountry(user: Partial<ClientUser>) {
     ...user,
     locale,
     country,
+    system_locale: locale,
   }
 }
 
