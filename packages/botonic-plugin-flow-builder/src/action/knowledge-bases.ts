@@ -1,3 +1,4 @@
+import { BotContext, ResolvedPlugins } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import {
@@ -65,9 +66,11 @@ export async function getContentsByKnowledgeBase({
   return []
 }
 
-async function getContentsWithKnowledgeResponse(
-  getKnowledgeBaseResponse: KnowledgeBaseFunction,
-  request: ActionRequest,
+async function getContentsWithKnowledgeResponse<
+  T extends ResolvedPlugins = ResolvedPlugins,
+>(
+  getKnowledgeBaseResponse: KnowledgeBaseFunction<T>,
+  request: BotContext<T>,
   contents: FlowContent[],
   knowledgeBaseContent: FlowKnowledgeBase,
   flowId: string

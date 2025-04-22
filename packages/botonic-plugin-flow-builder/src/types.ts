@@ -1,5 +1,9 @@
-import { PluginPreRequest, Session } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import {
+  BotContext,
+  PluginPreRequest,
+  ResolvedPlugins,
+  Session,
+} from '@botonic/core'
 
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
@@ -9,32 +13,33 @@ export interface InShadowingConfig {
   allowKnowledgeBases: boolean
 }
 
-export interface BotonicPluginFlowBuilderOptions {
+export interface BotonicPluginFlowBuilderOptions<T extends ResolvedPlugins> {
   apiUrl?: string
   jsonVersion?: FlowBuilderJSONVersion
   flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string
-  trackEvent?: TrackEventFunction
-  getKnowledgeBaseResponse?: KnowledgeBaseFunction
+  trackEvent?: TrackEventFunction<T>
+  getKnowledgeBaseResponse?: KnowledgeBaseFunction<T>
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
 }
 
-export type TrackEventFunction = (
-  request: ActionRequest,
+export type TrackEventFunction<T extends ResolvedPlugins = ResolvedPlugins> = (
+  request: BotContext<T>,
   eventAction: string,
   args?: Record<string, any>
 ) => Promise<void>
 
-export type KnowledgeBaseFunction = (
-  request: ActionRequest,
-  sources: string[],
-  instructions: string,
-  messageId: string,
-  memoryLength: number
-) => Promise<KnowledgeBaseResponse>
+export type KnowledgeBaseFunction<T extends ResolvedPlugins = ResolvedPlugins> =
+  (
+    request: BotContext<T>,
+    sources: string[],
+    instructions: string,
+    messageId: string,
+    memoryLength: number
+  ) => Promise<KnowledgeBaseResponse>
 
 export interface FlowBuilderApiOptions {
   url: string

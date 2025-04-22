@@ -244,13 +244,12 @@ export class FlowBuilderApi {
     return this.flow.is_knowledge_base_active || false
   }
 
-  getResolvedLocale(locale: string): string {
-    if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
+  getResolvedLocale(locale?: string): string {
+    if (locale && this.flow.locales.find(flowLocale => flowLocale === locale)) {
       return locale
     }
 
     const language = locale?.split('-')[0]
-
     if (
       language &&
       this.flow.locales.find(flowLocale => flowLocale === language)
@@ -259,8 +258,10 @@ export class FlowBuilderApi {
       return language
     }
 
-    throw new Error(
-      `locale: ${locale} cannot be resolved in  ${this.flow.locales}`
+    console.log(
+      `Resolve locale with default locale: ${this.flow.default_locale_code}`
     )
+
+    return this.flow.default_locale_code || 'en'
   }
 }

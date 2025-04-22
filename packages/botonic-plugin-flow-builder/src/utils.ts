@@ -2,11 +2,7 @@ import { INPUT, Input, Session } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { getFlowBuilderPlugin } from './helpers'
-import {
-  BotonicPluginFlowBuilderOptions,
-  InShadowingConfig,
-  ProcessEnvNodeEnvs,
-} from './types'
+import { InShadowingConfig, ProcessEnvNodeEnvs } from './types'
 
 function getAccessTokenFromSession(session: Session): string {
   if (!session._access_token) {
@@ -16,13 +12,13 @@ function getAccessTokenFromSession(session: Session): string {
 }
 
 export function resolveGetAccessToken(
-  options: BotonicPluginFlowBuilderOptions
+  getAccessToken: (session: Session) => string
 ): (session: Session) => string {
   switch (process.env.NODE_ENV) {
     case ProcessEnvNodeEnvs.PRODUCTION:
       return getAccessTokenFromSession
     case ProcessEnvNodeEnvs.DEVELOPMENT:
-      return options.getAccessToken
+      return getAccessToken
     default:
       throw new Error('No method defined for getting access token')
   }
