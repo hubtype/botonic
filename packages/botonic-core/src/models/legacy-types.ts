@@ -241,9 +241,9 @@ export interface SessionUser {
   extra_data?: any
   imp_id?: string
   provider_id?: string
-  locale?: string
-  country?: string
-  system_locale?: string
+  locale: string
+  country: string
+  system_locale: string
 }
 
 export interface HubtypeCaseContactReason {
@@ -326,7 +326,11 @@ export interface BotRequest {
 
 export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
   extends BotRequest {
+  // TODO: remove getString function?
   getString: (stringId: string) => string
+  getUserCountry: () => string
+  getUserLocale: () => string
+  getSystemLocale: () => string
   setUserCountry: (country: string) => void
   setUserLocale: (locale: string) => void
   setSystemLocale: (locale: string) => void
