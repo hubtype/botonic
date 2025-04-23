@@ -86,6 +86,7 @@ class App extends React.Component {
 
   render() {
     const webviewRequestContext = {
+      // TODO: remove getString function?
       getString: (stringId: string) =>
         getString(
           this.props.locales,

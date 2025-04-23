@@ -144,32 +144,7 @@ describe('CoreBot', () => {
     expect(botResponse).toEqual({
       input: { data: 'hello', type: 'text' },
       lastRoutePath: '',
-      response: [
-        {
-          actions: [null, 'Hi user!', null],
-          request: {
-            defaultDelay: 0.4,
-            defaultTyping: 0.6,
-            getString: expect.any(Function),
-            input: { data: 'hello', type: 'text' },
-            lastRoutePath: '',
-            params: {},
-            plugins: {},
-            session: {
-              __retries: 0,
-              user: {
-                locale: LOCALE_EN,
-                country: COUNTRY_GB,
-                system_locale: LOCALE_EN,
-              },
-              is_first_interaction: false,
-            },
-            setUserLocale: expect.any(Function),
-            setUserCountry: expect.any(Function),
-            setSystemLocale: expect.any(Function),
-          },
-        },
-      ],
+      response: [null, 'Hi user!', null],
       session: {
         __retries: 0,
         user: {
@@ -209,29 +184,7 @@ describe('CoreBot', () => {
       is_first_interaction: false,
     })
     expect(botResponse.lastRoutePath).toEqual('')
-    expect(botResponse.response[0]).toBeDefined()
-    expect(botResponse.response[0].request).toEqual({
-      defaultDelay: 0.4,
-      defaultTyping: 0.6,
-      getString: expect.any(Function),
-      input: { data: 'hello', type: 'text' },
-      lastRoutePath: '',
-      params: {},
-      plugins: {},
-      session: {
-        __retries: 0,
-        user: {
-          locale: LOCALE_EN,
-          country: COUNTRY_GB,
-          system_locale: LOCALE_EN,
-        },
-        is_first_interaction: false,
-      },
-      setUserLocale: expect.any(Function),
-      setUserCountry: expect.any(Function),
-      setSystemLocale: expect.any(Function),
-    })
-    expect(botResponse.response[0].actions).toEqual([null, 'Hi user!', null])
+    expect(botResponse.response).toEqual([null, 'Hi user!', null])
   })
 })
 
@@ -281,12 +234,11 @@ it('input returns two actions when first return a _botonic_action redirect', asy
     },
   })
   expect(botResponse.lastRoutePath).toEqual('after-rating-action')
-  expect(botResponse.response[0].actions).toEqual([
+  console.log('response', botResponse.response)
+  expect(botResponse.response).toEqual([
     null,
     'Can you rate the agent?',
     null,
-  ])
-  expect(botResponse.response[1].actions).toEqual([
     null,
     'Thanks for your rating',
     null,

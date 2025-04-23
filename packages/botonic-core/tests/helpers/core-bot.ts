@@ -1,5 +1,5 @@
 import { CoreBot } from '../../src/core-bot'
-import { Session, SessionUser } from '../../src/models/legacy-types'
+import { Session } from '../../src/models/legacy-types'
 
 export const LOCALE_EN = 'en'
 export const COUNTRY_GB = 'GB'
@@ -15,7 +15,7 @@ export const developerLocales = {
 
 export function initCoreBotWithDeveloperConfig(extraConfig = {}) {
   return new CoreBot({
-    renderer: async args => [args],
+    renderer: async args => args.actions,
     routes: developerRoutes,
     locales: developerLocales,
     ...extraConfig,

@@ -38,7 +38,7 @@ export class CoreBot {
   inspector: Inspector
   locales: Locales
   plugins: ResolvedPlugins
-  renderer: any
+  renderer: any // TODO use a type like ({ request, actions }: RendererArgs) => Promise<any[]>
   rootElement: any
   router: Router | null
   routes: Routes
@@ -76,8 +76,9 @@ export class CoreBot {
           )
   }
 
+  // TODO: remove getString function?
   getString(id: string, session: Session): string {
-    return getString(this.locales, session.user.system_locale!, id)
+    return getString(this.locales, session.user.system_locale, id)
   }
 
   setSystemLocale(locale: string, session: Session): void {
@@ -92,37 +93,45 @@ export class CoreBot {
     session.user.country = country
   }
 
-  async input({
-    input,
-    session,
-    lastRoutePath,
-  }: BotRequest): Promise<BotResponse> {
-    const botContext: BotContext = {
-      getString: (stringId: string) => this.getString(stringId, session),
-      setUserCountry: (country: string) =>
-        this.setUserCountry(country, session),
-      setUserLocale: (locale: string) => this.setUserLocale(locale, session),
-      setSystemLocale: (locale: string) =>
-        this.setSystemLocale(locale, session),
-      params: {},
-      lastRoutePath,
-      plugins: this.plugins,
-      defaultTyping: this.defaultTyping,
-      defaultDelay: this.defaultDelay,
-      input,
-      session,
-    }
+  async input(request: BotRequest): Promise<BotResponse> {
+    const botContext = this.getBotContext(request)
 
     const output = await this.runInput(botContext)
 
-    if (session._botonic_action?.startsWith(BotonicAction.Redirect)) {
+    if (
+      botContext.session._botonic_action?.startsWith(BotonicAction.Redirect)
+    ) {
       return await this.runRedirectAction(output, botContext)
     }
 
     return output
   }
 
+  private getBotContext(request: BotRequest): BotContext {
+    const { input, session, lastRoutePath } = request
+    return {
+      input,
+      session,
+      lastRoutePath,
+      params: {},
+      plugins: this.plugins,
+      defaultTyping: this.defaultTyping,
+      defaultDelay: this.defaultDelay,
+      // TODO: remove getString function?
+      getString: (stringId: string) => this.getString(stringId, session),
+      getUserCountry: () => session.user.country,
+      getUserLocale: () => session.user.locale,
+      getSystemLocale: () => session.user.system_locale,
+      setUserCountry: (country: string) =>
+        this.setUserCountry(country, session),
+      setUserLocale: (locale: string) => this.setUserLocale(locale, session),
+      setSystemLocale: (locale: string) =>
+        this.setSystemLocale(locale, session),
+    }
+  }
+
   private async runInput(botContext: BotContext): Promise<BotResponse> {
+    // After first updateSession, user country locale and system_locale are always defined
     this.updateSession(botContext.session)
 
     if (botContext.input.type === INPUT.CHAT_EVENT) {

@@ -1,6 +1,7 @@
 // eslint-disable-next-line filenames/match-regex
 import { Locales } from './models'
 
+// TODO: remove getString function?
 export const getString = (
   locales: Locales,
   locale: string,

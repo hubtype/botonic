@@ -4,7 +4,11 @@ import { createContext } from 'react'
 import { ActionRequest } from './index-types'
 
 export const RequestContext = createContext<ActionRequest>({
+  // TODO: remove getString function?
   getString: () => '',
+  getUserCountry: () => '',
+  getUserLocale: () => '',
+  getSystemLocale: () => '',
   setUserCountry: () => undefined,
   setUserLocale: () => undefined,
   setSystemLocale: () => undefined,
