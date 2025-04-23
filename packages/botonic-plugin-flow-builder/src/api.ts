@@ -7,7 +7,6 @@ import {
   HtFallbackNode,
   HtFlowBuilderData,
   HtGoToFlow,
-  HtIntentNode,
   HtKeywordNode,
   HtNodeComponent,
   HtNodeLink,
@@ -125,47 +124,10 @@ export class FlowBuilderApi {
       : undefined
   }
 
-  getIntentNode(input: Input, locale: string): HtIntentNode | undefined {
-    try {
-      const intentsNodes = this.flow.nodes.filter(
-        node => node.type === HtNodeWithContentType.INTENT
-      ) as HtIntentNode[]
-      const inputIntent = input.intent
-      if (inputIntent) {
-        return intentsNodes.find(
-          node =>
-            inputIntent && this.nodeContainsIntent(node, inputIntent, locale)
-        )
-      }
-    } catch (error) {
-      console.error(`Error getting node by intent '${input.intent}': `, error)
-    }
-
-    return undefined
-  }
-
   getSmartIntentNodes(): HtSmartIntentNode[] {
     return this.flow.nodes.filter(
       node => node.type === HtNodeWithContentType.SMART_INTENT
     ) as HtSmartIntentNode[]
-  }
-
-  private nodeContainsIntent(
-    node: HtIntentNode,
-    intent: string,
-    locale: string
-  ): boolean {
-    return node.content.intents.some(
-      i => i.locale === locale && i.values.includes(intent)
-    )
-  }
-
-  hasMetConfidenceThreshold(
-    node: HtIntentNode,
-    predictedConfidence: number
-  ): boolean {
-    const nodeConfidence = node.content.confidence / 100
-    return predictedConfidence >= nodeConfidence
   }
 
   getKeywordNodes(): HtKeywordNode[] {

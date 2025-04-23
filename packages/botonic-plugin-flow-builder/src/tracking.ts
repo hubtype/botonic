@@ -11,7 +11,6 @@ import { getFlowBuilderPlugin } from './helpers'
 export enum EventAction {
   FlowNode = 'flow_node',
   Keyword = 'nlu_keyword',
-  Intent = 'nlu_intent',
   IntentSmart = 'nlu_intent_smart',
   Knowledgebase = 'knowledgebase',
   Fallback = 'fallback',
