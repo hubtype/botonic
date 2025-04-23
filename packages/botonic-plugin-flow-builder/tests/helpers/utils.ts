@@ -23,8 +23,8 @@ import {
 interface FlowBuilderOptions {
   flow: any
   locale?: string
-  trackEvent?: TrackEventFunction
-  getKnowledgeBaseResponse?: KnowledgeBaseFunction
+  trackEvent?: TrackEventFunction<ResolvedPlugins>
+  getKnowledgeBaseResponse?: KnowledgeBaseFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
 }
 
@@ -34,7 +34,7 @@ export function createFlowBuilderPlugin({
   trackEvent,
   getKnowledgeBaseResponse,
   inShadowing,
-}: FlowBuilderOptions) {
+}: FlowBuilderOptions): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
     getLocale: () => locale,
@@ -43,13 +43,6 @@ export function createFlowBuilderPlugin({
     getKnowledgeBaseResponse,
     inShadowing,
   })
-
-  // @ts-ignore
-  flowBuilderPlugin.id = 'flowBuilder'
-  // @ts-ignore
-  flowBuilderPlugin.name = 'BotonicPluginFlowBuilder'
-  // @ts-ignore
-  flowBuilderPlugin.config = {}
 
   return flowBuilderPlugin
 }
@@ -61,6 +54,11 @@ interface RequestArgs {
   isFirstInteraction?: boolean
   extraData?: any
   shadowing?: boolean
+  user?: {
+    locale: string
+    country: string
+    system_locale: string
+  }
 }
 
 export function createRequest({
@@ -68,6 +66,11 @@ export function createRequest({
   plugins = {},
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
+  user = {
+    locale: 'en',
+    country: 'US',
+    system_locale: 'en',
+  },
   extraData = {},
   shadowing = false,
 }: RequestArgs): PluginPreRequest {
@@ -77,7 +80,7 @@ export function createRequest({
       organization: 'orgTest',
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
-      user: { provider, id: 'uid1', extra_data: extraData },
+      user: { provider, id: 'uid1', ...user, extra_data: extraData },
       _shadowing: shadowing,
       __retries: 0,
       _access_token: 'fake_access_token',
@@ -93,6 +96,9 @@ export function createRequest({
     lastRoutePath: '',
     plugins,
     getString: (_stringId: string) => '',
+    getUserCountry: () => user.country,
+    getUserLocale: () => user.locale,
+    getSystemLocale: () => user.system_locale,
     setUserCountry: (_country: string) => {
       return
     },

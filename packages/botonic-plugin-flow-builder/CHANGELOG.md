@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.31.x] - 2025-mm-dd
+## [0.35.x] - 2025-mm-dd
 
 ### Added
+
+- [PR-3008](https://github.com/hubtype/botonic/pull/3008/files): Use new user fields and default_locale_code
 
 ### Changed
 

@@ -1,4 +1,4 @@
-import { ActionRequest } from '@botonic/react'
+import { BotContext, ResolvedPlugins } from '@botonic/core'
 
 import {
   DISABLED_MEMORY_LENGTH,
@@ -65,9 +65,11 @@ export async function getContentsByKnowledgeBase({
   return []
 }
 
-async function getContentsWithKnowledgeResponse(
-  getKnowledgeBaseResponse: KnowledgeBaseFunction,
-  request: ActionRequest,
+async function getContentsWithKnowledgeResponse<
+  T extends ResolvedPlugins = ResolvedPlugins,
+>(
+  getKnowledgeBaseResponse: KnowledgeBaseFunction<T>,
+  request: BotContext<T>,
   contents: FlowContent[],
   knowledgeBaseContent: FlowKnowledgeBase,
   flowId: string
@@ -119,7 +121,7 @@ function updateContentsWithResponse(
 
 async function trackKnowledgeBase(
   response: KnowledgeBaseResponse,
-  request: ActionRequest,
+  request: BotContext,
   knowledgeBaseContent: FlowKnowledgeBase,
   flowId: string
 ) {

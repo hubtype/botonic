@@ -5,6 +5,7 @@ export interface HtFlowBuilderData {
   version: string
   name: string
   locales: string[]
+  default_locale_code: string
   start_node_id?: string
   ai_model_id?: string
   is_knowledge_base_active?: boolean

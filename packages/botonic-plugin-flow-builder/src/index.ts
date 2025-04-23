@@ -1,4 +1,9 @@
-import { Plugin, PluginPreRequest, Session } from '@botonic/core'
+import {
+  Plugin,
+  PluginPreRequest,
+  ResolvedPlugins,
+  Session,
+} from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -61,12 +66,17 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
 
-  constructor(options: BotonicPluginFlowBuilderOptions) {
+  constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
-    this.getLocale = options.getLocale
-    this.getAccessToken = resolveGetAccessToken(options)
+    this.getLocale =
+      typeof options.getLocale === 'function'
+        ? options.getLocale
+        : (session: Session) => {
+            return session.user.system_locale
+          }
+    this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     this.smartIntentsConfig = {

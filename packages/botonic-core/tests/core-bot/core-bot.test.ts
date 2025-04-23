@@ -234,7 +234,6 @@ it('input returns two actions when first return a _botonic_action redirect', asy
     },
   })
   expect(botResponse.lastRoutePath).toEqual('after-rating-action')
-  console.log('response', botResponse.response)
   expect(botResponse.response).toEqual([
     null,
     'Can you rate the agent?',

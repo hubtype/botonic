@@ -83,7 +83,7 @@ async function getContents(
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
   }
-  // TODO: Add needed logic when we can define contents for multilocale queue position message
+  // TODO: Add needed logic when we can define contents for multi locale queue position message
   if (request.input.type === INPUT.EVENT_QUEUE_POSITION_CHANGED) {
     return []
   }

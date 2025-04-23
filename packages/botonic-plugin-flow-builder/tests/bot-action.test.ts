@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { INPUT, InputType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../src/index'
@@ -41,7 +41,7 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
 
     const requestArgs = {
       input: {
-        type: INPUT.POSTBACK,
+        type: INPUT.POSTBACK as InputType,
         payload: botActionUuid,
       },
     }
@@ -49,7 +49,6 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
     const request = createRequest({
       ...requestArgs,
       plugins: {
-        // @ts-ignore
         flowBuilderPlugin,
       },
     })
