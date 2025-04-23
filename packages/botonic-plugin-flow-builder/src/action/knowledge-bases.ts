@@ -1,5 +1,4 @@
 import { BotContext, ResolvedPlugins } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
 
 import {
   DISABLED_MEMORY_LENGTH,
@@ -122,7 +121,7 @@ function updateContentsWithResponse(
 
 async function trackKnowledgeBase(
   response: KnowledgeBaseResponse,
-  request: ActionRequest,
+  request: BotContext,
   knowledgeBaseContent: FlowKnowledgeBase,
   flowId: string
 ) {
