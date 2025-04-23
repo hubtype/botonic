@@ -144,7 +144,7 @@ describe('CoreBot', () => {
     expect(botResponse).toEqual({
       input: { data: 'hello', type: 'text' },
       lastRoutePath: '',
-      response: ['Hi user!'],
+      response: [null, 'Hi user!', null],
       session: {
         __retries: 0,
         user: {
@@ -184,7 +184,7 @@ describe('CoreBot', () => {
       is_first_interaction: false,
     })
     expect(botResponse.lastRoutePath).toEqual('')
-    expect(botResponse.response).toEqual(['Hi user!'])
+    expect(botResponse.response).toEqual([null, 'Hi user!', null])
   })
 })
 
@@ -235,7 +235,10 @@ it('input returns two actions when first return a _botonic_action redirect', asy
   })
   expect(botResponse.lastRoutePath).toEqual('after-rating-action')
   expect(botResponse.response).toEqual([
+    null,
     'Can you rate the agent?',
+    null,
+    null,
     'Thanks for your rating',
   ])
 })

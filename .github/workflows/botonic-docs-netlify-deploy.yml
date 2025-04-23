@@ -13,17 +13,12 @@ jobs:
     steps:
       - name: Checking out to current branch
         uses: actions/checkout@v2
-      - name: Setting up node
+      - name: Setting up node with caching
         uses: actions/setup-node@v2-beta
         with:
           node-version: '16'
-      - name: Setting up cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: Install dev dependencies
         run: (cd ./$DOCS && npm install -D)
       - name: Build
