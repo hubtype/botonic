@@ -51,18 +51,12 @@ jobs:
       - name: Checking out to current branch
         uses: actions/checkout@v4
 
-      - name: Setting up node
+      - name: Setting up node with caching
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
-
-      - name: Setting up cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Configure AWS Credentials with role
         if: ${{ inputs.NEEDS_AWS_CRED != '' && always() }}
