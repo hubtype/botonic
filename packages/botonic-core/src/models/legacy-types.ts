@@ -97,12 +97,7 @@ export interface PluginConfig<T> {
   resolve: { default: PluginConstructor<T> }
 }
 
-export interface ResolvedPlugin extends Plugin {
-  id: string
-  name: string
-  config?: any
-}
-export type ResolvedPlugins = Record<string, ResolvedPlugin>
+export type ResolvedPlugins = Record<string, Plugin>
 
 export type InputType =
   | INPUT.AUDIO
@@ -329,7 +324,8 @@ export interface BotRequest {
   session: Session
 }
 
-export interface BotContext extends BotRequest {
+export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
+  extends BotRequest {
   getString: (stringId: string) => string
   setUserCountry: (country: string) => void
   setUserLocale: (locale: string) => void
@@ -337,7 +333,7 @@ export interface BotContext extends BotRequest {
   defaultDelay: number
   defaultTyping: number
   params: Record<string, string>
-  plugins: ResolvedPlugins
+  plugins: T
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -348,11 +344,13 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export type PluginPreRequest = BotContext
+export type PluginPreRequest<T extends ResolvedPlugins = ResolvedPlugins> =
+  BotContext<T>
 
-export type PluginPostRequest = BotContext & {
-  response: string | null
-}
+export type PluginPostRequest<T extends ResolvedPlugins = ResolvedPlugins> =
+  BotContext<T> & {
+    response: string | null
+  }
 
 export interface Plugin {
   post?(request: PluginPostRequest): void | Promise<void>

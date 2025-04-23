@@ -13,8 +13,8 @@ export function getFlowBuilderPlugin(
     throw new Error(ERROR_MESSAGE)
   }
 
-  const flowBuilderPlugin = Object.values(plugins).find(plugin =>
-    plugin.name.includes(FLOW_BUILDER_PLUGIN_NAME)
+  const flowBuilderPlugin = Object.values(plugins).find(
+    plugin => plugin.constructor.name === FLOW_BUILDER_PLUGIN_NAME
   ) as unknown as BotonicPluginFlowBuilder
 
   if (!flowBuilderPlugin) {
