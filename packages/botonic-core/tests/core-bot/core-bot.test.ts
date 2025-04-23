@@ -240,6 +240,7 @@ it('input returns two actions when first return a _botonic_action redirect', asy
     null,
     null,
     'Thanks for your rating',
+    null,
   ])
 })
 
