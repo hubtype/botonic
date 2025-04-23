@@ -16,7 +16,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
-[PR-3006](https://github.com/hubtype/botonic/pull/3006): Infer Plugins type in BotContext.
+- [PR-3006](https://github.com/hubtype/botonic/pull/3006): Infer Plugins type in BotContext
+- [PR-3007](https://github.com/hubtype/botonic/pull/3007): BotContext with getUserLocale, geUserCountry and getSystemLocale functions
 
 ### Fixed
 
