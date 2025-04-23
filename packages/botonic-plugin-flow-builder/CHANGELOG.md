@@ -18,6 +18,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- [PR-3010](https://github.com/hubtype/botonic/pull/3010): Remove all logic related with intents babel.
+
 ### Fixed
 
 </details>
