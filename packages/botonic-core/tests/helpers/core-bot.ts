@@ -15,7 +15,7 @@ export const developerLocales = {
 
 export function initCoreBotWithDeveloperConfig(extraConfig = {}) {
   return new CoreBot({
-    renderer: async args => args.actions.filter(action => action),
+    renderer: async args => args.actions,
     routes: developerRoutes,
     locales: developerLocales,
     ...extraConfig,
