@@ -87,18 +87,6 @@ describe('CoreBot', () => {
     expect(session.user.system_locale).toEqual(SYSTEM_LOCALE_EN_GB)
   })
 
-  it('getString to return expected locale', () => {
-    // Arrange
-    const coreBot = initCoreBotWithDeveloperConfig()
-    const session = { user: { system_locale: LOCALE_EN } }
-
-    // Act
-    const resolvedLocaleText = coreBot.getString('text1', session)
-
-    // Assert
-    expect(coreBot.locales.en.text1).toContain(resolvedLocaleText)
-  })
-
   it('input processes a chatevent (e.g: sent when enduser is typing', async () => {
     // Arrange
     const coreBot = initCoreBotWithDeveloperConfig()

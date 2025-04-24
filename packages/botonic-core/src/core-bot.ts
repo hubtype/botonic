@@ -1,5 +1,4 @@
 import { Inspector } from './debug'
-import { getString } from './i18n'
 import {
   BotContext,
   BotonicAction,
@@ -76,11 +75,6 @@ export class CoreBot {
           )
   }
 
-  // TODO: remove getString function?
-  getString(id: string, session: Session): string {
-    return getString(this.locales, session.user.system_locale, id)
-  }
-
   setSystemLocale(locale: string, session: Session): void {
     session.user.system_locale = locale
   }
@@ -117,8 +111,6 @@ export class CoreBot {
       plugins: this.plugins,
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
-      // TODO: remove getString function?
-      getString: (stringId: string) => this.getString(stringId, session),
       getUserCountry: () => session.user.country,
       getUserLocale: () => session.user.locale,
       getSystemLocale: () => session.user.system_locale,

@@ -326,8 +326,6 @@ export interface BotRequest {
 
 export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
   extends BotRequest {
-  // TODO: remove getString function?
-  getString: (stringId: string) => string
   getUserCountry: () => string
   getUserLocale: () => string
   getSystemLocale: () => string
