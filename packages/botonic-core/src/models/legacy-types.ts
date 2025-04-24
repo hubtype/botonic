@@ -225,7 +225,7 @@ export interface Campaign {
   template_name: string
 }
 
-export interface SessionUser {
+export interface SessionUser<TExtraData = any> {
   id: string
   // login
   username?: string
@@ -234,7 +234,7 @@ export interface SessionUser {
   // whatsapp, telegram,...
   provider: ProviderType
   // The provider's user id
-  extra_data?: any
+  extra_data?: TExtraData
   imp_id?: string
   provider_id?: string
   locale: string
@@ -253,7 +253,7 @@ export interface SessionBot {
   name?: string
 }
 
-export interface Session {
+export interface Session<TExtraData = any> {
   bot: SessionBot
   __retries: number
   _access_token: string
@@ -263,7 +263,7 @@ export interface Session {
   last_session?: any
   organization_id: string
   organization: string
-  user: SessionUser
+  user: SessionUser<TExtraData>
   // after handoff
   _botonic_action?: BotonicActionType
   _hubtype_case_status?: CaseStatusType
@@ -314,14 +314,18 @@ export interface Route {
 
 export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
 
-export interface BotRequest {
+export interface BotRequest<TExtraData = any> {
   input: Input
   lastRoutePath: RoutePath
-  session: Session
+  session: Session<TExtraData>
 }
 
-export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
-  extends BotRequest {
+export interface BotContext<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> extends BotRequest<TExtraData> {
+  // TODO: remove getString function?
+  getString: (stringId: string) => string
   getUserCountry: () => string
   getUserLocale: () => string
   getSystemLocale: () => string
@@ -331,7 +335,7 @@ export interface BotContext<T extends ResolvedPlugins = ResolvedPlugins>
   defaultDelay: number
   defaultTyping: number
   params: Record<string, string>
-  plugins: T
+  plugins: TPlugins
 }
 
 /** The response of the bot for the triggered actions, which can be
@@ -342,13 +346,17 @@ export interface BotResponse extends BotRequest {
   response: any
 }
 
-export type PluginPreRequest<T extends ResolvedPlugins = ResolvedPlugins> =
-  BotContext<T>
+export type PluginPreRequest<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = BotContext<TPlugins, TExtraData>
 
-export type PluginPostRequest<T extends ResolvedPlugins = ResolvedPlugins> =
-  BotContext<T> & {
-    response: string | null
-  }
+export type PluginPostRequest<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = BotContext<TPlugins, TExtraData> & {
+  response: string | null
+}
 
 export interface Plugin {
   post?(request: PluginPostRequest): void | Promise<void>

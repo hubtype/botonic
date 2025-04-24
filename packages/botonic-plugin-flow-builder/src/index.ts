@@ -66,7 +66,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
 
-  constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins>) {
+  constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
