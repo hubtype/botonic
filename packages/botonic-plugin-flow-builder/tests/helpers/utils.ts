@@ -71,7 +71,6 @@ export function createRequest({
   extraData = {},
   shadowing = false,
 }: RequestArgs): PluginPreRequest {
-  console.log({ user })
   return {
     session: {
       is_first_interaction: isFirstInteraction,
@@ -160,11 +159,6 @@ export async function createFlowBuilderPluginAndGetContents({
     },
   })
 
-  console.log(
-    'UTILS request locale and country',
-    request.getSystemLocale(),
-    request.getUserCountry()
-  )
   const { contents } = await getContentsAfterPreAndBotonicInit(
     request,
     flowBuilderPlugin
