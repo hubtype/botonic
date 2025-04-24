@@ -11,7 +11,6 @@ import { useWebchat, WebchatContext } from '../../src/webchat/context'
 export function renderWithBotonicProviders(children) {
   const Wrapper = ({ children }) => {
     const requestContext = {
-      getString: () => '',
       setLocale: () => undefined,
       session: {},
       params: {},
