@@ -54,27 +54,6 @@ describe('Check the contents returned by the plugin in first interaction', () =>
     expect(contents.length).toBe(3)
     expect((contents[2] as FlowText).text).toBe('All types of messages')
   })
-
-  test('The start contents are displayed followed by more contents obtained by matching an intent', async () => {
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: basicFlow },
-      requestArgs: {
-        input: {
-          data: 'I want to select my seat ',
-          type: INPUT.TEXT,
-          intent: 'select a seat',
-          confidence: 0.8,
-        },
-        isFirstInteraction: true,
-      },
-    })
-
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(3)
-    expect((contents[2] as FlowText).text).toBe(
-      'Message explaining how to select a seat'
-    )
-  })
 })
 
 describe('Check the contents returned by the plugin in first interaction with smart intent', () => {

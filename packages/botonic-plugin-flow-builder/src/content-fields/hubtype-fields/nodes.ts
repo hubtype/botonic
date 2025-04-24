@@ -5,7 +5,6 @@ import { HtFunctionNode } from './function'
 import { HtGoToFlow } from './go-to-flow'
 import { HtHandoffNode } from './handoff'
 import { HtImageNode } from './image'
-import { HtIntentNode } from './intent'
 import { HtKeywordNode } from './keyword'
 import { HtKnowledgeBaseNode } from './knowledge-base'
 import { HtPayloadNode } from './payload'
@@ -23,7 +22,6 @@ export type HtNodeWithContent =
   | HtCarouselNode
   | HtHandoffNode
   | HtKeywordNode
-  | HtIntentNode
   | HtFunctionNode
   | HtFallbackNode
   | HtWhatsappButtonListNode
