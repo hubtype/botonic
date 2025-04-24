@@ -13,33 +13,41 @@ export interface InShadowingConfig {
   allowKnowledgeBases: boolean
 }
 
-export interface BotonicPluginFlowBuilderOptions<T extends ResolvedPlugins> {
+export interface BotonicPluginFlowBuilderOptions<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
   apiUrl?: string
   jsonVersion?: FlowBuilderJSONVersion
   flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
   getLocale: (session: Session) => string
   getAccessToken: () => string
-  trackEvent?: TrackEventFunction<T>
-  getKnowledgeBaseResponse?: KnowledgeBaseFunction<T>
+  trackEvent?: TrackEventFunction<TPlugins, TExtraData>
+  getKnowledgeBaseResponse?: KnowledgeBaseFunction<TPlugins, TExtraData>
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
 }
 
-export type TrackEventFunction<T extends ResolvedPlugins = ResolvedPlugins> = (
-  request: BotContext<T>,
+export type TrackEventFunction<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = (
+  request: BotContext<TPlugins, TExtraData>,
   eventAction: string,
   args?: Record<string, any>
 ) => Promise<void>
 
-export type KnowledgeBaseFunction<T extends ResolvedPlugins = ResolvedPlugins> =
-  (
-    request: BotContext<T>,
-    sources: string[],
-    instructions: string,
-    messageId: string,
-    memoryLength: number
-  ) => Promise<KnowledgeBaseResponse>
+export type KnowledgeBaseFunction<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = (
+  request: BotContext<TPlugins, TExtraData>,
+  sources: string[],
+  instructions: string,
+  messageId: string,
+  memoryLength: number
+) => Promise<KnowledgeBaseResponse>
 
 export interface FlowBuilderApiOptions {
   url: string
