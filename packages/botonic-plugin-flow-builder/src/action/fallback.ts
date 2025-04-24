@@ -9,13 +9,10 @@ export async function getContentsByFallback({
   cmsApi,
   flowBuilderPlugin,
   request,
-  resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const fallbackNode = await getFallbackNode(cmsApi, request)
-  const fallbackContents = await flowBuilderPlugin.getContentsByNode(
-    fallbackNode,
-    resolvedLocale
-  )
+  const fallbackContents =
+    await flowBuilderPlugin.getContentsByNode(fallbackNode)
 
   return fallbackContents
 }

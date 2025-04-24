@@ -206,7 +206,8 @@ export class FlowBuilderApi {
     return this.flow.is_knowledge_base_active || false
   }
 
-  getResolvedLocale(locale?: string): string {
+  getResolvedLocale(): string {
+    const locale = this.request.getSystemLocale()
     if (locale && this.flow.locales.find(flowLocale => flowLocale === locale)) {
       return locale
     }

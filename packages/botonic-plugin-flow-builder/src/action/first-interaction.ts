@@ -10,9 +10,8 @@ import { getContentsByPayload } from './payload'
 export async function getContentsByFirstInteraction(
   context: FlowBuilderContext
 ): Promise<FlowContent[]> {
-  const { flowBuilderPlugin, request, resolvedLocale } = context
-  const firstInteractionContents =
-    await flowBuilderPlugin.getStartContents(resolvedLocale)
+  const { flowBuilderPlugin, request } = context
+  const firstInteractionContents = await flowBuilderPlugin.getStartContents()
 
   // If the first interaction has a FlowBotAction, it should be the last content
   // and avoid to render the match with keywords,intents or knowledge base
@@ -54,7 +53,6 @@ async function getContentsByUserInput({
 
     const hasRepeatedContent = await checkRepeatedContents(
       flowBuilderPlugin,
-      resolvedLocale,
       contentsByKeywordsOrIntents
     )
 
@@ -85,10 +83,9 @@ function getConversationStartId(cmsApi: FlowBuilderApi) {
 
 async function checkRepeatedContents(
   flowBuilderPlugin: BotonicPluginFlowBuilder,
-  resolvedLocale: string,
   contentsByKeywordsOrIntents: FlowContent[]
 ) {
-  const startContents = await flowBuilderPlugin.getStartContents(resolvedLocale)
+  const startContents = await flowBuilderPlugin.getStartContents()
   const contentIds = new Set(
     contentsByKeywordsOrIntents.map(content => content.id)
   )

@@ -21,7 +21,7 @@ export interface BotonicPluginFlowBuilderOptions<
   jsonVersion?: FlowBuilderJSONVersion
   flow?: HtFlowBuilderData
   customFunctions?: Record<any, any>
-  getLocale: (session: Session) => string
+  getLocale?: (request: BotContext<TPlugins, TExtraData>) => string
   getAccessToken: () => string
   trackEvent?: TrackEventFunction<TPlugins, TExtraData>
   getKnowledgeBaseResponse?: KnowledgeBaseFunction<TPlugins, TExtraData>

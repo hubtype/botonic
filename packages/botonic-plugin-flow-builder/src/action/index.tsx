@@ -121,8 +121,7 @@ function getContext(
 ): FlowBuilderContext {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
-  const locale = flowBuilderPlugin.getLocale(request.session)
-  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale(locale)
+  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale()
   return {
     cmsApi,
     flowBuilderPlugin,
