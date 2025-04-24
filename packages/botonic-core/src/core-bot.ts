@@ -6,7 +6,6 @@ import {
   BotResponse,
   INPUT,
   Input,
-  Locales,
   ProcessInputResult,
   ResolvedPlugins,
   Route,
@@ -22,7 +21,6 @@ export interface CoreBotConfig {
   defaultRoutes?: Route[]
   defaultTyping?: number
   inspector?: Inspector
-  locales: Locales
   plugins?: ResolvedPlugins
   renderer: any
   routes: Routes
@@ -35,7 +33,6 @@ export class CoreBot {
   defaultRoutes: Route[]
   defaultTyping: number
   inspector: Inspector
-  locales: Locales
   plugins: ResolvedPlugins
   renderer: any // TODO use a type like ({ request, actions }: RendererArgs) => Promise<any[]>
   rootElement: any
@@ -46,7 +43,6 @@ export class CoreBot {
   constructor({
     renderer,
     routes,
-    locales,
     theme,
     plugins,
     appId,
@@ -60,7 +56,6 @@ export class CoreBot {
     this.theme = theme || {}
     this.defaultTyping = defaultTyping
     this.defaultDelay = defaultDelay
-    this.locales = locales
     this.appId = appId || undefined
     this.rootElement = null
     this.inspector = inspector || new Inspector()

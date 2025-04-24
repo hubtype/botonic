@@ -3,7 +3,6 @@ import { BotonicAction } from '../../src/models'
 import {
   COUNTRY_GB,
   createSessionWithUser,
-  developerLocales,
   developerRoutes,
   initCoreBotWithDeveloperConfig,
   LOCALE_EN,
@@ -19,7 +18,6 @@ describe('CoreBot', () => {
     expect(coreBot).toBeDefined()
     expect(coreBot.renderer).toBeDefined()
     expect(coreBot.routes).toEqual(developerRoutes)
-    expect(coreBot.locales).toEqual(developerLocales)
     expect(coreBot.defaultRoutes).toEqual([])
     expect(coreBot.router).toBeDefined()
     expect(coreBot.inspector).toBeDefined()
@@ -39,7 +37,6 @@ describe('CoreBot', () => {
     expect(coreBot).toBeDefined()
     expect(coreBot.renderer).toBeDefined()
     expect(coreBot.routes).toEqual(developerRoutes)
-    expect(coreBot.locales).toEqual(developerLocales)
     expect(coreBot.defaultRoutes).toEqual([])
     expect(coreBot.router).toBeDefined()
     expect(coreBot.inspector).toBeDefined()
