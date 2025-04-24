@@ -12,15 +12,14 @@ describe('Check the contents returned by the plugin when it use a knowledge base
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
   const userInput = 'What is Flow Builder?'
-  const language = 'es'
+  const locale = 'es'
   const country = 'ES'
-  const locale = `${language}-${country}`
+  const systemLocale = 'es'
 
   test('When the knowledge base answer is correct, (with knowledge and without hallucinations) the answer is used to display a knowledge base node', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
           answer:
@@ -34,9 +33,10 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale,
         },
       },
     })
@@ -54,7 +54,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
           answer:
@@ -68,9 +67,10 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale,
         },
         shadowing: true,
       },
@@ -83,7 +83,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         inShadowing: { allowKnowledgeBases: true },
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
@@ -98,9 +97,10 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale,
         },
         shadowing: true,
       },
@@ -123,7 +123,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale: 'es-FR',
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
           answer,
@@ -136,9 +135,10 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language: 'es',
+        user: {
+          locale: 'es',
           country: 'FR',
+          systemLocale: 'es-FR',
         },
       },
     })
@@ -152,7 +152,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
           answer: 'This answer is incorrect',
@@ -165,9 +164,10 @@ describe('Check the contents returned by the plugin when it use a knowledge base
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale,
         },
       },
     })

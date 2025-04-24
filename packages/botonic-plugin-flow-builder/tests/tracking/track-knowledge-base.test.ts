@@ -22,7 +22,6 @@ describe('Check tracked events when a bot generates a response using a knowledge
     await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         trackEvent: trackEventMock,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
@@ -37,9 +36,10 @@ describe('Check tracked events when a bot generates a response using a knowledge
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale: locale,
         },
       },
     })

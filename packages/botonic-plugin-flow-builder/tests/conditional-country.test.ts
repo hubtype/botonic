@@ -21,9 +21,10 @@ describe('Check the contents returned by the plugin after conditional country no
         flowBuilderOptions: { flow: basicFlow },
         requestArgs: {
           input: { data: 'countryConditional', type: INPUT.TEXT },
-          extraData: {
-            language: 'en',
+          user: {
+            locale: 'en',
             country: countryISO,
+            systemLocale: 'en',
           },
         },
       })

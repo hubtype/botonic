@@ -22,7 +22,6 @@ import {
 
 interface FlowBuilderOptions {
   flow: any
-  locale?: string
   trackEvent?: TrackEventFunction<ResolvedPlugins>
   getKnowledgeBaseResponse?: KnowledgeBaseFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
@@ -30,14 +29,12 @@ interface FlowBuilderOptions {
 
 export function createFlowBuilderPlugin({
   flow,
-  locale = 'en',
   trackEvent,
   getKnowledgeBaseResponse,
   inShadowing,
 }: FlowBuilderOptions): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
-    getLocale: () => locale,
     getAccessToken: () => 'fake_token',
     trackEvent,
     getKnowledgeBaseResponse,
@@ -57,7 +54,7 @@ interface RequestArgs {
   user?: {
     locale: string
     country: string
-    system_locale: string
+    systemLocale: string
   }
 }
 
@@ -69,18 +66,26 @@ export function createRequest({
   user = {
     locale: 'en',
     country: 'US',
-    system_locale: 'en',
+    systemLocale: 'en',
   },
   extraData = {},
   shadowing = false,
 }: RequestArgs): PluginPreRequest {
+  console.log({ user })
   return {
     session: {
       is_first_interaction: isFirstInteraction,
       organization: 'orgTest',
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
-      user: { provider, id: 'uid1', ...user, extra_data: extraData },
+      user: {
+        provider,
+        id: 'uid1',
+        locale: user.locale,
+        country: user.country,
+        system_locale: user.systemLocale,
+        extra_data: extraData,
+      },
       _shadowing: shadowing,
       __retries: 0,
       _access_token: 'fake_access_token',
@@ -97,8 +102,9 @@ export function createRequest({
     plugins,
     getUserCountry: () => user.country,
     getUserLocale: () => user.locale,
-    getSystemLocale: () => user.system_locale,
+    getSystemLocale: () => user.systemLocale,
     setUserCountry: (_country: string) => {
+      user.country = _country
       return
     },
     setUserLocale: (_locale: string) => {
@@ -154,6 +160,11 @@ export async function createFlowBuilderPluginAndGetContents({
     },
   })
 
+  console.log(
+    'UTILS request locale and country',
+    request.getSystemLocale(),
+    request.getUserCountry()
+  )
   const { contents } = await getContentsAfterPreAndBotonicInit(
     request,
     flowBuilderPlugin
