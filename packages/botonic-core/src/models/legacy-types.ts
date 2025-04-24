@@ -324,8 +324,6 @@ export interface BotContext<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
 > extends BotRequest<TExtraData> {
-  // TODO: remove getString function?
-  getString: (stringId: string) => string
   getUserCountry: () => string
   getUserLocale: () => string
   getSystemLocale: () => string
