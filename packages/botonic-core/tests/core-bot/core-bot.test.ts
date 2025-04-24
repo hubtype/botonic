@@ -3,7 +3,6 @@ import { BotonicAction } from '../../src/models'
 import {
   COUNTRY_GB,
   createSessionWithUser,
-  developerLocales,
   developerRoutes,
   initCoreBotWithDeveloperConfig,
   LOCALE_EN,
@@ -19,7 +18,6 @@ describe('CoreBot', () => {
     expect(coreBot).toBeDefined()
     expect(coreBot.renderer).toBeDefined()
     expect(coreBot.routes).toEqual(developerRoutes)
-    expect(coreBot.locales).toEqual(developerLocales)
     expect(coreBot.defaultRoutes).toEqual([])
     expect(coreBot.router).toBeDefined()
     expect(coreBot.inspector).toBeDefined()
@@ -39,7 +37,6 @@ describe('CoreBot', () => {
     expect(coreBot).toBeDefined()
     expect(coreBot.renderer).toBeDefined()
     expect(coreBot.routes).toEqual(developerRoutes)
-    expect(coreBot.locales).toEqual(developerLocales)
     expect(coreBot.defaultRoutes).toEqual([])
     expect(coreBot.router).toBeDefined()
     expect(coreBot.inspector).toBeDefined()
@@ -85,18 +82,6 @@ describe('CoreBot', () => {
 
     // Assert
     expect(session.user.system_locale).toEqual(SYSTEM_LOCALE_EN_GB)
-  })
-
-  it('getString to return expected locale', () => {
-    // Arrange
-    const coreBot = initCoreBotWithDeveloperConfig()
-    const session = { user: { system_locale: LOCALE_EN } }
-
-    // Act
-    const resolvedLocaleText = coreBot.getString('text1', session)
-
-    // Assert
-    expect(coreBot.locales.en.text1).toContain(resolvedLocaleText)
   })
 
   it('input processes a chatevent (e.g: sent when enduser is typing', async () => {

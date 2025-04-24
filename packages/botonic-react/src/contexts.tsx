@@ -4,8 +4,6 @@ import { createContext } from 'react'
 import { ActionRequest } from './index-types'
 
 export const RequestContext = createContext<ActionRequest>({
-  // TODO: remove getString function?
-  getString: () => '',
   getUserCountry: () => '',
   getUserLocale: () => '',
   getSystemLocale: () => '',
@@ -29,12 +27,10 @@ export interface CloseWebviewOptions {
 
 export const WebviewRequestContext = createContext<{
   closeWebview: (options?: CloseWebviewOptions) => Promise<void>
-  getString?: (stringId: string) => string
   params: Record<string, any>
   session: Partial<CoreSession>
 }>({
   closeWebview: async () => undefined,
-  getString: undefined,
   params: {} as Record<string, any>,
   session: {} as Partial<CoreSession>,
 })

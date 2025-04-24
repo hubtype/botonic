@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { getString, params2queryString, PROVIDER } from '@botonic/core'
+import { params2queryString, PROVIDER } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -86,13 +86,6 @@ class App extends React.Component {
 
   render() {
     const webviewRequestContext = {
-      // TODO: remove getString function?
-      getString: (stringId: string) =>
-        getString(
-          this.props.locales,
-          this.state.session.user.system_locale,
-          stringId
-        ),
       session: this.state.session || {},
       params: this.state.params || {},
       closeWebview: this.close.bind(this),

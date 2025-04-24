@@ -1,5 +1,4 @@
 import { Inspector } from './debug'
-import { getString } from './i18n'
 import {
   BotContext,
   BotonicAction,
@@ -7,7 +6,6 @@ import {
   BotResponse,
   INPUT,
   Input,
-  Locales,
   ProcessInputResult,
   ResolvedPlugins,
   Route,
@@ -23,7 +21,6 @@ export interface CoreBotConfig {
   defaultRoutes?: Route[]
   defaultTyping?: number
   inspector?: Inspector
-  locales: Locales
   plugins?: ResolvedPlugins
   renderer: any
   routes: Routes
@@ -36,7 +33,6 @@ export class CoreBot {
   defaultRoutes: Route[]
   defaultTyping: number
   inspector: Inspector
-  locales: Locales
   plugins: ResolvedPlugins
   renderer: any // TODO use a type like ({ request, actions }: RendererArgs) => Promise<any[]>
   rootElement: any
@@ -47,7 +43,6 @@ export class CoreBot {
   constructor({
     renderer,
     routes,
-    locales,
     theme,
     plugins,
     appId,
@@ -61,7 +56,6 @@ export class CoreBot {
     this.theme = theme || {}
     this.defaultTyping = defaultTyping
     this.defaultDelay = defaultDelay
-    this.locales = locales
     this.appId = appId || undefined
     this.rootElement = null
     this.inspector = inspector || new Inspector()
@@ -74,11 +68,6 @@ export class CoreBot {
             [...this.routes, ...this.defaultRoutes],
             this.inspector.routeInspector
           )
-  }
-
-  // TODO: remove getString function?
-  getString(id: string, session: Session): string {
-    return getString(this.locales, session.user.system_locale, id)
   }
 
   setSystemLocale(locale: string, session: Session): void {
@@ -117,8 +106,6 @@ export class CoreBot {
       plugins: this.plugins,
       defaultTyping: this.defaultTyping,
       defaultDelay: this.defaultDelay,
-      // TODO: remove getString function?
-      getString: (stringId: string) => this.getString(stringId, session),
       getUserCountry: () => session.user.country,
       getUserLocale: () => session.user.locale,
       getSystemLocale: () => session.user.system_locale,

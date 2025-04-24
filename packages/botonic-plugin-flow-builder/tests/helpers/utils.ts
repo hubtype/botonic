@@ -95,7 +95,6 @@ export function createRequest({
     },
     lastRoutePath: '',
     plugins,
-    getString: (_stringId: string) => '',
     getUserCountry: () => user.country,
     getUserLocale: () => user.locale,
     getSystemLocale: () => user.system_locale,

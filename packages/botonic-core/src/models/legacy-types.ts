@@ -83,10 +83,6 @@ export enum INPUT {
   EVENT_CASE_STATUS_CHANGED = 'case_event_status_changed',
 }
 
-export interface Locales {
-  [id: string]: string | string[] | Locales
-}
-
 interface PluginConstructor<T> {
   new (arg: T): Plugin
 }
@@ -328,8 +324,6 @@ export interface BotContext<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
 > extends BotRequest<TExtraData> {
-  // TODO: remove getString function?
-  getString: (stringId: string) => string
   getUserCountry: () => string
   getUserLocale: () => string
   getSystemLocale: () => string
