@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3008](https://github.com/hubtype/botonic/pull/3008/files): Use new user fields and default_locale_code
+- [PR-3013](https://github.com/hubtype/botonic/pull/3013): no need to receive the locale in any function
 
 ### Changed
 
