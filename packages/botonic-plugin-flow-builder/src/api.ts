@@ -207,11 +207,29 @@ export class FlowBuilderApi {
   }
 
   getResolvedLocale(): string {
-    const locale = this.request.getSystemLocale()
-    if (locale && this.flow.locales.find(flowLocale => flowLocale === locale)) {
+    const systemLocale = this.request.getSystemLocale()
+
+    const locale = this.resolveAsLocale(systemLocale)
+    if (locale) {
       return locale
     }
 
+    const language = this.resolveAsLanguage(systemLocale)
+    if (language) {
+      return language
+    }
+
+    return this.resolveAsDefaultLocale()
+  }
+
+  private resolveAsLocale(locale: string): string | undefined {
+    if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
+      return locale
+    }
+    return undefined
+  }
+
+  private resolveAsLanguage(locale?: string): string | undefined {
     const language = locale?.split('-')[0]
     if (
       language &&
@@ -220,11 +238,13 @@ export class FlowBuilderApi {
       console.log(`locale: ${locale} has been resolved as ${language}`)
       return language
     }
+    return undefined
+  }
 
+  private resolveAsDefaultLocale(): string {
     console.log(
       `Resolve locale with default locale: ${this.flow.default_locale_code}`
     )
-
     return this.flow.default_locale_code || 'en'
   }
 }
