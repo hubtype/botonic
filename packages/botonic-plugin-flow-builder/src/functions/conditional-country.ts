@@ -9,6 +9,6 @@ export function conditionalCountry({
   request,
   results,
 }: ConditionalCountryArgs): string {
-  const country = request.session.user.extra_data.country
+  const country = request.getUserCountry()
   return results.find(result => result === country) || 'default'
 }

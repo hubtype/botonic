@@ -15,7 +15,6 @@ export async function getContentsByKnowledgeBase({
   cmsApi,
   flowBuilderPlugin,
   request,
-  resolvedLocale,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   if (isKnowledgeBasesAllowed(request)) {
     const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
@@ -25,8 +24,7 @@ export async function getContentsByKnowledgeBase({
     }
 
     const contents = await flowBuilderPlugin.getContentsByNode(
-      startNodeKnowledgeBaseFlow,
-      resolvedLocale
+      startNodeKnowledgeBaseFlow
     )
 
     const knowledgeBaseContent = contents.find(

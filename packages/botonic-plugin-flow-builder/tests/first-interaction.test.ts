@@ -87,16 +87,15 @@ describe('Check the contents returned by the plugin in first interaction with kn
   beforeEach(() => mockSmartIntent('Other'))
   test('The start contents are displayed followed by more contents obtained from knowledge base', async () => {
     const userInput = 'What is Flow Builder?'
-    const language = 'es'
+    const locale = 'es'
     const country = 'ES'
-    const locale = `${language}-${country}`
+    const systemLocale = 'es-ES'
     const answer =
       'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
 
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
-        locale,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
           userInput,
           answer,
@@ -109,9 +108,10 @@ describe('Check the contents returned by the plugin in first interaction with kn
           data: userInput,
           type: INPUT.TEXT,
         },
-        extraData: {
-          language,
+        user: {
+          locale,
           country,
+          systemLocale,
         },
         isFirstInteraction: true,
       },

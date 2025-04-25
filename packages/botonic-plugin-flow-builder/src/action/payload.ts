@@ -6,7 +6,6 @@ export async function getContentsByPayload({
   cmsApi,
   flowBuilderPlugin,
   request,
-  resolvedLocale,
   contentID,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const id = contentID
@@ -15,7 +14,7 @@ export async function getContentsByPayload({
   const targetNode = id ? cmsApi.getNodeById<HtNodeWithContent>(id) : undefined
 
   if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode, resolvedLocale)
+    return await flowBuilderPlugin.getContentsByNode(targetNode)
   }
 
   return []

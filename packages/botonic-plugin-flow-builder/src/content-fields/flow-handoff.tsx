@@ -55,8 +55,8 @@ export class FlowHandoff extends ContentFieldsBase {
     }
 
     if (this.queue) {
-      const language = request.session.user.extra_data.language
-      const country = request.session.user.extra_data.country
+      const language = request.getSystemLocale()
+      const country = request.getUserCountry()
 
       handOffBuilder.withQueue(this.queue.id)
       handOffBuilder.withBotEvent({
