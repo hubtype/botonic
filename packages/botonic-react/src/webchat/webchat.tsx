@@ -248,8 +248,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       setTimeout(() => {
         if (typeof props.onInit === 'function') {
           props.onInit()
-          const user = updateUserLocaleAndCountry(session.user)
-          updateSession({ ...session, user })
+          session.user = updateUserLocaleAndCountry(session.user)
         }
       }, 100)
     }
@@ -453,6 +452,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   */
 
   const updateSessionWithUser = (userToUpdate: any) => {
+    console.log('userToUpdate', userToUpdate)
     updateSession(merge(webchatState.session, { user: userToUpdate }))
   }
 

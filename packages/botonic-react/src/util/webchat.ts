@@ -51,15 +51,11 @@ export const initSession = (
 }
 
 export function updateUserLocaleAndCountry(user: Partial<ClientUser>) {
-  const locale = getLocale(user)
-  const country = getCountry(user)
+  user.locale = getLocale(user)
+  user.country = getCountry(user)
+  user.system_locale = getSystemLocale(user)
 
-  return {
-    ...user,
-    locale,
-    country,
-    system_locale: locale,
-  }
+  return user
 }
 
 function getLocale(user: Partial<ClientUser>) {
@@ -82,6 +78,13 @@ function getCountry(user: Partial<ClientUser>) {
   return user.extra_data?.country
     ? (user.extra_data?.country as string)
     : userCountry
+}
+
+function getSystemLocale(user: Partial<ClientUser>) {
+  if (user.system_locale) {
+    return user.system_locale
+  }
+  return getLocale(user)
 }
 
 export const shouldKeepSessionOnReload = ({
