@@ -1,4 +1,4 @@
-import type { BotRequest, Plugin, PluginPreRequest } from '@botonic/core'
+import type { BotContext, Plugin, PluginPreRequest } from '@botonic/core'
 import { AxiosResponse } from 'axios'
 
 import {
@@ -24,7 +24,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   }
 
   async getInference(
-    request: BotRequest,
+    request: BotContext,
     sources: string[],
     instructions: string,
     messageId: string,
@@ -51,7 +51,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
 
   async getTestInference(
     authToken: string,
-    request: BotRequest,
+    request: BotContext,
     instructions: string,
     sources: string[]
   ): Promise<KnowledgeBaseResponse> {
@@ -69,7 +69,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
 
   async getInferenceV1(
     authToken: string,
-    request: BotRequest,
+    request: BotContext,
     sources: string[]
   ): Promise<KnowledgeBaseResponse> {
     const response = await this.apiService.inferenceV1(
