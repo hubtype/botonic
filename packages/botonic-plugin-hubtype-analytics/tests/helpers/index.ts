@@ -1,6 +1,12 @@
-import { BotRequest, INPUT, PROVIDER, ProviderType } from '@botonic/core'
+import {
+  BotContext,
+  INPUT,
+  PROVIDER,
+  ProviderType,
+  ResolvedPlugins,
+} from '@botonic/core'
 
-import BotonicPluginHubtypeAnalytics from '../../src'
+import BotonicPluginHubtypeAnalytics from '../../src/index'
 
 interface RequestArgs {
   language?: string
@@ -16,7 +22,7 @@ export function getRequestData(args?: RequestArgs) {
   return hubtypeAnalyticsPlugin.getRequestData(request)
 }
 
-export function createRequest(args?: RequestArgs): BotRequest {
+export function createRequest(args?: RequestArgs): BotContext<ResolvedPlugins> {
   return {
     session: {
       is_first_interaction: args?.isFirstInteraction || false,
@@ -24,12 +30,12 @@ export function createRequest(args?: RequestArgs): BotRequest {
       organization_id: 'orgIdTest',
       bot: { id: 'bid1' },
       user: {
+        locale: args?.language || 'es',
+        country: args?.country || 'ES',
+        system_locale: args?.language || 'es',
         provider: args?.provider || PROVIDER.WEBCHAT,
         id: args?.chatId || 'chatIdTest',
-        extra_data: {
-          country: args?.country || 'ES',
-          language: args?.language || 'es',
-        },
+        extra_data: {},
       },
       __retries: 0,
       _access_token: 'fake_access_token',
@@ -44,5 +50,15 @@ export function createRequest(args?: RequestArgs): BotRequest {
       message_id: 'testMessageId',
     },
     lastRoutePath: '',
+    getUserCountry: () => args?.country || 'ES',
+    getUserLocale: () => args?.language || 'es',
+    getSystemLocale: () => args?.language || 'es',
+    setUserCountry: () => {},
+    setUserLocale: () => {},
+    setSystemLocale: () => {},
+    defaultDelay: 0,
+    defaultTyping: 0,
+    params: {},
+    plugins: {},
   }
 }

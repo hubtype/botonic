@@ -38,7 +38,7 @@ export default class BotonicPluginGoogleTranslate implements Plugin {
           request.input.translations = translations
         }
         const detectedLanguage = await this.languageDetector.detect(text)
-        request.input.language = detectedLanguage || request.session.__locale
+        request.input.language = detectedLanguage || request.getUserLocale()
       }
     } catch (e) {
       console.error(

@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { v7 as uuidv7 } from 'uuid'
 
 import ThumbsDown from '../../assets/thumbs-down.svg'
 import ThumbsUp from '../../assets/thumbs-up.svg'
-import { ActionRequest } from '../../index-types'
 import { resolveImage } from '../../util'
 import { WebchatContext } from '../../webchat/context'
-import { EventAction, FeedbackOption } from '../../webchat/tracking'
+import { useTracking } from '../../webchat/tracking'
 import { FeedbackButton, FeedbackMessageContainer } from './styles'
 
 interface ButtonsState {
@@ -25,7 +23,8 @@ export const MessageFeedback = ({
   inferenceId,
   messageId,
 }: RatingProps) => {
-  const { webchatState, updateMessage, trackEvent } = useContext(WebchatContext)
+  const { webchatState, updateMessage } = useContext(WebchatContext)
+  const { trackKnowledgebaseFeedback } = useTracking()
 
   const [className, setClassName] = useState('')
   const [disabled, setDisabled] = useState<ButtonsState>({
@@ -56,34 +55,18 @@ export const MessageFeedback = ({
   }, [disabled])
 
   const handleClick = async (isUseful: boolean) => {
-    if (!trackEvent) {
-      return
-    }
-
     if (isUseful) {
       setDisabled({ positive: false, negative: true })
     } else {
       setDisabled({ positive: true, negative: false })
     }
 
-    const args = {
-      knowledgebaseInferenceId: inferenceId,
-      feedbackBotInteractionId: botInteractionId,
-      feedbackTargetId: messageId,
-      feedbackGroupId: uuidv7(),
-      possibleOptions: [FeedbackOption.ThumbsDown, FeedbackOption.ThumbsUp],
-      possibleValues: [0, 1],
-      option: isUseful ? FeedbackOption.ThumbsUp : FeedbackOption.ThumbsDown,
-      value: isUseful ? 1 : 0,
-    }
-
-    const request = {
-      session: {
-        ...webchatState.session,
-      },
-    } as unknown as ActionRequest
-
-    await trackEvent(request, EventAction.FeedbackKnowledgebase, args)
+    await trackKnowledgebaseFeedback({
+      messageId,
+      isUseful,
+      botInteractionId,
+      inferenceId,
+    })
   }
 
   return (
