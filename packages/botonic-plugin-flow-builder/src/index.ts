@@ -57,7 +57,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private functions: Record<any, any>
   private currentRequest: PluginPreRequest
   public getAccessToken: (session: Session) => string
-  public getLocale: (request: BotContext) => string
   public trackEvent?: TrackEventFunction
   public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
@@ -71,12 +70,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
-    this.getLocale =
-      typeof options.getLocale === 'function'
-        ? options.getLocale
-        : (request: BotContext) => {
-            return request.getSystemLocale()
-          }
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
