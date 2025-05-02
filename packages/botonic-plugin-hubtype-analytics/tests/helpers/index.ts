@@ -50,7 +50,6 @@ export function createRequest(args?: RequestArgs): BotContext<ResolvedPlugins> {
       message_id: 'testMessageId',
     },
     lastRoutePath: '',
-    getString: () => '',
     getUserCountry: () => args?.country || 'ES',
     getUserLocale: () => args?.language || 'es',
     getSystemLocale: () => args?.language || 'es',
