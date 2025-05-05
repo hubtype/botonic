@@ -266,7 +266,7 @@ export interface Session<TExtraData = any> {
   user: SessionUser<TExtraData>
   // after handoff
   _botonic_action?: BotonicActionType
-  _hubtype_case_status?: CaseStatusType
+  _hubtype_case_resolution?: CaseResolution
   _hubtype_case_id?: string
   _hubtype_case_typification?: string
   _hubtype_case_contact_reasons?: HubtypeCaseContactReason[]
