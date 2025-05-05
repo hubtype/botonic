@@ -248,7 +248,7 @@ export class BotonicAPIService {
     const accessToken = this.getOauth().access_token
     this.setHeaders(accessToken)
 
-    const meResponse = await this.apiGet<Me>({ path: 'users/me' })
+    const meResponse = await this.getMe()
     if (meResponse) {
       this.me = meResponse.data
     }
@@ -261,7 +261,7 @@ export class BotonicAPIService {
     campaign: any
   ): Promise<any> {
     const signupData = { email, password, org_name: orgName, campaign }
-    return this.apiPost({ path: 'users/', body: signupData })
+    return this.apiPost({ path: 'sign-up/', body: signupData })
   }
 
   async createBot(botName: string): Promise<AxiosPromise> {
@@ -278,8 +278,8 @@ export class BotonicAPIService {
     return resp
   }
 
-  private async getMe(): AxiosPromise<Me> {
-    return this.apiGet({ path: 'users/me/' })
+  private async getMe(): AxiosResponse<Me> {
+    return this.apiGet({ path: 'users/me/', apiVersion: 'v3' })
   }
 
   async getBots(): Promise<AxiosResponse<PaginatedResponse<BotListItem>, any>> {

@@ -20,27 +20,11 @@ export interface OAuth {
 
 export interface Me {
   id: string
-  username: string
   email: string
   first_name: string
   last_name: string
-  role: string
-  pic: string
-  queues: string[]
-  projects: string[]
-  must_change_password: boolean
-  created_by_id: string
-  status: string
   organization_id: string
-  notifications_new_case: boolean
-  notifications_new_message: boolean
-  notifications_duration: number
-  is_staff: boolean
-  fb_info: string
-  is_read_only: boolean
-  preferred_product: string
   campaign: string
-  managers_settings_json: any
 }
 
 export interface AnalyticsInfo {
