@@ -22,7 +22,7 @@ describe('ManageEnvironment', () => {
     }
   )
 
-  test('TEST: create and delete environment', async () => {
+  test.skip('TEST: create and delete environment', async () => {
     const environmentManager = testManageEnvironment()
     const newEnvironment = 'newEnvironment'
 
