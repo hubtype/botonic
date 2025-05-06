@@ -278,7 +278,7 @@ export class BotonicAPIService {
     return resp
   }
 
-  private async getMe(): AxiosResponse<Me> {
+  private async getMe(): Promise<AxiosResponse<Me>> {
     return this.apiGet({ path: 'users/me/', apiVersion: 'v3' })
   }
 
