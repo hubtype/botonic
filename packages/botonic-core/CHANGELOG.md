@@ -16,15 +16,19 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+### Fixed
+
+</details>
+
+## [0.35.0] - 2025-05-06
+
+### Changed
+
 - [PR-3006](https://github.com/hubtype/botonic/pull/3006): Infer Plugins type in BotContext
 - [PR-3007](https://github.com/hubtype/botonic/pull/3007): BotContext with getUserLocale, geUserCountry and getSystemLocale functions
 - [PR-3011](https://github.com/hubtype/botonic/pull/3011): Remove getString function from request BotContext and locales from BotCore
 - [PR-3012](https://github.com/hubtype/botonic/pull/3012): Infer ExtraData type for session.user.extra_data in BotContext
 - [PR-3016](https://github.com/hubtype/botonic/pull/3016): Change `session._hubtype_case_status` for `session._hubtype_case_resolution`
-
-### Fixed
-
-</details>
 
 ## [0.34.0] - 2025-04-01
 

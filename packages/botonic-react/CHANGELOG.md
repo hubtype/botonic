@@ -10,9 +10,17 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.35.0] - 2025-mm-dd
+## [0.35.x] - 2025-mm-dd
 
 ### Added
+
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.35.0] - 2025-05-06
 
 ### Changed
 
@@ -20,10 +28,6 @@ All notable changes to Botonic will be documented in this file.
 [PR-2991](https://github.com/hubtype/botonic/pull/2991): Create Provider WebchatTheme with typescript and add a default theme
 [PR-2995](https://github.com/hubtype/botonic/pull/2995): Add Button style in WebchatTheme
 [PR-2996](https://github.com/hubtype/botonic/pull/2996): ButtonDisabler in typescript
-
-### Fixed
-
-</details>
 
 ## [0.34.1] - 2025-04-03
 

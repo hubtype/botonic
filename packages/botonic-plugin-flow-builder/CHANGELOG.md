@@ -14,16 +14,22 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.35.0] - 2025-05-06
+
+### Added
+
 - [PR-3008](https://github.com/hubtype/botonic/pull/3008/files): Use new user fields and default_locale_code
 - [PR-3013](https://github.com/hubtype/botonic/pull/3013): no need to receive the locale in any function
 
 ### Changed
 
 - [PR-3010](https://github.com/hubtype/botonic/pull/3010): Remove all logic related with intents babel.
-
-### Fixed
-
-</details>
 
 ## [0.34.2] - 2025-04-02
 
