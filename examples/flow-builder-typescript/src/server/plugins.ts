@@ -1,23 +1,16 @@
-import { PluginConfig } from '@botonic/core'
+import BotonicPluginFlowBuilder from '@botonic/plugin-flow-builder'
+import BotonicPluginHubtypeAnalytics from '@botonic/plugin-hubtype-analytics'
+import BotonicPluginKnowledgeBases from '@botonic/plugin-knowledge-bases'
 
 import { CONFIG } from './config'
 import { getEnvironment } from './utils/env-utils'
 
 const config = CONFIG[getEnvironment()]
 
-export const plugins: PluginConfig<any>[] = [
-  {
-    id: 'flowBuilder',
-    resolve: require('@botonic/plugin-flow-builder'),
-    options: config.flowBuilder,
-  },
-  {
-    id: 'hubtypeAnalytics',
-    resolve: require('@botonic/plugin-hubtype-analytics'),
-  },
-  {
-    id: 'knowledgeBases',
-    resolve: require('@botonic/plugin-knowledge-bases'),
-    options: config.knowledgeBases,
-  },
-]
+export type BotPlugins = typeof plugins
+
+export const plugins = {
+  flowBuilder: new BotonicPluginFlowBuilder(config.flowBuilder),
+  knowledgeBases: new BotonicPluginKnowledgeBases(config.knowledgeBases),
+  hubtypeAnalytics: new BotonicPluginHubtypeAnalytics(),
+}

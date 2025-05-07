@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-luis",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "axios": "^1.7.9"
+    "axios": "^1.9.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.26.0"
