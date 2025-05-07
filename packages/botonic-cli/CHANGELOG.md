@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.31.x] - 2025-mm-dd
+## [0.35.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,3 +19,9 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.35.0] - 2025-05-06
+
+### Added
+
+- [PR-3017](https://github.com/hubtype/botonic/pull/3017): Use v3 of users' endpoints and sign-up specific endpoint
