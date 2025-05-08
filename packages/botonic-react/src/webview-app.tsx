@@ -17,9 +17,17 @@ class App extends React.Component {
         o[key] = value
         return o
       }, {})
+
+    // TODO: think if we receive hubtype URL as param or we set at compilation or deploy time
+    const botId = url.searchParams.get('bot_id')
+    const userId = url.searchParams.get('user_id')
+    const getSessionUrl = `${_hubtype_api}/external/v1/conversational_app/${botId}/session/${userId}/`
+    const response = await axios.get(getSessionUrl)
+    session = response.json
+
     const urlContext = url.searchParams.get('context')
     const session = JSON.parse(urlContext || '{}')
-    this.state = { session, params }
+    this.state = { session, params, botId, userId, webviewSession }
   }
 
   async close(options?: CloseWebviewOptions) {
