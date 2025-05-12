@@ -57,7 +57,10 @@ export class FlowBuilderApi {
       headers: { Authorization: `Bearer ${token}` },
     })
     this.request.session.organization_id = response.data.organization_id
-    this.request.session.bot.id = response.data.bot_id
+    this.request.session.bot = {
+      ...this.request.session.bot,
+      id: response.data.bot_id,
+    }
   }
 
   getNodeByFlowId(id: string): HtNodeWithContent {

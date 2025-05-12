@@ -65,12 +65,22 @@ import {
 } from './styles'
 import { WebchatTheme } from './theme/types'
 import { TriggerButton } from './trigger-button'
-import { useStorageState } from './use-storage-state-hook'
+import { useBotonicStorage } from './use-botonic-storage'
 import { getParsedAction } from './utils'
 import { WebviewContainer } from './webview/index'
 
-// eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
+  const { getBotonicStorage, setBotonicStorage, getBotonicStorageAttribute } =
+    useBotonicStorage(props.storage, props.storageKey)
+
+  // const devSettings =
+  //   getBotonicStorage()?.devSettings || props.initialDevSettings
+
+  // console.log('devSettings', {
+  //   keepSessionOnReload: devSettings?.keepSessionOnReload,
+  //   showSessionView: devSettings?.showSessionView,
+  // })
+
   const {
     addMessage,
     addMessageComponent,
@@ -86,7 +96,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleWebchat,
-    updateDevSettings,
+    // updateDevSettings,
     updateHandoff,
     updateLastMessageDate,
     updateLastRoutePath,
@@ -106,43 +116,38 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     headerRef,
     repliesRef,
     scrollableMessagesListRef,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-  } = props.webchatHooks || useWebchat(props.theme)
+  } = props.webchatHooks
+  //||
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // useWebchat(
+  //   props.theme,
+  //   getBotonicStorage(),
+  //   props.initialSession,
+  //   devSettings
+  // )
 
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
   const currentDateString = () => new Date().toISOString()
   const theme = merge(webchatState.theme, props.theme)
-  const { initialSession, initialDevSettings, onStateChange } = props
+
   const getThemeProperty = _getThemeProperty(theme)
 
   const [customComponent, setCustomComponent] = useState(null)
-  const storage = props.storage
-  const storageKey =
-    typeof props.storageKey === 'function'
-      ? props.storageKey()
-      : props.storageKey
-
-  const [botonicState, saveState] = useStorageState(storage, storageKey)
 
   const host = props.host || document.body
 
   const { scrollToBottom } = useScrollToBottom({ host })
 
-  const saveWebchatState = (webchatState: WebchatState) => {
-    storage &&
-      saveState(
-        JSON.parse(
-          stringifyWithRegexs({
-            messages: webchatState.messagesJSON,
-            session: webchatState.session,
-            lastRoutePath: webchatState.lastRoutePath,
-            devSettings: webchatState.devSettings,
-            lastMessageUpdate: webchatState.lastMessageUpdate,
-            themeUpdates: webchatState.themeUpdates,
-          })
-        )
-      )
+  const saveWebchatStateOnStorage = (webchatState: WebchatState) => {
+    setBotonicStorage({
+      messages: webchatState.messagesJSON,
+      session: webchatState.session,
+      lastRoutePath: webchatState.lastRoutePath,
+      devSettings: webchatState.devSettings,
+      lastMessageUpdate: webchatState.lastMessageUpdate,
+      themeUpdates: webchatState.themeUpdates,
+    })
   }
 
   const handleAttachment = (event: any) => {
@@ -208,47 +213,52 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   // Load initial state from storage
   useEffect(() => {
-    let {
-      messages,
-      session,
-      lastRoutePath,
-      devSettings,
-      lastMessageUpdate,
-      themeUpdates,
-    } = botonicState || {}
-    session = initSession(session)
-    updateSession(session)
-    if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
-      if (messages) {
-        messages.forEach(message => {
-          addMessage(message)
-          const newMessageComponent = msgToBotonic(
-            { ...message, delay: 0, typing: 0 },
-            props.theme?.message?.customTypes
-          )
-          //@ts-ignore
-          if (newMessageComponent) addMessageComponent(newMessageComponent)
-        })
-      }
-      if (initialSession) updateSession(merge(initialSession, session))
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-    } else updateSession(merge(initialSession, session))
-    if (devSettings) updateDevSettings(devSettings)
-    else if (initialDevSettings) updateDevSettings(initialDevSettings)
+    // let {
+    // messages,
+    // session,
+    // lastRoutePath,
+    // devSettings,
+    // lastMessageUpdate,
+    // themeUpdates,
+    // } = getBotonicStorage() || {}
+    // session = initSession(session)
+    // updateSession(session)
+    // if (shouldKeepSessionOnReload({ initialDevSettings, devSettings })) {
+    // if (messages) {
+    //   messages.forEach(message => {
+    //     addMessage(message)
+    //     const newMessageComponent = msgToBotonic(
+    //       { ...message, delay: 0, typing: 0 },
+    //       props.theme?.message?.customTypes
+    //     )
+    //     //@ts-ignore
+    //     if (newMessageComponent) addMessageComponent(newMessageComponent)
+    //   })
+    // }
+    // if (initialSession) updateSession(merge(initialSession, session))
+    // if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+    // } else updateSession(merge(initialSession, session))
 
-    if (lastMessageUpdate) {
-      updateLastMessageDate(lastMessageUpdate)
-    }
+    // if (props.devSettings) {
+    //   updateDevSettings(props.devSettings)
+    // } else if (props.initialDevSettings) {
+    //   updateDevSettings(props.initialDevSettings)
+    // }
 
-    if (themeUpdates !== undefined) {
-      updateTheme(merge(props.theme, themeUpdates), themeUpdates)
-    }
+    // if (lastMessageUpdate) {
+    //   updateLastMessageDate(lastMessageUpdate)
+    // }
+
+    // if (themeUpdates !== undefined) {
+    //   updateTheme(merge(props.theme, themeUpdates), themeUpdates)
+    // }
 
     if (props.onInit) {
-      setTimeout(() => {
+      setTimeout(async () => {
         if (typeof props.onInit === 'function') {
-          props.onInit()
-          session.user = updateUserLocaleAndCountry(session.user)
+          await props.onInit()
+          const user = updateUserLocaleAndCountry(webchatState.session.user!)
+          updateSessionWithUser(user)
         }
       }, 100)
     }
@@ -265,10 +275,20 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   useEffect(() => {
     const { messagesJSON, session } = webchatState
-    if (onStateChange && typeof onStateChange === 'function' && session.user) {
-      onStateChange({ messagesJSON, user: session.user })
+    if (
+      props.onStateChange &&
+      typeof props.onStateChange === 'function' &&
+      session.user
+    ) {
+      props.onStateChange({ messagesJSON, user: session.user })
     }
-    saveWebchatState(webchatState)
+
+    console.log(
+      'onStateChange webchatState.devSettings',
+      JSON.stringify(webchatState.devSettings)
+    )
+
+    saveWebchatStateOnStorage(webchatState)
   }, [
     webchatState.messagesJSON,
     webchatState.session,
@@ -381,11 +401,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const coverComponentProps = webchatState.theme.coverComponent?.props
 
   useEffect(() => {
+    const botonicStorage = getBotonicStorage()
+    const messages = getBotonicStorageAttribute('messages')
     if (!coverComponent) return
-    if (
-      !botonicState ||
-      (botonicState.messages && botonicState.messages.length === 0)
-    )
+    if (!botonicStorage || (messages && messages.length === 0))
       toggleCoverComponent(true)
   }, [])
 
@@ -452,7 +471,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   */
 
   const updateSessionWithUser = (userToUpdate: any) => {
-    console.log('userToUpdate', userToUpdate)
     updateSession(merge(webchatState.session, { user: userToUpdate }))
   }
 
@@ -597,7 +615,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   useEffect(() => {
     // Prod mode
-    saveWebchatState(webchatState)
+    saveWebchatStateOnStorage(webchatState)
   }, [webchatState.themeUpdates])
 
   // Only needed for dev/serve mode

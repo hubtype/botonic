@@ -1,16 +1,32 @@
 import { Session } from '@botonic/core'
-import { useReducer, useRef } from 'react'
+import merge from 'lodash.merge'
+import { useEffect, useReducer, useRef } from 'react'
 
 import { Reply } from '../../components'
 import { Webview } from '../../components/index-types'
 import { WebchatMessage } from '../../index-types'
+import { msgToBotonic } from '../../msg-to-botonic'
+import { initSession, shouldKeepSessionOnReload } from '../../util'
 import { defaultTheme } from '../theme/default-theme'
 import { WebchatTheme } from '../theme/types'
+import { BotonicStorage } from '../use-botonic-storage'
 import { WebchatAction } from './actions'
 import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
 import { webchatReducer } from './webchat-reducer'
 
-function getWebchatInitialState(initialTheme: WebchatTheme): WebchatState {
+function getWebchatInitialState(
+  initialTheme: WebchatTheme,
+  botonicStorage?: BotonicStorage,
+  initialSession?: Partial<Session>,
+  devSettings?: DevSettings
+): WebchatState {
+  const initialStorageSession = initSession(botonicStorage?.session)
+  const session = merge(initialSession, initialStorageSession)
+  const lastMessageUpdate = botonicStorage?.lastMessageUpdate
+  const themeUpdates = botonicStorage?.themeUpdates || {}
+  const lastRoutePath = botonicStorage?.lastRoutePath
+  console.log('getWebchatInitialState devSettings', devSettings)
+
   return {
     replies: [],
     messagesJSON: [],
@@ -19,20 +35,20 @@ function getWebchatInitialState(initialTheme: WebchatTheme): WebchatState {
     typing: false,
     webview: null,
     webviewParams: null,
-    session: { user: undefined },
-    lastRoutePath: undefined,
+    session: session as Partial<Session>,
+    lastRoutePath: lastRoutePath,
     handoff: false,
     theme: initialTheme,
-    themeUpdates: {},
+    themeUpdates: themeUpdates,
     error: {},
     online: true,
-    devSettings: { keepSessionOnReload: false },
+    devSettings: devSettings || { keepSessionOnReload: false },
     isWebchatOpen: false,
     isEmojiPickerOpen: false,
     isPersistentMenuOpen: false,
     isCoverComponentOpen: false,
     isCustomComponentRendered: false,
-    lastMessageUpdate: undefined,
+    lastMessageUpdate: lastMessageUpdate,
     currentAttachment: undefined,
     numUnreadMessages: 0,
     isLastMessageVisible: true,
@@ -77,9 +93,20 @@ export interface UseWebchat {
   inputPanelRef: React.MutableRefObject<HTMLDivElement | null>
 }
 
-export function useWebchat(theme?: WebchatTheme): UseWebchat {
+export function useWebchat(
+  theme?: WebchatTheme,
+  botonicStorage?: BotonicStorage,
+  initialSession?: Partial<Session>,
+  devSettings?: DevSettings
+): UseWebchat {
   const initialTheme = theme || defaultTheme
-  const webchatInitialState = getWebchatInitialState(initialTheme)
+  console.log('useWebchat devSettings', devSettings)
+  const webchatInitialState = getWebchatInitialState(
+    initialTheme,
+    botonicStorage,
+    initialSession,
+    devSettings
+  )
 
   const [webchatState, webchatDispatch] = useReducer(
     webchatReducer,
@@ -244,6 +271,31 @@ export function useWebchat(theme?: WebchatTheme): UseWebchat {
       payload: isInputFocused,
     })
   }
+
+  useEffect(() => {
+    // const keepSessionOnReload = shouldKeepSessionOnReload({
+    //   devSettings,
+    //   initialDevSettings,
+    // })
+
+    const keepSessionOnReload = devSettings?.keepSessionOnReload
+    console.log('useWebchat useEffect keepSessionOnReload', keepSessionOnReload)
+    if (keepSessionOnReload) {
+      const messagesJSON = botonicStorage?.messages || []
+      for (const message of messagesJSON) {
+        addMessage(message)
+
+        const newMessageComponent = msgToBotonic(
+          { ...message, delay: 0, typing: 0 },
+          initialTheme.message?.customTypes
+        )
+        if (newMessageComponent) {
+          //@ts-ignore
+          addMessageComponent(newMessageComponent)
+        }
+      }
+    }
+  }, [])
 
   return {
     addMessage,

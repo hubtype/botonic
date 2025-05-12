@@ -18,6 +18,7 @@ import {
   WebchatSettingsProps,
 } from './components'
 import { CloseWebviewOptions } from './contexts'
+import { DevSettings } from './webchat/context/types'
 import { UseWebchat } from './webchat/context/use-webchat'
 import {
   CoverComponentOptions,
@@ -90,7 +91,7 @@ export interface WebchatArgs {
   defaultTyping?: number
   storage?: Storage | null
   storageKey?: string
-  onInit?: (app: WebchatApp, args: any) => void
+  onInit?: (app: WebchatApp, args: any) => Promise<void>
   onOpen?: (app: WebchatApp, args: any) => void
   onClose?: (app: WebchatApp, args: any) => void
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
@@ -102,18 +103,18 @@ export interface WebchatArgs {
 }
 
 export interface WebchatProps {
-  webchatHooks?: UseWebchat
+  webchatHooks: UseWebchat
   initialSession?: any
-  initialDevSettings?: any
+  initialDevSettings?: DevSettings
   onStateChange: (args: OnStateChangeArgs) => void
 
   shadowDOM?: any
   theme?: WebchatTheme
-  storage?: Storage | null
-  storageKey?: string | (() => string)
+  storage: Storage
+  storageKey: string
   defaultDelay?: number
   defaultTyping?: number
-  onInit?: (args?: any) => void
+  onInit?: (args?: any) => Promise<void>
   onOpen?: (args?: any) => void
   onClose?: (args?: any) => void
   onUserInput(args: OnUserInputArgs): Promise<void>

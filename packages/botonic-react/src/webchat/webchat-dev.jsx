@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { useWebchat } from './context/use-webchat'
 import { SessionView } from './session-view'
+import { useBotonicStorage } from './use-botonic-storage'
 import { Webchat } from './webchat'
 
 export const DebugTab = styled.div`
@@ -46,7 +47,24 @@ const initialSession = {
 
 // eslint-disable-next-line react/display-name
 export const WebchatDev = forwardRef((props, ref) => {
-  const webchatHooks = useWebchat()
+  const { getBotonicStorage } = useBotonicStorage(
+    props.storage,
+    props.storageKey
+  )
+  const devSettings =
+    getBotonicStorage()?.devSettings || props.initialDevSettings
+
+  console.log('devSettings', {
+    keepSessionOnReload: devSettings?.keepSessionOnReload,
+    showSessionView: devSettings?.showSessionView,
+  })
+
+  const webchatHooks = useWebchat(
+    undefined,
+    getBotonicStorage(),
+    initialSession,
+    devSettings
+  )
   const { webchatState, updateTheme } = webchatHooks
 
   /* TODO: webchatState.theme should be included in the dependencies array
@@ -63,7 +81,7 @@ export const WebchatDev = forwardRef((props, ref) => {
         {...props}
         ref={ref}
         webchatHooks={webchatHooks}
-        initialSession={initialSession}
+        // initialSession={initialSession}
         initialDevSettings={{
           keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
           showSessionView: webchatState.devSettings.showSessionView,

@@ -6,7 +6,7 @@ const IS_BROWSER =
   typeof navigator !== 'undefined' &&
   typeof document !== 'undefined'
 
-export function useStorageState(storage, key, defaultValue) {
+export function useStorageState(storage, key) {
   let evtTarget
 
   try {
@@ -17,7 +17,7 @@ export function useStorageState(storage, key, defaultValue) {
 
   const raw = storage?.getItem(key)
 
-  const [value, setValue] = useState(raw ? JSON.parse(raw) : defaultValue)
+  const [value, setValue] = useState(raw ? JSON.parse(raw) : undefined)
 
   const updater = useCallback(
     (updatedValue, remove = false) => {
@@ -32,8 +32,6 @@ export function useStorageState(storage, key, defaultValue) {
     },
     [key]
   )
-
-  defaultValue != null && !raw && updater(defaultValue)
 
   useEffect(() => {
     const listener = ({ detail }) => {
@@ -51,5 +49,5 @@ export function useStorageState(storage, key, defaultValue) {
   if (storage === null) {
     return [undefined, undefined]
   }
-  return [value, updater, () => updater(null, true)]
+  return [value, updater]
 }

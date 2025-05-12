@@ -90,7 +90,7 @@ function getSystemLocale(user: Partial<ClientUser>) {
 export const shouldKeepSessionOnReload = ({
   initialDevSettings,
   devSettings,
-}) => !initialDevSettings || (devSettings && devSettings.keepSessionOnReload)
+}) => !initialDevSettings || devSettings?.keepSessionOnReload
 
 //TODO: Review param serverConfig if is of type ServerConfig this never have errorMessage
 export const getServerErrorMessage = serverConfig => {

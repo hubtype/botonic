@@ -27,6 +27,7 @@ import {
   WebchatTheme,
 } from './webchat/theme/types'
 import { Webchat } from './webchat/webchat'
+import { WebchatHooks } from './webchat/webchat-hooks'
 
 export class WebchatApp {
   public theme?: Partial<WebchatTheme>
@@ -41,9 +42,9 @@ export class WebchatApp {
   public shadowDOM?: boolean | (() => boolean)
   public defaultDelay?: number
   public defaultTyping?: number
-  public storage?: Storage | null
+  public storage: Storage
   public storageKey: string
-  public onInit?: (app: WebchatApp, args: any) => void
+  public onInit?: (app: WebchatApp, args: any) => Promise<void>
   public onOpen?: (app: WebchatApp, args: any) => void
   public onClose?: (app: WebchatApp, args: any) => void
   public onMessage?: (app: WebchatApp, message: WebchatMessage) => void
@@ -107,7 +108,7 @@ export class WebchatApp {
     this.hostId = hostId || WEBCHAT.DEFAULTS.HOST_ID
     this.defaultDelay = defaultDelay
     this.defaultTyping = defaultTyping
-    this.storage = storage === undefined ? localStorage : storage
+    this.storage = !storage ? localStorage : storage
     this.storageKey = storageKey || WEBCHAT.DEFAULTS.STORAGE_KEY
     this.onInit = onInit
     this.onOpen = onOpen
@@ -175,8 +176,8 @@ export class WebchatApp {
     return node
   }
 
-  onInitWebchat(...args: [any]) {
-    this.onInit && this.onInit(this, ...args)
+  async onInitWebchat(...args: [any]) {
+    this.onInit && (await this.onInit(this, ...args))
   }
 
   onOpenWebchat(...args: [any]) {
@@ -485,7 +486,31 @@ export class WebchatApp {
     this.createRootElement(host)
 
     return (
-      <Webchat
+      // <Webchat
+      // {...webchatOptions}
+      // ref={this.webchatRef}
+      // host={this.host}
+      // shadowDOM={this.shadowDOM}
+      // theme={theme as WebchatTheme}
+      // storage={this.storage}
+      // storageKey={this.storageKey}
+      // defaultDelay={defaultDelay}
+      // defaultTyping={defaultTyping}
+      // onInit={(...args: [any]) => this.onInitWebchat(...args)}
+      // onOpen={(...args: [any]) => this.onOpenWebchat(...args)}
+      // onClose={(...args: [any]) => this.onCloseWebchat(...args)}
+      // onUserInput={(...args: [any]) => this.onUserInput(...args)}
+      // onStateChange={(args: OnStateChangeArgs) => {
+      //   this.onStateChange(args)
+      // }}
+      // onTrackEvent={(
+      //   request: ActionRequest,
+      //   eventName: string,
+      //   args?: EventArgs
+      // ) => this.onTrackEventWebchat(request, eventName, args)}
+      // server={server}
+      // />
+      <WebchatHooks
         {...webchatOptions}
         ref={this.webchatRef}
         host={this.host}
