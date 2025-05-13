@@ -1,4 +1,4 @@
-name: Botonic Deploy
+name: Botonic Publish
 
 on:
   workflow_dispatch:
@@ -6,11 +6,12 @@ on:
       version_type:
         description: 'Type of version upgrade'
         required: true
-        default: 'minor'
+        default: 'patch'
         type: choice
         options:
-          - 'major'
+          - 'patch'
           - 'minor'
+          - 'major'
       packages:
         description: 'Select packages to deploy'
         required: true
@@ -160,21 +161,21 @@ jobs:
         id: helpers
         run: |
           # Copy the helper script to a temporary location for use
-          cp scripts/ci/deploy-helpers.sh /tmp/helpers.sh
-          chmod +x /tmp/helpers.sh
+          cp scripts/ci/botonic-publish.sh /tmp/botonic-publish.sh
+          chmod +x /tmp/botonic-publish.sh
           echo "Utility functions setup complete"
 
       # Step 2: Calculate new version
       - name: Calculate new version
         id: version
         run: |
-          source /tmp/helpers.sh
+          source /tmp/botonic-publish.sh
 
-          if [[ "${{ github.event.inputs.version_type }}" == "major" ]]; then
-            # For major updates, use botonic-core as reference
+          if [[ "${{ github.event.inputs.version_type }}" != "patch" ]]; then
+            # For major or minor updates, use botonic-core as reference
             CURRENT_VERSION=$(get_core_version)
           else
-            # For minor/patch updates, find highest version
+            # For patch updates, find highest version
             CURRENT_VERSION=$(find_highest_version)
           fi
 
@@ -187,9 +188,9 @@ jobs:
       # Step 4: Deploy selected packages
       - name: Deploy selected packages
         id: deploy-packages
-        if: ${{ github.event.inputs.all != 'true' && github.event.inputs.version_type != 'major' }}
+        if: ${{ github.event.inputs.all != 'true' && github.event.inputs.version_type == 'patch' }}
         run: |
-          source /tmp/helpers.sh
+          source /tmp/botonic-publish.sh
 
           NEW_VERSION=${{ steps.version.outputs.new_version }}
           DEPLOYED=""
@@ -302,9 +303,9 @@ jobs:
       # Step 5: Deploy all packages (for all=true or major version upgrades)
       - name: Deploy all packages
         id: deploy-all
-        if: ${{ github.event.inputs.all == 'true' || github.event.inputs.version_type == 'major' }}
+        if: ${{ github.event.inputs.all == 'true' || github.event.inputs.version_type != 'patch' }}
         run: |
-          source /tmp/helpers.sh
+          source /tmp/botonic-publish.sh
 
           NEW_VERSION=${{ steps.version.outputs.new_version }}
           DEPLOYED="All packages"
@@ -324,7 +325,7 @@ jobs:
       - name: Deploy botonic-cli
         if: ${{ steps.deploy-packages.outputs.deploy_cli == 'true' || steps.deploy-all.outputs.deploy_cli == 'true' }}
         run: |
-          source /tmp/helpers.sh
+          source /tmp/botonic-publish.sh
 
           echo "Deploying botonic-cli package (always last)"
           NEW_VERSION=${{ steps.version.outputs.new_version }}
@@ -335,7 +336,7 @@ jobs:
       - name: Deploy examples
         if: ${{ github.event.inputs.version_type == 'major' }}
         run: |
-          source /tmp/helpers.sh
+          source /tmp/botonic-publish.sh
 
           NEW_VERSION=${{ steps.version.outputs.new_version }}
 

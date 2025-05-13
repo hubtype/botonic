@@ -29,20 +29,20 @@ find_highest_version() {
       local pkg_version=$(cd $pkg_dir && node -p "require('./package.json').version")
       
       # Parse the version numbers
-      local highest_fixed=$(echo $highest_version | cut -d. -f1)
+      local highest_patch=$(echo $highest_version | cut -d. -f3)
       local highest_major=$(echo $highest_version | cut -d. -f2)
-      local highest_minor=$(echo $highest_version | cut -d. -f3)
+      local highest_minor=$(echo $highest_version | cut -d. -f1)
       
-      local pkg_fixed=$(echo $pkg_version | cut -d. -f1)
+      local pkg_patch=$(echo $pkg_version | cut -d. -f3)
       local pkg_major=$(echo $pkg_version | cut -d. -f2)
-      local pkg_minor=$(echo $pkg_version | cut -d. -f3)
+      local pkg_minor=$(echo $pkg_version | cut -d. -f1)
       
       # Check if package version is higher
       local is_higher=false
       
-      if [ "$pkg_fixed" -gt "$highest_fixed" ]; then
+      if [ "$pkg_patch" -gt "$highest_patch" ]; then
         is_higher=true
-      elif [ "$pkg_fixed" -eq "$highest_fixed" ]; then
+      elif [ "$pkg_patch" -eq "$highest_patch" ]; then
         if [ "$pkg_major" -gt "$highest_major" ]; then
           is_higher=true
         elif [ "$pkg_major" -eq "$highest_major" ]; then
@@ -73,16 +73,19 @@ calculate_new_version() {
   local version_type=$2
   
   # Extract version components
-  local fixed=$(echo $current_version | cut -d. -f1)
-  local major=$(echo $current_version | cut -d. -f2)
-  local minor=$(echo $current_version | cut -d. -f3)
+  local major=$(echo $current_version | cut -d. -f1)
+  local minor=$(echo $current_version | cut -d. -f2)
+  local patch=$(echo $current_version | cut -d. -f3)
   
   if [[ "$version_type" == "major" ]]; then
     local new_major=$((major + 1))
-    echo "${fixed}.${new_major}.0"
+    echo "${new_major}.0.0"
+  elif [[ "$version_type" == "minor" ]]; then
+    local new_minor=$((minor + 1))
+    echo "${major}.${new_minor}.0"
   else
-    local new_minor=$((patch + 1))
-    echo "${fixed}.${major}.${new_minor}"
+    local new_patch=$((patch + 1))
+    echo "${major}.${minor}.${new_patch}"
   fi
 }
 
