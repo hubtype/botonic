@@ -27,8 +27,10 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const context = getContext(request)
     const contents = await getContentsByFirstInteraction(context)
-    const contentID = contents[0]?.code
-    return await FlowBuilderAction.botonicInit(request, contentID)
+    await trackFlowContent(request, contents)
+    await FlowBuilderAction.doHandoffAndBotActions(request, contents)
+
+    return { contents }
   }
 
   static async botonicInit(
@@ -37,7 +39,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
     await trackFlowContent(request, contents)
+    await FlowBuilderAction.doHandoffAndBotActions(request, contents)
 
+    return { contents }
+  }
+
+  private static async doHandoffAndBotActions(
+    request: ActionRequest,
+    contents: FlowContent[]
+  ) {
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
     ) as FlowHandoff
@@ -51,8 +61,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     if (botActionContent) {
       botActionContent.doBotAction(request)
     }
-
-    return { contents }
   }
 
   render(): JSX.Element | JSX.Element[] {

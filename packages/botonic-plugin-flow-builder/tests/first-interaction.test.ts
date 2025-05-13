@@ -59,7 +59,7 @@ describe('Check the contents returned by the plugin in first interaction', () =>
 describe('Check the contents returned by the plugin in first interaction with smart intent', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
-  beforeEach(() => mockSmartIntent('add a bag'))
+  beforeEach(() => mockSmartIntent('add_a_bag'))
 
   test('The start contents are displayed followed by more contents obtained by matching a smart-intent', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
