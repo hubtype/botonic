@@ -11,7 +11,7 @@ describe('Check tracked events when a contents are displayed after match with sm
 
   beforeEach(() => {
     trackEventMock.mockClear()
-    mockSmartIntent('add a bag')
+    mockSmartIntent('add_a_bag')
   })
 
   test('Track nlu_intent_smart', async () => {
@@ -31,7 +31,7 @@ describe('Check tracked events when a contents are displayed after match with sm
       expect.anything(),
       'nlu_intent_smart',
       {
-        nluIntentSmartTitle: 'add a bag',
+        nluIntentSmartTitle: 'add_a_bag',
         nluIntentSmartNumUsed: 2,
         nluIntentSmartMessageId: expect.anything(),
         userInput: 'How can I add a bag to my booking?',

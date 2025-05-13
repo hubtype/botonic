@@ -127,7 +127,7 @@ export async function getContentsAfterPreAndBotonicInit(
   return await FlowBuilderAction.botonicInit(actionRequest)
 }
 
-function getActionRequest(request: PluginPreRequest): ActionRequest {
+export function getActionRequest(request: PluginPreRequest): ActionRequest {
   return {
     ...request,
     lastRoutePath: 'flow-builder-action',
