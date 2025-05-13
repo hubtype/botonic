@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.35.1] - 2025-05-13
+
+### Changed
+
+- [PR-3018](https://github.com/hubtype/botonic/pull/3018): FlowBuilder.executeConversationStart always add match with keywords or smart-intent.
+
 ## [0.35.0] - 2025-05-06
 
 ### Added
