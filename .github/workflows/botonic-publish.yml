@@ -370,3 +370,24 @@ jobs:
 
           echo "Deployed packages: $PACKAGES" >> $GITHUB_STEP_SUMMARY
           echo "Deployment completed successfully at $(date)" >> $GITHUB_STEP_SUMMARY
+      - name: Sending Slack notification (success)
+        uses: rtCamp/action-slack-notify@v2
+        if: success()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEAM_PLATFORM }}
+          SLACK_USERNAME: Github
+          SLACK_ICON_EMOJI: ":rocket:"
+          SLACK_CHANNEL: "#team-botonic"
+          SLACK_TITLE: "Botonic version ${{ steps.version.outputs.new_version }} published succesfully"
+          MSG_MINIMAL: true
+      - name: Sending Slack notification (failure)
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEAM_PLATFORM }}
+          SLACK_USERNAME: Github
+          SLACK_ICON_EMOJI: ':bell:'
+          SLACK_COLOR: danger
+          SLACK_CHANNEL: "#team-botonic"
+          SLACK_TITLE: "Botonic version ${{ steps.version.outputs.new_version }} failed to publish"
+          MSG_MINIMAL: true
