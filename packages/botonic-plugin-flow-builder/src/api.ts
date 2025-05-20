@@ -1,7 +1,12 @@
 import { Input, PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import { KNOWLEDGE_BASE_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
+import {
+  AI_AGENTS_FLOW_NAME,
+  KNOWLEDGE_BASE_FLOW_NAME,
+  SEPARATOR,
+  UUID_REGEXP,
+} from './constants'
 import {
   HtBotActionNode,
   HtFallbackNode,
@@ -200,6 +205,18 @@ export class FlowBuilderApi {
       return undefined
     }
     return this.getNodeById<HtNodeWithContent>(knowledgeBaseFlow.start_node_id)
+  }
+
+  getStartNodeAiAgentFlow(): HtNodeWithContent | undefined {
+    const aiAgentFlow = this.flow.flows.find(
+      flow => flow.name === AI_AGENTS_FLOW_NAME
+    )
+
+    if (!aiAgentFlow) {
+      return undefined
+    }
+
+    return this.getNodeById<HtNodeWithContent>(aiAgentFlow.start_node_id)
   }
 
   isKnowledgeBaseEnabled(): boolean {

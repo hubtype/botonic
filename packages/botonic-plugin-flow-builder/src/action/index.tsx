@@ -9,6 +9,7 @@ import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
 import { inputHasTextData } from '../utils'
+import { getContentsByAiAgent } from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -106,6 +107,10 @@ async function getContents(
   }
 
   if (inputHasTextData(request.input)) {
+    const aiAgentContents = await getContentsByAiAgent(context)
+    if (aiAgentContents.length > 0) {
+      return aiAgentContents
+    }
     const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
     if (knowledgeBaseContents.length > 0) {
       return knowledgeBaseContents
