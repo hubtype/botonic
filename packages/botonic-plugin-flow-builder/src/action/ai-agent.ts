@@ -42,8 +42,18 @@ function updateContentsWithAiAgentResponse(
   contents: FlowContent[],
   aiAgentResponse: AiAgentResponse
 ): FlowContent[] {
+  if (
+    aiAgentResponse.message.role === 'tool' &&
+    aiAgentResponse.message.tool_name === 'exit_agent'
+  ) {
+    return []
+  }
+
   return contents.map(content => {
-    if (content instanceof FlowAiAgent) {
+    if (
+      content instanceof FlowAiAgent &&
+      aiAgentResponse.message.role === 'assistant'
+    ) {
       content.text = aiAgentResponse.message.content
     }
 

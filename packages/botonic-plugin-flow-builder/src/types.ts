@@ -89,8 +89,21 @@ export interface KnowledgeBaseResponse {
 }
 
 export interface AiAgentResponse {
-  message: { role: string; content: string }
+  message: AgentMessage
 }
+
+interface AssistantMessage {
+  role: 'assistant'
+  content: string
+}
+
+interface ToolMessage {
+  role: 'tool'
+  tool_name: string
+  tool_params?: Record<string, unknown>
+}
+
+export type AgentMessage = AssistantMessage | ToolMessage
 
 export interface SmartIntentResponse {
   data: {

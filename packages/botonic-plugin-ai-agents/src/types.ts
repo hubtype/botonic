@@ -19,7 +19,7 @@ export interface AiAgentRequestDataTest {
   instructions: string
 }
 
-export type MessageRole = 'user' | 'assistant'
+export type MessageRole = 'user' | 'assistant' | 'tool'
 
 export interface AiAgentRequestData {
   message: string
@@ -29,5 +29,23 @@ export interface AiAgentRequestData {
 }
 
 export interface AiAgentResponse {
-  message: { role: string; content: string }
+  message: AgentMessage
 }
+
+export interface AssistantMessage {
+  role: 'assistant'
+  content: string
+}
+
+export interface UserMessage {
+  role: 'user'
+  content: string
+}
+
+export interface ToolMessage {
+  role: 'tool'
+  tool_name: string
+  tool_params?: Record<string, unknown>
+}
+
+export type AgentMessage = AssistantMessage | ToolMessage
