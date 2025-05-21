@@ -15,6 +15,7 @@ import BotonicPluginFlowBuilder, {
   FlowContent,
 } from '../../src'
 import {
+  AiAgentFunction,
   InShadowingConfig,
   KnowledgeBaseFunction,
   TrackEventFunction,
@@ -24,6 +25,7 @@ interface FlowBuilderOptions {
   flow: any
   trackEvent?: TrackEventFunction<ResolvedPlugins>
   getKnowledgeBaseResponse?: KnowledgeBaseFunction<ResolvedPlugins>
+  getAiAgentResponse?: AiAgentFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
 }
 
@@ -31,6 +33,7 @@ export function createFlowBuilderPlugin({
   flow,
   trackEvent,
   getKnowledgeBaseResponse,
+  getAiAgentResponse,
   inShadowing,
 }: FlowBuilderOptions): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
@@ -38,6 +41,7 @@ export function createFlowBuilderPlugin({
     getAccessToken: () => 'fake_token',
     trackEvent,
     getKnowledgeBaseResponse,
+    getAiAgentResponse,
     inShadowing,
   })
 
