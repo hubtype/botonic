@@ -12,20 +12,52 @@ import {
   Config,
 } from './types'
 
-const url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
-
 export class AiAgentClient {
+  private url: string
+
+  constructor() {
+    this.url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
+  }
+
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
   ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-
     if (isDev(request.session)) {
-      return this.agentTestInference(request, config, aiAgentArgs)
+      return this.agentTestInference(request, aiAgentArgs)
     }
 
-    return this.agentInference(request, config, aiAgentArgs)
+    return this.agentInference(request, aiAgentArgs)
+  }
+
+  private async agentTestInference(
+    request: BotContext,
+    aiAgentArgs: AiAgentArgs
+  ): Promise<AiAgentResponse> {
+    const config = this.getConfig(request)
+    const data = this.getDataTest(request, aiAgentArgs)
+    const response = await axios.post<AiAgentResponse>(
+      `${this.url}/test/`,
+      data,
+      config
+    )
+
+    return response.data
+  }
+
+  private async agentInference(
+    request: BotContext,
+    aiAgentArgs: AiAgentArgs
+  ): Promise<AiAgentResponse> {
+    const config = this.getConfig(request)
+    const data = this.getData(request, aiAgentArgs)
+    const response = await axios.post<AiAgentResponse>(
+      `${this.url}/run/`,
+      data,
+      config
+    )
+
+    return response.data
   }
 
   private getConfig(request: BotContext): Config {
@@ -34,6 +66,22 @@ export class AiAgentClient {
         Authorization: `Bearer ${request.session._access_token}`,
         'Content-Type': 'application/json',
       },
+    }
+  }
+
+  private getData(
+    request: BotContext,
+    aiAgentArgs: AiAgentArgs
+  ): AiAgentRequestData {
+    if (!request.input.data) {
+      throw new AiAgentError('No input data provided')
+    }
+
+    return {
+      message: request.input.message_id,
+      memory_length: 10,
+      name: aiAgentArgs.name,
+      instructions: aiAgentArgs.instructions,
     }
   }
 
@@ -60,51 +108,5 @@ export class AiAgentClient {
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
     }
-  }
-
-  private getData(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestData {
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
-    }
-
-    return {
-      message: request.input.message_id,
-      memory_length: 10,
-      name: aiAgentArgs.name,
-      instructions: aiAgentArgs.instructions,
-    }
-  }
-
-  private async agentInference(
-    request: BotContext,
-    config: Config,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const data = this.getData(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${url}/run/`,
-      data,
-      config
-    )
-
-    return response.data
-  }
-
-  private async agentTestInference(
-    request: BotContext,
-    config: Config,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const data = this.getDataTest(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${url}/test/`,
-      data,
-      config
-    )
-
-    return response.data
   }
 }
