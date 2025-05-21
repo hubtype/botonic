@@ -14,6 +14,8 @@ export interface AiAgentRequestDataTest {
     role: MessageRole
     content: string
   }[]
+  name: string
+  instructions: string
 }
 
 export type MessageRole = 'user' | 'assistant'

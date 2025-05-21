@@ -41,7 +41,6 @@ export class AiAgentClient {
     request: BotContext,
     aiAgentArgs: AiAgentArgs
   ): AiAgentRequestDataTest {
-    console.log(aiAgentArgs)
     if (!request.input.data) {
       throw new AiAgentError('No input data provided')
     }
@@ -58,6 +57,8 @@ export class AiAgentClient {
           content: request.input.data,
         },
       ],
+      name: aiAgentArgs.name,
+      instructions: aiAgentArgs.instructions,
     }
   }
 
