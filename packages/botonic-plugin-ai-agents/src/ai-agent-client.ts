@@ -12,7 +12,7 @@ import {
   Config,
 } from './types'
 
-const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/`
+const url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
 
 export class AiAgentClient {
   async getInference(
@@ -84,7 +84,7 @@ export class AiAgentClient {
   ): Promise<AiAgentResponse> {
     const data = this.getData(request, aiAgentArgs)
     const response = await axios.post<AiAgentResponse>(
-      `${url}run/`,
+      `${url}/run/`,
       data,
       config
     )
@@ -99,7 +99,7 @@ export class AiAgentClient {
   ): Promise<AiAgentResponse> {
     const data = this.getDataTest(request, aiAgentArgs)
     const response = await axios.post<AiAgentResponse>(
-      `${url}test/`,
+      `${url}/test/`,
       data,
       config
     )
