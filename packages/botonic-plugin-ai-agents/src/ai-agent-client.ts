@@ -12,20 +12,52 @@ import {
   Config,
 } from './types'
 
-const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/`
-
 export class AiAgentClient {
+  private url: string
+
+  constructor() {
+    this.url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
+  }
+
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
   ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-
     if (isDev(request.session)) {
-      return this.agentTestInference(request, config, aiAgentArgs)
+      return this.agentTestInference(request, aiAgentArgs)
     }
 
-    return this.agentInference(request, config, aiAgentArgs)
+    return this.agentInference(request, aiAgentArgs)
+  }
+
+  private async agentTestInference(
+    request: BotContext,
+    aiAgentArgs: AiAgentArgs
+  ): Promise<AiAgentResponse> {
+    const config = this.getConfig(request)
+    const data = this.getDataTest(request, aiAgentArgs)
+    const response = await axios.post<AiAgentResponse>(
+      `${this.url}/test/`,
+      data,
+      config
+    )
+
+    return response.data
+  }
+
+  private async agentInference(
+    request: BotContext,
+    aiAgentArgs: AiAgentArgs
+  ): Promise<AiAgentResponse> {
+    const config = this.getConfig(request)
+    const data = this.getData(request, aiAgentArgs)
+    const response = await axios.post<AiAgentResponse>(
+      `${this.url}/run/`,
+      data,
+      config
+    )
+
+    return response.data
   }
 
   private getConfig(request: BotContext): Config {
@@ -34,30 +66,6 @@ export class AiAgentClient {
         Authorization: `Bearer ${request.session._access_token}`,
         'Content-Type': 'application/json',
       },
-    }
-  }
-
-  private getDataTest(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestDataTest {
-    console.log(aiAgentArgs)
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
-    }
-
-    // TODO: We can get messages from localStorage in Dev mode and transform them to the correct format {role: MessageRole, content: string}
-    // if (isDev(request.session)) {
-    //   const messages = localStorage.getItem('botonicState').
-    // }
-
-    return {
-      messages: [
-        {
-          role: 'user',
-          content: request.input.data,
-        },
-      ],
     }
   }
 
@@ -77,33 +85,28 @@ export class AiAgentClient {
     }
   }
 
-  private async agentInference(
+  private getDataTest(
     request: BotContext,
-    config: Config,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const data = this.getData(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${url}run/`,
-      data,
-      config
-    )
+  ): AiAgentRequestDataTest {
+    if (!request.input.data) {
+      throw new AiAgentError('No input data provided')
+    }
 
-    return response.data
-  }
+    // TODO: We can get messages from localStorage in Dev mode and transform them to the correct format {role: MessageRole, content: string}
+    // if (isDev(request.session)) {
+    //   const messages = localStorage.getItem('botonicState').
+    // }
 
-  private async agentTestInference(
-    request: BotContext,
-    config: Config,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const data = this.getDataTest(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${url}test/`,
-      data,
-      config
-    )
-
-    return response.data
+    return {
+      messages: [
+        {
+          role: 'user',
+          content: request.input.data,
+        },
+      ],
+      name: aiAgentArgs.name,
+      instructions: aiAgentArgs.instructions,
+    }
   }
 }
