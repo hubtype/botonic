@@ -1,8 +1,6 @@
-interface MockAiAgentOptions {
-  message: { role: string; content: string }
-}
+import { AiAgentResponse } from '../../src/types'
 
-export function mockAiAgentResponse({ message }: MockAiAgentOptions) {
+export function mockAiAgentResponse({ message }: AiAgentResponse) {
   return jest.fn(() => {
     return Promise.resolve({ message })
   })

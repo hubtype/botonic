@@ -59,4 +59,26 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
       'I can provide you with information about current temperatures, forecasts, and the probability of rain for your location. Just let me know where you are or where you’re interested in, and I’ll give you the details!'
     )
   })
+
+  test('When agent response is of role tool and name exit_agent, the plugin should respond with the tool response of fallback flow', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: mockAiAgentResponse({
+          message: {
+            role: 'tool',
+            tool_name: 'exit_agent',
+          },
+        }),
+      },
+      requestArgs: {
+        input: {
+          data: 'Who has won the league this year?',
+          type: INPUT.TEXT,
+        },
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toEqual('Fallback')
+  })
 })

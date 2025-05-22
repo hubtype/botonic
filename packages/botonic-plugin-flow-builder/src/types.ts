@@ -1,9 +1,4 @@
-import {
-  BotContext,
-  PluginPreRequest,
-  ResolvedPlugins,
-  Session,
-} from '@botonic/core'
+import { BotContext, PluginPreRequest, ResolvedPlugins } from '@botonic/core'
 
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
@@ -92,18 +87,17 @@ export interface AiAgentResponse {
   message: AgentMessage
 }
 
-interface AssistantMessage {
+export type AgentMessage = AssistantMessage | ToolMessage
+export interface AssistantMessage {
   role: 'assistant'
   content: string
 }
 
-interface ToolMessage {
+export interface ToolMessage {
   role: 'tool'
   tool_name: string
   tool_params?: Record<string, unknown>
 }
-
-export type AgentMessage = AssistantMessage | ToolMessage
 
 export interface SmartIntentResponse {
   data: {
