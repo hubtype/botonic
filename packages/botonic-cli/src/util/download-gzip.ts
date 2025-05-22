@@ -96,6 +96,20 @@ export async function editPackageJsonName(outputPath: string, botName: string) {
   // Modify the value of the attribute 'version'
   jsonData.version = '0.1.0'
 
+  jsonData.devDependencies = {
+    ...jsonData.devDependencies,
+    'cross-env': '^7.0.3',
+  }
+
+  // Prefix `build` and `start` with cross-env
+  const scripts = jsonData.scripts || {}
+  for (const scriptName of ['build', 'start']) {
+    if (scripts[scriptName] && !scripts[scriptName].startsWith('cross-env')) {
+      scripts[scriptName] = `cross-env ${scripts[scriptName]}`
+    }
+  }
+  jsonData.scripts = scripts
+
   // Convert the modified object back to JSON format
   const updatedJsonData = JSON.stringify(jsonData, null, 2)
 
