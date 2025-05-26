@@ -281,7 +281,7 @@ export type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
 export type SessionMatcher = (session: Session) => boolean
-export type RequestMatcher = (request: BotRequest) => boolean
+export type RequestMatcher = (request: BotContext) => boolean
 export type StringMatcher = RegExp | string | ((data: string) => boolean)
 
 export type RouteMatcher =
@@ -312,7 +312,7 @@ export interface Route {
   type?: StringMatcher
 }
 
-export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
+export type Routes<R = Route> = R[] | ((_: BotContext) => R[])
 
 export interface BotRequest<TExtraData = any> {
   input: Input
