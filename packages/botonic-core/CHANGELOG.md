@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.35.1] - 2025-05-26
+
+### Fixed
+
+- [PR-3026](https://github.com/hubtype/botonic/pull/3026): Use BotContext for routes function and RequestMatcher
+
 ## [0.35.0] - 2025-05-06
 
 ### Changed
