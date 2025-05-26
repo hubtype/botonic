@@ -12,116 +12,12 @@ on:
           - 'patch'
           - 'minor'
       packages:
-        description: 'Select packages to deploy'
+        description: 'Select packages to deploy (comma-separated)'
         required: true
-        type: boolean
-      all:
+        type: string
+        default: ''
+      deploy_all:
         description: 'Deploy all packages'
-        required: false
-        type: boolean
-        default: false
-      botonic-cli:
-        description: 'Deploy botonic-cli'
-        required: false
-        type: boolean
-        default: false
-      botonic-core:
-        description: 'Deploy botonic-core'
-        required: false
-        type: boolean
-        default: false
-      botonic-dx:
-        description: 'Deploy botonic-dx'
-        required: false
-        type: boolean
-        default: false
-      botonic-dx-bundler-rspack:
-        description: 'Deploy botonic-dx-bundler-rspack'
-        required: false
-        type: boolean
-        default: false
-      botonic-dx-bundler-webpack:
-        description: 'Deploy botonic-dx-bundler-webpack'
-        required: false
-        type: boolean
-        default: false
-      botonic-eslint-config:
-        description: 'Deploy botonic-eslint-config'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-contentful:
-        description: 'Deploy botonic-plugin-contentful'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-dashbot:
-        description: 'Deploy botonic-plugin-dashbot'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-dialogflow:
-        description: 'Deploy botonic-plugin-dialogflow'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-dynamodb:
-        description: 'Deploy botonic-plugin-dynamodb'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-flow-builder:
-        description: 'Deploy botonic-plugin-flow-builder'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-google-analytics:
-        description: 'Deploy botonic-plugin-google-analytics'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-google-translation:
-        description: 'Deploy botonic-plugin-google-translation'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-hubtype-analytics:
-        description: 'Deploy botonic-plugin-hubtype-analytics'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-hubtype-babel:
-        description: 'Deploy botonic-plugin-hubtype-babel'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-inbenta:
-        description: 'Deploy botonic-plugin-inbenta'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-knowledge-bases:
-        description: 'Deploy botonic-plugin-knowledge-bases'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-luis:
-        description: 'Deploy botonic-plugin-luis'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-segment:
-        description: 'Deploy botonic-plugin-segment'
-        required: false
-        type: boolean
-        default: false
-      botonic-plugin-watson:
-        description: 'Deploy botonic-plugin-watson'
-        required: false
-        type: boolean
-        default: false
-      botonic-react:
-        description: 'Deploy botonic-react'
         required: false
         type: boolean
         default: false
@@ -187,149 +83,46 @@ jobs:
       # Step 4: Deploy selected packages
       - name: Deploy selected packages
         id: deploy-packages
-        if: ${{ github.event.inputs.all != 'true' && github.event.inputs.version_type == 'patch' }}
+        if: ${{ github.event.inputs.deploy_all != 'true' && github.event.inputs.version_type == 'patch' }}
         run: |
           source /tmp/botonic-publish.sh
 
           NEW_VERSION=${{ steps.version.outputs.new_version }}
           DEPLOYED=""
-          DEPLOY_CLI="${{ github.event.inputs.botonic-cli == 'true' && 'true' || 'false' }}"
 
-          # Deploy each selected package except CLI
-          if [[ "${{ github.event.inputs.botonic-core }}" == "true" ]]; then
-            deploy_package "botonic-core" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-core"
-          fi
+          # Convert comma-separated string to array
+          IFS=',' read -ra PACKAGES <<< "${{ github.event.inputs.packages }}"
 
-          if [[ "${{ github.event.inputs.botonic-dx }}" == "true" ]]; then
-            deploy_package "botonic-dx" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-dx"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-dx-bundler-rspack }}" == "true" ]]; then
-            deploy_package "botonic-dx-bundler-rspack" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-dx-bundler-rspack"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-dx-bundler-webpack }}" == "true" ]]; then
-            deploy_package "botonic-dx-bundler-webpack" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-dx-bundler-webpack"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-eslint-config }}" == "true" ]]; then
-            deploy_package "botonic-eslint-config" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-eslint-config"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-contentful }}" == "true" ]]; then
-            deploy_package "botonic-plugin-contentful" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-contentful"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-dashbot }}" == "true" ]]; then
-            deploy_package "botonic-plugin-dashbot" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-dashbot"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-dialogflow }}" == "true" ]]; then
-            deploy_package "botonic-plugin-dialogflow" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-dialogflow"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-dynamodb }}" == "true" ]]; then
-            deploy_package "botonic-plugin-dynamodb" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-dynamodb"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-flow-builder }}" == "true" ]]; then
-            deploy_package "botonic-plugin-flow-builder" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-flow-builder"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-google-analytics }}" == "true" ]]; then
-            deploy_package "botonic-plugin-google-analytics" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-google-analytics"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-google-translation }}" == "true" ]]; then
-            deploy_package "botonic-plugin-google-translation" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-google-translation"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-hubtype-analytics }}" == "true" ]]; then
-            deploy_package "botonic-plugin-hubtype-analytics" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-hubtype-analytics"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-hubtype-babel }}" == "true" ]]; then
-            deploy_package "botonic-plugin-hubtype-babel" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-hubtype-babel"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-inbenta }}" == "true" ]]; then
-            deploy_package "botonic-plugin-inbenta" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-inbenta"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-knowledge-bases }}" == "true" ]]; then
-            deploy_package "botonic-plugin-knowledge-bases" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-knowledge-bases"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-luis }}" == "true" ]]; then
-            deploy_package "botonic-plugin-luis" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-luis"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-segment }}" == "true" ]]; then
-            deploy_package "botonic-plugin-segment" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-segment"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-plugin-watson }}" == "true" ]]; then
-            deploy_package "botonic-plugin-watson" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-plugin-watson"
-          fi
-
-          if [[ "${{ github.event.inputs.botonic-react }}" == "true" ]]; then
-            deploy_package "botonic-react" "$NEW_VERSION"
-            DEPLOYED="${DEPLOYED} botonic-react"
-          fi
+          # Deploy each selected package
+          for PKG in "${PACKAGES[@]}"; do
+            PKG=$(echo $PKG | xargs)  # Trim whitespace
+            if [ -d "packages/$PKG" ]; then
+              deploy_package "$PKG" "$NEW_VERSION"
+              DEPLOYED="${DEPLOYED} $PKG"
+            fi
+          done
 
           echo "deployed_packages=${DEPLOYED}" >> $GITHUB_OUTPUT
-          echo "deploy_cli=${DEPLOY_CLI}" >> $GITHUB_OUTPUT
 
       # Step 5: Deploy all packages (for all=true or major version upgrades)
       - name: Deploy all packages
         id: deploy-all
-        if: ${{ github.event.inputs.all == 'true' || github.event.inputs.version_type != 'patch' }}
+        if: ${{ github.event.inputs.deploy_all == 'true' || github.event.inputs.version_type != 'patch' }}
         run: |
           source /tmp/botonic-publish.sh
 
           NEW_VERSION=${{ steps.version.outputs.new_version }}
           DEPLOYED="All packages"
 
-          # Deploy all packages except botonic-cli
+          # Deploy all packages
           for PKG_DIR in packages/*; do
-            if [ -d "$PKG_DIR" ] && [ "$(basename $PKG_DIR)" != "botonic-cli" ]; then
+            if [ -d "$PKG_DIR" ]; then
               PACKAGE_NAME=$(basename $PKG_DIR)
               deploy_package "$PACKAGE_NAME" "$NEW_VERSION"
             fi
           done
 
           echo "deployed_packages=${DEPLOYED}" >> $GITHUB_OUTPUT
-          echo "deploy_cli=true" >> $GITHUB_OUTPUT
-
-      # Step 6: Deploy CLI (always last)
-      - name: Deploy botonic-cli
-        if: ${{ steps.deploy-packages.outputs.deploy_cli == 'true' || steps.deploy-all.outputs.deploy_cli == 'true' }}
-        run: |
-          source /tmp/botonic-publish.sh
-
-          echo "Deploying botonic-cli package (always last)"
-          NEW_VERSION=${{ steps.version.outputs.new_version }}
-
-          deploy_package "botonic-cli" "$NEW_VERSION"
 
       # Step 7: Deploy examples (for major version upgrades)
       - name: Deploy examples
@@ -358,13 +151,10 @@ jobs:
           echo "## Botonic Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "Version upgrade: **${{ steps.version.outputs.new_version }}** (Type: ${{ github.event.inputs.version_type }})" >> $GITHUB_STEP_SUMMARY
 
-          if [[ "${{ github.event.inputs.all }}" == "true" || "${{ github.event.inputs.version_type }}" == "major" ]]; then
-            PACKAGES="All packages (with botonic-cli published last)"
+          if [[ "${{ github.event.inputs.deploy_all }}" == "true" || "${{ github.event.inputs.version_type }}" == "major" ]]; then
+            PACKAGES="All packages"
           else
             PACKAGES="${{ steps.deploy-packages.outputs.deployed_packages }}"
-            if [[ "${{ steps.deploy-packages.outputs.deploy_cli }}" == "true" ]]; then
-              PACKAGES="${PACKAGES} botonic-cli"
-            fi
           fi
 
           echo "Deployed packages: $PACKAGES" >> $GITHUB_STEP_SUMMARY
@@ -375,9 +165,9 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEAM_PLATFORM }}
           SLACK_USERNAME: Github
-          SLACK_ICON_EMOJI: ":rocket:"
-          SLACK_CHANNEL: "#team-botonic"
-          SLACK_TITLE: "Botonic version ${{ steps.version.outputs.new_version }} published succesfully"
+          SLACK_ICON_EMOJI: ':rocket:'
+          SLACK_CHANNEL: '#team-botonic'
+          SLACK_TITLE: 'Botonic version ${{ steps.version.outputs.new_version }} published succesfully'
           MSG_MINIMAL: true
       - name: Sending Slack notification (failure)
         uses: rtCamp/action-slack-notify@v2
@@ -387,6 +177,6 @@ jobs:
           SLACK_USERNAME: Github
           SLACK_ICON_EMOJI: ':bell:'
           SLACK_COLOR: danger
-          SLACK_CHANNEL: "#team-botonic"
-          SLACK_TITLE: "Botonic version ${{ steps.version.outputs.new_version }} failed to publish"
+          SLACK_CHANNEL: '#team-botonic'
+          SLACK_TITLE: 'Botonic version ${{ steps.version.outputs.new_version }} failed to publish'
           MSG_MINIMAL: true
