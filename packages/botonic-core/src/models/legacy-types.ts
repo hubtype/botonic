@@ -280,8 +280,13 @@ export type InputMatcher = (input: Input) => boolean
 export type ParamsMatcher =
   | { [key: string]: string }
   | ((params: { [key: string]: string }) => boolean)
-export type SessionMatcher = (session: Session) => boolean
-export type RequestMatcher = (request: BotRequest) => boolean
+export type SessionMatcher<TExtraData = any> = (
+  session: Session<TExtraData>
+) => boolean
+export type RequestMatcher<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = (request: BotContext<TPlugins, TExtraData>) => boolean
 export type StringMatcher = RegExp | string | ((data: string) => boolean)
 
 export type RouteMatcher =
@@ -291,7 +296,10 @@ export type RouteMatcher =
   | SessionMatcher
   | StringMatcher
 
-export interface Route {
+export interface Route<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
   action?: any
   childRoutes?: Route[]
   lastRoutePath?: string
@@ -305,14 +313,14 @@ export interface Route {
   intent?: StringMatcher
   params?: ParamsMatcher
   payload?: StringMatcher
-  request?: RequestMatcher
-  session?: SessionMatcher
+  request?: RequestMatcher<TPlugins, TExtraData>
+  session?: SessionMatcher<TExtraData>
   text?: StringMatcher
   data?: StringMatcher
   type?: StringMatcher
 }
 
-export type Routes<R = Route> = R[] | ((_: BotRequest) => R[])
+export type Routes<R = Route> = R[] | ((request: BotContext) => R[])
 
 export interface BotRequest<TExtraData = any> {
   input: Input
