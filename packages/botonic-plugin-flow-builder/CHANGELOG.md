@@ -22,6 +22,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.35.2] - 2025-05-26
+
+### Added
+
+- [PR-3026](https://github.com/hubtype/botonic/pull/3026): Add target and webview in FlowButton
+
 ## [0.35.1] - 2025-05-13
 
 ### Changed
