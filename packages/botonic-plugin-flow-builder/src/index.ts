@@ -14,6 +14,7 @@ import {
   SOURCE_INFO_SEPARATOR,
 } from './constants'
 import {
+  FlowAiAgent,
   FlowBotAction,
   FlowCarousel,
   FlowContent,
@@ -37,6 +38,7 @@ import {
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
 import {
+  AiAgentFunction,
   BotonicPluginFlowBuilderOptions,
   FlowBuilderJSONVersion,
   InShadowingConfig,
@@ -58,6 +60,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getAccessToken: (session: Session) => string
   public trackEvent?: TrackEventFunction
   public getKnowledgeBaseResponse?: KnowledgeBaseFunction
+  public getAiAgentResponse?: AiAgentFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
   public inShadowing: InShadowingConfig
 
@@ -72,6 +75,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
+    this.getAiAgentResponse = options.getAiAgentResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
       useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
@@ -229,6 +233,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
       case HtNodeWithContentType.KNOWLEDGE_BASE:
         return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.AI_AGENT:
+        return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
 
       case HtNodeWithContentType.BOT_ACTION:
         return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)

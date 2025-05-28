@@ -24,6 +24,7 @@ export interface BotonicPluginFlowBuilderOptions<
   getAccessToken: () => string
   trackEvent?: TrackEventFunction<TPlugins, TExtraData>
   getKnowledgeBaseResponse?: KnowledgeBaseFunction<TPlugins, TExtraData>
+  getAiAgentResponse?: AiAgentFunction<TPlugins, TExtraData>
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
 }
@@ -47,6 +48,19 @@ export type KnowledgeBaseFunction<
   messageId: string,
   memoryLength: number
 ) => Promise<KnowledgeBaseResponse>
+
+export type AiAgentFunction<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = (
+  request: BotContext<TPlugins, TExtraData>,
+  aiAgentArgs: AiAgentArgs
+) => Promise<AiAgentResponse>
+
+export interface AiAgentArgs {
+  name: string
+  instructions: string
+}
 
 export interface FlowBuilderApiOptions {
   url: string
@@ -72,6 +86,10 @@ export interface KnowledgeBaseResponse {
   isFaithful: boolean
   chunkIds: string[]
   answer: string
+}
+
+export interface AiAgentResponse {
+  message: { role: string; content: string }
 }
 
 export interface SmartIntentResponse {

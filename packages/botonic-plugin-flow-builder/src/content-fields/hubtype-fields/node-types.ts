@@ -12,6 +12,7 @@ export enum HtNodeWithContentType {
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
   KNOWLEDGE_BASE = 'knowledge-base',
   BOT_ACTION = 'bot-action',
+  AI_AGENT = 'ai-agent',
 }
 
 export enum HtNodeWithoutContentType {

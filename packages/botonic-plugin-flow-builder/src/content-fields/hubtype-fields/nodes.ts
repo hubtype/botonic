@@ -1,3 +1,4 @@
+import { HtAiAgentNode } from './ai-agent'
 import { HtBotActionNode } from './bot-action'
 import { HtCarouselNode } from './carousel'
 import { HtFallbackNode } from './fallback'
@@ -29,6 +30,7 @@ export type HtNodeWithContent =
   | HtSmartIntentNode
   | HtKnowledgeBaseNode
   | HtBotActionNode
+  | HtAiAgentNode
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 
