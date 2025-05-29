@@ -17,9 +17,10 @@ describe('Create nlu keyword events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.Keyword,
       nlu_keyword_name: 'hello',
       nlu_keyword_is_regex: false,
