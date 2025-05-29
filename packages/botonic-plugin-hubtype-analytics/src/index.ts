@@ -7,13 +7,9 @@ import { createHtEvent } from './utils'
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {
   eventsBaseUrl: string
-  getLanguage: (request: BotContext) => string
-  getCountry: (request: BotContext) => string
   constructor() {
     const hubtypeUrl = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
     this.eventsBaseUrl = `${hubtypeUrl}/external/v2/conversational_apps`
-    this.getLanguage = (request: BotContext) => request.getSystemLocale()
-    this.getCountry = (request: BotContext) => request.getUserCountry()
   }
 
   post(): void {
@@ -34,10 +30,11 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
 
   getRequestData(request: BotContext): RequestData {
     return {
-      language: this.getLanguage(request),
-      country: this.getCountry(request),
       userId: this.isLambdaEvent(request) ? request.session.user.id : undefined,
       botInteractionId: request.input?.bot_interaction_id,
+      userLocale: request.getSystemLocale(),
+      userCountry: request.getUserCountry(),
+      systemLocale: request.getSystemLocale(),
     }
   }
 
