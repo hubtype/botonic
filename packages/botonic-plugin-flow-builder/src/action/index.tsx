@@ -4,6 +4,7 @@ import {
   Multichannel,
   RequestContext,
   WebchatSettings,
+  WebchatSettingsProps,
 } from '@botonic/react'
 import React from 'react'
 
@@ -23,7 +24,7 @@ import { getContentsByPayload } from './payload'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
-  webchatSettingsParams?: Record<string, any>
+  webchatSettingsParams?: WebchatSettingsProps
 }
 
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
@@ -54,7 +55,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     return { contents: filteredContents }
   }
 
-  private static async doHandoffAndBotActions(
+  static async doHandoffAndBotActions(
     request: ActionRequest,
     contents: FlowContent[]
   ) {
