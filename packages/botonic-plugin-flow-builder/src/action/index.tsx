@@ -91,14 +91,13 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
-    const request = this.context as ActionRequest
+
     return (
       <Multichannel text={{ buttonsAsText: false }}>
-        {(isWebchat(request.session) || isDev(request.session)) &&
-          !!webchatSettingsParams && (
-            <WebchatSettings {...webchatSettingsParams} />
-          )}
-        {contents.map(content => content.toBotonic(content.id, request))}
+        <FlowBuilderAction
+          contents={contents}
+          webchatSettingsParams={webchatSettingsParams}
+        />
       </Multichannel>
     )
   }
