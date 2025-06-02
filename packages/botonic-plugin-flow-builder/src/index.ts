@@ -316,6 +316,7 @@ export { HtBotActionNode } from './content-fields/hubtype-fields'
 export { trackFlowContent } from './tracking'
 export {
   BotonicPluginFlowBuilderOptions,
+  ContentFilter,
   FlowBuilderJSONVersion,
   PayloadParamsBase,
 } from './types'
