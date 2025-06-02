@@ -1,10 +1,11 @@
-import { INPUT } from '@botonic/core'
+import { BotContext, INPUT } from '@botonic/core'
 import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
+import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
 import { trackFlowContent } from '../tracking'
@@ -28,10 +29,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const context = getContext(request)
     const contents = await getContentsByFirstInteraction(context)
-    await trackFlowContent(request, contents)
-    await FlowBuilderAction.doHandoffAndBotActions(request, contents)
+    const filteredContents = await filterContents(request, contents)
+    await trackFlowContent(request, filteredContents)
+    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
-    return { contents }
+    return { contents: filteredContents }
   }
 
   static async botonicInit(
@@ -39,10 +41,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     contentID?: string
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
-    await trackFlowContent(request, contents)
-    await FlowBuilderAction.doHandoffAndBotActions(request, contents)
+    const filteredContents = await filterContents(request, contents)
+    await trackFlowContent(request, filteredContents)
+    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
-    return { contents }
+    return { contents: filteredContents }
   }
 
   private static async doHandoffAndBotActions(
@@ -118,6 +121,25 @@ async function getContents(
   }
 
   return await getContentsByFallback(context)
+}
+
+async function filterContents(
+  request: BotContext,
+  contents: FlowContent[]
+): Promise<FlowContent[]> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const contentFilters = flowBuilderPlugin.contentFilters
+  const contentFilterExecutor = new ContentFilterExecutor({
+    filters: contentFilters,
+  })
+
+  const filteredContents: FlowContent[] = []
+  for (const content of contents) {
+    const filteredContent = await contentFilterExecutor.filter(request, content)
+    filteredContents.push(filteredContent)
+  }
+
+  return filteredContents
 }
 
 export interface FlowBuilderContext {
