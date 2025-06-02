@@ -77,7 +77,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
-    this.getAiAgentResponse = options.getAiAgentResponse
+    // TODO: Add getAiAgentResponse before publish 0.36.0
+    this.getAiAgentResponse = undefined //options.getAiAgentResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
       useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
