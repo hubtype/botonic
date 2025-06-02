@@ -1,5 +1,10 @@
-import { BotContext, INPUT } from '@botonic/core'
-import { ActionRequest, Multichannel, RequestContext } from '@botonic/react'
+import { BotContext, INPUT, isDev, isWebchat } from '@botonic/core'
+import {
+  ActionRequest,
+  Multichannel,
+  RequestContext,
+  WebchatSettings,
+} from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -18,6 +23,7 @@ import { getContentsByPayload } from './payload'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
+  webchatSettingsParams?: Record<string, any>
 }
 
 export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
@@ -68,19 +74,31 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   }
 
   render(): JSX.Element | JSX.Element[] {
-    const { contents } = this.props
+    const { contents, webchatSettingsParams } = this.props
     const request = this.context as ActionRequest
-    return contents.map(content => content.toBotonic(content.id, request))
+    return (
+      <>
+        {contents.map(content => content.toBotonic(content.id, request))}
+        {(isWebchat(request.session) || isDev(request.session)) &&
+          !!webchatSettingsParams && (
+            <WebchatSettings {...webchatSettingsParams} />
+          )}
+      </>
+    )
   }
 }
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    const { contents } = this.props
+    const { contents, webchatSettingsParams } = this.props
     const request = this.context as ActionRequest
     return (
       <Multichannel text={{ buttonsAsText: false }}>
         {contents.map(content => content.toBotonic(content.id, request))}
+        {(isWebchat(request.session) || isDev(request.session)) &&
+          !!webchatSettingsParams && (
+            <WebchatSettings {...webchatSettingsParams} />
+          )}
       </Multichannel>
     )
   }
