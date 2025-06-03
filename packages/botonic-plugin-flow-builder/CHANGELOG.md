@@ -22,6 +22,13 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.35.3] - 2025-06-03
+
+### Added
+
+- [PR-3029](https://github.com/hubtype/botonic/pull/3029): Add contentFilters before tracking contents.
+- [PR-3030](https://github.com/hubtype/botonic/pull/3030): Allow webchatSettingsParams as a prop in FlowBuilderAction.
+
 ## [0.35.2] - 2025-05-26
 
 ### Added
