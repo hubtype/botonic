@@ -77,6 +77,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
     const request = this.context as ActionRequest
+
     return (
       <>
         {(isWebchat(request.session) || isDev(request.session)) &&
@@ -91,14 +92,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    const { contents, webchatSettingsParams } = this.props
-
     return (
       <Multichannel text={{ buttonsAsText: false }}>
-        <FlowBuilderAction
-          contents={contents}
-          webchatSettingsParams={webchatSettingsParams}
-        />
+        <FlowBuilderAction {...this.props} />
       </Multichannel>
     )
   }
