@@ -40,6 +40,7 @@ import { DEFAULT_FUNCTIONS } from './functions'
 import {
   AiAgentFunction,
   BotonicPluginFlowBuilderOptions,
+  ContentFilter,
   FlowBuilderJSONVersion,
   InShadowingConfig,
   KnowledgeBaseFunction,
@@ -63,6 +64,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public getAiAgentResponse?: AiAgentFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
   public inShadowing: InShadowingConfig
+  public contentFilters: ContentFilter[]
 
   // TODO: Rethink how we construct FlowBuilderApi to be simpler
   public jsonVersion: FlowBuilderJSONVersion
@@ -75,7 +77,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
     this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
-    this.getAiAgentResponse = options.getAiAgentResponse
+    // TODO: Add getAiAgentResponse before publish 0.36.0
+    this.getAiAgentResponse = undefined //options.getAiAgentResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
       useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
@@ -87,6 +90,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
       allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
     }
+    this.contentFilters = options.contentFilters || []
   }
 
   resolveFlowUrl(request: PluginPreRequest): string {

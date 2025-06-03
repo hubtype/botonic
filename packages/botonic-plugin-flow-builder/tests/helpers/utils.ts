@@ -16,6 +16,7 @@ import BotonicPluginFlowBuilder, {
 } from '../../src'
 import {
   AiAgentFunction,
+  ContentFilter,
   InShadowingConfig,
   KnowledgeBaseFunction,
   TrackEventFunction,
@@ -27,6 +28,7 @@ interface FlowBuilderOptions {
   getKnowledgeBaseResponse?: KnowledgeBaseFunction<ResolvedPlugins>
   getAiAgentResponse?: AiAgentFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
+  contentFilters?: ContentFilter[]
 }
 
 export function createFlowBuilderPlugin({
@@ -35,6 +37,7 @@ export function createFlowBuilderPlugin({
   getKnowledgeBaseResponse,
   getAiAgentResponse,
   inShadowing,
+  contentFilters,
 }: FlowBuilderOptions): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
@@ -43,6 +46,7 @@ export function createFlowBuilderPlugin({
     getKnowledgeBaseResponse,
     getAiAgentResponse,
     inShadowing,
+    contentFilters,
   })
 
   return flowBuilderPlugin

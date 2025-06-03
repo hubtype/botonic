@@ -1,10 +1,6 @@
-import {
-  BotContext,
-  PluginPreRequest,
-  ResolvedPlugins,
-  Session,
-} from '@botonic/core'
+import { BotContext, PluginPreRequest, ResolvedPlugins } from '@botonic/core'
 
+import { FlowContent } from './content-fields'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
 
 export interface InShadowingConfig {
@@ -27,6 +23,7 @@ export interface BotonicPluginFlowBuilderOptions<
   getAiAgentResponse?: AiAgentFunction<TPlugins, TExtraData>
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
+  contentFilters?: ContentFilter<TPlugins, TExtraData>[]
 }
 
 export type TrackEventFunction<
@@ -61,6 +58,13 @@ export interface AiAgentArgs {
   name: string
   instructions: string
 }
+export type ContentFilter<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> = (
+  request: BotContext<TPlugins, TExtraData>,
+  content: FlowContent
+) => Promise<FlowContent> | FlowContent
 
 export interface FlowBuilderApiOptions {
   url: string

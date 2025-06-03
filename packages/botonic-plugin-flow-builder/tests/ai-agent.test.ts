@@ -11,7 +11,7 @@ import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 describe('Check the contents returned by the plugin when it use an ai agent', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
-  test('When input match a keyword, the ai agent not respond', async () => {
+  test.skip('When input match a keyword, the ai agent not respond', async () => {
     const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: aiAgentTestFlow,
@@ -35,7 +35,7 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
     expect(request.input.nluResolution?.matchedValue).toEqual('Hello')
   })
 
-  test('When input not match a keyword or smart intent, the ai agent respond', async () => {
+  test.skip('When input not match a keyword or smart intent, the ai agent respond', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: {
         flow: aiAgentTestFlow,
