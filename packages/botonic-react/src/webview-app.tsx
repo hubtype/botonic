@@ -8,18 +8,59 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import { CloseWebviewOptions, WebviewRequestContext } from './contexts'
 
 class App extends React.Component {
+  private url: URL
   constructor(props) {
     super(props)
-    const url = new URL(window.location.href)
-    const params = Array.from(url.searchParams.entries())
+    this.url = new URL(window.location.href)
+    this.state = {
+      session: null,
+      params: {},
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      const botId = this.url.searchParams.get('bot_id')
+      const chatId = this.url.searchParams.get('chat_id')
+      if (botId && chatId) {
+        this.getBotSessionContextFromExternalApi(botId, chatId)
+      } else {
+        this.getBotSessionContextFromUrl()
+      }
+    } catch (error) {
+      this.getBotSessionContextFromUrl()
+    }
+  }
+
+  async getBotSessionContextFromExternalApi(botId: string, chatId: string) {
+    // const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
+    const baseUrl = 'https://api.hubtype.com' // TODO: How to retrieve here the api url to request?
+    const url = `${baseUrl}/external/v2/conversational_apps/${botId}/users/${chatId}/context/`
+
+    const response = await axios.get(url)
+    const session = response.data
+
+    this.setState({
+      session,
+      // TODO: Are we currently using botonic webviews api for params?
+    })
+  }
+
+  getBotSessionContextFromUrl() {
+    const params = Array.from(this.url.searchParams.entries())
       .filter(([key, value]) => key !== 'context')
       .reduce((o, [key, value]) => {
         o[key] = value
         return o
       }, {})
-    const urlContext = url.searchParams.get('context')
+
+    const urlContext = this.url.searchParams.get('context')
     const session = JSON.parse(urlContext || '{}')
-    this.state = { session, params }
+
+    this.setState({
+      session,
+      params,
+    })
   }
 
   async close(options?: CloseWebviewOptions) {
