@@ -2,7 +2,7 @@ import { BotContext } from '@botonic/core'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
-import { AgenticMessage } from './types'
+import { AgenticInputMessage } from './types'
 
 export class HubtypeClient {
   private readonly authToken: string
@@ -14,7 +14,7 @@ export class HubtypeClient {
   async getMessages(
     request: BotContext,
     memoryLength: number
-  ): Promise<AgenticMessage[]> {
+  ): Promise<AgenticInputMessage[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
     const data = {
       last_message_id: request.input.message_id,
@@ -28,7 +28,7 @@ export class HubtypeClient {
     }
 
     try {
-      const messages = await axios.post<{ messages: AgenticMessage[] }>(
+      const messages = await axios.post<{ messages: AgenticInputMessage[] }>(
         url,
         data,
         config
