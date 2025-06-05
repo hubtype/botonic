@@ -1,17 +1,51 @@
 import { tool } from '@langchain/core/tools'
 import { z } from 'zod'
 
-export const exit_agent = tool(
+export const handoffToHumanAgent = tool(
   async () => {
     return null
   },
   {
-    name: 'exit_agent',
+    name: 'handoffToHumanAgent',
     schema: z.object({}),
     description:
-      "Finish the interaction with the agent and send the user to the predefined fallback flow.\n\nUse the fallback tool when:\n- You don't know the answer.\n- The user is asking for something that is not related with your context.\n- The user wants to end the conversation.\n- The user wants to handoff the conversation to a real agent.",
+      'Use this tool strictly when the user wants to talk with a human agent.',
     returnDirect: true,
   }
 )
 
-export const MANDATORY_TOOLS = [exit_agent]
+export const outOfContext = tool(
+  async () => {
+    return null
+  },
+  {
+    name: 'outOfContext',
+    schema: z.object({}),
+    description:
+      'Use this when the user talks about something that is clearly out of your context. Example: "I want to buy a car" when you are a travel agent.',
+    returnDirect: true,
+  }
+)
+
+export const finishConversation = tool(
+  async () => {
+    return null
+  },
+  {
+    name: 'finishConversation',
+    schema: z.object({}),
+    description: 'Use this when the user wants to end the conversation.',
+    returnDirect: true,
+  }
+)
+
+export const MANDATORY_TOOLS = [
+  handoffToHumanAgent,
+  outOfContext,
+  finishConversation,
+]
+export const EXIT_TOOLS = [
+  handoffToHumanAgent.name,
+  outOfContext.name,
+  finishConversation.name,
+]
