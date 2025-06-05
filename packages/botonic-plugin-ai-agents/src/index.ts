@@ -9,6 +9,7 @@ import {
   PluginAiAgentOptions,
   UserMessage,
 } from './types'
+import { loadChatModel } from './utils'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -38,7 +39,8 @@ export default class BotonicPluginAiAgents implements Plugin {
         : [{ role: 'user', content: request.input.data } as UserMessage]
 
       const customTools = []
-      const aiAgentClient = new AiAgentClient(aiAgentArgs, [
+      const chatModel = loadChatModel('azureOpenAI')
+      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, [
         ...customTools,
         ...MANDATORY_TOOLS,
       ])

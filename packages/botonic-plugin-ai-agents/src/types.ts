@@ -22,8 +22,8 @@ export interface UserMessage extends AgenticBaseMessage {
 
 export interface ToolMessage extends AgenticBaseMessage {
   role: 'tool'
-  tool_name: string
-  tool_output: string | null
+  toolName: string
+  toolOutput: string | null
 }
 
 export interface ExitMessage extends AgenticBaseMessage {
