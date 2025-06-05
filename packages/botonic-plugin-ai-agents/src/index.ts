@@ -20,7 +20,6 @@ export default class BotonicPluginAiAgents implements Plugin {
     request: BotContext,
     aiAgentArgs: AiAgentArgs
   ): Promise<AgenticMessage | undefined> {
-    console.log('getInference', request, aiAgentArgs)
     const authToken = isProd ? request.session._access_token : this.authToken
     if (!authToken) {
       throw new Error('Auth token is required')
