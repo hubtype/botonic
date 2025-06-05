@@ -31,7 +31,7 @@ export async function getContentsByAiAgent({
     }
   )
 
-  if (!aiAgentResponse) {
+  if (!aiAgentResponse || aiAgentResponse.role === 'exit') {
     return []
   }
 
