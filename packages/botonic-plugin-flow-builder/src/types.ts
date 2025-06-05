@@ -52,7 +52,7 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<AiAgentResponse>
+) => Promise<AiAgentResponse | undefined>
 
 export interface AiAgentArgs {
   name: string
@@ -93,7 +93,8 @@ export interface KnowledgeBaseResponse {
 }
 
 export interface AiAgentResponse {
-  message: { role: string; content: string }
+  role: string
+  content: string
 }
 
 export interface SmartIntentResponse {

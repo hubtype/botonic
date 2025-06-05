@@ -1,13 +1,15 @@
 import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
-import { AiAgentArgs, AiAgentResponse } from './types'
+import { HubtypeClient } from './hubtype-client'
+import { AgenticMessage, AiAgentArgs, PluginAiAgentOptions } from './types'
+
+const isProd = process.env.NODE_ENV === 'production'
 
 export default class BotonicPluginAiAgents implements Plugin {
-  public aiAgentClient: AiAgentClient
-
-  constructor() {
-    this.aiAgentClient = new AiAgentClient()
+  private readonly authToken?: string
+  constructor(options?: PluginAiAgentOptions) {
+    this.authToken = options?.authToken
   }
 
   pre(): void {
@@ -17,7 +19,28 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    return this.aiAgentClient.getInference(request, aiAgentArgs)
+  ): Promise<AgenticMessage | undefined> {
+    console.log('getInference', request, aiAgentArgs)
+    const authToken = isProd ? request.session._access_token : this.authToken
+    if (!authToken) {
+      throw new Error('Auth token is required')
+    }
+
+    const hubtypeClient = new HubtypeClient(authToken)
+    const aiAgentClient = new AiAgentClient(aiAgentArgs)
+
+    try {
+      const messages = isProd
+        ? await hubtypeClient.getMessages(request, 10)
+        : [{ role: 'user', content: request.input.data } as AgenticMessage]
+      const response = await aiAgentClient.runAgent(messages)
+
+      return response
+    } catch (error) {
+      console.error('error plugin returns undefined', error)
+      return undefined
+    }
   }
 }
+
+export * from './types'

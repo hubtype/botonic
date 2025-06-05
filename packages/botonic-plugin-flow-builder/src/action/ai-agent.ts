@@ -44,7 +44,7 @@ function updateContentsWithAiAgentResponse(
 ): FlowContent[] {
   return contents.map(content => {
     if (content instanceof FlowAiAgent) {
-      content.text = aiAgentResponse.message.content
+      content.text = aiAgentResponse.content
     }
 
     return content

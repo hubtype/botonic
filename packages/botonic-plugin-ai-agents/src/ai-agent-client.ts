@@ -1,112 +1,52 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { BotContext, isDev } from '@botonic/core'
-import axios from 'axios'
+import { createReactAgent } from '@langchain/langgraph/prebuilt'
+import { ChatOpenAI } from '@langchain/openai'
 
-import { HUBTYPE_API_URL } from './constants'
-import { AiAgentError } from './errors'
-import {
-  AiAgentArgs,
-  AiAgentRequestData,
-  AiAgentRequestDataTest,
-  AiAgentResponse,
-  Config,
-} from './types'
+import { OPENAI_API_KEY } from './constants'
+import { AgenticMessage, AiAgentArgs } from './types'
 
 export class AiAgentClient {
-  private url: string
+  public name: string
+  public instructions: string
 
-  constructor() {
-    this.url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
+  constructor(aiAgentArgs: AiAgentArgs) {
+    this.name = aiAgentArgs.name
+    this.instructions = aiAgentArgs.instructions
   }
 
-  async getInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    if (isDev(request.session)) {
-      return this.agentTestInference(request, aiAgentArgs)
-    }
+  async runAgent(_messages: AgenticMessage[]): Promise<AgenticMessage> {
+    const model = new ChatOpenAI({
+      model: 'gpt-4.1-mini',
+      apiKey: OPENAI_API_KEY,
+      temperature: 0,
+      // other params...
+    })
+    console.log('model', model)
 
-    return this.agentInference(request, aiAgentArgs)
-  }
+    const agent = createReactAgent({
+      llm: model,
+      tools: [],
+      prompt: this.instructions,
+    })
 
-  private async agentTestInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-    const data = this.getDataTest(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${this.url}/test/`,
-      data,
-      config
-    )
+    console.log('agent', agent)
 
-    return response.data
-  }
+    const response = await agent.invoke({
+      messages: _messages.map((message: AgenticMessage) => ({
+        role: message.role,
+        content: message.content,
+      })),
+    })
 
-  private async agentInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-    const data = this.getData(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${this.url}/run/`,
-      data,
-      config
-    )
+    console.log('agent invoke response', response)
+    const content = response.messages.at(-1)?.content
 
-    return response.data
-  }
-
-  private getConfig(request: BotContext): Config {
-    return {
-      headers: {
-        Authorization: `Bearer ${request.session._access_token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  }
-
-  private getData(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestData {
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
+    if (typeof content !== 'string') {
+      throw new Error('Content is not a string')
     }
 
     return {
-      message: request.input.message_id,
-      memory_length: 10,
-      name: aiAgentArgs.name,
-      instructions: aiAgentArgs.instructions,
-    }
-  }
-
-  private getDataTest(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestDataTest {
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
-    }
-
-    // TODO: We can get messages from localStorage in Dev mode and transform them to the correct format {role: MessageRole, content: string}
-    // if (isDev(request.session)) {
-    //   const messages = localStorage.getItem('botonicState').
-    // }
-
-    return {
-      messages: [
-        {
-          role: 'user',
-          content: request.input.data,
-        },
-      ],
-      name: aiAgentArgs.name,
-      instructions: aiAgentArgs.instructions,
+      role: 'assistant',
+      content: content,
     }
   }
 }
