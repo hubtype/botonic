@@ -10,24 +10,7 @@ export interface Config {
   }
 }
 
-export interface AiAgentRequestDataTest {
-  messages: {
-    role: MessageRole
-    content: string
-  }[]
-  name: string
-  instructions: string
-}
-
-export type MessageRole = 'user' | 'assistant'
-
-export interface AiAgentRequestData {
-  message: string
-  memory_length: number
-  name: string
-  instructions: string
-}
-
-export interface AiAgentResponse {
-  message: { role: string; content: string }
+export interface AgenticMessage {
+  role: 'assistant' | 'user'
+  content: string
 }

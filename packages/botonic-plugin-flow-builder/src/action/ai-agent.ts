@@ -42,9 +42,10 @@ function updateContentsWithAiAgentResponse(
   contents: FlowContent[],
   aiAgentResponse: AiAgentResponse
 ): FlowContent[] {
+  console.log('aiAgentResponse', aiAgentResponse)
   return contents.map(content => {
     if (content instanceof FlowAiAgent) {
-      content.text = aiAgentResponse.message.content
+      content.text = aiAgentResponse.content
     }
 
     return content

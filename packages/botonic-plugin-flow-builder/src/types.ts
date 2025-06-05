@@ -93,7 +93,8 @@ export interface KnowledgeBaseResponse {
 }
 
 export interface AiAgentResponse {
-  message: { role: string; content: string }
+  role: string
+  content: string
 }
 
 export interface SmartIntentResponse {

@@ -1,15 +1,10 @@
 import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
-import { AiAgentArgs, AiAgentResponse } from './types'
+import { HubtypeClient } from './hubtype-client'
+import { AgenticMessage, AiAgentArgs } from './types'
 
 export default class BotonicPluginAiAgents implements Plugin {
-  public aiAgentClient: AiAgentClient
-
-  constructor() {
-    this.aiAgentClient = new AiAgentClient()
-  }
-
   pre(): void {
     return
   }
@@ -17,7 +12,18 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    return this.aiAgentClient.getInference(request, aiAgentArgs)
+  ): Promise<AgenticMessage> {
+    const { name, instructions } = aiAgentArgs
+    const hubtypeClient = new HubtypeClient()
+    const messages = await hubtypeClient.getMessages(request, 3)
+
+    const aiAgentClient = new AiAgentClient(name, instructions)
+    const response = await aiAgentClient.run(messages)
+    console.log('response', response)
+
+    return {
+      role: 'assistant',
+      content: response || '',
+    }
   }
 }
