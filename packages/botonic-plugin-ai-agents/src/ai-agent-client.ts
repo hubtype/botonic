@@ -20,15 +20,12 @@ export class AiAgentClient {
       temperature: 0,
       // other params...
     })
-    console.log('model', model)
 
     const agent = createReactAgent({
       llm: model,
       tools: [],
       prompt: this.instructions,
     })
-
-    console.log('agent', agent)
 
     const response = await agent.invoke({
       messages: _messages.map((message: AgenticMessage) => ({
@@ -37,7 +34,6 @@ export class AiAgentClient {
       })),
     })
 
-    console.log('agent invoke response', response)
     const content = response.messages.at(-1)?.content
 
     if (typeof content !== 'string') {

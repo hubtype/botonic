@@ -12,12 +12,13 @@ export class HubtypeClient {
   }
 
   async getMessages(
-    _request: BotContext,
-    _memoryLength: number
+    request: BotContext,
+    memoryLength: number
   ): Promise<AgenticMessage[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
     const data = {
-      memory_length: _memoryLength,
+      last_message_id: request.input.message_id,
+      num_messages: memoryLength,
     }
     const config = {
       headers: {
@@ -26,11 +27,14 @@ export class HubtypeClient {
       },
     }
 
-    console.log('getMessages', url, data, config)
     try {
-      const messages = await axios.post<AgenticMessage[]>(url, data, config)
-      console.log('getMessages response', messages.data)
-      return messages.data
+      const messages = await axios.post<{ messages: AgenticMessage[] }>(
+        url,
+        data,
+        config
+      )
+
+      return messages.data.messages
     } catch (error) {
       console.error(error)
       throw new Error('Failed to get messages from Hubtype')
