@@ -1,6 +1,7 @@
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 import { AzureChatOpenAI } from '@langchain/openai'
 
+import { StructuredTool } from '@langchain/core/tools'
 import {
   AZURE_OPENAI_API_BASE,
   AZURE_OPENAI_API_DEPLOYMENT_NAME,
@@ -12,10 +13,12 @@ import { AgenticMessage, AiAgentArgs } from './types'
 export class AiAgentClient {
   public name: string
   public instructions: string
+  public tools: StructuredTool[]
 
-  constructor(aiAgentArgs: AiAgentArgs) {
+  constructor(aiAgentArgs: AiAgentArgs, tools: StructuredTool[] = []) {
     this.name = aiAgentArgs.name
     this.instructions = aiAgentArgs.instructions
+    this.tools = tools
   }
 
   async runAgent(_messages: AgenticMessage[]): Promise<AgenticMessage> {
@@ -30,7 +33,7 @@ export class AiAgentClient {
 
     const agent = createReactAgent({
       llm: model,
-      tools: [],
+      tools: this.tools,
       prompt: this.instructions,
     })
 
