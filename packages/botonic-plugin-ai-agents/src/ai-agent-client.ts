@@ -1,14 +1,25 @@
+import {
+  AIMessage as LangchainAIMessage,
+  ToolMessage as LangchainToolMessage,
+} from '@langchain/core/messages'
+import { StructuredTool } from '@langchain/core/tools'
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 import { AzureChatOpenAI } from '@langchain/openai'
-
-import { StructuredTool } from '@langchain/core/tools'
 import {
   AZURE_OPENAI_API_BASE,
   AZURE_OPENAI_API_DEPLOYMENT_NAME,
   AZURE_OPENAI_API_KEY,
   AZURE_OPENAI_API_VERSION,
 } from './constants'
-import { AgenticMessage, AiAgentArgs } from './types'
+import { EXIT_TOOLS } from './tools'
+import {
+  AgenticInputMessage,
+  AgenticOutputMessage,
+  AiAgentArgs,
+  AssistantMessage,
+  ExitMessage,
+  ToolMessage,
+} from './types'
 
 export class AiAgentClient {
   public name: string
@@ -21,7 +32,9 @@ export class AiAgentClient {
     this.tools = tools
   }
 
-  async runAgent(_messages: AgenticMessage[]): Promise<AgenticMessage> {
+  async runAgent(
+    _messages: AgenticInputMessage[]
+  ): Promise<AgenticOutputMessage> {
     const model = new AzureChatOpenAI({
       azureOpenAIApiVersion: AZURE_OPENAI_API_VERSION,
       azureOpenAIApiKey: AZURE_OPENAI_API_KEY,
@@ -38,21 +51,38 @@ export class AiAgentClient {
     })
 
     const response = await agent.invoke({
-      messages: _messages.map((message: AgenticMessage) => ({
+      messages: _messages.map((message: AgenticInputMessage) => ({
         role: message.role,
         content: message.content,
       })),
     })
 
-    const content = response.messages.at(-1)?.content
+    const lastMessage = response.messages.at(-1)
 
-    if (typeof content !== 'string') {
-      throw new Error('Content is not a string')
+    if (lastMessage instanceof LangchainToolMessage) {
+      if (lastMessage.name && EXIT_TOOLS.includes(lastMessage.name)) {
+        return {
+          role: 'exit',
+        } as ExitMessage
+      }
+      return {
+        role: 'tool',
+        tool_name: lastMessage.name,
+        tool_output: lastMessage.content,
+      } as ToolMessage
     }
 
-    return {
-      role: 'assistant',
-      content: content,
+    if (lastMessage instanceof LangchainAIMessage) {
+      const content = lastMessage?.content
+      if (typeof content !== 'string') {
+        throw new Error('Content is not a string')
+      }
+      return {
+        role: 'assistant',
+        content: lastMessage.content,
+      } as AssistantMessage
     }
+
+    throw new Error('Last message is not a valid message')
   }
 }
