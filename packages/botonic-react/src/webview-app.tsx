@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { params2queryString, PROVIDER } from '@botonic/core'
+import { params2queryString, PROVIDER, Session } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -16,6 +16,11 @@ enum WebviewUrlParams {
 
 class App extends React.Component {
   private url: URL
+  private botId: string
+  private userId: string
+  private hubtypeApiUrl: string
+  private state: { session: Session; params: Record<string, string> }
+
   constructor(props) {
     super(props)
     this.url = new URL(window.location.href)
@@ -76,10 +81,9 @@ class App extends React.Component {
 
       const session = this.state.session
       try {
-        const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
-        const url = `${baseUrl}/v1/bots/${session.bot.id}/send_postback/`
+        const url = `${this.hubtypeApiUrl}/v1/bots/${this.botId}/send_postback/`
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const data = { payload: payload, chat_id: session.user.id }
+        const data = { payload: payload, chat_id: this.userId }
         await axios.post(url, data)
       } catch (e) {
         console.log(e)
