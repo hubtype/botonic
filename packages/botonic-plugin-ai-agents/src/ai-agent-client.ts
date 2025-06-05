@@ -1,7 +1,12 @@
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
-import { ChatOpenAI } from '@langchain/openai'
+import { AzureChatOpenAI } from '@langchain/openai'
 
-import { OPENAI_API_KEY } from './constants'
+import {
+  AZURE_OPENAI_API_BASE,
+  AZURE_OPENAI_API_DEPLOYMENT_NAME,
+  AZURE_OPENAI_API_KEY,
+  AZURE_OPENAI_API_VERSION,
+} from './constants'
 import { AgenticMessage, AiAgentArgs } from './types'
 
 export class AiAgentClient {
@@ -14,9 +19,11 @@ export class AiAgentClient {
   }
 
   async runAgent(_messages: AgenticMessage[]): Promise<AgenticMessage> {
-    const model = new ChatOpenAI({
-      model: 'gpt-4.1-mini',
-      apiKey: OPENAI_API_KEY,
+    const model = new AzureChatOpenAI({
+      azureOpenAIApiVersion: AZURE_OPENAI_API_VERSION,
+      azureOpenAIApiKey: AZURE_OPENAI_API_KEY,
+      azureOpenAIApiDeploymentName: AZURE_OPENAI_API_DEPLOYMENT_NAME,
+      azureOpenAIEndpoint: AZURE_OPENAI_API_BASE,
       temperature: 0,
       // other params...
     })
