@@ -190,8 +190,9 @@ export type HtEventProps =
   | EventCustom
 
 export interface RequestData {
-  language: string
-  country: string
   userId?: string
   botInteractionId: string
+  userLocale: string
+  userCountry: string
+  systemLocale: string
 }

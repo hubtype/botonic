@@ -17,9 +17,10 @@ describe('Create nlu intent smart events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.IntentSmart,
       nlu_intent_smart_title: 'ADD_A_BAG',
       nlu_intent_smart_num_used: 2,

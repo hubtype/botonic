@@ -16,9 +16,10 @@ describe('Create feedback event', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.FeedbackCase,
       feedback_target_id: 'caseId',
       feedback_group_id: 'groupIdTest',
@@ -46,9 +47,10 @@ describe('Create feedback event', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.FeedbackConversation,
       feedback_target_id: 'chatIdTest',
       feedback_group_id: 'groupIdTest',

@@ -19,9 +19,10 @@ describe('Create webview events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.WebviewStep,
       webview_thread_id: '12345',
       webview_name: 'ADD_A_BAG',
@@ -45,9 +46,10 @@ describe('Create webview events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.WebviewEnd,
       webview_thread_id: '12345',
       webview_name: 'ADD_A_BAG',
