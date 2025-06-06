@@ -13,9 +13,10 @@ describe('Create fallback events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.Fallback,
       user_input: 'userInputTest',
       fallback_out: 1,
@@ -35,9 +36,10 @@ describe('Create fallback events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.Fallback,
       user_input: 'userInputTest',
       fallback_out: 2,
@@ -57,9 +59,10 @@ describe('Create fallback events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.Fallback,
       user_input: 'userInputTest',
       fallback_out: 1,
