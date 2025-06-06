@@ -16,22 +16,22 @@ export class HubtypeClient {
     memoryLength: number
   ): Promise<AgenticInputMessage[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
-    const data = {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authToken}`,
+    }
+    const params = {
       last_message_id: request.input.message_id,
       num_messages: memoryLength,
     }
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.authToken}`,
-      },
-    }
 
     try {
-      const messages = await axios.post<{ messages: AgenticInputMessage[] }>(
+      const messages = await axios.get<{ messages: AgenticInputMessage[] }>(
         url,
-        data,
-        config
+        {
+          headers,
+          params,
+        }
       )
 
       return messages.data.messages
