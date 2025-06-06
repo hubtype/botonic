@@ -18,9 +18,10 @@ describe('Create nlu intent classic events', () => {
 
     expect(htEvent).toEqual({
       chat_id: 'chatIdTest',
-      chat_language: 'es',
-      chat_country: 'ES',
-      format_version: 2,
+      user_locale: 'es',
+      user_country: 'ES',
+      system_locale: 'es',
+      format_version: 3,
       action: EventAction.Intent,
       nlu_intent_label: 'ADD_A_BAG',
       nlu_intent_confidence: 0.7,
