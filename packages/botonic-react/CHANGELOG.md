@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.35.x] - 2025-mm-dd
+## [0.36.0] - 2025-mm-dd
 
 ### Added
 
 ### Changed
+
+- [PR-3031](https://github.com/hubtype/botonic/pull/3031): Webview get session from backend using new api endpoint.
 
 ### Fixed
 

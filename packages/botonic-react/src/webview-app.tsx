@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { params2queryString, PROVIDER } from '@botonic/core'
+import { params2queryString, PROVIDER, Session } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
@@ -7,19 +7,64 @@ import { BrowserRouter, Route } from 'react-router-dom'
 
 import { CloseWebviewOptions, WebviewRequestContext } from './contexts'
 
+enum WebviewUrlParams {
+  Context = 'context',
+  BotId = 'bot_id',
+  UserId = 'user_id',
+  HubtypeApiUrl = 'hubtype_api_url',
+}
+
 class App extends React.Component {
+  private url: URL
+  private botId: string
+  private userId: string
+  private hubtypeApiUrl: string
+  private state: { session: Session; params: Record<string, string> }
+
   constructor(props) {
     super(props)
-    const url = new URL(window.location.href)
-    const params = Array.from(url.searchParams.entries())
-      .filter(([key, value]) => key !== 'context')
+    this.url = new URL(window.location.href)
+    this.botId = this.url.searchParams.get(WebviewUrlParams.BotId)
+    this.userId = this.url.searchParams.get(WebviewUrlParams.UserId)
+    this.hubtypeApiUrl =
+      this.url.searchParams.get(WebviewUrlParams.HubtypeApiUrl) ||
+      'https://api.hubtype.com'
+    this.state = {
+      session: null,
+      params: {},
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      const session = await this.getSessionFromUrl()
+      const params = this.getParamsFromUrl()
+      this.setState({ session, params })
+    } catch (error) {
+      console.error('Error getting bot session context from url', error)
+    }
+  }
+
+  async getSessionFromUrl() {
+    const url = `${this.hubtypeApiUrl}/external/v2/conversational_apps/${this.botId}/users/${this.userId}/context/`
+    const response = await axios.get(url)
+    return response.data
+  }
+
+  getParamsFromUrl() {
+    const keysToExclude = [
+      WebviewUrlParams.Context,
+      WebviewUrlParams.BotId,
+      WebviewUrlParams.UserId,
+      WebviewUrlParams.HubtypeApiUrl,
+    ]
+    const params = Array.from(this.url.searchParams.entries())
+      .filter(([key, _]) => !keysToExclude.includes(key))
       .reduce((o, [key, value]) => {
         o[key] = value
         return o
       }, {})
-    const urlContext = url.searchParams.get('context')
-    const session = JSON.parse(urlContext || '{}')
-    this.state = { session, params }
+    return params
   }
 
   async close(options?: CloseWebviewOptions) {
@@ -36,10 +81,9 @@ class App extends React.Component {
 
       const session = this.state.session
       try {
-        const baseUrl = session._hubtype_api || 'https://api.hubtype.com'
-        const url = `${baseUrl}/v1/bots/${session.bot.id}/send_postback/`
+        const url = `${this.hubtypeApiUrl}/v1/bots/${this.botId}/send_postback/`
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const data = { payload: payload, chat_id: session.user.id }
+        const data = { payload: payload, chat_id: this.userId }
         await axios.post(url, data)
       } catch (e) {
         console.log(e)
