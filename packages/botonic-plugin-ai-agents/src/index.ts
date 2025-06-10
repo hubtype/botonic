@@ -2,7 +2,8 @@ import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
 import { HubtypeApiClient } from './hubtype-client'
-import { MANDATORY_TOOLS } from './tools'
+import { createCustomTool } from './tools/custom'
+import { MANDATORY_TOOLS } from './tools/default'
 import {
   AgenticOutputMessage,
   AiAgentArgs,
@@ -42,7 +43,9 @@ export default class BotonicPluginAiAgents implements Plugin {
         ? await hubtypeClient.getMessages(request, 10)
         : [{ role: 'user', content: request.input.data } as UserMessage]
 
-      const customTools = []
+      const customTools = this.customTools.map(customTool =>
+        createCustomTool(customTool)
+      )
       const chatModel = loadChatModel('azureOpenAI')
       const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, [
         ...customTools,

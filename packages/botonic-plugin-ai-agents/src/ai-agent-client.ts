@@ -7,7 +7,7 @@ import { StructuredTool } from '@langchain/core/tools'
 import { CompiledStateGraph } from '@langchain/langgraph'
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 
-import { EXIT_TOOLS } from './tools'
+import { EXIT_TOOLS } from './tools/default'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
