@@ -94,7 +94,9 @@ export interface KnowledgeBaseResponse {
 
 export interface AiAgentResponse {
   role: string
-  content: string
+  content?: string
+  toolName?: string
+  toolOutput?: string | null
 }
 
 export interface SmartIntentResponse {
