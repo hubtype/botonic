@@ -6,6 +6,7 @@ import { MANDATORY_TOOLS } from './tools'
 import {
   AgenticOutputMessage,
   AiAgentArgs,
+  CustomTool,
   PluginAiAgentOptions,
   UserMessage,
 } from './types'
@@ -15,8 +16,11 @@ const isProd = process.env.NODE_ENV === 'production'
 
 export default class BotonicPluginAiAgents implements Plugin {
   private readonly authToken?: string
+  public customTools: CustomTool[] = []
+
   constructor(options?: PluginAiAgentOptions) {
     this.authToken = options?.authToken
+    this.customTools = options?.customTools || []
   }
 
   pre(): void {
