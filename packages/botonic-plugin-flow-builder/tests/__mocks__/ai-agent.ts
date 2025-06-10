@@ -1,9 +1,10 @@
 interface MockAiAgentOptions {
-  message: { role: string; content: string }
+  role: string
+  content: string
 }
 
-export function mockAiAgentResponse({ message }: MockAiAgentOptions) {
+export function mockAiAgentResponse({ role, content }: MockAiAgentOptions) {
   return jest.fn(() => {
-    return Promise.resolve({ message })
+    return Promise.resolve({ role, content })
   })
 }

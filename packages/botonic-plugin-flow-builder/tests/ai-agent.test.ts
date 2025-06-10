@@ -16,10 +16,8 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
       flowBuilderOptions: {
         flow: aiAgentTestFlow,
         getAiAgentResponse: mockAiAgentResponse({
-          message: {
-            role: 'assistant',
-            content: 'Ai agent response',
-          },
+          role: 'assistant',
+          content: 'Ai agent response',
         }),
       },
       requestArgs: {
@@ -40,11 +38,9 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
       flowBuilderOptions: {
         flow: aiAgentTestFlow,
         getAiAgentResponse: mockAiAgentResponse({
-          message: {
-            role: 'assistant',
-            content:
-              'I can provide you with information about current temperatures, forecasts, and the probability of rain for your location. Just let me know where you are or where you’re interested in, and I’ll give you the details!',
-          },
+          role: 'assistant',
+          content:
+            'I can provide you with information about current temperatures, forecasts, and the probability of rain for your location. Just let me know where you are or where you’re interested in, and I’ll give you the details!',
         }),
       },
       requestArgs: {
