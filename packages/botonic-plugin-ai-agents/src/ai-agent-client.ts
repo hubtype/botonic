@@ -29,7 +29,6 @@ export class AiAgentClient {
   ) {
     this.name = aiAgentArgs.name
     this.instructions = aiAgentArgs.instructions
-
     this.agent = createReactAgent({
       llm: chatModel,
       tools: tools,

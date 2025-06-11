@@ -44,6 +44,7 @@ export const MANDATORY_TOOLS = [
   outOfContext,
   finishConversation,
 ]
+
 export const EXIT_TOOLS = [
   handoffToHumanAgent.name,
   outOfContext.name,

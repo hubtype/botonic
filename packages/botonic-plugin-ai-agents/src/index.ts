@@ -46,11 +46,10 @@ export default class BotonicPluginAiAgents implements Plugin {
       const customTools = this.customTools.map(customTool =>
         createCustomTool(customTool)
       )
+
+      const tools = [...customTools, ...MANDATORY_TOOLS]
       const chatModel = loadChatModel('azureOpenAI')
-      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, [
-        ...customTools,
-        ...MANDATORY_TOOLS,
-      ])
+      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, tools)
 
       return await aiAgentClient.runAgent(messages)
     } catch (error) {
