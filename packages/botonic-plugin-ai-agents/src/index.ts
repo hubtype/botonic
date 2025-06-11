@@ -1,7 +1,7 @@
 import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
-import { HubtypeClient } from './hubtype-client'
+import { HubtypeApiClient } from './hubtype-client'
 import { MANDATORY_TOOLS } from './tools'
 import {
   AgenticOutputMessage,
@@ -33,7 +33,7 @@ export default class BotonicPluginAiAgents implements Plugin {
         throw new Error('Auth token is required')
       }
 
-      const hubtypeClient = new HubtypeClient(authToken)
+      const hubtypeClient = new HubtypeApiClient(authToken)
       const messages = isProd
         ? await hubtypeClient.getMessages(request, 10)
         : [{ role: 'user', content: request.input.data } as UserMessage]

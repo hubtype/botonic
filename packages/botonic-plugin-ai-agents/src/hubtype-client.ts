@@ -4,7 +4,7 @@ import axios from 'axios'
 import { HUBTYPE_API_URL } from './constants'
 import { AgenticInputMessage } from './types'
 
-export class HubtypeClient {
+export class HubtypeApiClient {
   private readonly authToken: string
 
   constructor(authToken: string) {
