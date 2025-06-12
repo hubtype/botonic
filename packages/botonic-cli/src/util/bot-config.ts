@@ -53,7 +53,6 @@ export class BotConfig {
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
     const configLoaded = await this.loadBotConfig(appDirectory)
-    console.log('configLoaded', configLoaded)
 
     spinner.succeed()
 
@@ -64,9 +63,9 @@ export class BotConfig {
         botonic_cli_version: botonicCliVersion,
       },
       packages,
-      // tools: configLoaded.tools,
-      // payloads: configLoaded.payloads,
-      // webviews: configLoaded.webviews,
+      tools: configLoaded.tools,
+      payloads: configLoaded.payloads,
+      webviews: configLoaded.webviews,
     }
   }
   static async getTools(appDirectory: string) {
@@ -83,11 +82,31 @@ export class BotConfig {
   }
 
   static async loadBotConfig(appDirectory: string) {
-    const configPath = path.resolve(appDirectory, 'src/bot-config.ts')
+    try {
+      // Register ts-node to load TypeScript in real time
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('ts-node').register({
+        transpileOnly: true,
+        compilerOptions: {
+          module: 'commonjs',
+          target: 'es2018',
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+        },
+      })
 
-    const { botConfig } = await import(configPath)
+      const configPath = path.resolve(appDirectory, 'src/bot-config.ts')
 
-    return botConfig
+      // Clean cache to reload if necessary
+      delete require.cache[require.resolve(configPath)]
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { botConfig } = require(configPath)
+      return botConfig
+    } catch (error) {
+      console.error('Error cargando bot config:', error)
+      throw error
+    }
   }
 
   private static async getBotonicDependencies(
