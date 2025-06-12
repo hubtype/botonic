@@ -1,13 +1,22 @@
 import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
-import { AiAgentArgs, AiAgentResponse } from './types'
+import { HubtypeApiClient } from './hubtype-client'
+import { MANDATORY_TOOLS } from './tools'
+import {
+  AgenticOutputMessage,
+  AiAgentArgs,
+  PluginAiAgentOptions,
+  UserMessage,
+} from './types'
+import { loadChatModel } from './utils'
+
+const isProd = process.env.NODE_ENV === 'production'
 
 export default class BotonicPluginAiAgents implements Plugin {
-  public aiAgentClient: AiAgentClient
-
-  constructor() {
-    this.aiAgentClient = new AiAgentClient()
+  private readonly authToken?: string
+  constructor(options?: PluginAiAgentOptions) {
+    this.authToken = options?.authToken
   }
 
   pre(): void {
@@ -17,7 +26,31 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    return this.aiAgentClient.getInference(request, aiAgentArgs)
+  ): Promise<AgenticOutputMessage | undefined> {
+    try {
+      const authToken = isProd ? request.session._access_token : this.authToken
+      if (!authToken) {
+        throw new Error('Auth token is required')
+      }
+
+      const hubtypeClient = new HubtypeApiClient(authToken)
+      const messages = isProd
+        ? await hubtypeClient.getMessages(request, 10)
+        : [{ role: 'user', content: request.input.data } as UserMessage]
+
+      const customTools = []
+      const chatModel = loadChatModel('azureOpenAI')
+      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, [
+        ...customTools,
+        ...MANDATORY_TOOLS,
+      ])
+
+      return await aiAgentClient.runAgent(messages)
+    } catch (error) {
+      console.error('error plugin returns undefined', error)
+      return undefined
+    }
   }
 }
+
+export * from './types'

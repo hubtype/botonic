@@ -1,112 +1,73 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { BotContext, isDev } from '@botonic/core'
-import axios from 'axios'
-
-import { HUBTYPE_API_URL } from './constants'
-import { AiAgentError } from './errors'
+import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 import {
+  AIMessage as LangchainAIMessage,
+  ToolMessage as LangchainToolMessage,
+} from '@langchain/core/messages'
+import { StructuredTool } from '@langchain/core/tools'
+import { CompiledStateGraph } from '@langchain/langgraph'
+import { createReactAgent } from '@langchain/langgraph/prebuilt'
+
+import { EXIT_TOOLS } from './tools'
+import {
+  AgenticInputMessage,
+  AgenticOutputMessage,
   AiAgentArgs,
-  AiAgentRequestData,
-  AiAgentRequestDataTest,
-  AiAgentResponse,
-  Config,
+  AssistantMessage,
+  ExitMessage,
+  ToolMessage,
 } from './types'
 
 export class AiAgentClient {
-  private url: string
+  public name: string
+  public instructions: string
+  public agent: CompiledStateGraph<any, any> // TODO: apply RunInput, RunOutput, etc.
 
-  constructor() {
-    this.url = `${HUBTYPE_API_URL}/external/v1/ai/agent`
+  constructor(
+    aiAgentArgs: AiAgentArgs,
+    chatModel: BaseChatModel,
+    tools: StructuredTool[] = []
+  ) {
+    this.name = aiAgentArgs.name
+    this.instructions = aiAgentArgs.instructions
+
+    this.agent = createReactAgent({
+      llm: chatModel,
+      tools: tools,
+      prompt: this.instructions,
+    })
   }
 
-  async getInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    if (isDev(request.session)) {
-      return this.agentTestInference(request, aiAgentArgs)
+  async runAgent(
+    _messages: AgenticInputMessage[]
+  ): Promise<AgenticOutputMessage> {
+    const response = await this.agent.invoke({
+      messages: _messages.map((message: AgenticInputMessage) => ({
+        role: message.role,
+        content: message.content,
+      })),
+    })
+    const lastMessage = response.messages.at(-1)
+
+    if (lastMessage instanceof LangchainToolMessage) {
+      if (lastMessage.name && EXIT_TOOLS.includes(lastMessage.name)) {
+        return {
+          role: 'exit',
+        } as ExitMessage
+      }
+      return {
+        role: 'tool',
+        toolName: lastMessage.name,
+        toolOutput: lastMessage.content,
+      } as ToolMessage
     }
 
-    return this.agentInference(request, aiAgentArgs)
-  }
-
-  private async agentTestInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-    const data = this.getDataTest(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${this.url}/test/`,
-      data,
-      config
-    )
-
-    return response.data
-  }
-
-  private async agentInference(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): Promise<AiAgentResponse> {
-    const config = this.getConfig(request)
-    const data = this.getData(request, aiAgentArgs)
-    const response = await axios.post<AiAgentResponse>(
-      `${this.url}/run/`,
-      data,
-      config
-    )
-
-    return response.data
-  }
-
-  private getConfig(request: BotContext): Config {
-    return {
-      headers: {
-        Authorization: `Bearer ${request.session._access_token}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  }
-
-  private getData(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestData {
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
+    if (lastMessage instanceof LangchainAIMessage) {
+      return {
+        role: 'assistant',
+        content: lastMessage.content,
+      } as AssistantMessage
     }
 
-    return {
-      message: request.input.message_id,
-      memory_length: 10,
-      name: aiAgentArgs.name,
-      instructions: aiAgentArgs.instructions,
-    }
-  }
-
-  private getDataTest(
-    request: BotContext,
-    aiAgentArgs: AiAgentArgs
-  ): AiAgentRequestDataTest {
-    if (!request.input.data) {
-      throw new AiAgentError('No input data provided')
-    }
-
-    // TODO: We can get messages from localStorage in Dev mode and transform them to the correct format {role: MessageRole, content: string}
-    // if (isDev(request.session)) {
-    //   const messages = localStorage.getItem('botonicState').
-    // }
-
-    return {
-      messages: [
-        {
-          role: 'user',
-          content: request.input.data,
-        },
-      ],
-      name: aiAgentArgs.name,
-      instructions: aiAgentArgs.instructions,
-    }
+    throw new Error('Last message is not a valid message')
   }
 }

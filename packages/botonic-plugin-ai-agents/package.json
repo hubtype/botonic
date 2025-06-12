@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.36.0-alpha.0",
+  "version": "0.36.0-alpha.2",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
@@ -13,7 +13,10 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@botonic/core": "^0.35.0",
+    "@botonic/core": "^0.36.0-alpha.0",
+    "@langchain/core": "^0.3.57",
+    "@langchain/langgraph": "^0.3.0",
+    "@langchain/openai": "^0.5.12",
     "axios": "^1.9.0",
     "uuid": "^10.0.0"
   },
