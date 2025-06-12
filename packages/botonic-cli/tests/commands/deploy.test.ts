@@ -53,6 +53,18 @@ describe('TEST: Deploy pipeline', () => {
             '@botonic/core': { version: '0.29.0' },
             '@botonic/react': { version: '0.29.0' },
           },
+          tools: [
+            {
+              name: 'tool1',
+              description: 'tool1 description',
+            },
+          ],
+          payloads: ['payload1', 'payload2'],
+          webviews: [
+            {
+              name: 'webview1',
+            },
+          ],
         }
         const { hasDeployErrors } =
           await deployCommand.deployBundle(botConfigJson)
