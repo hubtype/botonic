@@ -7,9 +7,13 @@ import {
   AZURE_OPENAI_API_VERSION,
 } from './constants'
 
-export function loadChatModel(provider: 'azureOpenAI') {
+export enum ChatModelProvider {
+  AzureOpenAI = 'azureOpenAI',
+}
+
+export function loadChatModel(provider: ChatModelProvider) {
   switch (provider) {
-    case 'azureOpenAI':
+    case ChatModelProvider.AzureOpenAI:
       return new AzureChatOpenAI({
         azureOpenAIApiVersion: AZURE_OPENAI_API_VERSION,
         azureOpenAIApiKey: AZURE_OPENAI_API_KEY,
