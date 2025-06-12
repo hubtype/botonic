@@ -12,7 +12,7 @@ import {
   PluginAiAgentOptions,
   UserMessage,
 } from './types'
-import { ChatModelProvider, loadChatModel } from './utils'
+import { AiProvider, loadChatModel } from './utils'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -46,7 +46,7 @@ export default class BotonicPluginAiAgents implements Plugin {
       )
 
       const tools = [...customTools, ...MANDATORY_TOOLS]
-      const chatModel = loadChatModel(ChatModelProvider.AzureOpenAI)
+      const chatModel = loadChatModel(AiProvider.AzureOpenAI)
       const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, tools)
 
       return await aiAgentClient.runAgent(messages)
