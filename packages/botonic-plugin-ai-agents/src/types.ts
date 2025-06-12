@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { ZodSchema } from 'zod'
 export interface PluginAiAgentOptions {
   authToken?: string
   customTools?: CustomTool[]
@@ -7,7 +7,7 @@ export interface PluginAiAgentOptions {
 export interface CustomTool {
   name: string
   description: string
-  schema: z.ZodSchema
+  schema: ZodSchema
   returnDirect?: boolean
   func: (input?: any) => Promise<any>
 }
