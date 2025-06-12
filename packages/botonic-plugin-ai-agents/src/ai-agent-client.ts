@@ -18,8 +18,6 @@ import {
 } from './types'
 
 export class AiAgentClient {
-  public name: string
-  public instructions: string
   public agent: CompiledStateGraph<any, any> // TODO: apply RunInput, RunOutput, etc.
 
   constructor(
@@ -27,12 +25,11 @@ export class AiAgentClient {
     chatModel: BaseChatModel,
     tools: StructuredTool[] = []
   ) {
-    this.name = aiAgentArgs.name
-    this.instructions = aiAgentArgs.instructions
     this.agent = createReactAgent({
+      name: aiAgentArgs.name,
       llm: chatModel,
       tools: tools,
-      prompt: this.instructions,
+      prompt: aiAgentArgs.instructions,
     })
   }
 
