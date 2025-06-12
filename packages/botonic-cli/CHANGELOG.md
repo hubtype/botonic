@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3035](https://github.com/hubtype/botonic/pull/3035): botonic deploy get tools, payloads and webviews to save it in backend botConfig.
+
 ### Changed
 
 ### Fixed
