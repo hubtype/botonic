@@ -433,6 +433,8 @@ Deploying to AWS...
   /* istanbul ignore next */
   async deploy(): Promise<void> {
     try {
+      // const botConfigJson = await BotConfig.get(process.cwd())
+
       const buildOut = await this.botonicApiService.build(npmCommand)
       if (!buildOut) {
         const error = 'Deploy Botonic Build Error'

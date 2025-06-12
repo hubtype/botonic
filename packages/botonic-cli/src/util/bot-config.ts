@@ -13,15 +13,29 @@ const NPM_DEPTH_0 = 0
 // Also get alpha and beta versions
 const versionRegex = /@botonic\/[^@]+@(\d+\.\d+\.\d+(-[a-zA-Z]+\.\d+)?)/
 
+interface BuildInfo {
+  node_version: string
+  npm_version: string
+  botonic_cli_version: string
+}
+
 type BotonicDependencies = Record<string, { version: string }>
 
+interface Tool {
+  name: string
+  description: string
+}
+
+interface Webview {
+  name: string
+}
+
 export interface BotConfigJSON {
-  build_info: {
-    node_version: string
-    npm_version: string
-    botonic_cli_version: string
-  }
+  build_info: BuildInfo
   packages: BotonicDependencies
+  tools?: Tool[]
+  payloads?: string[]
+  webviews?: Webview[]
 }
 export class BotConfig {
   static async get(appDirectory: string): Promise<BotConfigJSON> {
@@ -37,6 +51,10 @@ export class BotConfig {
     )
     const botonicCliVersion =
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
+
+    const configLoaded = await this.loadBotConfig(appDirectory)
+    console.log('configLoaded', configLoaded)
+
     spinner.succeed()
 
     return {
@@ -46,7 +64,30 @@ export class BotConfig {
         botonic_cli_version: botonicCliVersion,
       },
       packages,
+      // tools: configLoaded.tools,
+      // payloads: configLoaded.payloads,
+      // webviews: configLoaded.webviews,
     }
+  }
+  static async getTools(appDirectory: string) {
+    try {
+      const botConfigPath = path.join(appDirectory, '.src/bot-config.ts')
+      const output = await this.getOutputByCommand(
+        `npx ts-node ${botConfigPath}`
+      )
+      console.log('output', output)
+    } catch (err: any) {
+      console.error(`Error: ${err.message}`)
+    }
+    return []
+  }
+
+  static async loadBotConfig(appDirectory: string) {
+    const configPath = path.resolve(appDirectory, 'src/bot-config.ts')
+
+    const { botConfig } = await import(configPath)
+
+    return botConfig
   }
 
   private static async getBotonicDependencies(
