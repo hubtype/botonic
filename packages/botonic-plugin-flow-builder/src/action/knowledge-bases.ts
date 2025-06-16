@@ -18,8 +18,9 @@ export async function getContentsByKnowledgeBase({
 }: FlowBuilderContext): Promise<FlowContent[]> {
   if (isKnowledgeBasesAllowed(request)) {
     const startNodeKnowledgeBaseFlow = cmsApi.getStartNodeKnowledgeBaseFlow()
+    const isKnowledgeBaseEnabled = cmsApi.isKnowledgeBaseEnabled()
 
-    if (!startNodeKnowledgeBaseFlow) {
+    if (!startNodeKnowledgeBaseFlow || !isKnowledgeBaseEnabled) {
       return []
     }
 

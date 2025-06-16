@@ -223,6 +223,10 @@ export class FlowBuilderApi {
     return this.flow.is_knowledge_base_active || false
   }
 
+  isAiAgentEnabled(): boolean {
+    return this.flow.is_ai_agent_active || false
+  }
+
   getResolvedLocale(): string {
     const systemLocale = this.request.getSystemLocale()
 

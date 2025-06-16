@@ -9,7 +9,8 @@ export async function getContentsByAiAgent({
   request,
 }: FlowBuilderContext): Promise<FlowContent[]> {
   const startNodeAiAgentFlow = cmsApi.getStartNodeAiAgentFlow()
-  if (!startNodeAiAgentFlow) {
+  const isAiAgentEnabled = cmsApi.isAiAgentEnabled()
+  if (!startNodeAiAgentFlow || !isAiAgentEnabled) {
     return []
   }
 
@@ -28,6 +29,7 @@ export async function getContentsByAiAgent({
     {
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
+      tools: aiAgentContent.activeTools,
     }
   )
 
