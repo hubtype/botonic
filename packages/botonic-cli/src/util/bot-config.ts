@@ -68,24 +68,10 @@ export class BotConfig {
       webviews: configLoaded.webviews,
     }
   }
-  static async getTools(appDirectory: string) {
-    try {
-      const botConfigPath = path.join(appDirectory, '.src/bot-config.ts')
-      const output = await this.getOutputByCommand(
-        `npx ts-node ${botConfigPath}`
-      )
-      console.log('output', output)
-    } catch (err: any) {
-      console.error(`Error: ${err.message}`)
-    }
-    return []
-  }
 
   static async loadBotConfig(appDirectory: string) {
     try {
-      // Register ts-node to load TypeScript in real time
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('ts-node').register({
+      const typescriptCompilerOptions = {
         transpileOnly: true,
         compilerOptions: {
           module: 'commonjs',
@@ -93,9 +79,12 @@ export class BotConfig {
           esModuleInterop: true,
           allowSyntheticDefaultImports: true,
         },
-      })
+      }
+      // Register ts-node to load TypeScript in real time
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('ts-node').register(typescriptCompilerOptions)
 
-      const configPath = path.resolve(appDirectory, 'src/bot-config.ts')
+      const configPath = path.join(appDirectory, 'src', 'bot-config.ts')
 
       // Clean cache to reload if necessary
       delete require.cache[require.resolve(configPath)]
@@ -104,7 +93,7 @@ export class BotConfig {
       const { botConfig } = require(configPath)
       return botConfig
     } catch (error) {
-      console.error('Error cargando bot config:', error)
+      console.error('Error loading bot config:', error)
       throw error
     }
   }
