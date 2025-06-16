@@ -7,7 +7,7 @@ import { StructuredTool } from '@langchain/core/tools'
 import { CompiledStateGraph } from '@langchain/langgraph'
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 
-import { EXIT_TOOLS } from './tools'
+import { EXIT_TOOLS } from './tools/default'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -18,8 +18,6 @@ import {
 } from './types'
 
 export class AiAgentClient {
-  public name: string
-  public instructions: string
   public agent: CompiledStateGraph<any, any> // TODO: apply RunInput, RunOutput, etc.
 
   constructor(
@@ -27,13 +25,11 @@ export class AiAgentClient {
     chatModel: BaseChatModel,
     tools: StructuredTool[] = []
   ) {
-    this.name = aiAgentArgs.name
-    this.instructions = aiAgentArgs.instructions
-
     this.agent = createReactAgent({
+      name: aiAgentArgs.name,
       llm: chatModel,
       tools: tools,
-      prompt: this.instructions,
+      prompt: aiAgentArgs.instructions,
     })
   }
 

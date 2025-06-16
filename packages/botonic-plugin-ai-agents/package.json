@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.36.0-alpha.2",
+  "version": "0.36.0-alpha.3",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
@@ -18,7 +18,8 @@
     "@langchain/langgraph": "^0.3.0",
     "@langchain/openai": "^0.5.12",
     "axios": "^1.9.0",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zod": "^3.25.57"
   },
   "devDependencies": {
     "@types/uuid": "^10.0.0"
