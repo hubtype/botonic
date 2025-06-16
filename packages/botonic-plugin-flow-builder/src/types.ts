@@ -57,7 +57,7 @@ export type AiAgentFunction<
 export interface AiAgentArgs {
   name: string
   instructions: string
-  tools?: { name: string }[]
+  activeTools?: { name: string }[]
 }
 export type ContentFilter<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

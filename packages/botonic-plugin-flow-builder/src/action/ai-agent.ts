@@ -29,7 +29,7 @@ export async function getContentsByAiAgent({
     {
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
-      tools: aiAgentContent.activeTools,
+      activeTools: aiAgentContent.activeTools,
     }
   )
 
