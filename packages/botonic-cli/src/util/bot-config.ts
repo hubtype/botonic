@@ -91,10 +91,18 @@ export class BotConfig {
 
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { botConfig } = require(configPath)
-      return botConfig
+      return {
+        tools: botConfig?.tools || [],
+        payloads: botConfig?.payloads || [],
+        webviews: botConfig?.webviews || [],
+      }
     } catch (error) {
-      console.error('Error loading bot config:', error)
-      throw error
+      console.error('Error loading src/bot-config.ts:', error)
+      return {
+        tools: [],
+        payloads: [],
+        webviews: [],
+      }
     }
   }
 
@@ -126,7 +134,7 @@ export class BotConfig {
         })
       )
     } catch (err: any) {
-      console.error(`Error: ${err.message}`)
+      console.error(`Error getting botonic dependencies: ${err.message}`)
     }
     return packages
   }
@@ -144,7 +152,7 @@ export class BotConfig {
       const installedVersion = match ? match[1] : ''
       packages[dependency] = { version: installedVersion }
     } catch (error: any) {
-      console.error(error)
+      console.error('Error setting dependencies version:', error)
     }
     return packages
   }
