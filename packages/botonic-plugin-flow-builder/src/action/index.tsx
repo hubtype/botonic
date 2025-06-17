@@ -77,13 +77,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
     const request = this.context as ActionRequest
+    const shouldSendWebchatSettings =
+      (isWebchat(request.session) || isDev(request.session)) &&
+      !!webchatSettingsParams
 
     return (
       <>
-        {(isWebchat(request.session) || isDev(request.session)) &&
-          !!webchatSettingsParams && (
-            <WebchatSettings {...webchatSettingsParams} />
-          )}
+        {shouldSendWebchatSettings && (
+          <WebchatSettings {...webchatSettingsParams} />
+        )}
         {contents.map(content => content.toBotonic(content.id, request))}
       </>
     )
@@ -94,13 +96,15 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
     const request = this.context as ActionRequest
+    const shouldSendWebchatSettings =
+      (isWebchat(request.session) || isDev(request.session)) &&
+      !!webchatSettingsParams
 
     return (
       <Multichannel text={{ buttonsAsText: false }}>
-        {(isWebchat(request.session) || isDev(request.session)) &&
-          !!webchatSettingsParams && (
-            <WebchatSettings {...webchatSettingsParams} />
-          )}
+        {shouldSendWebchatSettings && (
+          <WebchatSettings {...webchatSettingsParams} />
+        )}
         {contents.map(content => content.toBotonic(content.id, request))}
       </Multichannel>
     )
