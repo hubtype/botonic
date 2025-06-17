@@ -129,9 +129,9 @@ class App extends React.Component {
   }
 
   render() {
-    const webviewRequestContext = {
-      session: this.state.session || {},
-      params: this.state.params || {},
+    if (!this.state.session) {
+      return null
+    }
       closeWebview: this.close.bind(this),
     }
 
