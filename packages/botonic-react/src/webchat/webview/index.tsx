@@ -21,7 +21,7 @@ export const WebviewContainer = () => {
     useContext(WebchatContext)
 
   const webviewRequestContext: WebviewRequestContextType = {
-    params: webchatState.webviewParams || ({} as Record<string, any>),
+    params: webchatState.webviewParams || ({} as Record<string, string>),
     session: webchatState.session || ({} as Partial<CoreSession>),
     getUserCountry: () => webchatState.session?.user?.country || '',
     getUserLocale: () => webchatState.session?.user?.locale || '',
