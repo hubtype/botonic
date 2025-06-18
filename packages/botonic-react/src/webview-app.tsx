@@ -5,7 +5,11 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import { CloseWebviewOptions, WebviewRequestContext } from './contexts'
+import {
+  CloseWebviewOptions,
+  WebviewRequestContext,
+  WebviewRequestContextType,
+} from './contexts'
 
 enum WebviewUrlParams {
   Context = 'context',
@@ -129,9 +133,16 @@ class App extends React.Component {
   }
 
   render() {
-    const webviewRequestContext = {
-      session: this.state.session || {},
-      params: this.state.params || {},
+    if (!this.state.session) {
+      return null
+    }
+
+    const webviewRequestContext: WebviewRequestContextType = {
+      params: this.state.params,
+      session: this.state.session,
+      getUserCountry: () => this.state.session.user.country,
+      getUserLocale: () => this.state.session.user.locale,
+      getSystemLocale: () => this.state.session.system_locale,
       closeWebview: this.close.bind(this),
     }
 

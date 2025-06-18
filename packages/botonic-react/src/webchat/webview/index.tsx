@@ -1,8 +1,12 @@
-import { isMobile, Session as CoreSession } from '@botonic/core'
+import { Session as CoreSession } from '@botonic/core'
 import React, { useContext, useEffect } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
-import { CloseWebviewOptions, WebviewRequestContext } from '../../contexts'
+import {
+  CloseWebviewOptions,
+  WebviewRequestContext,
+  WebviewRequestContextType,
+} from '../../contexts'
 import { WebchatContext } from '../context'
 import { WebviewHeader } from './header'
 import {
@@ -16,11 +20,14 @@ export const WebviewContainer = () => {
   const { closeWebview, getThemeProperty, webchatState } =
     useContext(WebchatContext)
 
-  const webviewRequestContext = {
+  const webviewRequestContext: WebviewRequestContextType = {
+    params: webchatState.webviewParams || ({} as Record<string, string>),
+    session: webchatState.session || ({} as Partial<CoreSession>),
+    getUserCountry: () => webchatState.session?.user?.country || '',
+    getUserLocale: () => webchatState.session?.user?.locale || '',
+    getSystemLocale: () => webchatState.session?.user?.system_locale || '',
     closeWebview: async (options?: CloseWebviewOptions) =>
       await closeWebview(options),
-    params: webchatState.webviewParams || ({} as Record<string, any>),
-    session: webchatState.session || ({} as Partial<CoreSession>),
   }
 
   const Webview = webchatState.webview as string | React.ComponentType
