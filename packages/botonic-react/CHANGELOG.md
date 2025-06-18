@@ -10,7 +10,17 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.36.0] - 2025-mm-dd
+## [0.36.x] - 2025-mm-dd
+
+### Added
+
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.36.0] - 2025-06-18
 
 ### Added
 
@@ -18,10 +28,6 @@ All notable changes to Botonic will be documented in this file.
 
 - [PR-3031](https://github.com/hubtype/botonic/pull/3031): Webview get session from backend using new api endpoint.
 - [PR-3038](https://github.com/hubtype/botonic/pull/3038): Avoid render webview before fetch session, update WebchatRequestContext with get functions.
-
-### Fixed
-
-</details>
 
 ## [0.35.0] - 2025-05-06
 

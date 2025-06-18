@@ -14,6 +14,16 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.36.x] - 2025-06-18
+
+### Added
+
 - [PR-3022](https://github.com/hubtype/botonic/pull/3022): Add an ai agent from flow builder.
 
 ### Changed
@@ -22,8 +32,6 @@ All notable changes to Botonic will be documented in this file.
 
 - [PR-3037](https://github.com/hubtype/botonic/pull/3037): update system_locale when resolveLocale.
 - [PR-3037](https://github.com/hubtype/botonic/pull/3037): not fill Multichannel with FlowBuilderAction to not add more children in React tree.
-
-</details>
 
 ## [0.35.3] - 2025-06-03
 

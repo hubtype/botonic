@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.36.0-alpha.0",
+  "version": "0.36.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.25.9",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "decode": "^0.3.0",
     "pako": "^2.1.0",
     "process": "^0.11.10",
