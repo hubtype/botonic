@@ -274,6 +274,11 @@ export interface Session<TExtraData = any> {
   external?: any
   zendesk_ticket_id?: string
   flow_thread_id?: string
+  __campaign?: {
+    id: string
+    path: string
+    active: boolean
+  }
 }
 
 export type InputMatcher = (input: Input) => boolean

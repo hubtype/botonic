@@ -13,7 +13,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@botonic/core": "^0.36.0-alpha.0",
+    "@botonic/core": "^0.36.0",
     "@langchain/core": "^0.3.57",
     "@langchain/langgraph": "^0.3.0",
     "@langchain/openai": "^0.5.12",
