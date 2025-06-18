@@ -83,7 +83,7 @@ jobs:
       # Step 4: Deploy selected packages
       - name: Deploy selected packages
         id: deploy-packages
-        if: ${{ github.event.inputs.deploy_all != 'true' && github.event.inputs.version_type == 'patch' }}
+        if: ${{ github.event.inputs.deploy_all != 'true' }}
         run: |
           source /tmp/botonic-publish.sh
 
@@ -107,7 +107,7 @@ jobs:
       # Step 5: Deploy all packages (for all=true or major version upgrades)
       - name: Deploy all packages
         id: deploy-all
-        if: ${{ github.event.inputs.deploy_all == 'true' || github.event.inputs.version_type != 'patch' }}
+        if: ${{ github.event.inputs.deploy_all == 'true' }}
         run: |
           source /tmp/botonic-publish.sh
 
