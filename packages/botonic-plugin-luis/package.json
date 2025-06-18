@@ -12,7 +12,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.js'"
   },
   "dependencies": {
-    "axios": "^1.9.0"
+    "axios": "^1.10.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.26.0"

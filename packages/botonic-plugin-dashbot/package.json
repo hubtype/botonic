@@ -12,7 +12,7 @@
     "prepublishOnly": "npm i && npm run build"
   },
   "dependencies": {
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "dashbot": "^11.2.5"
   },
   "devDependencies": {},
