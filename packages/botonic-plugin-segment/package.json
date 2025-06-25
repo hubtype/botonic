@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-segment",
-  "version": "0.36.1",
+  "version": "0.36.2",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
