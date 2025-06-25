@@ -18,12 +18,11 @@ enum WebviewUrlParams {
   HubtypeApiUrl = 'hubtype_api_url',
 }
 
+const DEFAULT_HUBTYPE_API_URL = 'https://api.hubtype.com'
+
 class App extends React.Component {
   private url: URL
-  private botId: string
-  private userId: string
-  private hubtypeApiUrl: string = ''
-  private state: { session: Session; params: Record<string, string> }
+  private hubtypeApiUrl: string = DEFAULT_HUBTYPE_API_URL
 
   constructor(props) {
     super(props)
@@ -35,44 +34,49 @@ class App extends React.Component {
   }
 
   async componentDidMount() {
+    await this.initializeApp()
+  }
+
+  private async initializeApp() {
     try {
       const botId = this.url.searchParams.get(WebviewUrlParams.BotId)
       const chatId = this.url.searchParams.get(WebviewUrlParams.UserId)
-      this.hubtypeApiUrl = this.url.searchParams.get(
+      const hubtypeApiUrl = this.url.searchParams.get(
         WebviewUrlParams.HubtypeApiUrl
       )
+
       if (botId && chatId && hubtypeApiUrl) {
         const session = await this.getBotSessionContextFromExternalApi(
           hubtypeApiUrl,
           botId,
           chatId
         )
+        this.hubtypeApiUrl = hubtypeApiUrl
         this.setState({
           session,
           params: this.getParamsFromUrl(),
         })
       } else {
         const session = this.getBotSessionContextFromUrl()
-        this.hubtypeApiUrl = session._hubtype_api
+        this.hubtypeApiUrl = session._hubtype_api || DEFAULT_HUBTYPE_API_URL
         this.setState({
           session,
           params: this.getParamsFromUrl(),
         })
       }
     } catch (error) {
+      console.error('Failed to initialize app:', error)
       const session = this.getBotSessionContextFromUrl()
-      this.hubtypeApiUrl = session._hubtype_api
+      this.hubtypeApiUrl = session._hubtype_api || DEFAULT_HUBTYPE_API_URL
       this.setState({
         session,
         params: this.getParamsFromUrl(),
       })
-    } finally {
-      this.hubtypeApiUrl = this.hubtypeApiUrl || 'https://api.hubtype.com'
     }
   }
 
-  async getBotSessionContextFromExternalApi(
-    hubtypeApiUrl: string = 'https://api.hubtype.com',
+  private async getBotSessionContextFromExternalApi(
+    hubtypeApiUrl: string,
     botId: string,
     userId: string
   ) {
@@ -81,30 +85,83 @@ class App extends React.Component {
     return response.data
   }
 
-  getBotSessionContextFromUrl() {
+  private getBotSessionContextFromUrl() {
     const urlContext = this.url.searchParams.get(WebviewUrlParams.Context)
-    const session = JSON.parse(urlContext || '{}')
-    return session
+    try {
+      return JSON.parse(urlContext || '{}')
+    } catch (error) {
+      console.error('Failed to parse session context from URL:', error)
+      return {}
+    }
   }
 
-  getParamsFromUrl() {
+  private getParamsFromUrl() {
     const keysToExclude = [
       WebviewUrlParams.Context,
       WebviewUrlParams.BotId,
       WebviewUrlParams.UserId,
       WebviewUrlParams.HubtypeApiUrl,
     ]
-    const params = Array.from(this.url.searchParams.entries())
-      .filter(([key, _]) => !keysToExclude.includes(key))
-      .reduce((o, [key, value]) => {
-        o[key] = value
-        return o
+    return Array.from(this.url.searchParams.entries())
+      .filter(([key]) => !keysToExclude.includes(key))
+      .reduce((params, [key, value]) => {
+        params[key] = value
+        return params
       }, {})
-    return params
+  }
+
+  private async closeWebviewForProvider(
+    provider: string,
+    session: Session,
+    payload?: string
+  ) {
+    const { user } = session
+
+    switch (provider) {
+      case PROVIDER.WHATSAPP:
+        location.href = `https://wa.me/${user.unformatted_phone_number}`
+        break
+      case PROVIDER.TELEGRAM:
+        location.href = `https://t.me/${user.imp_id}`
+        break
+      case PROVIDER.APPLE:
+        location.href = `https://bcrw.apple.com/urn:biz:${user.imp_id}`
+        break
+      case PROVIDER.TWITTER:
+        location.href = `https://twitter.com/messages/compose?recipient_id=${user.imp_id}`
+        break
+      case PROVIDER.INSTAGRAM:
+        window.close()
+        break
+      case PROVIDER.FACEBOOK:
+        try {
+          window.MessengerExtensions.requestCloseBrowser(
+            () => {}, // success callback
+            () => window.close() // error callback
+          )
+        } catch (error) {
+          window.close()
+        }
+        break
+      case PROVIDER.WEBCHAT:
+        try {
+          await parent.postMessage('botonicCloseWebview', '*')
+        } catch (error) {
+          console.error('Failed to send close message to parent:', error)
+        }
+        break
+      default:
+        console.warn(`Unknown provider: ${provider}`)
+    }
   }
 
   async close(options?: CloseWebviewOptions) {
-    let payload = options ? options.payload : null
+    if (!this.state.session) {
+      console.error('No session available for closing webview')
+      return
+    }
+
+    let payload = options?.payload || null
 
     if (options?.path) {
       payload = `__PATH_PAYLOAD__${options.path}`
@@ -115,53 +172,23 @@ class App extends React.Component {
         payload = `${payload}?${params2queryString(options.params)}`
       }
 
-      const session = this.state.session
       try {
-        const url = `${this.hubtypeApiUrl}/v1/bots/${session.bot.id}/send_postback/`
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        const data = { payload: payload, chat_id: session.user.id }
+        const url = `${this.hubtypeApiUrl}/v1/bots/${this.state.session.bot.id}/send_postback/`
+        const data = {
+          payload,
+          chat_id: this.state.session.user.id,
+        }
         await axios.post(url, data)
-      } catch (e) {
-        console.log(e)
+      } catch (error) {
+        console.error('Failed to send postback:', error)
       }
     }
 
-    const provider = this.state.session.user.provider
-    const impId = this.state.session.user.imp_id
-    if (provider === PROVIDER.WHATSAPP) {
-      const phone_number = this.state.session.user.unformatted_phone_number
-      location.href = 'https://wa.me/' + phone_number
-    }
-    if (provider === PROVIDER.TELEGRAM) {
-      location.href = 'https://t.me/' + impId
-    }
-    if (provider === PROVIDER.APPLE) {
-      location.href = 'https://bcrw.apple.com/urn:biz:' + impId
-    }
-    if (provider === PROVIDER.TWITTER) {
-      location.href =
-        'https://twitter.com/messages/compose?recipient_id=' + impId
-    }
-    if (provider === PROVIDER.INSTAGRAM) {
-      window.close()
-    }
-    if (provider === PROVIDER.FACEBOOK) {
-      try {
-        window.MessengerExtensions.requestCloseBrowser(
-          function success() {},
-          function error(err) {
-            window.close()
-          }
-        )
-      } catch (e) {
-        window.close()
-      }
-    }
-    if (provider === PROVIDER.WEBCHAT) {
-      try {
-        await parent.postMessage('botonicCloseWebview', '*')
-      } catch (e) {}
-    }
+    await this.closeWebviewForProvider(
+      this.state.session.user.provider,
+      this.state.session,
+      payload
+    )
   }
 
   render() {
@@ -200,8 +227,7 @@ export class WebviewApp {
         <App webviews={this.webviews} locales={this.locales} />
       </BrowserRouter>
     )
-    const container = dest
-    const reactRoot = createRoot(container)
+    const reactRoot = createRoot(dest)
     reactRoot.render(component)
   }
 }
