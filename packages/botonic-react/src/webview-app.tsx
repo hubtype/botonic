@@ -22,17 +22,12 @@ class App extends React.Component {
   private url: URL
   private botId: string
   private userId: string
-  private hubtypeApiUrl: string
+  private hubtypeApiUrl: string = ''
   private state: { session: Session; params: Record<string, string> }
 
   constructor(props) {
     super(props)
     this.url = new URL(window.location.href)
-    this.botId = this.url.searchParams.get(WebviewUrlParams.BotId)
-    this.userId = this.url.searchParams.get(WebviewUrlParams.UserId)
-    this.hubtypeApiUrl =
-      this.url.searchParams.get(WebviewUrlParams.HubtypeApiUrl) ||
-      'https://api.hubtype.com'
     this.state = {
       session: null,
       params: {},
@@ -41,18 +36,55 @@ class App extends React.Component {
 
   async componentDidMount() {
     try {
-      const session = await this.getSessionFromUrl()
-      const params = this.getParamsFromUrl()
-      this.setState({ session, params })
+      const botId = this.url.searchParams.get(WebviewUrlParams.BotId)
+      const chatId = this.url.searchParams.get(WebviewUrlParams.UserId)
+      this.hubtypeApiUrl = this.url.searchParams.get(
+        WebviewUrlParams.HubtypeApiUrl
+      )
+      if (botId && chatId && hubtypeApiUrl) {
+        const session = await this.getBotSessionContextFromExternalApi(
+          hubtypeApiUrl,
+          botId,
+          chatId
+        )
+        this.setState({
+          session,
+          params: this.getParamsFromUrl(),
+        })
+      } else {
+        const session = this.getBotSessionContextFromUrl()
+        this.hubtypeApiUrl = session._hubtype_api
+        this.setState({
+          session,
+          params: this.getParamsFromUrl(),
+        })
+      }
     } catch (error) {
-      console.error('Error getting bot session context from url', error)
+      const session = this.getBotSessionContextFromUrl()
+      this.hubtypeApiUrl = session._hubtype_api
+      this.setState({
+        session,
+        params: this.getParamsFromUrl(),
+      })
+    } finally {
+      this.hubtypeApiUrl = this.hubtypeApiUrl || 'https://api.hubtype.com'
     }
   }
 
-  async getSessionFromUrl() {
-    const url = `${this.hubtypeApiUrl}/external/v2/conversational_apps/${this.botId}/users/${this.userId}/context/`
+  async getBotSessionContextFromExternalApi(
+    hubtypeApiUrl: string = 'https://api.hubtype.com',
+    botId: string,
+    userId: string
+  ) {
+    const url = `${hubtypeApiUrl}/external/v2/conversational_apps/${botId}/users/${userId}/context/`
     const response = await axios.get(url)
     return response.data
+  }
+
+  getBotSessionContextFromUrl() {
+    const urlContext = this.url.searchParams.get(WebviewUrlParams.Context)
+    const session = JSON.parse(urlContext || '{}')
+    return session
   }
 
   getParamsFromUrl() {
@@ -85,9 +117,9 @@ class App extends React.Component {
 
       const session = this.state.session
       try {
-        const url = `${this.hubtypeApiUrl}/v1/bots/${this.botId}/send_postback/`
+        const url = `${this.hubtypeApiUrl}/v1/bots/${session.bot.id}/send_postback/`
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const data = { payload: payload, chat_id: this.userId }
+        const data = { payload: payload, chat_id: session.user.id }
         await axios.post(url, data)
       } catch (e) {
         console.log(e)
