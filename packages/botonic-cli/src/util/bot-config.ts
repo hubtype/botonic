@@ -21,21 +21,21 @@ interface BuildInfo {
 
 type BotonicDependencies = Record<string, { version: string }>
 
-interface Tool {
+interface ToolConfigJSON {
   name: string
   description: string
 }
 
-interface Webview {
+interface WebviewConfigJSON {
   name: string
 }
 
 export interface BotConfigJSON {
   build_info: BuildInfo
   packages: BotonicDependencies
-  tools?: Tool[]
-  payloads?: string[]
-  webviews?: Webview[]
+  tools: ToolConfigJSON[]
+  payloads: string[]
+  webviews: WebviewConfigJSON[]
 }
 export class BotConfig {
   static async get(appDirectory: string): Promise<BotConfigJSON> {
@@ -81,7 +81,7 @@ export class BotConfig {
         },
       }
       // Register ts-node to load TypeScript in real time
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-var-requires, node/no-extraneous-require
       require('ts-node').register(typescriptCompilerOptions)
 
       const configPath = path.join(appDirectory, 'src', 'bot-config.ts')
