@@ -201,7 +201,7 @@ class App extends React.Component {
       session: this.state.session,
       getUserCountry: () => this.state.session.user.country,
       getUserLocale: () => this.state.session.user.locale,
-      getSystemLocale: () => this.state.session.system_locale,
+      getSystemLocale: () => this.state.session.user.system_locale,
       closeWebview: this.close.bind(this),
     }
 
