@@ -3,7 +3,7 @@ import path from 'path'
 import { BotonicProject } from './interfaces'
 
 const exampleTestPath = path.resolve(__dirname, '..', '..', '..', 'examples')
-const exampleVersion = '0.35.0'
+const exampleVersion = '0.36.0'
 
 export const EXAMPLES: BotonicProject[] = [
   {
@@ -62,12 +62,6 @@ export const EXAMPLES: BotonicProject[] = [
       'Handoff: Test how to transfer a conversation into Hubtype Desk',
     version: exampleVersion,
     localTestPath: path.resolve(exampleTestPath, 'handoff'),
-  },
-  {
-    name: 'intent',
-    description: 'Bot that uses external AI like DialogFlow.',
-    version: exampleVersion,
-    localTestPath: path.resolve(exampleTestPath, 'intent'),
   },
   {
     name: 'telco-offers',
