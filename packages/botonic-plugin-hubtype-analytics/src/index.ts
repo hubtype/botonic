@@ -26,7 +26,7 @@ export default class BotonicPluginHubtypeAnalytics implements Plugin {
     return {
       userId: this.isLambdaEvent(request) ? request.session.user.id : undefined,
       botInteractionId: request.input?.bot_interaction_id,
-      userLocale: request.getSystemLocale(),
+      userLocale: request.getUserLocale(),
       userCountry: request.getUserCountry(),
       systemLocale: request.getSystemLocale(),
     }
