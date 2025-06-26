@@ -13,15 +13,29 @@ const NPM_DEPTH_0 = 0
 // Also get alpha and beta versions
 const versionRegex = /@botonic\/[^@]+@(\d+\.\d+\.\d+(-[a-zA-Z]+\.\d+)?)/
 
+interface BuildInfo {
+  node_version: string
+  npm_version: string
+  botonic_cli_version: string
+}
+
 type BotonicDependencies = Record<string, { version: string }>
 
+interface ToolConfigJSON {
+  name: string
+  description: string
+}
+
+interface WebviewConfigJSON {
+  name: string
+}
+
 export interface BotConfigJSON {
-  build_info: {
-    node_version: string
-    npm_version: string
-    botonic_cli_version: string
-  }
+  build_info: BuildInfo
   packages: BotonicDependencies
+  tools: ToolConfigJSON[]
+  payloads: string[]
+  webviews: WebviewConfigJSON[]
 }
 export class BotConfig {
   static async get(appDirectory: string): Promise<BotConfigJSON> {
@@ -37,6 +51,9 @@ export class BotConfig {
     )
     const botonicCliVersion =
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
+
+    const configLoaded = await this.loadBotConfig(appDirectory)
+
     spinner.succeed()
 
     return {
@@ -46,6 +63,46 @@ export class BotConfig {
         botonic_cli_version: botonicCliVersion,
       },
       packages,
+      tools: configLoaded.tools,
+      payloads: configLoaded.payloads,
+      webviews: configLoaded.webviews,
+    }
+  }
+
+  static async loadBotConfig(appDirectory: string) {
+    try {
+      const typescriptCompilerOptions = {
+        transpileOnly: true,
+        compilerOptions: {
+          module: 'commonjs',
+          target: 'es2018',
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+        },
+      }
+      // Register ts-node to load TypeScript in real time
+      // eslint-disable-next-line @typescript-eslint/no-var-requires, node/no-extraneous-require
+      require('ts-node').register(typescriptCompilerOptions)
+
+      const configPath = path.join(appDirectory, 'src', 'bot-config.ts')
+
+      // Clean cache to reload if necessary
+      delete require.cache[require.resolve(configPath)]
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { botConfig } = require(configPath)
+      return {
+        tools: botConfig?.tools || [],
+        payloads: botConfig?.payloads || [],
+        webviews: botConfig?.webviews || [],
+      }
+    } catch (error) {
+      console.error('Error loading src/bot-config.ts:', error)
+      return {
+        tools: [],
+        payloads: [],
+        webviews: [],
+      }
     }
   }
 
@@ -77,7 +134,7 @@ export class BotConfig {
         })
       )
     } catch (err: any) {
-      console.error(`Error: ${err.message}`)
+      console.error(`Error getting botonic dependencies: ${err.message}`)
     }
     return packages
   }
@@ -95,7 +152,7 @@ export class BotConfig {
       const installedVersion = match ? match[1] : ''
       packages[dependency] = { version: installedVersion }
     } catch (error: any) {
-      console.error(error)
+      console.error('Error setting dependencies version:', error)
     }
     return packages
   }
