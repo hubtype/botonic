@@ -31,11 +31,15 @@ jobs:
     name: Deploy with version bump
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.HT_BOTONIC_PUBLISH_APP_ID }}
+          private-key: ${{ secrets.HT_BOTONIC_PUBLISH_APP_PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -83,7 +87,7 @@ jobs:
       # Step 4: Deploy selected packages
       - name: Deploy selected packages
         id: deploy-packages
-        if: ${{ github.event.inputs.deploy_all != 'true' && github.event.inputs.version_type == 'patch' }}
+        if: ${{ github.event.inputs.deploy_all != 'true' }}
         run: |
           source /tmp/botonic-publish.sh
 
@@ -107,7 +111,7 @@ jobs:
       # Step 5: Deploy all packages (for all=true or major version upgrades)
       - name: Deploy all packages
         id: deploy-all
-        if: ${{ github.event.inputs.deploy_all == 'true' || github.event.inputs.version_type != 'patch' }}
+        if: ${{ github.event.inputs.deploy_all == 'true' }}
         run: |
           source /tmp/botonic-publish.sh
 
@@ -137,7 +141,15 @@ jobs:
           # Use the function to update dependencies and publish examples
           version_and_publish_examples "$NEW_VERSION"
 
-      # Step 8: Commit changes
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
       - name: Commit version changes
         run: |
           git add .
@@ -169,14 +181,14 @@ jobs:
           SLACK_CHANNEL: '#team-botonic'
           SLACK_TITLE: 'Botonic version ${{ steps.version.outputs.new_version }} published succesfully'
           MSG_MINIMAL: true
-      - name: Sending Slack notification (failure)
-        uses: rtCamp/action-slack-notify@v2
-        if: failure()
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEAM_PLATFORM }}
-          SLACK_USERNAME: Github
-          SLACK_ICON_EMOJI: ':bell:'
-          SLACK_COLOR: danger
-          SLACK_CHANNEL: '#team-botonic'
-          SLACK_TITLE: 'Botonic version ${{ steps.version.outputs.new_version }} failed to publish'
-          MSG_MINIMAL: true
+      # - name: Sending Slack notification (failure)
+      #   uses: rtCamp/action-slack-notify@v2
+      #   if: failure()
+      #   env:
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEAM_PLATFORM }}
+      #     SLACK_USERNAME: Github
+      #     SLACK_ICON_EMOJI: ':bell:'
+      #     SLACK_COLOR: danger
+      #     SLACK_CHANNEL: '#team-botonic'
+      #     SLACK_TITLE: 'Botonic version ${{ steps.version.outputs.new_version }} failed to publish'
+      #     MSG_MINIMAL: true

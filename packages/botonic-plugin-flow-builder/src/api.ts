@@ -223,6 +223,10 @@ export class FlowBuilderApi {
     return this.flow.is_knowledge_base_active || false
   }
 
+  isAiAgentEnabled(): boolean {
+    return this.flow.is_ai_agent_active || false
+  }
+
   getResolvedLocale(): string {
     const systemLocale = this.request.getSystemLocale()
 
@@ -233,10 +237,13 @@ export class FlowBuilderApi {
 
     const language = this.resolveAsLanguage(systemLocale)
     if (language) {
+      this.request.setSystemLocale(language)
       return language
     }
 
-    return this.resolveAsDefaultLocale()
+    const defaultLocale = this.resolveAsDefaultLocale()
+    this.request.setSystemLocale(defaultLocale)
+    return defaultLocale
   }
 
   private resolveAsLocale(locale: string): string | undefined {

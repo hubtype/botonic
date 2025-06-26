@@ -25,12 +25,20 @@ export interface CloseWebviewOptions {
   params?: Record<string, any>
 }
 
-export const WebviewRequestContext = createContext<{
-  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
-  params: Record<string, any>
+export interface WebviewRequestContextType {
+  params: Record<string, string>
   session: Partial<CoreSession>
-}>({
-  closeWebview: async () => undefined,
-  params: {} as Record<string, any>,
+  getUserCountry: () => string
+  getUserLocale: () => string
+  getSystemLocale: () => string
+  closeWebview: (options?: CloseWebviewOptions) => Promise<void>
+}
+
+export const WebviewRequestContext = createContext<WebviewRequestContextType>({
+  params: {} as Record<string, string>,
   session: {} as Partial<CoreSession>,
+  getUserCountry: () => '',
+  getUserLocale: () => '',
+  getSystemLocale: () => '',
+  closeWebview: async () => undefined,
 })
