@@ -64,12 +64,6 @@ export const EXAMPLES: BotonicProject[] = [
     localTestPath: path.resolve(exampleTestPath, 'handoff'),
   },
   {
-    name: 'intent',
-    description: 'Bot that uses external AI like DialogFlow.',
-    version: exampleVersion,
-    localTestPath: path.resolve(exampleTestPath, 'intent'),
-  },
-  {
     name: 'telco-offers',
     description:
       'Telco Offers: Flow to acquire an Internet or a cell phone rate using buttons and replies',
