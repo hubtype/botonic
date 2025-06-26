@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-flow-builder-typescript",
-  "version": "0.35.0",
+  "version": "0.36.0",
   "scripts": {
     "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "lint": "npm run lint-core -- --fix && npm run prettier",
