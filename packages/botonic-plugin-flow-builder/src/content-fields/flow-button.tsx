@@ -34,6 +34,17 @@ export class FlowButton extends ContentFieldsBase {
     return newButton
   }
 
+  static fromAIAgent(button: {
+    id: string
+    text: string
+    payload: string
+  }): FlowButton {
+    const newButton = new FlowButton(button.id)
+    newButton.text = button.text
+    newButton.payload = button.payload
+    return newButton
+  }
+
   static getUrlId(cmsButton: HtButton, locale: string): string | undefined {
     return cmsButton.url.find(url => url.locale === locale)?.id
   }

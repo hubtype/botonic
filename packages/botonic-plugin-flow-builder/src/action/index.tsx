@@ -125,6 +125,10 @@ async function getContents(
     return []
   }
 
+  if (request.input.payload?.startsWith('do-nothing')) {
+    request.input.payload = undefined
+  }
+
   if (request.input.payload || contentID) {
     const contentsByPayload = await getContentsByPayload(context)
     if (contentsByPayload.length > 0) {

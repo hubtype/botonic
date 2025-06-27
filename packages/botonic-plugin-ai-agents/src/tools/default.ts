@@ -39,10 +39,33 @@ export const finishConversation = tool(
   }
 )
 
+export const displayTextWithOptions = tool(
+  async (input: { text: string; options: string[] }) => {
+    console.log('displayTextWithOptions', input)
+    return {
+      text: input.text,
+      buttons: input.options.map(option => ({
+        text: option,
+        payload: 'do-nothing',
+      })),
+    }
+  },
+  {
+    name: 'displayTextWithOptions',
+    schema: z.object({
+      text: z.string(),
+      options: z.array(z.string()),
+    }),
+    description: 'Use this when you want to display text with options.',
+    returnDirect: true,
+  }
+)
+
 export const MANDATORY_TOOLS = [
   handoffToHumanAgent,
   outOfContext,
   finishConversation,
+  displayTextWithOptions,
 ]
 
 export const EXIT_TOOLS = [

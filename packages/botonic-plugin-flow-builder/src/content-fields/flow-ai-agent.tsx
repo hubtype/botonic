@@ -1,7 +1,9 @@
 import { Text } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
+import { FlowButton } from './flow-button'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
+import { HtButtonStyle } from './hubtype-fields/node-types'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public code: string = ''
@@ -9,6 +11,7 @@ export class FlowAiAgent extends ContentFieldsBase {
   public instructions: string = ''
   public activeTools?: { name: string }[]
   public text: string = ''
+  public buttons: FlowButton[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -20,6 +23,13 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    return <Text key={id}>{this.text}</Text>
+    return (
+      <Text key={id}>
+        {this.text}
+        {this.buttons.map((button, buttonIndex) =>
+          button.renderButton(buttonIndex, HtButtonStyle.BUTTON)
+        )}
+      </Text>
+    )
   }
 }
