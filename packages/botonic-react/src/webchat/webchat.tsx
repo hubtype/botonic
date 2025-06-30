@@ -452,7 +452,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   */
 
   const updateSessionWithUser = (userToUpdate: any) => {
-    console.log('userToUpdate', userToUpdate)
     updateSession(merge(webchatState.session, { user: userToUpdate }))
   }
 

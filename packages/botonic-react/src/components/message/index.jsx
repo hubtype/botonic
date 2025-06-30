@@ -41,12 +41,12 @@ export const Message = props => {
     feedbackEnabled,
     inferenceId,
     botInteractionId,
+    markdown,
     ...otherProps
   } = props
 
   const isSentByUser = sentBy === SENDERS.user
   const isSentByBot = sentBy === SENDERS.bot
-  const markdown = props.markdown
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
   const [state] = useState({

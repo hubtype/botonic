@@ -1,5 +1,7 @@
 import MarkdownIt from 'markdown-it'
 
+import { isInWebviewApp } from '../util/environment'
+
 const BR_STRING_TAG = '<br/>'
 const BR_STRING_TAG_REGEX = new RegExp('<br\\s*/?>', 'g')
 export const ESCAPED_LINE_BREAK = '&lt;br&gt;'
@@ -36,18 +38,19 @@ const configureLinksRenderer = () => {
   return linksRenderer
 }
 
-const configureMarkdownRenderer = () => {
+const configureMarkdownRenderer = target => {
   const markdownRenderer = new MarkdownIt({
     html: true,
     linkify: true,
     typographer: true,
   })
-  withLinksTarget(markdownRenderer)
+  withLinksTarget(markdownRenderer, target)
   return markdownRenderer
 }
 
-const markdownRenderer = configureMarkdownRenderer()
 export const renderMarkdown = text => {
+  const target = isInWebviewApp() ? '_self' : '_blank'
+  const markdownRenderer = configureMarkdownRenderer(target)
   // markdown-it renderer expects '<br/>' strings to render correctly line breaks
   // Supporting multiline: https://stackoverflow.com/a/20543835
   text = text
