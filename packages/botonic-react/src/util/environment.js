@@ -55,3 +55,19 @@ function normalizeArray(parts, allowAboveRoot) {
   }
   return res
 }
+
+export function isInWebView() {
+  const userAgent = window.navigator.userAgent || ''
+  const standalone = window.navigator.standalone
+
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent)
+  const isAndroid = /Android/.test(userAgent)
+
+  // Detects iOS WebView
+  const isIOSWebView = isIOS && !userAgent.includes('Safari') && !standalone
+
+  // Detects Android WebView
+  const isAndroidWebView = isAndroid && userAgent.includes('wv')
+
+  return isIOSWebView || isAndroidWebView
+}
