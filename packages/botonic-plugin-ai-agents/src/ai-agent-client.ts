@@ -26,12 +26,12 @@ export class AiAgentClient {
     tools: StructuredTool[] = []
   ) {
     const currentDate = new Date().toLocaleDateString()
-    const extraInstructions = `## Instructions\nWhenever possible, use rich messages to improve the user experience.\n\n## Extra Data:\n- Current date: ${currentDate}`
+    const metadata = `\n\n## Metadata:\n- Current date: ${currentDate}`
     this.agent = createReactAgent({
       name: aiAgentArgs.name,
       llm: chatModel,
       tools: tools,
-      prompt: `${aiAgentArgs.instructions}\n\n${extraInstructions}`,
+      prompt: `${aiAgentArgs.instructions}\n\n${metadata}`,
     })
   }
 
