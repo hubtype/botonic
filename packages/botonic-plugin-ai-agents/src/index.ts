@@ -3,7 +3,7 @@ import { BotContext, Plugin } from '@botonic/core'
 import { AiAgentClient } from './ai-agent-client'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { createCustomTool } from './tools/custom'
-import { MANDATORY_TOOLS } from './tools/default'
+import { MANDATORY_TOOLS } from './tools'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,

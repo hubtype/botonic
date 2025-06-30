@@ -7,7 +7,7 @@ import { StructuredTool } from '@langchain/core/tools'
 import { CompiledStateGraph } from '@langchain/langgraph'
 import { createReactAgent } from '@langchain/langgraph/prebuilt'
 
-import { EXIT_TOOLS } from './tools/default'
+import { EXIT_TOOLS_NAMES } from './tools'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -47,7 +47,7 @@ export class AiAgentClient {
     const lastMessage = response.messages.at(-1)
 
     if (lastMessage instanceof LangchainToolMessage) {
-      if (lastMessage.name && EXIT_TOOLS.includes(lastMessage.name)) {
+      if (lastMessage.name && EXIT_TOOLS_NAMES.includes(lastMessage.name)) {
         return {
           role: 'exit',
         } as ExitMessage
