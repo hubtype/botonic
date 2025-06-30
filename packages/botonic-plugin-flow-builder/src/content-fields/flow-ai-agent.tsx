@@ -1,9 +1,10 @@
-import { Text } from '@botonic/react'
+import { Carousel, Text } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
 import { HtButtonStyle } from './hubtype-fields/node-types'
+import { FlowElement } from './flow-element'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public code: string = ''
@@ -12,6 +13,8 @@ export class FlowAiAgent extends ContentFieldsBase {
   public activeTools?: { name: string }[]
   public text: string = ''
   public buttons: FlowButton[] = []
+  public elements: FlowElement[] = []
+  public outputType: string = 'text'
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -23,13 +26,21 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    return (
-      <Text key={id}>
-        {this.text}
-        {this.buttons.map((button, buttonIndex) =>
-          button.renderButton(buttonIndex, HtButtonStyle.BUTTON)
-        )}
-      </Text>
-    )
+    if (this.outputType === 'carousel') {
+      return (
+        <Carousel key={id}>
+          {this.elements.map(element => element.toBotonic(id))}
+        </Carousel>
+      )
+    } else {
+      return (
+        <Text key={id}>
+          {this.text}
+          {this.buttons.map((button, buttonIndex) =>
+            button.renderButton(buttonIndex, HtButtonStyle.BUTTON)
+          )}
+        </Text>
+      )
+    }
   }
 }

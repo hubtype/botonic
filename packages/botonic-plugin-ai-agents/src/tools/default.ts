@@ -39,9 +39,9 @@ export const finishConversation = tool(
   }
 )
 
-export const displayTextWithOptions = tool(
+export const generateMessageWithButtons = tool(
   async (input: { text: string; options: string[] }) => {
-    console.log('displayTextWithOptions', input)
+    console.log('generateMessageWithButtons', input)
     return {
       text: input.text,
       buttons: input.options.map(option => ({
@@ -51,12 +51,50 @@ export const displayTextWithOptions = tool(
     }
   },
   {
-    name: 'displayTextWithOptions',
+    name: 'generateMessageWithButtons',
     schema: z.object({
       text: z.string(),
       options: z.array(z.string()),
     }),
-    description: 'Use this when you want to display text with options.',
+    description: 'Generate a message with a list of buttons to choose from.',
+    returnDirect: true,
+  }
+)
+
+export const generateCarouselMessage = tool(
+  async (input: {
+    elements: {
+      title: string
+      subtitle: string
+      image: string
+      button: {
+        text: string
+        url: string
+      }
+    }[]
+  }) => {
+    console.log('Generating carousel message with input: ', input)
+    return {
+      elements: input.elements,
+    }
+  },
+  {
+    name: 'generateCarouselMessage',
+    schema: z.object({
+      elements: z.array(
+        z.object({
+          title: z.string(),
+          subtitle: z.string(),
+          image: z.string(),
+          button: z.object({
+            text: z.string(),
+            url: z.string(),
+          }),
+        })
+      ),
+    }),
+    description:
+      'Use this tool to generate and send a carousel message to the user.',
     returnDirect: true,
   }
 )
@@ -65,7 +103,8 @@ export const MANDATORY_TOOLS = [
   handoffToHumanAgent,
   outOfContext,
   finishConversation,
-  displayTextWithOptions,
+  generateMessageWithButtons,
+  generateCarouselMessage,
 ]
 
 export const EXIT_TOOLS = [

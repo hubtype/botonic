@@ -1,6 +1,7 @@
 import { SOURCE_INFO_SEPARATOR } from '../constants'
-import { FlowButton, FlowContent } from '../content-fields'
+import { FlowButton, FlowContent, FlowElement } from '../content-fields'
 import { FlowAiAgent } from '../content-fields/flow-ai-agent'
+import { FlowCarousel } from '../content-fields/flow-carousel'
 import { AiAgentResponse } from '../types'
 import { FlowBuilderContext } from './index'
 
@@ -17,6 +18,7 @@ export async function getContentsByAiAgent({
 
   const contents =
     await flowBuilderPlugin.getContentsByNode(startNodeAiAgentFlow)
+
   const aiAgentContent = contents.find(
     content => content instanceof FlowAiAgent
   ) as FlowAiAgent
@@ -40,15 +42,14 @@ export async function getContentsByAiAgent({
     return []
   }
 
-  if (
-    aiAgentResponse.role === 'tool' &&
-    aiAgentResponse.toolName === 'displayTextWithOptions'
-  ) {
-    console.log(
-      'FlowBuilder: displayTextWithOptions',
-      aiAgentResponse.toolOutput
-    )
-    return updateFlowAiAgentWithTextAndButtons(contents, aiAgentResponse)
+  if (aiAgentResponse.role === 'tool') {
+    if (aiAgentResponse.toolName === 'generateCarouselMessage') {
+      return updateContentsWithCarouselMessage(contents, aiAgentResponse)
+    }
+    if (aiAgentResponse.toolName === 'generateMessageWithButtons') {
+      return updateFlowAiAgentWithTextAndButtons(contents, aiAgentResponse)
+    }
+    return []
   }
 
   return updateFlowAiAgentWithText(contents, aiAgentResponse)
@@ -90,4 +91,23 @@ function updateFlowAiAgentWithTextAndButtons(
 
     return content
   })
+}
+
+function updateContentsWithCarouselMessage(
+  contents: FlowContent[],
+  aiAgentResponse: AiAgentResponse
+): FlowContent[] {
+  console.log('aiAgentResponse:', aiAgentResponse)
+  const toolOutput = JSON.parse(aiAgentResponse.toolOutput || '{}')
+  console.log('toolOutput:', toolOutput)
+  const updatedContents = contents.map(content => {
+    if (content instanceof FlowAiAgent && toolOutput.elements) {
+      content.outputType = 'carousel'
+      content.elements = toolOutput.elements.map((element, index) =>
+        FlowElement.fromAIAgent(index.toString(), element)
+      )
+    }
+    return content
+  })
+  return updatedContents
 }

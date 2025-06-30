@@ -37,11 +37,13 @@ export class FlowButton extends ContentFieldsBase {
   static fromAIAgent(button: {
     id: string
     text: string
-    payload: string
+    payload?: string
+    url?: string
   }): FlowButton {
     const newButton = new FlowButton(button.id)
     newButton.text = button.text
     newButton.payload = button.payload
+    newButton.url = button.url
     return newButton
   }
 
