@@ -56,7 +56,7 @@ function normalizeArray(parts, allowAboveRoot) {
   return res
 }
 
-export function isInWebViewApp() {
+export function isInWebviewApp() {
   const userAgent = window.navigator.userAgent || ''
   const standalone = window.navigator.standalone
 

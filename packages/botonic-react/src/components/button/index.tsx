@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import React, { useContext } from 'react'
 
-import { isInWebViewApp, resolveImage } from '../../util/environment'
+import { isInWebviewApp, resolveImage } from '../../util/environment'
 import { renderComponent } from '../../util/react'
 import { generateWebviewUrlWithParams } from '../../util/webviews'
 import { WebchatContext } from '../../webchat/context'
@@ -41,7 +41,7 @@ export const Button = (props: ButtonProps) => {
             payload: props.payload,
           })
     } else if (props.url) {
-      const defaultTarget = isInWebViewApp() ? '_self' : '_blank'
+      const defaultTarget = isInWebviewApp() ? '_self' : '_blank'
       window.open(props.url, props.target || defaultTarget)
     }
 
