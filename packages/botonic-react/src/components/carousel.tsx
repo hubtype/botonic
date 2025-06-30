@@ -50,8 +50,8 @@ const StyledArrowContainer = styled.div<StyledArrowContainerProps>`
   cursor: pointer;
   justify-content: ${props => props.justifyContent};
 
-  ${props => (props.left ? ` left: ${props.left}px` : '')};
-  ${props => (props.right ? ` right: ${props.right}px` : '')};
+  ${props => (props.left === 0 ? `left: ${props.left}px` : '')};
+  ${props => (props.right === 0 ? `right: ${props.right}px` : '')};
   ${props => (props.arrow === 'right' ? 'border-top-right-radius: 30px' : '')};
   ${props =>
     props.arrow === 'right' ? 'border-bottom-right-radius: 30px' : ''};
