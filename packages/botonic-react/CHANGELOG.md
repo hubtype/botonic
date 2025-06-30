@@ -9,7 +9,7 @@ All notable changes to Botonic will be documented in this file.
     Changes that have landed in master-lts but are not yet released.
     Click to see more.
   </summary>
-  
+
 ## [0.36.x] - 2025-mm-dd
 
 ### Added
@@ -19,6 +19,18 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.36.4] - 2025-06-30
+
+### Fixed
+
+- [PR-3051](https://github.com/hubtype/botonic/pull/3051): Fix carousel buttons position.
+
+## [0.36.3] - 2025-06-30
+
+### Added
+
+- [PR-3050](https://github.com/hubtype/botonic/pull/3050): Set the default target in bot links to `_self` in iOS/Android webviews.
 
 ## [0.36.0] - 2025-06-18
 

@@ -10,7 +10,6 @@ import {
   AiAgentArgs,
   CustomTool,
   PluginAiAgentOptions,
-  UserMessage,
 } from './types'
 import { AiProvider, loadChatModel } from './utils'
 
@@ -69,8 +68,23 @@ export default class BotonicPluginAiAgents implements Plugin {
       const hubtypeClient = new HubtypeApiClient(authToken)
       return await hubtypeClient.getMessages(request, memoryLength)
     }
+    return this.loadLocalMessagesHistory(memoryLength)
+  }
 
-    return [{ role: 'user', content: request.input.data } as UserMessage]
+  private loadLocalMessagesHistory(
+    memoryLength: number
+  ): AgenticInputMessage[] {
+    const localBotonicState = localStorage.getItem('botonicState')
+    const botonicState = JSON.parse(localBotonicState || '{}')
+    const messages = botonicState.messages
+    const filteredMessages = messages
+      .filter(message => message.data.text)
+      .map(message => ({
+        role: message.sentBy === 'user' ? 'user' : 'assistant',
+        content: message.data.text,
+      }))
+
+    return filteredMessages.slice(-memoryLength)
   }
 }
 

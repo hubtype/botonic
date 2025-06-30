@@ -1,10 +1,25 @@
+/*
+  @jest-environment jsdom
+*/
 import {
   ESCAPED_LINE_BREAK,
   renderLinks,
   renderMarkdown,
 } from '../../src/components/markdown'
 
+// Mock the environment utility
+jest.mock('../../src/util/environment', () => ({
+  isInWebviewApp: jest.fn(),
+}))
+
+import { isInWebviewApp } from '../../src/util/environment'
+
 describe('Using renderMarkdown', () => {
+  beforeEach(() => {
+    // Default to false (not in webview app) for most tests
+    isInWebviewApp.mockReturnValue(false)
+  })
+
   // MarkdownIt renderer adds an extra blank space after each tag, hence the trim.
   const render = text => renderMarkdown(text).trim()
 
@@ -168,6 +183,24 @@ describe('Using renderMarkdown', () => {
         'console.log(foo(5));\n' +
         '</code></pre>\n' +
         '<h4>Was this useful?</h4>'
+    )
+  })
+
+  it('Uses _self target when in webview app', () => {
+    isInWebviewApp.mockReturnValue(true)
+    const toRender = ['[Link](https://example.com)']
+    const sut = render(toRender)
+    expect(sut).toEqual(
+      '<p><a href="https://example.com" target="_self">Link</a></p>'
+    )
+  })
+
+  it('Uses _blank target when not in webview app', () => {
+    isInWebviewApp.mockReturnValue(false)
+    const toRender = ['[Link](https://example.com)']
+    const sut = render(toRender)
+    expect(sut).toEqual(
+      '<p><a href="https://example.com" target="_blank">Link</a></p>'
     )
   })
 })
