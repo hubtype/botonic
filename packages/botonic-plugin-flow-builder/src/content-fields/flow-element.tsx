@@ -47,7 +47,6 @@ export class FlowElement extends ContentFieldsBase {
       id: '',
       text: element.button.text,
       url: element.button.url,
-      payload: 'do-nothing',
     })
     return newElement
   }
