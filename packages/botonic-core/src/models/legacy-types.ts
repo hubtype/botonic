@@ -162,6 +162,9 @@ export interface Input extends Partial<NluResult> {
   type: InputType
   context?: {
     campaign?: Campaign
+    salesforce?: {
+      access_token: string
+    }
   }
   message_id: string
   bot_interaction_id: string
