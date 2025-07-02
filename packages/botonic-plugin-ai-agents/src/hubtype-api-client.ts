@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BotContext } from '@botonic/core'
 import axios from 'axios'
 

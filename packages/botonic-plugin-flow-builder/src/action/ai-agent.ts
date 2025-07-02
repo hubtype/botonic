@@ -1,7 +1,6 @@
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { FlowButton, FlowContent, FlowElement } from '../content-fields'
 import { FlowAiAgent } from '../content-fields/flow-ai-agent'
-import { FlowCarousel } from '../content-fields/flow-carousel'
 import { AiAgentResponse } from '../types'
 import { FlowBuilderContext } from './index'
 

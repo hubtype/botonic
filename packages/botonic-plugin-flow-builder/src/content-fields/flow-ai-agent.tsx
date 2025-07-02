@@ -2,9 +2,9 @@ import { Carousel, Text } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
+import { FlowElement } from './flow-element'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
 import { HtButtonStyle } from './hubtype-fields/node-types'
-import { FlowElement } from './flow-element'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public code: string = ''
