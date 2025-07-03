@@ -12,6 +12,10 @@ export enum AiProvider {
 }
 
 export function loadChatModel(provider: AiProvider) {
+  console.log(
+    'Loading chat model - AZURE_OPENAI_API_VERSION',
+    AZURE_OPENAI_API_VERSION
+  )
   switch (provider) {
     case AiProvider.AzureOpenAI:
       return new AzureChatOpenAI({

@@ -16,21 +16,21 @@ import {
   ExitMessage,
   ToolMessage,
 } from './types'
+import { createHubtypeAIAgent } from './ht-graph/graph'
 
 export class AiAgentClient {
-  public agent: CompiledStateGraph<any, any> // TODO: apply RunInput, RunOutput, etc.
+  public agent: CompiledStateGraph<any, any, any> // TODO: apply RunInput, RunOutput, etc.
 
   constructor(
     aiAgentArgs: AiAgentArgs,
     chatModel: BaseChatModel,
     tools: StructuredTool[] = []
   ) {
-    this.agent = createReactAgent({
-      name: aiAgentArgs.name,
-      llm: chatModel,
-      tools: tools,
-      prompt: `${aiAgentArgs.instructions}\n\n## Metadata:\n- Current date: ${new Date().toLocaleDateString()}`,
-    })
+    this.agent = createHubtypeAIAgent(
+      chatModel,
+      tools,
+      `${aiAgentArgs.instructions}\n\n## Metadata:\n- Current date: ${new Date().toLocaleDateString()}`
+    )
   }
 
   async runAgent(
@@ -42,7 +42,13 @@ export class AiAgentClient {
         content: message.content,
       })),
     })
-    const lastMessage = response.messages.at(-1)
+    console.log('Structured Output Response')
+    response.response.messages.map(m => console.log(m.type, m.content))
+    const lastMessage = response.response.messages[0]
+    return {
+      role: 'assistant',
+      content: lastMessage.content.text,
+    } as AssistantMessage
 
     if (lastMessage instanceof LangchainToolMessage) {
       if (lastMessage.name && EXIT_TOOLS_NAMES.includes(lastMessage.name)) {
