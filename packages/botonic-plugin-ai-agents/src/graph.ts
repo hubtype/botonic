@@ -103,14 +103,14 @@ export function createHubtypeAIAgent(
     const lastMessage = state.messages.at(-1) as AIMessage
     const toolCalls = lastMessage.tool_calls || []
     if (toolCalls.length == 1 && toolCalls[0].name == 'messageResponse') {
-      return { output: toolCalls[0].args }
+      return { output: toolCalls[0].args.messages }
     }
     return {}
   }
 
   const exit = async (_state: typeof AgenticState.State) => {
     console.log('Node: exit')
-    return { output: { messages: [{ type: 'exit' }] } }
+    return { output: [{ type: 'exit' }] }
   }
 
   const shouldContinue = (state: typeof AgenticState.State): string => {
