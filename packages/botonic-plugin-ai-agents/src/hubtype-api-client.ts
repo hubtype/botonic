@@ -1,9 +1,9 @@
 import { BotContext } from '@botonic/core'
+import { AIMessage, HumanMessage } from '@langchain/core/messages'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
 import { AgenticInputMessage } from './types'
-import { AIMessage, HumanMessage } from '@langchain/core/messages'
 
 type HubtypeMessage = {
   role: 'user' | 'assistant'

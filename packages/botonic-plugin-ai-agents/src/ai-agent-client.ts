@@ -1,9 +1,9 @@
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
 import { StructuredTool } from '@langchain/core/tools'
 import { CompiledStateGraph } from '@langchain/langgraph'
+
 import { createHubtypeAIAgent } from './graph'
-import { AgenticInputMessage, AiAgentArgs, AgenticOutputMessage } from './types'
-import { AIMessage, HumanMessage } from '@langchain/core/messages'
+import { AgenticInputMessage, AgenticOutputMessage, AiAgentArgs } from './types'
 
 export class AiAgentClient {
   public agent: CompiledStateGraph<any, any, any> // TODO: apply RunInput, RunOutput, etc.

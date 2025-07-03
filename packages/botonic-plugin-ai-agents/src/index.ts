@@ -1,9 +1,10 @@
 import { BotContext, Plugin } from '@botonic/core'
+import { AIMessage, HumanMessage } from '@langchain/core/messages'
 
 import { AiAgentClient } from './ai-agent-client'
-import { AgenticOutputMessage } from './types'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { createCustomTool } from './tools/custom'
+import { AgenticOutputMessage } from './types'
 import {
   AgenticInputMessage,
   AiAgentArgs,
@@ -11,7 +12,6 @@ import {
   PluginAiAgentOptions,
 } from './types'
 import { AiProvider, loadChatModel } from './utils'
-import { AIMessage, HumanMessage } from '@langchain/core/messages'
 
 const isProd = process.env.NODE_ENV === 'production'
 

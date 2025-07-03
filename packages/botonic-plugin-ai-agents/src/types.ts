@@ -1,5 +1,5 @@
-import { ZodSchema } from 'zod'
 import { AIMessage, HumanMessage } from '@langchain/core/messages'
+import { ZodSchema } from 'zod'
 
 export interface PluginAiAgentOptions {
   authToken?: string
