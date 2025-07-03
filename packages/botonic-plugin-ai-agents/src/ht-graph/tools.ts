@@ -1,22 +1,28 @@
 import { tool } from '@langchain/core/tools'
 import { z } from 'zod'
 
-export const getWeather = tool(
-  async (input: { city: 'nyc' | 'sf' }) => {
-    if (input.city === 'nyc') {
-      return 'It is cloudy in NYC, with 5 mph winds in the North-East direction and a temperature of 70 degrees'
-    } else if (input.city === 'sf') {
-      return 'It is 75 degrees and sunny in SF, with 3 mph winds in the South-East direction'
-    } else {
-      throw new Error('Unknown city')
-    }
+export const outOfContext = tool(
+  async () => {
+    console.log('Tool: finishConversation')
+    return null
   },
   {
-    name: 'getWeather',
-    description: 'Use this to get weather information.',
-    schema: z.object({
-      city: z.enum(['nyc', 'sf']),
-    }),
+    name: 'outOfContext',
+    description:
+      'Use this to exit the conversation because the user is asking for something that is not context-related.',
+    schema: z.object({}),
+  }
+)
+
+export const finishConversation = tool(
+  async () => {
+    console.log('Tool: finishConversation')
+    return null
+  },
+  {
+    name: 'finishConversation',
+    description: 'Use this to finish the conversation.',
+    schema: z.object({}),
   }
 )
 
@@ -48,4 +54,8 @@ export const messageResponse = tool(
   }
 )
 
-export const TOOLS = [getWeather]
+export const MANDATORY_TOOLS = [
+  outOfContext,
+  finishConversation,
+  messageResponse,
+]

@@ -1,5 +1,5 @@
 import { AzureChatOpenAI } from '@langchain/openai'
-import { TOOLS } from './tools'
+import { MANDATORY_TOOLS } from './tools'
 
 const AZURE_OPENAI_API_VERSION = '2025-04-01-preview'
 const AZURE_OPENAI_API_KEY = '0d0f4cdaa9244f419a3023f4eba4399e'

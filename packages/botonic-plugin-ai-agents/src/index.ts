@@ -1,17 +1,17 @@
 import { BotContext, Plugin } from '@botonic/core'
 
 import { AiAgentClient } from './ai-agent-client'
+import { AgenticOutputMessage } from './types'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { createCustomTool } from './tools/custom'
-import { MANDATORY_TOOLS } from './tools'
 import {
   AgenticInputMessage,
-  AgenticOutputMessage,
   AiAgentArgs,
   CustomTool,
   PluginAiAgentOptions,
 } from './types'
 import { AiProvider, loadChatModel } from './utils'
+import { AIMessage, HumanMessage } from '@langchain/core/messages'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -31,7 +31,7 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AgenticOutputMessage | undefined> {
+  ): Promise<AgenticOutputMessage[] | undefined> {
     try {
       const authToken = isProd ? request.session._access_token : this.authToken
       if (!authToken) {
@@ -47,10 +47,13 @@ export default class BotonicPluginAiAgents implements Plugin {
       const customActiveTools = customTools.filter(tool =>
         aiAgentArgs.activeTools?.map(tool => tool.name).includes(tool.name)
       )
-      const tools = [...customActiveTools, ...MANDATORY_TOOLS]
 
       const chatModel = loadChatModel(AiProvider.AzureOpenAI)
-      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, tools)
+      const aiAgentClient = new AiAgentClient(
+        aiAgentArgs,
+        chatModel,
+        customActiveTools
+      )
 
       return await aiAgentClient.runAgent(messages)
     } catch (error) {
@@ -79,10 +82,12 @@ export default class BotonicPluginAiAgents implements Plugin {
     const messages = botonicState.messages
     const filteredMessages = messages
       .filter(message => message.data.text)
-      .map(message => ({
-        role: message.sentBy === 'user' ? 'user' : 'assistant',
-        content: message.data.text,
-      }))
+      .map(message => {
+        if (message.sentBy === 'user') {
+          return new HumanMessage(message.data.text)
+        }
+        return new AIMessage(message.data.text)
+      })
 
     return filteredMessages.slice(-memoryLength)
   }

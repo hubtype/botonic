@@ -3,6 +3,12 @@ import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
 import { AgenticInputMessage } from './types'
+import { AIMessage, HumanMessage } from '@langchain/core/messages'
+
+type HubtypeMessage = {
+  role: 'user' | 'assistant'
+  content: string
+}
 
 export class HubtypeApiClient {
   private readonly authToken: string
@@ -26,15 +32,18 @@ export class HubtypeApiClient {
     }
 
     try {
-      const messages = await axios.get<{ messages: AgenticInputMessage[] }>(
-        url,
-        {
-          headers,
-          params,
-        }
-      )
+      const response = await axios.get<{ messages: HubtypeMessage[] }>(url, {
+        headers,
+        params,
+      })
 
-      return messages.data.messages
+      const messages = response.data.messages
+      return messages.map(message => {
+        if (message.role === 'user') {
+          return new HumanMessage(message.content)
+        }
+        return new AIMessage(message.content)
+      })
     } catch (error) {
       console.error(error)
       throw new Error('Failed to get messages from Hubtype')
