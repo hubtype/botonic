@@ -1,20 +1,17 @@
-import { Carousel, Text } from '@botonic/react'
+import { Button, Carousel, Text } from '@botonic/react'
 
+import { SOURCE_INFO_SEPARATOR } from '../constants'
+import { AgenticOutputMessage } from '../types'
 import { ContentFieldsBase } from './content-fields-base'
-import { FlowButton } from './flow-button'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
-import { HtButtonStyle } from './hubtype-fields/node-types'
-import { FlowElement } from './flow-element'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public code: string = ''
   public name: string = ''
   public instructions: string = ''
   public activeTools?: { name: string }[]
-  public text: string = ''
-  public buttons: FlowButton[] = []
-  public elements: FlowElement[] = []
-  public outputType: string = 'text'
+
+  public responses: AgenticOutputMessage[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -26,21 +23,32 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    if (this.outputType === 'carousel') {
-      return (
-        <Carousel key={id}>
-          {this.elements.map(element => element.toBotonic(id))}
-        </Carousel>
-      )
-    } else {
-      return (
-        <Text key={id}>
-          {this.text}
-          {this.buttons.map((button, buttonIndex) =>
-            button.renderButton(buttonIndex, HtButtonStyle.BUTTON)
-          )}
-        </Text>
-      )
-    }
+    return (
+      <>
+        {this.responses.map(response => {
+          if (response.type === 'text') {
+            return <Text key={id}>{response.content.text}</Text>
+          }
+
+          if (response.type === 'textWithButtons') {
+            return (
+              <Text key={id}>
+                {response.content.text}
+                {response.content.buttons.map((button, buttonIndex) => (
+                  <Button
+                    key={buttonIndex}
+                    payload={`do-nothing${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
+                  >
+                    {button}
+                  </Button>
+                ))}
+              </Text>
+            )
+          }
+
+          return <></>
+        })}
+      </>
+    )
   }
 }
