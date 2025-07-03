@@ -3,6 +3,7 @@ import { Button, Carousel, Text } from '@botonic/react'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { AgenticOutputMessage } from '../types'
 import { ContentFieldsBase } from './content-fields-base'
+import { FlowElement } from './flow-element'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
@@ -43,6 +44,16 @@ export class FlowAiAgent extends ContentFieldsBase {
                   </Button>
                 ))}
               </Text>
+            )
+          }
+
+          if (response.type === 'carousel') {
+            return (
+              <Carousel key={id}>
+                {response.content.elements.map(element =>
+                  FlowElement.fromAIAgent(id, element).toBotonic(id)
+                )}
+              </Carousel>
             )
           }
 

@@ -109,7 +109,7 @@ export interface PayloadParamsBase {
 }
 
 export interface OutputBaseMessage {
-  type: 'text' | 'textWithButtons' | 'exit'
+  type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
 }
 
 export interface TextMessage extends OutputBaseMessage {
@@ -127,6 +127,18 @@ export interface TextWithButtonsMessage extends OutputBaseMessage {
   }
 }
 
+export interface CarouselMessage extends OutputBaseMessage {
+  type: 'carousel'
+  content: {
+    elements: {
+      title: string
+      subtitle: string
+      image: string
+      button: { text: string; url: string }
+    }[]
+  }
+}
+
 export interface ExitMessage extends OutputBaseMessage {
   type: 'exit'
 }
@@ -134,4 +146,5 @@ export interface ExitMessage extends OutputBaseMessage {
 export type AgenticOutputMessage =
   | TextMessage
   | TextWithButtonsMessage
+  | CarouselMessage
   | ExitMessage

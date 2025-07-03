@@ -58,6 +58,22 @@ export const messageResponse = tool(
               buttons: z.array(z.string()),
             }),
           }),
+          z.object({
+            type: z.enum(['carousel']),
+            content: z.object({
+              elements: z.array(
+                z.object({
+                  title: z.string(),
+                  subtitle: z.string(),
+                  image: z.string(),
+                  button: z.object({
+                    text: z.string(),
+                    url: z.string(),
+                  }),
+                })
+              ),
+            }),
+          }),
         ])
       ),
     }),
