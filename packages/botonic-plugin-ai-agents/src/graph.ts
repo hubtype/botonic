@@ -1,5 +1,11 @@
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
-import { AIMessage, BaseMessage, SystemMessage } from '@langchain/core/messages'
+import { AzureChatOpenAI } from '@langchain/openai'
+import {
+  AIMessage,
+  BaseMessage,
+  HumanMessage,
+  SystemMessage,
+} from '@langchain/core/messages'
 import { StructuredTool, tool } from '@langchain/core/tools'
 import {
   Annotation,
@@ -43,7 +49,8 @@ export const messageResponse = tool(
   },
   {
     name: 'messageResponse',
-    description: 'Use this to respond to the user.',
+    description:
+      'Use this to respond to the user with one or more messages of different types.',
     schema: z.object({
       messages: z.array(
         z.union([
@@ -163,6 +170,14 @@ export function createHubtypeAIAgent(
 }
 
 // async function main() {
+//   const llm = new AzureChatOpenAI({
+//     azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
+//     azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+//     azureOpenAIApiDeploymentName: 'gpt-41-mini_beta',
+//     azureOpenAIEndpoint: process.env.AZURE_OPENAI_API_BASE,
+//     temperature: 0,
+//     // other params...
+//   })
 //   const agent = createHubtypeAIAgent(
 //     llm,
 //     MANDATORY_TOOLS,
@@ -171,7 +186,7 @@ export function createHubtypeAIAgent(
 //   const response = await agent.invoke({
 //     messages: [new HumanMessage('quiero una camiseta?')],
 //   })
-//   console.log(response.response)
+//   console.log(response.output)
 // }
 
 // main()
