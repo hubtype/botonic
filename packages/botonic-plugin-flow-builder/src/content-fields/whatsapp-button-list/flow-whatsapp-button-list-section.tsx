@@ -5,7 +5,7 @@ import {
 
 import { FlowBuilderApi } from '../../api'
 import { HtWhatsappButtonListSection } from '../hubtype-fields'
-import { ContentFieldsBase } from './../content-fields-base'
+import { ContentFieldsBase } from '../content-fields-base'
 import { FlowWhatsappButtonListRow } from './flow-whatsapp-button-list-row'
 
 export class FlowWhatsappButtonListSection extends ContentFieldsBase {

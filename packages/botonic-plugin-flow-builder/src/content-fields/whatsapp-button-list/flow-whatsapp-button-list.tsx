@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../../api'
 import { HtWhatsappButtonListNode } from '../hubtype-fields'
-import { ContentFieldsBase } from './../content-fields-base'
+import { ContentFieldsBase } from '../content-fields-base'
 import { FlowWhatsappButtonListSection } from './flow-whatsapp-button-list-section'
 
 export class FlowWhatsappButtonList extends ContentFieldsBase {
