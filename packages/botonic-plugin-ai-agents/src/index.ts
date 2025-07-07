@@ -1,9 +1,7 @@
 import { BotContext, Plugin } from '@botonic/core'
 
-import { AiAgentClient } from './ai-agent-client'
+import { AIAgentRunner } from './runner'
 import { HubtypeApiClient } from './hubtype-api-client'
-import { MANDATORY_TOOLS } from './tools'
-import { createCustomTool } from './tools/custom'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -11,7 +9,6 @@ import {
   CustomTool,
   PluginAiAgentOptions,
 } from './types'
-import { AiProvider, loadChatModel } from './utils'
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -31,7 +28,7 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AgenticOutputMessage | undefined> {
+  ): Promise<AgenticOutputMessage[] | undefined> {
     try {
       const authToken = isProd ? request.session._access_token : this.authToken
       if (!authToken) {
@@ -40,19 +37,15 @@ export default class BotonicPluginAiAgents implements Plugin {
 
       const messages = await this.getMessages(request, authToken, 10)
 
-      const customTools = this.customTools.map(customTool =>
-        createCustomTool(customTool)
+      const runner = new AIAgentRunner(
+        aiAgentArgs.name,
+        aiAgentArgs.instructions,
+        []
       )
+      const output = await runner.run(messages)
+      console.log('\n\nOutput:', output)
 
-      const customActiveTools = customTools.filter(tool =>
-        aiAgentArgs.activeTools?.map(tool => tool.name).includes(tool.name)
-      )
-      const tools = [...customActiveTools, ...MANDATORY_TOOLS]
-
-      const chatModel = loadChatModel(AiProvider.AzureOpenAI)
-      const aiAgentClient = new AiAgentClient(aiAgentArgs, chatModel, tools)
-
-      return await aiAgentClient.runAgent(messages)
+      return output
     } catch (error) {
       console.error('error plugin returns undefined', error)
       return undefined
@@ -68,7 +61,8 @@ export default class BotonicPluginAiAgents implements Plugin {
       const hubtypeClient = new HubtypeApiClient(authToken)
       return await hubtypeClient.getMessages(request, memoryLength)
     }
-    return this.loadLocalMessagesHistory(memoryLength)
+    const hubtypeClient = new HubtypeApiClient(authToken)
+    return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
   private loadLocalMessagesHistory(
@@ -83,7 +77,6 @@ export default class BotonicPluginAiAgents implements Plugin {
         role: message.sentBy === 'user' ? 'user' : 'assistant',
         content: message.data.text,
       }))
-
     return filteredMessages.slice(-memoryLength)
   }
 }

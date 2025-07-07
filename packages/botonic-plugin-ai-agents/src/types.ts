@@ -1,4 +1,6 @@
 import { ZodSchema } from 'zod'
+import { AgentInputItem } from '@openai/agents'
+import { OutputMessage } from './structured-output'
 export interface PluginAiAgentOptions {
   authToken?: string
   customTools?: CustomTool[]
@@ -18,34 +20,5 @@ export interface AiAgentArgs {
   activeTools?: { name: string }[]
 }
 
-export interface AgenticBaseMessage {
-  role: 'assistant' | 'user' | 'tool' | 'exit'
-}
-
-export interface AssistantMessage extends AgenticBaseMessage {
-  role: 'assistant'
-  content: string
-}
-
-export interface UserMessage extends AgenticBaseMessage {
-  role: 'user'
-  content: string
-}
-
-export interface ToolMessage extends AgenticBaseMessage {
-  role: 'tool'
-  toolName: string
-  toolOutput: string | null
-}
-
-export interface ExitMessage extends AgenticBaseMessage {
-  role: 'exit'
-}
-
-export type AgenticInputMessage = AssistantMessage | UserMessage
-export type AgenticOutputMessage = AssistantMessage | ToolMessage | ExitMessage
-export type AgenticMessage =
-  | AssistantMessage
-  | UserMessage
-  | ToolMessage
-  | ExitMessage
+export type AgenticInputMessage = AgentInputItem
+export type AgenticOutputMessage = OutputMessage
