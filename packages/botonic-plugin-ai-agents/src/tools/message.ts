@@ -1,67 +1,46 @@
 import { tool } from '@langchain/core/tools'
 import { z } from 'zod'
 
-export const generateMessageWithButtons = tool(
-  async (input: { text: string; options: string[] }) => {
-    console.log('generateMessageWithButtons', input)
-    return {
-      text: input.text,
-      buttons: input.options.map(option => ({
-        text: option,
-        payload: 'do-nothing',
-      })),
-    }
+export const messageResponse = tool(
+  async (input: { messages: any[] }) => {
+    console.log('Tool: messageResponse', input)
+    return input
   },
   {
-    name: 'generateMessageWithButtons',
+    name: 'messageResponse',
+    description: 'Use this to respond to the user.',
     schema: z.object({
-      text: z.string(),
-      options: z.array(z.string()),
-    }),
-    description: 'Generate a message with a list of buttons to choose from.',
-    returnDirect: true,
-  }
-)
-
-export const generateCarouselMessage = tool(
-  async (input: {
-    elements: {
-      title: string
-      subtitle: string
-      image: string
-      button: {
-        text: string
-        url: string
-      }
-    }[]
-  }) => {
-    console.log('Generating carousel message with input: ', input)
-    return {
-      elements: input.elements,
-    }
-  },
-  {
-    name: 'generateCarouselMessage',
-    schema: z.object({
-      elements: z.array(
-        z.object({
-          title: z.string(),
-          subtitle: z.string(),
-          image: z.string(),
-          button: z.object({
-            text: z.string(),
-            url: z.string(),
+      messages: z.array(
+        z.union([
+          z.object({
+            type: z.enum(['text']),
+            content: z.object({ text: z.string() }),
           }),
-        })
+          z.object({
+            type: z.enum(['textWithButtons']),
+            content: z.object({
+              text: z.string(),
+              buttons: z.array(z.string()),
+            }),
+          }),
+          z.object({
+            type: z.enum(['carousel']),
+            content: z.object({
+              elements: z.array(
+                z.object({
+                  title: z.string(),
+                  subtitle: z.string(),
+                  image: z.string(),
+                  button: z.object({
+                    text: z.string(),
+                    url: z.string(),
+                  }),
+                })
+              ),
+            }),
+          }),
+        ])
       ),
     }),
-    description:
-      'Use this tool to generate and send a carousel message to the user.',
-    returnDirect: true,
   }
 )
-
-export const MESSAGE_TOOLS = [
-  generateMessageWithButtons,
-  generateCarouselMessage,
-]

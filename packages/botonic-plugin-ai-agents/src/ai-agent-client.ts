@@ -3,21 +3,22 @@ import { StructuredTool } from '@langchain/core/tools'
 import { CompiledStateGraph } from '@langchain/langgraph'
 
 import { createHubtypeAIAgent } from './graph'
+import { MANDATORY_TOOLS } from './tools'
 import { AgenticInputMessage, AgenticOutputMessage, AiAgentArgs } from './types'
 
 export class AiAgentClient {
-  public agent: CompiledStateGraph<any, any, any> // TODO: apply RunInput, RunOutput, etc.
+  public agent: CompiledStateGraph<any, any, any> // TODO: apply RunInput, RunOutput, State.
 
   constructor(
     aiAgentArgs: AiAgentArgs,
     chatModel: BaseChatModel,
     tools: StructuredTool[] = []
   ) {
-    this.agent = createHubtypeAIAgent(
-      chatModel,
-      tools,
-      aiAgentArgs.instructions
-    )
+    const finalTools = [...tools, ...MANDATORY_TOOLS]
+
+    const instructions = `${aiAgentArgs.instructions}\n\n## Metadata:\n- Current date: ${new Date().toLocaleDateString()}`
+
+    this.agent = createHubtypeAIAgent(chatModel, finalTools, instructions)
   }
 
   async runAgent(

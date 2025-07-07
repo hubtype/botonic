@@ -1,12 +1,6 @@
 import { BaseChatModel } from '@langchain/core/language_models/chat_models'
-import { AzureChatOpenAI } from '@langchain/openai'
-import {
-  AIMessage,
-  BaseMessage,
-  HumanMessage,
-  SystemMessage,
-} from '@langchain/core/messages'
-import { StructuredTool, tool } from '@langchain/core/tools'
+import { AIMessage, BaseMessage, SystemMessage } from '@langchain/core/messages'
+import { StructuredTool } from '@langchain/core/tools'
 import {
   Annotation,
   END,
@@ -15,101 +9,24 @@ import {
   StateGraph,
 } from '@langchain/langgraph'
 import { ToolNode } from '@langchain/langgraph/prebuilt'
-import { z } from 'zod'
 
-export const outOfContext = tool(
-  async () => {
-    console.log('Tool: finishConversation')
-    return null
-  },
-  {
-    name: 'outOfContext',
-    description:
-      'Use this to exit the conversation because the user is asking for something that is not context-related.',
-    schema: z.object({}),
-  }
-)
-
-export const finishConversation = tool(
-  async () => {
-    console.log('Tool: finishConversation')
-    return null
-  },
-  {
-    name: 'finishConversation',
-    description: 'Use this to finish the conversation.',
-    schema: z.object({}),
-  }
-)
-
-export const messageResponse = tool(
-  async (input: { messages: any[] }) => {
-    console.log('Tool: messageResponse', input)
-    return input
-  },
-  {
-    name: 'messageResponse',
-    description:
-      'Use this to respond to the user with one or more messages of different types.',
-    schema: z.object({
-      messages: z.array(
-        z.union([
-          z.object({
-            type: z.enum(['text']),
-            content: z.object({ text: z.string() }),
-          }),
-          z.object({
-            type: z.enum(['textWithButtons']),
-            content: z.object({
-              text: z.string(),
-              buttons: z.array(z.string()),
-            }),
-          }),
-          z.object({
-            type: z.enum(['carousel']),
-            content: z.object({
-              elements: z.array(
-                z.object({
-                  title: z.string(),
-                  subtitle: z.string(),
-                  image: z.string(),
-                  button: z.object({
-                    text: z.string(),
-                    url: z.string(),
-                  }),
-                })
-              ),
-            }),
-          }),
-        ])
-      ),
-    }),
-  }
-)
-
-export const MANDATORY_TOOLS = [
-  outOfContext,
-  finishConversation,
-  messageResponse,
-]
+import { finishConversation, outOfContext } from './tools/exit'
+import { messageResponse } from './tools/message'
 
 export function createHubtypeAIAgent(
   llm: BaseChatModel,
   tools: StructuredTool[],
   instructions: string
 ) {
-  const finalTools = [...tools, ...MANDATORY_TOOLS]
   const llmWithTools =
-    llm.bindTools?.(finalTools, {
+    llm.bindTools?.(tools, {
       tool_choice: 'any',
     }) || llm
-
-  const prompt = `${instructions}\n\n## Metadata:\n- Current date: ${new Date().toLocaleDateString()}`
 
   const AgenticState = Annotation.Root({
     messages: Annotation<BaseMessage[]>({
       reducer: messagesStateReducer,
-      default: () => [new SystemMessage(prompt)],
+      default: () => [new SystemMessage(instructions)],
     }),
     output: Annotation<Record<string, any>>(),
   })
@@ -145,10 +62,10 @@ export function createHubtypeAIAgent(
     }
 
     switch (lastMessage.tool_calls[0].name) {
-      case 'outOfContext':
-      case 'finishConversation':
+      case outOfContext.name:
+      case finishConversation.name:
         return 'exit'
-      case 'messageResponse':
+      case messageResponse.name:
         return 'respond'
       default:
         return 'tools'
@@ -157,7 +74,7 @@ export function createHubtypeAIAgent(
 
   const workflow = new StateGraph(AgenticState)
     .addNode('agent', callModel)
-    .addNode('tools', new ToolNode(finalTools))
+    .addNode('tools', new ToolNode(tools))
     .addNode('respond', respond)
     .addNode('exit', exit)
     .addEdge(START, 'agent')
@@ -168,25 +85,3 @@ export function createHubtypeAIAgent(
 
   return workflow.compile()
 }
-
-// async function main() {
-//   const llm = new AzureChatOpenAI({
-//     azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION,
-//     azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
-//     azureOpenAIApiDeploymentName: 'gpt-41-mini_beta',
-//     azureOpenAIEndpoint: process.env.AZURE_OPENAI_API_BASE,
-//     temperature: 0,
-//     // other params...
-//   })
-//   const agent = createHubtypeAIAgent(
-//     llm,
-//     MANDATORY_TOOLS,
-//     'You are a fashion assistant. Before recommending, always ask for extra preferences in order to perform a better recommendation (genre, colors, size, etc.). Ask these preferences one by one by providing a list of buttons. Use rich messages whenever possible to improve the user experience.'
-//   )
-//   const response = await agent.invoke({
-//     messages: [new HumanMessage('quiero una camiseta?')],
-//   })
-//   console.log(response.output)
-// }
-
-// main()
