@@ -1,11 +1,12 @@
 import { z } from 'zod'
+
+import { CarouselMessage, CarouselSchema } from './carousel'
+import { ExitMessage, ExitSchema } from './exit'
 import { TextMessage, TextSchema } from './text'
 import {
   TextWithButtonsMessage,
   TextWithButtonsSchema,
 } from './text-with-buttons'
-import { CarouselMessage, CarouselSchema } from './carousel'
-import { ExitMessage, ExitSchema } from './exit'
 
 export type OutputMessage =
   | TextMessage

@@ -4,7 +4,6 @@ import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
 import { AgenticInputMessage } from './types'
-import { UserMessageItem } from '@openai/agents'
 
 interface HubtypeAssistantMessage {
   role: 'assistant'

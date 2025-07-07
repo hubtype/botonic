@@ -1,5 +1,6 @@
-import { ZodSchema } from 'zod'
 import { AgentInputItem } from '@openai/agents'
+import { ZodSchema } from 'zod'
+
 import { OutputMessage } from './structured-output'
 export interface PluginAiAgentOptions {
   authToken?: string

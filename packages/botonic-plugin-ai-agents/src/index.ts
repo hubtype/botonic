@@ -1,7 +1,7 @@
 import { BotContext, Plugin } from '@botonic/core'
 
-import { AIAgentRunner } from './runner'
 import { HubtypeApiClient } from './hubtype-api-client'
+import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,

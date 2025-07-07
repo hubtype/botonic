@@ -1,12 +1,12 @@
 import {
   Agent,
   Runner,
-  Tool,
   setDefaultOpenAIClient,
   setOpenAIAPI,
-  UserMessageItem,
+  Tool,
 } from '@openai/agents'
 import { AzureOpenAI } from 'openai'
+
 import {
   AZURE_OPENAI_API_BASE,
   AZURE_OPENAI_API_DEPLOYMENT_NAME,
@@ -44,7 +44,6 @@ export class AIAgentRunner {
       model: 'gpt-4.1-mini',
       modelSettings: { temperature: 0 },
     })
-    // @ts-ignore
     const result = await runner.run(this.agent, messages)
     const finalOutput = result.finalOutput
     return finalOutput?.messages || []

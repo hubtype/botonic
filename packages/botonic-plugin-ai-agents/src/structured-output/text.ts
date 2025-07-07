@@ -1,5 +1,6 @@
-import { BaseMessage } from './shared'
 import { z } from 'zod'
+
+import { BaseMessage } from './shared'
 
 export interface TextMessage extends BaseMessage {
   type: 'text'
