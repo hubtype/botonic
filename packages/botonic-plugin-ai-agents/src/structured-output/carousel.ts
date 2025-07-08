@@ -16,19 +16,21 @@ export interface CarouselMessage extends BaseMessage {
   }
 }
 
-export const CarouselSchema = z.object({
-  type: z.enum(['carousel']),
-  content: z.object({
-    elements: z.array(
-      z.object({
-        title: z.string(),
-        subtitle: z.string(),
-        image: z.string(),
-        button: z.object({
-          text: z.string(),
-          url: z.string(),
-        }),
-      })
-    ),
-  }),
-})
+export const CarouselSchema = z
+  .object({
+    type: z.enum(['carousel']),
+    content: z.object({
+      elements: z.array(
+        z.object({
+          title: z.string(),
+          subtitle: z.string(),
+          image: z.string(),
+          button: z.object({
+            text: z.string(),
+            url: z.string(),
+          }),
+        })
+      ),
+    }),
+  })
+  .describe('A carousel message containing a list of elements')

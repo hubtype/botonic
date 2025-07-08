@@ -10,10 +10,14 @@ export interface TextWithButtonsMessage extends BaseMessage {
   }
 }
 
-export const TextWithButtonsSchema = z.object({
-  type: z.enum(['textWithButtons']),
-  content: z.object({
-    text: z.string(),
-    buttons: z.array(z.string()),
-  }),
-})
+export const TextWithButtonsSchema = z
+  .object({
+    type: z.enum(['textWithButtons']),
+    content: z.object({
+      text: z.string(),
+      buttons: z.array(z.string()),
+    }),
+  })
+  .describe(
+    'A text message with buttons to allow the user to use quick replies'
+  )

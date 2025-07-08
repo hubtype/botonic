@@ -18,8 +18,10 @@ export interface Output {
   messages: OutputMessage[]
 }
 
-export const OutputSchema = z.object({
-  messages: z.array(
-    z.union([TextSchema, TextWithButtonsSchema, CarouselSchema, ExitSchema])
-  ),
-})
+export const OutputSchema = z
+  .object({
+    messages: z.array(
+      z.union([TextSchema, TextWithButtonsSchema, CarouselSchema, ExitSchema])
+    ),
+  })
+  .describe('The messages to be sent to the user')
