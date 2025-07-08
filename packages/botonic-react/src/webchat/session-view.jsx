@@ -128,14 +128,6 @@ export const SessionView = props => {
         />
         <SessionViewAttribute label='PAYLOAD:' value={input.payload} />
         <SessionViewAttribute
-          label='INTENT:'
-          value={
-            input.intent
-              ? `${input.intent} (${(input.confidence * 100).toFixed(1)}%)`
-              : ''
-          }
-        />
-        <SessionViewAttribute
           label='PATH:'
           value={lastRoutePath ? `/${lastRoutePath}` : '/'}
         />
