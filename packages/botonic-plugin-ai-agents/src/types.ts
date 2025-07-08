@@ -1,5 +1,5 @@
 import { AgentInputItem } from '@openai/agents'
-import { ZodSchema } from 'zod'
+import { ZodObject } from 'zod'
 
 import { OutputMessage } from './structured-output'
 export interface PluginAiAgentOptions {
@@ -10,8 +10,7 @@ export interface PluginAiAgentOptions {
 export interface CustomTool {
   name: string
   description: string
-  schema: ZodSchema
-  returnDirect?: boolean
+  schema: ZodObject<any>
   func: (input?: any) => Promise<any>
 }
 

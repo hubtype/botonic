@@ -12,6 +12,7 @@ import {
   AZURE_OPENAI_API_DEPLOYMENT_NAME,
   AZURE_OPENAI_API_KEY,
   AZURE_OPENAI_API_VERSION,
+  isProd,
 } from './constants'
 import { OutputMessage, OutputSchema } from './structured-output'
 import { AgenticInputMessage } from './types'
@@ -26,11 +27,12 @@ export class AIAgentRunner {
         apiVersion: AZURE_OPENAI_API_VERSION,
         deployment: AZURE_OPENAI_API_DEPLOYMENT_NAME,
         baseURL: AZURE_OPENAI_API_BASE,
-        dangerouslyAllowBrowser: true,
+        dangerouslyAllowBrowser: !isProd,
       })
       setDefaultOpenAIClient(client as any)
       setOpenAIAPI('chat_completions')
     }
+
     this.agent = new Agent({
       name: name,
       instructions: instructions,
@@ -46,6 +48,7 @@ export class AIAgentRunner {
     })
     const result = await runner.run(this.agent, messages)
     const finalOutput = result.finalOutput
+
     return finalOutput?.messages || []
   }
 }
