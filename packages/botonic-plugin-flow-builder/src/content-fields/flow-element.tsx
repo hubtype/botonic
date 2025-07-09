@@ -39,7 +39,6 @@ export class FlowElement extends ContentFieldsBase {
       button: { text: string; url: string }
     }
   ) {
-    console.log('FlowElement.fromAIAgent', element)
     const newElement = new FlowElement(id)
     newElement.title = element.title
     newElement.subtitle = element.subtitle

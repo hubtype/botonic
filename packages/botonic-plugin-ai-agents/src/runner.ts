@@ -43,7 +43,6 @@ export class AIAgentRunner {
 
   async run(messages: AgenticInputMessage[]): Promise<OutputMessage[]> {
     const runner = new Runner({
-      model: 'gpt-4.1-mini',
       modelSettings: { temperature: 0 },
     })
     const result = await runner.run(this.agent, messages)
