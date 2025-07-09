@@ -78,7 +78,7 @@ export interface WebchatContextProps {
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void
-  updateUser: (user: ClientUser) => void
+  updateUser: (user: Partial<ClientUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
   webchatState: WebchatState
