@@ -20,13 +20,17 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.36.x] - 2025-06-18
+## [0.36.1] - 2025-06-18
+
+### Added
+
+- [PR-3056](https://github.com/hubtype/botonic/pull/3056): Ai agent can generate some messages, using array and each message can be of type text, textWithButtons or carousel.
+
+## [0.36.0] - 2025-06-18
 
 ### Added
 
 - [PR-3022](https://github.com/hubtype/botonic/pull/3022): Add an ai agent from flow builder.
-
-### Changed
 
 ### Fixed
 
