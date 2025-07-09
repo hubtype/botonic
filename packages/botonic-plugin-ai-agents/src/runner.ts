@@ -53,19 +53,21 @@ export class AIAgentRunner {
   }
 
   private addExtraInstructions(instructions: string): string {
-    const metadata = `
-<metadata>
-Current Date: ${new Date().toISOString()}
-</metadata>`
+    const metadata = `Current Date: ${new Date().toISOString()}`
 
-    const outputFormat = `
-<output>
-Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.
-<example>
-{ "messages": [{"type": "text", "content": {"text": "Hello, how can I help you today?"}}] }
-</example>
-</output>`
+    const outputExample = JSON.stringify({
+      messages: [
+        {
+          type: 'text',
+          content: {
+            text: 'Hello, how can I help you today?',
+          },
+        },
+      ],
+      numMessages: 1,
+    })
+    const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${outputExample}\n</example>`
 
-    return `${instructions}\n\n${metadata}\n\n${outputFormat}`
+    return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
   }
 }
