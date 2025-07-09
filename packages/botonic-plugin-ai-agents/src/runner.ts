@@ -3,6 +3,7 @@ import {
   Runner,
   setDefaultOpenAIClient,
   setOpenAIAPI,
+  setTracingDisabled,
   Tool,
 } from '@openai/agents'
 import { AzureOpenAI } from 'openai'
@@ -31,6 +32,7 @@ export class AIAgentRunner {
       })
       setDefaultOpenAIClient(client as any)
       setOpenAIAPI('chat_completions')
+      setTracingDisabled(true)
     }
 
     this.agent = new Agent({
