@@ -35,7 +35,7 @@ export class AIAgentRunner {
 
     this.agent = new Agent({
       name: name,
-      instructions: instructions,
+      instructions: this.addExtraInstructions(instructions),
       tools: tools,
       outputType: OutputSchema,
     })
@@ -50,5 +50,22 @@ export class AIAgentRunner {
     const finalOutput = result.finalOutput
 
     return finalOutput?.messages || []
+  }
+
+  private addExtraInstructions(instructions: string): string {
+    const metadata = `
+<metadata>
+Current Date: ${new Date().toISOString()}
+</metadata>`
+
+    const outputFormat = `
+<output>
+Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.
+<example>
+{ "messages": [{"type": "text", "content": {"text": "Hello, how can I help you today?"}}] }
+</example>
+</output>`
+
+    return `${instructions}\n\n${metadata}\n\n${outputFormat}`
   }
 }
