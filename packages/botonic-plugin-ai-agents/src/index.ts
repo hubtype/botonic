@@ -1,5 +1,5 @@
 import { BotContext, Plugin } from '@botonic/core'
-import { tool } from '@openai/agents'
+import { tool, FunctionTool } from '@openai/agents'
 
 import { isProd } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
@@ -11,6 +11,8 @@ import {
   CustomTool,
   PluginAiAgentOptions,
 } from './types'
+import { hubtypeTools } from './tools'
+import { Context } from './context'
 
 export default class BotonicPluginAiAgents implements Plugin {
   private readonly authToken?: string
@@ -39,14 +41,18 @@ export default class BotonicPluginAiAgents implements Plugin {
       const availableTools = this.customTools.filter(tool =>
         aiAgentArgs.activeTools?.map(tool => tool.name).includes(tool.name)
       )
-      const tools = this.createTools(availableTools)
+      const tools = [...this.createTools(availableTools), ...hubtypeTools]
+      console.log('tools', tools)
 
       const runner = new AIAgentRunner(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
         tools
       )
-      const output = await runner.run(messages)
+      const context: Context = {
+        sources: ['01975df7-a4d2-7ea1-909c-1029c52545bb'],
+      }
+      const output = await runner.run(messages, context)
       console.log('\n\nOutput:', output)
 
       return output
@@ -69,9 +75,9 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private createTools(customTools: CustomTool[]) {
+  private createTools(customTools: CustomTool[]): FunctionTool<Context>[] {
     return customTools.map(customTool => {
-      return tool({
+      return tool<any, Context, any>({
         name: customTool.name,
         description: customTool.description,
         parameters: customTool.schema,

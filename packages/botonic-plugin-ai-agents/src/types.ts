@@ -1,7 +1,9 @@
-import { AgentInputItem } from '@openai/agents'
+import { AgentInputItem, RunContext } from '@openai/agents'
 import { ZodObject } from 'zod'
 
 import { OutputMessage } from './structured-output'
+import { Context } from './context'
+
 export interface PluginAiAgentOptions {
   authToken?: string
   customTools?: CustomTool[]
@@ -11,7 +13,7 @@ export interface CustomTool {
   name: string
   description: string
   schema: ZodObject<any>
-  func: (input?: any) => Promise<any>
+  func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
 }
 
 export interface AiAgentArgs {

@@ -17,11 +17,12 @@ import {
 } from './constants'
 import { OutputMessage, OutputSchema } from './structured-output'
 import { AgenticInputMessage } from './types'
+import { Context } from './context'
 
 export class AIAgentRunner {
-  private agent: Agent<any, typeof OutputSchema>
+  private agent: Agent<Context, typeof OutputSchema>
 
-  constructor(name: string, instructions: string, tools: Tool[]) {
+  constructor(name: string, instructions: string, tools: Tool<Context>[]) {
     if (AZURE_OPENAI_API_KEY) {
       const client = new AzureOpenAI({
         apiKey: AZURE_OPENAI_API_KEY,
@@ -35,7 +36,7 @@ export class AIAgentRunner {
       setTracingDisabled(true)
     }
 
-    this.agent = new Agent({
+    this.agent = new Agent<Context, typeof OutputSchema>({
       name: name,
       instructions: this.addExtraInstructions(instructions),
       tools: tools,
@@ -43,11 +44,15 @@ export class AIAgentRunner {
     })
   }
 
-  async run(messages: AgenticInputMessage[]): Promise<OutputMessage[]> {
+  async run(
+    messages: AgenticInputMessage[],
+    context: Context
+  ): Promise<OutputMessage[]> {
     const runner = new Runner({
       modelSettings: { temperature: 0 },
     })
-    const result = await runner.run(this.agent, messages)
+
+    const result = await runner.run(this.agent, messages, { context })
     const finalOutput = result.finalOutput
 
     return finalOutput?.messages || []
