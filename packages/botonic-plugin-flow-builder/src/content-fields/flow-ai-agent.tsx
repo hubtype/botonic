@@ -1,6 +1,9 @@
-import { Text } from '@botonic/react'
+import { Button, Carousel, Text } from '@botonic/react'
 
+import { SOURCE_INFO_SEPARATOR } from '../constants'
+import { AgenticOutputMessage } from '../types'
 import { ContentFieldsBase } from './content-fields-base'
+import { FlowElement } from './flow-element'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
@@ -8,7 +11,8 @@ export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
   public activeTools?: { name: string }[]
-  public text: string = ''
+
+  public responses: AgenticOutputMessage[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -20,6 +24,42 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   toBotonic(id: string): JSX.Element {
-    return <Text key={id}>{this.text}</Text>
+    return (
+      <>
+        {this.responses.map(response => {
+          if (response.type === 'text') {
+            return <Text key={id}>{response.content.text}</Text>
+          }
+
+          if (response.type === 'textWithButtons') {
+            return (
+              <Text key={id}>
+                {response.content.text}
+                {response.content.buttons.map((button, buttonIndex) => (
+                  <Button
+                    key={buttonIndex}
+                    payload={`do-nothing${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
+                  >
+                    {button}
+                  </Button>
+                ))}
+              </Text>
+            )
+          }
+
+          if (response.type === 'carousel') {
+            return (
+              <Carousel key={id}>
+                {response.content.elements.map(element =>
+                  FlowElement.fromAIAgent(id, element).toBotonic(id)
+                )}
+              </Carousel>
+            )
+          }
+
+          return <></>
+        })}
+      </>
+    )
   }
 }

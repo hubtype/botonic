@@ -172,7 +172,7 @@ export const aiAgentTestFlow = {
     },
     {
       id: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
-      name: 'AI agents',
+      name: 'AI Agents',
       start_node_id: '0196f202-a5ea-713e-a3f9-287cf8f0303a',
     },
     {

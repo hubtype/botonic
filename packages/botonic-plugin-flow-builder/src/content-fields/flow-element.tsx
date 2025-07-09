@@ -30,6 +30,27 @@ export class FlowElement extends ContentFieldsBase {
     return newElement
   }
 
+  static fromAIAgent(
+    id: string,
+    element: {
+      title: string
+      subtitle: string
+      image: string
+      button: { text: string; url: string }
+    }
+  ) {
+    const newElement = new FlowElement(id)
+    newElement.title = element.title
+    newElement.subtitle = element.subtitle
+    newElement.image = element.image
+    newElement.button = FlowButton.fromAIAgent({
+      id: '',
+      text: element.button.text,
+      url: element.button.url,
+    })
+    return newElement
+  }
+
   toBotonic(parentId: string): JSX.Element {
     return (
       <Element key={`${parentId}-${this.id}`}>

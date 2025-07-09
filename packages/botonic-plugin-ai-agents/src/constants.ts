@@ -7,3 +7,5 @@ export const AZURE_OPENAI_API_DEPLOYMENT_NAME =
   process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME || 'gpt-4o-mini_p1'
 export const AZURE_OPENAI_API_VERSION =
   process.env.AZURE_OPENAI_API_VERSION || '2024-12-01-preview'
+
+export const isProd = process.env.NODE_ENV === 'production'

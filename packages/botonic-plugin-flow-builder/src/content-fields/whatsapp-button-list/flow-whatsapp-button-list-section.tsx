@@ -4,8 +4,8 @@ import {
 } from '@botonic/react'
 
 import { FlowBuilderApi } from '../../api'
+import { ContentFieldsBase } from '../content-fields-base'
 import { HtWhatsappButtonListSection } from '../hubtype-fields'
-import { ContentFieldsBase } from './../content-fields-base'
 import { FlowWhatsappButtonListRow } from './flow-whatsapp-button-list-row'
 
 export class FlowWhatsappButtonListSection extends ContentFieldsBase {

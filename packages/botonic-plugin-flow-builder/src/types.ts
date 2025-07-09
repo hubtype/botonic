@@ -52,7 +52,7 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<AiAgentResponse | undefined>
+) => Promise<AgenticOutputMessage[] | undefined>
 
 export interface AiAgentArgs {
   name: string
@@ -93,13 +93,6 @@ export interface KnowledgeBaseResponse {
   answer: string
 }
 
-export interface AiAgentResponse {
-  role: string
-  content?: string
-  toolName?: string
-  toolOutput?: string | null
-}
-
 export interface SmartIntentResponse {
   data: {
     smart_intent_title: string
@@ -114,3 +107,44 @@ export interface SmartIntentResponse {
 export interface PayloadParamsBase {
   followUpContentID?: string
 }
+
+export interface OutputBaseMessage {
+  type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
+}
+
+export interface TextMessage extends OutputBaseMessage {
+  type: 'text'
+  content: {
+    text: string
+  }
+}
+
+export interface TextWithButtonsMessage extends OutputBaseMessage {
+  type: 'textWithButtons'
+  content: {
+    text: string
+    buttons: string[]
+  }
+}
+
+export interface CarouselMessage extends OutputBaseMessage {
+  type: 'carousel'
+  content: {
+    elements: {
+      title: string
+      subtitle: string
+      image: string
+      button: { text: string; url: string }
+    }[]
+  }
+}
+
+export interface ExitMessage extends OutputBaseMessage {
+  type: 'exit'
+}
+
+export type AgenticOutputMessage =
+  | TextMessage
+  | TextWithButtonsMessage
+  | CarouselMessage
+  | ExitMessage
