@@ -14,7 +14,6 @@ export enum EventAction {
   HandoffSuccess = 'handoff_success',
   HandoffFail = 'handoff_fail',
   Keyword = 'nlu_keyword',
-  Intent = 'nlu_intent',
   IntentSmart = 'nlu_intent_smart',
   Knowledgebase = 'knowledgebase',
   Fallback = 'fallback',
@@ -81,18 +80,6 @@ export interface EventHandoffOption extends HtBaseEventProps {
   flowThreadId?: string
   queueId?: string
   queueName?: string
-}
-
-export interface EventIntent extends HtBaseEventProps {
-  action: EventAction.Intent
-  flowThreadId: string
-  flowId: string
-  flowNodeId: string
-  nluIntentLabel: string
-  nluIntentConfidence: number
-  nluIntentThreshold: number
-  nluIntentMessageId: string
-  userInput: string
 }
 
 export interface EventKeyword extends HtBaseEventProps {
@@ -180,7 +167,6 @@ export type HtEventProps =
   | EventFlow
   | EventHandoff
   | EventHandoffOption
-  | EventIntent
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase
