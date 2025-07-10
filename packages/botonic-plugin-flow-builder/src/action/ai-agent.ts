@@ -30,6 +30,7 @@ export async function getContentsByAiAgent({
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
       activeTools: aiAgentContent.activeTools,
+      sourceIds: aiAgentContent.sources?.map(source => source.id),
     }
   )
 

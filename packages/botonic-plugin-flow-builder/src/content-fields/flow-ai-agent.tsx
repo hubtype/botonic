@@ -11,6 +11,7 @@ export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
   public activeTools?: { name: string }[]
+  public sources?: { id: string; name: string }[]
 
   public responses: AgenticOutputMessage[] = []
 
@@ -19,7 +20,7 @@ export class FlowAiAgent extends ContentFieldsBase {
     newAiAgent.name = component.content.name
     newAiAgent.instructions = component.content.instructions
     newAiAgent.activeTools = component.content.active_tools
-
+    newAiAgent.sources = component.content.sources
     return newAiAgent
   }
 

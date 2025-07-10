@@ -7,5 +7,6 @@ export interface HtAiAgentNode extends HtBaseNode {
     name: string
     instructions: string
     active_tools?: { name: string }[]
+    sources?: { id: string; name: string }[]
   }
 }
