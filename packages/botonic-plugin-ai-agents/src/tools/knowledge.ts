@@ -1,6 +1,7 @@
 import { RunContext, tool } from '@openai/agents'
 import { z } from 'zod'
 import { Context } from '../context'
+import { HubtypeApiClient } from '../hubtype-api-client'
 
 export const consultKnowledgeBase = tool<any, Context, any>({
   name: 'consultKnowledgeBase',
@@ -12,12 +13,13 @@ export const consultKnowledgeBase = tool<any, Context, any>({
     { query }: { query: string },
     runContext?: RunContext<Context>
   ): Promise<string[]> => {
-    const sources = runContext?.context.sources
-    console.log(`Query ${query} executed on sources: ${sources}`)
-    return [
-      'El check-in es a las 14:00',
-      'El check-out es a las 12:00',
-      'No se devuelve la fianza si se rompe algo',
-    ]
+    const context = runContext?.context
+    if (!context) {
+      throw new Error('Context is required')
+    }
+    const sources = context.sources
+    const client = new HubtypeApiClient(context.authToken)
+    const chunks = await client.retrieveSimilarChunks(query, sources)
+    return chunks
   },
 })

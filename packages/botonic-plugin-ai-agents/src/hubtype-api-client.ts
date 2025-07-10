@@ -24,6 +24,24 @@ export class HubtypeApiClient {
     this.authToken = authToken
   }
 
+  async retrieveSimilarChunks(
+    query: string,
+    sources: string[]
+  ): Promise<string[]> {
+    const url = `${HUBTYPE_API_URL}/external/v1/ai/knowledge_base/similar_chunks/`
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authToken}`,
+    }
+    const params = {
+      query,
+      source_ids: sources,
+      num_chunks: 5,
+    }
+    const response = await axios.post(url, params, { headers })
+    return response.data.chunks.map((chunk: any) => chunk.text)
+  }
+
   async getLocalMessages(memoryLength: number): Promise<AgenticInputMessage[]> {
     const localBotonicState = localStorage.getItem('botonicState')
     const botonicState = JSON.parse(localBotonicState || '{}')
