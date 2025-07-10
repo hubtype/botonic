@@ -42,7 +42,6 @@ export default class BotonicPluginAiAgents implements Plugin {
         aiAgentArgs.activeTools?.map(tool => tool.name).includes(tool.name)
       )
       const tools = [...this.createTools(availableTools), ...hubtypeTools]
-      console.log('tools', tools)
 
       const runner = new AIAgentRunner(
         aiAgentArgs.name,
@@ -50,10 +49,10 @@ export default class BotonicPluginAiAgents implements Plugin {
         tools
       )
       const context: Context = {
-        sources: ['01975df7-a4d2-7ea1-909c-1029c52545bb'],
+        authToken,
+        sources: aiAgentArgs.sourceIds || [],
       }
       const output = await runner.run(messages, context)
-      console.log('\n\nOutput:', output)
 
       return output
     } catch (error) {

@@ -20,6 +20,7 @@ export interface AiAgentArgs {
   name: string
   instructions: string
   activeTools?: { name: string }[]
+  sourceIds?: string[]
 }
 
 export type AgenticInputMessage = AgentInputItem
