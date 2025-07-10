@@ -1,3 +1,3 @@
-import { consultKnowledgeBase } from './knowledge'
+export { consultKnowledgeBase } from './knowledge'
 
-export const hubtypeTools = [consultKnowledgeBase]
+export const mandatoryTools = []

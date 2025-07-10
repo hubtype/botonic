@@ -6,10 +6,10 @@ import { Context } from './context'
 
 export interface PluginAiAgentOptions {
   authToken?: string
-  customTools?: CustomTool[]
+  customToolDefinitions?: CustomToolDefinition[]
 }
 
-export interface CustomTool {
+export interface CustomToolDefinition {
   name: string
   description: string
   schema: ZodObject<any>
