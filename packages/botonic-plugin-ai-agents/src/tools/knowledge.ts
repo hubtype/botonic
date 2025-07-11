@@ -3,9 +3,10 @@ import { z } from 'zod'
 import { Context } from '../context'
 import { HubtypeApiClient } from '../hubtype-api-client'
 
-export const consultKnowledgeBase = tool<any, Context, any>({
-  name: 'consultKnowledgeBase',
-  description: 'Consult the knowledge base for information',
+export const retrieveKnowledge = tool<any, Context, any>({
+  name: 'retrieve_knowledge',
+  description:
+    'Consult the knowledge base for information before answering. Use this tool to make sure the information you provide is faithful.',
   parameters: z.object({
     query: z.string().describe('The query to search the knowledge base for'),
   }),

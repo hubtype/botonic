@@ -2,7 +2,7 @@ import { Agent, Tool } from '@openai/agents'
 
 import { Context } from './context'
 import { OutputSchema } from './structured-output'
-import { consultKnowledgeBase, mandatoryTools } from './tools'
+import { retrieveKnowledge, mandatoryTools } from './tools'
 
 export class AIAgentBuilder {
   private name: string
@@ -31,7 +31,7 @@ export class AIAgentBuilder {
 
   private addExtraInstructions(instructions: string): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
-    const outputExample = JSON.stringify({
+    const example = {
       messages: [
         {
           type: 'text',
@@ -41,8 +41,8 @@ export class AIAgentBuilder {
         },
       ],
       numMessages: 1,
-    })
-    const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${outputExample}\n</example>`
+    }
+    const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
     return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
   }
 
@@ -52,7 +52,7 @@ export class AIAgentBuilder {
   ): Tool<Context>[] {
     const hubtypeTools: Tool<Context>[] = [...mandatoryTools]
     if (sourceIds.length > 0) {
-      hubtypeTools.push(consultKnowledgeBase)
+      hubtypeTools.push(retrieveKnowledge)
     }
     return [...hubtypeTools, ...customTools]
   }

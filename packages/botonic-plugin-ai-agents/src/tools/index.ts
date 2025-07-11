@@ -1,3 +1,3 @@
-export { consultKnowledgeBase } from './knowledge'
+export { retrieveKnowledge } from './knowledge'
 
 export const mandatoryTools = []
