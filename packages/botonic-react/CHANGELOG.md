@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.36.5] - 2025-07-14
+
+### Changed
+
+- [PR-3061](https://github.com/hubtype/botonic/pull/3061): Export everything from src/contexts.tsx file.
+
 ## [0.36.4] - 2025-06-30
 
 ### Fixed
