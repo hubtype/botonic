@@ -1,6 +1,5 @@
 import { Agent, Runner } from '@openai/agents'
 import { Context } from './context'
-import { setUpOpenAI } from './openai'
 import { OutputSchema } from './structured-output'
 import { AgenticInputMessage, AgenticOutputMessage } from './types'
 
@@ -13,12 +12,29 @@ export class AIAgentRunner {
 
   async run(
     messages: AgenticInputMessage[],
-    context: Context
+    context: Context,
+    maxRetries: number = 1
   ): Promise<AgenticOutputMessage[]> {
-    const runner = new Runner({
-      modelSettings: { temperature: 0 },
-    })
-    const result = await runner.run(this.agent, messages, { context })
-    return result.finalOutput?.messages || []
+    return this.runWithRetry(messages, context, maxRetries, 1)
+  }
+
+  private async runWithRetry(
+    messages: AgenticInputMessage[],
+    context: Context,
+    maxRetries: number,
+    attempt: number
+  ): Promise<AgenticOutputMessage[]> {
+    try {
+      const runner = new Runner({
+        modelSettings: { temperature: 0 },
+      })
+      const result = await runner.run(this.agent, messages, { context })
+      return result.finalOutput?.messages || []
+    } catch (error) {
+      if (attempt > maxRetries) {
+        throw error
+      }
+      return this.runWithRetry(messages, context, maxRetries, attempt + 1)
+    }
   }
 }
