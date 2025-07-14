@@ -1,5 +1,6 @@
 import {
   Agent,
+  ModelBehaviorError,
   Runner,
   setDefaultOpenAIClient,
   setOpenAIAPI,
@@ -62,6 +63,9 @@ export class AIAgentRunner {
       const result = await runner.run(this.agent, messages)
       return result.finalOutput?.messages || []
     } catch (error) {
+      if (!(error instanceof ModelBehaviorError)) {
+        throw error
+      }
       if (attempt > maxRetries) {
         throw error
       }
