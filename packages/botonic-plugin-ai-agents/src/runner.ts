@@ -1,5 +1,6 @@
 import {
   Agent,
+  ModelBehaviorError,
   Runner,
   setDefaultOpenAIClient,
   setOpenAIAPI,
@@ -43,14 +44,36 @@ export class AIAgentRunner {
     })
   }
 
-  async run(messages: AgenticInputMessage[]): Promise<OutputMessage[]> {
-    const runner = new Runner({
-      modelSettings: { temperature: 0 },
-    })
-    const result = await runner.run(this.agent, messages)
-    const finalOutput = result.finalOutput
+  async run(
+    messages: AgenticInputMessage[],
+    maxRetries: number = 1
+  ): Promise<OutputMessage[]> {
+    return this.runWithRetry(messages, maxRetries, 1)
+  }
 
-    return finalOutput?.messages || []
+  private async runWithRetry(
+    messages: AgenticInputMessage[],
+    maxRetries: number,
+    attempt: number
+  ): Promise<OutputMessage[]> {
+    try {
+      const runner = new Runner({
+        modelSettings: { temperature: 0 },
+      })
+      const result = await runner.run(this.agent, messages)
+      return result.finalOutput?.messages || []
+    } catch (error) {
+      if (!(error instanceof ModelBehaviorError)) {
+        throw error
+      }
+      if (attempt > maxRetries) {
+        throw error
+      }
+      console.warn(
+        `AI Agent execution failed due to ModelBehaviorError. Retrying... (Attempt ${attempt}/${maxRetries})`
+      )
+      return this.runWithRetry(messages, maxRetries, attempt + 1)
+    }
   }
 
   private addExtraInstructions(instructions: string): string {
