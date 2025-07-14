@@ -69,6 +69,9 @@ export class AIAgentRunner {
       if (attempt > maxRetries) {
         throw error
       }
+      console.warn(
+        `AI Agent execution failed due to ModelBehaviorError. Retrying... (Attempt ${attempt}/${maxRetries})`
+      )
       return this.runWithRetry(messages, maxRetries, attempt + 1)
     }
   }
