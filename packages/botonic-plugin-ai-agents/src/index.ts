@@ -1,8 +1,7 @@
 import { BotContext, Plugin } from '@botonic/core'
-import { FunctionTool, tool } from '@openai/agents'
+import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-
 import { isProd } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
@@ -14,6 +13,7 @@ import {
   Context,
   CustomTool,
   PluginAiAgentOptions,
+  Tool,
 } from './types'
 
 export default class BotonicPluginAiAgents implements Plugin {
@@ -75,7 +75,7 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private buildCustomTools(activeTools: string[]): FunctionTool<Context>[] {
+  private buildCustomTools(activeTools: string[]): Tool[] {
     const availableTools = this.customToolDefinitions.filter(tool =>
       activeTools.includes(tool.name)
     )
