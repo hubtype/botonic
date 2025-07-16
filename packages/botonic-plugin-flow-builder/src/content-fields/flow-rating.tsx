@@ -35,7 +35,6 @@ export class FlowRating extends ContentFieldsBase {
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
     if (isWhatsapp(request.session)) {
-      console.log('use a WhatsappButtonList')
       return (
         <WhatsappButtonList
           body={this.text}
