@@ -9,6 +9,7 @@ import { HtImageNode } from './image'
 import { HtKeywordNode } from './keyword'
 import { HtKnowledgeBaseNode } from './knowledge-base'
 import { HtPayloadNode } from './payload'
+import { HtRatingNode } from './rating'
 import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
@@ -31,6 +32,7 @@ export type HtNodeWithContent =
   | HtKnowledgeBaseNode
   | HtBotActionNode
   | HtAiAgentNode
+  | HtRatingNode
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 

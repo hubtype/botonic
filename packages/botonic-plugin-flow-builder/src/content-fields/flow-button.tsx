@@ -5,6 +5,7 @@ import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import { HtButton, HtButtonStyle, HtUrlNode } from './hubtype-fields'
+import { HtRatingButton } from './hubtype-fields/rating'
 
 export class FlowButton extends ContentFieldsBase {
   public text = ''
@@ -44,6 +45,14 @@ export class FlowButton extends ContentFieldsBase {
     newButton.text = button.text
     newButton.payload = button.payload
     newButton.url = button.url
+    return newButton
+  }
+
+  static fromRating(button: HtRatingButton): FlowButton {
+    const newButton = new FlowButton(button.id)
+    newButton.text = button.text
+    newButton.payload = button.payload
+    newButton.target = button.target?.id
     return newButton
   }
 

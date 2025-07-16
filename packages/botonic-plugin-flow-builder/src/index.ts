@@ -26,6 +26,7 @@ import {
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
+import { FlowRating } from './content-fields/flow-rating'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
@@ -239,6 +240,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
       case HtNodeWithContentType.AI_AGENT:
         return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.RATING:
+        return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
 
       case HtNodeWithContentType.BOT_ACTION:
         return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
