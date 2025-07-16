@@ -1,6 +1,7 @@
-import { INPUT, InputType } from '@botonic/core'
+import { INPUT, InputType, Session, storeCaseRating } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
+import { AGENT_RATING_PAYLOAD } from '../../src/constants'
 import { RatingType } from '../../src/content-fields/hubtype-fields/index'
 import { FlowRating, FlowText } from '../../src/content-fields/index'
 import { EventAction } from '../../src/tracking'
@@ -15,11 +16,22 @@ import {
   getContentsAfterPreAndBotonicInit,
 } from '../helpers/utils'
 
+jest.mock('@botonic/core', () => {
+  const actual = jest.requireActual('@botonic/core') as any
+  return {
+    ...actual,
+    storeCaseRating: jest.fn((_session, _value) => {
+      return Promise.resolve({ status: 'ok' })
+    }),
+  }
+})
+
 describe('Rating', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
   beforeEach(() => {
     trackEventMock.mockClear()
+    ;(storeCaseRating as jest.Mock).mockClear()
   })
 
   test('The contents of the rating message are displayed', async () => {
@@ -46,31 +58,31 @@ describe('Rating', () => {
     const firstButton = buttons[0]
     expect(firstButton.text).toBe('⭐️ ⭐️ ⭐️ ⭐️ ⭐️')
     expect(firstButton.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852b-fd70729d3c39'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852b-fd70729d3c39`
     )
 
     const secondButton = buttons[1]
     expect(secondButton.text).toBe('⭐️ ⭐️ ⭐️ ⭐️')
     expect(secondButton.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852c-03bc8d6cf3d1'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852c-03bc8d6cf3d1`
     )
 
     const thirdButton = buttons[2]
     expect(thirdButton.text).toBe('⭐️ ⭐️ ⭐️')
     expect(thirdButton.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852c-06a2bb713c77'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852c-06a2bb713c77`
     )
 
     const fourthButton = buttons[3]
     expect(fourthButton.text).toBe('⭐️ ⭐️')
     expect(fourthButton.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852c-095ec611b92a'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852c-095ec611b92a`
     )
 
     const fifthButton = buttons[4]
     expect(fifthButton.text).toBe('⭐️')
     expect(fifthButton.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852c-0df6b7bffeac'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852c-0df6b7bffeac`
     )
   })
 
@@ -98,7 +110,7 @@ describe('Rating', () => {
     await flowBuilderPlugin.pre(request)
 
     expect(request.input.payload).toBe(
-      'agent-rating|01980ec7-88d3-714c-852c-03bc8d6cf3d1'
+      `${AGENT_RATING_PAYLOAD}|01980ec7-88d3-714c-852c-03bc8d6cf3d1`
     )
 
     const { contents } = await getContentsAfterPreAndBotonicInit(
@@ -140,6 +152,9 @@ describe('Rating', () => {
         flowNodeIsMeaningful: false,
       }
     )
+
+    expect(storeCaseRating).toHaveBeenCalledTimes(1)
+    expect(storeCaseRating).toHaveBeenCalledWith(expect.anything(), 4)
 
     const textMessage = contents[0] as FlowText
     expect(textMessage.text).toBe('Thanks')
