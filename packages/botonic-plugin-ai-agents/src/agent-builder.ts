@@ -9,10 +9,10 @@ export class AIAgentBuilder {
   private instructions: string
   private tools: Tool[]
 
-  constructor(name: string, instructions: string, customTools: Tool[]) {
+  constructor(name: string, instructions: string, tools: Tool[]) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions)
-    this.tools = this.addHubtypeTools(customTools)
+    this.tools = this.addHubtypeTools(tools)
   }
 
   build(): AIAgent {
@@ -41,8 +41,8 @@ export class AIAgentBuilder {
     return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
   }
 
-  private addHubtypeTools(customTools: Tool[]): Tool[] {
+  private addHubtypeTools(tools: Tool[]): Tool[] {
     const hubtypeTools: Tool[] = [...mandatoryTools]
-    return [...hubtypeTools, ...customTools]
+    return [...hubtypeTools, ...tools]
   }
 }
