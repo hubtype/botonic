@@ -3,7 +3,7 @@ import { ActionRequest, Text, WhatsappButtonList } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtRatingNode, RatingType } from './hubtype-fields/rating'
+import { HtRatingNode, RatingType } from './hubtype-fields'
 
 export class FlowRating extends ContentFieldsBase {
   public code = ''

@@ -21,12 +21,12 @@ import {
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
+  FlowRating,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
-import { FlowRating } from './content-fields/flow-rating'
 import {
   HtBotActionNode,
   HtFlowBuilderData,

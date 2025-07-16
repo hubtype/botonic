@@ -23,6 +23,7 @@ export {
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
+  FlowRating,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
