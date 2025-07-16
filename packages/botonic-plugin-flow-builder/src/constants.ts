@@ -8,6 +8,10 @@ export const REG_EXP_PATTERN = /^\/(.*)\/([gimyus]*)$/
 export const UUID_REGEXP =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
+/* ********** PAYLOADS ********** */
+export const AGENT_RATING_PAYLOAD = 'agent-rating'
+
+/* ********** FLOW NAMES ********** */
 export const MAIN_FLOW_NAME = 'Main'
 export const KNOWLEDGE_BASE_FLOW_NAME = 'Knowledge base'
 export const AI_AGENTS_FLOW_NAME = 'AI Agents'
