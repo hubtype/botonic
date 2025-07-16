@@ -1,24 +1,29 @@
 import { BotContext, Plugin } from '@botonic/core'
-import { tool } from '@openai/agents'
+import { FunctionTool, tool } from '@openai/agents'
+
+import { AIAgentBuilder } from './agent-builder'
 
 import { isProd } from './constants'
+import { Context } from './context'
 import { HubtypeApiClient } from './hubtype-api-client'
+import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
   AiAgentArgs,
-  CustomTool,
+  CustomToolDefinition,
   PluginAiAgentOptions,
 } from './types'
 
 export default class BotonicPluginAiAgents implements Plugin {
   private readonly authToken?: string
-  public customTools: CustomTool[] = []
+  public customToolDefinitions: CustomToolDefinition[] = []
 
   constructor(options?: PluginAiAgentOptions) {
+    setUpOpenAI()
     this.authToken = options?.authToken
-    this.customTools = options?.customTools || []
+    this.customToolDefinitions = options?.customToolDefinitions || []
   }
 
   pre(): void {
@@ -35,21 +40,22 @@ export default class BotonicPluginAiAgents implements Plugin {
         throw new Error('Auth token is required')
       }
 
-      const messages = await this.getMessages(request, authToken, 10)
-      const availableTools = this.customTools.filter(tool =>
-        aiAgentArgs.activeTools?.map(tool => tool.name).includes(tool.name)
+      const customTools = this.buildCustomTools(
+        aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
-      const tools = this.createTools(availableTools)
-
-      const runner = new AIAgentRunner(
+      const agent = new AIAgentBuilder(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
-        tools
-      )
-      const output = await runner.run(messages)
-      console.log('\n\nOutput:', output)
+        customTools
+      ).build()
 
-      return output
+      const messages = await this.getMessages(request, authToken, 10)
+      const context: Context = {
+        authToken,
+      }
+
+      const runner = new AIAgentRunner(agent)
+      return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)
       return undefined
@@ -69,13 +75,16 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private createTools(customTools: CustomTool[]) {
-    return customTools.map(customTool => {
-      return tool({
-        name: customTool.name,
-        description: customTool.description,
-        parameters: customTool.schema,
-        execute: customTool.func,
+  private buildCustomTools(activeTools: string[]): FunctionTool<Context>[] {
+    const availableTools = this.customToolDefinitions.filter(tool =>
+      activeTools.includes(tool.name)
+    )
+    return availableTools.map(toolDefinition => {
+      return tool<any, Context, any>({
+        name: toolDefinition.name,
+        description: toolDefinition.description,
+        parameters: toolDefinition.schema,
+        execute: toolDefinition.func,
       })
     })
   }
