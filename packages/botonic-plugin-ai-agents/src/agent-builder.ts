@@ -1,27 +1,27 @@
-import { Agent, Tool } from '@openai/agents'
+import { Agent } from '@openai/agents'
 
-import { Context } from './context'
 import { OutputSchema } from './structured-output'
 import { retrieveKnowledge, mandatoryTools } from './tools'
+import { AIAgent, Tool } from './types'
 
 export class AIAgentBuilder {
   private name: string
   private instructions: string
-  private tools: Tool<Context>[]
+  private tools: Tool[]
 
   constructor(
     name: string,
     instructions: string,
-    customTools: Tool<Context>[],
+    tools: Tool[],
     sourceIds: string[]
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions)
-    this.tools = this.addHubtypeTools(customTools, sourceIds)
+    this.tools = this.addHubtypeTools(tools, sourceIds)
   }
 
-  build(): Agent<Context, typeof OutputSchema> {
-    return new Agent<Context, typeof OutputSchema>({
+  build(): AIAgent {
+    return new Agent({
       name: this.name,
       instructions: this.instructions,
       tools: this.tools,
@@ -46,14 +46,11 @@ export class AIAgentBuilder {
     return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
   }
 
-  private addHubtypeTools(
-    customTools: Tool<Context>[],
-    sourceIds: string[]
-  ): Tool<Context>[] {
-    const hubtypeTools: Tool<Context>[] = [...mandatoryTools]
+  private addHubtypeTools(tools: Tool[], sourceIds: string[]): Tool[] {
+    const hubtypeTools: Tool[] = [...mandatoryTools]
     if (sourceIds.length > 0) {
       hubtypeTools.push(retrieveKnowledge)
     }
-    return [...hubtypeTools, ...customTools]
+    return [...hubtypeTools, ...tools]
   }
 }

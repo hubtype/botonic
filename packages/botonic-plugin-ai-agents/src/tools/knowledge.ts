@@ -1,6 +1,6 @@
 import { RunContext, tool } from '@openai/agents'
 import { z } from 'zod'
-import { Context } from '../context'
+import { Context } from '../types'
 import { HubtypeApiClient } from '../hubtype-api-client'
 
 export const retrieveKnowledge = tool<any, Context, any>({

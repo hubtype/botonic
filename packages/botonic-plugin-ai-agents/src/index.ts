@@ -1,10 +1,8 @@
 import { BotContext, Plugin } from '@botonic/core'
-import { FunctionTool, tool } from '@openai/agents'
+import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-
 import { isProd } from './constants'
-import { Context } from './context'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
@@ -12,18 +10,20 @@ import {
   AgenticInputMessage,
   AgenticOutputMessage,
   AiAgentArgs,
-  CustomToolDefinition,
+  Context,
+  CustomTool,
   PluginAiAgentOptions,
+  Tool,
 } from './types'
 
 export default class BotonicPluginAiAgents implements Plugin {
   private readonly authToken?: string
-  public customToolDefinitions: CustomToolDefinition[] = []
+  public toolDefinitions: CustomTool[] = []
 
   constructor(options?: PluginAiAgentOptions) {
     setUpOpenAI()
     this.authToken = options?.authToken
-    this.customToolDefinitions = options?.customToolDefinitions || []
+    this.toolDefinitions = options?.customTools || []
   }
 
   pre(): void {
@@ -40,13 +40,13 @@ export default class BotonicPluginAiAgents implements Plugin {
         throw new Error('Auth token is required')
       }
 
-      const customTools = this.buildCustomTools(
+      const tools = this.buildTools(
         aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
       const agent = new AIAgentBuilder(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
-        customTools,
+        tools,
         aiAgentArgs.sourceIds || []
       ).build()
 
@@ -77,9 +77,9 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private buildCustomTools(activeTools: string[]): FunctionTool<Context>[] {
-    const availableTools = this.customToolDefinitions.filter(tool =>
-      activeTools.includes(tool.name)
+  private buildTools(activeToolNames: string[]): Tool[] {
+    const availableTools = this.toolDefinitions.filter(tool =>
+      activeToolNames.includes(tool.name)
     )
     return availableTools.map(toolDefinition => {
       return tool<any, Context, any>({
