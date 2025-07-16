@@ -4,7 +4,6 @@ import { FunctionTool, tool } from '@openai/agents'
 import { AIAgentBuilder } from './agent-builder'
 
 import { isProd } from './constants'
-import { Context } from './context'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
@@ -12,18 +11,19 @@ import {
   AgenticInputMessage,
   AgenticOutputMessage,
   AiAgentArgs,
-  CustomToolDefinition,
+  Context,
+  CustomTool,
   PluginAiAgentOptions,
 } from './types'
 
 export default class BotonicPluginAiAgents implements Plugin {
   private readonly authToken?: string
-  public customToolDefinitions: CustomToolDefinition[] = []
+  public customToolDefinitions: CustomTool[] = []
 
   constructor(options?: PluginAiAgentOptions) {
     setUpOpenAI()
     this.authToken = options?.authToken
-    this.customToolDefinitions = options?.customToolDefinitions || []
+    this.customToolDefinitions = options?.customTools || []
   }
 
   pre(): void {

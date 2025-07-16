@@ -1,7 +1,6 @@
 import { Agent, Runner } from '@openai/agents'
-import { Context } from './context'
 import { OutputSchema } from './structured-output'
-import { AgenticInputMessage, AgenticOutputMessage } from './types'
+import { AgenticInputMessage, AgenticOutputMessage, Context } from './types'
 
 export class AIAgentRunner {
   private agent: Agent<Context, typeof OutputSchema>
