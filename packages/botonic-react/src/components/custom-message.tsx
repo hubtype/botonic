@@ -20,7 +20,7 @@ import { Reply } from './reply'
 
 export interface CustomMessageArgs {
   name: string
-  component: React.ComponentType
+  component: React.FC<any>
   defaultProps?: Record<string, any>
   errorBoundary?: any
 }
