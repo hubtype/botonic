@@ -41,8 +41,8 @@ export class FlowRating extends ContentFieldsBase {
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-    const enableCustomRatingMessage =
-      flowBuilderPlugin.enableCustomRatingMessage
+    const customRatingMessageEnabled =
+      flowBuilderPlugin.customRatingMessageEnabled
 
     if (isWhatsapp(request.session)) {
       return (
@@ -63,7 +63,7 @@ export class FlowRating extends ContentFieldsBase {
 
     if (
       (isWebchat(request.session) || isDev(request.session)) &&
-      enableCustomRatingMessage
+      customRatingMessageEnabled
     ) {
       const payloads = this.buttons
         .map(button => button.payload)
