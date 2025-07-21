@@ -8,24 +8,24 @@ import { RatingType } from './types'
 interface RatingSelectorProps {
   color: string
   isSent?: boolean
-  ratingChange: (newRating: number) => void
+  onRatingChange: (newRating: number) => void
   ratingValue: number
   ratingType: RatingType
-  valueSended?: number
+  valueSent?: number
 }
 
 export const RatingSelector = ({
   color,
   isSent,
-  ratingChange,
+  onRatingChange,
   ratingValue,
   ratingType,
-  valueSended,
+  valueSent,
 }: RatingSelectorProps) => {
-  const [hover, setHover] = useState<number>(valueSended ? valueSended : -1)
+  const [hover, setHover] = useState<number>(valueSent ? valueSent : -1)
 
   const onHover = (ratingNumber: number) => {
-    if (!valueSended) setHover(ratingNumber)
+    if (!valueSent) setHover(ratingNumber)
   }
 
   return (
@@ -38,7 +38,7 @@ export const RatingSelector = ({
             key={i}
             onMouseEnter={() => onHover(ratingNumber)}
             onMouseLeave={() => onHover(ratingValue)}
-            onClick={() => ratingChange(ratingNumber)}
+            onClick={() => onRatingChange(ratingNumber)}
           >
             {ratingType === RatingType.Stars && (
               <Stars color={color} ratingNumber={ratingNumber} hover={hover} />

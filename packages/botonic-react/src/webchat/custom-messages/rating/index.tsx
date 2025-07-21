@@ -14,34 +14,40 @@ interface CustomRatingMessageProps {
   buttonText: string
   ratingType: RatingType
   json: { messageId: string }
-  valueSended?: number
+  valueSent?: number
 }
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
-  const { payloads, messageText, buttonText, ratingType, valueSended } = props
+  const { payloads, messageText, buttonText, ratingType, valueSent } = props
   const { webchatState, updateMessage, sendInput } = useContext(WebchatContext)
 
   const theme = useContext(ThemeContext)
   const color = theme?.brand?.color ?? ''
 
-  const [ratingValue, setRatingValue] = useState(valueSended ? valueSended : -1)
+  const [ratingValue, setRatingValue] = useState(valueSent ? valueSent : -1)
   const [showRating, setShowRating] = useState(true)
 
   const ratingChanged = (newRating: number) => {
     setRatingValue(newRating)
   }
 
-  const onClickSend = () => {
+  const updateMessageJSON = (messageId: string) => {
+    if (messageId) {
+      const messageToUpdate = webchatState.messagesJSON.filter(m => {
+        return m.id === messageId
+      })[0]
+      messageToUpdate.data.valueSent = ratingValue
+      updateMessage(messageToUpdate)
+    }
+  }
+
+  const handleButtonSend = () => {
     if (ratingValue !== -1) {
       setShowRating(false)
 
       const payload = payloads[ratingValue - 1]
 
-      const messageToUpdate = webchatState.messagesJSON.filter(m => {
-        return m.id === props.json.messageId
-      })[0]
-      messageToUpdate.data.valueSended = ratingValue
-      updateMessage(messageToUpdate)
+      updateMessageJSON(props.json.messageId)
 
       const input = {
         type: INPUT.POSTBACK as InputType,
@@ -59,14 +65,18 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
         {messageText}
         <RatingSelector
           color={color}
-          ratingChange={ratingChanged}
+          onRatingChange={ratingChanged}
           ratingValue={ratingValue}
           ratingType={ratingType}
-          valueSended={valueSended}
+          valueSent={valueSent}
         />
       </MessageBubble>
-      {!valueSended && showRating && (
-        <Button autodisable={true} disabled={disabled} onClick={onClickSend}>
+      {!valueSent && showRating && (
+        <Button
+          autodisable={true}
+          disabled={disabled}
+          onClick={handleButtonSend}
+        >
           {buttonText}
         </Button>
       )}
