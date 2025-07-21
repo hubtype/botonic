@@ -9,23 +9,19 @@ import {
 } from './icons'
 import { RatingItemProps } from './types'
 
+const SMILEY_MAP = {
+  1: FaceFrownSvg,
+  2: FaceAngrySvg,
+  3: FaceMehSvg,
+  4: FaceSmileSvg,
+  5: FaceGrinBeamSvg,
+} as const
+
 export const Smileys = ({ color, ratingNumber, hover }: RatingItemProps) => {
   const isSelected = hover === ratingNumber
-  return (
-    <>
-      {ratingNumber === 1 && (
-        <FaceFrownSvg color={color} selected={isSelected} />
-      )}
-      {ratingNumber === 2 && (
-        <FaceAngrySvg color={color} selected={isSelected} />
-      )}
-      {ratingNumber === 3 && <FaceMehSvg color={color} selected={isSelected} />}
-      {ratingNumber === 4 && (
-        <FaceSmileSvg color={color} selected={isSelected} />
-      )}
-      {ratingNumber === 5 && (
-        <FaceGrinBeamSvg color={color} selected={isSelected} />
-      )}
-    </>
-  )
+  const SmileyComponent = SMILEY_MAP[ratingNumber as keyof typeof SMILEY_MAP]
+
+  return SmileyComponent ? (
+    <SmileyComponent color={color} selected={isSelected} />
+  ) : null
 }
