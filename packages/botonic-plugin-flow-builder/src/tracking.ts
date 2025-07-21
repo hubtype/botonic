@@ -14,6 +14,7 @@ export enum EventAction {
   IntentSmart = 'nlu_intent_smart',
   Knowledgebase = 'knowledgebase',
   Fallback = 'fallback',
+  FeedbackCase = 'feedback_case',
 }
 
 export enum KnowledgebaseFailReason {

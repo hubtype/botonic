@@ -13,6 +13,7 @@ export enum HtNodeWithContentType {
   KNOWLEDGE_BASE = 'knowledge-base',
   BOT_ACTION = 'bot-action',
   AI_AGENT = 'ai-agent',
+  RATING = 'rating',
 }
 
 export enum HtNodeWithoutContentType {

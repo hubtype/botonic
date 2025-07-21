@@ -19,6 +19,8 @@ import {
   HtNodeWithContentType,
   HtNodeWithoutContentType,
   HtPayloadNode,
+  HtRatingButton,
+  HtRatingNode,
 } from './content-fields/hubtype-fields'
 import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
 import { FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
@@ -78,6 +80,32 @@ export class FlowBuilderApi {
       return this.getNodeByFlowId(node.content.flow_id) as T
     }
     return node as T
+  }
+
+  getRatingNodeByButtonId(id: string): HtRatingNode {
+    const ratingNodes = this.flow.nodes.filter(
+      node => node.type === HtNodeWithContentType.RATING
+    ) as HtRatingNode[]
+    const ratingNode = ratingNodes.find(node =>
+      node.content.buttons.some(button => button.id === id)
+    ) as HtRatingNode | undefined
+
+    if (!ratingNode) {
+      throw Error(`Rating node with button id: '${id}' not found`)
+    }
+
+    return ratingNode
+  }
+
+  getRatingButtonById(ratingNode: HtRatingNode, id: string): HtRatingButton {
+    const ratingButton = ratingNode.content.buttons.find(
+      button => button.id === id
+    ) as HtRatingButton | undefined
+    if (!ratingButton) {
+      throw Error(`Rating button with id: '${id}' not found`)
+    }
+
+    return ratingButton
   }
 
   getNodeByContentID(contentID: string): HtNodeComponent {

@@ -21,6 +21,7 @@ import {
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
+  FlowRating,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
@@ -239,6 +240,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
       case HtNodeWithContentType.AI_AGENT:
         return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.RATING:
+        return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
 
       case HtNodeWithContentType.BOT_ACTION:
         return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)

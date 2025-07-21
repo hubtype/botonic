@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.36.x] - 2025-mm-dd
+## [0.37.0] - 2025-mm-dd
 
 ### Added
+
+- [PR-3063](https://github.com/hubtype/botonic/pull/3063): Add rating flow to resolve rating nodes.
 
 ### Changed
 
