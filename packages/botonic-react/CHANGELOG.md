@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.36.x] - 2025-mm-dd
+## [0.37.x] - 2025-mm-dd
 
 ### Added
+
+- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Add CustomRatingMessage.
 
 ### Changed
 
