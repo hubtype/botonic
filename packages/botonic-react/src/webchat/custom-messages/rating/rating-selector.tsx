@@ -5,6 +5,7 @@ import { Stars } from './stars'
 import { RatingSelectorContainer } from './styles'
 import { RatingType } from './types'
 
+const NUMBER_OF_RATING_BUTTONS = 5
 interface RatingSelectorProps {
   color: string
   isSent?: boolean
@@ -30,7 +31,7 @@ export const RatingSelector = ({
 
   return (
     <RatingSelectorContainer isSent={isSent}>
-      {Array.from({ length: 5 }, (_star, i) => {
+      {Array.from({ length: NUMBER_OF_RATING_BUTTONS }, (_star, i) => {
         const ratingNumber = i + 1
 
         return (
