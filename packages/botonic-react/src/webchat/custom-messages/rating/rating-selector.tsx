@@ -11,6 +11,7 @@ interface RatingSelectorProps {
   ratingChange: (newRating: number) => void
   ratingValue: number
   ratingType: RatingType
+  valueSended?: number
 }
 
 export const RatingSelector = ({
@@ -19,11 +20,12 @@ export const RatingSelector = ({
   ratingChange,
   ratingValue,
   ratingType,
+  valueSended,
 }: RatingSelectorProps) => {
-  const [hover, setHover] = useState<number>(-1)
+  const [hover, setHover] = useState<number>(valueSended ? valueSended : -1)
 
   const onHover = (ratingNumber: number) => {
-    if (!isSent) setHover(ratingNumber)
+    if (!valueSended) setHover(ratingNumber)
   }
 
   return (

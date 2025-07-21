@@ -13,16 +13,18 @@ interface CustomRatingMessageProps {
   messageText: string
   buttonText: string
   ratingType: RatingType
+  json: { messageId: string }
+  valueSended?: number
 }
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
-  const { payloads, messageText, buttonText, ratingType } = props
-  const context = useContext(WebchatContext)
+  const { payloads, messageText, buttonText, ratingType, valueSended } = props
+  const { webchatState, updateMessage, sendInput } = useContext(WebchatContext)
 
   const theme = useContext(ThemeContext)
   const color = theme?.brand?.color ?? ''
 
-  const [ratingValue, setRatingValue] = useState(-1)
+  const [ratingValue, setRatingValue] = useState(valueSended ? valueSended : -1)
   const [showRating, setShowRating] = useState(true)
 
   const ratingChanged = (newRating: number) => {
@@ -35,11 +37,17 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
 
       const payload = payloads[ratingValue - 1]
 
+      const messageToUpdate = webchatState.messagesJSON.filter(m => {
+        return m.id === props.json.messageId
+      })[0]
+      messageToUpdate.data.valueSended = ratingValue
+      updateMessage(messageToUpdate)
+
       const input = {
         type: INPUT.POSTBACK as InputType,
         payload,
       }
-      void context.sendInput(input)
+      void sendInput(input)
     }
   }
 
@@ -54,9 +62,10 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
           ratingChange={ratingChanged}
           ratingValue={ratingValue}
           ratingType={ratingType}
+          valueSended={valueSended}
         />
       </MessageBubble>
-      {showRating && (
+      {!valueSended && showRating && (
         <Button autodisable={true} disabled={disabled} onClick={onClickSend}>
           {buttonText}
         </Button>
