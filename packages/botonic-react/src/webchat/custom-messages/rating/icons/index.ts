@@ -1,0 +1,6 @@
+export * from './face-angry'
+export * from './face-frown'
+export * from './face-grin-beam'
+export * from './face-meh'
+export * from './face-smile'
+export * from './star'

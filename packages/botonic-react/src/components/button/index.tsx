@@ -13,7 +13,8 @@ export const Button = (props: ButtonProps) => {
   const { webchatState, openWebview, sendPayload, sendInput, updateMessage } =
     useContext(WebchatContext)
 
-  const autoDisable = webchatState.theme?.button?.autodisable
+  const autoDisable =
+    webchatState.theme?.button?.autodisable || props.autodisable
 
   const handleClick = event => {
     event.preventDefault()

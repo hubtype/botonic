@@ -24,6 +24,7 @@ export interface BotonicPluginFlowBuilderOptions<
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
   contentFilters?: ContentFilter<TPlugins, TExtraData>[]
+  customRatingMessageEnabled?: boolean
 }
 
 export type TrackEventFunction<

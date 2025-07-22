@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3063](https://github.com/hubtype/botonic/pull/3063): Add rating flow to resolve rating nodes.
+- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Allow to enable CustomRatingMessage.
 
 ### Changed
 

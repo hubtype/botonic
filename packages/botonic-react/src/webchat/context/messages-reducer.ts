@@ -1,4 +1,5 @@
 import { SENDERS } from '../../index-types'
+import { isCustom } from '../../message-utils'
 import { WebchatAction } from './actions'
 import { WebchatState } from './types'
 
@@ -100,6 +101,13 @@ function updateMessageReducer(
           props: { ...msgComponent.props, ack: action.payload.ack },
         },
       }
+
+      if (isCustom(action.payload)) {
+        // If the message is a custom message, update the json property to update props.
+        // If user close and open the chat the message will render again with the new props.
+        updatedMsgComponent.props.json = action.payload.data.json
+      }
+
       updatedMessageComponents = {
         messagesComponents: [
           ...state.messagesComponents.slice(0, msgIndex),

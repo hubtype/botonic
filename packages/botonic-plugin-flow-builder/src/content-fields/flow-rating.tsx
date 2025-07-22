@@ -1,6 +1,12 @@
-import { isWhatsapp } from '@botonic/core'
-import { ActionRequest, Text, WhatsappButtonList } from '@botonic/react'
+import { isDev, isWebchat, isWhatsapp } from '@botonic/core'
+import {
+  ActionRequest,
+  CustomRatingMessage,
+  Text,
+  WhatsappButtonList,
+} from '@botonic/react'
 
+import { getFlowBuilderPlugin } from '../helpers'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtRatingNode, RatingType } from './hubtype-fields'
@@ -34,6 +40,10 @@ export class FlowRating extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+    const customRatingMessageEnabled =
+      flowBuilderPlugin.customRatingMessageEnabled
+
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappButtonList
@@ -50,6 +60,26 @@ export class FlowRating extends ContentFieldsBase {
         />
       )
     }
+
+    if (
+      (isWebchat(request.session) || isDev(request.session)) &&
+      customRatingMessageEnabled
+    ) {
+      const payloads = this.buttons
+        .map(button => button.payload)
+        .slice()
+        .reverse()
+
+      return (
+        <CustomRatingMessage
+          payloads={payloads}
+          messageText={this.text}
+          buttonText={this.sendButtonText}
+          ratingType={this.ratingType}
+        />
+      )
+    }
+
     return (
       <Text key={id}>
         {this.text}

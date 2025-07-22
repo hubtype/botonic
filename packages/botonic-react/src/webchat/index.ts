@@ -1,5 +1,6 @@
 // @ts-nocheck
 export { WebchatContext } from './context'
+export * from './custom-messages'
 export { Webchat } from './webchat'
 export { WebchatDev } from './webchat-dev'
 

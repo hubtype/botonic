@@ -70,6 +70,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   // TODO: Rethink how we construct FlowBuilderApi to be simpler
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
+  public customRatingMessageEnabled: boolean
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -91,6 +92,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
     }
     this.contentFilters = options.contentFilters || []
+    this.customRatingMessageEnabled =
+      options.customRatingMessageEnabled || false
   }
 
   resolveFlowUrl(request: PluginPreRequest): string {

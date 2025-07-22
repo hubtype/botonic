@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.36.5",
+  "version": "0.37.0-alpha.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
