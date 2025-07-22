@@ -14,13 +14,17 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Add CustomRatingMessage.
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.37.0] - 2025-07-22
+
+### Added
+
+- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Add CustomRatingMessage.
 
 ## [0.36.5] - 2025-07-14
 
