@@ -49,7 +49,7 @@ export default class BotonicPluginAiAgents implements Plugin {
         tools
       ).build()
 
-      const messages = await this.getMessages(request, authToken, 10)
+      const messages = await this.getMessages(request, authToken, 25)
       const context: Context = {
         authToken,
       }

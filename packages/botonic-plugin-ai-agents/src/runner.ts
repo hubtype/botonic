@@ -1,8 +1,9 @@
 import { Runner } from '@openai/agents'
+
 import {
-  AIAgent,
   AgenticInputMessage,
   AgenticOutputMessage,
+  AIAgent,
   Context,
 } from './types'
 
