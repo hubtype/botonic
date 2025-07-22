@@ -1,4 +1,5 @@
 import { INPUT, InputType } from '@botonic/core'
+import merge from 'lodash.merge'
 import React, { useContext, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
@@ -37,8 +38,15 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
       const messageToUpdate = webchatState.messagesJSON.filter(m => {
         return m.id === messageId
       })[0]
-      messageToUpdate.data.json.valueSent = ratingValue
-      updateMessage(messageToUpdate)
+      const messageInfo = {
+        data: {
+          json: {
+            valueSent: ratingValue,
+          },
+        },
+      }
+      const updatedMsg = merge(messageToUpdate, messageInfo)
+      updateMessage(updatedMsg)
     }
   }
 
