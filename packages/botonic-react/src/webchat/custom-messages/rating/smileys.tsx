@@ -10,8 +10,8 @@ import {
 import { RatingItemProps } from './types'
 
 const SMILEY_MAP = {
-  1: FaceFrownSvg,
-  2: FaceAngrySvg,
+  1: FaceAngrySvg,
+  2: FaceFrownSvg,
   3: FaceMehSvg,
   4: FaceSmileSvg,
   5: FaceGrinBeamSvg,
