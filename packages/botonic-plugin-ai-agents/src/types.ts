@@ -4,7 +4,7 @@ import {
   RunContext,
   Tool as OpenAITool,
 } from '@openai/agents'
-import { ZodObject } from 'zod'
+import { ZodSchema } from 'zod'
 
 import { OutputMessage, OutputSchema } from './structured-output'
 
@@ -15,7 +15,7 @@ export interface Context {
 export interface CustomTool {
   name: string
   description: string
-  schema: ZodObject<any>
+  schema: ZodSchema
   func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
 }
 
