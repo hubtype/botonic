@@ -7,9 +7,11 @@ import {
 import { ZodSchema } from 'zod'
 
 import { OutputMessage, OutputSchema } from './structured-output'
+import { BotContext } from '@botonic/core'
 
 export interface Context {
   authToken: string
+  request: BotContext
 }
 
 export interface CustomTool {

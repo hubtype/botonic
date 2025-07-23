@@ -1,3 +1,4 @@
 import { Tool } from '../types'
+import { updateUserProfile } from './profile'
 
-export const mandatoryTools: Tool[] = []
+export const mandatoryTools: Tool[] = [updateUserProfile]

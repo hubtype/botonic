@@ -46,12 +46,14 @@ export default class BotonicPluginAiAgents implements Plugin {
       const agent = new AIAgentBuilder(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
-        tools
+        tools,
+        request.session.user.extra_data['profile'] || {}
       ).build()
 
       const messages = await this.getMessages(request, authToken, 25)
       const context: Context = {
         authToken,
+        request,
       }
 
       const runner = new AIAgentRunner(agent)

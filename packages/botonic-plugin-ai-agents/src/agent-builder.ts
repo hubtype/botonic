@@ -9,9 +9,14 @@ export class AIAgentBuilder {
   private instructions: string
   private tools: Tool[]
 
-  constructor(name: string, instructions: string, tools: Tool[]) {
+  constructor(
+    name: string,
+    instructions: string,
+    tools: Tool[],
+    profile: Record<string, string>
+  ) {
     this.name = name
-    this.instructions = this.addExtraInstructions(instructions)
+    this.instructions = this.addExtraInstructions(instructions, profile)
     this.tools = this.addHubtypeTools(tools)
   }
 
@@ -24,7 +29,10 @@ export class AIAgentBuilder {
     })
   }
 
-  private addExtraInstructions(instructions: string): string {
+  private addExtraInstructions(
+    instructions: string,
+    profile: Record<string, string>
+  ): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
     const example = {
       messages: [
@@ -38,7 +46,7 @@ export class AIAgentBuilder {
       numMessages: 1,
     }
     const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
+    return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<profile>\n${JSON.stringify(profile)}\n</profile>\n\n<output>\n${output}\n</output>`
   }
 
   private addHubtypeTools(tools: Tool[]): Tool[] {
