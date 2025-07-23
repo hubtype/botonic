@@ -97,7 +97,9 @@ export class BotConfig {
         webviews: botConfig?.webviews || [],
       }
     } catch (error) {
-      console.error('Error loading src/bot-config.ts:', error)
+      console.warn(
+        'Error loading src/bot-config.ts this file is not required but is used to share config with flow builder frontend'
+      )
       return {
         tools: [],
         payloads: [],
