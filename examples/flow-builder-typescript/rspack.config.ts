@@ -1,9 +1,12 @@
 import { Configuration } from '@rspack/cli'
 import * as rspack from '@rspack/core'
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
+import { config } from 'dotenv'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
 import path from 'path'
+
+config()
 
 const ROOT_PATH = path.resolve(__dirname, 'src')
 const OUTPUT_PATH = path.resolve(__dirname, 'dist')

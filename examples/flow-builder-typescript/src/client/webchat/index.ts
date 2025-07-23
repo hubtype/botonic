@@ -1,4 +1,4 @@
-import { WebchatApp, WebchatArgs } from '@botonic/react'
+import { CustomRatingMessage, WebchatApp, WebchatArgs } from '@botonic/react'
 
 import { START_CONVERSATION_PAYLOAD } from '../../server/constants'
 
@@ -7,5 +7,8 @@ export const webchat: WebchatArgs = {
     if (app.getMessages()?.length === 0) {
       app.addUserPayload(START_CONVERSATION_PAYLOAD)
     }
+  },
+  theme: {
+    message: { customTypes: [CustomRatingMessage] },
   },
 }
