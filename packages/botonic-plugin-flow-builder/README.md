@@ -140,6 +140,26 @@ getKnowledgeBaseResponse: async (
 },
 ```
 
+- `getAiAgentResponse`: Using this option we can inject a function so that the bot can respond to the user using an AI agent with tools.
+
+e.g using @botonic/plugin-ai-agents
+
+```ts
+    getAiAgentResponse: async (
+      request: BotRequest,
+      aiAgentArgs: {
+        name: string
+        instructions: string
+      }
+    ) => {
+      const aiAgentPlugin = request.plugins.aiAgent
+      const response = await aiAgentPlugin.getInference(request, aiAgentArgs)
+      return response
+    },
+```
+
+- `customRatingMessageEnabled`: To enable custom message rating in webchat you need to configure the plugin with this option to true and import from @botonic/react the CustomRatingMessage and add it in webchat/index.ts as a message.customTypes
+
 2. Modify the `routes.ts` file, where routes map user inputs to actions which are in fact React Components:
 
 ```ts

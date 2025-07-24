@@ -1,5 +1,3 @@
-import { PROVIDER, Session } from '@botonic/core'
-
 export enum ENVIRONMENT {
   PRODUCTION = 'production',
   LOCAL = 'local',
@@ -10,7 +8,7 @@ export enum NODE_ENV {
   TEST = 'test',
 }
 
-const isExpectedEnvironemnt = (
+const isExpectedEnvironment = (
   env: ENVIRONMENT,
   expected: ENVIRONMENT
 ): boolean => env === expected
@@ -32,30 +30,10 @@ export const getEnvironment = (): ENVIRONMENT => {
 }
 
 export const isLocal = (env?: ENVIRONMENT): boolean =>
-  isExpectedEnvironemnt(env || getEnvironment(), ENVIRONMENT.LOCAL)
+  isExpectedEnvironment(env || getEnvironment(), ENVIRONMENT.LOCAL)
 
 export const isProduction = (env?: ENVIRONMENT): boolean =>
-  isExpectedEnvironemnt(env || getEnvironment(), ENVIRONMENT.PRODUCTION)
-
-export const isWhatsApp = (session: Session): boolean => {
-  return session.user.provider === PROVIDER.WHATSAPP
-}
-
-export const isWebchat = (session: Session): boolean => {
-  return session.user.provider === PROVIDER.WEBCHAT
-}
-
-export const isFacebook = (session: Session): boolean => {
-  return session.user.provider === PROVIDER.FACEBOOK
-}
-
-export const isTelegram = (session: Session): boolean => {
-  return session.user.provider === PROVIDER.TELEGRAM
-}
-
-export const isTwitter = (session: Session): boolean => {
-  return session.user.provider === PROVIDER.TWITTER
-}
+  isExpectedEnvironment(env || getEnvironment(), ENVIRONMENT.PRODUCTION)
 
 export function isBrowser() {
   return typeof window !== 'undefined'

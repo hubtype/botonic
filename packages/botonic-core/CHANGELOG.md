@@ -16,11 +16,15 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
--[PR-3068](https://github.com/hubtype/botonic/pull/3068): Store case rating for test integrations.
-
 ### Fixed
 
 </details>
+
+## [0.37.0] - 2025-07-22
+
+### Changed
+
+-[PR-3068](https://github.com/hubtype/botonic/pull/3068): Store case rating for test integrations.
 
 ## [0.35.2] - 2025-05-27
 
