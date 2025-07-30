@@ -217,6 +217,7 @@ export interface SessionUser<TExtraData = any> {
   // whatsapp, telegram,...
   provider: ProviderType
   // The provider's user id
+  contact_info?: Record<string, any>
   extra_data?: TExtraData
   imp_id?: string
   provider_id?: string
