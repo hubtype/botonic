@@ -1,22 +1,26 @@
 import {
   Agent,
   AgentInputItem,
-  RunContext,
   Tool as OpenAITool,
+  RunContext as OpenAIRunContext,
 } from '@openai/agents'
 import { ZodSchema } from 'zod'
 
+import { BotContext } from '@botonic/core'
 import { OutputMessage, OutputSchema } from './structured-output'
 
 export interface Context {
   authToken: string
+  request: BotContext
 }
+
+export type RunContext = OpenAIRunContext<Context>
 
 export interface CustomTool {
   name: string
   description: string
   schema: ZodSchema
-  func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
+  func: (input?: any, runContext?: RunContext) => Promise<any>
 }
 
 export type Tool = OpenAITool<Context>
