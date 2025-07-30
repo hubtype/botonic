@@ -117,6 +117,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       inputHasTextData(request.input) && !request.input.payload
 
     if (checkUserTextInput) {
+      if (request.input.message_id) {
+        request.session.user.contact_info = await this.cmsApi.updateContactInfo(
+          this.getAccessToken(request.session),
+          request.input.message_id
+        )
+      }
       const resolvedLocale = this.cmsApi.getResolvedLocale()
       const nodeByUserInput = await getNodeByUserInput(
         this.cmsApi,

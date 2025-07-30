@@ -1,6 +1,5 @@
-import { Input, PluginPreRequest } from '@botonic/core'
+import { PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
-
 import {
   AI_AGENTS_FLOW_NAME,
   KNOWLEDGE_BASE_FLOW_NAME,
@@ -298,5 +297,28 @@ export class FlowBuilderApi {
       `Resolve locale with default locale: ${this.flow.default_locale_code}`
     )
     return this.flow.default_locale_code || 'en'
+  }
+
+  async updateContactInfo(
+    token: string,
+    lastMessageId: string,
+    memory_length: number = 10
+  ): Promise<Record<string, any>> {
+    const url = `${this.url}/external/v1/entities/synchronize/`
+    const params = {
+      last_message_id: lastMessageId,
+      memory_length: memory_length,
+    }
+    const { data } = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      params,
+    })
+    return (data['entities'] || []).reduce(
+      (acc, entity) => {
+        acc[entity.name] = entity.value
+        return acc
+      },
+      {} as Record<string, any>
+    )
   }
 }
