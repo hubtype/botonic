@@ -21,7 +21,7 @@ export class FlowElement extends ContentFieldsBase {
     const newElement = new FlowElement(component.id)
     newElement.title = this.getTextByLocale(locale, component.title)
     newElement.subtitle = this.getTextByLocale(locale, component.subtitle)
-    newElement.image = this.getImageByLocale(locale, component.image)
+    newElement.image = this.getAssetByLocale(locale, component.image)
     newElement.button = FlowButton.fromHubtypeCMS(
       component.button,
       locale,
