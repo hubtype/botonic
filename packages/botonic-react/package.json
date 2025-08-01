@@ -9,6 +9,7 @@
   "scripts": {
     "test:no-coverage": "../../node_modules/.bin/jest -c ./jest.config.js",
     "test": "../../node_modules/.bin/jest -c ./jest.config.js --coverage",
+    "updateSnapshot": "../../node_modules/.bin/jest -c ./jest.config.js --updateSnapshot",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "npm run clean; npm i; npm run build; npm run copy-files;",
     "clean": "rm -rf ./lib/",

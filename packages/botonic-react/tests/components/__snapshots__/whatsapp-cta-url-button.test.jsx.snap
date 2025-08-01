@@ -5,7 +5,6 @@ exports[`renders WhatsappCTAUrlButton component (passing a URL) 1`] = `
   body="This is the body"
   displayText="Go to Hubtype"
   footer="This is the footer"
-  header="This is the header"
   type="whatsapp-cta-url-button"
   url="https://www.hubtype.com"
 />
@@ -17,6 +16,7 @@ exports[`renders WhatsappCTAUrlButton component (passing a Webview) 1`] = `
   displayText="Go to webview"
   footer="This is the footer"
   header="This is the header"
+  headerType="text"
   params={
     {
       "numbers": "123",

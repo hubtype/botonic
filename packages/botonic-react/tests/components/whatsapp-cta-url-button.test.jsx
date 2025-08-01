@@ -22,6 +22,7 @@ test('renders WhatsappCTAUrlButton component (passing a URL)', () => {
 test('renders WhatsappCTAUrlButton component (passing a Webview)', () => {
   class MyWebview {}
   const props = {
+    headerType: 'text',
     header: 'This is the header',
     body: 'This is the body',
     footer: 'This is the footer',
