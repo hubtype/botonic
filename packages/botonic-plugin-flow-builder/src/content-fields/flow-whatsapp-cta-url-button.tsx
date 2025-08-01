@@ -58,7 +58,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     locale: string
   ) {
     // If header is set, set header_type to text, this is need to be compatible with the old version of the component
-    if (component.content.header) {
+    if (component.content.header.length > 0) {
       component.content.header_type = WhatsappCTAUrlHeaderType.Text
     }
 
