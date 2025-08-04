@@ -19,9 +19,10 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
 }
 
+export type ContactInfo = Record<string, string>
+
 export type Tool = OpenAITool<Context>
 export type AIAgent = Agent<Context, typeof OutputSchema>
-
 export interface PluginAiAgentOptions {
   authToken?: string
   customTools?: CustomTool[]
