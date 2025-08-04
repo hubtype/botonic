@@ -6,12 +6,10 @@ import {
 } from '@openai/agents'
 import { ZodSchema } from 'zod'
 
-import { BotContext } from '@botonic/core'
 import { OutputMessage, OutputSchema } from './structured-output'
 
 export interface Context {
   authToken: string
-  request: BotContext
 }
 
 export type RunContext = OpenAIRunContext<Context>

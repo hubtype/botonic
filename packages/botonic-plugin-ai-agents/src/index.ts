@@ -52,7 +52,6 @@ export default class BotonicPluginAiAgents implements Plugin {
       const messages = await this.getMessages(request, authToken, 25)
       const context: Context = {
         authToken,
-        request,
       }
 
       const runner = new AIAgentRunner(agent)
