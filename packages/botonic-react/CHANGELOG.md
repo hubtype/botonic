@@ -14,7 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
--[PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Update Whatsapp CTA URL to accept image, video or document in header.
+- [PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Update Whatsapp CTA URL to accept image, video or document in header.
+- [PR-3077](https://github.com/hubtype/botonic/pull/3077): Input panel buttons no need enable attribute to be used.
 
 ### Changed
 
