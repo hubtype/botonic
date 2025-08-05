@@ -13,23 +13,58 @@ import {
 } from './multichannel/whatsapp/constants'
 import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 
-export interface WhatsappCTAUrlButtonCommonProps {
-  header?: string
+export enum WhatsappCTAUrlHeaderType {
+  Document = 'document',
+  Image = 'image',
+  Text = 'text',
+  Video = 'video',
+}
+export interface WhatsappCTAUrlHeaderTextProps {
+  headerType: WhatsappCTAUrlHeaderType.Text
+  header: string
+}
+
+export interface WhatsappCTAUrlHeaderImageProps {
+  headerType: WhatsappCTAUrlHeaderType.Image
+  headerImage: string
+}
+
+export interface WhatsappCTAUrlHeaderVideoProps {
+  headerType: WhatsappCTAUrlHeaderType.Video
+  headerVideo: string
+}
+
+export interface WhatsappCTAUrlHeaderDocumentProps {
+  headerType: WhatsappCTAUrlHeaderType.Document
+  headerDocument: string
+}
+
+export interface WhatsappCTAUrlNoHeaderProps {
+  headerType?: undefined
+}
+
+export type WhatsappCTAUrlHeader =
+  | WhatsappCTAUrlHeaderTextProps
+  | WhatsappCTAUrlHeaderImageProps
+  | WhatsappCTAUrlHeaderVideoProps
+  | WhatsappCTAUrlHeaderDocumentProps
+  | WhatsappCTAUrlNoHeaderProps
+
+export type WhatsappCTAUrlButtonCommonProps = WhatsappCTAUrlHeader & {
   body: string
   footer?: string
   displayText: string
 }
 
-export interface WhatsappCTAUrlButtonUrlProps
-  extends WhatsappCTAUrlButtonCommonProps {
+export type WhatsappCTAUrlButtonUrlProps = WhatsappCTAUrlButtonCommonProps & {
   url: string
 }
 
-export interface WhatsappCTAUrlButtonWebviewProps
-  extends WhatsappCTAUrlButtonCommonProps {
-  webview: any
-  params?: any
-}
+export type WhatsappCTAUrlButtonWebviewProps =
+  WhatsappCTAUrlButtonCommonProps & {
+    webview: any
+    params?: any
+  }
 
 export type WhatsappCTAUrlButtonProps =
   | WhatsappCTAUrlButtonUrlProps
@@ -58,9 +93,23 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
   const renderNode = () => {
     const validatedProps = {
       ...props,
-      header: props.header
-        ? truncateText(props.header, WHATSAPP_MAX_HEADER_CHARS)
-        : undefined,
+      headerType: props.headerType,
+      header:
+        props.headerType === WhatsappCTAUrlHeaderType.Text && props.header
+          ? truncateText(props.header, WHATSAPP_MAX_HEADER_CHARS)
+          : undefined,
+      headerImage:
+        props.headerType === WhatsappCTAUrlHeaderType.Image
+          ? props.headerImage
+          : undefined,
+      headerVideo:
+        props.headerType === WhatsappCTAUrlHeaderType.Video
+          ? props.headerVideo
+          : undefined,
+      headerDocument:
+        props.headerType === WhatsappCTAUrlHeaderType.Document
+          ? props.headerDocument
+          : undefined,
       body: truncateText(
         convertToMarkdownMeta(props.body),
         WHATSAPP_MAX_BODY_CHARS
