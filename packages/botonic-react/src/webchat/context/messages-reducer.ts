@@ -160,17 +160,16 @@ function updateCustomJsonMessageReducer(
   action: { type: WebchatAction; payload?: any }
 ) {
   const { messageId, json } = action.payload
-  const messageToUpdate = state.messagesJSON.findIndex(m => m.id === messageId)
+  const messageToUpdate = state.messagesJSON.find(m => m.id === messageId)
   const messageInfo = {
     data: {
       json,
     },
   }
   const updatedMsg = merge(messageToUpdate, messageInfo)
-  updateMessageReducer(state, {
+
+  return updateMessageReducer(state, {
     type: WebchatAction.UPDATE_MESSAGE,
     payload: updatedMsg,
   })
-
-  return state
 }
