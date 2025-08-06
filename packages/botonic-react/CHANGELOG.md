@@ -10,19 +10,23 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.37.1] - 2025-mm-dd
+## [0.37.x] - 2025-mm-dd
 
 ### Added
-
-- [PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Update Whatsapp CTA URL to accept image, video or document in header.
-- [PR-3077](https://github.com/hubtype/botonic/pull/3077): Input panel buttons no need enable attribute to be used.
-- [PR-3078](https://github.com/hubtype/botonic/pull/3078): Multichannel change buttons for replies when a text in facebook has more than 3 buttons.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.37.1] - 2025-08-06
+
+### Added
+
+- [PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Update Whatsapp CTA URL to accept image, video or document in header.
+- [PR-3077](https://github.com/hubtype/botonic/pull/3077): Input panel buttons no need enable attribute to be used.
+- [PR-3078](https://github.com/hubtype/botonic/pull/3078): Multichannel change buttons for replies when a text in facebook has more than 3 buttons.
 
 ## [0.37.0] - 2025-07-22
 
