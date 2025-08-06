@@ -79,11 +79,11 @@ export const defaultTheme: WebchatTheme = {
   },
   triggerButton: { image: WEBCHAT.DEFAULTS.LOGO },
   userInput: {
-    attachments: { enable: false },
+    attachments: { enable: undefined },
     box: {
       placeholder: 'Ask me something...',
     },
-    emojiPicker: { enable: false },
+    emojiPicker: { enable: undefined },
     sendButton: { enable: true },
     enable: true,
   },

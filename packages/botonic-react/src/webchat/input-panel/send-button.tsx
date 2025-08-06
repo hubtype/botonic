@@ -13,13 +13,19 @@ interface SendButtonProps {
 export const SendButton = ({ onClick }: SendButtonProps) => {
   const { webchatState } = useContext(WebchatContext)
 
-  const sendButtonEnabled = webchatState.theme.userInput?.sendButton?.enable
-
   const CustomSendButton = webchatState.theme.userInput?.sendButton?.custom
+
+  const isSendButtonEnabled = () => {
+    const hasCustomSendButton = !!CustomSendButton
+    return (
+      webchatState.theme.userInput?.sendButton?.enable ?? hasCustomSendButton
+    )
+  }
+  const sendButtonEnabled = isSendButtonEnabled()
 
   return (
     <>
-      {sendButtonEnabled || CustomSendButton ? (
+      {sendButtonEnabled ? (
         <ConditionalAnimation>
           <div onClick={onClick} role={ROLES.SEND_BUTTON_ICON}>
             {CustomSendButton ? (
