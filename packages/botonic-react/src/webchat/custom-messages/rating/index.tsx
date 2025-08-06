@@ -1,10 +1,10 @@
 import { INPUT, InputType } from '@botonic/core'
-import merge from 'lodash.merge'
 import React, { useContext, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import { Button, customMessage } from '../../../components'
 import { WebchatContext } from '../../context'
+import { CustomJsonBase } from '../types'
 import { RatingSelector } from './rating-selector'
 import { MessageBubble } from './styles'
 import { RatingType } from './types'
@@ -14,12 +14,12 @@ interface CustomRatingMessageProps {
   messageText: string
   buttonText: string
   ratingType: RatingType
-  json: { messageId?: string; valueSent?: number }
+  json: CustomJsonBase & { valueSent?: number }
 }
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   const { payloads, messageText, buttonText, ratingType } = props
-  const { webchatState, updateMessage, sendInput } = useContext(WebchatContext)
+  const { updateCustomJsonMessage, sendInput } = useContext(WebchatContext)
 
   const theme = useContext(ThemeContext)
   const color = theme?.brand?.color ?? ''
@@ -33,37 +33,23 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
     setRatingValue(newRating)
   }
 
-  const updateMessageJSON = (messageId?: string) => {
-    if (messageId) {
-      const messageToUpdate = webchatState.messagesJSON.filter(m => {
-        return m.id === messageId
-      })[0]
-      const messageInfo = {
-        data: {
-          json: {
-            valueSent: ratingValue,
-          },
-        },
-      }
-      const updatedMsg = merge(messageToUpdate, messageInfo)
-      updateMessage(updatedMsg)
-    }
-  }
-
   const handleButtonSend = () => {
-    if (ratingValue !== -1) {
-      setShowRating(false)
+    if (ratingValue === -1) return
 
-      const payload = payloads[ratingValue - 1]
-
-      updateMessageJSON(props.json?.messageId)
-
-      const input = {
-        type: INPUT.POSTBACK as InputType,
-        payload,
-      }
-      void sendInput(input)
+    if (props.json?.messageId) {
+      updateCustomJsonMessage(props.json.messageId, {
+        valueSent: ratingValue,
+      })
     }
+
+    setShowRating(false)
+    const payload = payloads[ratingValue - 1]
+
+    const input = {
+      type: INPUT.POSTBACK as InputType,
+      payload,
+    }
+    void sendInput(input)
   }
 
   const disabled = ratingValue === -1

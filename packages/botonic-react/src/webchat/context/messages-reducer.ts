@@ -1,3 +1,5 @@
+import merge from 'lodash.merge'
+
 import { SENDERS } from '../../index-types'
 import { isCustom } from '../../message-utils'
 import { WebchatAction } from './actions'
@@ -14,6 +16,8 @@ export const messagesReducer = (
       return addMessageComponent(state, action)
     case WebchatAction.UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
+    case WebchatAction.UPDATE_CUSTOM_JSON_MESSAGE:
+      return updateCustomJsonMessageReducer(state, action)
     case WebchatAction.UPDATE_REPLIES:
       return { ...state, replies: action.payload }
     case WebchatAction.REMOVE_REPLIES:
@@ -149,4 +153,24 @@ function addMessageReducer(
     ...state,
     messagesJSON: [...(state.messagesJSON || []), action.payload],
   }
+}
+
+function updateCustomJsonMessageReducer(
+  state: WebchatState,
+  action: { type: WebchatAction; payload?: any }
+) {
+  const { messageId, json } = action.payload
+  const messageToUpdate = state.messagesJSON.findIndex(m => m.id === messageId)
+  const messageInfo = {
+    data: {
+      json,
+    },
+  }
+  const updatedMsg = merge(messageToUpdate, messageInfo)
+  updateMessageReducer(state, {
+    type: WebchatAction.UPDATE_MESSAGE,
+    payload: updatedMsg,
+  })
+
+  return state
 }
