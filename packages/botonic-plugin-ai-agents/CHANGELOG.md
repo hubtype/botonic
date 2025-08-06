@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.37.1] - 2025-08-06
+
+### Changed
+
+- [PR-3075](https://github.com/hubtype/botonic/pull/3075): Change type for context to RunContext in tools.
+
 ## [0.37.0] - 2025-07-22
 
 ### Added
