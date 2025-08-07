@@ -2,7 +2,7 @@ import { Agent } from '@openai/agents'
 
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
-import { AIAgent, ContactInfo, Flag, Tool } from './types'
+import { AIAgent, ContactInfo, GuardrailFlag, Tool } from './types'
 import { createInputGuardrail } from './guardrails'
 
 export class AIAgentBuilder {
@@ -22,7 +22,7 @@ export class AIAgentBuilder {
   }
 
   build(): AIAgent {
-    const flags: Flag[] = [
+    const flags: GuardrailFlag[] = [
       {
         name: 'isOffensive',
         description: 'Whether the user input is offensive.',

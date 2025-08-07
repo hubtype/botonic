@@ -1,8 +1,8 @@
 import { Agent, InputGuardrail, run } from '@openai/agents'
-import { Flag } from '../types'
+import { GuardrailFlag } from '../types'
 import { z } from 'zod'
 
-export function createInputGuardrail(flags: Flag[]): InputGuardrail {
+export function createInputGuardrail(flags: GuardrailFlag[]): InputGuardrail {
   const outputType = z.object(
     Object.fromEntries(
       flags.map(flag => [flag.name, z.boolean().describe(flag.description)])

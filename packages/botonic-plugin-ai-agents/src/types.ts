@@ -19,7 +19,7 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
 }
 
-export interface Flag {
+export interface GuardrailFlag {
   name: string
   description: string
 }
