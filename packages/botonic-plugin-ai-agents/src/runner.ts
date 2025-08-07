@@ -1,4 +1,4 @@
-import { Runner } from '@openai/agents'
+import { Runner, InputGuardrailTripwireTriggered } from '@openai/agents'
 
 import {
   AgenticInputMessage,
@@ -35,6 +35,9 @@ export class AIAgentRunner {
       const result = await runner.run(this.agent, messages, { context })
       return result.finalOutput?.messages || []
     } catch (error) {
+      if (error instanceof InputGuardrailTripwireTriggered) {
+        return [{ type: 'exit' }] // TODO: Add a new message type for this?
+      }
       if (attempt > maxRetries) {
         throw error
       }

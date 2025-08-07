@@ -2,7 +2,8 @@ import { Agent } from '@openai/agents'
 
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
-import { AIAgent, ContactInfo, Tool } from './types'
+import { AIAgent, ContactInfo, Flag, Tool } from './types'
+import { createInputGuardrail } from './guardrails'
 
 export class AIAgentBuilder {
   private name: string
@@ -17,16 +18,44 @@ export class AIAgentBuilder {
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions, contactInfo)
-    console.log('AI AgentInstructions:\n', this.instructions)
     this.tools = this.addHubtypeTools(tools)
   }
 
   build(): AIAgent {
+    const flags: Flag[] = [
+      {
+        name: 'isOffensive',
+        description: 'Whether the user input is offensive.',
+      },
+      {
+        name: 'talksAboutHockey',
+        description: 'Whether the user input is about hockey.',
+      },
+      {
+        name: 'isHarassment',
+        description: 'Whether the user input is harassment.',
+      },
+      {
+        name: 'isSpam',
+        description: 'Whether the user input is spam.',
+      },
+      {
+        name: 'isIllegal',
+        description: 'Whether the user input is illegal.',
+      },
+      {
+        name: 'isNSFW',
+        description: 'Whether the user input is NSFW.',
+      },
+    ]
+    const inputGuardrail = createInputGuardrail(flags)
     return new Agent({
       name: this.name,
       instructions: this.instructions,
       tools: this.tools,
       outputType: OutputSchema,
+      inputGuardrails: [inputGuardrail],
+      outputGuardrails: [],
     })
   }
 

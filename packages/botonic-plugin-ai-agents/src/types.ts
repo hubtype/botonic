@@ -19,6 +19,11 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext<Context>) => Promise<any>
 }
 
+export interface Flag {
+  name: string
+  description: string
+}
+
 export type ContactInfo = Record<string, string>
 
 export type Tool = OpenAITool<Context>
