@@ -7,6 +7,7 @@ import {
 import { ZodSchema } from 'zod'
 
 import { OutputMessage, OutputSchema } from './structured-output'
+import { ExitMessage } from './structured-output/exit'
 
 export interface Context {
   authToken: string
@@ -36,7 +37,7 @@ export interface AiAgentArgs {
 }
 
 export type AgenticInputMessage = AgentInputItem
-export type AgenticOutputMessage = OutputMessage
+export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
 
 export interface RunResult {
   messages: AgenticOutputMessage[]
