@@ -1,12 +1,6 @@
 import { Runner, RunToolCallItem } from '@openai/agents'
 
-import {
-  AgenticInputMessage,
-  AgenticOutputMessage,
-  AIAgent,
-  Context,
-  RunResult,
-} from './types'
+import { AgenticInputMessage, AIAgent, Context, RunResult } from './types'
 
 export class AIAgentRunner {
   private agent: AIAgent
@@ -34,23 +28,17 @@ export class AIAgentRunner {
         modelSettings: { temperature: 0 },
       })
       const result = await runner.run(this.agent, messages, { context })
-      console.log('result', result)
 
       const outputMessages = result.finalOutput?.messages || []
-      const hasExit = outputMessages.some(message => message.type === 'exit')
-      const toolsExecuted =
-        result.newItems
-          ?.filter(item => item instanceof RunToolCallItem)
-          .map(item => {
-            if (item.rawItem.type === 'function_call') {
-              return item.rawItem.name
-            }
-            return ''
-          })
-          .filter(item => item !== '') || []
+      const hasExit =
+        outputMessages.length === 0 ||
+        outputMessages.some(message => message.type === 'exit')
+      const toolsExecuted = this.getExecutedNameTools(result)
 
       return {
-        messages: hasExit ? [] : outputMessages,
+        messages: hasExit
+          ? []
+          : outputMessages.filter(message => message.type !== 'exit'),
         toolsExecuted,
         exit: hasExit,
         inputGuardrailTriggered: false,
@@ -62,5 +50,19 @@ export class AIAgentRunner {
       }
       return this.runWithRetry(messages, context, maxRetries, attempt + 1)
     }
+  }
+
+  private getExecutedNameTools(result) {
+    return (
+      result.newItems
+        ?.filter(item => item instanceof RunToolCallItem)
+        .map((item: RunToolCallItem) => {
+          if (item.rawItem.type === 'function_call') {
+            return item.rawItem.name
+          }
+          return ''
+        })
+        .filter((toolName: string) => toolName !== '') || []
+    )
   }
 }
