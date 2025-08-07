@@ -19,7 +19,7 @@ interface CustomRatingMessageProps {
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   const { payloads, messageText, buttonText, ratingType } = props
-  const { updateCustomJsonMessage, sendInput } = useContext(WebchatContext)
+  const { updateCustomMessageJSON, sendInput } = useContext(WebchatContext)
 
   const theme = useContext(ThemeContext)
   const color = theme?.brand?.color ?? ''
@@ -37,7 +37,7 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
     if (ratingValue === -1) return
 
     if (props.json?.messageId) {
-      updateCustomJsonMessage(props.json.messageId, {
+      updateCustomMessageJSON(props.json.messageId, {
         valueSent: ratingValue,
       })
     }

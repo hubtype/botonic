@@ -16,8 +16,8 @@ export const messagesReducer = (
       return addMessageComponent(state, action)
     case WebchatAction.UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
-    case WebchatAction.UPDATE_CUSTOM_JSON_MESSAGE:
-      return updateCustomJsonMessageReducer(state, action)
+    case WebchatAction.UPDATE_CUSTOM_MESSAGE_JSON:
+      return updateCustomMessageJSONReducer(state, action)
     case WebchatAction.UPDATE_REPLIES:
       return { ...state, replies: action.payload }
     case WebchatAction.REMOVE_REPLIES:
@@ -155,7 +155,7 @@ function addMessageReducer(
   }
 }
 
-function updateCustomJsonMessageReducer(
+function updateCustomMessageJSONReducer(
   state: WebchatState,
   action: { type: WebchatAction; payload?: any }
 ) {

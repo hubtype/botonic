@@ -13,7 +13,7 @@ export enum WebchatAction {
   TOGGLE_EMOJI_PICKER = 'toggleEmojiPicker',
   TOGGLE_PERSISTENT_MENU = 'togglePersistentMenu',
   TOGGLE_WEBCHAT = 'toggleWebchat',
-  UPDATE_CUSTOM_JSON_MESSAGE = 'updateCustomJsonMessage',
+  UPDATE_CUSTOM_MESSAGE_JSON = 'updateCustomMessageJSON',
   UPDATE_DEV_SETTINGS = 'updateDevSettings',
   UPDATE_HANDOFF = 'updateHandoff',
   UPDATE_LAST_MESSAGE_DATE = 'updateLastMessageDate',
