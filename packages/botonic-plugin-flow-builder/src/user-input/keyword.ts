@@ -1,4 +1,4 @@
-import { NluType } from '@botonic/core'
+import { EventAction, EventKeyword, NluType } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -7,7 +7,7 @@ import {
   HtKeywordNode,
   HtNodeWithContent,
 } from '../content-fields/hubtype-fields'
-import { EventAction, trackEvent } from '../tracking'
+import { trackEvent } from '../tracking'
 
 interface KeywordProps {
   cmsApi: FlowBuilderApi
@@ -101,15 +101,17 @@ export class KeywordMatcher {
   }
 
   private async trackKeywordEvent() {
-    const eventArgs = {
-      nluKeywordName: this.matchedKeyword,
+    const event: EventKeyword = {
+      action: EventAction.Keyword,
+      flowThreadId: this.request.session.flow_thread_id as string,
+      flowNodeId: this.keywordNodeId as string,
+      flowId: this.flowId as string,
+      nluKeywordName: this.matchedKeyword as string,
       nluKeywordIsRegex: this.isRegExp,
       nluKeywordMessageId: this.request.input.message_id,
-      userInput: this.request.input.data,
-      flowThreadId: this.request.session.flow_thread_id,
-      flowId: this.flowId,
-      flowNodeId: this.keywordNodeId,
+      userInput: this.request.input.data as string,
     }
-    await trackEvent(this.request, EventAction.Keyword, eventArgs)
+    const { action, ...eventArgs } = event
+    await trackEvent(this.request, action, eventArgs)
   }
 }
