@@ -1,5 +1,10 @@
-import { FlowContent } from '../content-fields'
-import { FlowAiAgent } from '../content-fields/flow-ai-agent'
+import { BotContext } from '@botonic/core'
+
+import { FlowAiAgent, FlowContent } from '../content-fields'
+import { HtNodeWithContent } from '../content-fields/hubtype-fields'
+import { getFlowBuilderPlugin } from '../helpers'
+import { EventAction, trackEvent } from '../tracking'
+import { AiAgentInferenceResponse } from '../types'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
@@ -36,6 +41,7 @@ export async function getContentsByAiAgent({
   if (!aiAgentResponse) {
     return []
   }
+  trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
 
   if (aiAgentResponse.exit) {
     return []
@@ -44,4 +50,49 @@ export async function getContentsByAiAgent({
   aiAgentContent.responses = aiAgentResponse.messages
 
   return contents
+}
+
+async function trackAiAgentResponse(
+  aiAgentResponse: AiAgentInferenceResponse,
+  request: BotContext,
+  aiAgentContent: FlowAiAgent
+) {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowId = flowBuilderPlugin.cmsApi.getNodeById<HtNodeWithContent>(
+    aiAgentContent.id
+  ).flow_id
+  const flowName = flowBuilderPlugin.getFlowName(flowId)
+
+  const eventArgs: EventAiAgent = {
+    flowThreadId: request.session.flow_thread_id!,
+    flowId: flowId,
+    flowName: flowName,
+    flowNodeId: aiAgentContent.id,
+    flowNodeContentId: aiAgentContent.code,
+    flowNodeIsMeaningful: true,
+    toolsExecuted: aiAgentResponse.toolsExecuted,
+    exit: aiAgentResponse.exit,
+    inputGuardrailTriggered: [], //aiAgentResponse.inputGuardrailTriggered,
+    outputGuardrailTriggered: [], //aiAgentResponse.outputGuardrailTriggered,
+    error: false, // aiAgentResponse.error,
+    messageId: request.input.message_id!,
+  }
+
+  await trackEvent(request, EventAction.AiAgent, eventArgs)
+}
+
+// TODO: Remove this interface when we can import from @botonic/core
+interface EventAiAgent {
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful: boolean
+  toolsExecuted: string[]
+  inputGuardrailTriggered: string[]
+  outputGuardrailTriggered: string[]
+  exit: boolean
+  error: boolean
+  messageId: string
 }

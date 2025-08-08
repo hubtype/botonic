@@ -15,6 +15,7 @@ export enum EventAction {
   Knowledgebase = 'knowledgebase',
   Fallback = 'fallback',
   FeedbackCase = 'feedback_case',
+  AiAgent = 'ai_agent',
 }
 
 export enum KnowledgebaseFailReason {
