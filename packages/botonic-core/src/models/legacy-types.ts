@@ -218,6 +218,7 @@ export interface SessionUser<TExtraData = any> {
   provider: ProviderType
   // The provider's user id
   extra_data?: TExtraData
+  contact_info?: Record<string, string>
   imp_id?: string
   provider_id?: string
   locale: string

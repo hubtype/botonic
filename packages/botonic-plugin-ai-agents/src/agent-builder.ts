@@ -2,16 +2,21 @@ import { Agent } from '@openai/agents'
 
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
-import { AIAgent, Tool } from './types'
+import { AIAgent, ContactInfo, Tool } from './types'
 
 export class AIAgentBuilder {
   private name: string
   private instructions: string
   private tools: Tool[]
 
-  constructor(name: string, instructions: string, tools: Tool[]) {
+  constructor(
+    name: string,
+    instructions: string,
+    tools: Tool[],
+    contactInfo: ContactInfo
+  ) {
     this.name = name
-    this.instructions = this.addExtraInstructions(instructions)
+    this.instructions = this.addExtraInstructions(instructions, contactInfo)
     this.tools = this.addHubtypeTools(tools)
   }
 
@@ -24,8 +29,29 @@ export class AIAgentBuilder {
     })
   }
 
-  private addExtraInstructions(instructions: string): string {
+  private addExtraInstructions(
+    initialInstructions: string,
+    contactInfo: ContactInfo
+  ): string {
+    const metadataInstructions = this.getMetadataInstructions()
+    const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
+    const outputInstructions = this.getOutputInstructions()
+    return `${initialInstructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
+  }
+
+  private getContactInfoInstructions(contactInfo: ContactInfo): string {
+    const structuredContactInfo = Object.entries(contactInfo)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n')
+    return `<contact_info>\n${structuredContactInfo}\n</contact_info>`
+  }
+
+  private getMetadataInstructions(): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
+    return `<metadata>\n${metadata}\n</metadata>`
+  }
+
+  private getOutputInstructions(): string {
     const example = {
       messages: [
         {
@@ -38,7 +64,7 @@ export class AIAgentBuilder {
       numMessages: 1,
     }
     const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `<instructions>\n${instructions}\n</instructions>\n\n<metadata>\n${metadata}\n</metadata>\n\n<output>\n${output}\n</output>`
+    return `<output>\n${output}\n</output>`
   }
 
   private addHubtypeTools(tools: Tool[]): Tool[] {
