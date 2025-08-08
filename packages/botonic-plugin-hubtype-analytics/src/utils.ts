@@ -1,5 +1,6 @@
 import {
   HtEvent,
+  HtEventAiAgent,
   HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
@@ -59,6 +60,9 @@ export function createHtEvent(
 
     case EventAction.Custom:
       return new HtEventCustom(htEventProps, requestData)
+
+    case EventAction.AiAgent:
+      return new HtEventAiAgent(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

@@ -20,6 +20,7 @@ export enum EventAction {
   WebviewStep = 'webview_step',
   WebviewEnd = 'webview_end',
   Custom = 'custom',
+  AiAgent = 'ai_agent',
 }
 
 export interface HtBaseEventProps {
@@ -161,6 +162,22 @@ export interface EventCustom extends HtBaseEventProps {
   customSensitiveFields?: Record<string, any>
 }
 
+export interface EventAiAgent extends HtBaseEventProps {
+  action: EventAction.AiAgent
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful: boolean
+  toolsExecuted: string[]
+  inputGuardrailTriggered: string[]
+  outputGuardrailTriggered: string[]
+  exit: boolean
+  error: boolean
+  messageId: string
+}
+
 export type HtEventProps =
   | EventFeedback
   | EventFeedbackKnowledgebase
@@ -174,6 +191,7 @@ export type HtEventProps =
   | EventWebviewStep
   | EventWebviewEnd
   | EventCustom
+  | EventAiAgent
 
 export interface RequestData {
   userId?: string
