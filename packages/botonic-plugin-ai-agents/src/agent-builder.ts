@@ -17,7 +17,6 @@ export class AIAgentBuilder {
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions, contactInfo)
-    console.log('AI AgentInstructions:\n', this.instructions)
     this.tools = this.addHubtypeTools(tools)
   }
 
