@@ -1,3 +1,4 @@
+import { EventFeedbackKnowledgebase } from '@botonic/core'
 import { useContext } from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -14,7 +15,7 @@ interface TrackKnowledgebaseFeedbackArgs {
   inferenceId?: string
 }
 
-export enum FeedbackOption {
+enum FeedbackOption {
   ThumbsUp = 'thumbsUp',
   ThumbsDown = 'thumbsDown',
 }
@@ -46,10 +47,13 @@ export function useTracking() {
     if (!trackEvent) {
       return
     }
+    const request = getRequest()
 
-    const args = {
-      knowledgebaseInferenceId: inferenceId,
-      feedbackBotInteractionId: botInteractionId,
+    // inferenceId and botInteractionId are strings, but in local development they are undefined
+    const event: EventFeedbackKnowledgebase = {
+      action: EventAction.FeedbackKnowledgebase,
+      knowledgebaseInferenceId: inferenceId as string,
+      feedbackBotInteractionId: botInteractionId as string,
       feedbackTargetId: messageId,
       feedbackGroupId: uuidv7(),
       possibleOptions: [FeedbackOption.ThumbsDown, FeedbackOption.ThumbsUp],
@@ -57,6 +61,10 @@ export function useTracking() {
       option: isUseful ? FeedbackOption.ThumbsUp : FeedbackOption.ThumbsDown,
       value: isUseful ? 1 : 0,
     }
+    const { action, ...eventArgs } = event
+
+    await trackEvent(request, action, eventArgs)
+  }
 
     const request = getRequest()
 
