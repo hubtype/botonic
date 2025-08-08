@@ -61,7 +61,6 @@ export class AIAgentBuilder {
           },
         },
       ],
-      numMessages: 1,
     }
     const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
     return `<output>\n${output}\n</output>`
