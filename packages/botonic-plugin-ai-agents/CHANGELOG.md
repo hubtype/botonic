@@ -14,6 +14,9 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3076](https://github.com/hubtype/botonic/pull/3076): Add contact_info on AI Agent system prompt.
+- [PR-3083](https://github.com/hubtype/botonic/pull/3083): getInference returns an object as InferenceResponse.
+
 ### Changed
 
 ### Fixed
