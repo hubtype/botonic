@@ -33,28 +33,25 @@ export class AIAgentBuilder {
     initialInstructions: string,
     contactInfo: ContactInfo
   ): string {
-    let instructions = `<instructions>\n${initialInstructions}\n</instructions>`
-    instructions = this.addContactInfo(instructions, contactInfo)
-    instructions = this.addMetadata(instructions)
-    return this.addOutputInstructions(instructions)
+    const metadataInstructions = this.getMetadataInstructions()
+    const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
+    const outputInstructions = this.getOutputInstructions()
+    return `${initialInstructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
   }
 
-  private addContactInfo(
-    instructions: string,
-    contactInfo: ContactInfo
-  ): string {
+  private getContactInfoInstructions(contactInfo: ContactInfo): string {
     const structuredContactInfo = Object.entries(contactInfo)
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n')
-    return `${instructions}\n\n<contact_info>\n${structuredContactInfo}\n</contact_info>`
+    return `<contact_info>\n${structuredContactInfo}\n</contact_info>`
   }
 
-  private addMetadata(instructions: string): string {
+  private getMetadataInstructions(): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
-    return `${instructions}\n\n<metadata>\n${metadata}\n</metadata>`
+    return `<metadata>\n${metadata}\n</metadata>`
   }
 
-  private addOutputInstructions(instructions: string): string {
+  private getOutputInstructions(): string {
     const example = {
       messages: [
         {
@@ -67,7 +64,7 @@ export class AIAgentBuilder {
       numMessages: 1,
     }
     const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `${instructions}\n\n<output>\n${output}\n</output>`
+    return `<output>\n${output}\n</output>`
   }
 
   private addHubtypeTools(tools: Tool[]): Tool[] {
