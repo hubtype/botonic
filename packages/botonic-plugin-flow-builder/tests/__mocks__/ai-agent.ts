@@ -1,13 +1,19 @@
-import { AgenticOutputMessage, InferenceResponse } from '../../src/types'
+import { AiAgentInferenceResponse } from '../../src/types'
 
-export function mockAiAgentResponse(messages: AgenticOutputMessage[]) {
+export function mockAiAgentResponse({
+  messages = [],
+  toolsExecuted = [],
+  inputGuardrailTriggered = false,
+  outputGuardrailTriggered = false,
+  exit = false,
+}: Partial<AiAgentInferenceResponse>) {
   return jest.fn(() => {
-    const response: InferenceResponse = {
+    const response: AiAgentInferenceResponse = {
       messages,
-      toolsExecuted: [],
-      exit: false,
-      inputGuardrailTriggered: false,
-      outputGuardrailTriggered: false,
+      toolsExecuted,
+      inputGuardrailTriggered,
+      outputGuardrailTriggered,
+      exit,
     }
     return Promise.resolve(response)
   })
