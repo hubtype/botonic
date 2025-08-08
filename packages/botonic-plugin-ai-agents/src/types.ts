@@ -1,12 +1,13 @@
 import {
   Agent,
   AgentInputItem,
-  Tool as OpenAITool,
   RunContext as OpenAIRunContext,
+  Tool as OpenAITool,
 } from '@openai/agents'
 import { ZodSchema } from 'zod'
 
 import { OutputMessage, OutputSchema } from './structured-output'
+import { ExitMessage } from './structured-output/exit'
 
 export interface Context {
   authToken: string
@@ -37,4 +38,14 @@ export interface AiAgentArgs {
 }
 
 export type AgenticInputMessage = AgentInputItem
-export type AgenticOutputMessage = OutputMessage
+export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
+
+export interface RunResult {
+  messages: AgenticOutputMessage[]
+  toolsExecuted: string[]
+  exit: boolean
+  inputGuardrailTriggered: boolean
+  outputGuardrailTriggered: boolean
+}
+
+export type InferenceResponse = RunResult | undefined

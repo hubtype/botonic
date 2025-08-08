@@ -37,11 +37,11 @@ export async function getContentsByAiAgent({
     return []
   }
 
-  if (aiAgentResponse.length === 1 && aiAgentResponse[0].type === 'exit') {
+  if (aiAgentResponse.exit) {
     return []
   }
 
-  aiAgentContent.responses = aiAgentResponse
+  aiAgentContent.responses = aiAgentResponse.messages
 
   return contents
 }
