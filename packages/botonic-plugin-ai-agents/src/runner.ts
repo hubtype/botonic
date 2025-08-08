@@ -1,6 +1,12 @@
 import { Runner, RunToolCallItem } from '@openai/agents'
 
-import { AgenticInputMessage, AIAgent, Context, RunResult } from './types'
+import {
+  AgenticInputMessage,
+  AgenticOutputMessage,
+  AIAgent,
+  Context,
+  RunResult,
+} from './types'
 
 export class AIAgentRunner {
   private agent: AIAgent
@@ -38,7 +44,9 @@ export class AIAgentRunner {
       return {
         messages: hasExit
           ? []
-          : outputMessages.filter(message => message.type !== 'exit'),
+          : (outputMessages.filter(
+              message => message.type !== 'exit'
+            ) as AgenticOutputMessage[]),
         toolsExecuted,
         exit: hasExit,
         inputGuardrailTriggered: false,
