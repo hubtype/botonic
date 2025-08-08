@@ -1,4 +1,8 @@
-import { EventFeedbackKnowledgebase } from '@botonic/core'
+import {
+  EventCustom,
+  EventFeedback,
+  EventFeedbackKnowledgebase,
+} from '@botonic/core'
 import { useContext } from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -20,7 +24,18 @@ enum FeedbackOption {
   ThumbsDown = 'thumbsDown',
 }
 
-export function useTracking() {
+interface UseTracking {
+  trackKnowledgebaseFeedback: ({
+    messageId,
+    isUseful,
+    botInteractionId,
+    inferenceId,
+  }: TrackKnowledgebaseFeedbackArgs) => Promise<void>
+  trackCustomEvent: (event: EventCustom) => Promise<void>
+  trackFeedbackEvent: (event: EventFeedback) => Promise<void>
+}
+
+export function useTracking(): UseTracking {
   const { webchatState, trackEvent } = useContext(WebchatContext)
 
   const getRequest = () => {
@@ -66,10 +81,25 @@ export function useTracking() {
     await trackEvent(request, action, eventArgs)
   }
 
-    const request = getRequest()
+  const trackCustomEvent = async (event: EventCustom) => {
+    if (!trackEvent) {
+      return
+    }
 
-    await trackEvent(request, EventAction.FeedbackKnowledgebase, args)
+    const request = getRequest()
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
   }
 
-  return { trackKnowledgebaseFeedback }
+  const trackFeedbackEvent = async (event: EventFeedback) => {
+    if (!trackEvent) {
+      return
+    }
+
+    const request = getRequest()
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
+  }
+
+  return { trackKnowledgebaseFeedback, trackCustomEvent, trackFeedbackEvent }
 }
