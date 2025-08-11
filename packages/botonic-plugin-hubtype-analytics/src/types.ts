@@ -1,5 +1,6 @@
 import {
   EventAction,
+  EventAiAgent,
   EventCustom,
   EventFallback,
   EventFeedback,
@@ -44,6 +45,7 @@ export interface RequestData {
 
 export {
   EventAction,
+  EventAiAgent,
   EventCustom,
   EventFallback,
   EventFeedback,

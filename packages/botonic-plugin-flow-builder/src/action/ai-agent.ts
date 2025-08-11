@@ -1,9 +1,9 @@
-import { BotContext } from '@botonic/core'
+import { BotContext, EventAction, EventAiAgent } from '@botonic/core'
 
 import { FlowAiAgent, FlowContent } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventAction, trackEvent } from '../tracking'
+import { trackEvent } from '../tracking'
 import { AiAgentInferenceResponse } from '../types'
 import { FlowBuilderContext } from './index'
 
@@ -63,7 +63,8 @@ async function trackAiAgentResponse(
   ).flow_id
   const flowName = flowBuilderPlugin.getFlowName(flowId)
 
-  const eventArgs: EventAiAgent = {
+  const event: EventAiAgent = {
+    action: EventAction.AiAgent,
     flowThreadId: request.session.flow_thread_id!,
     flowId: flowId,
     flowName: flowName,
@@ -77,22 +78,7 @@ async function trackAiAgentResponse(
     error: false, // aiAgentResponse.error,
     messageId: request.input.message_id!,
   }
+  const { action, ...eventArgs } = event
 
-  await trackEvent(request, EventAction.AiAgent, eventArgs)
-}
-
-// TODO: Remove this interface when we can import from @botonic/core
-interface EventAiAgent {
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
-  flowNodeIsMeaningful: boolean
-  toolsExecuted: string[]
-  inputGuardrailTriggered: string[]
-  outputGuardrailTriggered: string[]
-  exit: boolean
-  error: boolean
-  messageId: string
+  await trackEvent(request, action, eventArgs)
 }

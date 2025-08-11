@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 
 import { AiAgentInferenceResponse, ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -43,11 +43,11 @@ describe('Check tracked events when a contents are displayed', () => {
       },
     })
 
-    expect(trackEventMock).toHaveBeenCalledTimes(2)
+    expect(trackEventMock).toHaveBeenCalledTimes(1)
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
-      'ai_agent',
+      EventAction.AiAgent,
       {
         flowId: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
         flowName: 'AI Agents',
@@ -61,20 +61,6 @@ describe('Check tracked events when a contents are displayed', () => {
         exit: false,
         error: false,
         messageId: 'testMessageId',
-      }
-    )
-
-    expect(trackEventMock).toHaveBeenNthCalledWith(
-      2,
-      expect.anything(),
-      'flow_node',
-      {
-        flowId: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
-        flowName: 'AI Agents',
-        flowNodeContentId: 'weather-agent',
-        flowNodeId: '0196f202-a5ea-713e-a3f9-287cf8f0303a',
-        flowNodeIsMeaningful: false,
-        flowThreadId: 'testFlowThreadId',
       }
     )
   })
