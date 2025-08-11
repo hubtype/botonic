@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -48,7 +48,7 @@ describe('Check tracked events when a bot generates a response using a knowledge
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
-      'knowledgebase',
+      EventAction.Knowledgebase,
       {
         knowledgebaseInferenceId: 'inferenceId',
         knowledgebaseFailReason: undefined,
