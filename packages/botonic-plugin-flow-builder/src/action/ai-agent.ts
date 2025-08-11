@@ -1,7 +1,7 @@
 import { FlowContent } from '../content-fields'
 import { FlowAiAgent } from '../content-fields/flow-ai-agent'
-import { FlowBuilderContext } from './index'
 import { GuardrailRule } from '../types'
+import { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
   cmsApi,
