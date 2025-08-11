@@ -1,11 +1,11 @@
-import { NluType } from '@botonic/core'
+import { EventAction, EventIntentSmart, NluType } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
 import { getFlowBuilderPlugin } from '../helpers'
-import { EventAction, trackEvent } from '../tracking'
+import { trackEvent } from '../tracking'
 import { SmartIntentResponse } from '../types'
 
 export interface SmartIntentsInferenceParams {
@@ -55,15 +55,19 @@ export class SmartIntentsApi {
           payload: targetPayload,
         }
 
-        await trackEvent(this.currentRequest, EventAction.IntentSmart, {
+        const event: EventIntentSmart = {
+          action: EventAction.IntentSmart,
           nluIntentSmartTitle: response.data.smart_intent_title,
           nluIntentSmartNumUsed: response.data.smart_intents_used.length,
           nluIntentSmartMessageId: this.currentRequest.input.message_id,
           userInput: this.currentRequest.input.data,
-          flowThreadId: this.currentRequest.session.flow_thread_id,
+          flowThreadId: this.currentRequest.session.flow_thread_id as string,
           flowId: smartIntentNode.flow_id,
           flowNodeId: smartIntentNode.id,
-        })
+        }
+        const { action, ...eventArgs } = event
+
+        await trackEvent(this.currentRequest, action, eventArgs)
 
         return smartIntentNode
       }

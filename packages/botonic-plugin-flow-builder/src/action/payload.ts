@@ -1,10 +1,10 @@
-import { storeCaseRating } from '@botonic/core'
+import { EventAction, EventFeedback, storeCaseRating } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
 
 import { AGENT_RATING_PAYLOAD, SEPARATOR } from '../constants'
 import { FlowContent } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
-import { EventAction, trackEvent } from '../tracking'
+import { trackEvent } from '../tracking'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByPayload(
@@ -45,7 +45,7 @@ async function resolveRatingPayload(
   const possibleValues = ratingNode.content.buttons.map(button => button.value)
 
   if (request.session._hubtype_case_id) {
-    const event = {
+    const event: EventFeedback = {
       action: EventAction.FeedbackCase,
       feedbackTargetId: request.session._hubtype_case_id,
       feedbackGroupId: uuid().toString(),

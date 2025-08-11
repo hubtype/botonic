@@ -1,3 +1,4 @@
+import { EventAction, EventFlow } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -7,21 +8,6 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'
-
-export enum EventAction {
-  FlowNode = 'flow_node',
-  Keyword = 'nlu_keyword',
-  IntentSmart = 'nlu_intent_smart',
-  Knowledgebase = 'knowledgebase',
-  Fallback = 'fallback',
-  FeedbackCase = 'feedback_case',
-  AiAgent = 'ai_agent',
-}
-
-export enum KnowledgebaseFailReason {
-  NoKnowledge = 'no_knowledge',
-  Hallucination = 'hallucination',
-}
 
 export async function trackEvent(
   request: ActionRequest,
@@ -44,37 +30,29 @@ export async function trackFlowContent(
   for (const content of contents) {
     const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
     if (nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE) {
-      const eventArgs = getContentEventArgs(request, {
-        code: nodeContent.code,
-        flowId: nodeContent.flow_id,
-        flowName: flowBuilderPlugin.getFlowName(nodeContent.flow_id),
-        id: nodeContent.id,
-        isMeaningful: nodeContent.is_meaningful ?? false,
-      })
-      await trackEvent(request, EventAction.FlowNode, eventArgs)
+      const event = getContentEventArgs(request, nodeContent)
+      const { action, ...eventArgs } = event
+      await trackEvent(request, action, eventArgs)
     }
   }
 }
 
 function getContentEventArgs(
   request: ActionRequest,
-  contentInfo: {
-    code: string
-    flowId: string
-    flowName: string
-    id: string
-    isMeaningful: boolean
-  }
-) {
+  nodeContent: HtNodeWithContent
+): EventFlow {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowName = flowBuilderPlugin.getFlowName(nodeContent.flow_id)
   const flowThreadId = request.session.flow_thread_id ?? uuidv7()
   request.session.flow_thread_id = flowThreadId
 
   return {
+    action: EventAction.FlowNode,
     flowThreadId,
-    flowId: contentInfo.flowId,
-    flowName: contentInfo.flowName,
-    flowNodeId: contentInfo.id,
-    flowNodeContentId: contentInfo.code,
-    flowNodeIsMeaningful: contentInfo.isMeaningful,
+    flowId: nodeContent.flow_id,
+    flowName: flowName,
+    flowNodeId: nodeContent.id,
+    flowNodeContentId: nodeContent.code,
+    flowNodeIsMeaningful: nodeContent.is_meaningful ?? false,
   }
 }
