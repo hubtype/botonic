@@ -10,8 +10,20 @@ import { getContentsByPayload } from './payload'
 export async function getContentsByFirstInteraction(
   context: FlowBuilderContext
 ): Promise<FlowContent[]> {
-  const { flowBuilderPlugin, request } = context
+  const { contentID, flowBuilderPlugin, request } = context
+
+  // If the contentID is provided, the firstInteractionContents are obtained even if they are not used
+  // because when obtain this firstInteractionContents is when the session.flow_thread_id is updated.
   const firstInteractionContents = await flowBuilderPlugin.getStartContents()
+
+  if (contentID) {
+    const contentsByContentID =
+      await flowBuilderPlugin.getContentsByContentID(contentID)
+
+    if (contentsByContentID.length > 0) {
+      return contentsByContentID
+    }
+  }
 
   // If the first interaction has a FlowBotAction, it should be the last content
   // and avoid to render the match with keywords,intents or knowledge base
