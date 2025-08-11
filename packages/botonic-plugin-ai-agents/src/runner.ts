@@ -53,8 +53,8 @@ export class AIAgentRunner {
             ) as AgenticOutputMessage[]),
         toolsExecuted,
         exit: hasExit,
-        inputGuardrailTriggered: false,
-        outputGuardrailTriggered: false,
+        inputGuardrailTriggered: [],
+        outputGuardrailTriggered: [],
       }
     } catch (error) {
       if (error instanceof InputGuardrailTripwireTriggered) {
@@ -62,8 +62,8 @@ export class AIAgentRunner {
           messages: [],
           toolsExecuted: [],
           exit: true,
-          inputGuardrailTriggered: true,
-          outputGuardrailTriggered: false,
+          inputGuardrailTriggered: [],
+          outputGuardrailTriggered: [],
         }
       }
       if (attempt > maxRetries) {
