@@ -11,7 +11,7 @@ export class FlowImage extends ContentFieldsBase {
   static fromHubtypeCMS(component: HtImageNode, locale: string): FlowImage {
     const newImage = new FlowImage(component.id)
     newImage.code = component.code
-    newImage.src = this.getImageByLocale(locale, component.content.image)
+    newImage.src = this.getAssetByLocale(locale, component.content.image)
     return newImage
   }
 

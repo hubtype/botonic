@@ -1,10 +1,9 @@
-import { INPUT, InputType, Session, storeCaseRating } from '@botonic/core'
+import { EventAction, INPUT, InputType, storeCaseRating } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { AGENT_RATING_PAYLOAD } from '../../src/constants'
 import { RatingType } from '../../src/content-fields/hubtype-fields/index'
 import { FlowRating, FlowText } from '../../src/content-fields/index'
-import { EventAction } from '../../src/tracking'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { trackEventMock } from '../__mocks__/track-event'

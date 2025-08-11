@@ -1,8 +1,10 @@
+/* eslint-disable complexity */
 import { INPUT, isFacebook, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { WhatsappButtonList, WhatsappCTAUrlButton } from '..'
+import { Reply } from '../reply'
 import { Text } from '../text'
 import { MultichannelFacebook } from './facebook/facebook'
 import { MultichannelButton } from './multichannel-button'
@@ -15,6 +17,7 @@ import {
   getButtonType,
   getMultichannelButtons,
   getMultichannelReplies,
+  isNodeButton,
 } from './multichannel-utils'
 import {
   DEFAULT_WHATSAPP_MAX_BUTTON_SEPARATOR,
@@ -292,6 +295,16 @@ export const MultichannelText = props => {
       multichannelFacebook.convertText(props, text[0])
 
     const [lastText, ...buttonsAndReplies] = propsLastText.children
+    const replies = []
+
+    if (buttonsAndReplies.length > 3) {
+      buttonsAndReplies.forEach(button => {
+        if (isNodeButton(button)) {
+          replies.push(<Reply {...button.props} />)
+        }
+      })
+    }
+
     return (
       <>
         {texts?.map((message, i) => (
@@ -301,7 +314,7 @@ export const MultichannelText = props => {
         ))}
         <Text {...propsLastText}>
           {convertToMarkdownMeta(lastText)}
-          {buttonsAndReplies}
+          {replies.length > 0 ? replies : buttonsAndReplies}
         </Text>
       </>
     )

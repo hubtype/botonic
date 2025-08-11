@@ -2,7 +2,7 @@ import { Agent } from '@openai/agents'
 
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
-import { AIAgent, ContactInfo, GuardrailFlag, Tool } from './types'
+import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
 import { createInputGuardrail } from './guardrails'
 
 export class AIAgentBuilder {
@@ -22,7 +22,7 @@ export class AIAgentBuilder {
   }
 
   build(): AIAgent {
-    const flags: GuardrailFlag[] = [
+    const rules: GuardrailRule[] = [
       {
         name: 'isOffensive',
         description: 'Whether the user input is offensive.',
@@ -48,7 +48,7 @@ export class AIAgentBuilder {
         description: 'Whether the user input is NSFW.',
       },
     ]
-    const inputGuardrail = createInputGuardrail(flags)
+    const inputGuardrail = createInputGuardrail(rules)
     return new Agent({
       name: this.name,
       instructions: this.instructions,
@@ -63,28 +63,26 @@ export class AIAgentBuilder {
     initialInstructions: string,
     contactInfo: ContactInfo
   ): string {
-    let instructions = `<instructions>\n${initialInstructions}\n</instructions>`
-    instructions = this.addContactInfo(instructions, contactInfo)
-    instructions = this.addMetadata(instructions)
-    return this.addOutputInstructions(instructions)
+    const instructions = `<instructions>\n${initialInstructions}\n</instructions>`
+    const metadataInstructions = this.getMetadataInstructions()
+    const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
+    const outputInstructions = this.getOutputInstructions()
+    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
   }
 
-  private addContactInfo(
-    instructions: string,
-    contactInfo: ContactInfo
-  ): string {
+  private getContactInfoInstructions(contactInfo: ContactInfo): string {
     const structuredContactInfo = Object.entries(contactInfo)
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n')
-    return `${instructions}\n\n<contact_info>\n${structuredContactInfo}\n</contact_info>`
+    return `<contact_info>\n${structuredContactInfo}\n</contact_info>`
   }
 
-  private addMetadata(instructions: string): string {
+  private getMetadataInstructions(): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
-    return `${instructions}\n\n<metadata>\n${metadata}\n</metadata>`
+    return `<metadata>\n${metadata}\n</metadata>`
   }
 
-  private addOutputInstructions(instructions: string): string {
+  private getOutputInstructions(): string {
     const example = {
       messages: [
         {
@@ -94,10 +92,9 @@ export class AIAgentBuilder {
           },
         },
       ],
-      numMessages: 1,
     }
     const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `${instructions}\n\n<output>\n${output}\n</output>`
+    return `<output>\n${output}\n</output>`
   }
 
   private addHubtypeTools(tools: Tool[]): Tool[] {

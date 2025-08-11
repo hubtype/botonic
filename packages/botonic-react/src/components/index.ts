@@ -34,6 +34,7 @@ export { WhatsappCatalog, WhatsappCatalogProps } from './whatsapp-catalog'
 export {
   WhatsappCTAUrlButton,
   WhatsappCTAUrlButtonProps,
+  WhatsappCTAUrlHeaderType,
 } from './whatsapp-cta-url-button'
 export {
   WhatsappMediaCarousel,

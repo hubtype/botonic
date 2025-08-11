@@ -53,7 +53,7 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<AgenticOutputMessage[] | undefined>
+) => Promise<InferenceResponse>
 
 export interface AiAgentArgs {
   name: string
@@ -140,12 +140,15 @@ export interface CarouselMessage extends OutputBaseMessage {
   }
 }
 
-export interface ExitMessage extends OutputBaseMessage {
-  type: 'exit'
-}
-
 export type AgenticOutputMessage =
   | TextMessage
   | TextWithButtonsMessage
   | CarouselMessage
-  | ExitMessage
+
+export interface InferenceResponse {
+  messages: AgenticOutputMessage[]
+  toolsExecuted: string[]
+  exit: boolean
+  inputGuardrailTriggered: boolean
+  outputGuardrailTriggered: boolean
+}
