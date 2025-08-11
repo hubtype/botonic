@@ -25,8 +25,11 @@ export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
         throw new Error('Guardrail agent failed to produce output')
       }
       const triggered = Object.values(finalOutput).some(value => value === true)
+      const triggeredGuardrails = Object.keys(finalOutput).filter(
+        key => finalOutput[key] === true
+      )
       return {
-        outputInfo: finalOutput,
+        outputInfo: triggeredGuardrails,
         tripwireTriggered: triggered,
       }
     },

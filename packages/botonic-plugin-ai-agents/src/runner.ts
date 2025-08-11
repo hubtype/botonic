@@ -62,7 +62,7 @@ export class AIAgentRunner {
           messages: [],
           toolsExecuted: [],
           exit: true,
-          inputGuardrailTriggered: [],
+          inputGuardrailTriggered: error.result.output.outputInfo,
           outputGuardrailTriggered: [],
         }
       }

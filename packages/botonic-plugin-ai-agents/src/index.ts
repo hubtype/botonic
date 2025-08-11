@@ -47,7 +47,8 @@ export default class BotonicPluginAiAgents implements Plugin {
         aiAgentArgs.name,
         aiAgentArgs.instructions,
         tools,
-        request.session.user.contact_info || {}
+        request.session.user.contact_info || {},
+        aiAgentArgs.inputGuardrailRules || []
       ).build()
 
       const messages = await this.getMessages(request, authToken, 25)

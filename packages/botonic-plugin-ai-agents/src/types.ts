@@ -40,6 +40,7 @@ export interface AiAgentArgs {
   name: string
   instructions: string
   activeTools?: { name: string }[]
+  inputGuardrailRules?: GuardrailRule[]
 }
 
 export type AgenticInputMessage = AgentInputItem

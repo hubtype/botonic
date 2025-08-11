@@ -1,4 +1,4 @@
-import { Agent } from '@openai/agents'
+import { Agent, InputGuardrail } from '@openai/agents'
 
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
@@ -9,52 +9,32 @@ export class AIAgentBuilder {
   private name: string
   private instructions: string
   private tools: Tool[]
+  private inputGuardrails: InputGuardrail[]
 
   constructor(
     name: string,
     instructions: string,
     tools: Tool[],
-    contactInfo: ContactInfo
+    contactInfo: ContactInfo,
+    inputGuardrailRules: GuardrailRule[]
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions, contactInfo)
     this.tools = this.addHubtypeTools(tools)
+    this.inputGuardrails = []
+    if (inputGuardrailRules.length > 0) {
+      const inputGuardrail = createInputGuardrail(inputGuardrailRules)
+      this.inputGuardrails.push(inputGuardrail)
+    }
   }
 
   build(): AIAgent {
-    const rules: GuardrailRule[] = [
-      {
-        name: 'isOffensive',
-        description: 'Whether the user input is offensive.',
-      },
-      {
-        name: 'talksAboutHockey',
-        description: 'Whether the user input is about hockey.',
-      },
-      {
-        name: 'isHarassment',
-        description: 'Whether the user input is harassment.',
-      },
-      {
-        name: 'isSpam',
-        description: 'Whether the user input is spam.',
-      },
-      {
-        name: 'isIllegal',
-        description: 'Whether the user input is illegal.',
-      },
-      {
-        name: 'isNSFW',
-        description: 'Whether the user input is NSFW.',
-      },
-    ]
-    const inputGuardrail = createInputGuardrail(rules)
     return new Agent({
       name: this.name,
       instructions: this.instructions,
       tools: this.tools,
       outputType: OutputSchema,
-      inputGuardrails: [inputGuardrail],
+      inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
     })
   }
