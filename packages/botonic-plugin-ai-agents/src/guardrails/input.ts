@@ -1,5 +1,6 @@
 import { Agent, InputGuardrail, run } from '@openai/agents'
 import { z } from 'zod'
+
 import { GuardrailRule } from '../types'
 
 export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
