@@ -1,3 +1,8 @@
+import {
+  EventCustom,
+  EventFeedback,
+  EventFeedbackKnowledgebase,
+} from '@botonic/core'
 import { useContext } from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -14,12 +19,23 @@ interface TrackKnowledgebaseFeedbackArgs {
   inferenceId?: string
 }
 
-export enum FeedbackOption {
+enum FeedbackOption {
   ThumbsUp = 'thumbsUp',
   ThumbsDown = 'thumbsDown',
 }
 
-export function useTracking() {
+interface UseTracking {
+  trackKnowledgebaseFeedback: ({
+    messageId,
+    isUseful,
+    botInteractionId,
+    inferenceId,
+  }: TrackKnowledgebaseFeedbackArgs) => Promise<void>
+  trackCustomEvent: (event: EventCustom) => Promise<void>
+  trackFeedbackEvent: (event: EventFeedback) => Promise<void>
+}
+
+export function useTracking(): UseTracking {
   const { webchatState, trackEvent } = useContext(WebchatContext)
 
   const getRequest = () => {
@@ -46,10 +62,13 @@ export function useTracking() {
     if (!trackEvent) {
       return
     }
+    const request = getRequest()
 
-    const args = {
-      knowledgebaseInferenceId: inferenceId,
-      feedbackBotInteractionId: botInteractionId,
+    // inferenceId and botInteractionId are strings, but in local development they are undefined
+    const event: EventFeedbackKnowledgebase = {
+      action: EventAction.FeedbackKnowledgebase,
+      knowledgebaseInferenceId: inferenceId as string,
+      feedbackBotInteractionId: botInteractionId as string,
       feedbackTargetId: messageId,
       feedbackGroupId: uuidv7(),
       possibleOptions: [FeedbackOption.ThumbsDown, FeedbackOption.ThumbsUp],
@@ -57,11 +76,30 @@ export function useTracking() {
       option: isUseful ? FeedbackOption.ThumbsUp : FeedbackOption.ThumbsDown,
       value: isUseful ? 1 : 0,
     }
+    const { action, ...eventArgs } = event
 
-    const request = getRequest()
-
-    await trackEvent(request, EventAction.FeedbackKnowledgebase, args)
+    await trackEvent(request, action, eventArgs)
   }
 
-  return { trackKnowledgebaseFeedback }
+  const trackCustomEvent = async (event: EventCustom) => {
+    if (!trackEvent) {
+      return
+    }
+
+    const request = getRequest()
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
+  }
+
+  const trackFeedbackEvent = async (event: EventFeedback) => {
+    if (!trackEvent) {
+      return
+    }
+
+    const request = getRequest()
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
+  }
+
+  return { trackKnowledgebaseFeedback, trackCustomEvent, trackFeedbackEvent }
 }
