@@ -1,9 +1,9 @@
 import { Agent, InputGuardrail } from '@openai/agents'
 
+import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
 import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
-import { createInputGuardrail } from './guardrails'
 
 export class AIAgentBuilder {
   private name: string
