@@ -55,10 +55,16 @@ export type AiAgentFunction<
   aiAgentArgs: AiAgentArgs
 ) => Promise<InferenceResponse>
 
+export interface GuardrailRule {
+  name: string
+  description: string
+}
+
 export interface AiAgentArgs {
   name: string
   instructions: string
   activeTools?: { name: string }[]
+  inputGuardrailRules?: GuardrailRule[]
 }
 export type ContentFilter<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

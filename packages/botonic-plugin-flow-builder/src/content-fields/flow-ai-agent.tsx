@@ -4,13 +4,14 @@ import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { AgenticOutputMessage } from '../types'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
-import { HtAiAgentNode } from './hubtype-fields/ai-agent'
+import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public code: string = ''
   public name: string = ''
   public instructions: string = ''
   public activeTools?: { name: string }[]
+  public inputGuardrailRules: HtInputGuardrailRule[]
 
   public responses: AgenticOutputMessage[] = []
 
@@ -19,7 +20,8 @@ export class FlowAiAgent extends ContentFieldsBase {
     newAiAgent.name = component.content.name
     newAiAgent.instructions = component.content.instructions
     newAiAgent.activeTools = component.content.active_tools
-
+    newAiAgent.inputGuardrailRules =
+      component.content.input_guardrail_rules || []
     return newAiAgent
   }
 

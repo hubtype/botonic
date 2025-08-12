@@ -1,23 +1,31 @@
-import { Agent } from '@openai/agents'
+import { Agent, InputGuardrail } from '@openai/agents'
 
+import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools } from './tools'
-import { AIAgent, ContactInfo, Tool } from './types'
+import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
 
 export class AIAgentBuilder {
   private name: string
   private instructions: string
   private tools: Tool[]
+  private inputGuardrails: InputGuardrail[]
 
   constructor(
     name: string,
     instructions: string,
     tools: Tool[],
-    contactInfo: ContactInfo
+    contactInfo: ContactInfo,
+    inputGuardrailRules: GuardrailRule[]
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions, contactInfo)
     this.tools = this.addHubtypeTools(tools)
+    this.inputGuardrails = []
+    if (inputGuardrailRules.length > 0) {
+      const inputGuardrail = createInputGuardrail(inputGuardrailRules)
+      this.inputGuardrails.push(inputGuardrail)
+    }
   }
 
   build(): AIAgent {
@@ -26,6 +34,8 @@ export class AIAgentBuilder {
       instructions: this.instructions,
       tools: this.tools,
       outputType: OutputSchema,
+      inputGuardrails: this.inputGuardrails,
+      outputGuardrails: [],
     })
   }
 
@@ -33,10 +43,11 @@ export class AIAgentBuilder {
     initialInstructions: string,
     contactInfo: ContactInfo
   ): string {
+    const instructions = `<instructions>\n${initialInstructions}\n</instructions>`
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
     const outputInstructions = this.getOutputInstructions()
-    return `${initialInstructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
+    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
   }
 
   private getContactInfoInstructions(contactInfo: ContactInfo): string {
