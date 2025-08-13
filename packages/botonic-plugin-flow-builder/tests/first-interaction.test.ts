@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import { FlowBuilderAction, FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
@@ -9,7 +9,12 @@ import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
 import { mockSmartIntent } from './__mocks__/smart-intent'
 import { basicFlow } from './helpers/flows/basic'
 import { knowledgeBaseTestFlow } from './helpers/flows/knowledge-base'
-import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
+import {
+  createFlowBuilderPlugin,
+  createFlowBuilderPluginAndGetContents,
+  createRequest,
+  getActionRequest,
+} from './helpers/utils'
 
 describe('Check the contents returned by the plugin in first interaction', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
@@ -53,6 +58,54 @@ describe('Check the contents returned by the plugin in first interaction', () =>
     expect((contents[0] as FlowText).text).toBe('Welcome message')
     expect(contents.length).toBe(3)
     expect((contents[2] as FlowText).text).toBe('All types of messages')
+  })
+})
+
+describe('Execute botonicInit in the first interaction with contentID', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  test('plugin flow builder responds with the contents found by the contentID', async () => {
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { data: 'hola', type: INPUT.TEXT },
+      isFirstInteraction: true,
+      plugins: {
+        // @ts-ignore
+        flowBuilderPlugin,
+      },
+    })
+    await flowBuilderPlugin.pre(request)
+    const actionRequest = getActionRequest(request)
+    const contentID = 'MAIN_MENU'
+    const { contents } = await FlowBuilderAction.botonicInit(
+      actionRequest,
+      contentID
+    )
+    expect(contents.length).toBe(1)
+    expect((contents[0] as FlowText).text).toBe('How can I help you?')
+    expect((contents[0] as FlowText).buttons.length).toBe(5)
+  })
+
+  test('plugin flow builder responds with the first interaction contents when not found contents by the contentID', async () => {
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { data: 'hola', type: INPUT.TEXT },
+      isFirstInteraction: true,
+      plugins: {
+        // @ts-ignore
+        flowBuilderPlugin,
+      },
+    })
+    await flowBuilderPlugin.pre(request)
+    const actionRequest = getActionRequest(request)
+    const contentID = 'MAIN_MENU_2'
+    const { contents } = await FlowBuilderAction.botonicInit(
+      actionRequest,
+      contentID
+    )
+    console.log(contents)
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(2)
   })
 })
 

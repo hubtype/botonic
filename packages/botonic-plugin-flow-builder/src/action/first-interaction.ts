@@ -17,11 +17,17 @@ export async function getContentsByFirstInteraction(
   const firstInteractionContents = await flowBuilderPlugin.getStartContents()
 
   if (contentID) {
-    const contentsByContentID =
-      await flowBuilderPlugin.getContentsByContentID(contentID)
+    try {
+      const contentsByContentID =
+        await flowBuilderPlugin.getContentsByContentID(contentID)
 
-    if (contentsByContentID.length > 0) {
-      return contentsByContentID
+      if (contentsByContentID.length > 0) {
+        return contentsByContentID
+      }
+    } catch (error) {
+      console.warn(
+        `The contentID ${contentID} is not found. Returning the firstInteractionContents`
+      )
     }
   }
 
