@@ -3,6 +3,7 @@ import {
   EventAction,
   EventKnowledgeBase,
   KnowledgebaseFailReason,
+  KnowledgeBaseResponse,
   ResolvedPlugins,
 } from '@botonic/core'
 
@@ -14,7 +15,7 @@ import {
 import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
-import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
+import { KnowledgeBaseFunction } from '../types'
 import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
 import { FlowBuilderContext } from './index'
 

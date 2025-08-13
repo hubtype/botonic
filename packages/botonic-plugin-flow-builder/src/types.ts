@@ -1,4 +1,9 @@
-import { BotContext, PluginPreRequest, ResolvedPlugins } from '@botonic/core'
+import {
+  BotContext,
+  KnowledgeBaseResponse,
+  PluginPreRequest,
+  ResolvedPlugins,
+} from '@botonic/core'
 
 import { FlowContent } from './content-fields'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
@@ -84,14 +89,6 @@ export enum ProcessEnvNodeEnvs {
 export enum FlowBuilderJSONVersion {
   DRAFT = 'draft',
   LATEST = 'latest',
-}
-
-export interface KnowledgeBaseResponse {
-  inferenceId: string
-  hasKnowledge: boolean
-  isFaithful: boolean
-  chunkIds: string[]
-  answer: string
 }
 
 export interface SmartIntentResponse {
