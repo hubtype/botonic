@@ -1,20 +1,19 @@
+import { KnowledgeBasesResponse } from '@botonic/core'
+
 interface MockKnowledgeBaseOptions {
-  userInput: string
   answer: string
   hasKnowledge: boolean
   isFaithful: boolean
 }
 
 export function mockKnowledgeBaseResponse({
-  userInput,
   answer,
   hasKnowledge,
   isFaithful,
-}: MockKnowledgeBaseOptions) {
+}: MockKnowledgeBaseOptions): jest.Mock<Promise<KnowledgeBasesResponse>> {
   return jest.fn(() => {
     return Promise.resolve({
       inferenceId: 'inferenceId',
-      question: userInput,
       answer,
       hasKnowledge,
       isFaithful,

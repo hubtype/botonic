@@ -1,4 +1,4 @@
-import { AiAgentInferenceResponse } from '../../src/types'
+import { InferenceResponse } from '@botonic/core'
 
 export function mockAiAgentResponse({
   messages = [],
@@ -6,9 +6,9 @@ export function mockAiAgentResponse({
   inputGuardrailTriggered = [],
   outputGuardrailTriggered = [],
   exit = false,
-}: Partial<AiAgentInferenceResponse>) {
+}: Partial<InferenceResponse>) {
   return jest.fn(() => {
-    const response: AiAgentInferenceResponse = {
+    const response: InferenceResponse = {
       messages,
       toolsExecuted,
       inputGuardrailTriggered,

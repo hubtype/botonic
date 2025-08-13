@@ -1,10 +1,7 @@
+import { ExitMessage } from '@botonic/core'
 import z from 'zod'
 
-import { BaseMessage } from './shared'
-
-export interface ExitMessage extends BaseMessage {
-  type: 'exit'
-}
+export type { ExitMessage }
 
 export const ExitSchema = z
   .object({

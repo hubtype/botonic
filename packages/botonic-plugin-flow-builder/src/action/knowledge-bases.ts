@@ -3,6 +3,7 @@ import {
   EventAction,
   EventKnowledgeBase,
   KnowledgebaseFailReason,
+  KnowledgeBasesResponse,
   ResolvedPlugins,
 } from '@botonic/core'
 
@@ -14,7 +15,7 @@ import {
 import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
-import { KnowledgeBaseFunction, KnowledgeBaseResponse } from '../types'
+import { KnowledgeBaseFunction } from '../types'
 import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
 import { FlowBuilderContext } from './index'
 
@@ -103,7 +104,7 @@ async function getContentsWithKnowledgeResponse<
 
 function updateContentsWithResponse(
   contents: FlowContent[],
-  response: KnowledgeBaseResponse
+  response: KnowledgeBasesResponse
 ): FlowContent[] {
   return contents.map(content => {
     if (content instanceof FlowKnowledgeBase) {
@@ -116,7 +117,7 @@ function updateContentsWithResponse(
 }
 
 async function trackKnowledgeBase(
-  response: KnowledgeBaseResponse,
+  response: KnowledgeBasesResponse,
   request: BotContext,
   knowledgeBaseContent: FlowKnowledgeBase
 ) {

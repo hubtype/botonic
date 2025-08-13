@@ -77,7 +77,12 @@ describe('createInputGuardrail', () => {
 
     const guardrail = createInputGuardrail(mockRules)
     const result = await guardrail.execute({
-      input: 'some offensive text',
+      input: [
+        {
+          role: 'user',
+          content: [{ type: 'input_text', text: 'some offensive text' }],
+        },
+      ],
       context: mockRunContext,
       agent: mockAgent,
     })
@@ -88,7 +93,12 @@ describe('createInputGuardrail', () => {
     })
     expect(run).toHaveBeenCalledWith(
       expect.any(Object),
-      'some offensive text',
+      [
+        {
+          role: 'user',
+          content: [{ type: 'input_text', text: 'some offensive text' }],
+        },
+      ],
       { context: mockRunContext }
     )
   })
@@ -104,7 +114,12 @@ describe('createInputGuardrail', () => {
 
     const guardrail = createInputGuardrail(mockRules)
     const result = await guardrail.execute({
-      input: 'normal text',
+      input: [
+        {
+          role: 'user',
+          content: [{ type: 'input_text', text: 'normal text' }],
+        },
+      ],
       context: mockRunContext,
       agent: mockAgent,
     })
@@ -124,7 +139,12 @@ describe('createInputGuardrail', () => {
     const guardrail = createInputGuardrail(mockRules)
     await expect(
       guardrail.execute({
-        input: 'some text',
+        input: [
+          {
+            role: 'user',
+            content: [{ type: 'input_text', text: 'some text' }],
+          },
+        ],
         context: mockRunContext,
         agent: mockAgent,
       })

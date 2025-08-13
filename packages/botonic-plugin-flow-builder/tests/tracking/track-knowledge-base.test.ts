@@ -2,7 +2,9 @@ import { EventAction, INPUT } from '@botonic/core'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
-import { mockKnowledgeBaseResponse, trackEventMock } from '../__mocks__'
+import { mockKnowledgeBaseResponse } from '../__mocks__/knowledge-base'
+// eslint-disable-next-line jest/no-mocks-import
+import { trackEventMock } from '../__mocks__/track-event'
 import { knowledgeBaseTestFlow } from '../helpers/flows/knowledge-base'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
@@ -24,7 +26,6 @@ describe('Check tracked events when a bot generates a response using a knowledge
         flow: knowledgeBaseTestFlow,
         trackEvent: trackEventMock,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer:
             'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
           hasKnowledge: true,

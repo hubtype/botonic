@@ -97,7 +97,6 @@ describe('Check the contents returned by the plugin in first interaction with kn
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer,
           hasKnowledge: true,
           isFaithful: true,
