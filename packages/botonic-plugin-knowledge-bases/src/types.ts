@@ -1,4 +1,4 @@
-import { KnowledgeBaseResponse } from '@botonic/core'
+import { KnowledgeBasesResponse } from '@botonic/core'
 
 export interface PluginKnowledgeBaseOptions {
   host: string
@@ -6,7 +6,7 @@ export interface PluginKnowledgeBaseOptions {
   timeout?: number
 }
 
-export type { KnowledgeBaseResponse }
+export type { KnowledgeBasesResponse }
 
 export interface Chunk {
   id: string

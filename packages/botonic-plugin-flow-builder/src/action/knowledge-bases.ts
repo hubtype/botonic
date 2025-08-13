@@ -3,7 +3,7 @@ import {
   EventAction,
   EventKnowledgeBase,
   KnowledgebaseFailReason,
-  KnowledgeBaseResponse,
+  KnowledgeBasesResponse,
   ResolvedPlugins,
 } from '@botonic/core'
 
@@ -104,7 +104,7 @@ async function getContentsWithKnowledgeResponse<
 
 function updateContentsWithResponse(
   contents: FlowContent[],
-  response: KnowledgeBaseResponse
+  response: KnowledgeBasesResponse
 ): FlowContent[] {
   return contents.map(content => {
     if (content instanceof FlowKnowledgeBase) {
@@ -117,7 +117,7 @@ function updateContentsWithResponse(
 }
 
 async function trackKnowledgeBase(
-  response: KnowledgeBaseResponse,
+  response: KnowledgeBasesResponse,
   request: BotContext,
   knowledgeBaseContent: FlowKnowledgeBase
 ) {

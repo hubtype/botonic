@@ -3,7 +3,7 @@ import {
   BotContext,
   CarouselMessage,
   InferenceResponse,
-  KnowledgeBaseResponse,
+  KnowledgeBasesResponse,
   PluginPreRequest,
   ResolvedPlugins,
   TextMessage,
@@ -55,7 +55,7 @@ export type KnowledgeBaseFunction<
   instructions: string,
   messageId: string,
   memoryLength: number
-) => Promise<KnowledgeBaseResponse>
+) => Promise<KnowledgeBasesResponse>
 
 export type AiAgentFunction<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

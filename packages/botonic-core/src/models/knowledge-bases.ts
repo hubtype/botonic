@@ -1,4 +1,4 @@
-export interface KnowledgeBaseResponse {
+export interface KnowledgeBasesResponse {
   inferenceId: string
   hasKnowledge: boolean
   isFaithful: boolean
