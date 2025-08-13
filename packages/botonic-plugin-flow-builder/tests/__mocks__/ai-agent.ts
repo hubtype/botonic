@@ -6,8 +6,8 @@ export function mockAiAgentResponse(messages: AgenticOutputMessage[]) {
       messages,
       toolsExecuted: [],
       exit: false,
-      inputGuardrailTriggered: false,
-      outputGuardrailTriggered: false,
+      inputGuardrailTriggered: [],
+      outputGuardrailTriggered: [],
     }
     return Promise.resolve(response)
   })
