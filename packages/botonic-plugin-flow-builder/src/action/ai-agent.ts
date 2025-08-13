@@ -1,10 +1,14 @@
-import { BotContext, EventAction, EventAiAgent } from '@botonic/core'
+import {
+  BotContext,
+  EventAction,
+  EventAiAgent,
+  InferenceResponse,
+} from '@botonic/core'
 
 import { FlowAiAgent, FlowContent } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
-import { AiAgentInferenceResponse } from '../types'
 import { GuardrailRule } from '../types'
 import { FlowBuilderContext } from './index'
 
@@ -63,7 +67,7 @@ export async function getContentsByAiAgent({
 }
 
 async function trackAiAgentResponse(
-  aiAgentResponse: AiAgentInferenceResponse,
+  aiAgentResponse: InferenceResponse,
   request: BotContext,
   aiAgentContent: FlowAiAgent
 ) {
@@ -81,9 +85,9 @@ async function trackAiAgentResponse(
     flowNodeId: aiAgentContent.id,
     flowNodeContentId: aiAgentContent.code,
     flowNodeIsMeaningful: true,
-    toolsExecuted: aiAgentResponse.toolsExecuted,
-    exit: aiAgentResponse.exit,
-    inputGuardrailTriggered: aiAgentResponse.inputGuardrailTriggered,
+    toolsExecuted: aiAgentResponse?.toolsExecuted || [],
+    exit: aiAgentResponse?.exit || true,
+    inputGuardrailTriggered: aiAgentResponse?.inputGuardrailTriggered || [],
     outputGuardrailTriggered: [], //aiAgentResponse.outputGuardrailTriggered,
     error: false, // aiAgentResponse.error,
     messageId: request.input.message_id!,

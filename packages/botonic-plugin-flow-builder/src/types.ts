@@ -1,13 +1,9 @@
 import {
-  AgenticOutputMessage,
   BotContext,
-  CarouselMessage,
   InferenceResponse,
   KnowledgeBasesResponse,
   PluginPreRequest,
   ResolvedPlugins,
-  TextMessage,
-  TextWithButtonsMessage,
 } from '@botonic/core'
 
 import { FlowContent } from './content-fields'
@@ -63,7 +59,7 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<AiAgentInferenceResponse>
+) => Promise<InferenceResponse>
 
 export interface GuardrailRule {
   name: string
