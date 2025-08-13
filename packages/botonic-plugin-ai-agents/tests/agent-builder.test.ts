@@ -1,5 +1,5 @@
 import { AIAgentBuilder } from '../src/agent-builder'
-import { Tool } from '../src/types'
+import { Tool, GuardrailRule } from '../src/types'
 
 // Mock OpenAI Agent class
 jest.mock('@openai/agents', () => ({
@@ -35,6 +35,12 @@ describe('AIAgentBuilder', () => {
     phone: '1234567890',
     address: '123 Main St, Anytown, USA',
   }
+  const inputGuardrailRules: GuardrailRule[] = [
+    {
+      name: 'is_offensive',
+      description: 'Whether the user input is offensive.',
+    },
+  ]
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -51,9 +57,10 @@ describe('AIAgentBuilder', () => {
       agentName,
       agentInstructions,
       agentCustomTools,
-      contactInfo
+      contactInfo,
+      inputGuardrailRules
     ).build()
-    const expectedInstructions = `${agentInstructions}\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
+    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)

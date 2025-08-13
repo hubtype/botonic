@@ -1,5 +1,6 @@
 import { FlowContent } from '../content-fields'
 import { FlowAiAgent } from '../content-fields/flow-ai-agent'
+import { GuardrailRule } from '../types'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
@@ -24,12 +25,21 @@ export async function getContentsByAiAgent({
     return []
   }
 
+  const activeInputGuardrailRules: GuardrailRule[] =
+    aiAgentContent.inputGuardrailRules
+      .filter(rule => rule.is_active)
+      .map(rule => ({
+        name: rule.name,
+        description: rule.description,
+      }))
+
   const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
     request,
     {
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
       activeTools: aiAgentContent.activeTools,
+      inputGuardrailRules: activeInputGuardrailRules,
     }
   )
 
