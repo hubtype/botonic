@@ -1,4 +1,14 @@
-import { BotContext, PluginPreRequest, ResolvedPlugins } from '@botonic/core'
+import {
+  AgenticOutputMessage,
+  BotContext,
+  CarouselMessage,
+  InferenceResponse,
+  KnowledgeBasesResponse,
+  PluginPreRequest,
+  ResolvedPlugins,
+  TextMessage,
+  TextWithButtonsMessage,
+} from '@botonic/core'
 
 import { FlowContent } from './content-fields'
 import { HtFlowBuilderData } from './content-fields/hubtype-fields'
@@ -45,7 +55,7 @@ export type KnowledgeBaseFunction<
   instructions: string,
   messageId: string,
   memoryLength: number
-) => Promise<KnowledgeBaseResponse>
+) => Promise<KnowledgeBasesResponse>
 
 export type AiAgentFunction<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -92,14 +102,6 @@ export enum FlowBuilderJSONVersion {
   LATEST = 'latest',
 }
 
-export interface KnowledgeBaseResponse {
-  inferenceId: string
-  hasKnowledge: boolean
-  isFaithful: boolean
-  chunkIds: string[]
-  answer: string
-}
-
 export interface SmartIntentResponse {
   data: {
     smart_intent_title: string
@@ -113,48 +115,4 @@ export interface SmartIntentResponse {
 
 export interface PayloadParamsBase {
   followUpContentID?: string
-}
-
-export interface OutputBaseMessage {
-  type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
-}
-
-export interface TextMessage extends OutputBaseMessage {
-  type: 'text'
-  content: {
-    text: string
-  }
-}
-
-export interface TextWithButtonsMessage extends OutputBaseMessage {
-  type: 'textWithButtons'
-  content: {
-    text: string
-    buttons: string[]
-  }
-}
-
-export interface CarouselMessage extends OutputBaseMessage {
-  type: 'carousel'
-  content: {
-    elements: {
-      title: string
-      subtitle: string
-      image: string
-      button: { text: string; url: string }
-    }[]
-  }
-}
-
-export type AgenticOutputMessage =
-  | TextMessage
-  | TextWithButtonsMessage
-  | CarouselMessage
-
-export interface InferenceResponse {
-  messages: AgenticOutputMessage[]
-  toolsExecuted: string[]
-  exit: boolean
-  inputGuardrailTriggered: boolean
-  outputGuardrailTriggered: boolean
 }
