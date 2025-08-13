@@ -154,7 +154,7 @@ export type AgenticOutputMessage =
 export interface AiAgentInferenceResponse {
   messages: AgenticOutputMessage[]
   toolsExecuted: string[]
-  inputGuardrailTriggered: boolean
-  outputGuardrailTriggered: boolean
+  inputGuardrailTriggered: string[]
+  outputGuardrailTriggered: string[]
   exit: boolean
 }

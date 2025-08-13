@@ -3,8 +3,8 @@ import { AiAgentInferenceResponse } from '../../src/types'
 export function mockAiAgentResponse({
   messages = [],
   toolsExecuted = [],
-  inputGuardrailTriggered = false,
-  outputGuardrailTriggered = false,
+  inputGuardrailTriggered = [],
+  outputGuardrailTriggered = [],
   exit = false,
 }: Partial<AiAgentInferenceResponse>) {
   return jest.fn(() => {
