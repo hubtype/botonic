@@ -1,4 +1,4 @@
-import { Agent, InputGuardrail, run } from '@openai/agents'
+import { Agent, InputGuardrail, run, UserMessageItem } from '@openai/agents'
 import { z } from 'zod'
 
 import { GuardrailRule } from '../types'
@@ -20,7 +20,8 @@ export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
   return {
     name: 'InputGuardrail',
     execute: async ({ input, context }) => {
-      const result = await run(agent, input, { context })
+      const lastMessage = input[input.length - 1] as UserMessageItem
+      const result = await run(agent, [lastMessage], { context })
       const finalOutput = result.finalOutput
       if (finalOutput === undefined) {
         throw new Error('Guardrail agent failed to produce output')
