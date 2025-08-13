@@ -1,4 +1,9 @@
 import {
+  AgenticOutputMessage,
+  InferenceResponse,
+  RunResult,
+} from '@botonic/core'
+import {
   Agent,
   AgentInputItem,
   RunContext as OpenAIRunContext,
@@ -6,8 +11,7 @@ import {
 } from '@openai/agents'
 import { ZodSchema } from 'zod'
 
-import { OutputMessage, OutputSchema } from './structured-output'
-import { ExitMessage } from './structured-output/exit'
+import { OutputSchema } from './structured-output'
 
 export interface Context {
   authToken: string
@@ -38,14 +42,5 @@ export interface AiAgentArgs {
 }
 
 export type AgenticInputMessage = AgentInputItem
-export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
 
-export interface RunResult {
-  messages: AgenticOutputMessage[]
-  toolsExecuted: string[]
-  exit: boolean
-  inputGuardrailTriggered: boolean
-  outputGuardrailTriggered: boolean
-}
-
-export type InferenceResponse = RunResult | undefined
+export type { AgenticOutputMessage, InferenceResponse, RunResult }

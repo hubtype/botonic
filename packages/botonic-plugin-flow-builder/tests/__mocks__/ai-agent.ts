@@ -1,4 +1,4 @@
-import { AgenticOutputMessage, InferenceResponse } from '../../src/types'
+import { AgenticOutputMessage, InferenceResponse } from '@botonic/core'
 
 export function mockAiAgentResponse(messages: AgenticOutputMessage[]) {
   return jest.fn(() => {

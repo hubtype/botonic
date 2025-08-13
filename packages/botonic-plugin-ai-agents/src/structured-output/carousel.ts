@@ -1,20 +1,7 @@
+import { CarouselMessage } from '@botonic/core'
 import { z } from 'zod'
 
-import { BaseMessage } from './shared'
-
-interface CarouselElement {
-  title: string
-  subtitle: string
-  image: string
-  button: { text: string; url: string }
-}
-
-export interface CarouselMessage extends BaseMessage {
-  type: 'carousel'
-  content: {
-    elements: CarouselElement[]
-  }
-}
+export type { CarouselMessage }
 
 export const CarouselSchema = z
   .object({

@@ -1,7 +1,7 @@
+import { AgenticOutputMessage } from '@botonic/core'
 import { Button, Carousel, Text } from '@botonic/react'
 
 import { SOURCE_INFO_SEPARATOR } from '../constants'
-import { AgenticOutputMessage } from '../types'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
 import { HtAiAgentNode } from './hubtype-fields/ai-agent'
@@ -26,7 +26,7 @@ export class FlowAiAgent extends ContentFieldsBase {
   toBotonic(id: string): JSX.Element {
     return (
       <>
-        {this.responses.map(response => {
+        {this.responses.map((response: AgenticOutputMessage) => {
           if (response.type === 'text') {
             return <Text key={id}>{response.content.text}</Text>
           }
