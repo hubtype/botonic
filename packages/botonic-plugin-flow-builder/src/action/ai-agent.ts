@@ -5,6 +5,7 @@ import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
 import { AiAgentInferenceResponse } from '../types'
+import { GuardrailRule } from '../types'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
@@ -29,12 +30,21 @@ export async function getContentsByAiAgent({
     return []
   }
 
+  const activeInputGuardrailRules: GuardrailRule[] =
+    aiAgentContent.inputGuardrailRules
+      .filter(rule => rule.is_active)
+      .map(rule => ({
+        name: rule.name,
+        description: rule.description,
+      }))
+
   const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
     request,
     {
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
       activeTools: aiAgentContent.activeTools,
+      inputGuardrailRules: activeInputGuardrailRules,
     }
   )
 

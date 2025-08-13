@@ -22,6 +22,11 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext) => Promise<any>
 }
 
+export interface GuardrailRule {
+  name: string
+  description: string
+}
+
 export type ContactInfo = Record<string, string>
 
 export type Tool = OpenAITool<Context>
@@ -35,6 +40,7 @@ export interface AiAgentArgs {
   name: string
   instructions: string
   activeTools?: { name: string }[]
+  inputGuardrailRules?: GuardrailRule[]
 }
 
 export type AgenticInputMessage = AgentInputItem
@@ -44,8 +50,8 @@ export interface RunResult {
   messages: AgenticOutputMessage[]
   toolsExecuted: string[]
   exit: boolean
-  inputGuardrailTriggered: boolean
-  outputGuardrailTriggered: boolean
+  inputGuardrailTriggered: string[]
+  outputGuardrailTriggered: string[]
 }
 
 export type InferenceResponse = RunResult | undefined
