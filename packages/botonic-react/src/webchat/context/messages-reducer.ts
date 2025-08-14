@@ -1,7 +1,4 @@
-import merge from 'lodash.merge'
-
 import { SENDERS } from '../../index-types'
-import { isCustom } from '../../message-utils'
 import { WebchatAction } from './actions'
 import { WebchatState } from './types'
 
@@ -94,32 +91,31 @@ function updateMessageReducer(
   state: WebchatState,
   action: { type: WebchatAction; payload?: any }
 ) {
-  const msgIndex = state.messagesJSON.map(m => m.id).indexOf(action.payload.id)
+  const messageId = action.payload.id
+  const msgIndex = state.messagesJSON.map(m => m.id).indexOf(messageId)
   if (msgIndex > -1) {
     const msgComponent = state.messagesComponents[msgIndex]
-    let updatedMessageComponents = {}
     if (msgComponent) {
-      const updatedMsgComponent = {
-        ...msgComponent,
-        ...{
-          props: { ...msgComponent.props, ack: action.payload.ack },
-        },
-      }
-
-      if (isCustom(action.payload)) {
-        // If the message is a custom message, update the json property to update props.
-        // If user close and open the chat the message will render again with the new props.
-        updatedMsgComponent.props.json = action.payload.data.json
-      }
-
-      updatedMessageComponents = {
-        messagesComponents: [
-          ...state.messagesComponents.slice(0, msgIndex),
-          { ...updatedMsgComponent },
-          ...state.messagesComponents.slice(msgIndex + 1),
-        ],
+      msgComponent.props = {
+        ...msgComponent.props,
+        ack: action.payload.ack,
       }
     }
+
+    const updatedMessagesComponents = msgComponent
+      ? getUpdatedMessagesComponents(state, msgIndex, msgComponent)
+      : state.messagesComponents
+
+    const messageJSON = state.messagesJSON.find(m => m.id === messageId)
+    if (messageJSON) {
+      messageJSON.data = {
+        ...messageJSON.data,
+      }
+    }
+
+    const updatedMessagesJSON = messageJSON
+      ? getUpdatedMessagesJSON(state, msgIndex, action.payload)
+      : state.messagesJSON
 
     const numUnreadMessages = state.messagesComponents.filter(
       messageComponent => messageComponent.props.isUnread
@@ -127,12 +123,8 @@ function updateMessageReducer(
 
     return {
       ...state,
-      messagesJSON: [
-        ...state.messagesJSON.slice(0, msgIndex),
-        { ...action.payload },
-        ...state.messagesJSON.slice(msgIndex + 1),
-      ],
-      ...updatedMessageComponents,
+      messagesJSON: updatedMessagesJSON,
+      messagesComponents: updatedMessagesComponents,
       numUnreadMessages,
     }
   }
@@ -161,28 +153,21 @@ function updateCustomMessagePropsReducer(
 ) {
   const { messageId, props } = action.payload
 
-  // Similar to updateMessageReducer but only for custom messages
+  // Similar to updateMessageReducer but only for custom messages when update props
   const msgIndex = state.messagesJSON.map(m => m.id).indexOf(messageId)
   if (msgIndex > -1) {
     const msgComponent = state.messagesComponents[msgIndex]
-    let updatedMessageComponents = {}
-    let updatedMessagesJSON = {}
     if (msgComponent) {
-      const updatedMsgComponent = {
-        ...msgComponent,
-        ...{
-          props: { ...msgComponent.props, ack: action.payload.ack, ...props },
-        },
-      }
-
-      updatedMessageComponents = {
-        messagesComponents: [
-          ...state.messagesComponents.slice(0, msgIndex),
-          { ...updatedMsgComponent },
-          ...state.messagesComponents.slice(msgIndex + 1),
-        ],
+      msgComponent.props = {
+        ...msgComponent.props,
+        ack: action.payload.ack,
+        ...props,
       }
     }
+
+    const updatedMessagesComponents = msgComponent
+      ? getUpdatedMessagesComponents(state, msgIndex, msgComponent)
+      : state.messagesComponents
 
     const messageJSON = state.messagesJSON.find(m => m.id === messageId)
     if (messageJSON) {
@@ -190,22 +175,43 @@ function updateCustomMessagePropsReducer(
         ...messageJSON.data,
         ...props,
       }
-
-      updatedMessagesJSON = {
-        messagesJSON: [
-          ...state.messagesJSON.slice(0, msgIndex),
-          { ...messageJSON },
-          ...state.messagesJSON.slice(msgIndex + 1),
-        ],
-      }
     }
+
+    const updatedMessagesJSON = messageJSON
+      ? getUpdatedMessagesJSON(state, msgIndex, messageJSON)
+      : state.messagesJSON
 
     return {
       ...state,
-      ...updatedMessagesJSON,
-      ...updatedMessageComponents,
+      messagesJSON: updatedMessagesJSON,
+      messagesComponents: updatedMessagesComponents,
     }
   }
 
   return state
+}
+
+// Helper functions to update messagesComponents and messagesJSON
+function getUpdatedMessagesComponents(
+  state: WebchatState,
+  msgIndex: number,
+  updatedMessageComponent: any
+) {
+  return [
+    ...state.messagesComponents.slice(0, msgIndex),
+    { ...updatedMessageComponent },
+    ...state.messagesComponents.slice(msgIndex + 1),
+  ]
+}
+
+function getUpdatedMessagesJSON(
+  state: WebchatState,
+  msgIndex: number,
+  messageJSON: any
+) {
+  return [
+    ...state.messagesJSON.slice(0, msgIndex),
+    { ...messageJSON },
+    ...state.messagesJSON.slice(msgIndex + 1),
+  ]
 }

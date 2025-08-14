@@ -13,7 +13,7 @@ interface CustomRatingMessageProps {
   messageText: string
   buttonText: string
   ratingType: RatingType
-  id: string
+  id?: string // This id not exist in local development
   valueSent?: number
 }
 
