@@ -95,23 +95,21 @@ function updateMessageReducer(
   const msgIndex = state.messagesJSON.map(m => m.id).indexOf(messageId)
   if (msgIndex > -1) {
     const msgComponent = state.messagesComponents[msgIndex]
+    let updatedMsgComponent = {}
     if (msgComponent) {
-      msgComponent.props = {
-        ...msgComponent.props,
-        ack: action.payload.ack,
+      updatedMsgComponent = {
+        ...msgComponent,
+        ...{
+          props: { ...msgComponent.props, ack: action.payload.ack },
+        },
       }
     }
 
     const updatedMessagesComponents = msgComponent
-      ? getUpdatedMessagesComponents(state, msgIndex, msgComponent)
+      ? getUpdatedMessagesComponents(state, msgIndex, updatedMsgComponent)
       : state.messagesComponents
 
     const messageJSON = state.messagesJSON.find(m => m.id === messageId)
-    if (messageJSON) {
-      messageJSON.data = {
-        ...messageJSON.data,
-      }
-    }
 
     const updatedMessagesJSON = messageJSON
       ? getUpdatedMessagesJSON(state, msgIndex, action.payload)
