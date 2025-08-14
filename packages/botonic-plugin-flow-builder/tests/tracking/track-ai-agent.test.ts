@@ -1,6 +1,6 @@
-import { EventAction, INPUT } from '@botonic/core'
+import { EventAction, InferenceResponse, INPUT } from '@botonic/core'
 
-import { AiAgentInferenceResponse, ProcessEnvNodeEnvs } from '../../src/types'
+import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from '../__mocks__/ai-agent'
 // eslint-disable-next-line jest/no-mocks-import
@@ -17,7 +17,7 @@ describe('Check tracked events when a contents are displayed', () => {
 
   test('Track ai agent event with response, after executing a tool', async () => {
     const userInput = 'I want to cancel my flight'
-    const mockResponse: Partial<AiAgentInferenceResponse> = {
+    const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
           type: 'text',

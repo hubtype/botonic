@@ -6,6 +6,7 @@ export function mockAiAgentResponse({
   inputGuardrailTriggered = [],
   outputGuardrailTriggered = [],
   exit = false,
+  error = false,
 }: Partial<InferenceResponse>) {
   return jest.fn(() => {
     const response: InferenceResponse = {
@@ -14,7 +15,9 @@ export function mockAiAgentResponse({
       inputGuardrailTriggered,
       outputGuardrailTriggered,
       exit,
+      error,
     }
+
     return Promise.resolve(response)
   })
 }

@@ -1,8 +1,8 @@
-import { INPUT } from '@botonic/core'
+import { InferenceResponse, INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowAiAgent, FlowText } from '../src'
-import { AiAgentInferenceResponse, ProcessEnvNodeEnvs } from '../src/types'
+import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
 import { aiAgentTestFlow } from './helpers/flows/ai-agent'
@@ -12,7 +12,7 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
   test('When input match a keyword, the ai agent not respond', async () => {
-    const mockResponse: Partial<AiAgentInferenceResponse> = {
+    const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
           type: 'text',
@@ -42,7 +42,7 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
   })
 
   test('When input not match a keyword or smart intent, the ai agent respond with a text message', async () => {
-    const mockResponse: Partial<AiAgentInferenceResponse> = {
+    const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
           type: 'text',
@@ -77,7 +77,7 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
   })
 
   test('When input not match a keyword or smart intent, the ai agent respond with two messages, a text followed by a text with buttons', async () => {
-    const mockResponse: Partial<AiAgentInferenceResponse> = {
+    const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
           type: 'text',
@@ -127,7 +127,7 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
   })
 
   test('When input not match a keyword or smart intent, the ai agent respond with two messages, a text followed by a carousel', async () => {
-    const mockResponse: Partial<AiAgentInferenceResponse> = {
+    const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
           type: 'text',
