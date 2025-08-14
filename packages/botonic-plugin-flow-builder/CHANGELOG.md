@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.37.x] - 2025-mm-dd
+## [0.37.2] - 2025-08-13
 
 ### Added
 
 ### Changed
+
+- [PR-3084](https://github.com/hubtype/botonic/pull/3084): Allow to use input guardrails in ai agent node.
 
 ### Fixed
 

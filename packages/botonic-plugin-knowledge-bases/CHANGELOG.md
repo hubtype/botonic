@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.31.x] - 2025-mm-dd
+## [0.37.1] - 2025-08-13
 
 ### Added
 
 ### Changed
+
+- [PR-3088](https://github.com/hubtype/botonic/pull/3088): Use types from @botonic/core.
 
 ### Fixed
 

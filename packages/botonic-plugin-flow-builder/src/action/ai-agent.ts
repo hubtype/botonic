@@ -27,11 +27,11 @@ export async function getContentsByAiAgent({
 
   const activeInputGuardrailRules: GuardrailRule[] =
     aiAgentContent.inputGuardrailRules
-      .filter(rule => rule.is_active)
-      .map(rule => ({
+      ?.filter(rule => rule.is_active)
+      ?.map(rule => ({
         name: rule.name,
         description: rule.description,
-      }))
+      })) || []
 
   const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
     request,

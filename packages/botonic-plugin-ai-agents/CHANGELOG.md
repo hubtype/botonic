@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.37.x] - 2025-mm-dd
+## [0.37.2] - 2025-08-13
 
 ### Added
 
@@ -18,6 +18,8 @@ All notable changes to Botonic will be documented in this file.
 - [PR-3083](https://github.com/hubtype/botonic/pull/3083): getInference returns an object as InferenceResponse.
 
 ### Changed
+
+- [PR-3088](https://github.com/hubtype/botonic/pull/3088): Use types from @botonic/core.
 
 ### Fixed
 
