@@ -4,7 +4,6 @@ import { ThemeContext } from 'styled-components'
 
 import { Button, customMessage } from '../../../components'
 import { WebchatContext } from '../../context'
-import { CustomJsonBase } from '../types'
 import { RatingSelector } from './rating-selector'
 import { MessageBubble } from './styles'
 import { RatingType } from './types'
@@ -14,19 +13,18 @@ interface CustomRatingMessageProps {
   messageText: string
   buttonText: string
   ratingType: RatingType
-  json: CustomJsonBase & { valueSent?: number }
+  id: string
+  valueSent?: number
 }
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
-  const { payloads, messageText, buttonText, ratingType } = props
-  const { updateCustomMessageJSON, sendInput } = useContext(WebchatContext)
+  const { payloads, messageText, buttonText, ratingType, id, valueSent } = props
+  const { updateCustomMessageProps, sendInput } = useContext(WebchatContext)
 
   const theme = useContext(ThemeContext)
   const color = theme?.brand?.color ?? ''
 
-  const [ratingValue, setRatingValue] = useState(
-    props.json?.valueSent ? props.json.valueSent : -1
-  )
+  const [ratingValue, setRatingValue] = useState(valueSent ? valueSent : -1)
   const [showRating, setShowRating] = useState(true)
 
   const ratingChanged = (newRating: number) => {
@@ -36,8 +34,8 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   const handleButtonSend = () => {
     if (ratingValue === -1) return
 
-    if (props.json?.messageId) {
-      updateCustomMessageJSON(props.json.messageId, {
+    if (id) {
+      updateCustomMessageProps(id, {
         valueSent: ratingValue,
       })
     }
@@ -63,10 +61,10 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
           onRatingChange={ratingChanged}
           ratingValue={ratingValue}
           ratingType={ratingType}
-          valueSent={props.json?.valueSent}
+          valueSent={valueSent}
         />
       </MessageBubble>
-      {!props.json?.valueSent && showRating && (
+      {!props?.valueSent && showRating && (
         <Button
           autodisable={true}
           disabled={disabled}

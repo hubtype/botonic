@@ -54,7 +54,7 @@ export const WebchatContext = createContext<WebchatContextProps>({
   togglePersistentMenu: () => {
     return
   },
-  updateCustomMessageJSON: () => {
+  updateCustomMessageProps: () => {
     return
   },
   updateLatestInput: () => {

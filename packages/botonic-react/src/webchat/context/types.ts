@@ -75,7 +75,10 @@ export interface WebchatContextProps {
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
   toggleCoverComponent: (toggle: boolean) => void
-  updateCustomMessageJSON: (messageId: string, json: any) => void
+  updateCustomMessageProps: (
+    messageId: string,
+    json: Record<string, any>
+  ) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void

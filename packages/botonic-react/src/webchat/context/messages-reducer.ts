@@ -16,8 +16,8 @@ export const messagesReducer = (
       return addMessageComponent(state, action)
     case WebchatAction.UPDATE_MESSAGE:
       return updateMessageReducer(state, action)
-    case WebchatAction.UPDATE_CUSTOM_MESSAGE_JSON:
-      return updateCustomMessageJSONReducer(state, action)
+    case WebchatAction.UPDATE_CUSTOM_MESSAGE_PROPS:
+      return updateCustomMessagePropsReducer(state, action)
     case WebchatAction.UPDATE_REPLIES:
       return { ...state, replies: action.payload }
     case WebchatAction.REMOVE_REPLIES:
@@ -155,21 +155,57 @@ function addMessageReducer(
   }
 }
 
-function updateCustomMessageJSONReducer(
+function updateCustomMessagePropsReducer(
   state: WebchatState,
   action: { type: WebchatAction; payload?: any }
 ) {
-  const { messageId, json } = action.payload
-  const messageToUpdate = state.messagesJSON.find(m => m.id === messageId)
-  const messageInfo = {
-    data: {
-      json,
-    },
-  }
-  const updatedMsg = merge(messageToUpdate, messageInfo)
+  const { messageId, props } = action.payload
 
-  return updateMessageReducer(state, {
-    type: WebchatAction.UPDATE_MESSAGE,
-    payload: updatedMsg,
-  })
+  // Similar to updateMessageReducer but only for custom messages
+  const msgIndex = state.messagesJSON.map(m => m.id).indexOf(messageId)
+  if (msgIndex > -1) {
+    const msgComponent = state.messagesComponents[msgIndex]
+    let updatedMessageComponents = {}
+    let updatedMessagesJSON = {}
+    if (msgComponent) {
+      const updatedMsgComponent = {
+        ...msgComponent,
+        ...{
+          props: { ...msgComponent.props, ack: action.payload.ack, ...props },
+        },
+      }
+
+      updatedMessageComponents = {
+        messagesComponents: [
+          ...state.messagesComponents.slice(0, msgIndex),
+          { ...updatedMsgComponent },
+          ...state.messagesComponents.slice(msgIndex + 1),
+        ],
+      }
+    }
+
+    const messageJSON = state.messagesJSON.find(m => m.id === messageId)
+    if (messageJSON) {
+      messageJSON.data = {
+        ...messageJSON.data,
+        ...props,
+      }
+
+      updatedMessagesJSON = {
+        messagesJSON: [
+          ...state.messagesJSON.slice(0, msgIndex),
+          { ...messageJSON },
+          ...state.messagesJSON.slice(msgIndex + 1),
+        ],
+      }
+    }
+
+    return {
+      ...state,
+      ...updatedMessagesJSON,
+      ...updatedMessageComponents,
+    }
+  }
+
+  return state
 }

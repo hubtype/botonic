@@ -55,7 +55,10 @@ export interface UseWebchat {
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
   toggleWebchat: (toggle: boolean) => void
-  updateCustomMessageJSON: (messageId: string, json: any) => void
+  updateCustomMessageProps: (
+    messageId: string,
+    props: Record<string, any>
+  ) => void
   updateDevSettings: (settings: DevSettings) => void
   updateHandoff: (handoff: boolean) => void
   updateLastMessageDate: (date: string) => void
@@ -103,10 +106,13 @@ export function useWebchat(theme?: WebchatTheme): UseWebchat {
       payload: message,
     })
 
-  const updateCustomMessageJSON = (messageId: string, json: any) =>
+  const updateCustomMessageProps = (
+    messageId: string,
+    props: Record<string, any>
+  ) =>
     webchatDispatch({
-      type: WebchatAction.UPDATE_CUSTOM_MESSAGE_JSON,
-      payload: { messageId, json },
+      type: WebchatAction.UPDATE_CUSTOM_MESSAGE_PROPS,
+      payload: { messageId, props },
     })
 
   const updateMessage = (message: WebchatMessage) =>
@@ -267,7 +273,7 @@ export function useWebchat(theme?: WebchatTheme): UseWebchat {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleWebchat,
-    updateCustomMessageJSON,
+    updateCustomMessageProps,
     updateDevSettings,
     updateHandoff,
     updateLastMessageDate,
