@@ -47,8 +47,9 @@ export interface RunResult {
   messages: AgenticOutputMessage[]
   toolsExecuted: string[]
   exit: boolean
+  error: boolean
   inputGuardrailTriggered: string[]
   outputGuardrailTriggered: string[]
 }
 
-export type InferenceResponse = RunResult | undefined
+export type InferenceResponse = RunResult

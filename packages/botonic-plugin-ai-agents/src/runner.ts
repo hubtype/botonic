@@ -53,6 +53,7 @@ export class AIAgentRunner {
             ) as AgenticOutputMessage[]),
         toolsExecuted,
         exit: hasExit,
+        error: false,
         inputGuardrailTriggered: [],
         outputGuardrailTriggered: [],
       }
@@ -62,6 +63,7 @@ export class AIAgentRunner {
           messages: [],
           toolsExecuted: [],
           exit: true,
+          error: false,
           inputGuardrailTriggered: error.result.output.outputInfo,
           outputGuardrailTriggered: [],
         }

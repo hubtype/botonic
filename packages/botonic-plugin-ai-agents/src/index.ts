@@ -60,9 +60,14 @@ export default class BotonicPluginAiAgents implements Plugin {
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)
-      // Here we can return a InferenceResponse as a exit
-      // but indicate that the inference failed
-      return undefined
+      return {
+        messages: [],
+        toolsExecuted: [],
+        exit: true,
+        error: true,
+        inputGuardrailTriggered: [],
+        outputGuardrailTriggered: [],
+      }
     }
   }
 
