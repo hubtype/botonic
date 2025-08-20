@@ -10,17 +10,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.37.x] - 2025-mm-dd
+## [0.38.x] - 2025-mm-dd
 
 ### Added
-
-- [PR-3079](https://github.com/hubtype/botonic/pull/3079): Create updateCustomMessageJSON function in WebchatContext to keep state in custom messages.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.38.0] - 2025-08-20
+
+### Added
+
+- [PR-3079](https://github.com/hubtype/botonic/pull/3079): Create updateCustomMessageJSON function in WebchatContext to keep state in custom messages.
 
 ## [0.37.1] - 2025-08-06
 
