@@ -17,6 +17,9 @@ All notable changes to Botonic will be documented in this file.
 ### Changed
 
 - [PR-3084](https://github.com/hubtype/botonic/pull/3084): Allow to use input guardrails in ai agent node.
+- [PR-3081](https://github.com/hubtype/botonic/pull/3081): plugin-flow-builder not respond with first interaction if it receive a contentID.
+- [PR-3091](https://github.com/hubtype/botonic/pull/3091): plugin-flow-builder not to use specific WhatsApp messages when the channel is not WhatsApp.
+- [PR-3092](https://github.com/hubtype/botonic/pull/3092): Change do-nothing payload.
 
 ### Fixed
 

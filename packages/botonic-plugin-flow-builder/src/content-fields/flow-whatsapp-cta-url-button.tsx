@@ -1,4 +1,11 @@
-import { WhatsappCTAUrlButton, WhatsappCTAUrlHeaderType } from '@botonic/react'
+import { isWhatsapp } from '@botonic/core'
+import {
+  ActionRequest,
+  Button,
+  Text,
+  WhatsappCTAUrlButton,
+  WhatsappCTAUrlHeaderType,
+} from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -103,7 +110,16 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     }
   }
 
-  toBotonic(id: string): JSX.Element {
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    if (!isWhatsapp(request.session)) {
+      return (
+        <Text>
+          {this.text}
+          <Button url={this.url}>{this.displayText}</Button>
+        </Text>
+      )
+    }
+
     if (
       this.headerType === WhatsappCTAUrlHeaderType.Image &&
       this.headerImage
