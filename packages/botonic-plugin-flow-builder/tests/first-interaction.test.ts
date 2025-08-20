@@ -84,6 +84,7 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
     expect(contents.length).toBe(1)
     expect((contents[0] as FlowText).text).toBe('How can I help you?')
     expect((contents[0] as FlowText).buttons.length).toBe(5)
+    expect(request.session.flow_thread_id).toBeDefined()
   })
 
   test('plugin flow builder responds with the first interaction contents when not found contents by the contentID', async () => {
