@@ -16,6 +16,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- [PR-3081](https://github.com/hubtype/botonic/pull/3081): plugin-flow-builder not respond with first interaction if it receive a contentID.
+
 ### Fixed
 
 </details>
