@@ -12,6 +12,8 @@ import {
   EventKnowledgeBase,
   EventWebviewEnd,
   EventWebviewStep,
+  KnowledgebaseFailReason,
+  WebviewEndFailType,
 } from '@botonic/core'
 
 export enum EventType {
@@ -55,4 +57,6 @@ export {
   EventKnowledgeBase,
   EventWebviewEnd,
   EventWebviewStep,
+  KnowledgebaseFailReason,
+  WebviewEndFailType,
 }
