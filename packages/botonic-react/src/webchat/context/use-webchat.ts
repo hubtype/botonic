@@ -56,8 +56,8 @@ export interface UseWebchat {
   togglePersistentMenu: (toggle: boolean) => void
   toggleWebchat: (toggle: boolean) => void
   updateCustomMessageProps: (
-    messageId: string,
-    props: Record<string, any>
+    props: Record<string, any>,
+    messageId?: string
   ) => void
   updateDevSettings: (settings: DevSettings) => void
   updateHandoff: (handoff: boolean) => void
@@ -107,8 +107,8 @@ export function useWebchat(theme?: WebchatTheme): UseWebchat {
     })
 
   const updateCustomMessageProps = (
-    messageId: string,
-    props: Record<string, any>
+    props: Record<string, any>,
+    messageId?: string
   ) =>
     webchatDispatch({
       type: WebchatAction.UPDATE_CUSTOM_MESSAGE_PROPS,

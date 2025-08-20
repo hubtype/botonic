@@ -151,6 +151,10 @@ function updateCustomMessagePropsReducer(
 ) {
   const { messageId, props } = action.payload
 
+  if (!messageId) {
+    return state
+  }
+
   // Similar to updateMessageReducer but only for custom messages when update props
   const msgIndex = state.messagesJSON.map(m => m.id).indexOf(messageId)
   if (msgIndex > -1) {

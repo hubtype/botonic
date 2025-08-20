@@ -76,8 +76,8 @@ export interface WebchatContextProps {
   togglePersistentMenu: (toggle: boolean) => void
   toggleCoverComponent: (toggle: boolean) => void
   updateCustomMessageProps: (
-    messageId: string,
-    json: Record<string, any>
+    json: Record<string, any>,
+    messageId?: string
   ) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
