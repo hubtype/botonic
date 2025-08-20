@@ -16,6 +16,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- [PR-3092](https://github.com/hubtype/botonic/pull/3092): Change do-nothing payload.
+
 ### Fixed
 
 </details>
