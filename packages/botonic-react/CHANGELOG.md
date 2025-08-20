@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3079](https://github.com/hubtype/botonic/pull/3079): Create updateCustomMessageJSON function in WebchatContext to keep state in custom messages.
+
 ### Changed
 
 ### Fixed

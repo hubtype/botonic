@@ -82,7 +82,7 @@ export const customMessage = ({
         isUnread={props.isUnread}
       >
         <ErrorBoundary key={'errorBoundary'} {...customMessageProps}>
-          <CustomMessageComponent {...customMessageProps}>
+          <CustomMessageComponent id={id} {...customMessageProps}>
             {childrenWithoutReplies}
           </CustomMessageComponent>
         </ErrorBoundary>
@@ -93,12 +93,11 @@ export const customMessage = ({
   WrappedComponent.customTypeName = name
   // eslint-disable-next-line react/display-name
   WrappedComponent.deserialize = (msg: any) => {
-    const json = { ...msg.data, messageId: msg.id }
     return (
       <WrappedComponent
         id={msg.id}
         key={msg.key}
-        json={json}
+        json={msg.data}
         {...msg.data}
         sentBy={msg.sentBy || SENDERS.bot}
         isUnread={msg.isUnread}

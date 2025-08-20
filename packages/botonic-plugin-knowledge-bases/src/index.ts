@@ -5,7 +5,7 @@ import {
   HtApiKnowledgeBaseResponse,
   HubtypeApiService,
 } from './hubtype-knowledge-api-service'
-import { KnowledgeBaseResponse, PluginKnowledgeBaseOptions } from './types'
+import { KnowledgeBasesResponse, PluginKnowledgeBaseOptions } from './types'
 
 const isProd = process.env.NODE_ENV === 'production'
 const isDev = process.env.NODE_ENV === 'development'
@@ -29,7 +29,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     instructions: string,
     messageId: string,
     memoryLength: number
-  ): Promise<KnowledgeBaseResponse> {
+  ): Promise<KnowledgeBasesResponse> {
     const authToken = isProd ? request.session._access_token : this.authToken
 
     if (isDev) {
@@ -54,7 +54,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     request: BotContext,
     instructions: string,
     sources: string[]
-  ): Promise<KnowledgeBaseResponse> {
+  ): Promise<KnowledgeBasesResponse> {
     const messages = [{ role: 'human', content: request.input.data }]
 
     const response = await this.apiService.testInference(
@@ -71,7 +71,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     authToken: string,
     request: BotContext,
     sources: string[]
-  ): Promise<KnowledgeBaseResponse> {
+  ): Promise<KnowledgeBasesResponse> {
     const response = await this.apiService.inferenceV1(
       authToken,
       request.input.data!,
@@ -92,7 +92,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
     instructions: string,
     messageId: string,
     memoryLength: number
-  ): Promise<KnowledgeBaseResponse> {
+  ): Promise<KnowledgeBasesResponse> {
     const response = await this.apiService.inferenceV2(
       authToken,
       sources,
@@ -106,7 +106,7 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
 
   private mapApiResponse(
     response: AxiosResponse<HtApiKnowledgeBaseResponse>
-  ): KnowledgeBaseResponse {
+  ): KnowledgeBasesResponse {
     return {
       inferenceId: response.data.inference_id,
       chunkIds: response.data.chunks.map(chunk => chunk.id),

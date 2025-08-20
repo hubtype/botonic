@@ -8,10 +8,10 @@ import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
-  AgenticOutputMessage,
   AiAgentArgs,
   Context,
   CustomTool,
+  InferenceResponse,
   PluginAiAgentOptions,
   Tool,
 } from './types'
@@ -33,7 +33,7 @@ export default class BotonicPluginAiAgents implements Plugin {
   async getInference(
     request: BotContext,
     aiAgentArgs: AiAgentArgs
-  ): Promise<AgenticOutputMessage[] | undefined> {
+  ): Promise<InferenceResponse> {
     try {
       const authToken = isProd ? request.session._access_token : this.authToken
       if (!authToken) {
@@ -46,7 +46,9 @@ export default class BotonicPluginAiAgents implements Plugin {
       const agent = new AIAgentBuilder(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
-        tools
+        tools,
+        request.session.user.contact_info || {},
+        aiAgentArgs.inputGuardrailRules || []
       ).build()
 
       const messages = await this.getMessages(request, authToken, 25)
@@ -58,6 +60,8 @@ export default class BotonicPluginAiAgents implements Plugin {
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)
+      // Here we can return a InferenceResponse as a exit
+      // but indicate that the inference failed
       return undefined
     }
   }
