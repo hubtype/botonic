@@ -34,12 +34,10 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   const handleButtonSend = () => {
     if (ratingValue === -1) return
 
-    updateCustomMessageProps(
-      {
-        valueSent: ratingValue,
-      },
-      id
-    )
+    const json = {
+      valueSent: ratingValue,
+    }
+    updateCustomMessageProps(json, id)
 
     setShowRating(false)
     const payload = payloads[ratingValue - 1]
