@@ -38,7 +38,7 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     if (!isWhatsapp(request.session)) {
       const rows = this.sections.flatMap(section => section.rows)
       const buttons = rows.map(row => (
-        <Button key={row.id} payload={row.id}>
+        <Button key={row.id} payload={row.targetId}>
           {row.title}
         </Button>
       ))
