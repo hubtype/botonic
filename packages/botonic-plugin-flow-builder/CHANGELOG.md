@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.38.1] - 2025-08-26
+
+### Fixed
+
+- [PR-3093](https://github.com/hubtype/botonic/pull/3093): Fix payload in toBotonic method of FlowWhatsappButtonList component.
+
 ## [0.38.0] - 2025-08-20
 
 ### Added
