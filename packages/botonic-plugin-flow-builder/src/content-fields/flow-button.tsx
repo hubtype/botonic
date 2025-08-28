@@ -4,7 +4,13 @@ import React from 'react'
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtButton, HtButtonStyle, HtUrlNode } from './hubtype-fields'
+import {
+  HtButton,
+  HtButtonStyle,
+  HtFlowWebview,
+  HtUrlNode,
+  HtWebviewNode,
+} from './hubtype-fields'
 import { HtRatingButton } from './hubtype-fields/rating'
 
 export class FlowButton extends ContentFieldsBase {
@@ -13,6 +19,7 @@ export class FlowButton extends ContentFieldsBase {
   public payload?: string
   public target?: string
   public webview?: Webview
+  public params?: Record<string, string>
 
   static fromHubtypeCMS(
     cmsButton: HtButton,
@@ -24,7 +31,13 @@ export class FlowButton extends ContentFieldsBase {
     const newButton = new FlowButton(cmsButton.id)
     newButton.text = this.getTextByLocale(locale, cmsButton.text)
     if (cmsButton.target) {
-      newButton.payload = cmsApi.getPayload(cmsButton.target)
+      const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
+      if (webview) {
+        newButton.webview = { name: webview.name }
+        newButton.params = { webviewId: webview.id }
+      } else {
+        newButton.payload = cmsApi.getPayload(cmsButton.target)
+      }
     }
 
     if (cmsButton.url && urlId) {
@@ -60,6 +73,24 @@ export class FlowButton extends ContentFieldsBase {
     return cmsButton.url.find(url => url.locale === locale)?.id
   }
 
+  static getTargetWebview(
+    cmsApi: FlowBuilderApi,
+    targetId: string
+  ): HtFlowWebview | undefined {
+    const targetNode = cmsApi.getNodeById(targetId)
+    if (targetNode.type !== 'webview') {
+      return undefined
+    }
+    const webview = cmsApi.getWebviewById(
+      (targetNode as HtWebviewNode).content.webview_target_id
+    )
+    if (webview) {
+      return { name: webview.name.replaceAll(' ', ''), id: webview.id }
+    }
+
+    return undefined
+  }
+
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {
     if (buttonStyle === HtButtonStyle.QUICK_REPLY) {
       return (
@@ -68,6 +99,7 @@ export class FlowButton extends ContentFieldsBase {
         </Reply>
       )
     }
+
     return (
       <Button
         key={this.id}
@@ -75,6 +107,7 @@ export class FlowButton extends ContentFieldsBase {
         payload={this.getButtonPayload(buttonIndex)}
         target={this.target}
         webview={this.webview}
+        params={this.params}
       >
         {this.text}
       </Button>

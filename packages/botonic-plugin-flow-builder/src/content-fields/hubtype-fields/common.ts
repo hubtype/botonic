@@ -12,12 +12,18 @@ export interface HtFlowBuilderData {
   is_ai_agent_active?: boolean
   nodes: HtNodeComponent[]
   flows: HtFlows[]
+  webviews: HtFlowWebview[]
 }
 
 export interface HtFlows {
   id: string
   name: string
   start_node_id: string
+}
+
+export interface HtFlowWebview {
+  id: string
+  name: string
 }
 
 export interface HtNodeLink {

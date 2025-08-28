@@ -14,6 +14,7 @@ export enum HtNodeWithContentType {
   BOT_ACTION = 'bot-action',
   AI_AGENT = 'ai-agent',
   RATING = 'rating',
+  WEBVIEW = 'webview',
 }
 
 export enum HtNodeWithoutContentType {

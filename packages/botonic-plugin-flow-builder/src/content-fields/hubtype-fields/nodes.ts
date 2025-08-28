@@ -14,6 +14,7 @@ import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
 import { HtVideoNode } from './video'
+import { HtWebviewNode } from './webview'
 import { HtWhatsappButtonListNode } from './whatsapp-button-list'
 import { HtWhatsappCTAUrlButtonNode } from './whatsapp-cta-url-button'
 
@@ -33,6 +34,7 @@ export type HtNodeWithContent =
   | HtBotActionNode
   | HtAiAgentNode
   | HtRatingNode
+  | HtWebviewNode
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 
