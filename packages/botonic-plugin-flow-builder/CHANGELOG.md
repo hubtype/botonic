@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.38.2] - 2025-08-28
+
+### Added
+
+- [PR-3094](https://github.com/hubtype/botonic/pull/3094): Extract the logic that obtains the submitted rating information into a function so it can be exported and used in the bots.
+
 ## [0.38.1] - 2025-08-26
 
 ### Fixed
