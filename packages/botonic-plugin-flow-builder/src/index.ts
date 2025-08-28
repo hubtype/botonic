@@ -317,6 +317,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 }
 
 export * from './action'
+export { getRatingButtonClicked } from './action/payload'
+export { AGENT_RATING_PAYLOAD } from './constants'
 export * from './content-fields'
 export { HtBotActionNode } from './content-fields/hubtype-fields'
 export { trackFlowContent } from './tracking'

@@ -1,9 +1,14 @@
 import { EventAction, EventFeedback, storeCaseRating } from '@botonic/core'
+import { ActionRequest } from '@botonic/react'
 import { v7 as uuid } from 'uuid'
 
 import { AGENT_RATING_PAYLOAD, SEPARATOR } from '../constants'
 import { FlowContent } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
+import {
+  HtNodeWithContent,
+  HtRatingButton,
+} from '../content-fields/hubtype-fields'
+import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
 import { FlowBuilderContext } from './index'
 
@@ -36,11 +41,12 @@ async function resolveRatingPayload(
     return []
   }
 
-  const id = request.input.payload
-  const buttonId = id?.split(SEPARATOR)[1]
-  const ratingNode = cmsApi.getRatingNodeByButtonId(buttonId)
-  const ratingButton = cmsApi.getRatingButtonById(ratingNode, buttonId)
-  const { target, text, value } = ratingButton
+  const { id, target, text, value } = getRatingButtonClicked(
+    request,
+    request.input.payload
+  )
+  const ratingNode = cmsApi.getRatingNodeByButtonId(id)
+
   const possibleOptions = ratingNode.content.buttons.map(button => button.text)
   const possibleValues = ratingNode.content.buttons.map(button => button.value)
 
@@ -68,4 +74,16 @@ async function resolveRatingPayload(
   }
 
   return []
+}
+
+export function getRatingButtonClicked(
+  request: ActionRequest,
+  payload: string
+): HtRatingButton {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const cmsApi = flowBuilderPlugin.cmsApi
+  const buttonId = payload?.split(SEPARATOR)[1]
+  const ratingNode = cmsApi.getRatingNodeByButtonId(buttonId)
+
+  return cmsApi.getRatingButtonById(ratingNode, buttonId)
 }
