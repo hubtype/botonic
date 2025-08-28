@@ -20,7 +20,8 @@ export interface WebchatState {
   replies?: (typeof Reply)[]
   latestInput: Partial<CoreInput>
   typing: boolean
-  webview: Webview | null
+  // In local development webview can be a React.ComponentType or a Webview object
+  webview?: Webview | string | React.ComponentType
   webviewParams: null
   session: Partial<CoreSession>
   lastRoutePath?: string

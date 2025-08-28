@@ -120,6 +120,7 @@ export interface WebchatProps {
   onTrackEvent?: TrackEventFunction
   host?: any
   server?: ServerConfig
+  localWebviews?: React.ComponentType[]
 }
 
 export type EventArgs = { [key: string]: any }

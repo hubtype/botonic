@@ -1,4 +1,4 @@
-import { Session as CoreSession } from '@botonic/core'
+import { isDev, Session as CoreSession, Session } from '@botonic/core'
 import React, { useContext, useEffect } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
@@ -16,7 +16,11 @@ import {
   StyledWebviewContent,
 } from './styles'
 
-export const WebviewContainer = () => {
+export const WebviewContainer = ({
+  localWebviews,
+}: {
+  localWebviews?: React.ComponentType[]
+}) => {
   const { closeWebview, getThemeProperty, webchatState } =
     useContext(WebchatContext)
 
@@ -29,8 +33,6 @@ export const WebviewContainer = () => {
     closeWebview: async (options?: CloseWebviewOptions) =>
       await closeWebview(options),
   }
-
-  const Webview = webchatState.webview as string | React.ComponentType
 
   const close = async (e: any) => {
     if (e.data === 'botonicCloseWebview') {
@@ -45,9 +47,39 @@ export const WebviewContainer = () => {
     return () => window.removeEventListener('message', close, false)
   }, [])
 
-  // TODO: Review how to split the logic of rendering a webview in local development and production
-  // In local development, Webview is a component. In production it is the URL of the webview
-  const isUrlToWebview = typeof Webview === 'string'
+  if (isDev(webchatState.session as Session)) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const Webview =
+      localWebviews?.find(webview => {
+        if (typeof webchatState.webview === 'string') {
+          return false
+        }
+        return webview.name === webchatState.webview?.name
+      }) ?? (webchatState.webview as React.ComponentType)
+
+    return (
+      <WebviewRequestContext.Provider value={webviewRequestContext}>
+        <StyledWebview
+          role={ROLES.WEBVIEW}
+          style={{
+            ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.webviewStyle),
+          }}
+        >
+          <WebviewHeader />
+          <StyledWebviewContent>
+            <StyledFrameAsDiv>
+              <Webview />
+            </StyledFrameAsDiv>
+          </StyledWebviewContent>
+        </StyledWebview>
+      </WebviewRequestContext.Provider>
+    )
+  }
+
+  const webviewUrl =
+    webchatState.webview && typeof webchatState.webview === 'string'
+      ? webchatState.webview
+      : ''
 
   return (
     <WebviewRequestContext.Provider value={webviewRequestContext}>
@@ -59,13 +91,7 @@ export const WebviewContainer = () => {
       >
         <WebviewHeader />
         <StyledWebviewContent>
-          {isUrlToWebview ? (
-            <StyledFrame src={Webview} />
-          ) : (
-            <StyledFrameAsDiv>
-              <Webview />
-            </StyledFrameAsDiv>
-          )}
+          <StyledFrame src={webviewUrl as string} />
         </StyledWebviewContent>
       </StyledWebview>
     </WebviewRequestContext.Provider>
