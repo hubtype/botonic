@@ -22,7 +22,7 @@ export interface WebchatState {
   typing: boolean
   // In local development webview can be a React.ComponentType or a Webview object
   webview?: Webview | string | React.ComponentType
-  webviewParams: null
+  webviewParams: undefined
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
