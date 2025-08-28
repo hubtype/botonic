@@ -1,17 +1,16 @@
 import {
-  AgenticOutputMessage,
   BotContext,
-  CarouselMessage,
   InferenceResponse,
   KnowledgeBasesResponse,
   PluginPreRequest,
   ResolvedPlugins,
-  TextMessage,
-  TextWithButtonsMessage,
 } from '@botonic/core'
 
 import { FlowContent } from './content-fields'
-import { HtFlowBuilderData } from './content-fields/hubtype-fields'
+import {
+  HtFlowBuilderData,
+  HtRatingButton,
+} from './content-fields/hubtype-fields'
 
 export interface InShadowingConfig {
   allowKeywords: boolean
@@ -115,4 +114,9 @@ export interface SmartIntentResponse {
 
 export interface PayloadParamsBase {
   followUpContentID?: string
+}
+
+export interface RatingSubmittedInfo extends HtRatingButton {
+  possibleOptions: string[]
+  possibleValues: number[]
 }
