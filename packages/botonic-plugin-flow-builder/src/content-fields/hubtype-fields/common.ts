@@ -24,6 +24,7 @@ export interface HtFlows {
 export interface HtFlowWebview {
   id: string
   name: string
+  component_name: string
 }
 
 export interface HtNodeLink {

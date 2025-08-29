@@ -7,7 +7,6 @@ import { ContentFieldsBase } from './content-fields-base'
 import {
   HtButton,
   HtButtonStyle,
-  HtFlowWebview,
   HtUrlNode,
   HtWebviewNode,
 } from './hubtype-fields'
@@ -33,7 +32,7 @@ export class FlowButton extends ContentFieldsBase {
     if (cmsButton.target) {
       const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
       if (webview) {
-        newButton.webview = { name: webview.name }
+        newButton.webview = { name: webview.componentName }
         newButton.params = { webviewId: webview.id }
       } else {
         newButton.payload = cmsApi.getPayload(cmsButton.target)
@@ -76,7 +75,7 @@ export class FlowButton extends ContentFieldsBase {
   static getTargetWebview(
     cmsApi: FlowBuilderApi,
     targetId: string
-  ): HtFlowWebview | undefined {
+  ): { name: string; id: string; componentName: string } | undefined {
     const targetNode = cmsApi.getNodeById(targetId)
     if (targetNode.type !== 'webview') {
       return undefined
@@ -85,7 +84,11 @@ export class FlowButton extends ContentFieldsBase {
       (targetNode as HtWebviewNode).content.webview_target_id
     )
     if (webview) {
-      return { name: webview.name.replaceAll(' ', ''), id: webview.id }
+      return {
+        name: webview.name.replaceAll(' ', ''),
+        id: webview.id,
+        componentName: webview.component_name,
+      }
     }
 
     return undefined
