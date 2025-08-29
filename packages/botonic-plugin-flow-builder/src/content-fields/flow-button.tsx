@@ -69,7 +69,7 @@ export class FlowButton extends ContentFieldsBase {
     webview: FlowWebview,
     cmsApi: FlowBuilderApi
   ) {
-    const webviewSuccessExit = webview.exits.find(
+    const webviewSuccessExit = webview.exits?.find(
       exit => exit.name === 'Success'
     )
     const exitSuccessId = webviewSuccessExit?.target?.id
