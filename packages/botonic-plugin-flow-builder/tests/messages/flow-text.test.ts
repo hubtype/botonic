@@ -60,7 +60,6 @@ describe('Check the contents and logic of a text node', () => {
 
     const firstContent = contents[0] as FlowText
     const firstButton = firstContent.buttons[0]
-    console.log('firstButton', firstButton)
     expect(firstButton.text).toEqual('Open webview')
     expect(firstButton.url).toBeUndefined()
     expect(firstButton.payload).toBeUndefined()
@@ -68,7 +67,8 @@ describe('Check the contents and logic of a text node', () => {
       name: 'FlowBuilderWebview',
     })
     expect(firstButton.params).toEqual({
-      webviewId: '0198e171-6fd0-77db-9562-19cfa1f2e83c',
+      exitSuccessContentID: 'webview success',
+      webviewId: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
     })
   })
 })
