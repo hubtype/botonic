@@ -4,11 +4,12 @@ import React from 'react'
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
+import { FlowWebview } from './flow-webview'
 import {
   HtButton,
   HtButtonStyle,
+  HtNodeWithContent,
   HtUrlNode,
-  HtWebviewNode,
 } from './hubtype-fields'
 import { HtRatingButton } from './hubtype-fields/rating'
 
@@ -32,8 +33,9 @@ export class FlowButton extends ContentFieldsBase {
     if (cmsButton.target) {
       const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
       if (webview) {
-        newButton.webview = { name: webview.componentName }
-        newButton.params = { webviewId: webview.id }
+        const params = this.getWebviewParams(webview, cmsApi)
+        newButton.webview = { name: webview.webviewComponentName }
+        newButton.params = params
       } else {
         newButton.payload = cmsApi.getPayload(cmsButton.target)
       }
@@ -45,6 +47,38 @@ export class FlowButton extends ContentFieldsBase {
     }
 
     return newButton
+  }
+
+  private static getWebviewParams(
+    webview: FlowWebview,
+    cmsApi: FlowBuilderApi
+  ) {
+    const params: Record<string, string> = {
+      webviewId: webview.webviewTargetId,
+    }
+    const exitSuccessContentID = this.getExitSuccessContentID(webview, cmsApi)
+
+    if (exitSuccessContentID) {
+      params.exitSuccessContentID = exitSuccessContentID
+    }
+
+    return params
+  }
+
+  private static getExitSuccessContentID(
+    webview: FlowWebview,
+    cmsApi: FlowBuilderApi
+  ) {
+    const webviewSuccessExit = webview.exits.find(
+      exit => exit.name === 'Success'
+    )
+    const exitSuccessId = webviewSuccessExit?.target?.id
+    if (!exitSuccessId) {
+      return undefined
+    }
+    const exitNode = cmsApi.getNodeById<HtNodeWithContent>(exitSuccessId)
+
+    return exitNode.code
   }
 
   static fromAIAgent(button: {
@@ -75,23 +109,12 @@ export class FlowButton extends ContentFieldsBase {
   static getTargetWebview(
     cmsApi: FlowBuilderApi,
     targetId: string
-  ): { name: string; id: string; componentName: string } | undefined {
+  ): FlowWebview | undefined {
     const targetNode = cmsApi.getNodeById(targetId)
     if (targetNode.type !== 'webview') {
       return undefined
     }
-    const webview = cmsApi.getWebviewById(
-      (targetNode as HtWebviewNode).content.webview_target_id
-    )
-    if (webview) {
-      return {
-        name: webview.name.replaceAll(' ', ''),
-        id: webview.id,
-        componentName: webview.component_name,
-      }
-    }
-
-    return undefined
+    return FlowWebview.fromHubtypeCMS(targetNode)
   }
 
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {
