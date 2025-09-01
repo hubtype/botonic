@@ -7,7 +7,7 @@ import {
   WebviewRequestContext,
   WebviewRequestContextType,
 } from '../../contexts'
-import { WebchatContext } from '../context'
+import { WebchatContext, WebchatState } from '../context'
 import { WebviewHeader } from './header'
 import {
   StyledFrame,
@@ -49,13 +49,7 @@ export const WebviewContainer = ({
 
   if (isDev(webchatState.session as Session)) {
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    const Webview =
-      localWebviews?.find(webview => {
-        if (typeof webchatState.webview === 'string') {
-          return false
-        }
-        return webview.name === webchatState.webview?.name
-      }) ?? (webchatState.webview as React.ComponentType)
+    const Webview = getWebviewInDevMode(localWebviews, webchatState)
 
     return (
       <WebviewRequestContext.Provider value={webviewRequestContext}>
@@ -95,5 +89,19 @@ export const WebviewContainer = ({
         </StyledWebviewContent>
       </StyledWebview>
     </WebviewRequestContext.Provider>
+  )
+}
+
+function getWebviewInDevMode(
+  localWebviews: React.ComponentType[] | undefined,
+  webchatState: WebchatState
+) {
+  return (
+    localWebviews?.find(webview => {
+      if (typeof webchatState.webview === 'string') {
+        return false
+      }
+      return webview.name === webchatState.webview?.name
+    }) ?? (webchatState.webview as React.ComponentType)
   )
 }
