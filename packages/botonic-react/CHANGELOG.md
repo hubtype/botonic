@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.38.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
 ### Changed
+
+- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add webviews in DevApp to resolve webviews from flow builder.
 
 ### Fixed
 
