@@ -54,7 +54,6 @@ export class BotConfig {
 
     const configLoaded = await this.loadBotConfig(appDirectory)
     fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
-    fs.rm(path.join(appDirectory, 'dist', 'bot-config.js.map'))
 
     spinner.succeed()
 

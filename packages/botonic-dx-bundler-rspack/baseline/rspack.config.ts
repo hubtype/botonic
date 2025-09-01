@@ -365,12 +365,10 @@ function botonicServerConfig(mode: string): Configuration {
 function botonicBotConfig(mode: Mode): Configuration {
   return {
     optimization: {
-      sideEffects: true, // critical so that tree-shaking discards browser code from @botonic/react
-      minimize: true,
-      minimizer: mode === Mode.production ? [minimizerPlugin] : [],
+      minimize: false,
     },
     context: ROOT_PATH,
-    // 'mode' removed so that we're forced to be explicit
+    devtool: false,
     target: 'node',
     entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.BOT_CONFIG),
     output: {
