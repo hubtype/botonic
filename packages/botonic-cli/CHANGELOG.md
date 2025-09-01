@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.37.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
 ### Changed
+
+- [PR-3096](https://github.com/hubtype/botonic/pull/3096): botonic deploy get bot config from after build from dist folder and remove it before the deploy.
 
 ### Fixed
 
