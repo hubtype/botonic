@@ -17,6 +17,7 @@ enum BotonicTarget {
   NODE = 'node',
   WEBVIEWS = 'webviews',
   WEBCHAT = 'webchat',
+  BOT_CONFIG = 'bot-config',
 }
 
 const WEBPACK_ENTRIES_DIRNAME = 'webpack-entries'
@@ -25,6 +26,7 @@ const WEBPACK_ENTRIES = {
   NODE: 'node-entry.ts',
   WEBCHAT: 'webchat-entry.ts',
   WEBVIEWS: 'webviews-entry.ts',
+  BOT_CONFIG: 'bot-config-entry.ts',
 }
 
 const TEMPLATES = {
@@ -360,6 +362,32 @@ function botonicServerConfig(mode: string): Configuration {
   }
 }
 
+function botonicBotConfig(mode: Mode): Configuration {
+  return {
+    optimization: {
+      sideEffects: true, // critical so that tree-shaking discards browser code from @botonic/react
+      minimize: true,
+      minimizer: mode === Mode.production ? [minimizerPlugin] : [],
+    },
+    context: ROOT_PATH,
+    // 'mode' removed so that we're forced to be explicit
+    target: 'node',
+    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.BOT_CONFIG),
+    output: {
+      filename: 'bot-config.js',
+      library: 'botConfig',
+      libraryTarget: 'umd',
+      libraryExport: 'botConfig',
+      assetModuleFilename: 'assets/[hash][ext][query]',
+    },
+    module: {
+      rules: [...typescriptLoaderConfig, ...fileLoaderConfig, nullLoaderConfig],
+    },
+    resolve: resolveConfig,
+    plugins: getPlugins(mode, BotonicTarget.NODE),
+  }
+}
+
 export default function (
   env: { target: string },
   argv: { mode: Mode }
@@ -369,6 +397,7 @@ export default function (
       botonicServerConfig(argv.mode),
       botonicWebviewsConfig(argv.mode),
       botonicWebchatConfig(argv.mode),
+      botonicBotConfig(argv.mode),
     ]
   } else if (env.target === BotonicTarget.DEV) {
     return [botonicDevConfig(argv.mode)]
@@ -378,6 +407,8 @@ export default function (
     return [botonicWebviewsConfig(argv.mode)]
   } else if (env.target === BotonicTarget.WEBCHAT) {
     return [botonicWebchatConfig(argv.mode)]
+  } else if (env.target === BotonicTarget.BOT_CONFIG) {
+    return [botonicBotConfig(argv.mode)]
   }
   throw new Error(`Invalid target ${env.target}`)
 }
