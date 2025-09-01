@@ -9,6 +9,7 @@ import {
   HtButton,
   HtButtonStyle,
   HtNodeWithContent,
+  HtNodeWithContentType,
   HtUrlNode,
 } from './hubtype-fields'
 import { HtRatingButton } from './hubtype-fields/rating'
@@ -111,7 +112,7 @@ export class FlowButton extends ContentFieldsBase {
     targetId: string
   ): FlowWebview | undefined {
     const targetNode = cmsApi.getNodeById(targetId)
-    if (targetNode.type !== 'webview') {
+    if (targetNode.type !== HtNodeWithContentType.WEBVIEW) {
       return undefined
     }
     return FlowWebview.fromHubtypeCMS(targetNode)
