@@ -707,7 +707,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                   />
                 )}
 
-                {webchatState.webview && <WebviewContainer />}
+                {webchatState.webview && (
+                  <WebviewContainer localWebviews={props.localWebviews} />
+                )}
 
                 {webchatState.isCustomComponentRendered &&
                   customComponent &&

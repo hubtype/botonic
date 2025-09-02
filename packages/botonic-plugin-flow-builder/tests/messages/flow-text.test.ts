@@ -4,6 +4,7 @@ import { describe, test } from '@jest/globals'
 import { FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
+import { webviewFlow } from '../helpers/flows/webview'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
 describe('Check the contents and logic of a text node', () => {
@@ -46,5 +47,28 @@ describe('Check the contents and logic of a text node', () => {
     expect(renderedMessage.props.children[0]).toBe(
       'This text message contains buttons and replaces the variable 2'
     )
+  })
+
+  test('The rendered message has a button with a webview target', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: webviewFlow },
+      requestArgs: {
+        input: { data: 'hola', type: INPUT.TEXT },
+        isFirstInteraction: true,
+      },
+    })
+
+    const firstContent = contents[0] as FlowText
+    const firstButton = firstContent.buttons[0]
+    expect(firstButton.text).toEqual('Open webview')
+    expect(firstButton.url).toBeUndefined()
+    expect(firstButton.payload).toBeUndefined()
+    expect(firstButton.webview).toEqual({
+      name: 'FlowBuilderWebview',
+    })
+    expect(firstButton.params).toEqual({
+      exitSuccessContentID: 'webview success',
+      webviewId: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
+    })
   })
 })

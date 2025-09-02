@@ -4,7 +4,14 @@ import React from 'react'
 import { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtButton, HtButtonStyle, HtUrlNode } from './hubtype-fields'
+import { FlowWebview } from './flow-webview'
+import {
+  HtButton,
+  HtButtonStyle,
+  HtNodeWithContent,
+  HtNodeWithContentType,
+  HtUrlNode,
+} from './hubtype-fields'
 import { HtRatingButton } from './hubtype-fields/rating'
 
 export class FlowButton extends ContentFieldsBase {
@@ -13,6 +20,7 @@ export class FlowButton extends ContentFieldsBase {
   public payload?: string
   public target?: string
   public webview?: Webview
+  public params?: Record<string, string>
 
   static fromHubtypeCMS(
     cmsButton: HtButton,
@@ -24,7 +32,14 @@ export class FlowButton extends ContentFieldsBase {
     const newButton = new FlowButton(cmsButton.id)
     newButton.text = this.getTextByLocale(locale, cmsButton.text)
     if (cmsButton.target) {
-      newButton.payload = cmsApi.getPayload(cmsButton.target)
+      const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
+      if (webview) {
+        const params = this.getWebviewParams(webview, cmsApi)
+        newButton.webview = { name: webview.webviewComponentName }
+        newButton.params = params
+      } else {
+        newButton.payload = cmsApi.getPayload(cmsButton.target)
+      }
     }
 
     if (cmsButton.url && urlId) {
@@ -33,6 +48,38 @@ export class FlowButton extends ContentFieldsBase {
     }
 
     return newButton
+  }
+
+  private static getWebviewParams(
+    webview: FlowWebview,
+    cmsApi: FlowBuilderApi
+  ) {
+    const params: Record<string, string> = {
+      webviewId: webview.webviewTargetId,
+    }
+    const exitSuccessContentID = this.getExitSuccessContentID(webview, cmsApi)
+
+    if (exitSuccessContentID) {
+      params.exitSuccessContentID = exitSuccessContentID
+    }
+
+    return params
+  }
+
+  private static getExitSuccessContentID(
+    webview: FlowWebview,
+    cmsApi: FlowBuilderApi
+  ) {
+    const webviewSuccessExit = webview.exits?.find(
+      exit => exit.name === 'Success'
+    )
+    const exitSuccessId = webviewSuccessExit?.target?.id
+    if (!exitSuccessId) {
+      return undefined
+    }
+    const exitNode = cmsApi.getNodeById<HtNodeWithContent>(exitSuccessId)
+
+    return exitNode.code
   }
 
   static fromAIAgent(button: {
@@ -60,6 +107,17 @@ export class FlowButton extends ContentFieldsBase {
     return cmsButton.url.find(url => url.locale === locale)?.id
   }
 
+  static getTargetWebview(
+    cmsApi: FlowBuilderApi,
+    targetId: string
+  ): FlowWebview | undefined {
+    const targetNode = cmsApi.getNodeById(targetId)
+    if (targetNode.type !== HtNodeWithContentType.WEBVIEW) {
+      return undefined
+    }
+    return FlowWebview.fromHubtypeCMS(targetNode)
+  }
+
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {
     if (buttonStyle === HtButtonStyle.QUICK_REPLY) {
       return (
@@ -68,6 +126,7 @@ export class FlowButton extends ContentFieldsBase {
         </Reply>
       )
     }
+
     return (
       <Button
         key={this.id}
@@ -75,6 +134,7 @@ export class FlowButton extends ContentFieldsBase {
         payload={this.getButtonPayload(buttonIndex)}
         target={this.target}
         webview={this.webview}
+        params={this.params}
       >
         {this.text}
       </Button>

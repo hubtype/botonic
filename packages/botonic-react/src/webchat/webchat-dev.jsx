@@ -68,6 +68,7 @@ export const WebchatDev = forwardRef((props, ref) => {
           keepSessionOnReload: webchatState.devSettings.keepSessionOnReload,
           showSessionView: webchatState.devSettings.showSessionView,
         }}
+        localWebviews={props.webviews}
       />
       <DebugTabPortal
         show={webchatState.devSettings.showSessionView}
