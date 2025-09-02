@@ -20,8 +20,8 @@ enum BotonicTarget {
   BOT_CONFIG = 'bot-config',
 }
 
-const WEBPACK_ENTRIES_DIRNAME = 'webpack-entries'
-const WEBPACK_ENTRIES = {
+const RSPACK_ENTRIES_DIRNAME = 'rspack-entries'
+const RSPACK_ENTRIES = {
   DEV: 'dev-entry.ts',
   NODE: 'node-entry.ts',
   WEBCHAT: 'webchat-entry.ts',
@@ -234,7 +234,7 @@ function botonicDevConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.DEV),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.DEV),
     module: {
       rules: [
         ...typescriptLoaderConfig,
@@ -277,7 +277,7 @@ function botonicWebchatConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBCHAT),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.WEBCHAT),
     output: {
       path: OUTPUT_PATH,
       filename: FILENAME.WEBCHAT,
@@ -312,7 +312,7 @@ function botonicWebviewsConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBVIEWS),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.WEBVIEWS),
     output: {
       path: WEBVIEWS_PATH,
       filename: FILENAME.WEBVIEWS,
@@ -346,7 +346,7 @@ function botonicServerConfig(mode: string): Configuration {
     context: ROOT_PATH,
     // 'mode' removed so that we're forced to be explicit
     target: 'node',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.NODE),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.NODE),
     output: {
       filename: FILENAME.BOT,
       library: LIBRARY_NAME.BOT,
@@ -370,7 +370,7 @@ function botonicBotConfig(mode: Mode): Configuration {
     context: ROOT_PATH,
     devtool: false,
     target: 'node',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.BOT_CONFIG),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.BOT_CONFIG),
     output: {
       filename: 'bot-config.js',
       library: 'botConfig',
