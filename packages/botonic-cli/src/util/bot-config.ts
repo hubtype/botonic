@@ -53,7 +53,6 @@ export class BotConfig {
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
     const configLoaded = await this.loadBotConfig(appDirectory)
-    fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
 
     spinner.succeed()
 
