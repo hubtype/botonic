@@ -16,11 +16,15 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
-- [PR-3096](https://github.com/hubtype/botonic/pull/3096): get botConfig after the build from the `dist` folder and remove it before the deploy.
-
 ### Fixed
 
 </details>
+
+## [0.39.0] - 2025-09-03
+
+### Changed
+
+- [PR-3096](https://github.com/hubtype/botonic/pull/3096): get botConfig after the build from the `dist` folder and remove it before the deploy.
 
 ## [0.36.0] - 2025-06-18
 

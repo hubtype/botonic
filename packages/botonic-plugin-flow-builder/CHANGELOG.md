@@ -14,13 +14,18 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add FlowWebview node to open a webview.
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.39.0] - 2025-09-03
+
+### Added
+
+- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add FlowWebview node to open a webview.
+- [PR-3097](https://github.com/hubtype/botonic/pull/3097): Add provider_id in useWebviewContents.
 
 ## [0.38.2] - 2025-08-28
 
