@@ -19,8 +19,8 @@ enum BotonicTarget {
   WEBCHAT = 'webchat',
 }
 
-const WEBPACK_ENTRIES_DIRNAME = 'webpack-entries'
-const WEBPACK_ENTRIES = {
+const RSPACK_ENTRIES_DIRNAME = 'rspack-entries'
+const RSPACK_ENTRIES = {
   DEV: 'dev-entry.js',
   NODE: 'node-entry.js',
   WEBCHAT: 'webchat-entry.js',
@@ -162,7 +162,7 @@ function getConfigEnvironment() {
   const configEnvironment = String(process.env.ENVIRONMENT).toLowerCase()
   if (!CONFIG_ENVIRONMENTS.includes(configEnvironment)) {
     console.error(
-      `You need to set env var ENVIRONMENT to one of these: ${CONFIG_ENVIRONMENTS}. Current value: ${configEnvironment}`
+      `You need to set env var ENVIRONMENT to one of these: ${CONFIG_ENVIRONMENTS}. Current value: ${configEnvironment}`,
     )
     // eslint-disable-next-line no-process-exit
     process.exit(1)
@@ -173,7 +173,7 @@ function getConfigEnvironment() {
 function getPlugins(mode: string, target: string) {
   const environment = getConfigEnvironment()
   log(
-    `Generating bundle for: ${target}\nRspack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
+    `Generating bundle for: ${target}\nRspack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`,
   )
 
   const plugins = [
@@ -203,7 +203,7 @@ function sourceMap(mode: string) {
     return 'eval-cheap-source-map'
   } else {
     throw new Error(
-      'Invalid mode argument (' + mode + '). See package.json scripts'
+      'Invalid mode argument (' + mode + '). See package.json scripts',
     )
   }
 }
@@ -232,7 +232,7 @@ function botonicDevConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.DEV),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.DEV),
     module: {
       rules: [
         ...typescriptLoaderConfig,
@@ -258,7 +258,7 @@ function botonicDevConfig(mode: Mode): Configuration {
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBCHAT),
       new NodePolyfillPlugin({ onlyAliases: ['stream'] }),
-      new rspack.NormalModuleReplacementPlugin(/node:stream/, resource => {
+      new rspack.NormalModuleReplacementPlugin(/node:stream/, (resource) => {
         resource.request = resource.request.replace(/^node:/, '')
       }),
       ...getPlugins(mode, BotonicTarget.DEV),
@@ -275,7 +275,7 @@ function botonicWebchatConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBCHAT),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.WEBCHAT),
     output: {
       path: OUTPUT_PATH,
       filename: FILENAME.WEBCHAT,
@@ -310,7 +310,7 @@ function botonicWebviewsConfig(mode: Mode): Configuration {
     mode,
     devtool: sourceMap(mode),
     target: 'web',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.WEBVIEWS),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.WEBVIEWS),
     output: {
       path: WEBVIEWS_PATH,
       filename: FILENAME.WEBVIEWS,
@@ -344,7 +344,7 @@ function botonicServerConfig(mode: string): Configuration {
     context: ROOT_PATH,
     // 'mode' removed so that we're forced to be explicit
     target: 'node',
-    entry: path.resolve(WEBPACK_ENTRIES_DIRNAME, WEBPACK_ENTRIES.NODE),
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.NODE),
     output: {
       filename: FILENAME.BOT,
       library: LIBRARY_NAME.BOT,
@@ -362,7 +362,7 @@ function botonicServerConfig(mode: string): Configuration {
 
 export default function (
   env: { target: string },
-  argv: { mode: Mode }
+  argv: { mode: Mode },
 ): Configuration[] {
   if (env.target === BotonicTarget.ALL) {
     return [
