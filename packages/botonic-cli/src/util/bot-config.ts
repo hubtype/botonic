@@ -53,7 +53,6 @@ export class BotConfig {
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
     const configLoaded = await this.loadBotConfig(appDirectory)
-    fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
 
     spinner.succeed()
 
@@ -77,6 +76,7 @@ export class BotConfig {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const botConfig = require(path.resolve(configPath))
       fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
+
       return {
         tools: botConfig?.tools || [],
         payloads: botConfig?.payloads || [],
