@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-knowledge-bases",
-  "version": "0.39.0-alpha.1",
+  "version": "0.39.0",
   "description": "Use a Hubtype to make the bot respond through a knowledge base.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/core": "0.39.0-alpha.1",
+    "@botonic/core": "^0.39.0",
     "axios": "^1.10.0"
   },
   "devDependencies": {
