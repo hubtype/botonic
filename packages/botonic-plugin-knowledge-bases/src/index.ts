@@ -15,7 +15,11 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   private readonly authToken: string
 
   constructor(options: PluginKnowledgeBaseOptions) {
-    this.apiService = new HubtypeApiService(options.host, options.timeout)
+    this.apiService = new HubtypeApiService(
+      options.host,
+      options.timeout,
+      options.verbose
+    )
     this.authToken = options.authToken || ''
   }
 
