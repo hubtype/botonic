@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.38.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,12 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.39.1] - 2025-09-05
+
+### Added
+
+- [PR-3099](https://github.com/hubtype/botonic/pull/3099): Add verbose config option to show a log with inference response.
 
 ## [0.38.0] - 2025-08-20
 

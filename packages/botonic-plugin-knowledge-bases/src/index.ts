@@ -15,7 +15,11 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
   private readonly authToken: string
 
   constructor(options: PluginKnowledgeBaseOptions) {
-    this.apiService = new HubtypeApiService(options.host, options.timeout)
+    this.apiService = new HubtypeApiService(
+      options.host,
+      options.timeout,
+      options.verbose
+    )
     this.authToken = options.authToken || ''
   }
 
@@ -36,17 +40,15 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
       return this.getTestInference(authToken, request, instructions, sources)
     }
 
-    if (!instructions) {
-      return this.getInferenceV1(authToken, request, sources)
-    }
-
-    return this.getInferenceV2(
+    const response = await this.apiService.inferenceV2(
       authToken,
       sources,
       instructions,
       messageId,
       memoryLength
     )
+
+    return this.mapApiResponse(response)
   }
 
   async getTestInference(
@@ -62,43 +64,6 @@ export default class BotonicPluginKnowledgeBases implements Plugin {
       instructions,
       messages,
       sources
-    )
-
-    return this.mapApiResponse(response)
-  }
-
-  async getInferenceV1(
-    authToken: string,
-    request: BotContext,
-    sources: string[]
-  ): Promise<KnowledgeBasesResponse> {
-    const response = await this.apiService.inferenceV1(
-      authToken,
-      request.input.data!,
-      sources
-    )
-    return {
-      inferenceId: response.data.inference_id,
-      answer: response.data.answer,
-      hasKnowledge: response.data.has_knowledge,
-      isFaithful: response.data.is_faithful,
-      chunkIds: response.data.chunk_ids,
-    }
-  }
-
-  async getInferenceV2(
-    authToken: string,
-    sources: string[],
-    instructions: string,
-    messageId: string,
-    memoryLength: number
-  ): Promise<KnowledgeBasesResponse> {
-    const response = await this.apiService.inferenceV2(
-      authToken,
-      sources,
-      instructions,
-      messageId,
-      memoryLength
     )
 
     return this.mapApiResponse(response)
