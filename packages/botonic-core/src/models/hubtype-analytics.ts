@@ -1,4 +1,5 @@
 export enum EventAction {
+  AiAgent = 'ai_agent',
   FeedbackCase = 'feedback_case',
   FeedbackMessage = 'feedback_message',
   FeedbackConversation = 'feedback_conversation',
@@ -110,6 +111,23 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   knowledgebaseChunksIds: string[]
   knowledgebaseMessageId: string
   userInput: string
+}
+
+export interface EventAiAgent extends HtBaseEventProps {
+  action: EventAction.AiAgent
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowNodeIsMeaningful: boolean
+  toolsExecuted: string[]
+  inputMessageId: string
+  memoryLength: number
+  inputGuardrailsTriggered: string[]
+  outputGuardrailsTriggered: string[]
+  exit: boolean
+  error: boolean
 }
 
 export enum KnowledgebaseFailReason {

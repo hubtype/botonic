@@ -29,7 +29,10 @@ export async function trackFlowContent(
   const cmsApi = flowBuilderPlugin.cmsApi
   for (const content of contents) {
     const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
-    if (nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE) {
+    if (
+      nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE &&
+      nodeContent.type !== HtNodeWithContentType.AI_AGENT
+    ) {
       const event = getContentEventArgs(request, nodeContent)
       const { action, ...eventArgs } = event
       await trackEvent(request, action, eventArgs)

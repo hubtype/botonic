@@ -1,14 +1,25 @@
-import { AgenticOutputMessage, InferenceResponse } from '@botonic/core'
+import { InferenceResponse } from '@botonic/core'
 
-export function mockAiAgentResponse(messages: AgenticOutputMessage[]) {
+export function mockAiAgentResponse({
+  messages = [],
+  toolsExecuted = [],
+  memoryLength = 0,
+  inputGuardrailsTriggered = [],
+  outputGuardrailsTriggered = [],
+  exit = false,
+  error = false,
+}: Partial<InferenceResponse>) {
   return jest.fn(() => {
     const response: InferenceResponse = {
       messages,
-      toolsExecuted: [],
-      exit: false,
-      inputGuardrailTriggered: [],
-      outputGuardrailTriggered: [],
+      toolsExecuted,
+      memoryLength,
+      inputGuardrailsTriggered,
+      outputGuardrailsTriggered,
+      exit,
+      error,
     }
+
     return Promise.resolve(response)
   })
 }

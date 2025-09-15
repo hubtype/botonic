@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
@@ -30,7 +30,7 @@ describe('Check tracked events when a contents are displayed', () => {
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
-      'nlu_keyword',
+      EventAction.Keyword,
       {
         flowId: '43a736f8-4837-4fbb-a661-021291749b4f',
         flowNodeId: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
@@ -44,7 +44,7 @@ describe('Check tracked events when a contents are displayed', () => {
     expect(trackEventMock).toHaveBeenNthCalledWith(
       2,
       expect.anything(),
-      'flow_node',
+      EventAction.FlowNode,
       {
         flowThreadId: expect.anything(),
         flowId: '43a736f8-4837-4fbb-a661-021291749b4f',

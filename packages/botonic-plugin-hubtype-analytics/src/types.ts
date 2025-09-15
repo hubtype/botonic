@@ -1,5 +1,6 @@
 import {
   EventAction,
+  EventAiAgent,
   EventCustom,
   EventFallback,
   EventFeedback,
@@ -34,6 +35,7 @@ export type HtEventProps =
   | EventWebviewStep
   | EventWebviewEnd
   | EventCustom
+  | EventAiAgent
 
 export interface RequestData {
   userId?: string
@@ -45,6 +47,7 @@ export interface RequestData {
 
 export {
   EventAction,
+  EventAiAgent,
   EventCustom,
   EventFallback,
   EventFeedback,

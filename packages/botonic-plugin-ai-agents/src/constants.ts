@@ -9,3 +9,5 @@ export const AZURE_OPENAI_API_VERSION =
   process.env.AZURE_OPENAI_API_VERSION || '2024-12-01-preview'
 
 export const isProd = process.env.NODE_ENV === 'production'
+
+export const MAX_MEMORY_LENGTH = 25

@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -29,7 +29,7 @@ describe('Check tracked events when a contents are displayed', () => {
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
-      'fallback',
+      EventAction.Fallback,
       {
         userInput: userInput,
         fallbackOut: 1,
@@ -39,7 +39,7 @@ describe('Check tracked events when a contents are displayed', () => {
     expect(trackEventMock).toHaveBeenNthCalledWith(
       2,
       expect.anything(),
-      'flow_node',
+      EventAction.FlowNode,
       {
         flowThreadId: expect.anything(),
         flowId: '03bafba6-c0fa-5449-9d42-bd98b44fe370',

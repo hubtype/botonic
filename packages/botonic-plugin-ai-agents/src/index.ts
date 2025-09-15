@@ -2,7 +2,7 @@ import { BotContext, Plugin } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-import { isProd } from './constants'
+import { isProd, MAX_MEMORY_LENGTH } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
@@ -51,7 +51,11 @@ export default class BotonicPluginAiAgents implements Plugin {
         aiAgentArgs.inputGuardrailRules || []
       ).build()
 
-      const messages = await this.getMessages(request, authToken, 25)
+      const messages = await this.getMessages(
+        request,
+        authToken,
+        MAX_MEMORY_LENGTH
+      )
       const context: Context = {
         authToken,
       }
@@ -60,9 +64,15 @@ export default class BotonicPluginAiAgents implements Plugin {
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)
-      // Here we can return a InferenceResponse as a exit
-      // but indicate that the inference failed
-      return undefined
+      return {
+        messages: [],
+        toolsExecuted: [],
+        memoryLength: 0,
+        exit: true,
+        error: true,
+        inputGuardrailsTriggered: [],
+        outputGuardrailsTriggered: [],
+      }
     }
   }
 

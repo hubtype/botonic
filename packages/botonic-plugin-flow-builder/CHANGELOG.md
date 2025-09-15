@@ -20,6 +20,16 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.40.x] - 2025-mm-dd
+
+### Added
+
+- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Create and send AI Agent events.
+
+### Changed
+
+### Fixed
+
 ## [0.39.0] - 2025-09-03
 
 ### Added
