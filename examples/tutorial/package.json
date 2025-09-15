@@ -1,9 +1,8 @@
 {
   "name": "@botonic/example-tutorial",
-  "version": "0.37.0",
+  "version": "0.39.0",
   "scripts": {
     "analyze": "esbuild-visualizer --metadata ./meta.json",
-    "build:esbuild": "rm -rf ./dist; ts-node ./esbuild-config.ts",
     "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
     "start:esbuild:in-progress": "rm -rf ./dist; esbuild ./esbuild-entries/webchat-entry.js --bundle --outdir=dist --serve",
@@ -12,17 +11,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/react": "^0.37.0",
+    "@botonic/react": "^0.39.0",
     "core-js": "^3.36.0"
   },
   "devDependencies": {
-    "esbuild-plugin-imagemin": "^1.0.1",
-    "esbuild-plugin-inline-image": "0.0.9",
-    "esbuild-sass-plugin": "^2.16.1",
-    "esbuild-visualizer": "^0.4.1",
-    "esbuild": "^0.19.4",
-    "@craftamap/esbuild-plugin-html": "^0.5.0",
-    "@botonic/dx": "^0.37.0"
+    "@botonic/dx": "^0.39.0"
   },
   "engines": {
     "node": ">=20.0.0"

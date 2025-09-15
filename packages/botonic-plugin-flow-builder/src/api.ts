@@ -11,6 +11,7 @@ import {
   HtBotActionNode,
   HtFallbackNode,
   HtFlowBuilderData,
+  HtFlowWebview,
   HtGoToFlow,
   HtKeywordNode,
   HtNodeComponent,
@@ -253,6 +254,10 @@ export class FlowBuilderApi {
 
   isAiAgentEnabled(): boolean {
     return this.flow.is_ai_agent_active || false
+  }
+
+  getWebviewById(id: string): HtFlowWebview | undefined {
+    return this.flow.webviews.find(webview => webview.id === id)
   }
 
   getResolvedLocale(): string {

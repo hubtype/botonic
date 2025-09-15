@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.37.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,18 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.39.x] - 2025-09-03
+
+### Changed
+
+- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add webviews in DevApp to resolve webviews from flow builder.
+
+## [0.38.0] - 2025-08-20
+
+### Added
+
+- [PR-3079](https://github.com/hubtype/botonic/pull/3079): Create updateCustomMessageJSON function in WebchatContext to keep state in custom messages.
 
 ## [0.37.1] - 2025-08-06
 

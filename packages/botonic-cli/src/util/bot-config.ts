@@ -71,26 +71,12 @@ export class BotConfig {
 
   static async loadBotConfig(appDirectory: string) {
     try {
-      const typescriptCompilerOptions = {
-        transpileOnly: true,
-        compilerOptions: {
-          module: 'commonjs',
-          target: 'es2018',
-          esModuleInterop: true,
-          allowSyntheticDefaultImports: true,
-        },
-      }
-      // Register ts-node to load TypeScript in real time
-      // eslint-disable-next-line @typescript-eslint/no-var-requires, node/no-extraneous-require
-      require('ts-node').register(typescriptCompilerOptions)
-
-      const configPath = path.join(appDirectory, 'src', 'bot-config.ts')
-
-      // Clean cache to reload if necessary
-      delete require.cache[require.resolve(configPath)]
+      const configPath = path.join(appDirectory, 'dist', 'bot-config.js')
 
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { botConfig } = require(configPath)
+      const botConfig = require(path.resolve(configPath))
+      fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
+
       return {
         tools: botConfig?.tools || [],
         payloads: botConfig?.payloads || [],
@@ -98,7 +84,9 @@ export class BotConfig {
       }
     } catch (error) {
       console.warn(
-        'Error loading src/bot-config.ts this file is not required but is used to share config with flow builder frontend'
+        `Error loading dist/bot-config.js. This file is not required but is used to share config with flow builder frontend.
+        To create this file update your build process to include the bot-config.js file in dest folder. 
+        You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
       )
       return {
         tools: [],

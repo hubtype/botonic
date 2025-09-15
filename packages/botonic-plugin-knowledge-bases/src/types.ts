@@ -4,6 +4,7 @@ export interface PluginKnowledgeBaseOptions {
   host: string
   authToken?: string
   timeout?: number
+  verbose?: boolean
 }
 
 export type { KnowledgeBasesResponse }

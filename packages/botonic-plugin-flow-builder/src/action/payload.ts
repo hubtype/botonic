@@ -1,7 +1,7 @@
 import { EventAction, EventFeedback, storeCaseRating } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
 
-import { AGENT_RATING_PAYLOAD, SEPARATOR } from '../constants'
+import { AGENT_RATING_PAYLOAD } from '../constants'
 import { FlowContent } from '../content-fields'
 import { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
@@ -36,13 +36,8 @@ async function resolveRatingPayload(
     return []
   }
 
-  const id = request.input.payload
-  const buttonId = id?.split(SEPARATOR)[1]
-  const ratingNode = cmsApi.getRatingNodeByButtonId(buttonId)
-  const ratingButton = cmsApi.getRatingButtonById(ratingNode, buttonId)
-  const { target, text, value } = ratingButton
-  const possibleOptions = ratingNode.content.buttons.map(button => button.text)
-  const possibleValues = ratingNode.content.buttons.map(button => button.value)
+  const { target, text, value, possibleOptions, possibleValues } =
+    flowBuilderPlugin.getRatingSubmittedInfo(request.input.payload)
 
   if (request.session._hubtype_case_id) {
     const event: EventFeedback = {
