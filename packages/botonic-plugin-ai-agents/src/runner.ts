@@ -63,7 +63,6 @@ export class AIAgentRunner {
         return {
           messages: [],
           memoryLength: 0,
-          inputMessageId: '',
           toolsExecuted: [],
           exit: true,
           error: false,

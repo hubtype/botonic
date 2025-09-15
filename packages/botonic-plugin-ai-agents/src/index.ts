@@ -2,7 +2,7 @@ import { BotContext, Plugin } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-import { MAX_MEMORY_LENGTH, isProd } from './constants'
+import { isProd, MAX_MEMORY_LENGTH } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
