@@ -55,7 +55,7 @@ export async function getContentsByAiAgent({
   if (!aiAgentResponse) {
     return []
   }
-  trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
+  await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
 
   if (aiAgentResponse.exit) {
     return []
@@ -83,7 +83,7 @@ async function trackAiAgentResponse(
     flowId: flowId,
     flowName: flowName,
     flowNodeId: aiAgentContent.id,
-    flowNodeContentId: aiAgentContent.code,
+    flowNodeContentId: aiAgentContent.name,
     flowNodeIsMeaningful: true,
     toolsExecuted: aiAgentResponse?.toolsExecuted ?? [],
     memoryLength: aiAgentResponse?.memoryLength ?? 0,
