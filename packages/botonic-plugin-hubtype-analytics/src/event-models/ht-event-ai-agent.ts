@@ -10,11 +10,12 @@ export class HtEventAiAgent extends HtEvent {
   flow_node_content_id: string
   flow_node_is_meaningful: boolean
   tools_executed: string[]
-  input_guardrail_triggered: string[]
-  output_guardrail_triggered: string[]
+  memory_length: number
+  input_message_id: string
+  input_guardrails_triggered: string[]
+  output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
-  message_id: string
 
   constructor(event: EventAiAgent, requestData: RequestData) {
     super(event, requestData)
@@ -27,10 +28,11 @@ export class HtEventAiAgent extends HtEvent {
     this.flow_node_content_id = event.flowNodeContentId
     this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.tools_executed = event.toolsExecuted
-    this.input_guardrail_triggered = event.inputGuardrailTriggered
-    this.output_guardrail_triggered = event.outputGuardrailTriggered
+    this.memory_length = event.memoryLength
+    this.input_message_id = event.inputMessageId
+    this.input_guardrails_triggered = event.inputGuardrailsTriggered
+    this.output_guardrails_triggered = event.outputGuardrailsTriggered
     this.exit = event.exit
     this.error = event.error
-    this.message_id = event.messageId
   }
 }

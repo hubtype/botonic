@@ -14,11 +14,12 @@ describe('Ai agent event', () => {
       flowNodeContentId: 'flowNodeContentIdTest',
       flowNodeIsMeaningful: true,
       toolsExecuted: ['tool1', 'tool2'],
-      inputGuardrailTriggered: [],
-      outputGuardrailTriggered: [],
+      memoryLength: 0,
+      inputMessageId: 'messageIdTest',
+      inputGuardrailsTriggered: [],
+      outputGuardrailsTriggered: [],
       exit: false,
       error: false,
-      messageId: 'messageIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -37,11 +38,12 @@ describe('Ai agent event', () => {
       flow_node_content_id: 'flowNodeContentIdTest',
       flow_node_is_meaningful: true,
       tools_executed: ['tool1', 'tool2'],
-      input_guardrail_triggered: [],
-      output_guardrail_triggered: [],
+      memory_length: 0,
+      input_guardrails_triggered: [],
+      output_guardrails_triggered: [],
       exit: false,
       error: false,
-      message_id: 'messageIdTest',
+      input_message_id: 'messageIdTest',
     })
   })
 })

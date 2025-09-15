@@ -122,11 +122,12 @@ export interface EventAiAgent extends HtBaseEventProps {
   flowNodeContentId: string
   flowNodeIsMeaningful: boolean
   toolsExecuted: string[]
-  inputGuardrailTriggered: string[]
-  outputGuardrailTriggered: string[]
+  inputMessageId: string
+  memoryLength: number
+  inputGuardrailsTriggered: string[]
+  outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
-  messageId: string
 }
 
 export enum KnowledgebaseFailReason {

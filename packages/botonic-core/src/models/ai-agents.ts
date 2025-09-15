@@ -46,10 +46,11 @@ export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
 export interface RunResult {
   messages: AgenticOutputMessage[]
   toolsExecuted: string[]
+  memoryLength: number
   exit: boolean
   error: boolean
-  inputGuardrailTriggered: string[]
-  outputGuardrailTriggered: string[]
+  inputGuardrailsTriggered: string[]
+  outputGuardrailsTriggered: string[]
 }
 
 export type InferenceResponse = RunResult

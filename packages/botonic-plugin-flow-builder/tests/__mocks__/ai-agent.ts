@@ -3,8 +3,9 @@ import { InferenceResponse } from '@botonic/core'
 export function mockAiAgentResponse({
   messages = [],
   toolsExecuted = [],
-  inputGuardrailTriggered = [],
-  outputGuardrailTriggered = [],
+  memoryLength = 0,
+  inputGuardrailsTriggered = [],
+  outputGuardrailsTriggered = [],
   exit = false,
   error = false,
 }: Partial<InferenceResponse>) {
@@ -12,8 +13,9 @@ export function mockAiAgentResponse({
     const response: InferenceResponse = {
       messages,
       toolsExecuted,
-      inputGuardrailTriggered,
-      outputGuardrailTriggered,
+      memoryLength,
+      inputGuardrailsTriggered,
+      outputGuardrailsTriggered,
       exit,
       error,
     }

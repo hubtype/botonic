@@ -65,8 +65,8 @@ export default class BotonicPluginAiAgents implements Plugin {
         toolsExecuted: [],
         exit: true,
         error: true,
-        inputGuardrailTriggered: [],
-        outputGuardrailTriggered: [],
+        inputGuardrailsTriggered: [],
+        outputGuardrailsTriggered: [],
       }
     }
   }

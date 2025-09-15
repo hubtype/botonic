@@ -56,11 +56,12 @@ describe('Check tracked events when a contents are displayed', () => {
         flowNodeIsMeaningful: true,
         flowThreadId: 'testFlowThreadId',
         toolsExecuted: ['tool1'],
-        inputGuardrailTriggered: [],
-        outputGuardrailTriggered: [],
+        inputMessageId: 'testMessageId',
+        memoryLength: 0,
+        inputGuardrailsTriggered: [],
+        outputGuardrailsTriggered: [],
         exit: false,
         error: false,
-        messageId: 'testMessageId',
       }
     )
   })

@@ -86,11 +86,12 @@ async function trackAiAgentResponse(
     flowNodeContentId: aiAgentContent.code,
     flowNodeIsMeaningful: true,
     toolsExecuted: aiAgentResponse?.toolsExecuted ?? [],
+    memoryLength: aiAgentResponse?.memoryLength ?? 0,
+    inputMessageId: request.input.message_id!,
     exit: aiAgentResponse?.exit ?? true,
-    inputGuardrailTriggered: aiAgentResponse?.inputGuardrailTriggered ?? [],
-    outputGuardrailTriggered: [], //aiAgentResponse.outputGuardrailTriggered,
+    inputGuardrailsTriggered: aiAgentResponse?.inputGuardrailsTriggered ?? [],
+    outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
     error: aiAgentResponse.error,
-    messageId: request.input.message_id!,
   }
   const { action, ...eventArgs } = event
 
