@@ -57,7 +57,7 @@ describe('Check tracked events when a contents are displayed', () => {
         flowThreadId: 'testFlowThreadId',
         toolsExecuted: ['tool1'],
         inputMessageId: 'testMessageId',
-        memoryLength: 0,
+        memoryLength: 1,
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
         exit: false,

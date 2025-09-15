@@ -28,7 +28,7 @@ export class AIAgentRunner {
   }
 
   private async runWithRetry(
-    messages: AgenticInputMessage[],
+    inputMessages: AgenticInputMessage[],
     context: Context,
     maxRetries: number,
     attempt: number
@@ -37,7 +37,7 @@ export class AIAgentRunner {
       const runner = new Runner({
         modelSettings: { temperature: 0 },
       })
-      const result = await runner.run(this.agent, messages, { context })
+      const result = await runner.run(this.agent, inputMessages, { context })
 
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
@@ -53,7 +53,7 @@ export class AIAgentRunner {
             ) as AgenticOutputMessage[]),
         toolsExecuted,
         exit: hasExit,
-        memoryLength: 0,
+        memoryLength: inputMessages.length,
         error: false,
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
@@ -74,7 +74,7 @@ export class AIAgentRunner {
       if (attempt > maxRetries) {
         throw error
       }
-      return this.runWithRetry(messages, context, maxRetries, attempt + 1)
+      return this.runWithRetry(inputMessages, context, maxRetries, attempt + 1)
     }
   }
 
