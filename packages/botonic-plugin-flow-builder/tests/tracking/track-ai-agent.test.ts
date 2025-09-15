@@ -51,7 +51,7 @@ describe('Check tracked events when a contents are displayed', () => {
       {
         flowId: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
         flowName: 'AI Agents',
-        flowNodeContentId: '',
+        flowNodeContentId: 'Weather Agent',
         flowNodeId: '0196f202-a5ea-713e-a3f9-287cf8f0303a',
         flowNodeIsMeaningful: true,
         flowThreadId: 'testFlowThreadId',
