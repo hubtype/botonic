@@ -1,4 +1,4 @@
-import { Agent, InputGuardrail } from '@openai/agents'
+import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
 
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
@@ -30,6 +30,12 @@ export class AIAgentBuilder {
   }
 
   build(): AIAgent {
+    const modelSettings: ModelSettings = {}
+
+    if (this.tools.includes(retrieveKnowledge)) {
+      modelSettings.toolChoice = retrieveKnowledge.name
+    }
+
     return new Agent({
       name: this.name,
       instructions: this.instructions,
@@ -37,6 +43,7 @@ export class AIAgentBuilder {
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
+      modelSettings,
     })
   }
 
