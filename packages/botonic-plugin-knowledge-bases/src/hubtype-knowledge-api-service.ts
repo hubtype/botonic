@@ -16,10 +16,12 @@ export interface HtApiKnowledgeBaseResponse {
 export class HubtypeApiService {
   private host: string
   private timeout: number
+  private verbose: boolean
 
-  constructor(host: string, timeout?: number) {
+  constructor(host: string, timeout?: number, verbose?: boolean) {
     this.host = host
     this.timeout = timeout || DEFAULT_TIMEOUT
+    this.verbose = verbose || false
   }
 
   async inferenceV2(
@@ -29,21 +31,34 @@ export class HubtypeApiService {
     messageId: string,
     memoryLength: number
   ): Promise<AxiosResponse<HtApiKnowledgeBaseResponse>> {
-    return await axios({
+    const url = `${this.host}/external/v2/ai/knowledge_base/inference/`
+    const data = {
+      sources,
+      instructions,
+      message: messageId,
+      memory_length: memoryLength,
+    }
+    const response = await axios({
       method: 'POST',
-      url: `${this.host}/external/v2/ai/knowledge_base/inference/`,
+      url,
       headers: {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json',
       },
-      data: {
-        sources,
-        instructions,
-        message: messageId,
-        memory_length: memoryLength,
-      },
+      data,
       timeout: this.timeout,
     })
+
+    if (this.verbose) {
+      console.log('Data and response', {
+        url,
+        data,
+        timeout: this.timeout,
+        response,
+      })
+    }
+
+    return response
   }
 
   async testInference(
@@ -63,35 +78,6 @@ export class HubtypeApiService {
         sources,
         instructions,
         messages,
-      },
-      timeout: this.timeout,
-    })
-  }
-
-  async inferenceV1(
-    authToken: string,
-    question: string,
-    sources: string[]
-  ): Promise<
-    AxiosResponse<{
-      inference_id: string
-      question: string
-      answer: string
-      has_knowledge: boolean
-      is_faithful: boolean
-      chunk_ids: string[]
-    }>
-  > {
-    return await axios({
-      method: 'POST',
-      url: `${this.host}/external/v1/ai/knowledge_base/inference/`,
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-        'Content-Type': 'application/json',
-      },
-      data: {
-        question,
-        sources,
       },
       timeout: this.timeout,
     })

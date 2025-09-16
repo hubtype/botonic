@@ -1,7 +1,16 @@
-import { BotContext, PluginPreRequest, ResolvedPlugins } from '@botonic/core'
+import {
+  BotContext,
+  InferenceResponse,
+  KnowledgeBasesResponse,
+  PluginPreRequest,
+  ResolvedPlugins,
+} from '@botonic/core'
 
 import { FlowContent } from './content-fields'
-import { HtFlowBuilderData } from './content-fields/hubtype-fields'
+import {
+  HtFlowBuilderData,
+  HtRatingButton,
+} from './content-fields/hubtype-fields'
 
 export interface InShadowingConfig {
   allowKeywords: boolean
@@ -24,6 +33,7 @@ export interface BotonicPluginFlowBuilderOptions<
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
   contentFilters?: ContentFilter<TPlugins, TExtraData>[]
+  customRatingMessageEnabled?: boolean
 }
 
 export type TrackEventFunction<
@@ -44,7 +54,7 @@ export type KnowledgeBaseFunction<
   instructions: string,
   messageId: string,
   memoryLength: number
-) => Promise<KnowledgeBaseResponse>
+) => Promise<KnowledgeBasesResponse>
 
 export type AiAgentFunction<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -52,12 +62,18 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<AgenticOutputMessage[] | undefined>
+) => Promise<InferenceResponse>
+
+export interface GuardrailRule {
+  name: string
+  description: string
+}
 
 export interface AiAgentArgs {
   name: string
   instructions: string
   activeTools?: { name: string }[]
+  inputGuardrailRules?: GuardrailRule[]
   sourceIds?: string[]
 }
 export type ContentFilter<
@@ -86,14 +102,6 @@ export enum FlowBuilderJSONVersion {
   LATEST = 'latest',
 }
 
-export interface KnowledgeBaseResponse {
-  inferenceId: string
-  hasKnowledge: boolean
-  isFaithful: boolean
-  chunkIds: string[]
-  answer: string
-}
-
 export interface SmartIntentResponse {
   data: {
     smart_intent_title: string
@@ -109,43 +117,7 @@ export interface PayloadParamsBase {
   followUpContentID?: string
 }
 
-export interface OutputBaseMessage {
-  type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
+export interface RatingSubmittedInfo extends HtRatingButton {
+  possibleOptions: string[]
+  possibleValues: number[]
 }
-
-export interface TextMessage extends OutputBaseMessage {
-  type: 'text'
-  content: {
-    text: string
-  }
-}
-
-export interface TextWithButtonsMessage extends OutputBaseMessage {
-  type: 'textWithButtons'
-  content: {
-    text: string
-    buttons: string[]
-  }
-}
-
-export interface CarouselMessage extends OutputBaseMessage {
-  type: 'carousel'
-  content: {
-    elements: {
-      title: string
-      subtitle: string
-      image: string
-      button: { text: string; url: string }
-    }[]
-  }
-}
-
-export interface ExitMessage extends OutputBaseMessage {
-  type: 'exit'
-}
-
-export type AgenticOutputMessage =
-  | TextMessage
-  | TextWithButtonsMessage
-  | CarouselMessage
-  | ExitMessage

@@ -1,9 +1,12 @@
 import { Configuration } from '@rspack/cli'
 import * as rspack from '@rspack/core'
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
+import { config } from 'dotenv'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
 import path from 'path'
+
+config()
 
 const ROOT_PATH = path.resolve(__dirname, 'src')
 const OUTPUT_PATH = path.resolve(__dirname, 'dist')
@@ -17,6 +20,7 @@ enum BotonicTarget {
   NODE = 'node',
   WEBVIEWS = 'webviews',
   WEBCHAT = 'webchat',
+  BOT_CONFIG = 'bot-config',
 }
 
 const RSPACK_ENTRIES_DIRNAME = 'rspack-entries'
@@ -25,6 +29,7 @@ const RSPACK_ENTRIES = {
   NODE: 'node-entry.ts',
   WEBCHAT: 'webchat-entry.ts',
   WEBVIEWS: 'webviews-entry.ts',
+  BOT_CONFIG: 'bot-config-entry.ts',
 }
 
 const TEMPLATES = {
@@ -360,6 +365,30 @@ function botonicServerConfig(mode: string): Configuration {
   }
 }
 
+function botonicBotConfig(mode: Mode): Configuration {
+  return {
+    optimization: {
+      minimize: false,
+    },
+    context: ROOT_PATH,
+    devtool: false,
+    target: 'node',
+    entry: path.resolve(RSPACK_ENTRIES_DIRNAME, RSPACK_ENTRIES.BOT_CONFIG),
+    output: {
+      filename: 'bot-config.js',
+      library: 'botConfig',
+      libraryTarget: 'umd',
+      libraryExport: 'botConfig',
+      assetModuleFilename: 'assets/[hash][ext][query]',
+    },
+    module: {
+      rules: [...typescriptLoaderConfig, ...fileLoaderConfig, nullLoaderConfig],
+    },
+    resolve: resolveConfig,
+    plugins: getPlugins(mode, BotonicTarget.NODE),
+  }
+}
+
 export default function (
   env: { target: string },
   argv: { mode: Mode }
@@ -369,6 +398,7 @@ export default function (
       botonicServerConfig(argv.mode),
       botonicWebviewsConfig(argv.mode),
       botonicWebchatConfig(argv.mode),
+      botonicBotConfig(argv.mode),
     ]
   } else if (env.target === BotonicTarget.DEV) {
     return [botonicDevConfig(argv.mode)]
@@ -378,6 +408,8 @@ export default function (
     return [botonicWebviewsConfig(argv.mode)]
   } else if (env.target === BotonicTarget.WEBCHAT) {
     return [botonicWebchatConfig(argv.mode)]
+  } else if (env.target === BotonicTarget.BOT_CONFIG) {
+    return [botonicBotConfig(argv.mode)]
   }
   throw new Error(`Invalid target ${env.target}`)
 }

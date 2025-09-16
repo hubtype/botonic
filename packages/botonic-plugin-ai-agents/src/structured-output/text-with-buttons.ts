@@ -1,14 +1,7 @@
+import { TextWithButtonsMessage } from '@botonic/core'
 import z from 'zod'
 
-import { BaseMessage } from './shared'
-
-export interface TextWithButtonsMessage extends BaseMessage {
-  type: 'textWithButtons'
-  content: {
-    text: string
-    buttons: string[]
-  }
-}
+export type { TextWithButtonsMessage }
 
 export const TextWithButtonsSchema = z
   .object({

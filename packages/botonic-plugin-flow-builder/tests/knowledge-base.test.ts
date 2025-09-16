@@ -21,7 +21,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer:
             'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
           hasKnowledge: true,
@@ -55,7 +54,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer:
             'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
           hasKnowledge: true,
@@ -85,7 +83,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
         flow: knowledgeBaseTestFlow,
         inShadowing: { allowKnowledgeBases: true },
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer:
             'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.',
           hasKnowledge: true,
@@ -124,7 +121,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer,
           hasKnowledge: true,
           isFaithful: true,
@@ -153,7 +149,6 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       flowBuilderOptions: {
         flow: knowledgeBaseTestFlow,
         getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          userInput,
           answer: 'This answer is incorrect',
           hasKnowledge: false,
           isFaithful: true,

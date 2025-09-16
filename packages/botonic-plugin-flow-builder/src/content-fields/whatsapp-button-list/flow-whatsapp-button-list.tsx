@@ -1,4 +1,5 @@
-import { WhatsappButtonList } from '@botonic/react'
+import { isWhatsapp } from '@botonic/core'
+import { ActionRequest, Button, Text, WhatsappButtonList } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../../api'
@@ -33,7 +34,23 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     return newWhatsappButtonList
   }
 
-  toBotonic(id: string): JSX.Element {
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    if (!isWhatsapp(request.session)) {
+      const rows = this.sections.flatMap(section => section.rows)
+      const buttons = rows.map(row => (
+        <Button key={row.id} payload={row.targetId}>
+          {row.title}
+        </Button>
+      ))
+
+      return (
+        <Text>
+          {this.text}
+          {buttons}
+        </Text>
+      )
+    }
+
     return (
       <WhatsappButtonList
         key={id}

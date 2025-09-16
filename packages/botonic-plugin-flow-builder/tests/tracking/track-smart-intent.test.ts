@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -29,7 +29,7 @@ describe('Check tracked events when a contents are displayed after match with sm
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),
-      'nlu_intent_smart',
+      EventAction.IntentSmart,
       {
         nluIntentSmartTitle: 'add_a_bag',
         nluIntentSmartNumUsed: 2,
@@ -43,7 +43,7 @@ describe('Check tracked events when a contents are displayed after match with sm
     expect(trackEventMock).toHaveBeenNthCalledWith(
       2,
       expect.anything(),
-      'flow_node',
+      EventAction.FlowNode,
       {
         flowThreadId: expect.anything(),
         flowId: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',

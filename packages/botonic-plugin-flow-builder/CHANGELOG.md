@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.36.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,60 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.40.x] - 2025-mm-dd
+
+### Added
+
+- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Create and send AI Agent events.
+
+### Changed
+
+### Fixed
+
+## [0.39.0] - 2025-09-03
+
+### Added
+
+- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add FlowWebview node to open a webview.
+- [PR-3097](https://github.com/hubtype/botonic/pull/3097): Add provider_id in useWebviewContents.
+
+## [0.38.2] - 2025-08-28
+
+### Added
+
+- [PR-3094](https://github.com/hubtype/botonic/pull/3094): Extract the logic that obtains the submitted rating information into a function so it can be exported and used in the bots.
+
+## [0.38.1] - 2025-08-26
+
+### Fixed
+
+- [PR-3093](https://github.com/hubtype/botonic/pull/3093): Fix payload in toBotonic method of FlowWhatsappButtonList component.
+
+## [0.38.0] - 2025-08-20
+
+### Added
+
+- [PR-3084](https://github.com/hubtype/botonic/pull/3084): Allow to use input guardrails in ai agent node.
+
+### Changed
+
+- [PR-3081](https://github.com/hubtype/botonic/pull/3081): plugin-flow-builder not respond with first interaction if it receive a contentID.
+- [PR-3091](https://github.com/hubtype/botonic/pull/3091): plugin-flow-builder not to use specific WhatsApp messages when the channel is not WhatsApp.
+- [PR-3092](https://github.com/hubtype/botonic/pull/3092): Change do-nothing payload.
+
+## [0.37.1] - 2025-08-06
+
+### Added
+
+-[PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Use Whatsapp CTA URL with image, video or document in header.
+
+## [0.37.0] - 2025-07-22
+
+### Added
+
+- [PR-3063](https://github.com/hubtype/botonic/pull/3063): Add rating flow to resolve rating nodes.
+- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Allow to enable CustomRatingMessage.
 
 ## [0.36.1] - 2025-07-09
 

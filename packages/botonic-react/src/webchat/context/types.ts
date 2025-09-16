@@ -20,8 +20,9 @@ export interface WebchatState {
   replies?: (typeof Reply)[]
   latestInput: Partial<CoreInput>
   typing: boolean
-  webview: Webview | null
-  webviewParams: null
+  // In local development webview can be a React.ComponentType or a Webview object
+  webview?: Webview | string | React.ComponentType
+  webviewParams: undefined
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
@@ -75,6 +76,10 @@ export interface WebchatContextProps {
   toggleEmojiPicker: (toggle: boolean) => void
   togglePersistentMenu: (toggle: boolean) => void
   toggleCoverComponent: (toggle: boolean) => void
+  updateCustomMessageProps: (
+    json: Record<string, any>,
+    messageId?: string
+  ) => void
   updateLatestInput: (input: ClientInput) => void
   updateMessage: (message: WebchatMessage) => void
   updateReplies: (replies: (typeof Reply)[]) => void

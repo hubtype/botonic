@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.36.x] - 2025-mm-dd
+## [0.39.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,32 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.39.x] - 2025-09-03
+
+### Changed
+
+- [PR-3095](https://github.com/hubtype/botonic/pull/3095): Add webviews in DevApp to resolve webviews from flow builder.
+
+## [0.38.0] - 2025-08-20
+
+### Added
+
+- [PR-3079](https://github.com/hubtype/botonic/pull/3079): Create updateCustomMessageJSON function in WebchatContext to keep state in custom messages.
+
+## [0.37.1] - 2025-08-06
+
+### Added
+
+- [PR-3074](https://github.com/hubtype/botonic/pull/3074/files): Update Whatsapp CTA URL to accept image, video or document in header.
+- [PR-3077](https://github.com/hubtype/botonic/pull/3077): Input panel buttons no need enable attribute to be used.
+- [PR-3078](https://github.com/hubtype/botonic/pull/3078): Multichannel change buttons for replies when a text in facebook has more than 3 buttons.
+
+## [0.37.0] - 2025-07-22
+
+### Added
+
+- [PR-3066](https://github.com/hubtype/botonic/pull/3066): Add CustomRatingMessage.
 
 ## [0.36.5] - 2025-07-14
 

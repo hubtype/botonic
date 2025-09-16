@@ -42,7 +42,9 @@ export class HubtypeApiClient {
     return response.data.chunks.map((chunk: any) => chunk.text)
   }
 
-  async getLocalMessages(memoryLength: number): Promise<AgenticInputMessage[]> {
+  async getLocalMessages(
+    maxMemoryLength: number
+  ): Promise<AgenticInputMessage[]> {
     const localBotonicState = localStorage.getItem('botonicState')
     const botonicState = JSON.parse(localBotonicState || '{}')
     const messages = botonicState.messages
@@ -53,12 +55,12 @@ export class HubtypeApiClient {
         content: message.data.text,
       }))
       .map(message => this.formatMessage(message))
-    return filteredMessages.slice(-memoryLength)
+    return filteredMessages.slice(-maxMemoryLength)
   }
 
   async getMessages(
     request: BotContext,
-    memoryLength: number
+    maxMemoryLength: number
   ): Promise<AgenticInputMessage[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
     const headers = {
@@ -67,7 +69,7 @@ export class HubtypeApiClient {
     }
     const params = {
       last_message_id: request.input.message_id,
-      num_messages: memoryLength,
+      num_messages: maxMemoryLength,
     }
 
     try {

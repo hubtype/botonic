@@ -9,10 +9,12 @@ import { HtImageNode } from './image'
 import { HtKeywordNode } from './keyword'
 import { HtKnowledgeBaseNode } from './knowledge-base'
 import { HtPayloadNode } from './payload'
+import { HtRatingNode } from './rating'
 import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
 import { HtUrlNode } from './url'
 import { HtVideoNode } from './video'
+import { HtWebviewNode } from './webview'
 import { HtWhatsappButtonListNode } from './whatsapp-button-list'
 import { HtWhatsappCTAUrlButtonNode } from './whatsapp-cta-url-button'
 
@@ -31,6 +33,8 @@ export type HtNodeWithContent =
   | HtKnowledgeBaseNode
   | HtBotActionNode
   | HtAiAgentNode
+  | HtRatingNode
+  | HtWebviewNode
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
 

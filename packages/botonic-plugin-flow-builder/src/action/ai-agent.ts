@@ -1,5 +1,15 @@
-import { FlowContent } from '../content-fields'
-import { FlowAiAgent } from '../content-fields/flow-ai-agent'
+import {
+  BotContext,
+  EventAction,
+  EventAiAgent,
+  InferenceResponse,
+} from '@botonic/core'
+
+import { FlowAiAgent, FlowContent } from '../content-fields'
+import { HtNodeWithContent } from '../content-fields/hubtype-fields'
+import { getFlowBuilderPlugin } from '../helpers'
+import { trackEvent } from '../tracking'
+import { GuardrailRule } from '../types'
 import { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
@@ -24,12 +34,21 @@ export async function getContentsByAiAgent({
     return []
   }
 
+  const activeInputGuardrailRules: GuardrailRule[] =
+    aiAgentContent.inputGuardrailRules
+      ?.filter(rule => rule.is_active)
+      ?.map(rule => ({
+        name: rule.name,
+        description: rule.description,
+      })) || []
+
   const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
     request,
     {
       name: aiAgentContent.name,
       instructions: aiAgentContent.instructions,
       activeTools: aiAgentContent.activeTools,
+      inputGuardrailRules: activeInputGuardrailRules,
       sourceIds: aiAgentContent.sources?.map(source => source.id),
     }
   )
@@ -37,12 +56,45 @@ export async function getContentsByAiAgent({
   if (!aiAgentResponse) {
     return []
   }
+  await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
 
-  if (aiAgentResponse.length === 1 && aiAgentResponse[0].type === 'exit') {
+  if (aiAgentResponse.exit) {
     return []
   }
 
-  aiAgentContent.responses = aiAgentResponse
+  aiAgentContent.responses = aiAgentResponse.messages
 
   return contents
+}
+
+async function trackAiAgentResponse(
+  aiAgentResponse: InferenceResponse,
+  request: BotContext,
+  aiAgentContent: FlowAiAgent
+) {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowId = flowBuilderPlugin.cmsApi.getNodeById<HtNodeWithContent>(
+    aiAgentContent.id
+  ).flow_id
+  const flowName = flowBuilderPlugin.getFlowName(flowId)
+
+  const event: EventAiAgent = {
+    action: EventAction.AiAgent,
+    flowThreadId: request.session.flow_thread_id!,
+    flowId: flowId,
+    flowName: flowName,
+    flowNodeId: aiAgentContent.id,
+    flowNodeContentId: aiAgentContent.name,
+    flowNodeIsMeaningful: true,
+    toolsExecuted: aiAgentResponse?.toolsExecuted ?? [],
+    memoryLength: aiAgentResponse?.memoryLength ?? 0,
+    inputMessageId: request.input.message_id!,
+    exit: aiAgentResponse?.exit ?? true,
+    inputGuardrailsTriggered: aiAgentResponse?.inputGuardrailsTriggered ?? [],
+    outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
+    error: aiAgentResponse.error,
+  }
+  const { action, ...eventArgs } = event
+
+  await trackEvent(request, action, eventArgs)
 }

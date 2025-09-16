@@ -31,9 +31,9 @@ export type MapContentsType = Record<string, string>
 export interface UseWebviewContentsProps<T extends MapContentsType> {
   apiUrl?: string
   version?: FlowBuilderJSONVersion
-  orgId: string
   botId: string
   webviewId: string
+  providerId: string
   locale: string
   mapContents: Record<keyof T, string>
 }

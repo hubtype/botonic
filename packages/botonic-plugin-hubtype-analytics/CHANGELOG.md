@@ -10,7 +10,8 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.36.x] - 2025-mm-dd
+  
+## [0.38.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +20,22 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.39.x] - 2025-mm-dd
+
+### Added
+
+- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Create and send AI Agent events.
+
+### Changed
+
+### Fixed
+
+## [0.38.0] - 2025-08-20
+
+### Changed
+
+- [PR-3087](https://github.com/hubtype/botonic/pull/3087): Use types from @botonic/core.
 
 ## [0.36.0] - 2025-06-18
 

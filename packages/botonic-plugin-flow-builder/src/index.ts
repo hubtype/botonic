@@ -21,6 +21,7 @@ import {
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
+  FlowRating,
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
@@ -35,6 +36,7 @@ import {
   HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
+  HtRatingButton,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
 import {
@@ -45,6 +47,7 @@ import {
   InShadowingConfig,
   KnowledgeBaseFunction,
   PayloadParamsBase,
+  RatingSubmittedInfo,
   TrackEventFunction,
 } from './types'
 import { getNodeByUserInput } from './user-input'
@@ -69,6 +72,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   // TODO: Rethink how we construct FlowBuilderApi to be simpler
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
+  public customRatingMessageEnabled: boolean
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -90,6 +94,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
     }
     this.contentFilters = options.contentFilters || []
+    this.customRatingMessageEnabled =
+      options.customRatingMessageEnabled || false
   }
 
   resolveFlowUrl(request: PluginPreRequest): string {
@@ -240,6 +246,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       case HtNodeWithContentType.AI_AGENT:
         return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
 
+      case HtNodeWithContentType.RATING:
+        return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
+
       case HtNodeWithContentType.BOT_ACTION:
         return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
 
@@ -307,9 +316,29 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   getFlowName(flowId: string): string {
     return this.cmsApi.getFlowName(flowId)
   }
+
+  getRatingSubmittedInfo(payload: string): RatingSubmittedInfo {
+    const buttonId = payload?.split(SEPARATOR)[1]
+    const ratingNode = this.cmsApi.getRatingNodeByButtonId(buttonId)
+
+    const ratingButton = this.cmsApi.getRatingButtonById(ratingNode, buttonId)
+    const possibleOptions = ratingNode.content.buttons.map(
+      button => button.text
+    )
+    const possibleValues = ratingNode.content.buttons.map(
+      button => button.value
+    )
+
+    return {
+      ...ratingButton,
+      possibleOptions,
+      possibleValues,
+    }
+  }
 }
 
 export * from './action'
+export { AGENT_RATING_PAYLOAD } from './constants'
 export * from './content-fields'
 export { HtBotActionNode } from './content-fields/hubtype-fields'
 export { trackFlowContent } from './tracking'
@@ -318,5 +347,6 @@ export {
   ContentFilter,
   FlowBuilderJSONVersion,
   PayloadParamsBase,
+  RatingSubmittedInfo,
 } from './types'
 export * from './webview'

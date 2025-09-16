@@ -1,24 +1,24 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.36.0-alpha.9",
+  "version": "0.40.0-alpha.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
   "scripts": {
     "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "../../node_modules/.bin/jest --coverage",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
   },
   "dependencies": {
-    "@botonic/core": "^0.36.0",
+    "@botonic/core": "0.40.0-alpha.0",
     "@openai/agents": "^0.0.10",
     "axios": "^1.10.0",
     "openai": "^5.8.3",
     "uuid": "^10.0.0",
-    "zod": "^3.25.57"
+    "zod": "3.25.67"
   },
   "devDependencies": {
     "@types/uuid": "^10.0.0"
@@ -29,7 +29,7 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.0.0",
     "npm": ">=10.0.0"
   },
   "repository": {

@@ -86,6 +86,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     toggleEmojiPicker,
     togglePersistentMenu,
     toggleWebchat,
+    updateCustomMessageProps,
     updateDevSettings,
     updateHandoff,
     updateLastMessageDate,
@@ -650,6 +651,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         toggleEmojiPicker,
         togglePersistentMenu,
         toggleCoverComponent,
+        updateCustomMessageProps,
         updateLatestInput,
         updateMessage,
         updateReplies,
@@ -705,7 +707,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
                   />
                 )}
 
-                {webchatState.webview && <WebviewContainer />}
+                {webchatState.webview && (
+                  <WebviewContainer localWebviews={props.localWebviews} />
+                )}
 
                 {webchatState.isCustomComponentRendered &&
                   customComponent &&

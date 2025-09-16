@@ -1,6 +1,6 @@
 {
   "name": "@botonic/eslint-config",
-  "version": "0.36.0",
+  "version": "0.39.0",
   "description": "Eslint config for botonic packages",
   "main": "index.js",
   "scripts": {

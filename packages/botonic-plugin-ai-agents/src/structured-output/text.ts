@@ -1,13 +1,7 @@
+import { TextMessage } from '@botonic/core'
 import { z } from 'zod'
 
-import { BaseMessage } from './shared'
-
-export interface TextMessage extends BaseMessage {
-  type: 'text'
-  content: {
-    text: string
-  }
-}
+export type { TextMessage }
 
 export const TextSchema = z
   .object({

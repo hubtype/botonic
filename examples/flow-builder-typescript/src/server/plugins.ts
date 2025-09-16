@@ -1,4 +1,8 @@
-import BotonicPluginFlowBuilder from '@botonic/plugin-flow-builder'
+import { ResolvedPlugins } from '@botonic/core'
+import BotonicPluginAiAgents from '@botonic/plugin-ai-agents'
+import BotonicPluginFlowBuilder, {
+  BotonicPluginFlowBuilderOptions,
+} from '@botonic/plugin-flow-builder'
 import BotonicPluginHubtypeAnalytics from '@botonic/plugin-hubtype-analytics'
 import BotonicPluginKnowledgeBases from '@botonic/plugin-knowledge-bases'
 
@@ -10,7 +14,10 @@ const config = CONFIG[getEnvironment()]
 export type BotPlugins = typeof plugins
 
 export const plugins = {
-  flowBuilder: new BotonicPluginFlowBuilder(config.flowBuilder),
+  flowBuilder: new BotonicPluginFlowBuilder(
+    config.flowBuilder as BotonicPluginFlowBuilderOptions<ResolvedPlugins>
+  ),
+  aiAgents: new BotonicPluginAiAgents(config.aiAgents),
   knowledgeBases: new BotonicPluginKnowledgeBases(config.knowledgeBases),
   hubtypeAnalytics: new BotonicPluginHubtypeAnalytics(),
 }

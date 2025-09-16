@@ -26,6 +26,7 @@ export class DevApp extends WebchatApp {
     onClose,
     onMessage,
     onTrackEvent,
+    webviews,
     ...botOptions
   }) {
     super({
@@ -47,6 +48,7 @@ export class DevApp extends WebchatApp {
       onMessage,
       onTrackEvent,
     })
+    this.webviews = webviews
     this.bot = new ReactBot({
       ...botOptions,
     })
@@ -89,6 +91,7 @@ export class DevApp extends WebchatApp {
         onClose={(...args) => this.onCloseWebchat(...args)}
         onUserInput={(...args) => this.onUserInput(...args)}
         onTrackEvent={(...args) => this.onTrackEvent(...args)}
+        webviews={this.webviews}
       />
     )
   }

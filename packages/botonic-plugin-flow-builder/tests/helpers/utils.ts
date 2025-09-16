@@ -64,6 +64,7 @@ interface RequestArgs {
     country: string
     systemLocale: string
   }
+  hubtypeCaseId?: string
 }
 
 export function createRequest({
@@ -78,6 +79,7 @@ export function createRequest({
   },
   extraData = {},
   shadowing = false,
+  hubtypeCaseId,
 }: RequestArgs): PluginPreRequest {
   return {
     session: {
@@ -94,6 +96,7 @@ export function createRequest({
         extra_data: extraData,
       },
       _shadowing: shadowing,
+      _hubtype_case_id: hubtypeCaseId,
       __retries: 0,
       _access_token: 'fake_access_token',
       _hubtype_api: 'https://api.hubtype.com',

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.36.5",
+  "version": "0.40.0-alpha.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -9,6 +9,7 @@
   "scripts": {
     "test:no-coverage": "../../node_modules/.bin/jest -c ./jest.config.js",
     "test": "../../node_modules/.bin/jest -c ./jest.config.js --coverage",
+    "updateSnapshot": "../../node_modules/.bin/jest -c ./jest.config.js --updateSnapshot",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "npm run clean; npm i; npm run build; npm run copy-files;",
     "clean": "rm -rf ./lib/",
@@ -20,7 +21,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "^0.36.0",
+    "@botonic/core": "^0.40.0-alpha.0",
     "axios": "^1.10.0",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",

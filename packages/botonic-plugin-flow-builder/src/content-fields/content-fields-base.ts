@@ -13,8 +13,8 @@ export abstract class ContentFieldsBase {
     return result?.message ?? ''
   }
 
-  static getImageByLocale(locale: string, image: HtMediaFileLocale[]): string {
-    const result = image.find(i => i.locale === locale)
+  static getAssetByLocale(locale: string, asset: HtMediaFileLocale[]): string {
+    const result = asset.find(i => i.locale === locale)
     return result?.file ?? ''
   }
 

@@ -1,7 +1,7 @@
 import { INPUT, InputType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import {
@@ -16,8 +16,8 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
   const ratingMessageUuid = '578b30eb-d230-4162-8a36-6c7fa18ff0db'
   const botActionUuid = '85dbeb56-81c9-419d-a235-4ebf491b4fc9'
   const ratingPayload = 'rating'
-  const payloadParms = '{"value":1,"followUpContentID":"SORRY"}'
-  const ratingPayloadWithParams = `${ratingPayload}|${payloadParms}`
+  const payloadParams = '{"value":1,"followUpContentID":"SORRY"}'
+  const ratingPayloadWithParams = `${ratingPayload}|${payloadParams}`
 
   test('The button has a payload equal to botActionUuid', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
@@ -30,8 +30,8 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
       },
     })
 
-    const nextPaylod = (contents[0] as FlowText).buttons[0].payload
-    expect(nextPaylod).toBe(botActionUuid)
+    const nextPayload = (contents[0] as FlowText).buttons[0].payload
+    expect(nextPayload).toBe(botActionUuid)
   })
 
   test('When the request.input.payload is a UUID of a bot action node it is replaced by the payload with parameters defined in the node', async () => {

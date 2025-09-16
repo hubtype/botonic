@@ -20,7 +20,7 @@ import { Reply } from './reply'
 
 export interface CustomMessageArgs {
   name: string
-  component: React.ComponentType
+  component: React.FC<any>
   defaultProps?: Record<string, any>
   errorBoundary?: any
 }
@@ -82,7 +82,7 @@ export const customMessage = ({
         isUnread={props.isUnread}
       >
         <ErrorBoundary key={'errorBoundary'} {...customMessageProps}>
-          <CustomMessageComponent {...customMessageProps}>
+          <CustomMessageComponent id={id} {...customMessageProps}>
             {childrenWithoutReplies}
           </CustomMessageComponent>
         </ErrorBoundary>
@@ -92,15 +92,17 @@ export const customMessage = ({
   }
   WrappedComponent.customTypeName = name
   // eslint-disable-next-line react/display-name
-  WrappedComponent.deserialize = (msg: any) => (
-    <WrappedComponent
-      id={msg.id}
-      key={msg.key}
-      json={msg.data}
-      {...msg.data}
-      sentBy={msg.sentBy || SENDERS.bot}
-      isUnread={msg.isUnread}
-    />
-  )
+  WrappedComponent.deserialize = (msg: any) => {
+    return (
+      <WrappedComponent
+        id={msg.id}
+        key={msg.key}
+        json={msg.data}
+        {...msg.data}
+        sentBy={msg.sentBy || SENDERS.bot}
+        isUnread={msg.isUnread}
+      />
+    )
+  }
   return WrappedComponent
 }

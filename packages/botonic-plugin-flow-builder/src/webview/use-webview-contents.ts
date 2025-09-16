@@ -16,10 +16,9 @@ import {
 export function useWebviewContents<T extends MapContentsType>({
   apiUrl = FLOW_BUILDER_API_URL_PROD,
   version = FlowBuilderJSONVersion.LATEST,
-  // @ts-ignore
-  orgId,
   botId,
   webviewId,
+  providerId,
   locale,
   mapContents,
 }: UseWebviewContentsProps<T>): UseWebviewContents<T> {
@@ -85,7 +84,7 @@ export function useWebviewContents<T extends MapContentsType>({
 
   useEffect(() => {
     const getResponseContents = async () => {
-      const url = `${apiUrl}/v1/bot_flows/${botId}/versions/${version}/webviews/${webviewId}/`
+      const url = `${apiUrl}/v1/bot_flows/${botId}/versions/${version}/webviews/${webviewId}/?provider_id=${providerId}`
       try {
         const response = await axios.get<WebviewContentsResponse>(url)
 

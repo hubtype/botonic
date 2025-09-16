@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.35.x] - 2025-mm-dd
+## [0.38.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,30 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.40.x] - 2025-mm-dd
+
+### Added
+
+- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Add AI Agent events types.
+
+### Changed
+
+### Fixed
+
+## [0.38.0] - 2025-08-20
+
+## Added
+
+- [PR-3088](https://github.com/hubtype/botonic/pull/3088): plugin-ai-agent types declared and exported from @botonic/core.
+- [PR-3087](https://github.com/hubtype/botonic/pull/3087): plugin-hubtype-analytics types declared and exported from @botonic/core.
+- [PR-3088](https://github.com/hubtype/botonic/pull/3088): plugin-knowledge-bases types declared and exported from @botonic/core.
+
+## [0.37.0] - 2025-07-22
+
+### Changed
+
+-[PR-3068](https://github.com/hubtype/botonic/pull/3068): Store case rating for test integrations.
 
 ## [0.35.2] - 2025-05-27
 
