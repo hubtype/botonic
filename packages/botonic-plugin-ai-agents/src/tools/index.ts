@@ -1,4 +1,4 @@
 import { Tool } from '../types'
-export { retrieveKnowledge } from './knowledge'
+export { retrieveKnowledge } from './retrieve-knowledge'
 
 export const mandatoryTools: Tool[] = []
