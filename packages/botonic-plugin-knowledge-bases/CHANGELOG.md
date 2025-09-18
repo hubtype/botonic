@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.39.2] - 2025-09-05
+
+### Changed
+
+- [PR-3100](https://github.com/hubtype/botonic/pull/3100): Increase the default timeout to 20s
+
 ## [0.39.1] - 2025-09-05
 
 ### Added
