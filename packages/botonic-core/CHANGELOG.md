@@ -30,6 +30,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
+- Fix Button model for AI Agents.
+
 ## [0.38.0] - 2025-08-20
 
 ## Added

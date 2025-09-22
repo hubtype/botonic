@@ -30,6 +30,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
+- Do not execute postbacks on AI Agent generated buttons execution.
+
 ## [0.39.0] - 2025-09-03
 
 ### Added

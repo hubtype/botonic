@@ -20,6 +20,16 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.40.x] - 2025-mm-dd
+
+### Added
+
+### Changed
+
+### Fixed
+
+- Fix TextWithButtons and Carrousel definitions.
+
 ## [0.39.x] - 2025-mm-dd
 
 ### Added
