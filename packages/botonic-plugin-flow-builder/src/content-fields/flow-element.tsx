@@ -1,6 +1,6 @@
+import { Button } from '@botonic/core'
 import { Element, Pic, Subtitle, Title } from '@botonic/react'
 
-import { Button } from '@botonic/core'
 import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'

@@ -110,9 +110,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   async pre(request: PluginPreRequest): Promise<void> {
     if (request.session.user.provider === PROVIDER.WHATSAPP) {
       const shouldUseReferral =
-        (request.input.referral &&
-          request.input.payload?.startsWith(GENERATED_BY_AI_AGENT)) ||
-        (request.input.type === INPUT.TEXT && !request.input.payload) // TODO: It seems this is the quick replies scenario for whatsapp
+        request.input.referral &&
+        request.input.payload?.startsWith(GENERATED_BY_AI_AGENT)
 
       if (shouldUseReferral) {
         request.input.type = INPUT.TEXT
