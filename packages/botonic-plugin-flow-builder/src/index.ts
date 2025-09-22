@@ -11,8 +11,8 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
-  DO_NOTHING_PAYLOAD,
   FLOW_BUILDER_API_URL_PROD,
+  GENERATED_BY_AI_AGENT,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
@@ -108,13 +108,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
-    if (
-      request.input.referral &&
-      request.input.payload?.startsWith(DO_NOTHING_PAYLOAD) &&
-      request.session.user.provider === PROVIDER.WHATSAPP
-    ) {
-      request.input.type = INPUT.TEXT
-      request.input.data = request.input.referral
+    if (request.session.user.provider === PROVIDER.WHATSAPP) {
+      const shouldUseReferral =
+        (request.input.referral &&
+          request.input.payload?.startsWith(GENERATED_BY_AI_AGENT)) ||
+        (request.input.type === INPUT.TEXT && !request.input.payload) // TODO: It seems this is the quick replies scenario for whatsapp
+
+      if (shouldUseReferral) {
+        request.input.type = INPUT.TEXT
+        request.input.data = request.input.referral
+      }
     }
 
     this.currentRequest = request

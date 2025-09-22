@@ -9,7 +9,7 @@ import {
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { DO_NOTHING_PAYLOAD } from '../constants'
+import { GENERATED_BY_AI_AGENT } from '../constants'
 import { FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
@@ -126,7 +126,7 @@ async function getContents(
     return []
   }
 
-  if (request.input.payload?.startsWith(DO_NOTHING_PAYLOAD)) {
+  if (request.input.payload?.startsWith(GENERATED_BY_AI_AGENT)) {
     request.input.payload = undefined
   }
 
