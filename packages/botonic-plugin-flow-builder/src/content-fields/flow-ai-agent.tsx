@@ -1,7 +1,7 @@
 import { AgenticOutputMessage } from '@botonic/core'
 import { Button, Carousel, Text } from '@botonic/react'
 
-import { GENERATED_BY_AI_AGENT } from '../constants'
+import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
 import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
@@ -42,7 +42,7 @@ export class FlowAiAgent extends ContentFieldsBase {
                     return (
                       <Button
                         key={buttonIndex}
-                        payload={`${GENERATED_BY_AI_AGENT}${button.payload}`}
+                        payload={`${button.payload}${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
                       >
                         {button.text}
                       </Button>
@@ -55,7 +55,14 @@ export class FlowAiAgent extends ContentFieldsBase {
                       </Button>
                     )
                   }
-                  return <></>
+                  return (
+                    <Button
+                      key={buttonIndex}
+                      payload={`${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
+                    >
+                      {button.text}
+                    </Button>
+                  )
                 })}
               </Text>
             )

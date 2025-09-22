@@ -18,5 +18,5 @@ export const TextWithButtonsSchema = z
     }),
   })
   .describe(
-    `A text message with buttons to allow the user to use quick replies. The payload value is filled with JUST the same value as the button text. Each button must have either a payload (for internal actions) or a url (for external links).`
+    'A text message with buttons to allow the user to use quick replies'
   )

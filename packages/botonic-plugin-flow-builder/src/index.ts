@@ -11,8 +11,8 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
+  EMPTY_PAYLOAD,
   FLOW_BUILDER_API_URL_PROD,
-  GENERATED_BY_AI_AGENT,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
@@ -111,7 +111,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     if (request.session.user.provider === PROVIDER.WHATSAPP) {
       const shouldUseReferral =
         request.input.referral &&
-        request.input.payload?.startsWith(GENERATED_BY_AI_AGENT)
+        request.input.payload?.startsWith(EMPTY_PAYLOAD)
 
       if (shouldUseReferral) {
         request.input.type = INPUT.TEXT

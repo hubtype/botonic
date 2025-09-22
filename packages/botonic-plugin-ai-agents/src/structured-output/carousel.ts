@@ -21,6 +21,4 @@ export const CarouselSchema = z
       ),
     }),
   })
-  .describe(
-    'A carousel message containing a list of elements. Each button must have a url (for external links).'
-  )
+  .describe('A carousel message containing a list of elements')
