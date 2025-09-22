@@ -1,6 +1,8 @@
 import {
+  INPUT,
   Plugin,
   PluginPreRequest,
+  PROVIDER,
   ResolvedPlugins,
   Session,
 } from '@botonic/core'
@@ -9,6 +11,7 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import {
+  DO_NOTHING_PAYLOAD,
   FLOW_BUILDER_API_URL_PROD,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
@@ -36,7 +39,6 @@ import {
   HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
-  HtRatingButton,
 } from './content-fields/hubtype-fields'
 import { DEFAULT_FUNCTIONS } from './functions'
 import {
@@ -106,6 +108,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
+    if (
+      request.input.referral &&
+      request.input.payload?.startsWith(DO_NOTHING_PAYLOAD) &&
+      request.session.user.provider === PROVIDER.WHATSAPP
+    ) {
+      request.input.type = INPUT.TEXT
+      request.input.data = request.input.referral
+    }
+
     this.currentRequest = request
     this.cmsApi = await FlowBuilderApi.create({
       flowUrl: this.resolveFlowUrl(request),

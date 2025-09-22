@@ -14,10 +14,13 @@ export const CarouselSchema = z
           image: z.string(),
           button: z.object({
             text: z.string(),
-            url: z.string(),
+            url: z.string().nullable().optional(),
+            // TODO: Add payload?
           }),
         })
       ),
     }),
   })
-  .describe('A carousel message containing a list of elements')
+  .describe(
+    'A carousel message containing a list of elements. Each button must have a url (for external links).'
+  )
