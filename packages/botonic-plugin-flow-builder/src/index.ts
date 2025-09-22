@@ -108,16 +108,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
-    if (request.session.user.provider === PROVIDER.WHATSAPP) {
-      const shouldUseReferral =
-        request.input.referral &&
-        request.input.payload?.startsWith(EMPTY_PAYLOAD)
-
-      if (shouldUseReferral) {
-        request.input.type = INPUT.TEXT
-        request.input.data = request.input.referral
-      }
-    }
+    // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
+    this.convertWhatsappAiAgentEmptyPayloads(request)
 
     this.currentRequest = request
     this.cmsApi = await FlowBuilderApi.create({
@@ -143,6 +135,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     this.updateRequestBeforeRoutes(request)
+  }
+
+  private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
+    if (request.session.user.provider === PROVIDER.WHATSAPP) {
+      const shouldUseReferral =
+        request.input.referral &&
+        request.input.payload?.startsWith(EMPTY_PAYLOAD)
+
+      if (shouldUseReferral) {
+        request.input.type = INPUT.TEXT
+        request.input.data = request.input.referral
+      }
+    }
   }
 
   private updateRequestBeforeRoutes(request: PluginPreRequest): void {
