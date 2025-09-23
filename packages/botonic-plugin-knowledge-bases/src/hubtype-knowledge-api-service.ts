@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { Chunk } from './types'
 
-const DEFAULT_TIMEOUT = 10000
+const DEFAULT_TIMEOUT = 20000
 
 export interface HtApiKnowledgeBaseResponse {
   inference_id: string
