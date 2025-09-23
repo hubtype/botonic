@@ -15,7 +15,6 @@ export const CarouselSchema = z
           button: z.object({
             text: z.string(),
             url: z.string().nullable().optional(),
-            // TODO: Add payload?
           }),
         })
       ),

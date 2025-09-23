@@ -38,23 +38,6 @@ export class FlowAiAgent extends ContentFieldsBase {
               <Text key={id}>
                 {response.content.text}
                 {response.content.buttons.map((button, buttonIndex) => {
-                  if (button.payload) {
-                    return (
-                      <Button
-                        key={buttonIndex}
-                        payload={`${button.payload}${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
-                      >
-                        {button.text}
-                      </Button>
-                    )
-                  }
-                  if (button.url) {
-                    return (
-                      <Button key={buttonIndex} url={button.url}>
-                        {button.text}
-                      </Button>
-                    )
-                  }
                   return (
                     <Button
                       key={buttonIndex}

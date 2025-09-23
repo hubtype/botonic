@@ -11,8 +11,6 @@ export const TextWithButtonsSchema = z
       buttons: z.array(
         z.object({
           text: z.string(),
-          payload: z.string().nullable().optional(),
-          url: z.string().nullable().optional(),
         })
       ),
     }),
