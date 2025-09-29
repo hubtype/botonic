@@ -45,7 +45,10 @@ export class HubtypeApiClient {
   async getLocalMessages(
     maxMemoryLength: number
   ): Promise<AgenticInputMessage[]> {
-    const localBotonicState = localStorage.getItem('botonicState')
+    const localBotonicState =
+      typeof globalThis !== 'undefined' && globalThis.localStorage
+        ? globalThis.localStorage.getItem('botonicState')
+        : null
     const botonicState = JSON.parse(localBotonicState || '{}')
     const messages = botonicState.messages
     const filteredMessages = messages
