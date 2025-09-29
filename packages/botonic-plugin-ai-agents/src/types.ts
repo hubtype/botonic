@@ -1,5 +1,7 @@
 import {
   AgenticOutputMessage,
+  AiAgentArgs,
+  GuardrailRule,
   InferenceResponse,
   RunResult,
 } from '@botonic/core'
@@ -27,11 +29,6 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext) => Promise<any>
 }
 
-export interface GuardrailRule {
-  name: string
-  description: string
-}
-
 export type ContactInfo = Record<string, string>
 
 export type Tool = OpenAITool<Context>
@@ -41,14 +38,12 @@ export interface PluginAiAgentOptions {
   customTools?: CustomTool[]
 }
 
-export interface AiAgentArgs {
-  name: string
-  instructions: string
-  activeTools?: { name: string }[]
-  inputGuardrailRules?: GuardrailRule[]
-  sourceIds?: string[]
-}
-
 export type AgenticInputMessage = AgentInputItem
 
-export type { AgenticOutputMessage, InferenceResponse, RunResult }
+export type {
+  AgenticOutputMessage,
+  AiAgentArgs,
+  GuardrailRule,
+  InferenceResponse,
+  RunResult,
+}

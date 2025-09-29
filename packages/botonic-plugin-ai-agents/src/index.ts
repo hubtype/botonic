@@ -1,4 +1,4 @@
-import { BotContext, Plugin } from '@botonic/core'
+import { AiAgentArgs, BotContext, Plugin } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
@@ -8,7 +8,6 @@ import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
-  AiAgentArgs,
   Context,
   CustomTool,
   InferenceResponse,
