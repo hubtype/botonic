@@ -12,6 +12,7 @@ export class FlowAiAgent extends ContentFieldsBase {
   public instructions: string = ''
   public activeTools?: { name: string }[]
   public inputGuardrailRules: HtInputGuardrailRule[]
+  public sources?: { id: string; name: string }[]
 
   public responses: AgenticOutputMessage[] = []
 
@@ -22,6 +23,7 @@ export class FlowAiAgent extends ContentFieldsBase {
     newAiAgent.activeTools = component.content.active_tools
     newAiAgent.inputGuardrailRules =
       component.content.input_guardrail_rules || []
+    newAiAgent.sources = component.content.sources
     return newAiAgent
   }
 

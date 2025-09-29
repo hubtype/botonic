@@ -1,5 +1,7 @@
 import {
+  AiAgentArgs,
   BotContext,
+  GuardrailRule,
   InferenceResponse,
   KnowledgeBasesResponse,
   PluginPreRequest,
@@ -64,17 +66,6 @@ export type AiAgentFunction<
   aiAgentArgs: AiAgentArgs
 ) => Promise<InferenceResponse>
 
-export interface GuardrailRule {
-  name: string
-  description: string
-}
-
-export interface AiAgentArgs {
-  name: string
-  instructions: string
-  activeTools?: { name: string }[]
-  inputGuardrailRules?: GuardrailRule[]
-}
 export type ContentFilter<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
@@ -120,3 +111,5 @@ export interface RatingSubmittedInfo extends HtRatingButton {
   possibleOptions: string[]
   possibleValues: number[]
 }
+
+export { AiAgentArgs, GuardrailRule }

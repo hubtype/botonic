@@ -1,5 +1,7 @@
 import {
   AgenticOutputMessage,
+  AiAgentArgs,
+  GuardrailRule,
   InferenceResponse,
   RunResult,
 } from '@botonic/core'
@@ -15,6 +17,7 @@ import { OutputSchema } from './structured-output'
 
 export interface Context {
   authToken: string
+  sources: string[]
 }
 
 export type RunContext = OpenAIRunContext<Context>
@@ -26,11 +29,6 @@ export interface CustomTool {
   func: (input?: any, runContext?: RunContext) => Promise<any>
 }
 
-export interface GuardrailRule {
-  name: string
-  description: string
-}
-
 export type ContactInfo = Record<string, string>
 
 export type Tool = OpenAITool<Context>
@@ -40,13 +38,12 @@ export interface PluginAiAgentOptions {
   customTools?: CustomTool[]
 }
 
-export interface AiAgentArgs {
-  name: string
-  instructions: string
-  activeTools?: { name: string }[]
-  inputGuardrailRules?: GuardrailRule[]
-}
-
 export type AgenticInputMessage = AgentInputItem
 
-export type { AgenticOutputMessage, InferenceResponse, RunResult }
+export type {
+  AgenticOutputMessage,
+  AiAgentArgs,
+  GuardrailRule,
+  InferenceResponse,
+  RunResult,
+}

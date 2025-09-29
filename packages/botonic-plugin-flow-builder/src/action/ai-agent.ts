@@ -49,6 +49,7 @@ export async function getContentsByAiAgent({
       instructions: aiAgentContent.instructions,
       activeTools: aiAgentContent.activeTools,
       inputGuardrailRules: activeInputGuardrailRules,
+      sourceIds: aiAgentContent.sources?.map(source => source.id),
     }
   )
 

@@ -14,5 +14,6 @@ export interface HtAiAgentNode extends HtBaseNode {
     instructions: string
     active_tools?: { name: string }[]
     input_guardrail_rules?: HtInputGuardrailRule[]
+    sources?: { id: string; name: string }[]
   }
 }

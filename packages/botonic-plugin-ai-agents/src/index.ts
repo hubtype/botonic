@@ -1,4 +1,4 @@
-import { BotContext, Plugin } from '@botonic/core'
+import { AiAgentArgs, BotContext, Plugin } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
@@ -8,7 +8,6 @@ import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
-  AiAgentArgs,
   Context,
   CustomTool,
   InferenceResponse,
@@ -48,7 +47,8 @@ export default class BotonicPluginAiAgents implements Plugin {
         aiAgentArgs.instructions,
         tools,
         request.session.user.contact_info || {},
-        aiAgentArgs.inputGuardrailRules || []
+        aiAgentArgs.inputGuardrailRules || [],
+        aiAgentArgs.sourceIds || []
       ).build()
 
       const messages = await this.getMessages(
@@ -58,6 +58,7 @@ export default class BotonicPluginAiAgents implements Plugin {
       )
       const context: Context = {
         authToken,
+        sources: aiAgentArgs.sourceIds || [],
       }
 
       const runner = new AIAgentRunner(agent)
