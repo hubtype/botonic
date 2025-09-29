@@ -60,3 +60,15 @@ export interface RunResult {
 }
 
 export type InferenceResponse = RunResult
+
+export interface GuardrailRule {
+  name: string
+  description: string
+}
+export interface AiAgentArgs {
+  name: string
+  instructions: string
+  activeTools?: { name: string }[]
+  inputGuardrailRules?: GuardrailRule[]
+  sourceIds?: string[]
+}

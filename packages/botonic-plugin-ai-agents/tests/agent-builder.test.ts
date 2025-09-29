@@ -16,6 +16,10 @@ jest.mock('@openai/agents', () => ({
 
 jest.mock('../src/tools', () => ({
   mandatoryTools: [],
+  retrieveKnowledge: {
+    name: 'retrieve_knowledge',
+    description: 'Consult the knowledge base for information before answering.',
+  },
 }))
 
 describe('AIAgentBuilder', () => {
@@ -42,6 +46,7 @@ describe('AIAgentBuilder', () => {
       description: 'Whether the user input is offensive.',
     },
   ]
+  const sourceIds: string[] = ['123', '456']
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -59,13 +64,14 @@ describe('AIAgentBuilder', () => {
       agentInstructions,
       agentCustomTools,
       contactInfo,
-      inputGuardrailRules
+      inputGuardrailRules,
+      sourceIds
     ).build()
     const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
-    expect(aiAgent.tools).toHaveLength(2)
+    expect(aiAgent.tools).toHaveLength(3) // 2 custom tools + 1 retrieveKnowledge tool
   })
 
   describe('Structured Output Schema Validation', () => {

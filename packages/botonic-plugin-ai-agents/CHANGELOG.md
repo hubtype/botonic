@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.38.x] - 2025-mm-dd
+## [0.40.x] - 2025-mm-dd
 
 ### Added
+
+- [BLT-1741](https://hubtype.atlassian.net/browse/BLT-1741): Add default tool `retrieve_knowledge`.
 
 ### Changed
 

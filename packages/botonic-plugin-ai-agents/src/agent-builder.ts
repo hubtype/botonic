@@ -1,8 +1,8 @@
-import { Agent, InputGuardrail } from '@openai/agents'
+import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
 
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
-import { mandatoryTools } from './tools'
+import { mandatoryTools, retrieveKnowledge } from './tools'
 import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
 
 export class AIAgentBuilder {
@@ -16,11 +16,12 @@ export class AIAgentBuilder {
     instructions: string,
     tools: Tool[],
     contactInfo: ContactInfo,
-    inputGuardrailRules: GuardrailRule[]
+    inputGuardrailRules: GuardrailRule[],
+    sourceIds: string[]
   ) {
     this.name = name
     this.instructions = this.addExtraInstructions(instructions, contactInfo)
-    this.tools = this.addHubtypeTools(tools)
+    this.tools = this.addHubtypeTools(tools, sourceIds)
     this.inputGuardrails = []
     if (inputGuardrailRules.length > 0) {
       const inputGuardrail = createInputGuardrail(inputGuardrailRules)
@@ -29,6 +30,12 @@ export class AIAgentBuilder {
   }
 
   build(): AIAgent {
+    const modelSettings: ModelSettings = {}
+
+    if (this.tools.includes(retrieveKnowledge)) {
+      modelSettings.toolChoice = retrieveKnowledge.name
+    }
+
     return new Agent({
       name: this.name,
       instructions: this.instructions,
@@ -36,6 +43,7 @@ export class AIAgentBuilder {
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
+      modelSettings,
     })
   }
 
@@ -77,8 +85,11 @@ export class AIAgentBuilder {
     return `<output>\n${output}\n</output>`
   }
 
-  private addHubtypeTools(tools: Tool[]): Tool[] {
+  private addHubtypeTools(tools: Tool[], sourceIds: string[]): Tool[] {
     const hubtypeTools: Tool[] = [...mandatoryTools]
+    if (sourceIds.length > 0) {
+      hubtypeTools.push(retrieveKnowledge)
+    }
     return [...hubtypeTools, ...tools]
   }
 }
