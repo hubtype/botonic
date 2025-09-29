@@ -40,7 +40,7 @@ export interface PluginAiAgentOptions {
 
 export type AgenticInputMessage = AgentInputItem
 
-export type {
+export {
   AgenticOutputMessage,
   AiAgentArgs,
   GuardrailRule,
