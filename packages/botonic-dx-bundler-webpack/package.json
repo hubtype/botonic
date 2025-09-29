@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-webpack",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "description": "Build Botonic bots with Webpack",
   "scripts": {
     "build": "echo Skipping build..."
