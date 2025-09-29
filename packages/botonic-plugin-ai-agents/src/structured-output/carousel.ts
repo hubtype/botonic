@@ -14,7 +14,7 @@ export const CarouselSchema = z
           image: z.string(),
           button: z.object({
             text: z.string(),
-            url: z.string(),
+            url: z.string().nullable().optional(),
           }),
         })
       ),

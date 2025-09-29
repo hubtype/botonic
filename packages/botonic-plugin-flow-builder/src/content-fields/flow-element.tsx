@@ -1,5 +1,5 @@
+import { Button } from '@botonic/core'
 import { Element, Pic, Subtitle, Title } from '@botonic/react'
-import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
@@ -36,7 +36,7 @@ export class FlowElement extends ContentFieldsBase {
       title: string
       subtitle: string
       image: string
-      button: { text: string; url: string }
+      button: Button
     }
   ) {
     const newElement = new FlowElement(id)

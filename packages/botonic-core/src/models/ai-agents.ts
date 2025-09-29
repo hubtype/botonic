@@ -2,6 +2,12 @@ export interface BaseMessage {
   type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
 }
 
+export interface Button {
+  text: string
+  payload?: string
+  url?: string
+}
+
 export interface TextMessage extends BaseMessage {
   type: 'text'
   content: {
@@ -13,7 +19,7 @@ export interface TextWithButtonsMessage extends BaseMessage {
   type: 'textWithButtons'
   content: {
     text: string
-    buttons: string[]
+    buttons: Button[]
   }
 }
 
@@ -21,7 +27,7 @@ interface CarouselElement {
   title: string
   subtitle: string
   image: string
-  button: { text: string; url: string }
+  button: Button
 }
 
 export interface CarouselMessage extends BaseMessage {

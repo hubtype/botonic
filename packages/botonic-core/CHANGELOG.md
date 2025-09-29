@@ -24,11 +24,13 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Add AI Agent events types.
+- [PR-3086](https://github.com/hubtype/botonic/pull/3086): Add AI Agent events types.
 
 ### Changed
 
 ### Fixed
+
+- Fix Button model for AI Agents.
 
 ## [0.38.0] - 2025-08-20
 

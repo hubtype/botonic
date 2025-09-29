@@ -8,7 +8,11 @@ export const TextWithButtonsSchema = z
     type: z.enum(['textWithButtons']),
     content: z.object({
       text: z.string(),
-      buttons: z.array(z.string()),
+      buttons: z.array(
+        z.object({
+          text: z.string(),
+        })
+      ),
     }),
   })
   .describe(

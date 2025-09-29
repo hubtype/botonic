@@ -1,4 +1,5 @@
 import { AIAgentBuilder } from '../src/agent-builder'
+import { OutputSchema } from '../src/structured-output'
 import { GuardrailRule, Tool } from '../src/types'
 
 // Mock OpenAI Agent class
@@ -71,5 +72,98 @@ describe('AIAgentBuilder', () => {
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
     expect(aiAgent.tools).toHaveLength(3) // 2 custom tools + 1 retrieveKnowledge tool
+  })
+
+  describe('Structured Output Schema Validation', () => {
+    it('should validate textWithButtons with multiple buttons', () => {
+      const validOutput = {
+        messages: [
+          {
+            type: 'textWithButtons',
+            content: {
+              text: 'Choose an option:',
+              buttons: [
+                { text: 'Option 1' },
+                { text: 'Option 2' },
+                { text: 'Option 3' },
+              ],
+            },
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(validOutput)
+      expect(result.success).toBe(true)
+    })
+
+    it('should validate carousel with multiple elements', () => {
+      const validOutput = {
+        messages: [
+          {
+            type: 'carousel',
+            content: {
+              elements: [
+                {
+                  title: 'Product 1',
+                  subtitle: 'Description 1',
+                  image: 'https://example.com/1.jpg',
+                  button: { text: 'View', url: 'https://example.com/1' },
+                },
+                {
+                  title: 'Product 2',
+                  subtitle: 'Description 2',
+                  image: 'https://example.com/2.jpg',
+                  button: { text: 'Buy', url: 'https://example.com/2' },
+                },
+              ],
+            },
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(validOutput)
+      expect(result.success).toBe(true)
+    })
+
+    it('should reject invalid button structure', () => {
+      const invalidOutput = {
+        messages: [
+          {
+            type: 'textWithButtons',
+            content: {
+              text: 'Choose an option:',
+              buttons: [
+                { text: 'Valid button' },
+                {}, // Invalid empty button
+              ],
+            },
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(invalidOutput)
+      expect(result.success).toBe(false)
+    })
+
+    it('should reject carousel with missing required fields', () => {
+      const invalidOutput = {
+        messages: [
+          {
+            type: 'carousel',
+            content: {
+              elements: [
+                {
+                  title: 'Product 1',
+                  // Missing subtitle, image, button
+                },
+              ],
+            },
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(invalidOutput)
+      expect(result.success).toBe(false)
+    })
   })
 })

@@ -24,11 +24,13 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [BLT-1804](https://github.com/hubtype/botonic/pull/1804): Create and send AI Agent events.
+- [PR-3086](https://github.com/hubtype/botonic/pull/3086): Create and send AI Agent events.
 
 ### Changed
 
 ### Fixed
+
+- Do not execute postbacks on AI Agent generated buttons execution.
 
 ## [0.39.0] - 2025-09-03
 
