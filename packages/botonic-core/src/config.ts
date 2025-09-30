@@ -32,7 +32,11 @@ export function resetHubtypeConfig(): void {
 }
 
 export function getHubtypeApiUrl(): string {
-  return overrides.hubtypeApiUrl ?? readEnvValue('HUBTYPE_API_URL') ?? DEFAULT_CONFIG.hubtypeApiUrl
+  return (
+    overrides.hubtypeApiUrl ??
+    readEnvValue('HUBTYPE_API_URL') ??
+    DEFAULT_CONFIG.hubtypeApiUrl
+  )
 }
 
 export function getWebchatPusherKey(): string {

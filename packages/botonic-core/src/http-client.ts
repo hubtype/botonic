@@ -15,17 +15,17 @@ function sanitizeBaseUrl(baseUrl: string): string {
   return baseUrl.replace(/\/$/, '')
 }
 
-export function buildHubtypeUrl(path: string, baseUrl = getHubtypeApiUrl()): string {
+export function buildHubtypeUrl(
+  path: string,
+  baseUrl = getHubtypeApiUrl()
+): string {
   if (!path) {
     return baseUrl
   }
   return `${sanitizeBaseUrl(baseUrl)}/${sanitizeUrlSegment(path)}/`
 }
 
-function resolveUrl(
-  pathOrUrl: string,
-  hubtypeBaseUrl?: string
-): string {
+function resolveUrl(pathOrUrl: string, hubtypeBaseUrl?: string): string {
   if (/^https?:\/\//.test(pathOrUrl)) {
     return pathOrUrl
   }

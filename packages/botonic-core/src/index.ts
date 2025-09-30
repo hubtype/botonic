@@ -1,5 +1,5 @@
-export * from './constants'
 export * from './config'
+export * from './constants'
 export * from './core-bot'
 export * from './debug'
 export * from './handoff'

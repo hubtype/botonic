@@ -1,5 +1,5 @@
-import { PATH_PAYLOAD_IDENTIFIER } from './constants'
 import { getHubtypeApiUrl } from './config'
+import { PATH_PAYLOAD_IDENTIFIER } from './constants'
 import { hubtypePost, hubtypeRequest } from './http-client'
 import { BotonicAction, BotonicActionType, Session } from './models'
 
