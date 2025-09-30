@@ -11,7 +11,7 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.38.x] - 2025-mm-dd
+## [0.40.x] - 2025-mm-dd
 
 ### Added
 
@@ -20,6 +20,16 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.40.0] - 2025-09-30
+
+### Added
+
+- [PR-3086](https://github.com/hubtype/botonic/pull/3086): Add AI Agent events.
+
+### Changed
+
+### Fixed
 
 ## [0.39.x] - 2025-mm-dd
 
