@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-webpack",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "description": "Build Botonic bots with Webpack",
   "scripts": {
     "build": "echo Skipping build..."
@@ -27,7 +27,7 @@
     "sass": "^1.83.4",
     "stream-browserify": "^3.0.0",
     "style-loader": "^4.0.0",
-    "svgo": "^3.2.2",
+    "svgo": "^3.3.2",
     "terser-webpack-plugin": "^5.3.11",
     "terser": "^5.37.0",
     "webpack-cli": "^5.1.4",

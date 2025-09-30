@@ -14,7 +14,7 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [BLT-1741](https://hubtype.atlassian.net/browse/BLT-1741): Add default tool `retrieve_knowledge`.
+- [PR-3059](https://github.com/hubtype/botonic/pull/3059): Add default tool `retrieve_knowledge`.
 
 ### Changed
 
@@ -22,7 +22,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.40.x] - 2025-mm-dd
+## [0.40.0] - 2025-09-30
 
 ### Added
 
@@ -32,7 +32,7 @@ All notable changes to Botonic will be documented in this file.
 
 - Fix TextWithButtons and Carrousel definitions.
 
-## [0.39.x] - 2025-mm-dd
+## [0.39.0] - 2025-09-03
 
 ### Added
 

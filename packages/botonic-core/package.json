@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.40.0-alpha.0",
+  "version": "0.40.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -34,8 +34,7 @@
     "decode": "^0.3.0",
     "pako": "^2.1.0",
     "process": "^0.11.10",
-    "pusher-js": "^5.1.1",
-    "ulid": "^2.3.0"
+    "pusher-js": "^5.1.1"
   },
   "devDependencies": {
     "@types/minipass": "^3.3.5",
