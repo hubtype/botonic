@@ -1,8 +1,10 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import Pusher, { AuthOptions, Channel } from 'pusher-js'
 import Channels from 'pusher-js/types/src/core/channels/channels'
 
-import { Input, SessionUser } from './models'
+import { getHubtypeApiUrl, getWebchatPusherKey } from './config'
+import { buildHubtypeUrl, hubtypeGet, hubtypePost } from './http-client'
+import { HubtypeEvent, HubtypeEventHandler, Input, SessionUser } from './models'
 import { decompressData } from './pusher-utils'
 
 interface UnsentInput {
@@ -11,11 +13,11 @@ interface UnsentInput {
   unsentInput: Input
 }
 
-interface BotonicHeaders {
+type BotonicHeaders = Partial<{
   'X-BOTONIC-USER-ID': string
   'X-BOTONIC-LAST-MESSAGE-ID': string
   'X-BOTONIC-LAST-MESSAGE-UPDATE-DATE': string
-}
+}>
 
 export interface ServerConfig {
   activityTimeout?: number
@@ -27,15 +29,10 @@ interface HubtypeServiceArgs {
   user: SessionUser
   lastMessageId?: string
   lastMessageUpdateDate?: string
-  onEvent: any
+  onEvent: HubtypeEventHandler
   unsentInputs: () => UnsentInput[]
   server?: ServerConfig
 }
-
-const WEBCHAT_PUSHER_KEY =
-  process.env.WEBCHAT_PUSHER_KEY || '434ca667c8e6cb3f641c' // pragma: allowlist secret
-
-const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 const ACTIVITY_TIMEOUT = 20 * 1000 // https://pusher.com/docs/channels/using_channels/connection#activitytimeout-integer-
 const PONG_TIMEOUT = 5 * 1000 // https://pusher.com/docs/channels/using_channels/connection#pongtimeout-integer-
@@ -48,7 +45,7 @@ export class HubtypeService {
   public user: SessionUser
   public lastMessageId?: string
   public lastMessageUpdateDate?: string
-  public onEvent: (event: any) => void
+  public onEvent: HubtypeEventHandler
   public unsentInputs: () => UnsentInput[]
   public pusher: Pusher | null
   public channel: Channel
@@ -65,7 +62,7 @@ export class HubtypeService {
     server,
   }: HubtypeServiceArgs) {
     this.appId = appId
-    this.user = user || {}
+    this.user = user ?? ({} as SessionUser)
     this.lastMessageId = lastMessageId
     this.lastMessageUpdateDate = lastMessageUpdateDate
     this.onEvent = onEvent
@@ -106,9 +103,14 @@ export class HubtypeService {
       // TODO recover user & appId somehow
       return Promise.reject('No User or appId. Clear cache and reload')
     }
-    this.pusher = new Pusher(WEBCHAT_PUSHER_KEY, {
+    const hubtypeApiUrl = getHubtypeApiUrl()
+    const webchatPusherKey = getWebchatPusherKey()
+    this.pusher = new Pusher(webchatPusherKey, {
       cluster: 'eu',
-      authEndpoint: `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
+      authEndpoint: buildHubtypeUrl(
+        `v1/provider_accounts/webhooks/webchat/${this.appId}/auth/`,
+        hubtypeApiUrl
+      ),
       forceTLS: true,
       auth: {
         headers: this.constructHeaders(),
@@ -133,16 +135,20 @@ export class HubtypeService {
         clearTimeout(connectTimeout)
         resolve()
       })
-      this.channel.bind('botonic_response', data => this.onPusherEvent(data))
+      this.channel.bind('botonic_response', data =>
+        this.onPusherEvent(data as HubtypeEvent)
+      )
       this.channel.bind('botonic_response_compressed', compressedData => {
         try {
           const data = JSON.parse(decompressData(compressedData))
-          this.onPusherEvent(data)
+          this.onPusherEvent(data as HubtypeEvent)
         } catch (e) {
           console.error('Error: Unable to decompress data', e)
         }
       })
-      this.channel.bind('update_message_info', data => this.onPusherEvent(data))
+      this.channel.bind('update_message_info', data =>
+        this.onPusherEvent(data as HubtypeEvent)
+      )
 
       this.pusher &&
         this.pusher.connection.bind('error', event => {
@@ -166,7 +172,7 @@ export class HubtypeService {
   }
 
   constructHeaders(): BotonicHeaders {
-    const headers = {}
+    const headers: BotonicHeaders = {}
     if (this.user && this.user.id) {
       headers['X-BOTONIC-USER-ID'] = this.user.id
     }
@@ -205,7 +211,7 @@ export class HubtypeService {
     this.onPusherEvent({ action: 'connectionChange', online })
   }
 
-  onPusherEvent(event: any): void {
+  onPusherEvent(event: HubtypeEvent): void {
     if (this.onEvent && typeof this.onEvent === 'function') this.onEvent(event)
   }
 
@@ -213,25 +219,32 @@ export class HubtypeService {
     return `private-encrypted-${this.appId}-${this.user.id}`
   }
 
-  handleSentInput(message: any): void {
+  handleSentInput(message: Input): void {
+    const messageId = this.resolveMessageId(message)
     this.onEvent({
       action: 'update_message_info',
-      message: { id: message.id, ack: 1 },
+      message: { id: messageId, ack: 1 },
     })
   }
 
-  handleUnsentInput(message: any): void {
+  handleUnsentInput(message: Input): void {
+    const messageId = this.resolveMessageId(message)
     this.onEvent({
       action: 'update_message_info',
-      message: { id: message.id, ack: 0, unsentInput: message },
+      message: { id: messageId, ack: 0, unsentInput: message },
     })
   }
 
-  async postMessage(user: SessionUser, message: any): Promise<void> {
+  private resolveMessageId(message: Input): string {
+    const candidate = (message as Input & { id?: string }).id
+    return candidate ?? message.message_id
+  }
+
+  async postMessage(user: SessionUser, message: Input): Promise<void> {
     try {
       await this.init(user)
-      await axios.post(
-        `${HUBTYPE_API_URL}/v1/provider_accounts/webhooks/webchat/${this.appId}/`,
+      await hubtypePost(
+        `v1/provider_accounts/webhooks/webchat/${this.appId}/`,
         {
           sender: this.user,
           message: message,
@@ -250,9 +263,7 @@ export class HubtypeService {
   static async getWebchatVisibility(
     appId: string
   ): Promise<AxiosResponse<any>> {
-    return axios.get(
-      `${HUBTYPE_API_URL}/v1/provider_accounts/${appId}/visibility/`
-    )
+    return hubtypeGet(`v1/provider_accounts/${appId}/visibility/`)
   }
 
   destroyPusher(): void {

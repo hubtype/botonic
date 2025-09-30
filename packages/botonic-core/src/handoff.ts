@@ -1,9 +1,7 @@
-import axios from 'axios'
-
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
+import { getHubtypeApiUrl } from './config'
+import { hubtypePost, hubtypeRequest } from './http-client'
 import { BotonicAction, BotonicActionType, Session } from './models'
-
-const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
 export interface HubtypeAgentsInfo {
   attending_count: number
@@ -51,18 +49,19 @@ export async function getOpenQueues(
   context = {}
 ): Promise<{ queues: string[] }> {
   //be aware of https://github.com/axios/axios/issues/1543
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
+  const baseUrl = session._hubtype_api || getHubtypeApiUrl()
   context = contextDefaults(context)
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'post',
-    url: endpointUrl,
-    data: { bot_id: session.bot.id },
-    timeout: (context as BackendContext).timeoutMs,
-  })
+  const resp = await hubtypePost<{ queues: string[] }>(
+    'v1/queues/get_open_queues/',
+    { bot_id: session.bot.id },
+    {
+      headers: {
+        Authorization: `Bearer ${session._access_token}`,
+      },
+      hubtypeBaseUrl: baseUrl,
+      timeout: (context as BackendContext).timeoutMs,
+    }
+  )
   return resp.data
 }
 
@@ -275,17 +274,18 @@ export async function storeCaseRating(
   rating: number,
   context: any = {}
 ): Promise<{ status: string }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
+  const baseUrl = session._hubtype_api || getHubtypeApiUrl()
   const chatId = session.user.id
   context = contextDefaults(context)
-  const resp = await axios({
+  const resp = await hubtypeRequest<{ status: string }>({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
-    url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
+    url: `v1/chats/${chatId}/store_case_rating/`,
     data: { chat_id: chatId, rating },
     timeout: (context as BackendContext).timeoutMs,
+    hubtypeBaseUrl: baseUrl,
   })
   return resp.data
 }
@@ -294,13 +294,14 @@ export async function getAvailableAgentsByQueue(
   session: Session,
   queueId: string
 ): Promise<{ agents: string[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const resp = await axios({
+  const baseUrl = session._hubtype_api || getHubtypeApiUrl()
+  const resp = await hubtypeRequest<{ agents: string[] }>({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
-    url: `${baseUrl}/v1/queues/${queueId}/get_available_agents/`,
+    url: `v1/queues/${queueId}/get_available_agents/`,
+    hubtypeBaseUrl: baseUrl,
   })
   return resp.data
 }
@@ -308,14 +309,15 @@ export async function getAvailableAgentsByQueue(
 export async function getAvailableAgents(
   session: Session
 ): Promise<{ agents: HubtypeAgentsInfo[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
+  const baseUrl = session._hubtype_api || getHubtypeApiUrl()
   const botId = session.bot.id
-  const resp = await axios({
+  const resp = await hubtypeRequest<{ agents: HubtypeAgentsInfo[] }>({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'post',
-    url: `${baseUrl}/v1/bots/${botId}/get_agents/`,
+    url: `v1/bots/${botId}/get_agents/`,
+    hubtypeBaseUrl: baseUrl,
   })
   return resp.data
 }
@@ -324,15 +326,16 @@ export async function getAgentVacationRanges(
   session: Session,
   { agentId, agentEmail }: { agentId?: string; agentEmail?: string }
 ): Promise<{ vacation_ranges: VacationRange[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
+  const baseUrl = session._hubtype_api || getHubtypeApiUrl()
   const botId = session.bot.id
-  const resp = await axios({
+  const resp = await hubtypeRequest<{ vacation_ranges: VacationRange[] }>({
     headers: {
       Authorization: `Bearer ${session._access_token}`,
     },
     method: 'get',
-    url: `${baseUrl}/v1/bots/${botId}/get_agent_vacation_ranges/`,
+    url: `v1/bots/${botId}/get_agent_vacation_ranges/`,
     params: { agent_id: agentId, agent_email: agentEmail },
+    hubtypeBaseUrl: baseUrl,
   })
   return resp.data
 }
