@@ -72,6 +72,7 @@ export class FlowRating extends ContentFieldsBase {
 
       return (
         <CustomRatingMessage
+          alt={this.text}
           payloads={payloads}
           messageText={this.text}
           buttonText={this.sendButtonText}
