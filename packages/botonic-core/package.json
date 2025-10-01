@@ -31,13 +31,11 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.25.9",
     "axios": "^1.10.0",
-    "decode": "^0.3.0",
     "pako": "^2.1.0",
     "process": "^0.11.10",
     "pusher-js": "^5.1.1"
   },
   "devDependencies": {
-    "@types/minipass": "^3.3.5",
     "@types/pako": "^1.0.2",
     "babel-plugin-add-module-exports": "^1.0.2"
   },
