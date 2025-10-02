@@ -2,7 +2,6 @@ import { Command, flags } from '@oclif/command'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
 
-import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 
 export default class Run extends Command {
@@ -20,26 +19,15 @@ export default class Run extends Command {
   static args = []
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
-  private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackLogin()
     await this.logInUser()
   }
 
   askLoginInfo(): Promise<{ email: string; password: string }> {
     return prompt([
-      {
-        type: 'input',
-        name: 'email',
-        message: 'email:',
-      },
-      {
-        type: 'password',
-        name: 'password',
-        mask: '*',
-        message: 'password:',
-      },
+      { type: 'input', name: 'email', message: 'email:' },
+      { type: 'password', name: 'password', mask: '*', message: 'password:' },
     ])
   }
 

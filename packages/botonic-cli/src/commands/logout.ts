@@ -1,7 +1,5 @@
 import { Command, flags } from '@oclif/command'
-import { resolve } from 'path'
 
-import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 
 export default class Run extends Command {
@@ -19,10 +17,8 @@ export default class Run extends Command {
   static args = []
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
-  private telemetry = new Telemetry()
 
   async run(): Promise<void> {
-    this.telemetry.trackLogout()
     this.botonicApiService.logout()
     console.log('You have been log out!')
     return Promise.resolve()

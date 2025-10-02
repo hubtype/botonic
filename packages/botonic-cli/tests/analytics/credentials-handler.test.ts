@@ -35,40 +35,6 @@ describe('TEST: CredentialsHandler', () => {
     const content = credentialsHandler.loadJSON()
     expect(content?.dummy).toEqual('content')
   })
-  it('Generates a random id', () => {
-    const sut = credentialsHandler.generateId()
-    expect(sut).toEqual(expect.any(String))
-  })
-})
-
-describe('TEST: GlobalCredentialsHandler', () => {
-  let globalCredsHandler: GlobalCredentialsHandler
-
-  beforeEach(() => {
-    globalCredsHandler = new GlobalCredentialsHandler()
-  })
-
-  afterEach(() => {})
-
-  it('Initializes correctly', () => {
-    const sut = pathExists(globalCredsHandler.homeDir)
-    expect(sut).toBeTruthy()
-    const hasAnonymousId = globalCredsHandler.hasAnonymousId()
-    expect(hasAnonymousId).toBeTruthy()
-    const credentials = globalCredsHandler.load()
-    expect(credentials).toMatchObject({
-      analytics: { anonymous_id: expect.any(String) },
-    })
-  })
-  it('Handles ids properly', () => {
-    const currentAnonymousId = globalCredsHandler.getAnonymousId()
-    const refreshedAnonymousId = globalCredsHandler.refreshAnonymousId()
-    expect(currentAnonymousId).not.toEqual(refreshedAnonymousId)
-    if (currentAnonymousId)
-      globalCredsHandler.dump({
-        analytics: { anonymous_id: currentAnonymousId },
-      })
-  })
 })
 
 describe('TEST: BotCredentialsHandler', () => {
