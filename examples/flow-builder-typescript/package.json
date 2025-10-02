@@ -20,7 +20,7 @@
     "@botonic/plugin-knowledge-bases": "^0.40.0",
     "@botonic/react": "^0.40.0",
     "@reduxjs/toolkit": "1.9.7",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "dotenv": "^17.2.0",
     "he": "^1.2.0",
     "react": "^18.3.1",
@@ -43,7 +43,7 @@
     "unorm": "^1.6.0"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   }
 }

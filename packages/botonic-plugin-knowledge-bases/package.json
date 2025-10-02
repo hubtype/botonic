@@ -16,13 +16,13 @@
   "dependencies": {
     "@babel/runtime": "^7.26.0",
     "@botonic/core": "^0.40.0",
-    "axios": "^1.10.0"
+    "axios": "^1.12.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.16"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "repository": {

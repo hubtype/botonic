@@ -72,7 +72,7 @@
     "identity-obj-proxy": "^3.0.0"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "keywords": [

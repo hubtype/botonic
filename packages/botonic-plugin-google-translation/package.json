@@ -16,14 +16,14 @@
   "dependencies": {
     "@babel/runtime": "^7.26.0",
     "@botonic/core": "^0.40.0",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "jsrsasign": "^10.9.0"
   },
   "resolutions": {
     "@types/webgl2": "0.0.6"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "keywords": [
