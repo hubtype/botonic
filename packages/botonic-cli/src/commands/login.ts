@@ -1,46 +1,27 @@
-import { Command, flags } from '@oclif/command'
-// eslint-disable-next-line import/named
-import { prompt } from 'inquirer'
+import {Command, Flags} from '@oclif/core'
+import {input, password} from '@inquirer/prompts'
+import {BotonicAPIService} from '../botonic-api-service.js'
 
-import { BotonicAPIService } from '../botonic-api-service'
-
-export default class Run extends Command {
-  static description = 'Log in to Botonic'
-
-  static examples = []
-
-  static flags = {
-    path: flags.string({
+export default class Login extends Command {
+  static override args = {}
+  static override description = 'Log in to Botonic'
+  static override examples = []
+  //TODO: Review path flag, currently not used
+  static override flags = {
+    path: Flags.string({
       char: 'p',
       description: 'Path to botonic project. Defaults to current dir.',
     }),
   }
 
-  static args = []
-
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
-  async run(): Promise<void> {
-    await this.logInUser()
-  }
+  public async run(): Promise<void> {
+    const {flags} = await this.parse(Login)
 
-  askLoginInfo(): Promise<{ email: string; password: string }> {
-    return prompt([
-      { type: 'input', name: 'email', message: 'email:' },
-      { type: 'password', name: 'password', mask: '*', message: 'password:' },
-    ])
-  }
+    const userEmail = await input({required: true, message: 'email:'})
+    const userPassword = await password({mask: true, message: 'password:'})
 
-  async logInUser(): Promise<void> {
-    const userData = await this.askLoginInfo()
-    await this.botonicApiService.login(userData.email, userData.password).then(
-      () => {
-        console.log('Successful log in!'.green)
-        return
-      },
-      err => {
-        console.log('Error: '.red, err.response.data.error_description.red)
-      }
-    )
+    await this.botonicApiService.login(userEmail, userPassword)
   }
 }

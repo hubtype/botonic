@@ -1,19 +1,11 @@
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from 'fs'
-import { copySync } from 'fs-extra'
-import { homedir } from 'os'
-import { basename } from 'path'
+import {existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync} from 'fs'
+import {copySync} from 'fs-extra'
+import {homedir} from 'os'
+import {basename} from 'path'
 
-import { JSONObject } from '../interfaces'
-import { isWindows } from './environment-info'
-import { execCommand } from './system'
+import {JSONObject} from '../interfaces.js'
+import {isWindows} from './environment-info.js'
+import {execCommand} from './system.js'
 
 export function pathExists(path: string): boolean {
   return existsSync(path)
@@ -52,7 +44,7 @@ export function copy(from: string, to: string): void {
 }
 
 export function removeRecursively(path: string): void {
-  rmSync(path, { recursive: true, force: true })
+  rmSync(path, {recursive: true, force: true})
 }
 
 export function getHomeDirectory(): string {

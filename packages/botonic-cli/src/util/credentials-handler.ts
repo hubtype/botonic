@@ -1,24 +1,13 @@
-import { join, resolve } from 'path'
+import {join, resolve} from 'path'
 
 import {
   BOT_CREDENTIALS_FILENAME,
   BOTONIC_HOME_DIRNAME,
   BOTONIC_PROJECT_PATH,
   GLOBAL_CREDENTIALS_FILENAME,
-} from '../constants'
-import {
-  BotCredentials,
-  CredentialsHandlerArgs,
-  GlobalCredentials,
-  JSONObject,
-} from '../interfaces'
-import {
-  createDir,
-  getHomeDirectory,
-  pathExists,
-  readJSON,
-  writeJSON,
-} from '../util/file-system'
+} from '../constants.js'
+import {BotCredentials, CredentialsHandlerArgs, GlobalCredentials, JSONObject} from '../interfaces.js'
+import {createDir, getHomeDirectory, pathExists, readJSON, writeJSON} from '../util/file-system.js'
 
 export class CredentialsHandler {
   homeDir: string
@@ -82,7 +71,7 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
 
 export class BotCredentialsHandler extends CredentialsHandler {
   constructor() {
-    super({ homeDir: BOTONIC_PROJECT_PATH, filename: BOT_CREDENTIALS_FILENAME })
+    super({homeDir: BOTONIC_PROJECT_PATH, filename: BOT_CREDENTIALS_FILENAME})
   }
 
   load(): BotCredentials | undefined {

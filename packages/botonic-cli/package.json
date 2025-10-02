@@ -4,42 +4,43 @@
   "version": "0.40.0",
   "license": "MIT",
   "bin": {
-    "botonic": "./bin/run"
+    "botonic": "./bin/run.js"
   },
   "scripts": {
     "prepublishOnly": "npm i && npm run build",
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json",
-    "build:watch": "rm -rf lib && ../../node_modules/.bin/tsc -w",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "oclif-dev manifest && oclif-dev readme",
-    "version": "oclif-dev readme && git add README.md",
-    "postinstall": "node scripts/postinstall.js",
+    "build": "shx rm -rf lib && tsc -b",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "npm run lint",
+    "prepack": "oclif manifest && oclif readme",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
-    "test": "../../node_modules/.bin/jest --coverage",
-    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit"
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
   },
   "dependencies": {
-    "@oclif/command": "^1.8.36",
-    "@oclif/config": "^1.18.17",
-    "@oclif/plugin-help": "^3.3.1",
+    "@inquirer/prompts": "^7.8.6",
+    "@oclif/core": "^4.5.4",
+    "@oclif/plugin-help": "^6.2.33",
+    "@oclif/plugin-plugins": "^5.4.48",
     "axios": "^1.12.2",
-    "colors": "^1.4.0",
-    "form-data": "^3.0.2",
-    "fs-extra": "^10.1.0",
-    "inquirer": "^7.3.3",
-    "ora": "^5.4.1",
-    "qs": "^6.14.0",
-    "tar": "^6.2.1",
-    "tslib": "^2.8.1",
-    "zip-a-folder": "3.1.8"
+    "fs-extra": "^11.3.2",
+    "ora": "^9.0.0",
+    "picocolors": "^1.1.1",
+    "zip-a-folder": "^3.1.9"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.10",
-    "@types/fs-extra": "^9.0.13",
-    "@types/inquirer": "^7.3.3",
-    "@types/tar": "^6.1.13",
-    "globby": "^11.1.0"
+    "@eslint/compat": "^1.0.0",
+    "@oclif/prettier-config": "^0.2.1",
+    "@oclif/test": "^4.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-oclif": "^6.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "oclif": "^4.22.27",
+    "shx": "^0.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=22.19.0",
@@ -47,19 +48,21 @@
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
   "files": [
-    "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
-    "/scripts"
+    "./bin",
+    "./lib",
+    "./lib",
+    "./oclif.manifest.json"
   ],
   "homepage": "https://github.com/hubtype/botonic",
   "main": "lib/index.js",
+  "type": "module",
   "oclif": {
-    "commands": "./lib/commands",
     "bin": "botonic",
+    "dirname": "botonic",
+    "commands": "./lib/commands",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
     ]
   },
   "repository": "hubtype/botonic",

@@ -1,195 +1,396 @@
-# @botonic/cli
+@botonic/cli
+=================
 
-Build Chatbots Using React
+@botonic/cli is the tool that allows you to create and deploy bots to Hubtype.
+
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/@botonic/cli.svg)](https://npmjs.org/package/@botonic/cli)
 [![Downloads/week](https://img.shields.io/npm/dw/@botonic/cli.svg)](https://npmjs.org/package/@botonic/cli)
-[![License](https://img.shields.io/npm/l/@botonic/cli.svg)](https://github.com/hubtype/botonic/blob/master/package.json)
+
 
 <!-- toc -->
-* [@botonic/cli](#botoniccli)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
-
 # Usage
-
 <!-- usage -->
 ```sh-session
-$ npm install -g @botonic/cli
-$ botonic COMMAND
+$ npm install -g mycli123
+$ mycli123 COMMAND
 running command...
-$ botonic (-v|--version|version)
-@botonic/cli/0.40.0 darwin-arm64 node-v23.4.0
-$ botonic --help [COMMAND]
+$ mycli123 (--version)
+mycli123/0.0.0 darwin-arm64 node-v20.12.2
+$ mycli123 --help [COMMAND]
 USAGE
-  $ botonic COMMAND
+  $ mycli123 COMMAND
 ...
 ```
 <!-- usagestop -->
-
 # Commands
-
 <!-- commands -->
-* [`botonic deploy [PROVIDER]`](#botonic-deploy-provider)
-* [`botonic destroy [PROVIDER]`](#botonic-destroy-provider)
-* [`botonic help [COMMAND]`](#botonic-help-command)
-* [`botonic login`](#botonic-login)
-* [`botonic logout`](#botonic-logout)
-* [`botonic new NAME [PROJECTNAME]`](#botonic-new-name-projectname)
-* [`botonic serve`](#botonic-serve)
-* [`botonic test`](#botonic-test)
+* [`mycli123 hello PERSON`](#mycli123-hello-person)
+* [`mycli123 hello world`](#mycli123-hello-world)
+* [`mycli123 help [COMMAND]`](#mycli123-help-command)
+* [`mycli123 plugins`](#mycli123-plugins)
+* [`mycli123 plugins add PLUGIN`](#mycli123-plugins-add-plugin)
+* [`mycli123 plugins:inspect PLUGIN...`](#mycli123-pluginsinspect-plugin)
+* [`mycli123 plugins install PLUGIN`](#mycli123-plugins-install-plugin)
+* [`mycli123 plugins link PATH`](#mycli123-plugins-link-path)
+* [`mycli123 plugins remove [PLUGIN]`](#mycli123-plugins-remove-plugin)
+* [`mycli123 plugins reset`](#mycli123-plugins-reset)
+* [`mycli123 plugins uninstall [PLUGIN]`](#mycli123-plugins-uninstall-plugin)
+* [`mycli123 plugins unlink [PLUGIN]`](#mycli123-plugins-unlink-plugin)
+* [`mycli123 plugins update`](#mycli123-plugins-update)
 
-## `botonic deploy [PROVIDER]`
+## `mycli123 hello PERSON`
 
-Deploy Botonic project to cloud provider
+Say hello
 
 ```
 USAGE
-  $ botonic deploy [PROVIDER]
+  $ mycli123 hello PERSON -f <value>
 
-OPTIONS
-  -b, --botName=botName    Name of the bot from Hubtype where you want to deploy
-  -c, --command=command    Command to execute from the package "scripts" object
-  -e, --email=email        Email from Hubtype Organization
-  -p, --password=password  Password from Hubtype Organization
+ARGUMENTS
+  PERSON  Person to say hello to
+
+FLAGS
+  -f, --from=<value>  (required) Who is saying hello
+
+DESCRIPTION
+  Say hello
 
 EXAMPLES
-  $ botonic deploy
-  Building...
-  Creating bundle...
-  Uploading...
-  🚀 Bot deployed!
-
-  $ botonic deploy aws
-  Deploying to AWS...
+  $ mycli123 hello friend --from oclif
+  hello friend from oclif! (./src/commands/hello/index.ts)
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/deploy.js)_
+_See code: [src/commands/hello/index.ts](https://github.com/mdonnalley/mycli123/blob/v0.0.0/src/commands/hello/index.ts)_
 
-## `botonic destroy [PROVIDER]`
+## `mycli123 hello world`
 
-Destroy Botonic project from cloud provider
+Say hello world
 
 ```
 USAGE
-  $ botonic destroy [PROVIDER]
+  $ mycli123 hello world
 
-EXAMPLE
-  $ botonic destroy aws
-  Destroying AWS stack...
+DESCRIPTION
+  Say hello world
+
+EXAMPLES
+  $ mycli123 hello world
+  hello world! (./src/commands/hello/world.ts)
 ```
 
-_See code: [lib/commands/destroy.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/destroy.js)_
+_See code: [src/commands/hello/world.ts](https://github.com/mdonnalley/mycli123/blob/v0.0.0/src/commands/hello/world.ts)_
 
-## `botonic help [COMMAND]`
+## `mycli123 help [COMMAND]`
 
-display help for botonic
+Display help for mycli123.
 
 ```
 USAGE
-  $ botonic help [COMMAND]
+  $ mycli123 help [COMMAND...] [-n]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  COMMAND...  Command to show help for.
 
-OPTIONS
-  --all  see all commands in CLI
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for mycli123.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.21/src/commands/help.ts)_
 
-## `botonic login`
+## `mycli123 plugins`
 
-Log in to Botonic
-
-```
-USAGE
-  $ botonic login
-
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
-```
-
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/login.js)_
-
-## `botonic logout`
-
-Log out of Botonic
+List installed plugins.
 
 ```
 USAGE
-  $ botonic logout
+  $ mycli123 plugins [--json] [--core]
 
-OPTIONS
-  -p, --path=path  Path to botonic project. Defaults to current dir.
+FLAGS
+  --core  Show core plugins.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  List installed plugins.
+
+EXAMPLES
+  $ mycli123 plugins
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/logout.js)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/index.ts)_
 
-## `botonic new NAME [PROJECTNAME]`
+## `mycli123 plugins add PLUGIN`
 
-Create a new Botonic project
+Installs a plugin into mycli123.
 
 ```
 USAGE
-  $ botonic new NAME [PROJECTNAME]
+  $ mycli123 plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
-  NAME         name of the bot folder
-  PROJECTNAME  OPTIONAL name of the bot project
+  PLUGIN...  Plugin to install.
 
-EXAMPLE
-  $ botonic new test_bot
-  Creating...
-  ✨ test_bot was successfully created!
+FLAGS
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
+  -h, --help     Show CLI help.
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Installs a plugin into mycli123.
+
+  Uses bundled npm executable to install plugins into /Users/mdonnalley/.local/share/mycli123
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  Use the MYCLI123_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the MYCLI123_NPM_REGISTRY environment variable to set the npm registry.
+
+ALIASES
+  $ mycli123 plugins add
+
+EXAMPLES
+  Install a plugin from npm registry.
+
+    $ mycli123 plugins add myplugin
+
+  Install a plugin from a github url.
+
+    $ mycli123 plugins add https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ mycli123 plugins add someuser/someplugin
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/new.js)_
+## `mycli123 plugins:inspect PLUGIN...`
 
-## `botonic serve`
-
-Serve your bot in your localhost
+Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ botonic serve
+  $ mycli123 plugins inspect PLUGIN...
 
-OPTIONS
-  -p, --preview  Run preview Botonic 1.0 serve.
+ARGUMENTS
+  PLUGIN...  [default: .] Plugin to inspect.
 
-EXAMPLE
-  $ botonic serve
-  > Project is running at http://localhost:8080/
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Displays installation properties of a plugin.
+
+EXAMPLES
+  $ mycli123 plugins inspect myplugin
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/serve.js)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/inspect.ts)_
 
-## `botonic test`
+## `mycli123 plugins install PLUGIN`
 
-Test your Botonic components
+Installs a plugin into mycli123.
 
 ```
 USAGE
-  $ botonic test
+  $ mycli123 plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
 
-EXAMPLE
-  PASS  tests/app.test.js
-    ✓ TEST: hi.js (10ms)
-    ✓ TEST: pizza.js (1ms)
-    ✓ TEST: sausage.js (1ms)
-    ✓ TEST: bacon.js
-    ✓ TEST: pasta.js (1ms)
-    ✓ TEST: cheese.js (1ms)
-    ✓ TEST: tomato.js
+ARGUMENTS
+  PLUGIN...  Plugin to install.
 
-  Test Suites: 1 passed, 1 total
-  Tests:       7 passed, 7 total
-  Snapshots:   0 total
-  Time:        1.223s
-  Ran all test suites.
+FLAGS
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
+  -h, --help     Show CLI help.
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Installs a plugin into mycli123.
+
+  Uses bundled npm executable to install plugins into /Users/mdonnalley/.local/share/mycli123
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  Use the MYCLI123_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the MYCLI123_NPM_REGISTRY environment variable to set the npm registry.
+
+ALIASES
+  $ mycli123 plugins add
+
+EXAMPLES
+  Install a plugin from npm registry.
+
+    $ mycli123 plugins install myplugin
+
+  Install a plugin from a github url.
+
+    $ mycli123 plugins install https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ mycli123 plugins install someuser/someplugin
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/test.js)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/install.ts)_
+
+## `mycli123 plugins link PATH`
+
+Links a plugin into the CLI for development.
+
+```
+USAGE
+  $ mycli123 plugins link PATH [-h] [--install] [-v]
+
+ARGUMENTS
+  PATH  [default: .] path to plugin
+
+FLAGS
+  -h, --help          Show CLI help.
+  -v, --verbose
+      --[no-]install  Install dependencies after linking the plugin.
+
+DESCRIPTION
+  Links a plugin into the CLI for development.
+  Installation of a linked plugin will override a user-installed or core plugin.
+
+  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
+  command will override the user-installed or core plugin implementation. This is useful for development work.
+
+
+EXAMPLES
+  $ mycli123 plugins link myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/link.ts)_
+
+## `mycli123 plugins remove [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ mycli123 plugins remove [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ mycli123 plugins unlink
+  $ mycli123 plugins remove
+
+EXAMPLES
+  $ mycli123 plugins remove myplugin
+```
+
+## `mycli123 plugins reset`
+
+Remove all user-installed and linked plugins.
+
+```
+USAGE
+  $ mycli123 plugins reset [--hard] [--reinstall]
+
+FLAGS
+  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
+  --reinstall  Reinstall all plugins after uninstalling.
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/reset.ts)_
+
+## `mycli123 plugins uninstall [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ mycli123 plugins uninstall [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ mycli123 plugins unlink
+  $ mycli123 plugins remove
+
+EXAMPLES
+  $ mycli123 plugins uninstall myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/uninstall.ts)_
+
+## `mycli123 plugins unlink [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ mycli123 plugins unlink [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ mycli123 plugins unlink
+  $ mycli123 plugins remove
+
+EXAMPLES
+  $ mycli123 plugins unlink myplugin
+```
+
+## `mycli123 plugins update`
+
+Update installed plugins.
+
+```
+USAGE
+  $ mycli123 plugins update [-h] [-v]
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Update installed plugins.
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.16/src/commands/plugins/update.ts)_
 <!-- commandsstop -->

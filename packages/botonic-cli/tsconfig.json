@@ -1,11 +1,18 @@
 {
-  "extends": "../../tsconfig.cjs.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./lib",
-    "noImplicitReturns": true,
-    "useUnknownInCatchVariables": false
+    "declaration": true,
+    "module": "NodeNext",
+    "outDir": "lib",
+    "rootDir": "src",
+    "strict": false,
+    "target": "es2022",
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true
   },
-  "include": [".*.js", "*.js", "**/*.ts", "**/*.tsx"],
-  "exclude": ["templates", "tests", "lib"]
+  "include": ["./src/**/*", "./src/types/**/*"],
+  "exclude": ["templates", "dist", "lib"],
+  "ts-node": {
+    "esm": true
+  }
 }
