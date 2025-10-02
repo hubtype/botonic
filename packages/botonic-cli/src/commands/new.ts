@@ -1,7 +1,6 @@
 import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
 import { bold, red } from 'colors'
-// import fetchRepoDir from 'fetch-repo-dir'
 import { moveSync } from 'fs-extra'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
