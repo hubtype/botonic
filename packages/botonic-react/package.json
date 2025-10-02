@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@botonic/core": "^0.40.0",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
     "markdown-it": "^12.3.2",
@@ -57,7 +57,7 @@
     "typescript": "5.0.4"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "sideEffects": [

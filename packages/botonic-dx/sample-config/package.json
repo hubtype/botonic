@@ -3,18 +3,15 @@
     "##########  BUILD": "",
     "build": "tsc",
     "build-ci": "tsc -b tsconfig.tests.json",
-
     "##########  LINT": "",
     "lint": "npm run lint-core -- --fix && npm run prettier",
     "lint-ci": "npm run lint-core -- -c .eslintrc-ci.js && npm run prettier",
     "lint-core": "eslint_d --cache --quiet '{src,tests}/**/*.[t]{s,sx}'",
     "prettier": "prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
-
     "########## DEBUG": "",
     "test": "jest",
     "test-ci": "jest --coverage",
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
-
     "########## PUBLISH": "",
     "prepublishOnly": "npm run build && npm run lint-ci && npm test",
     "preversion": "npm run lint-ci",
@@ -23,10 +20,10 @@
     "postversion": "git push && git push --tags"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
-  "########## files": [
+  "##########  files": [
     "bin/**",
     "doc/**",
     "lib/**",

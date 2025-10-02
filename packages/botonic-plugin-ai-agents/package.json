@@ -15,7 +15,7 @@
   "dependencies": {
     "@botonic/core": "^0.40.0",
     "@openai/agents": "^0.0.10",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "openai": "^5.8.3",
     "uuid": "^10.0.0",
     "zod": "3.25.67"
@@ -29,7 +29,7 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "repository": {

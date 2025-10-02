@@ -25,7 +25,7 @@
     "@oclif/config": "^1.18.17",
     "@oclif/plugin-help": "^3.3.1",
     "analytics-node": "^3.5.0",
-    "axios": "^1.10.0",
+    "axios": "^1.12.2",
     "colors": "^1.4.0",
     "concurrently": "^6.5.1",
     "fetch-repo-dir": "^1.0.6",
@@ -54,7 +54,7 @@
     "globby": "^11.1.0"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": ">=22.19.0",
     "npm": ">=10.0.0"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",
