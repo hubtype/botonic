@@ -110,7 +110,7 @@ repos:
     hooks:
       - id: detect-secrets
         args:
-          ['--baseline', '.secrets.baseline', '--exclude-files ', .*/tests/.*']
+          ['--baseline', '.secrets.baseline', '--exclude-files', '.*/tests/.*']
         exclude: package.lock.json
         name: Detect secrets
         description: Detects high entropy strings that are likely to be passwords.
