@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import axios, {AxiosHeaders, AxiosInstance, AxiosPromise, AxiosResponse} from 'axios'
 import childProcess from 'child_process'
-import colors from 'colors'
+import pc from 'picocolors'
 import FormData from 'form-data'
 import {createReadStream, unlinkSync} from 'fs'
 import ora from 'ora'
@@ -34,7 +34,7 @@ export class BotonicAPIService {
   oauth?: OAuth
   me?: Me
   bot: BotDetail | null = null
-  headers: AxiosHeaders = new AxiosHeaders()
+  headers = new AxiosHeaders()
   apiClient: AxiosInstance
 
   constructor() {
@@ -127,7 +127,7 @@ export class BotonicAPIService {
       await exec(`npm run ${npmCommand}`)
     } catch (error: any) {
       spinner.fail()
-      console.log(`${String(error.stdout)}` + colors.red(`\n\nBuild error:\n${String(error)}`))
+      console.log(`${String(error.stdout)}` + pc.red(`\n\nBuild error:\n${String(error)}`))
       return false
     }
     spinner.succeed()

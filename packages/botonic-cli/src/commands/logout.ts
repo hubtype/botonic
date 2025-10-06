@@ -6,6 +6,8 @@ export default class Logout extends Command {
   static override args = {}
   static override description = 'Log out of Botonic'
   static override examples = []
+
+  //TODO: Review path flag, currently not used
   static override flags = {
     path: Flags.string({
       char: 'p',
