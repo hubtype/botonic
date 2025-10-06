@@ -13,8 +13,8 @@
     "posttest": "npm run lint",
     "prepack": "oclif manifest && oclif readme",
     "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'",
-    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "lint_core": "../../node_modules/.bin/eslint --quiet",
+    "test": "../../node_modules/.bin/jest --coverage",
     "version": "oclif readme && git add README.md"
   },
   "dependencies": {
