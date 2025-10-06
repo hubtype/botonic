@@ -1,5 +1,6 @@
-import {Command, Flags} from '@oclif/core'
 import {input, password} from '@inquirer/prompts'
+import {Command, Flags} from '@oclif/core'
+
 import {BotonicAPIService} from '../botonic-api-service.js'
 
 export default class Login extends Command {

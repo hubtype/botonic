@@ -1,18 +1,18 @@
-import {Args, Command} from '@oclif/core'
 import {select} from '@inquirer/prompts'
+import {Args, Command} from '@oclif/core'
 import {exec as childProcessExec} from 'child_process'
 import {moveSync} from 'fs-extra'
 import ora from 'ora'
 import {platform} from 'os'
-import {promisify} from 'util'
 import path from 'path'
 import pc from 'picocolors'
+import {promisify} from 'util'
 
 import {BotonicAPIService} from '../botonic-api-service.js'
 import {EXAMPLES} from '../botonic-examples.js'
 import {BotonicProject} from '../interfaces.js'
-import {pathExists, removeRecursively} from '../util/file-system.js'
 import {downloadSelectedProject, editPackageJsonName, extractTarGz, renameFolder} from '../util/download-gzip.js'
+import {pathExists, removeRecursively} from '../util/file-system.js'
 
 const exec = promisify(childProcessExec)
 export default class New extends Command {

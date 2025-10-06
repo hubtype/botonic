@@ -8,9 +8,9 @@ import ora from 'ora'
 import {stringify} from 'qs'
 import * as util from 'util'
 
-import {BotCredentialsHandler, GlobalCredentialsHandler} from './util/credentials-handler.js'
 import {BotDetail, BotListItem, Me, OAuth, PaginatedResponse} from './interfaces.js'
 import {BotConfigJSON} from './util/bot-config.js'
+import {BotCredentialsHandler, GlobalCredentialsHandler} from './util/credentials-handler.js'
 import {pathExists} from './util/file-system.js'
 
 const exec = util.promisify(childProcess.exec)

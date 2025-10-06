@@ -1,5 +1,5 @@
 import childProcess from 'child_process'
-import { promises as fs } from 'fs'
+import {promises as fs} from 'fs'
 import ora from 'ora'
 import path from 'path'
 import * as util from 'util'
@@ -19,7 +19,7 @@ interface BuildInfo {
   botonic_cli_version: string
 }
 
-type BotonicDependencies = Record<string, { version: string }>
+type BotonicDependencies = Record<string, {version: string}>
 
 interface ToolConfigJSON {
   name: string
@@ -45,12 +45,9 @@ export class BotConfig {
     }).start()
     const packages = await this.getBotonicDependencies(appDirectory)
     const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
-      ['node -v', 'npm -v', 'botonic -v'].map(command =>
-        this.getOutputByCommand(command)
-      )
+      ['node -v', 'npm -v', 'botonic -v'].map((command) => this.getOutputByCommand(command)),
     )
-    const botonicCliVersion =
-      botonicCli.match(botonicCliVersionRegex)?.[1] || ''
+    const botonicCliVersion = botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
     const configLoaded = await this.loadBotConfig(appDirectory)
 
@@ -86,7 +83,7 @@ export class BotConfig {
       console.warn(
         `Error loading dist/bot-config.js. This file is not required but is used to share config with flow builder frontend.
         To create this file update your build process to include the bot-config.js file in dest folder. 
-        You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
+        You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`,
       )
       return {
         tools: [],
@@ -96,32 +93,28 @@ export class BotConfig {
     }
   }
 
-  private static async getBotonicDependencies(
-    appDirectory: string
-  ): Promise<BotonicDependencies> {
+  private static async getBotonicDependencies(appDirectory: string): Promise<BotonicDependencies> {
     const packages = {}
     try {
       const packageJsonPath = path.join(appDirectory, 'package.json')
       const data = await fs.readFile(packageJsonPath, 'utf8')
       const packageJson = JSON.parse(data)
 
-      const botonicDependencies = Object.keys(packageJson.dependencies).filter(
-        dependency => dependency.startsWith(BOTONIC_PREFIX_PACKAGE)
+      const botonicDependencies = Object.keys(packageJson.dependencies).filter((dependency) =>
+        dependency.startsWith(BOTONIC_PREFIX_PACKAGE),
       )
       if (!botonicDependencies.includes(BOTONIC_CORE_PACKAGE)) {
         botonicDependencies.push(BOTONIC_CORE_PACKAGE)
       }
 
       await Promise.all(
-        botonicDependencies.map(botonicDependency => {
+        botonicDependencies.map((botonicDependency) => {
           return this.setDependenciesVersion(
             botonicDependency,
             packages,
-            botonicDependency === BOTONIC_CORE_PACKAGE
-              ? NPM_DEPTH_1
-              : NPM_DEPTH_0
+            botonicDependency === BOTONIC_CORE_PACKAGE ? NPM_DEPTH_1 : NPM_DEPTH_0,
           )
-        })
+        }),
       )
     } catch (err: any) {
       console.error(`Error getting botonic dependencies: ${err.message}`)
@@ -132,15 +125,13 @@ export class BotConfig {
   private static async setDependenciesVersion(
     dependency: string,
     packages: Record<string, any>,
-    depth: number = NPM_DEPTH_0
+    depth: number = NPM_DEPTH_0,
   ): Promise<BotonicDependencies> {
     try {
-      const output = await this.getOutputByCommand(
-        `npm ls ${dependency} --depth=${depth}`
-      )
+      const output = await this.getOutputByCommand(`npm ls ${dependency} --depth=${depth}`)
       const match = output.match(versionRegex)
       const installedVersion = match ? match[1] : ''
-      packages[dependency] = { version: installedVersion }
+      packages[dependency] = {version: installedVersion}
     } catch (error: any) {
       console.error('Error setting dependencies version:', error)
     }
@@ -149,7 +140,7 @@ export class BotConfig {
 
   private static async getOutputByCommand(command: string): Promise<string> {
     const exec = util.promisify(childProcess.exec)
-    const { stdout } = await exec(command)
+    const {stdout} = await exec(command)
     return stdout.trim()
   }
 }

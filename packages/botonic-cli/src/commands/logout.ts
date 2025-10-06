@@ -1,4 +1,5 @@
 import {Command, Flags} from '@oclif/core'
+
 import {BotonicAPIService} from '../botonic-api-service.js'
 
 export default class Logout extends Command {
