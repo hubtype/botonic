@@ -47,10 +47,9 @@ export default class New extends Command {
       const userProjectDirName = args.name
       const selectedProjectName = args.projectName
 
-      console.log({ userProjectDirName, selectedProjectName })
       const selectedProject =
         await this.resolveSelectedProject(selectedProjectName)
-      console.log({ selectedProject })
+
       if (!selectedProject) {
         console.log(
           pc.red(
