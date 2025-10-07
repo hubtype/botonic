@@ -4,14 +4,15 @@
     "declaration": true,
     "module": "NodeNext",
     "outDir": "lib",
-    "rootDir": "src",
+    "rootDir": ".",
     "strict": false,
     "target": "es2022",
     "moduleResolution": "NodeNext",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedModules": true
   },
-  "include": ["./src/**/*", "./src/types/**/*"],
-  "exclude": ["templates", "dist", "lib"],
+  "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
+  "exclude": ["templates", "dist", "lib", "tests"],
   "ts-node": {
     "esm": true
   }

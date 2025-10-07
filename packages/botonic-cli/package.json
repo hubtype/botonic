@@ -14,7 +14,7 @@
     "prepack": "oclif manifest && oclif readme",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint --quiet",
-    "test": "../../node_modules/.bin/jest --coverage",
+    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
     "version": "oclif readme && git add README.md"
   },
   "dependencies": {
@@ -26,12 +26,15 @@
     "fs-extra": "^11.3.2",
     "ora": "^9.0.0",
     "picocolors": "^1.1.1",
+    "tslib": "^2.8.1",
     "zip-a-folder": "^3.1.9"
   },
   "devDependencies": {
     "@eslint/compat": "^1.0.0",
     "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4.0.0",
+    "@oclif/test": "^4.1.14",
+    "@swc/jest": "^0.2.39",
+    "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.0.0",
     "eslint": "^9.0.0",
@@ -39,6 +42,7 @@
     "eslint-config-prettier": "^10.1.8",
     "oclif": "^4.22.27",
     "shx": "^0.3.3",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
@@ -54,19 +58,19 @@
     "./oclif.manifest.json"
   ],
   "homepage": "https://github.com/hubtype/botonic",
-  "main": "lib/index.js",
+  "main": "lib/src/index.js",
   "type": "module",
   "oclif": {
     "bin": "botonic",
     "dirname": "botonic",
-    "commands": "./lib/commands",
+    "commands": "./lib/src/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
     ]
   },
   "repository": "hubtype/botonic",
-  "types": "lib/index.d.ts",
+  "types": "lib/src/index.d.ts",
   "keywords": [
     "bot-framework",
     "chatbot",
