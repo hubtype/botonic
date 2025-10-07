@@ -1,7 +1,7 @@
 import {select} from '@inquirer/prompts'
-import {Args, Command} from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 import {exec as childProcessExec} from 'child_process'
-import {moveSync} from 'fs-extra'
+import fsExtra from 'fs-extra'
 import ora from 'ora'
 import {platform} from 'os'
 import path from 'path'
@@ -27,6 +27,43 @@ export default class New extends Command {
   private examples = EXAMPLES
 
   private botonicApiService = new BotonicAPIService()
+
+  public async run(): Promise<void> {
+    try {
+      const {args} = await this.parse(New)
+      const userProjectDirName = args.name
+      const selectedProjectName = args.projectName
+
+      console.log({userProjectDirName, selectedProjectName})
+      const selectedProject = await this.resolveSelectedProject(selectedProjectName)
+      console.log({selectedProject})
+      if (!selectedProject) {
+        console.log(
+          pc.red(
+            `Example ${String(selectedProjectName)} does not exist, please choose one of the following:\n` +
+              `${this.examples.map((p) => p.name).join(', ')}`,
+          ),
+        )
+        return
+      }
+      await this.downloadSelectedProjectIntoPath(selectedProject, userProjectDirName)
+      process.chdir(userProjectDirName)
+      const devPlatform = platform()
+      if (devPlatform === 'win32') {
+        await this.installDependencies()
+      } else {
+        // TODO: review this when node-sass is needed again
+        // Solve issue with node-sass and higher versions of Node.
+        // Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439)
+        await this.installDependencies('CXXFLAGS="--std=c++14" npm install')
+      }
+      this.botonicApiService.beforeExit()
+      fsExtra.moveSync(path.join('..', '.botonic.json'), path.join(process.cwd(), '.botonic.json'))
+      console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
+    } catch (e) {
+      throw new Error(`botonic new error: ${String(e)}`)
+    }
+  }
 
   async resolveSelectedProject(projectName: string | undefined): Promise<BotonicProject | undefined> {
     if (!projectName) {
@@ -97,40 +134,5 @@ export default class New extends Command {
     const deployCmd = `${pc.bold('botonic deploy')} (publish your bot to the world!)`
     feedback += deployCmd
     return feedback
-  }
-
-  public async run(): Promise<void> {
-    try {
-      const {args} = await this.parse(New)
-      const userProjectDirName = args.name
-      const selectedProjectName = args.projectName
-
-      const selectedProject = await this.resolveSelectedProject(selectedProjectName)
-      if (!selectedProject) {
-        console.log(
-          pc.red(
-            `Example ${String(selectedProjectName)} does not exist, please choose one of the following:\n` +
-              `${this.examples.map((p) => p.name).join(', ')}`,
-          ),
-        )
-        return
-      }
-      await this.downloadSelectedProjectIntoPath(selectedProject, userProjectDirName)
-      process.chdir(userProjectDirName)
-      const devPlatform = platform()
-      if (devPlatform === 'win32') {
-        await this.installDependencies()
-      } else {
-        // TODO: review this when node-sass is nedded again
-        // Solve issue with node-sass and higher versions of Node.
-        // Ref: https://github.com/nodejs/node/issues/38367#issuecomment-1025343439)
-        await this.installDependencies('CXXFLAGS="--std=c++14" npm install')
-      }
-      this.botonicApiService.beforeExit()
-      moveSync(path.join('..', '.botonic.json'), path.join(process.cwd(), '.botonic.json'))
-      console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
-    } catch (e) {
-      throw new Error(`botonic new error: ${String(e)}`)
-    }
   }
 }
