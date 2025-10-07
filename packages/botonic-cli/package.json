@@ -15,6 +15,7 @@
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint --quiet",
     "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
+    "test_ci": "../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "version": "oclif readme && git add README.md"
   },
   "dependencies": {
