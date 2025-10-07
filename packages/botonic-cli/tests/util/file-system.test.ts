@@ -1,5 +1,5 @@
-import {readFileSync, writeFileSync} from 'fs'
-import {join} from 'path'
+import { readFileSync, writeFileSync } from 'fs'
+import { join } from 'path'
 
 import {
   createDir,
@@ -11,10 +11,10 @@ import {
   removeRecursively,
   writeJSON,
 } from '../../src/util/file-system.js'
-import {execCommandSafe} from '../../src/util/system.js'
+import { execCommandSafe } from '../../src/util/system.js'
 
 const createFile = (path: string, content: string) => {
-  writeFileSync(path, content, {encoding: 'utf-8'})
+  writeFileSync(path, content, { encoding: 'utf-8' })
 }
 
 describe('TEST: File System utilities', () => {
@@ -85,7 +85,7 @@ describe('TEST: File System utilities', () => {
     const writtenContent = String(readFileSync(path))
     expect(writtenContent).toEqual('{"dummy":"content"}')
     const readContent = readJSON(path)
-    expect(readContent).toEqual({dummy: 'content'})
+    expect(readContent).toEqual({ dummy: 'content' })
     execCommandSafe(`touch ${tempDir}/another.json`)
     const noContent = readJSON(join(tempDir, 'another.json'))
     expect(noContent).toBeUndefined()

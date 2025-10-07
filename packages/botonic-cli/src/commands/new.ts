@@ -1,27 +1,40 @@
-import {select} from '@inquirer/prompts'
-import {Args, Command, Flags} from '@oclif/core'
-import {exec as childProcessExec} from 'child_process'
+import { select } from '@inquirer/prompts'
+import { Args, Command, Flags } from '@oclif/core'
+import { exec as childProcessExec } from 'child_process'
 import fsExtra from 'fs-extra'
 import ora from 'ora'
-import {platform} from 'os'
+import { platform } from 'os'
 import path from 'path'
 import pc from 'picocolors'
-import {promisify} from 'util'
+import { promisify } from 'util'
 
-import {BotonicAPIService} from '../botonic-api-service.js'
-import {EXAMPLES} from '../botonic-examples.js'
-import {BotonicProject} from '../interfaces.js'
-import {downloadSelectedProject, editPackageJsonName, extractTarGz, renameFolder} from '../util/download-gzip.js'
-import {pathExists, removeRecursively} from '../util/file-system.js'
+import { BotonicAPIService } from '../botonic-api-service.js'
+import { EXAMPLES } from '../botonic-examples.js'
+import { BotonicProject } from '../interfaces.js'
+import {
+  downloadSelectedProject,
+  editPackageJsonName,
+  extractTarGz,
+  renameFolder,
+} from '../util/download-gzip.js'
+import { pathExists, removeRecursively } from '../util/file-system.js'
 
 const exec = promisify(childProcessExec)
 export default class New extends Command {
   static override args = {
-    name: Args.string({description: 'name of the bot folder', required: true}),
-    projectName: Args.string({description: 'OPTIONAL name of the bot project', required: false}),
+    name: Args.string({
+      description: 'name of the bot folder',
+      required: true,
+    }),
+    projectName: Args.string({
+      description: 'OPTIONAL name of the bot project',
+      required: false,
+    }),
   }
   static override description = 'Create a new Botonic project'
-  static override examples = ['$ botonic new test_bot\nCreating...\n✨ test_bot was successfully created!']
+  static override examples = [
+    '$ botonic new test_bot\nCreating...\n✨ test_bot was successfully created!',
+  ]
   static override flags = {}
 
   private examples = EXAMPLES
@@ -30,23 +43,27 @@ export default class New extends Command {
 
   public async run(): Promise<void> {
     try {
-      const {args} = await this.parse(New)
+      const { args } = await this.parse(New)
       const userProjectDirName = args.name
       const selectedProjectName = args.projectName
 
-      console.log({userProjectDirName, selectedProjectName})
-      const selectedProject = await this.resolveSelectedProject(selectedProjectName)
-      console.log({selectedProject})
+      console.log({ userProjectDirName, selectedProjectName })
+      const selectedProject =
+        await this.resolveSelectedProject(selectedProjectName)
+      console.log({ selectedProject })
       if (!selectedProject) {
         console.log(
           pc.red(
             `Example ${String(selectedProjectName)} does not exist, please choose one of the following:\n` +
-              `${this.examples.map((p) => p.name).join(', ')}`,
-          ),
+              `${this.examples.map(p => p.name).join(', ')}`
+          )
         )
         return
       }
-      await this.downloadSelectedProjectIntoPath(selectedProject, userProjectDirName)
+      await this.downloadSelectedProjectIntoPath(
+        selectedProject,
+        userProjectDirName
+      )
       process.chdir(userProjectDirName)
       const devPlatform = platform()
       if (devPlatform === 'win32') {
@@ -58,25 +75,33 @@ export default class New extends Command {
         await this.installDependencies('CXXFLAGS="--std=c++14" npm install')
       }
       this.botonicApiService.beforeExit()
-      fsExtra.moveSync(path.join('..', '.botonic.json'), path.join(process.cwd(), '.botonic.json'))
+      fsExtra.moveSync(
+        path.join('..', '.botonic.json'),
+        path.join(process.cwd(), '.botonic.json')
+      )
       console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
     } catch (e) {
       throw new Error(`botonic new error: ${String(e)}`)
     }
   }
 
-  async resolveSelectedProject(projectName: string | undefined): Promise<BotonicProject | undefined> {
+  async resolveSelectedProject(
+    projectName: string | undefined
+  ): Promise<BotonicProject | undefined> {
     if (!projectName) {
       const botDescription = await select({
         message: 'Select a bot example',
-        choices: this.examples.map((p) => p.description),
+        choices: this.examples.map(p => p.description),
       })
-      return this.examples.find((p) => p.description === botDescription)
+      return this.examples.find(p => p.description === botDescription)
     }
-    return this.examples.find((p) => p.name === projectName)
+    return this.examples.find(p => p.name === projectName)
   }
 
-  async downloadSelectedProjectIntoPath(selectedProject: BotonicProject, userProjectDirName: string): Promise<void> {
+  async downloadSelectedProjectIntoPath(
+    selectedProject: BotonicProject,
+    userProjectDirName: string
+  ): Promise<void> {
     if (pathExists(userProjectDirName)) removeRecursively(userProjectDirName)
     const spinnerDownload = ora({
       text: 'Downloading files...',

@@ -1,1 +1,10 @@
-"@oclif/prettier-config"
+{
+    "extends": "@oclif/prettier-config",
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
+}

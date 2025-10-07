@@ -1,7 +1,7 @@
-import {execSync, spawn} from 'child_process'
+import { execSync, spawn } from 'child_process'
 
 export async function sleep(ms: number): Promise<number> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export function execCommand(command: string): string {
@@ -16,15 +16,19 @@ export function execCommandSafe(command: string): string {
   }
 }
 
-export function spawnProcess(command: string, args: string[], onClose?: () => string): void {
-  const childProcess = spawn(command, args, {shell: true}) // https://nodejs.org/api/child_process.html#child_process_spawning_bat_and_cmd_files_on_windows
-  childProcess.stdout.on('data', (out) => {
+export function spawnProcess(
+  command: string,
+  args: string[],
+  onClose?: () => string
+): void {
+  const childProcess = spawn(command, args, { shell: true }) // https://nodejs.org/api/child_process.html#child_process_spawning_bat_and_cmd_files_on_windows
+  childProcess.stdout.on('data', out => {
     process.stdout.write(out)
   })
-  childProcess.stderr.on('data', (stderr) => {
+  childProcess.stderr.on('data', stderr => {
     process.stderr.write(stderr)
   })
-  childProcess.on('close', (code) => {
+  childProcess.on('close', code => {
     onClose && onClose()
     process.stdout.write(`child process exited with code ${String(code)}`)
   })

@@ -1,13 +1,19 @@
-import {Config} from '@oclif/core'
-import {assert} from 'console'
-import {join} from 'path'
-import {chdir} from 'process'
+import { Config } from '@oclif/core'
+import { assert } from 'console'
+import { join } from 'path'
+import { chdir } from 'process'
 
-import {EXAMPLES} from '../../src/botonic-examples'
-import {default as NewCommand} from '../../src/commands/new'
-import {copyRecursively, createTempDir, readDir, readJSON, removeRecursively} from '../../src/util/file-system'
+import { EXAMPLES } from '../../src/botonic-examples'
+import { default as NewCommand } from '../../src/commands/new'
+import {
+  copyRecursively,
+  createTempDir,
+  readDir,
+  readJSON,
+  removeRecursively,
+} from '../../src/util/file-system'
 
-const newCommand = new NewCommand(process.argv, new Config({root: ''}))
+const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
 
 const BLANK_EXAMPLE = EXAMPLES[0]
 assert(BLANK_EXAMPLE.name === 'blank')
@@ -42,8 +48,8 @@ describe('TEST: New command (downloading project)', () => {
           description: 'desc',
           localTestPath: 'unexistingLocalPath',
         },
-        tmpPath,
-      ),
+        tmpPath
+      )
     ).rejects.toThrow(Error)
     removeRecursively(tmpPath)
   })
@@ -67,7 +73,9 @@ describe('TEST: New command (installing project)', () => {
     const tmpPath = createTempDir('botonic-tmp')
     // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
     copyRecursively(BLANK_EXAMPLE.localTestPath, tmpPath)
-    await expect(newCommand.installDependencies('npm instal-typo')).rejects.toThrow(Error)
+    await expect(
+      newCommand.installDependencies('npm instal-typo')
+    ).rejects.toThrow(Error)
     removeRecursively(tmpPath)
   })
 })

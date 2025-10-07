@@ -1,7 +1,7 @@
-import {input, password} from '@inquirer/prompts'
-import {Command, Flags} from '@oclif/core'
+import { input, password } from '@inquirer/prompts'
+import { Command, Flags } from '@oclif/core'
 
-import {BotonicAPIService} from '../botonic-api-service.js'
+import { BotonicAPIService } from '../botonic-api-service.js'
 
 export default class Login extends Command {
   static override args = {}
@@ -18,10 +18,10 @@ export default class Login extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   public async run(): Promise<void> {
-    const {flags} = await this.parse(Login)
+    const { flags } = await this.parse(Login)
 
-    const userEmail = await input({required: true, message: 'email:'})
-    const userPassword = await password({mask: true, message: 'password:'})
+    const userEmail = await input({ required: true, message: 'email:' })
+    const userPassword = await password({ mask: true, message: 'password:' })
 
     await this.botonicApiService.login(userEmail, userPassword)
   }

@@ -1,21 +1,36 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import axios, {AxiosHeaders, AxiosInstance, AxiosPromise, AxiosResponse} from 'axios'
+import axios, {
+  AxiosHeaders,
+  AxiosInstance,
+  AxiosPromise,
+  AxiosResponse,
+} from 'axios'
 import childProcess from 'child_process'
 import pc from 'picocolors'
 import FormData from 'form-data'
-import {createReadStream, unlinkSync} from 'fs'
+import { createReadStream, unlinkSync } from 'fs'
 import ora from 'ora'
-import {stringify} from 'qs'
+import { stringify } from 'qs'
 import * as util from 'util'
 
-import {BotDetail, BotListItem, Me, OAuth, PaginatedResponse} from './interfaces.js'
-import {BotConfigJSON} from './util/bot-config.js'
-import {BotCredentialsHandler, GlobalCredentialsHandler} from './util/credentials-handler.js'
-import {pathExists} from './util/file-system.js'
+import {
+  BotDetail,
+  BotListItem,
+  Me,
+  OAuth,
+  PaginatedResponse,
+} from './interfaces.js'
+import { BotConfigJSON } from './util/bot-config.js'
+import {
+  BotCredentialsHandler,
+  GlobalCredentialsHandler,
+} from './util/credentials-handler.js'
+import { pathExists } from './util/file-system.js'
 
 const exec = util.promisify(childProcess.exec)
 
-const BOTONIC_CLIENT_ID: string = process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
+const BOTONIC_CLIENT_ID: string =
+  process.env.BOTONIC_CLIENT_ID || 'jOIYDdvcfwqwSs7ZJ1CpmTKcE7UDapZDOSobFmEp'
 const BOTONIC_URL: string = process.env.BOTONIC_URL || 'https://api.hubtype.com'
 
 interface RequestArgs {
@@ -58,7 +73,7 @@ export class BotonicAPIService {
       if (error.response?.status === 401 && !retry) {
         originalRequest._retry = true
         await this.refreshToken()
-        const nextRequest = {...originalRequest, headers: this.headers}
+        const nextRequest = { ...originalRequest, headers: this.headers }
 
         return this.apiClient.request(nextRequest)
       }
@@ -114,20 +129,22 @@ export class BotonicAPIService {
 
   private saveGlobalCredentials(): void {
     this.globalCredentialsHandler.createDirIfNotExists()
-    this.globalCredentialsHandler.dump({oauth: this.oauth, me: this.me})
+    this.globalCredentialsHandler.dump({ oauth: this.oauth, me: this.me })
   }
 
   private saveBotCredentials(): void {
-    this.botCredentialsHandler.dump({bot: this.bot})
+    this.botCredentialsHandler.dump({ bot: this.bot })
   }
 
   async build(npmCommand = 'build'): Promise<boolean> {
-    const spinner = ora({text: 'Building...', spinner: 'bouncingBar'}).start()
+    const spinner = ora({ text: 'Building...', spinner: 'bouncingBar' }).start()
     try {
       await exec(`npm run ${npmCommand}`)
     } catch (error: any) {
       spinner.fail()
-      console.log(`${String(error.stdout)}` + pc.red(`\n\nBuild error:\n${String(error)}`))
+      console.log(
+        `${String(error.stdout)}` + pc.red(`\n\nBuild error:\n${String(error)}`)
+      )
       return false
     }
     spinner.succeed()
@@ -150,13 +167,22 @@ export class BotonicAPIService {
     headers,
     params,
   }: RequestArgs): Promise<AxiosResponse<T, any>> {
-    return this.apiClient.post<T>(`${this.baseUrl}/${apiVersion}/${path}`, body, {
-      headers: headers || this.headers,
-      params,
-    })
+    return this.apiClient.post<T>(
+      `${this.baseUrl}/${apiVersion}/${path}`,
+      body,
+      {
+        headers: headers || this.headers,
+        params,
+      }
+    )
   }
 
-  private async apiGet<T>({apiVersion = 'v1', path, headers, params}: RequestArgs): Promise<AxiosResponse<T, any>> {
+  private async apiGet<T>({
+    apiVersion = 'v1',
+    path,
+    headers,
+    params,
+  }: RequestArgs): Promise<AxiosResponse<T, any>> {
     return this.apiClient.get<T>(`${this.baseUrl}/${apiVersion}/${path}`, {
       headers: headers || this.headers,
       params,
@@ -172,7 +198,7 @@ export class BotonicAPIService {
     })
 
     const oauthResponse = await axios.post(this.loginUrl, data, {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
 
     if (oauthResponse.status !== 200) {
@@ -194,7 +220,7 @@ export class BotonicAPIService {
     })
 
     const loginResponse = await axios.post(this.loginUrl, data, {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
     this.oauth = loginResponse.data
 
@@ -207,16 +233,21 @@ export class BotonicAPIService {
     }
   }
 
-  signup(email: string, password: string, orgName: string, campaign: any): Promise<any> {
-    const signupData = {email, password, org_name: orgName, campaign}
-    return this.apiPost({path: 'sign-up/', body: signupData})
+  signup(
+    email: string,
+    password: string,
+    orgName: string,
+    campaign: any
+  ): Promise<any> {
+    const signupData = { email, password, org_name: orgName, campaign }
+    return this.apiPost({ path: 'sign-up/', body: signupData })
   }
 
   async createBot(botName: string): Promise<AxiosPromise> {
     const resp = await this.apiPost({
       apiVersion: 'v2',
       path: 'bots/',
-      body: {name: botName},
+      body: { name: botName },
     })
 
     if (resp.data) {
@@ -227,7 +258,7 @@ export class BotonicAPIService {
   }
 
   private async getMe(): Promise<AxiosResponse<Me>> {
-    return this.apiGet({path: 'users/me/', apiVersion: 'v3'})
+    return this.apiGet({ path: 'users/me/', apiVersion: 'v3' })
   }
 
   async getBots(): Promise<AxiosResponse<PaginatedResponse<BotListItem>, any>> {
@@ -243,7 +274,10 @@ export class BotonicAPIService {
     return botsResponse
   }
 
-  private async getMoreBots(bots: BotListItem[], nextUrl: string | null): Promise<BotListItem[]> {
+  private async getMoreBots(
+    bots: BotListItem[],
+    nextUrl: string | null
+  ): Promise<BotListItem[]> {
     if (!nextUrl) {
       return bots
     }
@@ -252,7 +286,7 @@ export class BotonicAPIService {
       apiVersion: 'v2',
       path: nextUrl.split(`${this.baseUrl}/v2/`)[1],
     })
-    resp.data.results.forEach((bot) => bots.push(bot))
+    resp.data.results.forEach(bot => bots.push(bot))
     nextUrl = resp.data.next
 
     return this.getMoreBots(bots, nextUrl)
@@ -261,11 +295,14 @@ export class BotonicAPIService {
   async getProviders(): Promise<AxiosPromise> {
     return this.apiGet({
       path: 'provider_accounts/',
-      params: {bot_id: this.botInfo().id},
+      params: { bot_id: this.botInfo().id },
     })
   }
 
-  async deployBot(bundlePath: string, botConfigJson: BotConfigJSON): Promise<any> {
+  async deployBot(
+    bundlePath: string,
+    botConfigJson: BotConfigJSON
+  ): Promise<any> {
     try {
       await this.getMe()
     } catch (e) {
@@ -282,7 +319,7 @@ export class BotonicAPIService {
       apiVersion: 'v2',
       path: `bots/${this.botInfo().id}/deploy/`,
       body: form,
-      headers: {...this.headers, ...headers},
+      headers: { ...this.headers, ...headers },
     })
   }
 
@@ -290,7 +327,7 @@ export class BotonicAPIService {
     return this.apiGet({
       apiVersion: 'v2',
       path: `bots/${this.botInfo().id}/deploy_status/`,
-      params: {deploy_id: deployId},
+      params: { deploy_id: deployId },
     })
   }
 
@@ -301,7 +338,10 @@ export class BotonicAPIService {
         if (err) {
           reject(err)
         }
-        const headers = Object.assign({'Content-Length': length}, form.getHeaders())
+        const headers = Object.assign(
+          { 'Content-Length': length },
+          form.getHeaders()
+        )
         resolve(headers)
       })
     })

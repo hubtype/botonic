@@ -1,18 +1,20 @@
-import {createReadStream} from 'node:fs'
-import {readFile, rename, writeFile} from 'node:fs/promises'
-import {platform} from 'node:os'
-import {createGunzip} from 'node:zlib'
+import { createReadStream } from 'node:fs'
+import { readFile, rename, writeFile } from 'node:fs/promises'
+import { platform } from 'node:os'
+import { createGunzip } from 'node:zlib'
 
-import {exec} from 'child_process'
+import { exec } from 'child_process'
 import path from 'path'
-import {extract} from 'tar'
+import { extract } from 'tar'
 
-import {removeRecursively} from './file-system.js'
+import { removeRecursively } from './file-system.js'
 
 function pathByOS(...paths: string[]): string {
   const devPlatform = platform()
   const realtivePath = path.join(...paths)
-  return devPlatform === 'win32' ? realtivePath.replace(/\//g, '\\') : realtivePath
+  return devPlatform === 'win32'
+    ? realtivePath.replace(/\//g, '\\')
+    : realtivePath
 }
 
 export async function downloadSelectedProject({
@@ -45,7 +47,10 @@ export async function extractTarGz({
   exampleVersion: string
 }): Promise<void> {
   // Path to the file .tgz
-  const originPath = pathByOS(projectPath, `botonic-example-${exampleName}-${exampleVersion}.tgz`)
+  const originPath = pathByOS(
+    projectPath,
+    `botonic-example-${exampleName}-${exampleVersion}.tgz`
+  )
   return new Promise((resolve, reject) => {
     // Creates a read stream for the .tgz file
     const readStream = createReadStream(originPath)
@@ -54,7 +59,7 @@ export async function extractTarGz({
     const gunzip = createGunzip()
 
     // Create an extraction stream to extract the .tgz files.
-    const folderStream = extract({cwd: projectPath})
+    const folderStream = extract({ cwd: projectPath })
 
     // Pipe of the streams: Reading of the file -> Decompression -> Extraction to the destination folder
     readStream.pipe(gunzip).pipe(folderStream)
@@ -65,7 +70,7 @@ export async function extractTarGz({
       resolve()
     })
 
-    folderStream.on('error', (err) => {
+    folderStream.on('error', err => {
       console.error('Error while extracting the folder:', err)
       reject(err)
     })

@@ -1,5 +1,12 @@
-import {BotCredentialsHandler, CredentialsHandler} from '../../src/util/credentials-handler.js'
-import {createTempDir, pathExists, removeRecursively} from '../../src/util/file-system.js'
+import {
+  BotCredentialsHandler,
+  CredentialsHandler,
+} from '../../src/util/credentials-handler.js'
+import {
+  createTempDir,
+  pathExists,
+  removeRecursively,
+} from '../../src/util/file-system.js'
 
 describe('TEST: CredentialsHandler', () => {
   let tempDir = ''
@@ -22,7 +29,7 @@ describe('TEST: CredentialsHandler', () => {
   })
   it('Loads/Dumps correctly the data', () => {
     expect(pathExists(credentialsHandler.pathToCredentials)).toBeFalsy()
-    credentialsHandler.dumpJSON({dummy: 'content'})
+    credentialsHandler.dumpJSON({ dummy: 'content' })
     expect(pathExists(credentialsHandler.pathToCredentials)).toBeTruthy()
     const content = credentialsHandler.loadJSON()
     expect(content?.dummy).toEqual('content')

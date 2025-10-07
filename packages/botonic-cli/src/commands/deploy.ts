@@ -1,18 +1,27 @@
-import {confirm, input, password, select} from '@inquirer/prompts'
-import {Args, Command, Flags} from '@oclif/core'
-import {AxiosError} from 'axios'
-import {rmSync, statSync} from 'fs'
+import { confirm, input, password, select } from '@inquirer/prompts'
+import { Args, Command, Flags } from '@oclif/core'
+import { AxiosError } from 'axios'
+import { rmSync, statSync } from 'fs'
 import ora from 'ora'
 import path from 'path'
 import pc from 'picocolors'
-import {ZipAFolder} from 'zip-a-folder'
+import { ZipAFolder } from 'zip-a-folder'
 
-import {BotonicAPIService} from '../botonic-api-service.js'
-import {CLOUD_PROVIDERS} from '../constants.js'
-import {BotListItem, DeployHubtypeFlags, LoginErrorData} from '../interfaces.js'
-import {BotConfig, BotConfigJSON} from '../util/bot-config.js'
-import {copy, createDir, pathExists, removeRecursively} from '../util/file-system.js'
-import {sleep} from '../util/system.js'
+import { BotonicAPIService } from '../botonic-api-service.js'
+import { CLOUD_PROVIDERS } from '../constants.js'
+import {
+  BotListItem,
+  DeployHubtypeFlags,
+  LoginErrorData,
+} from '../interfaces.js'
+import { BotConfig, BotConfigJSON } from '../util/bot-config.js'
+import {
+  copyRecursively,
+  createDir,
+  pathExists,
+  removeRecursively,
+} from '../util/file-system.js'
+import { sleep } from '../util/system.js'
 
 let npmCommand: string | undefined
 
@@ -20,22 +29,39 @@ const BOTONIC_BUNDLE_FILE = 'botonic_bundle.zip'
 const BOTONIC_TEMP_DIRNAME = 'tmp'
 export default class Deploy extends Command {
   static override args = {
-    provider: Args.string({description: 'Provider to deploy to', options: Object.values(CLOUD_PROVIDERS)}),
+    provider: Args.string({
+      description: 'Provider to deploy to',
+      options: Object.values(CLOUD_PROVIDERS),
+    }),
   }
   static override description = 'Deploy Botonic project to cloud provider'
-  static override examples = ['$ botonic deploy\nBuilding...\nCreating bundle...\nUploading...\n🚀 Bot deployed!']
+  static override examples = [
+    '$ botonic deploy\nBuilding...\nCreating bundle...\nUploading...\n🚀 Bot deployed!',
+  ]
   static override flags = {
-    command: Flags.string({char: 'c', description: 'Command to execute from the package "scripts" object'}),
-    email: Flags.string({char: 'e', description: 'Email from Hubtype Organization'}),
-    password: Flags.string({char: 'p', description: 'Password from Hubtype Organization'}),
-    botName: Flags.string({char: 'b', description: 'Name of the bot from Hubtype where you want to deploy'}),
+    command: Flags.string({
+      char: 'c',
+      description: 'Command to execute from the package "scripts" object',
+    }),
+    email: Flags.string({
+      char: 'e',
+      description: 'Email from Hubtype Organization',
+    }),
+    password: Flags.string({
+      char: 'p',
+      description: 'Password from Hubtype Organization',
+    }),
+    botName: Flags.string({
+      char: 'b',
+      description: 'Name of the bot from Hubtype where you want to deploy',
+    }),
   }
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
 
   public async run(): Promise<void> {
-    const {args, flags} = await this.parse(Deploy)
+    const { args, flags } = await this.parse(Deploy)
 
     const provider: string = args.provider || CLOUD_PROVIDERS.HUBTYPE
     // TODO: -> In a next iteration it would be cool to get a prompt asking which provider we prefer (if it's the 1st deploy) or getting the provider from `.botonic.json` (after 1st deploy)
@@ -60,15 +86,15 @@ export default class Deploy extends Command {
   async deployBotFromFlag(botName: string): Promise<void | undefined> {
     const bots = await this.getAvailableBots()
 
-    const bot = bots.filter((b) => b.name === botName)[0]
+    const bot = bots.filter(b => b.name === botName)[0]
     if (bot === undefined && !botName) {
       console.log(pc.red(`Bot ${botName} doesn't exist.`))
       console.log('\nThese are the available options:')
-      bots.map((b) => console.log(` > ${String(b.name)}`))
+      bots.map(b => console.log(` > ${String(b.name)}`))
 
       return undefined
     } else if (botName) {
-      const botByBotName = bots.find((bot) => bot.name === botName)
+      const botByBotName = bots.find(bot => bot.name === botName)
       if (botByBotName) {
         this.botonicApiService.setCurrentBot(bot)
         return await this.deploy()
@@ -89,28 +115,32 @@ export default class Deploy extends Command {
   }
 
   async signupFlow(): Promise<void> {
-    const choices = ['No, I need to create a new one (Signup)', 'Yes, I do. (Login)']
+    const choices = [
+      'No, I need to create a new one (Signup)',
+      'Yes, I do. (Login)',
+    ]
     const signupConfirmation = await select({
-      message: 'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
+      message:
+        'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
       choices: choices,
     })
     if (signupConfirmation === choices[1]) return this.askLogin()
     else return this.askSignup()
   }
 
-  async askEmailPassword(): Promise<{email: string; password: string}> {
-    const userEmail = await input({message: 'email:'})
-    const userPassword = await password({message: 'password:', mask: true})
-    return {email: userEmail, password: userPassword}
+  async askEmailPassword(): Promise<{ email: string; password: string }> {
+    const userEmail = await input({ message: 'email:' })
+    const userPassword = await password({ message: 'password:', mask: true })
+    return { email: userEmail, password: userPassword }
   }
 
   async askLogin(): Promise<void> {
-    const {email, password} = await this.askEmailPassword()
+    const { email, password } = await this.askEmailPassword()
     this.login(email, password)
   }
 
   async askSignup(): Promise<void> {
-    const {email, password} = await this.askEmailPassword()
+    const { email, password } = await this.askEmailPassword()
     this.signup(email, password)
   }
 
@@ -119,7 +149,10 @@ export default class Deploy extends Command {
       return this.deployBotFromFlag(this.botName)
     }
 
-    if (!this.botonicApiService.bot || !Object.keys(this.botonicApiService.bot).length) {
+    if (
+      !this.botonicApiService.bot ||
+      !Object.keys(this.botonicApiService.bot).length
+    ) {
       return this.newBotFlow()
     } else {
       const resp = await this.botonicApiService.getBots()
@@ -141,9 +174,13 @@ export default class Deploy extends Command {
       if (axiosError.response?.data?.error_description) {
         console.log(pc.red(axiosError.response.data.error_description))
       } else {
-        console.log(pc.red('There was an error when trying to log in. Please, try again:'))
+        console.log(
+          pc.red('There was an error when trying to log in. Please, try again:')
+        )
         if (axiosError.response?.status && axiosError.response?.statusText) {
-          console.error(`Error ${axiosError.response.status}: ${axiosError.response.statusText}`)
+          console.error(
+            `Error ${axiosError.response.status}: ${axiosError.response.statusText}`
+          )
         }
       }
       await this.askLogin()
@@ -152,7 +189,7 @@ export default class Deploy extends Command {
 
   async signup(email: string, password: string): Promise<void> {
     const orgName = email.split('@')[0]
-    const campaign = {product: 'botonic'}
+    const campaign = { product: 'botonic' }
     try {
       await this.botonicApiService.signup(email, password, orgName, campaign)
       await this.login(email, password)
@@ -164,7 +201,9 @@ export default class Deploy extends Command {
         console.log(pc.red(err.response.data.password[0]))
       }
       if (!err.response?.data?.email && !err.response?.data?.password) {
-        console.log(pc.red('There was an error trying to signup. Please, try again:'))
+        console.log(
+          pc.red('There was an error trying to signup. Please, try again:')
+        )
       }
       await this.askSignup()
     }
@@ -197,7 +236,7 @@ export default class Deploy extends Command {
     const MAX_ALLOWED_CHARS_FOR_BOT_NAME = 25
     if (inpBotName.length > MAX_ALLOWED_CHARS_FOR_BOT_NAME) {
       throw new Error(
-        `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`,
+        `Maximum allowed chars for bot name is ${MAX_ALLOWED_CHARS_FOR_BOT_NAME} chars. Please, give a shorter name.`
       )
     }
 
@@ -211,7 +250,7 @@ export default class Deploy extends Command {
 
   async createNewBot(botName?: string): Promise<void> {
     if (botName) return this.createNewBotWithName(botName)
-    const newBotName = await input({message: 'Bot name:'})
+    const newBotName = await input({ message: 'Bot name:' })
 
     return await this.createNewBotWithName(newBotName)
   }
@@ -219,21 +258,25 @@ export default class Deploy extends Command {
   async selectExistentBot(bots: any[]): Promise<void> {
     const botNameSelected = await select({
       message: 'Please, select a bot',
-      choices: bots.map((b) => b.name),
+      choices: bots.map(b => b.name),
     })
-    const bot = bots.filter((b_1) => b_1.name === botNameSelected)[0]
+    const bot = bots.filter(b_1 => b_1.name === botNameSelected)[0]
     this.botonicApiService.setCurrentBot(bot)
 
     return await this.deploy()
   }
 
-  displayProviders(providers: {username: string; provider: string}[]): void {
+  displayProviders(providers: { username: string; provider: string }[]): void {
     console.log('Your bot is published on:')
-    providers.forEach((p) => {
-      if (p.provider === 'whatsapp') console.log(`💬  [whatsapp] https://wa.me/${p.username}`)
-      if (p.provider === 'facebook') console.log(`💬  [facebook] https://m.me/${p.username}`)
-      if (p.provider === 'telegram') console.log(`💬  [telegram] https://t.me/${p.username}`)
-      if (p.provider === 'twitter') console.log(`💬  [twitter] https://t.me/${p.username}`)
+    providers.forEach(p => {
+      if (p.provider === 'whatsapp')
+        console.log(`💬  [whatsapp] https://wa.me/${p.username}`)
+      if (p.provider === 'facebook')
+        console.log(`💬  [facebook] https://m.me/${p.username}`)
+      if (p.provider === 'telegram')
+        console.log(`💬  [telegram] https://t.me/${p.username}`)
+      if (p.provider === 'twitter')
+        console.log(`💬  [twitter] https://t.me/${p.username}`)
       if (p.provider === 'generic') console.log(`💬  Your app or website`)
     })
   }
@@ -244,10 +287,14 @@ export default class Deploy extends Command {
       spinner: 'bouncingBar',
     }).start()
 
-    if (pathExists(BOTONIC_TEMP_DIRNAME)) removeRecursively(BOTONIC_TEMP_DIRNAME)
+    if (pathExists(BOTONIC_TEMP_DIRNAME))
+      removeRecursively(BOTONIC_TEMP_DIRNAME)
     createDir(path.join(process.cwd(), BOTONIC_TEMP_DIRNAME))
-    copy('dist', path.join(BOTONIC_TEMP_DIRNAME, 'dist'))
-    const zipRes = await ZipAFolder.zip(BOTONIC_TEMP_DIRNAME, path.join(BOTONIC_BUNDLE_FILE))
+    copyRecursively('dist', path.join(BOTONIC_TEMP_DIRNAME, 'dist'))
+    const zipRes = await ZipAFolder.zip(
+      BOTONIC_TEMP_DIRNAME,
+      path.join(BOTONIC_BUNDLE_FILE)
+    )
     if (zipRes instanceof Error) {
       throw Error
     }
@@ -255,12 +302,18 @@ export default class Deploy extends Command {
     spinner.succeed()
     if (zipStats.size >= 10 * 10 ** 6) {
       spinner.fail()
-      console.log(pc.red(`Deploy failed. Bundle size too big ${zipStats.size} (max 10Mb).`))
+      console.log(
+        pc.red(
+          `Deploy failed. Bundle size too big ${zipStats.size} (max 10Mb).`
+        )
+      )
       return
     }
   }
 
-  async deployBundle(botConfigJson: BotConfigJSON): Promise<{hasDeployErrors: boolean}> {
+  async deployBundle(
+    botConfigJson: BotConfigJSON
+  ): Promise<{ hasDeployErrors: boolean }> {
     const spinner = ora({
       text: 'Deploying...',
       spinner: 'bouncingBar',
@@ -268,7 +321,7 @@ export default class Deploy extends Command {
     try {
       const deploy = await this.botonicApiService.deployBot(
         path.join(process.cwd(), BOTONIC_BUNDLE_FILE),
-        botConfigJson,
+        botConfigJson
       )
       if (deploy.response?.status === 403 || !deploy.data.deploy_id) {
         throw deploy.response.data.status
@@ -276,12 +329,14 @@ export default class Deploy extends Command {
       // eslint-disable-next-line no-constant-condition
       while (true) {
         await sleep(500)
-        const deployStatus = await this.botonicApiService.deployStatus(deploy.data.deploy_id)
+        const deployStatus = await this.botonicApiService.deployStatus(
+          deploy.data.deploy_id
+        )
         if (deployStatus.data.is_completed) {
           if (deployStatus.data.status == 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(pc.green('\n🚀  Bot deployed!\n'))
-            return {hasDeployErrors: false}
+            return { hasDeployErrors: false }
           } else throw deployStatus.data.error
         }
       }
@@ -290,7 +345,7 @@ export default class Deploy extends Command {
       const error = String(err)
       console.log(pc.red('There was a problem in the deploy:'))
       console.log(pc.red(error))
-      return {hasDeployErrors: true}
+      return { hasDeployErrors: true }
     }
   }
 
@@ -311,7 +366,9 @@ export default class Deploy extends Command {
       }
       return true
     } catch (e) {
-      console.log(pc.red(`There was an error getting the providers: ${String(e)}`))
+      console.log(
+        pc.red(`There was an error getting the providers: ${String(e)}`)
+      )
       return false
     }
   }
@@ -328,7 +385,7 @@ export default class Deploy extends Command {
       const botConfigJson = await BotConfig.get(process.cwd())
 
       await this.createBundle()
-      const {hasDeployErrors} = await this.deployBundle(botConfigJson)
+      const { hasDeployErrors } = await this.deployBundle(botConfigJson)
       await this.displayDeployResults(hasDeployErrors)
     } catch (e) {
       console.log(pc.red('Deploy Error'), e)

@@ -1,12 +1,14 @@
-import {Command} from '@oclif/core'
+import { Command } from '@oclif/core'
 import pc from 'picocolors'
 
-import {spawnNpmScript} from '../util/system.js'
+import { spawnNpmScript } from '../util/system.js'
 
 export default class Serve extends Command {
   static override args = {}
   static override description = 'Serve your bot in your localhost'
-  static override examples = ['$ botonic serve\n> Project is running at http://localhost:8080/']
+  static override examples = [
+    '$ botonic serve\n> Project is running at http://localhost:8080/',
+  ]
   static override flags = {}
 
   public async run(): Promise<void> {

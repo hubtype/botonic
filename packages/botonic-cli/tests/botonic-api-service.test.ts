@@ -1,13 +1,13 @@
-import {runCommand} from '@oclif/test'
-import {assert} from 'console'
-import {chdir, cwd} from 'process'
+import { runCommand } from '@oclif/test'
+import { assert } from 'console'
+import { chdir, cwd } from 'process'
 
-import {BotonicAPIService} from '../src/botonic-api-service.js'
-import {EXAMPLES} from '../src/botonic-examples.js'
-import {createTempDir, removeRecursively} from '../src/util/file-system.js'
-import path, {dirname} from 'path'
-import {fileURLToPath} from 'url'
-import {cpSync} from 'fs'
+import { BotonicAPIService } from '../src/botonic-api-service.js'
+import { EXAMPLES } from '../src/botonic-examples.js'
+import { createTempDir, removeRecursively } from '../src/util/file-system.js'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { cpSync } from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -26,9 +26,12 @@ describe('TEST: BotonicApiService', () => {
       // // Cambiar al directorio temporal antes de ejecutar el comando
       chdir(tmpPath)
       // Pasa 'blank' como projectName para evitar el prompt interactivo
-      const {stdout, stderr} = await runCommand(['new', 'test-blank', 'blank'], {
-        root: CLI_ROOT,
-      })
+      const { stdout, stderr } = await runCommand(
+        ['new', 'test-blank', 'blank'],
+        {
+          root: CLI_ROOT,
+        }
+      )
 
       // El stdout debería contener el mensaje de éxito
       expect(stdout).toContain('was successfully created')
