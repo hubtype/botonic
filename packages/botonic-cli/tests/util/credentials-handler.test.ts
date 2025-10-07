@@ -1,5 +1,5 @@
-import {BotCredentialsHandler, CredentialsHandler} from '../../src/util/credentials-handler'
-import {createTempDir, pathExists, removeRecursively} from '../../src/util/file-system'
+import {BotCredentialsHandler, CredentialsHandler} from '../../src/util/credentials-handler.js'
+import {createTempDir, pathExists, removeRecursively} from '../../src/util/file-system.js'
 
 describe('TEST: CredentialsHandler', () => {
   let tempDir = ''

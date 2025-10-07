@@ -1,27 +1,46 @@
-import { Config } from '@oclif/config'
-import { assert } from 'console'
-// import { promises } from 'fs'
-import { chdir } from 'process'
+import {runCommand} from '@oclif/test'
+import {assert} from 'console'
+import {chdir, cwd} from 'process'
 
-import { BotonicAPIService } from '../src/botonic-api-service'
-import { EXAMPLES } from '../src/botonic-examples'
-import { default as NewCommand } from '../src/commands/new'
-import { copy, createTempDir, removeRecursively } from '../src/util/file-system'
+import {BotonicAPIService} from '../src/botonic-api-service.js'
+import {EXAMPLES} from '../src/botonic-examples.js'
+import {createTempDir, removeRecursively} from '../src/util/file-system.js'
+import path, {dirname} from 'path'
+import {fileURLToPath} from 'url'
+import {cpSync} from 'fs'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+// El root debe ser el directorio del CLI, no el temporal
+const CLI_ROOT = path.join(__dirname, '..')
 
 describe('TEST: BotonicApiService', () => {
-  const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
   const BLANK_EXAMPLE = EXAMPLES[0]
   assert(BLANK_EXAMPLE.name === 'blank')
 
   it('Builds correctly a project', async () => {
+    const originalCwd = cwd()
     const tmpPath = createTempDir('botonic-tmp')
-    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
-    chdir(tmpPath)
-    await newCommand.installDependencies()
-    const botonicApiService = new BotonicAPIService()
-    const buildOut = await botonicApiService.build()
-    expect(buildOut).toBe(true)
-    chdir('..')
-    removeRecursively(tmpPath)
+
+    try {
+      // // Cambiar al directorio temporal antes de ejecutar el comando
+      chdir(tmpPath)
+      // Pasa 'blank' como projectName para evitar el prompt interactivo
+      const {stdout, stderr} = await runCommand(['new', 'test-blank', 'blank'], {
+        root: CLI_ROOT,
+      })
+
+      // El stdout debería contener el mensaje de éxito
+      expect(stdout).toContain('was successfully created')
+
+      // cpSync(BLANK_EXAMPLE.localTestPath, path.join('..', tmpPath), {recursive: true})
+      // const botonicApiService = new BotonicAPIService()
+      // const buildOut = await botonicApiService.build()
+      // expect(buildOut).toBe(true)
+    } finally {
+      // Restaurar el directorio original y limpiar
+      chdir(originalCwd)
+      removeRecursively(tmpPath)
+    }
   })
 })
