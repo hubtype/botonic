@@ -16,7 +16,7 @@ describe('TEST: CredentialsHandler', () => {
     tempDir = createTempDir('botonic-tmp')
     credentialsHandler = new CredentialsHandler({
       homeDir: tempDir,
-      filename: '.botonic-creds',
+      filename: '.botonic-credentials',
     })
   })
 
@@ -51,7 +51,7 @@ describe('TEST: BotCredentialsHandler', () => {
     const sut = pathExists(botCredentialsHandler.homeDir)
     expect(sut).toBeTruthy()
   })
-  it('Loads/Dumps correclty', () => {
+  it('Loads/Dumps correctly', () => {
     expect(botCredentialsHandler.load()).toBeFalsy()
     const botInfo = {
       bot: {
