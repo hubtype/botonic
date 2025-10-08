@@ -22,7 +22,6 @@
     "@inquirer/prompts": "^7.8.6",
     "@oclif/core": "^4.5.4",
     "@oclif/plugin-help": "^6.2.33",
-    "@oclif/plugin-plugins": "^5.4.48",
     "axios": "^1.12.2",
     "fs-extra": "^11.3.2",
     "ora": "^9.0.0",
