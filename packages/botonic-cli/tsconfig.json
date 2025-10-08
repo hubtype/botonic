@@ -9,7 +9,8 @@
     "target": "es2022",
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "composite": true
   },
   "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
   "exclude": ["templates", "dist", "lib", "tests"],
