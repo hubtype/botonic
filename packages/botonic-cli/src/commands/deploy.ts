@@ -9,7 +9,6 @@ import { join } from 'path'
 // eslint-disable-next-line import/named
 import { ZipAFolder } from 'zip-a-folder'
 
-import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { CLOUD_PROVIDERS } from '../constants'
 import { BotConfig, BotConfigJSON } from '../util/bot-config'
@@ -74,14 +73,12 @@ Deploying to AWS...
 
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
   private botName: string | undefined = undefined
-  private telemetry = new Telemetry()
 
   /* istanbul ignore next */
   async run(): Promise<void> {
     const { flags, args } = this.parse(Run)
     const provider: string = args.provider || CLOUD_PROVIDERS.HUBTYPE
     // TODO: -> In a next iteration it would be cool to get a prompt asking which provider we prefer (if it's the 1st deploy) or getting the provider from `.botonic.json` (after 1st deploy)
-    this.telemetry.trackDeploy1_0({ provider })
     console.log(`Deploying to ${provider}...`)
     console.log('This can take a while, do not cancel this process.')
 
@@ -151,17 +148,8 @@ Deploying to AWS...
 
   async askEmailPassword(): Promise<{ email: string; password: string }> {
     return prompt([
-      {
-        type: 'input',
-        name: 'email',
-        message: 'email:',
-      },
-      {
-        type: 'password',
-        name: 'password',
-        mask: '*',
-        message: 'password:',
-      },
+      { type: 'input', name: 'email', message: 'email:' },
+      { type: 'password', name: 'password', mask: '*', message: 'password:' },
     ])
   }
 
@@ -290,11 +278,7 @@ Deploying to AWS...
   async createNewBot(botName?: string): Promise<void> {
     if (botName) return this.createNewBotWithName(botName)
     const inp = await prompt([
-      {
-        type: 'input',
-        name: 'bot_name',
-        message: 'Bot name:',
-      },
+      { type: 'input', name: 'bot_name', message: 'Bot name:' },
     ])
     return await this.createNewBotWithName(inp.bot_name)
   }
@@ -353,8 +337,6 @@ Deploying to AWS...
           `Deploy failed. Bundle size too big ${zipStats.size} (max 10Mb).`
         )
       )
-      const error = 'Deploy Botonic Zip Error'
-      this.telemetry.trackError(error)
       return
     }
   }
@@ -373,10 +355,6 @@ Deploying to AWS...
         botConfigJson
       )
       if (deploy.response?.status === 403 || !deploy.data.deploy_id) {
-        const error = `Deploy Botonic Error: ${String(
-          deploy.response.data.status
-        )}`
-        this.telemetry.trackError(error)
         throw deploy.response.data.status
       }
       // eslint-disable-next-line no-constant-condition
@@ -398,7 +376,6 @@ Deploying to AWS...
       const error = String(err)
       console.log(colors.red('There was a problem in the deploy:'))
       console.log(colors.red(error))
-      this.telemetry.trackError(`Deploy Botonic Error: ${error}`)
       return { hasDeployErrors: true }
     }
   }
@@ -421,8 +398,6 @@ Deploying to AWS...
       }
       return true
     } catch (e) {
-      const error = `Deploy Botonic Provider Error: ${String(e)}`
-      this.telemetry.trackError(error)
       console.log(
         colors.red(`There was an error getting the providers: ${String(e)}`)
       )
@@ -435,8 +410,6 @@ Deploying to AWS...
     try {
       const buildOut = await this.botonicApiService.build(npmCommand)
       if (!buildOut) {
-        const error = 'Deploy Botonic Build Error'
-        this.telemetry.trackError(error)
         console.log(colors.red('There was a problem building the bot'))
         return
       }

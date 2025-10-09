@@ -1,7 +1,6 @@
 import { Command } from '@oclif/command'
 import { exec as childProcessExec } from 'child_process'
 import { bold, red } from 'colors'
-// import fetchRepoDir from 'fetch-repo-dir'
 import { moveSync } from 'fs-extra'
 // eslint-disable-next-line import/named
 import { prompt } from 'inquirer'
@@ -10,7 +9,6 @@ import { platform } from 'os'
 import path, { join } from 'path'
 import { promisify } from 'util'
 
-import { Telemetry } from '../analytics/telemetry'
 import { BotonicAPIService } from '../botonic-api-service'
 import { EXAMPLES } from '../botonic-examples'
 import { BotonicProject } from '../interfaces'
@@ -52,11 +50,9 @@ Creating...
   private examples = EXAMPLES
 
   private botonicApiService = new BotonicAPIService()
-  private telemetry = new Telemetry()
 
   /* istanbul ignore next */
   async run(): Promise<void> {
-    this.telemetry.trackCreate()
     try {
       const args = this.parse(Run).args as NewCommandArgs
       const userProjectDirName = args.name
@@ -75,9 +71,6 @@ Creating...
         )
         return
       }
-      this.telemetry.trackCreate({
-        selected_project_name: selectedProject.name,
-      })
       await this.downloadSelectedProjectIntoPath(
         selectedProject,
         userProjectDirName
@@ -100,7 +93,6 @@ Creating...
       console.log(this.getProcessFeedback(selectedProject, userProjectDirName))
     } catch (e) {
       const error = `botonic new error: ${String(e)}`
-      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }
@@ -158,23 +150,21 @@ Creating...
     } catch (e) {
       spinnerDownload.fail()
       const error = `Downloading Project: ${selectedProject.name}: ${String(e)}`
-      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }
 
-  async installDependencies(commmand = 'npm install'): Promise<void> {
+  async installDependencies(command = 'npm install'): Promise<void> {
     const spinner = ora({
       text: 'Installing dependencies...',
       spinner: 'bouncingBar',
     }).start()
     try {
-      await exec(commmand)
+      await exec(command)
       spinner.succeed()
     } catch (e) {
       spinner.fail()
       const error = `Installing dependencies: ${String(e)}`
-      this.telemetry.trackError(error)
       throw new Error(error)
     }
   }

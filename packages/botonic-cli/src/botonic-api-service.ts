@@ -18,7 +18,6 @@ import {
   GlobalCredentialsHandler,
 } from './analytics/credentials-handler'
 import {
-  AnalyticsInfo,
   BotDetail,
   BotListItem,
   Me,
@@ -49,7 +48,6 @@ export class BotonicAPIService {
   globalCredentialsHandler = new GlobalCredentialsHandler()
   oauth?: OAuth
   me?: Me
-  analytics: AnalyticsInfo
   bot: BotDetail | null
   headers: AxiosHeaders
   apiClient: AxiosInstance
@@ -64,7 +62,7 @@ export class BotonicAPIService {
       headers: this.headers,
     })
 
-    const onFullfilled = (response: AxiosResponse) => {
+    const onFulfilled = (response: AxiosResponse) => {
       return response
     }
 
@@ -75,17 +73,14 @@ export class BotonicAPIService {
       if (error.response?.status === 401 && !retry) {
         originalRequest._retry = true
         await this.refreshToken()
-        const nextRequest = {
-          ...originalRequest,
-          headers: this.headers,
-        }
+        const nextRequest = { ...originalRequest, headers: this.headers }
 
         return this.apiClient.request(nextRequest)
       }
       return Promise.reject(error)
     }
 
-    this.apiClient.interceptors.response.use(onFullfilled, onRejected)
+    this.apiClient.interceptors.response.use(onFulfilled, onRejected)
   }
 
   beforeExit(): void {
@@ -112,7 +107,6 @@ export class BotonicAPIService {
     if (credentials) {
       this.oauth = credentials.oauth
       this.me = credentials.me
-      this.analytics = credentials.analytics
     }
   }
 
@@ -129,31 +123,21 @@ export class BotonicAPIService {
       this.headers = new AxiosHeaders({
         Authorization: `Bearer ${accessToken}`,
         'content-type': 'application/json',
-        'x-segment-anonymous-id': this.analytics.anonymous_id,
       })
     }
   }
 
   private saveGlobalCredentials(): void {
     this.globalCredentialsHandler.createDirIfNotExists()
-    this.globalCredentialsHandler.dump({
-      oauth: this.oauth,
-      me: this.me,
-      analytics: this.analytics,
-    })
+    this.globalCredentialsHandler.dump({ oauth: this.oauth, me: this.me })
   }
 
   private saveBotCredentials(): void {
-    this.botCredentialsHandler.dump({
-      bot: this.bot,
-    })
+    this.botCredentialsHandler.dump({ bot: this.bot })
   }
 
   async build(npmCommand = 'build'): Promise<boolean> {
-    const spinner = ora({
-      text: 'Building...',
-      spinner: 'bouncingBar',
-    }).start()
+    const spinner = ora({ text: 'Building...', spinner: 'bouncingBar' }).start()
     try {
       await exec(`npm run ${npmCommand}`)
     } catch (error: any) {
@@ -187,10 +171,7 @@ export class BotonicAPIService {
     return this.apiClient.post<T>(
       `${this.baseUrl}/${apiVersion}/${path}`,
       body,
-      {
-        headers: headers || this.headers,
-        params,
-      }
+      { headers: headers || this.headers, params }
     )
   }
 
@@ -215,9 +196,7 @@ export class BotonicAPIService {
     })
 
     const oauthResponse = await axios.post(this.loginUrl, data, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
 
     if (oauthResponse.status !== 200) {
@@ -239,9 +218,7 @@ export class BotonicAPIService {
     })
 
     const loginResponse = await axios.post(this.loginUrl, data, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
     this.oauth = loginResponse.data
 
@@ -313,9 +290,7 @@ export class BotonicAPIService {
   async getProviders(): Promise<AxiosPromise> {
     return this.apiGet({
       path: 'provider_accounts/',
-      params: {
-        bot_id: this.botInfo().id,
-      },
+      params: { bot_id: this.botInfo().id },
     })
   }
 
@@ -339,10 +314,7 @@ export class BotonicAPIService {
       apiVersion: 'v2',
       path: `bots/${this.botInfo().id}/deploy/`,
       body: form,
-      headers: {
-        ...this.headers,
-        ...headers,
-      },
+      headers: { ...this.headers, ...headers },
     })
   }
 

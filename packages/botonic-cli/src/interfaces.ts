@@ -26,15 +26,9 @@ export interface Me {
   organization_id: string
   campaign: string
 }
-
-export interface AnalyticsInfo {
-  anonymous_id: string
-}
-
 export interface GlobalCredentials {
   oauth?: OAuth
   me?: Me
-  analytics: AnalyticsInfo
 }
 export interface PaginatedResponse<T> {
   count: number
@@ -68,16 +62,6 @@ export interface BotDetail {
   active_users: number
 }
 
-export interface PlaygroundSessionInfo {
-  id: string
-  created_at: string
-  code: string
-  url: string
-  anonymous_id: string
-  app_name: string
-  is_active: boolean
-}
-
 interface ProviderAccountsInfo {
   id: string
   queue_id: string
@@ -105,15 +89,6 @@ interface ProviderAccountsInfo {
 
 export interface BotCredentials {
   bot: BotDetail | null
-}
-
-export interface TrackArgs {
-  event: string
-  anonymousId: string
-  properties?: any
-}
-export interface AnalyticsService {
-  track: (args: TrackArgs) => void
 }
 
 export interface SystemInformation {
