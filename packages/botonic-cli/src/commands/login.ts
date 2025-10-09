@@ -35,6 +35,7 @@ export default class Run extends Command {
     const userData = await this.askLoginInfo()
     await this.botonicApiService.login(userData.email, userData.password).then(
       () => {
+        this.botonicApiService.beforeExit()
         console.log('Successful log in!'.green)
         return
       },
