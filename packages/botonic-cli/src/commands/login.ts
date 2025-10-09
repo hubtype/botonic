@@ -1,5 +1,6 @@
 import { input, password } from '@inquirer/prompts'
 import { Command, Flags } from '@oclif/core'
+import pc from 'picocolors'
 
 import { BotonicAPIService } from '../botonic-api-service.js'
 
@@ -23,6 +24,13 @@ export default class Login extends Command {
     const userEmail = await input({ required: true, message: 'email:' })
     const userPassword = await password({ mask: true, message: 'password:' })
 
-    await this.botonicApiService.login(userEmail, userPassword)
+    try {
+      await this.botonicApiService.login(userEmail, userPassword)
+      console.log(pc.green('Login successful!'))
+    } catch (error) {
+      console.error(pc.red('Failed to login'))
+    } finally {
+      this.botonicApiService.beforeExit()
+    }
   }
 }
