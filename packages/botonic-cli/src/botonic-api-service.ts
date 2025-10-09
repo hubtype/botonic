@@ -170,10 +170,7 @@ export class BotonicAPIService {
     return this.apiClient.post<T>(
       `${this.baseUrl}/${apiVersion}/${path}`,
       body,
-      {
-        headers: headers || this.headers,
-        params,
-      }
+      { headers: headers || this.headers, params }
     )
   }
 
