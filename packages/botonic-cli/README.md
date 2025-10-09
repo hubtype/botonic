@@ -21,7 +21,7 @@ $ npm install -g @botonic/cli
 $ botonic COMMAND
 running command...
 $ botonic (-v|--version|version)
-@botonic/cli/0.40.0 darwin-arm64 node-v23.4.0
+@botonic/cli/0.40.1 darwin-arm64 node-v22.19.0
 $ botonic --help [COMMAND]
 USAGE
   $ botonic COMMAND
@@ -33,7 +33,6 @@ USAGE
 
 <!-- commands -->
 * [`botonic deploy [PROVIDER]`](#botonic-deploy-provider)
-* [`botonic destroy [PROVIDER]`](#botonic-destroy-provider)
 * [`botonic help [COMMAND]`](#botonic-help-command)
 * [`botonic login`](#botonic-login)
 * [`botonic logout`](#botonic-logout)
@@ -66,22 +65,7 @@ EXAMPLES
   Deploying to AWS...
 ```
 
-_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/deploy.js)_
-
-## `botonic destroy [PROVIDER]`
-
-Destroy Botonic project from cloud provider
-
-```
-USAGE
-  $ botonic destroy [PROVIDER]
-
-EXAMPLE
-  $ botonic destroy aws
-  Destroying AWS stack...
-```
-
-_See code: [lib/commands/destroy.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/destroy.js)_
+_See code: [lib/commands/deploy.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/deploy.js)_
 
 ## `botonic help [COMMAND]`
 
@@ -112,7 +96,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/login.js)_
+_See code: [lib/commands/login.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/login.js)_
 
 ## `botonic logout`
 
@@ -126,7 +110,7 @@ OPTIONS
   -p, --path=path  Path to botonic project. Defaults to current dir.
 ```
 
-_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/logout.js)_
+_See code: [lib/commands/logout.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/logout.js)_
 
 ## `botonic new NAME [PROJECTNAME]`
 
@@ -146,7 +130,7 @@ EXAMPLE
   ✨ test_bot was successfully created!
 ```
 
-_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/new.js)_
+_See code: [lib/commands/new.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/new.js)_
 
 ## `botonic serve`
 
@@ -156,15 +140,12 @@ Serve your bot in your localhost
 USAGE
   $ botonic serve
 
-OPTIONS
-  -p, --preview  Run preview Botonic 1.0 serve.
-
 EXAMPLE
   $ botonic serve
   > Project is running at http://localhost:8080/
 ```
 
-_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/serve.js)_
+_See code: [lib/commands/serve.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/serve.js)_
 
 ## `botonic test`
 
@@ -191,5 +172,5 @@ EXAMPLE
   Ran all test suites.
 ```
 
-_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.40.0/lib/commands/test.js)_
+_See code: [lib/commands/test.js](https://github.com/hubtype/botonic/blob/v0.40.1/lib/commands/test.js)_
 <!-- commandsstop -->
