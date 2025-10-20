@@ -58,6 +58,7 @@ export default class BotonicPluginAiAgents implements Plugin {
       )
       const context: Context = {
         authToken,
+        request,
         sources: aiAgentArgs.sourceIds || [],
       }
 
