@@ -31,6 +31,21 @@ export const StyledDebugEventArrow = styled.span`
   flex-shrink: 0;
 `
 
+export const StyledDebugEventIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`
+
 export const StyledDebugEventTitle = styled.span`
   font-weight: 400;
   color: #374151;

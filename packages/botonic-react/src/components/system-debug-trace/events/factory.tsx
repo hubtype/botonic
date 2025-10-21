@@ -6,6 +6,7 @@ import {
   StyledDebugEventContainer,
   StyledDebugEventContent,
   StyledDebugEventHeader,
+  StyledDebugEventIcon,
   StyledDebugEventTitle,
 } from '../styles'
 import { DebugEvent } from '../types'
@@ -15,6 +16,7 @@ interface DebugEventConfig {
   action: string
   title: string
   component: React.ComponentType<any>
+  icon?: React.ReactNode
 }
 
 const debugEventRegistry: Map<EventAction, DebugEventConfig> = new Map([
@@ -24,9 +26,11 @@ const debugEventRegistry: Map<EventAction, DebugEventConfig> = new Map([
 
 const DebugEventContainer = ({
   title,
+  icon,
   children,
 }: {
   title: string
+  icon?: React.ReactNode
   children: React.ReactNode
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -34,6 +38,7 @@ const DebugEventContainer = ({
   return (
     <StyledDebugEventContainer>
       <StyledDebugEventHeader onClick={() => setIsExpanded(!isExpanded)}>
+        {icon && <StyledDebugEventIcon>{icon}</StyledDebugEventIcon>}
         <StyledDebugEventTitle>{title}</StyledDebugEventTitle>
         <StyledDebugEventArrow>{isExpanded ? '▲' : '▼'}</StyledDebugEventArrow>
       </StyledDebugEventHeader>
@@ -57,7 +62,7 @@ export const getDebugEventComponent = (
   const DebugEventComponent = eventConfig.component
 
   return (
-    <DebugEventContainer title={eventConfig.title}>
+    <DebugEventContainer title={eventConfig.title} icon={eventConfig.icon}>
       <DebugEventComponent {...data} />
     </DebugEventContainer>
   )
