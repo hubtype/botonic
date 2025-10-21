@@ -1,6 +1,7 @@
 import { EventAction } from '@botonic/core'
 import React from 'react'
 
+import { QuoteRightSvg } from '../../icons/quote-right'
 import {
   StyledDebugDetail,
   StyledDebugLabel,
@@ -67,4 +68,5 @@ export const nluKeywordEventConfig = {
   action: EventAction.Keyword,
   title: 'Keyword matched',
   component: NluKeywordEventComponent,
+  icon: <QuoteRightSvg color={'#666A7A'} />,
 }
