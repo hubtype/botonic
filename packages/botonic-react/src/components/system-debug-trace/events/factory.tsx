@@ -10,7 +10,10 @@ import {
   StyledDebugEventTitle,
 } from '../styles'
 import { DebugEvent } from '../types'
-import { nluKeywordEventConfig } from './nlu-keyword'
+import { aiAgentEventConfig } from './ai-agent'
+import { fallbackEventConfig } from './fallback'
+import { keywordEventConfig } from './keyword'
+import { knowledgeBaseEventConfig } from './knowledge-base'
 
 interface DebugEventConfig {
   action: string
@@ -19,10 +22,19 @@ interface DebugEventConfig {
   icon?: React.ReactNode
 }
 
-const debugEventRegistry: Map<EventAction, DebugEventConfig> = new Map([
-  [EventAction.Keyword, nluKeywordEventConfig],
+type DebugEventKeys =
+  | EventAction.Keyword
+  | EventAction.AiAgent
+  | EventAction.Knowledgebase
+  | EventAction.Fallback
+
+const debugEventMap: Record<DebugEventKeys, DebugEventConfig> = {
+  [EventAction.Keyword]: keywordEventConfig,
+  [EventAction.AiAgent]: aiAgentEventConfig,
+  [EventAction.Knowledgebase]: knowledgeBaseEventConfig,
+  [EventAction.Fallback]: fallbackEventConfig,
   // Add more events here as they are created:
-])
+}
 
 const DebugEventContainer = ({
   title,
@@ -53,7 +65,14 @@ export const getDebugEventComponent = (
   action: EventAction,
   data: DebugEvent
 ): React.ReactNode | null => {
-  const eventConfig = debugEventRegistry.get(action)
+  console.log('getDebugEventComponent')
+  console.log('action', action)
+  console.log('data', data)
+
+  const eventConfig: DebugEventConfig | undefined =
+    debugEventMap?.[action] || undefined
+
+  console.log('eventConfig', eventConfig)
 
   if (!eventConfig) {
     return null

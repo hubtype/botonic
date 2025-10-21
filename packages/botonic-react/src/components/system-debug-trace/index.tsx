@@ -27,11 +27,13 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
   // Parse data if it's a string
   const parsedData = typeof data === 'string' ? JSON.parse(data) : data
 
+  console.log('parsedData', parsedData)
+  console.log('isBrowser', isBrowser())
+
   if (isBrowser()) {
-    const content = getDebugEventComponent(
-      (parsedData as DebugEvent).action,
-      parsedData as DebugEvent
-    )
+    const content = getDebugEventComponent(parsedData.action, parsedData)
+
+    console.log('content', content)
 
     return (
       <Message

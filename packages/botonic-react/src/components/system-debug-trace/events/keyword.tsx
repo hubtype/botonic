@@ -1,39 +1,25 @@
 import { EventAction } from '@botonic/core'
 import React from 'react'
 
-import { QuoteRightSvg } from '../../icons/quote-right'
+import { QuoteRightSvg } from '../icons/quote-right'
 import {
   StyledDebugDetail,
   StyledDebugLabel,
   StyledDebugMetadata,
   StyledDebugValue,
-} from '../../styles'
+} from '../styles'
 
-export interface NluKeywordDebugEvent {
+export interface KeywordDebugEvent {
   action: EventAction.Keyword
-  bot_version: string
   flow_id: string
   flow_node_id: string
-  flow_thread_id: string
-  format_version: number
   nlu_keyword_is_regex: boolean
-  nlu_keyword_message_id: string
   nlu_keyword_name: string
-  system_locale: string
-  user_country: string
-  user_input: string
-  user_locale: string
 }
 
-export const NluKeywordEventComponent: React.FC<
-  NluKeywordDebugEvent
-> = props => {
+export const Keyword = (props: KeywordDebugEvent) => {
   return (
     <>
-      <div>
-        <StyledDebugLabel>Query:</StyledDebugLabel>{' '}
-        <StyledDebugValue>&quot;{props.user_input}&quot;</StyledDebugValue>
-      </div>
       <StyledDebugDetail>
         <StyledDebugLabel>Keyword:</StyledDebugLabel>{' '}
         <StyledDebugValue>{props.nlu_keyword_name}</StyledDebugValue>
@@ -52,21 +38,14 @@ export const NluKeywordEventComponent: React.FC<
           <StyledDebugLabel>Flow Node ID:</StyledDebugLabel>{' '}
           {props.flow_node_id}
         </div>
-        <div>
-          <StyledDebugLabel>User Locale:</StyledDebugLabel> {props.user_locale}
-        </div>
-        <div>
-          <StyledDebugLabel>User Country:</StyledDebugLabel>{' '}
-          {props.user_country}
-        </div>
       </StyledDebugMetadata>
     </>
   )
 }
 
-export const nluKeywordEventConfig = {
+export const keywordEventConfig = {
   action: EventAction.Keyword,
-  title: 'Keyword matched',
-  component: NluKeywordEventComponent,
+  title: 'Keyword triggered',
+  component: Keyword,
   icon: <QuoteRightSvg color={'#666A7A'} />,
 }
