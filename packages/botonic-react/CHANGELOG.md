@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.40.1] - 2025-10-20
+
+### Added
+
+- Export `ClientSession` type at package level.
+
 ## [0.39.0] - 2025-09-03
 
 ### Changed

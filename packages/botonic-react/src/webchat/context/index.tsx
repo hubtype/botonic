@@ -2,7 +2,7 @@ import { createContext } from 'react'
 
 import { WebchatContextProps, WebchatState } from './types'
 
-export { WebchatState } from './types'
+export { ClientSession, WebchatState } from './types'
 export { useWebchat } from './use-webchat'
 
 export const WebchatContext = createContext<WebchatContextProps>({
