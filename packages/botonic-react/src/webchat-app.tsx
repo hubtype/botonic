@@ -563,6 +563,19 @@ export class WebchatApp {
     if (this.storage) this.storage.removeItem(this.storageKey)
   }
 
+  // TODO: Remove after implementing system debug trace events
+  exposeToWindow() {
+    if (typeof window !== 'undefined') {
+      // @ts-expect-error - Adding Botonic namespace to window object
+      if (!window.Botonic) {
+        // @ts-expect-error - Adding Botonic namespace to window object
+        window.Botonic = {}
+      }
+      // @ts-expect-error - Adding webchatApp to Botonic namespace
+      window.Botonic.webchatApp = this
+    }
+  }
+
   async render(dest: HTMLDivElement, optionsAtRuntime?: WebchatArgs) {
     onDOMLoaded(async () => {
       const isVisible = await this.resolveWebchatVisibility(optionsAtRuntime)
@@ -571,6 +584,7 @@ export class WebchatApp {
         const container = this.getReactMountNode(dest)
         this.reactRoot = createRoot(container)
         this.reactRoot.render(webchatComponent)
+        this.exposeToWindow() // TODO: Remove after implementing system debug trace events
       }
     })
   }
