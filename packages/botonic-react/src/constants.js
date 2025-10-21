@@ -176,4 +176,5 @@ export const ROLES = {
   VIDEO_MESSAGE: 'video-message',
   DOCUMENT_MESSAGE: 'document-message',
   RAW_MESSAGE: 'raw-message',
+  SYSTEM_DEBUG_TRACE_MESSAGE: 'system-debug-trace-message',
 }

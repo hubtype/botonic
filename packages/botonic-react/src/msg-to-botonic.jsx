@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React from 'react'
 
 import { Audio } from './components/audio'
@@ -11,6 +12,7 @@ import { Location } from './components/location'
 import { Pic } from './components/pic'
 import { Reply } from './components/reply'
 import { Subtitle } from './components/subtitle'
+import { SystemDebugTrace } from './components/system-debug-trace'
 import { Text } from './components/text'
 import { Title } from './components/title'
 import { Video } from './components/video'
@@ -22,6 +24,7 @@ import {
   isDocument,
   isImage,
   isLocation,
+  isSystemDebugTrace,
   isText,
   isVideo,
 } from './message-utils'
@@ -94,6 +97,8 @@ export function msgToBotonic(msg, customMessageTypes = []) {
         </Text>
       </>
     )
+  } else if (isSystemDebugTrace(msg)) {
+    return <SystemDebugTrace {...msg} key={msg.key} />
   }
   console.warn(`Not converting message of type ${msg.type}`)
   return null

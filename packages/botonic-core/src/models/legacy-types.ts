@@ -81,6 +81,7 @@ export enum INPUT {
   EVENT_AGENT_MESSAGE_CREATED = 'case_event_agent_message_created',
   EVENT_QUEUE_POSITION_CHANGED = 'case_event_queue_position_changed',
   EVENT_CASE_STATUS_CHANGED = 'case_event_status_changed',
+  SYSTEM_DEBUG_TRACE = 'system_debug_trace',
 }
 
 interface PluginConstructor<T> {
