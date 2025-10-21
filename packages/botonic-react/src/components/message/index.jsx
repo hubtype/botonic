@@ -168,6 +168,10 @@ export const Message = props => {
     const messageJSON = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!messageJSON || !messageJSON.display) return <></>
 
+    if (messageJSON?.type === INPUT.SYSTEM_DEBUG_TRACE) {
+      return <div>{children}</div>
+    }
+
     const getBlobTick = pointerSize => {
       // to add a border to the blobTick we need to create two triangles and overlap them
       // that is why the color depends on the pointerSize

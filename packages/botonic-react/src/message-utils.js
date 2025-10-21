@@ -15,6 +15,8 @@ export const isContact = msg => isOfType(msg.type, INPUT.CONTACT)
 export const isCarousel = msg => isOfType(msg.type, INPUT.CAROUSEL)
 export const isCustom = msg => isOfType(msg.type, INPUT.CUSTOM)
 export const isButtonMessage = msg => isOfType(msg.type, INPUT.BUTTON_MESSAGE)
+export const isSystemDebugTrace = msg =>
+  isOfType(msg.type, INPUT.SYSTEM_DEBUG_TRACE)
 
 export const INPUT_MEDIA_TYPES = [
   INPUT.AUDIO,
