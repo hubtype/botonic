@@ -22,11 +22,24 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.40.1] - 2025-10-22
+
+### Added
+
+- Add the Bot Request to the tools context.
+
+### Changed
+
+### Fixed
+
+
 ## [0.40.0] - 2025-09-30
 
 ### Added
 
 ### Changed
+
+- Update 
 
 ### Fixed
 
