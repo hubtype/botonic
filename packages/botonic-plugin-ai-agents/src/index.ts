@@ -1,4 +1,4 @@
-import { AiAgentArgs, BotContext, Plugin } from '@botonic/core'
+import { AiAgentArgs, BotContext, Plugin, ResolvedPlugins } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
@@ -15,11 +15,15 @@ import {
   Tool,
 } from './types'
 
-export default class BotonicPluginAiAgents implements Plugin {
+export default class BotonicPluginAiAgents<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> implements Plugin
+{
   private readonly authToken?: string
-  public toolDefinitions: CustomTool[] = []
+  public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
-  constructor(options?: PluginAiAgentOptions) {
+  constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     setUpOpenAI()
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
@@ -91,12 +95,12 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private buildTools(activeToolNames: string[]): Tool[] {
+  private buildTools(activeToolNames: string[]): Tool<TPlugins, TExtraData>[] {
     const availableTools = this.toolDefinitions.filter(tool =>
       activeToolNames.includes(tool.name)
     )
     return availableTools.map(toolDefinition => {
-      return tool<any, Context, any>({
+      return tool<any, Context<TPlugins, TExtraData>, any>({
         name: toolDefinition.name,
         description: toolDefinition.description,
         parameters: toolDefinition.schema,

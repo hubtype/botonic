@@ -1,3 +1,4 @@
+import { ResolvedPlugins } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
   Runner,
@@ -12,10 +13,13 @@ import {
   RunResult,
 } from './types'
 
-export class AIAgentRunner {
-  private agent: AIAgent
+export class AIAgentRunner<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
+  private agent: AIAgent<TPlugins, TExtraData>
 
-  constructor(agent: AIAgent) {
+  constructor(agent: AIAgent<TPlugins, TExtraData>) {
     this.agent = agent
   }
 
