@@ -1,4 +1,5 @@
 import { EventAction } from '@botonic/core'
+import React from 'react'
 
 import { WandSvg } from '../icons/wand'
 import {
