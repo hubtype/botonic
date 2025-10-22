@@ -55,5 +55,5 @@ export const knowledgeBaseEventConfig = {
   action: EventAction.Knowledgebase,
   title: 'Knowledge base triggered',
   component: KnowledgeBase,
-  icon: <RobotSvg color={'#666A7A'} />,
+  icon: <RobotSvg />,
 }

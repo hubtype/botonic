@@ -60,5 +60,5 @@ export const aiAgentEventConfig = {
   action: EventAction.AiAgent,
   title: 'AI agent triggered',
   component: AiAgent,
-  icon: <WandSvg color={'#666A7A'} />,
+  icon: <WandSvg />,
 }
