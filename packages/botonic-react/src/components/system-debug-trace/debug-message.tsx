@@ -61,20 +61,20 @@ export const DebugMessage = ({
     }
   }
 
-  const containerClassName = collapsible && isExpanded ? 'expanded' : ''
+  let containerClassName = collapsible ? 'collapsible' : ''
+  containerClassName += collapsible && isExpanded ? ' expanded' : ''
 
   return (
     <StyledDebugContainer className={containerClassName}>
-      <StyledDebugHeader onClick={handleClick}>
+      <StyledDebugHeader
+        // className={collapsible ? 'collapsible' : ''}
+        onClick={handleClick}
+      >
         <StyledDebugIcon>{icon}</StyledDebugIcon>
         <StyledDebugTitle>{title}</StyledDebugTitle>
         {collapsible && (
           <StyledDebugArrow>
-            {isExpanded ? (
-              <CaretUpSvg color='#666a7a' />
-            ) : (
-              <CaretDownSvg color='#666a7a' />
-            )}
+            {isExpanded ? <CaretUpSvg /> : <CaretDownSvg />}
           </StyledDebugArrow>
         )}
       </StyledDebugHeader>

@@ -47,5 +47,5 @@ export const keywordEventConfig = {
   action: EventAction.Keyword,
   title: 'Keyword triggered',
   component: Keyword,
-  icon: <QuoteRightSvg color={'#666A7A'} />,
+  icon: <QuoteRightSvg />,
 }

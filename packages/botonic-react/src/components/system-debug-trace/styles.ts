@@ -1,26 +1,25 @@
 import styled from 'styled-components'
 
+import { COLORS } from '../../constants'
+
 export const StyledDebugContainer = styled.div`
-  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+
+  background-color: ${COLORS.SOLID_WHITE};
   border-radius: 4px;
-  padding: 4px 12px;
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    sans-serif;
+  font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   margin: 8px;
   max-width: calc(100% - 16px);
+  width: 100%;
 
   &.expanded {
-    border: 1px solid #e8e8ea;
-    padding: 4px 0;
+    border: 1px solid ${COLORS.N100};
+    padding-bottom: 8px;
   }
 `
 
@@ -28,14 +27,17 @@ export const StyledDebugHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  box-sizing: border-box;
   user-select: none;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 8px 12px;
+  width: 100%;
 
-  .expanded & {
+  .collapsible & {
     cursor: pointer;
-    padding: 0 12px;
     &:hover {
-      opacity: 0.8;
+      background-color: ${COLORS.N50};
     }
   }
 `
@@ -70,14 +72,15 @@ export const StyledDebugIcon = styled.span`
 `
 
 export const StyledDebugTitle = styled.span`
-  font-weight: 600;
-  font-size: 12px;
-  color: #393b45;
-  line-height: 1.5;
-  white-space: nowrap;
   flex: 1;
   display: flex;
   align-items: center;
+
+  font-weight: 600;
+  font-size: 12px;
+  color: ${COLORS.N700};
+  line-height: 1.5;
+  white-space: nowrap;
   gap: 4px;
 
   span {
@@ -89,10 +92,10 @@ export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 8px;
+
   font-size: 12px;
   line-height: 1.5;
-  color: #393b45;
+  color: ${COLORS.N700};
 `
 
 export const StyledDebugDetail = styled.div`
@@ -104,7 +107,7 @@ export const StyledDebugDetail = styled.div`
 `
 
 export const StyledDebugLabel = styled.strong`
-  color: #393b45;
+  color: ${COLORS.N700};
   font-weight: 400;
   font-size: 12px;
   line-height: 1.5;
@@ -117,15 +120,15 @@ export const StyledDebugValue = styled.div`
   padding: 0 12px;
   font-weight: 600;
   font-size: 12px;
-  color: #393b45;
+  color: ${COLORS.N700};
   line-height: 1.5;
 `
 
 export const StyledDebugMetadata = styled.div`
   margin-top: 16px;
   padding-top: 12px;
-  border-top: 1px solid #e8e8ea;
-  color: #393b45;
+  border-top: 1px solid ${COLORS.N100};
+  color: ${COLORS.N700};
   font-size: 12px;
   padding: 0 32px;
 

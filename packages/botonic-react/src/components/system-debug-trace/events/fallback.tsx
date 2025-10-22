@@ -31,7 +31,7 @@ export const getFallbackEventConfig = (fallbackOut: number) => {
       </>
     ),
     component: Fallback,
-    icon: <LifeRingSvg color={'#666A7A'} />,
+    icon: <LifeRingSvg />,
     collapsible: false,
   }
 }
@@ -40,6 +40,6 @@ export const fallbackEventConfig = {
   action: EventAction.Fallback,
   title: 'Fallback message triggered',
   component: Fallback,
-  icon: <LifeRingSvg color={'#666A7A'} />,
+  icon: <LifeRingSvg />,
   collapsible: false,
 }
