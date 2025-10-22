@@ -1,10 +1,11 @@
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
-import { WebchatApp } from './webchat-app'
 import { WebchatDev } from './webchat/webchat-dev'
+import { WebchatApp } from './webchat-app'
 
 export class DevApp extends WebchatApp {
   constructor({

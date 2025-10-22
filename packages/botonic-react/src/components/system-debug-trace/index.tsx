@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ROLES } from '../../constants'
 import { Message } from '../message'
-import { getDebugEventComponent } from './events/factory'
+import { DebugMessage } from './debug-message'
 
 interface SystemDebugTraceProps {
   type: string
@@ -50,8 +50,6 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
       action: eventAction,
     }
 
-    const content = getDebugEventComponent(eventAction, eventData)
-
     return (
       <Message
         role={ROLES.SYSTEM_DEBUG_TRACE_MESSAGE}
@@ -59,7 +57,7 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
         {...props}
         type={INPUT.SYSTEM_DEBUG_TRACE}
       >
-        {content}
+        <DebugMessage action={eventAction} data={eventData} />
       </Message>
     )
   }

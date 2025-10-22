@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledDebugEventContainer = styled.div`
+export const StyledDebugContainer = styled.div`
   background-color: #ffffff;
   border-radius: 4px;
   padding: 4px 12px;
@@ -24,37 +24,37 @@ export const StyledDebugEventContainer = styled.div`
   }
 `
 
-export const StyledDebugEventHeader = styled.div`
+export const StyledDebugHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
   padding: 0;
   user-select: none;
 
   .expanded & {
+    cursor: pointer;
     padding: 0 12px;
-  }
-
-  &:hover {
-    opacity: 0.8;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `
 
-export const StyledDebugEventArrow = styled.span`
-  font-size: 12px;
-  color: #666a7a;
+export const StyledDebugArrow = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 12px;
-  height: 12px;
-  text-align: center;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
-  line-height: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `
 
-export const StyledDebugEventIcon = styled.span`
+export const StyledDebugIcon = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -69,7 +69,7 @@ export const StyledDebugEventIcon = styled.span`
   }
 `
 
-export const StyledDebugEventTitle = styled.span`
+export const StyledDebugTitle = styled.span`
   font-weight: 600;
   font-size: 12px;
   color: #393b45;
@@ -85,7 +85,7 @@ export const StyledDebugEventTitle = styled.span`
   }
 `
 
-export const StyledDebugEventContent = styled.div`
+export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -119,21 +119,6 @@ export const StyledDebugValue = styled.div`
   font-size: 12px;
   color: #393b45;
   line-height: 1.5;
-`
-
-export const StyledDebugValueIcon = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-  color: #6d6a78;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
 `
 
 export const StyledDebugMetadata = styled.div`

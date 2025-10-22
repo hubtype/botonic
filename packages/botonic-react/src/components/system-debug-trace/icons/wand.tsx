@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { IconProps } from './types'
+import { IconProps } from '../types'
 
 export const WandSvg = ({ color }: IconProps) => {
   return (
