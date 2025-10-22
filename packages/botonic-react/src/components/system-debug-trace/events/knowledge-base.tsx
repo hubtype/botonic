@@ -23,12 +23,12 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>Query</StyledDebugLabel>{' '}
+        <StyledDebugLabel>Query</StyledDebugLabel>
         <StyledDebugValue>{props.user_input}</StyledDebugValue>
       </StyledDebugDetail>
       {props.knowledgebase_fail_reason ? (
         <StyledDebugDetail>
-          <StyledDebugLabel>Knowledge Base Fail Reason:</StyledDebugLabel>{' '}
+          <StyledDebugLabel>Knowledge Base Fail Reason</StyledDebugLabel>
           <StyledDebugValue>{props.knowledgebase_fail_reason}</StyledDebugValue>
         </StyledDebugDetail>
       ) : (
