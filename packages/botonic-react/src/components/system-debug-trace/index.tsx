@@ -1,10 +1,9 @@
-import { INPUT, isBrowser } from '@botonic/core'
+import { EventAction, INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
 
 import { ROLES } from '../../constants'
 import { Message } from '../message'
 import { getDebugEventComponent } from './events/factory'
-import { DebugEvent } from './types'
 
 interface SystemDebugTraceProps {
   type: string
@@ -21,19 +20,37 @@ const serialize = (props: SystemDebugTraceProps) => {
   }
 }
 
+// Map backend action strings to EventAction enum
+const mapEventAction = (action: string): EventAction | undefined => {
+  const mapping: Record<string, EventAction> = {
+    nlu_keyword: EventAction.Keyword,
+    ai_agent: EventAction.AiAgent,
+    knowledgebase: EventAction.Knowledgebase,
+    fallback: EventAction.Fallback,
+  }
+  return mapping[action]
+}
+
 export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
   const { data } = props
 
   // Parse data if it's a string
   const parsedData = typeof data === 'string' ? JSON.parse(data) : data
 
-  console.log('parsedData', parsedData)
-  console.log('isBrowser', isBrowser())
-
   if (isBrowser()) {
-    const content = getDebugEventComponent(parsedData.action, parsedData)
+    const eventAction = mapEventAction(parsedData.action)
 
-    console.log('content', content)
+    if (!eventAction) {
+      console.warn('Unknown action:', parsedData.action)
+      return null
+    }
+
+    const eventData = {
+      ...parsedData,
+      action: eventAction,
+    }
+
+    const content = getDebugEventComponent(eventAction, eventData)
 
     return (
       <Message
