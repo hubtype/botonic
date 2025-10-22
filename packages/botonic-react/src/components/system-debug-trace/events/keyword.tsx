@@ -21,11 +21,11 @@ export const Keyword = (props: KeywordDebugEvent) => {
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>Keyword:</StyledDebugLabel>{' '}
+        <StyledDebugLabel>Keyword</StyledDebugLabel>
         <StyledDebugValue>{props.nlu_keyword_name}</StyledDebugValue>
       </StyledDebugDetail>
       <StyledDebugDetail>
-        <StyledDebugLabel>Is Regex:</StyledDebugLabel>{' '}
+        <StyledDebugLabel>Is Regex</StyledDebugLabel>
         <StyledDebugValue>
           {props.nlu_keyword_is_regex ? 'Yes' : 'No'}
         </StyledDebugValue>

@@ -11,15 +11,20 @@ import {
 } from '../styles'
 import { DebugEvent } from '../types'
 import { aiAgentEventConfig } from './ai-agent'
-import { fallbackEventConfig } from './fallback'
+import {
+  FallbackDebugEvent,
+  fallbackEventConfig,
+  getFallbackEventConfig,
+} from './fallback'
 import { keywordEventConfig } from './keyword'
 import { knowledgeBaseEventConfig } from './knowledge-base'
 
 interface DebugEventConfig {
   action: string
-  title: string
+  title: string | React.ReactNode
   component: React.ComponentType<any>
   icon?: React.ReactNode
+  collapsible?: boolean
 }
 
 type DebugEventKeys =
@@ -40,21 +45,34 @@ const DebugEventContainer = ({
   title,
   icon,
   children,
+  collapsible = true,
 }: {
-  title: string
+  title: string | React.ReactNode
   icon?: React.ReactNode
-  children: React.ReactNode
+  children?: React.ReactNode
+  collapsible?: boolean
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  if (!collapsible) {
+    return (
+      <StyledDebugEventContainer>
+        <StyledDebugEventHeader style={{ cursor: 'default' }}>
+          {icon && <StyledDebugEventIcon>{icon}</StyledDebugEventIcon>}
+          <StyledDebugEventTitle>{title}</StyledDebugEventTitle>
+        </StyledDebugEventHeader>
+      </StyledDebugEventContainer>
+    )
+  }
+
   return (
-    <StyledDebugEventContainer>
+    <StyledDebugEventContainer className={isExpanded ? 'expanded' : ''}>
       <StyledDebugEventHeader onClick={() => setIsExpanded(!isExpanded)}>
         {icon && <StyledDebugEventIcon>{icon}</StyledDebugEventIcon>}
         <StyledDebugEventTitle>{title}</StyledDebugEventTitle>
         <StyledDebugEventArrow>{isExpanded ? '▲' : '▼'}</StyledDebugEventArrow>
       </StyledDebugEventHeader>
-      {isExpanded && (
+      {isExpanded && children && (
         <StyledDebugEventContent>{children}</StyledDebugEventContent>
       )}
     </StyledDebugEventContainer>
@@ -69,8 +87,15 @@ export const getDebugEventComponent = (
   console.log('action', action)
   console.log('data', data)
 
-  const eventConfig: DebugEventConfig | undefined =
+  let eventConfig: DebugEventConfig | undefined =
     debugEventMap?.[action] || undefined
+
+  // Handle fallback with dynamic title based on fallback_out
+  if (action === EventAction.Fallback && 'fallback_out' in data) {
+    eventConfig = getFallbackEventConfig(
+      (data as FallbackDebugEvent).fallback_out
+    )
+  }
 
   console.log('eventConfig', eventConfig)
 
@@ -81,8 +106,12 @@ export const getDebugEventComponent = (
   const DebugEventComponent = eventConfig.component
 
   return (
-    <DebugEventContainer title={eventConfig.title} icon={eventConfig.icon}>
-      <DebugEventComponent {...data} />
+    <DebugEventContainer
+      title={eventConfig.title}
+      icon={eventConfig.icon}
+      collapsible={eventConfig.collapsible}
+    >
+      {eventConfig.collapsible !== false && <DebugEventComponent {...data} />}
     </DebugEventContainer>
   )
 }

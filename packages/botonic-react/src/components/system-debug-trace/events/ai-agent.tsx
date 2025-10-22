@@ -21,29 +21,37 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>Tools Executed</StyledDebugLabel>
+        <StyledDebugLabel>Executed tools</StyledDebugLabel>
         {props.tools_executed.map(tool => (
           <StyledDebugValue key={tool}>{tool}</StyledDebugValue>
         ))}
-        {props.input_guardrails_triggered.length > 0 && (
-          <>
-            <StyledDebugLabel>Input Guardrails Triggered</StyledDebugLabel>
-            {props.input_guardrails_triggered.map(guardrail => (
-              <StyledDebugValue key={guardrail}>{guardrail}</StyledDebugValue>
-            ))}
-          </>
-        )}
-        {props.output_guardrails_triggered.length > 0 && (
-          <>
-            <StyledDebugLabel>Output Guardrails Triggered</StyledDebugLabel>
-            {props.output_guardrails_triggered.map(guardrail => (
-              <StyledDebugValue key={guardrail}>{guardrail}</StyledDebugValue>
-            ))}
-          </>
-        )}
-        {props.exit && <StyledDebugLabel>Exit</StyledDebugLabel>}
-        {props.error && <StyledDebugLabel>Error</StyledDebugLabel>}
       </StyledDebugDetail>
+      {props.input_guardrails_triggered.length > 0 && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>Input Guardrails Triggered</StyledDebugLabel>
+          {props.input_guardrails_triggered.map(guardrail => (
+            <StyledDebugValue key={guardrail}>{guardrail}</StyledDebugValue>
+          ))}
+        </StyledDebugDetail>
+      )}
+      {props.output_guardrails_triggered.length > 0 && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>Output Guardrails Triggered</StyledDebugLabel>
+          {props.output_guardrails_triggered.map(guardrail => (
+            <StyledDebugValue key={guardrail}>{guardrail}</StyledDebugValue>
+          ))}
+        </StyledDebugDetail>
+      )}
+      {props.exit && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>Exit</StyledDebugLabel>
+        </StyledDebugDetail>
+      )}
+      {props.error && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>Error</StyledDebugLabel>
+        </StyledDebugDetail>
+      )}
     </>
   )
 }
