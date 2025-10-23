@@ -2,12 +2,10 @@ import { EventAction } from '@botonic/core'
 import React, { useState } from 'react'
 
 import {
-  aiAgentEventConfig,
-  FallbackDebugEvent,
-  fallbackEventConfig,
+  getAiAgentEventConfig,
   getFallbackEventConfig,
-  keywordEventConfig,
-  knowledgeBaseEventConfig,
+  getKeywordEventConfig,
+  getKnowledgeBaseEventConfig,
 } from './events'
 import { CaretDownSvg, CaretUpSvg } from './icons'
 import {
@@ -18,40 +16,39 @@ import {
   StyledDebugIcon,
   StyledDebugTitle,
 } from './styles'
-import { DebugEvent, DebugEventConfig, DebugEventKeys } from './types'
+import { DebugEvent, DebugEventConfig } from './types'
 
-const debugEventMap: Record<DebugEventKeys, DebugEventConfig> = {
-  [EventAction.Keyword]: keywordEventConfig,
-  [EventAction.AiAgent]: aiAgentEventConfig,
-  [EventAction.Knowledgebase]: knowledgeBaseEventConfig,
-  [EventAction.Fallback]: fallbackEventConfig,
-  // Add more events here as they are created:
+const getEventConfig = (
+  debugEvent: DebugEvent
+): DebugEventConfig | undefined => {
+  switch (debugEvent.action) {
+    case EventAction.Keyword:
+      return getKeywordEventConfig(debugEvent)
+    case EventAction.AiAgent:
+      return getAiAgentEventConfig(debugEvent)
+    case EventAction.Knowledgebase:
+      return getKnowledgeBaseEventConfig(debugEvent)
+    case EventAction.Fallback:
+      return getFallbackEventConfig(debugEvent)
+    default:
+      return undefined
+  }
 }
 
-export const DebugMessage = ({
-  action,
-  data,
-}: {
-  action: EventAction
-  data: DebugEvent
-}) => {
+interface DebugMessageProps {
+  debugEvent: DebugEvent
+}
+
+export const DebugMessage = ({ debugEvent }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  let eventConfig: DebugEventConfig | undefined =
-    debugEventMap?.[action] || undefined
-
-  // Handle fallback with dynamic title based on fallback_out
-  if (action === EventAction.Fallback && 'fallback_out' in data) {
-    eventConfig = getFallbackEventConfig(
-      (data as FallbackDebugEvent).fallback_out
-    )
-  }
+  const eventConfig = getEventConfig(debugEvent)
 
   if (!eventConfig) {
     return null
   }
 
-  const { title, icon, component: component, collapsible = true } = eventConfig
+  const { title, icon, component, collapsible } = eventConfig
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const Component = component
 
@@ -80,7 +77,7 @@ export const DebugMessage = ({
       </StyledDebugHeader>
       {isExpanded && Component && (
         <StyledDebugContent>
-          <Component {...data} />
+          <Component {...debugEvent} />
         </StyledDebugContent>
       )}
     </StyledDebugContainer>

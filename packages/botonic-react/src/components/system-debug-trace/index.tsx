@@ -1,4 +1,4 @@
-import { EventAction, INPUT, isBrowser } from '@botonic/core'
+import { INPUT, isBrowser } from '@botonic/core'
 import React from 'react'
 
 import { ROLES } from '../../constants'
@@ -20,17 +20,6 @@ const serialize = (props: SystemDebugTraceProps) => {
   }
 }
 
-// Map backend action strings to EventAction enum
-const mapEventAction = (action: string): EventAction | undefined => {
-  const mapping: Record<string, EventAction> = {
-    nlu_keyword: EventAction.Keyword,
-    ai_agent: EventAction.AiAgent,
-    knowledgebase: EventAction.Knowledgebase,
-    fallback: EventAction.Fallback,
-  }
-  return mapping[action]
-}
-
 export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
   const { data } = props
 
@@ -38,16 +27,8 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
   const parsedData = typeof data === 'string' ? JSON.parse(data) : data
 
   if (isBrowser()) {
-    const eventAction = mapEventAction(parsedData.action)
-
-    if (!eventAction) {
-      console.warn('Unknown action:', parsedData.action)
-      return null
-    }
-
     const eventData = {
       ...parsedData,
-      action: eventAction,
     }
 
     return (
@@ -57,7 +38,7 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
         {...props}
         type={INPUT.SYSTEM_DEBUG_TRACE}
       >
-        <DebugMessage action={eventAction} data={eventData} />
+        <DebugMessage debugEvent={eventData} />
       </Message>
     )
   }
