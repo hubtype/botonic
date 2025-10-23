@@ -1,5 +1,7 @@
+export * from './brain'
 export * from './caret-down'
 export * from './caret-up'
+export * from './head-set'
 export * from './life-ring'
 export * from './quote-right'
 export * from './wand'

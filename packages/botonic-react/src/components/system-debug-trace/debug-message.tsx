@@ -4,8 +4,10 @@ import React, { useState } from 'react'
 import {
   getAiAgentEventConfig,
   getFallbackEventConfig,
+  getHandoffSuccessEventConfig,
   getKeywordEventConfig,
   getKnowledgeBaseEventConfig,
+  getSmartIntentEventConfig,
 } from './events'
 import { CaretDownSvg, CaretUpSvg } from './icons'
 import {
@@ -24,6 +26,10 @@ const getEventConfig = (
   switch (debugEvent.action) {
     case EventAction.Keyword:
       return getKeywordEventConfig(debugEvent)
+    case EventAction.IntentSmart:
+      return getSmartIntentEventConfig(debugEvent)
+    case EventAction.HandoffSuccess:
+      return getHandoffSuccessEventConfig(debugEvent)
     case EventAction.AiAgent:
       return getAiAgentEventConfig(debugEvent)
     case EventAction.Knowledgebase:
