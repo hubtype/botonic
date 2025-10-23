@@ -42,8 +42,8 @@ export const getHandoffSuccessEventConfig = (
         Handoff success <span>- {data.queue_name}</span>
       </>
     ),
-    component: null,
+    component: HandoffSuccess,
     icon: <HeadSetSvg />,
-    collapsible: false,
+    collapsible: true,
   }
 }

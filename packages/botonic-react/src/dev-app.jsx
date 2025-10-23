@@ -230,6 +230,20 @@ export class DevApp extends WebchatApp {
           })
           /* eslint-enable @typescript-eslint/naming-convention */
         },
+        handoffSuccess: () => {
+          /* eslint-disable @typescript-eslint/naming-convention */
+          // @ts-expect-error - Calling dev helper
+          window.Botonic.devTestSystemDebugTrace({
+            action: 'handoff_success',
+            flow_thread_id: '880e8400-e29b-41d4-a716-446655440028',
+            queue_id: '990e8400-e29b-41d4-a716-446655440029',
+            queue_name: 'Support Queue',
+            case_id: '330e8400-e29b-41d4-a716-446655440030',
+            is_queue_open: true,
+            is_available_agent: true,
+            is_threshold_reached: false,
+          })
+        },
       }
     }
   }
