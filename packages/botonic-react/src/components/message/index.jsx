@@ -169,7 +169,7 @@ export const Message = props => {
     if (!messageJSON || !messageJSON.display) return <></>
 
     if (messageJSON?.type === INPUT.SYSTEM_DEBUG_TRACE) {
-      return <div>{children}</div>
+      return children
     }
 
     const getBlobTick = pointerSize => {
