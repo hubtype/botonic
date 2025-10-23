@@ -1,6 +1,7 @@
 import { ResolvedPlugins } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
+  OutputGuardrailTripwireTriggered,
   Runner,
   RunToolCallItem,
 } from '@openai/agents'
@@ -72,6 +73,17 @@ export class AIAgentRunner<
           error: false,
           inputGuardrailsTriggered: error.result.output.outputInfo,
           outputGuardrailsTriggered: [],
+        }
+      }
+      if (error instanceof OutputGuardrailTripwireTriggered) {
+        return {
+          messages: [],
+          memoryLength: 0,
+          toolsExecuted: [],
+          exit: true,
+          error: false,
+          inputGuardrailsTriggered: [],
+          outputGuardrailsTriggered: error.result.output.outputInfo,
         }
       }
       if (attempt > maxRetries) {

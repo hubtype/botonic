@@ -1,7 +1,13 @@
 import { ResolvedPlugins } from '@botonic/core'
-import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
+import {
+  Agent,
+  InputGuardrail,
+  ModelSettings,
+  OutputGuardrail,
+} from '@openai/agents'
 
 import { createInputGuardrail } from './guardrails'
+import { createOutputGuardrail } from './guardrails/output'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
 import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
@@ -14,6 +20,7 @@ export class AIAgentBuilder<
   private instructions: string
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
+  private outputGuardrails: OutputGuardrail<typeof OutputSchema>[]
 
   constructor(
     name: string,
@@ -31,6 +38,19 @@ export class AIAgentBuilder<
       const inputGuardrail = createInputGuardrail(inputGuardrailRules)
       this.inputGuardrails.push(inputGuardrail)
     }
+    this.outputGuardrails = []
+    if (sourceIds.length > 0) {
+      // TODO: in the future, we should allow to pass a list of output guardrails from Flow Builder Frontend
+      this.outputGuardrails.push(
+        createOutputGuardrail([
+          {
+            name: 'no_answer',
+            description:
+              'The agent should be context aware. The agent responds that they do not know or cannot answer the question.',
+          },
+        ])
+      )
+    }
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
@@ -46,7 +66,7 @@ export class AIAgentBuilder<
       tools: this.tools,
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
-      outputGuardrails: [],
+      outputGuardrails: this.outputGuardrails,
       modelSettings,
     })
   }
