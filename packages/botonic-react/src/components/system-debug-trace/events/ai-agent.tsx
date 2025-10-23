@@ -7,9 +7,11 @@ import {
   StyledDebugLabel,
   StyledDebugValue,
 } from '../styles'
+import { DebugEventConfig } from '../types'
 
 export interface AiAgentDebugEvent {
   action: EventAction.AiAgent
+  flow_node_content_id: string
   tools_executed: string[]
   input_guardrails_triggered: string[]
   output_guardrails_triggered: string[]
@@ -56,9 +58,20 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
   )
 }
 
-export const aiAgentEventConfig = {
-  action: EventAction.AiAgent,
-  title: 'AI agent triggered',
-  component: AiAgent,
-  icon: <WandSvg />,
+export const getAiAgentEventConfig = (
+  data: AiAgentDebugEvent
+): DebugEventConfig => {
+  const title = (
+    <>
+      AI agent triggered <span>- {data.flow_node_content_id}</span>
+    </>
+  )
+
+  return {
+    action: EventAction.AiAgent,
+    title,
+    component: AiAgent,
+    icon: <WandSvg />,
+    collapsible: true,
+  }
 }

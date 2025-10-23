@@ -1,4 +1,3 @@
-import { EventAction } from '@botonic/core'
 import React from 'react'
 
 import { AiAgentDebugEvent } from './events/ai-agent'
@@ -19,14 +18,8 @@ export type DebugEvent =
 
 export interface DebugEventConfig {
   action: string
-  title: string | React.ReactNode
-  component: React.ComponentType<any>
+  title: React.ReactNode
+  component: React.ComponentType<any> | null
   icon?: React.ReactNode
   collapsible?: boolean
 }
-
-export type DebugEventKeys =
-  | EventAction.Keyword
-  | EventAction.AiAgent
-  | EventAction.Knowledgebase
-  | EventAction.Fallback

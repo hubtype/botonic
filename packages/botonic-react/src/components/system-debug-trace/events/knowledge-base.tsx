@@ -7,6 +7,7 @@ import {
   StyledDebugLabel,
   StyledDebugValue,
 } from '../styles'
+import { DebugEventConfig } from '../types'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase
@@ -51,9 +52,16 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   )
 }
 
-export const knowledgeBaseEventConfig = {
-  action: EventAction.Knowledgebase,
-  title: 'Knowledge base triggered',
-  component: KnowledgeBase,
-  icon: <RobotSvg />,
+export const getKnowledgeBaseEventConfig = (
+  data: KnowledgeBaseDebugEvent
+): DebugEventConfig => {
+  const title = <>Knowledge base triggered</>
+
+  return {
+    action: EventAction.Knowledgebase,
+    title,
+    component: KnowledgeBase,
+    icon: <RobotSvg />,
+    collapsible: true,
+  }
 }
