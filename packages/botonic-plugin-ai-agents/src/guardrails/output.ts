@@ -28,12 +28,12 @@ export function createOutputGuardrail(
       console.log('outputMessages', outputMessages)
       const knowledgeUsed = (context as RunContext<Context>).context
         .knowledgeUsed
-      const chunkTexts = knowledgeUsed?.chunkTexts
+      const chunkTexts = knowledgeUsed.chunkTexts
       console.log('knowledgeUsed', knowledgeUsed)
 
       agent.instructions += `
         <knowledge>
-          ${chunkTexts?.join('\n') || ''}
+          ${chunkTexts?.join('\n')}
         </knowledge>
       `
 

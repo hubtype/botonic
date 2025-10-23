@@ -24,7 +24,7 @@ export interface Context<
   authToken: string
   request: BotContext<TPlugins, TExtraData>
   sources: string[]
-  knowledgeUsed?: {
+  knowledgeUsed: {
     query: string
     sourceIds: string[]
     chunksIds: string[]
