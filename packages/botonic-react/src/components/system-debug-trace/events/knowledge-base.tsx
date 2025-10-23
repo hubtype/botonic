@@ -1,7 +1,7 @@
 import { EventAction } from '@botonic/core'
 import React from 'react'
 
-import { RobotSvg } from '../icons/robot'
+import { WandSvg } from '../icons'
 import {
   StyledDebugDetail,
   StyledDebugLabel,
@@ -53,7 +53,7 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
 }
 
 export const getKnowledgeBaseEventConfig = (
-  data: KnowledgeBaseDebugEvent
+  _data: KnowledgeBaseDebugEvent
 ): DebugEventConfig => {
   const title = <>Knowledge base triggered</>
 
@@ -61,7 +61,7 @@ export const getKnowledgeBaseEventConfig = (
     action: EventAction.Knowledgebase,
     title,
     component: KnowledgeBase,
-    icon: <RobotSvg />,
+    icon: <WandSvg />,
     collapsible: true,
   }
 }
