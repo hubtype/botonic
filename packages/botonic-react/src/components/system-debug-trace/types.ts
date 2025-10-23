@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { AiAgentDebugEvent } from './events/ai-agent'
-import { FallbackDebugEvent } from './events/fallback'
-import { KeywordDebugEvent } from './events/keyword'
-import { KnowledgeBaseDebugEvent } from './events/knowledge-base'
+import {
+  AiAgentDebugEvent,
+  FallbackDebugEvent,
+  HandoffSuccessDebugEvent,
+  KeywordDebugEvent,
+  KnowledgeBaseDebugEvent,
+  SmartIntentDebugEvent,
+} from './events'
 
 export interface IconProps {
   color?: string
@@ -15,6 +19,8 @@ export type DebugEvent =
   | AiAgentDebugEvent
   | KnowledgeBaseDebugEvent
   | FallbackDebugEvent
+  | SmartIntentDebugEvent
+  | HandoffSuccessDebugEvent
 
 export interface DebugEventConfig {
   action: string
