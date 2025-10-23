@@ -69,10 +69,7 @@ export const DebugMessage = ({ debugEvent }: DebugMessageProps) => {
 
   return (
     <StyledDebugContainer className={containerClassName}>
-      <StyledDebugHeader
-        // className={collapsible ? 'collapsible' : ''}
-        onClick={handleClick}
-      >
+      <StyledDebugHeader onClick={handleClick}>
         <StyledDebugIcon>{icon}</StyledDebugIcon>
         <StyledDebugTitle>{title}</StyledDebugTitle>
         {collapsible && (
