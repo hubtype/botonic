@@ -46,7 +46,7 @@ export class AIAgentBuilder<
           {
             name: 'no_answer',
             description:
-              'The agent should be context aware. The agent responds that they do not know or cannot answer the question.',
+              'If the provided knowledge does not fully and confidently answer the user’s last message.',
           },
         ])
       )

@@ -1,7 +1,7 @@
 import { RunContext, tool } from '@openai/agents'
 import { z } from 'zod'
 
-import { HubtypeApiClient } from '../hubtype-api-client'
+import { Chunk, HubtypeApiClient } from '../hubtype-api-client'
 import { Context } from '../types'
 
 export const retrieveKnowledge = tool<any, Context, any>({
@@ -15,13 +15,23 @@ export const retrieveKnowledge = tool<any, Context, any>({
     { query }: { query: string },
     runContext?: RunContext<Context>
   ): Promise<string[]> => {
+    console.log('retrieveKnowledge', query)
     const context = runContext?.context
     if (!context) {
       throw new Error('Context is required')
     }
-    const sources = context.sources
+    const sourceIds = context.sources
     const client = new HubtypeApiClient(context.authToken)
-    const chunks = await client.retrieveSimilarChunks(query, sources)
-    return chunks
+    const chunks = await client.retrieveSimilarChunks(query, sourceIds)
+    console.log('chunks', chunks)
+
+    context.knowledgeUsed = {
+      query,
+      sourceIds,
+      chunksIds: chunks.map((chunk: Chunk) => chunk.id),
+      chunkTexts: chunks.map((chunk: Chunk) => chunk.text),
+    }
+
+    return chunks.map(chunk => chunk.text)
   },
 })

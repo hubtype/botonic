@@ -24,6 +24,12 @@ export interface Context<
   authToken: string
   request: BotContext<TPlugins, TExtraData>
   sources: string[]
+  knowledgeUsed?: {
+    query: string
+    sourceIds: string[]
+    chunksIds: string[]
+    chunkTexts: string[]
+  }
 }
 
 export type RunContext<

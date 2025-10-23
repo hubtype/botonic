@@ -64,6 +64,12 @@ export default class BotonicPluginAiAgents<
         authToken,
         request,
         sources: aiAgentArgs.sourceIds || [],
+        knowledgeUsed: {
+          query: '',
+          sourceIds: aiAgentArgs.sourceIds || [],
+          chunksIds: [],
+          chunkTexts: [],
+        },
       }
 
       const runner = new AIAgentRunner(agent)

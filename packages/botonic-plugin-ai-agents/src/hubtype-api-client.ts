@@ -17,6 +17,10 @@ interface HubtypeUserMessage {
 
 type HubtypeMessage = HubtypeAssistantMessage | HubtypeUserMessage
 
+export interface Chunk {
+  id: string
+  text: string
+}
 export class HubtypeApiClient {
   private readonly authToken: string
 
@@ -26,8 +30,8 @@ export class HubtypeApiClient {
 
   async retrieveSimilarChunks(
     query: string,
-    sources: string[]
-  ): Promise<string[]> {
+    sourcesIds: string[]
+  ): Promise<Chunk[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/knowledge_base/similar_chunks/`
     const headers = {
       'Content-Type': 'application/json',
@@ -35,11 +39,16 @@ export class HubtypeApiClient {
     }
     const params = {
       query,
-      source_ids: sources,
+      source_ids: sourcesIds,
       num_chunks: 5,
     }
     const response = await axios.post(url, params, { headers })
-    return response.data.chunks.map((chunk: any) => chunk.text)
+    const chunks = response.data.chunks.map((chunk: Chunk) => ({
+      id: chunk.id,
+      text: chunk.text,
+    }))
+
+    return chunks
   }
 
   async getLocalMessages(
