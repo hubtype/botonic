@@ -15,7 +15,6 @@ export const retrieveKnowledge = tool<any, Context, any>({
     { query }: { query: string },
     runContext?: RunContext<Context>
   ): Promise<string[]> => {
-    console.log('retrieveKnowledge', query)
     const context = runContext?.context
     if (!context) {
       throw new Error('Context is required')
@@ -23,7 +22,6 @@ export const retrieveKnowledge = tool<any, Context, any>({
     const sourceIds = context.sources
     const client = new HubtypeApiClient(context.authToken)
     const chunks = await client.retrieveSimilarChunks(query, sourceIds)
-    console.log('chunks', chunks)
 
     context.knowledgeUsed = {
       query,

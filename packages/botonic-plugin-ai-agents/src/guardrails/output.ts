@@ -16,28 +16,31 @@ export function createOutputGuardrail(
   const agent = new Agent({
     name: 'Knowledge OutputGuardrail',
     instructions:
-      'You are a guardrail agent. You must check if the output messages comply with the following knowledge:',
+      'You are an output guardrail. Given a user question, retrieved knowledge, and a candidate assistant answer, decide whether the answer is supported by the knowledge and whether it should instead refuse due to insufficient knowledge. Work only with the provided inputs; do not bring in outside knowledge.',
     outputType,
   })
 
   return {
     name: 'OutputGuardrail',
     execute: async ({ agentOutput, context }) => {
-      console.log('OutputGuardrail', { agentOutput, context })
       const outputMessages = JSON.stringify(agentOutput.messages)
-      console.log('outputMessages', outputMessages)
+      const userInput = (context as RunContext<Context>).context.request.input
+        .data
       const knowledgeUsed = (context as RunContext<Context>).context
         .knowledgeUsed
       const chunkTexts = knowledgeUsed.chunkTexts
-      console.log('knowledgeUsed', knowledgeUsed)
 
       agent.instructions += `
+      The user's question is:
+        <question>
+          ${userInput}
+        </question>
+
+      To check for hallucinations, you have to use the following knowledge:
         <knowledge>
           ${chunkTexts?.join('\n')}
         </knowledge>
       `
-
-      console.log('agent', agent.instructions)
 
       const result = await run(agent, outputMessages, {
         context,
