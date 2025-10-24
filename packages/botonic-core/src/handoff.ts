@@ -30,8 +30,11 @@ export type HandoffExtraData = {
 }
 
 interface BotEventData {
-  language: string
-  country: string
+  format_version: 'v4'
+  flow_id: string
+  flow_name: string
+  flow_node_id: string
+  flow_node_content_id: string
 }
 
 export enum HelpdeskEvent {

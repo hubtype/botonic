@@ -82,10 +82,15 @@ export class AIAgentRunner<
   }
 
   private getExecutedNameTools(result) {
+    console.log('RESULT INPUT', result.input)
+    console.log('RESULT OUTPUT', result.output)
+    console.log('RESULT NEW ITEMS', result.newItems)
+
     return (
       result.newItems
         ?.filter(item => item instanceof RunToolCallItem)
         .map((item: RunToolCallItem) => {
+          console.log('ITEM', JSON.stringify(item, null, 2))
           if (item.rawItem.type === 'function_call') {
             return item.rawItem.name
           }
