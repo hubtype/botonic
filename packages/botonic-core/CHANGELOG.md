@@ -20,6 +20,16 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.41.0] - TBD
+
+### Added
+
+- [PR-3115](https://github.com/hubtype/botonic/pull/3115): Update and standardize events to format v4 in botonic.
+
+### Changed
+
+### Fixed
+
 ## [0.40.0] - 2025-09-30
 
 ### Added
