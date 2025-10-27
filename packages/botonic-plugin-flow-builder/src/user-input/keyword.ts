@@ -7,7 +7,10 @@ import {
   HtKeywordNode,
   HtNodeWithContent,
 } from '../content-fields/hubtype-fields'
-import { trackEvent } from '../tracking'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 
 interface KeywordProps {
   cmsApi: FlowBuilderApi
@@ -101,11 +104,19 @@ export class KeywordMatcher {
   }
 
   private async trackKeywordEvent() {
+    const { flowId, flowName, flowNodeId, flowNodeContentId } =
+      getCommonFlowContentEventArgsForContentId(
+        this.request,
+        this.keywordNodeId as string
+      )
+
     const event: EventKeyword = {
       action: EventAction.Keyword,
+      flowNodeId,
+      flowId,
+      flowName,
+      flowNodeContentId,
       flowThreadId: this.request.session.flow_thread_id as string,
-      flowNodeId: this.keywordNodeId as string,
-      flowId: this.flowId as string,
       nluKeywordName: this.matchedKeyword as string,
       nluKeywordIsRegex: this.isRegExp,
       nluKeywordMessageId: this.request.input.message_id,

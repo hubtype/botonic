@@ -44,18 +44,52 @@ function getContentEventArgs(
   request: ActionRequest,
   nodeContent: HtNodeWithContent
 ): EventFlow {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const flowName = flowBuilderPlugin.getFlowName(nodeContent.flow_id)
+  const { flowId, flowName, flowNodeId, flowNodeContentId } =
+    getCommonFlowContentEventArgs(request, nodeContent)
+
   const flowThreadId = request.session.flow_thread_id ?? uuidv7()
   request.session.flow_thread_id = flowThreadId
 
   return {
     action: EventAction.FlowNode,
+    flowId,
+    flowName,
+    flowNodeId,
+    flowNodeContentId,
     flowThreadId,
-    flowId: nodeContent.flow_id,
-    flowName: flowName,
-    flowNodeId: nodeContent.id,
-    flowNodeContentId: nodeContent.code,
     flowNodeIsMeaningful: nodeContent.is_meaningful ?? false,
   }
+}
+
+type CommonFlowContentEventArgs = {
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+}
+
+function getCommonFlowContentEventArgs(
+  request: ActionRequest,
+  nodeContent: HtNodeWithContent
+): CommonFlowContentEventArgs {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowName = flowBuilderPlugin.getFlowName(nodeContent.flow_id)
+
+  return {
+    flowId: nodeContent.flow_id,
+    flowName,
+    flowNodeId: nodeContent.id,
+    flowNodeContentId: nodeContent.code,
+  }
+}
+
+export function getCommonFlowContentEventArgsForContentId(
+  request: ActionRequest,
+  contentId: string
+): CommonFlowContentEventArgs {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const cmsApi = flowBuilderPlugin.cmsApi
+  const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(contentId)
+
+  return getCommonFlowContentEventArgs(request, nodeContent)
 }
