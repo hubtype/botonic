@@ -19,9 +19,18 @@ export const retrieveKnowledge = tool<any, Context, any>({
     if (!context) {
       throw new Error('Context is required')
     }
-    const sources = context.sources
+    const sourceIds = context.sourceIds
     const client = new HubtypeApiClient(context.authToken)
-    const chunks = await client.retrieveSimilarChunks(query, sources)
-    return chunks
+    const chunks = await client.retrieveSimilarChunks(query, sourceIds)
+    const chunkTexts = chunks.map(chunk => chunk.text)
+
+    context.knowledgeUsed = {
+      query,
+      sourceIds,
+      chunksIds: chunks.map(chunk => chunk.id),
+      chunkTexts,
+    }
+
+    return chunkTexts
   },
 })

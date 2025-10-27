@@ -1,10 +1,11 @@
-import { ResolvedPlugins } from '@botonic/core'
+import { ToolExecution } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
   Runner,
   RunToolCallItem,
 } from '@openai/agents'
 
+import { retrieveKnowledge } from './tools'
 import {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -13,13 +14,10 @@ import {
   RunResult,
 } from './types'
 
-export class AIAgentRunner<
-  TPlugins extends ResolvedPlugins = ResolvedPlugins,
-  TExtraData = any,
-> {
-  private agent: AIAgent<TPlugins, TExtraData>
+export class AIAgentRunner {
+  private agent: AIAgent
 
-  constructor(agent: AIAgent<TPlugins, TExtraData>) {
+  constructor(agent: AIAgent) {
     this.agent = agent
   }
 
@@ -47,7 +45,7 @@ export class AIAgentRunner<
       const hasExit =
         outputMessages.length === 0 ||
         outputMessages.some(message => message.type === 'exit')
-      const toolsExecuted = this.getExecutedNameTools(result)
+      const toolsExecuted = this.getToolsExecuted(result, context)
 
       return {
         messages: hasExit
@@ -81,17 +79,52 @@ export class AIAgentRunner<
     }
   }
 
-  private getExecutedNameTools(result) {
+  private getToolsExecuted(result, context: Context): ToolExecution[] {
     return (
       result.newItems
         ?.filter(item => item instanceof RunToolCallItem)
-        .map((item: RunToolCallItem) => {
-          if (item.rawItem.type === 'function_call') {
-            return item.rawItem.name
-          }
-          return ''
-        })
-        .filter((toolName: string) => toolName !== '') || []
+        .map((item: RunToolCallItem) =>
+          this.getToolExecutionInfo(item as RunToolCallItem, context)
+        )
+        .filter(
+          (toolExecution: ToolExecution) => toolExecution.toolName !== ''
+        ) || []
     )
+  }
+
+  private getToolExecutionInfo(
+    item: RunToolCallItem,
+    context: Context
+  ): ToolExecution {
+    if (item.rawItem.type !== 'function_call') {
+      return {
+        toolName: '',
+        toolArguments: {},
+      }
+    }
+    const toolName = item.rawItem.name
+    const toolArguments = this.getSafeToolArguments(item.rawItem.arguments)
+
+    if (toolName === retrieveKnowledge.name) {
+      return {
+        toolName,
+        toolArguments,
+        knowledgebaseSourcesIds: context.knowledgeUsed.sourceIds,
+        knowledgebaseChunksIds: context.knowledgeUsed.chunksIds,
+      }
+    }
+
+    return {
+      toolName,
+      toolArguments,
+    }
+  }
+
+  private getSafeToolArguments(rawToolArguments: string): Record<string, any> {
+    try {
+      return JSON.parse(rawToolArguments)
+    } catch (error) {
+      return {}
+    }
   }
 }

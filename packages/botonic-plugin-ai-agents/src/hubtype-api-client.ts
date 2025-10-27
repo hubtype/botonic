@@ -3,7 +3,7 @@ import { BotContext } from '@botonic/core'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
-import { AgenticInputMessage } from './types'
+import { AgenticInputMessage, Chunk } from './types'
 
 interface HubtypeAssistantMessage {
   role: 'assistant'
@@ -26,8 +26,8 @@ export class HubtypeApiClient {
 
   async retrieveSimilarChunks(
     query: string,
-    sources: string[]
-  ): Promise<string[]> {
+    sourceIds: string[]
+  ): Promise<Chunk[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/knowledge_base/similar_chunks/`
     const headers = {
       'Content-Type': 'application/json',
@@ -35,11 +35,15 @@ export class HubtypeApiClient {
     }
     const params = {
       query,
-      source_ids: sources,
+      source_ids: sourceIds,
       num_chunks: 5,
     }
     const response = await axios.post(url, params, { headers })
-    return response.data.chunks.map((chunk: any) => chunk.text)
+    const chunks = response.data.chunks.map((chunk: Chunk) => ({
+      id: chunk.id,
+      text: chunk.text,
+    }))
+    return chunks
   }
 
   async getLocalMessages(
