@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { EventAction, EventType, HtEventProps, RequestData } from '../types'
+import {
+  EventAction,
+  EventFormatVersion,
+  EventType,
+  HtEventProps,
+  RequestData,
+} from '../types'
 
 export class HtEvent {
   chat_id?: string
@@ -15,7 +21,7 @@ export class HtEvent {
 
   constructor(event: HtEventProps, requestData: RequestData) {
     this.chat_id = requestData.userId
-    this.format_version = 3
+    this.format_version = EventFormatVersion.V4
     this.action = event.action
     this.bot_interaction_id = requestData.botInteractionId
     this.user_locale = requestData.userLocale

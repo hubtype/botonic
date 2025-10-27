@@ -18,7 +18,9 @@ describe('Create knowledge base events', () => {
       userInput: 'What is Flow Builder?',
       flowThreadId: 'flowThreadId',
       flowId: 'flowId',
+      flowName: 'flowName',
       flowNodeId: 'knowledgebaseNodeId',
+      flowNodeContentId: 'knowledgebaseNodeContentId',
     })
 
     expect(htEvent).toEqual({
@@ -26,7 +28,7 @@ describe('Create knowledge base events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.Knowledgebase,
       knowledgebase_inference_id: 'knowledgebaseInferenceId',
       knowledgebase_sources_ids: ['sourceId1', 'sourceId2'],
@@ -35,7 +37,9 @@ describe('Create knowledge base events', () => {
       user_input: 'What is Flow Builder?',
       flow_thread_id: 'flowThreadId',
       flow_id: 'flowId',
+      flow_name: 'flowName',
       flow_node_id: 'knowledgebaseNodeId',
+      flow_node_content_id: 'knowledgebaseNodeContentId',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
@@ -52,7 +56,9 @@ describe('Create knowledge base events', () => {
       userInput: 'What is Flow Builder?',
       flowThreadId: 'flowThreadId',
       flowId: 'flowId',
+      flowName: 'flowName',
       flowNodeId: 'knowledgebaseNodeId',
+      flowNodeContentId: 'knowledgebaseNodeContentId',
     })
 
     expect(htEvent).toEqual({
@@ -60,7 +66,7 @@ describe('Create knowledge base events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.Knowledgebase,
       knowledgebase_inference_id: 'knowledgebaseInferenceId',
       knowledgebase_fail_reason: KnowledgebaseFailReason.Hallucination,
@@ -70,7 +76,9 @@ describe('Create knowledge base events', () => {
       user_input: 'What is Flow Builder?',
       flow_thread_id: 'flowThreadId',
       flow_id: 'flowId',
+      flow_name: 'flowName',
       flow_node_id: 'knowledgebaseNodeId',
+      flow_node_content_id: 'knowledgebaseNodeContentId',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

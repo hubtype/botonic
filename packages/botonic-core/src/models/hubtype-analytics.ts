@@ -195,5 +195,5 @@ export interface EventCustom extends HtBaseEventProps {
 }
 
 export enum EventFormatVersion {
-  V4 = 'v4',
+  V4 = 4,
 }

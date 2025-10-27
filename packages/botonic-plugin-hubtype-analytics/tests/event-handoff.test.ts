@@ -6,6 +6,10 @@ describe('Create handoff events', () => {
   test('should create handoff success event', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffSuccess,
+      flowId: 'flowIdTest',
+      flowName: 'flowNameTest',
+      flowNodeId: 'flowNodeIdTest',
+      flowNodeContentId: 'flowNodeContentIdTest',
       queueId: 'handoffQueueIdTest',
       queueName: 'handoffQueueNameTest',
       caseId: 'handoffCaseIdTest',
@@ -19,8 +23,12 @@ describe('Create handoff events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.HandoffSuccess,
+      flow_id: 'flowIdTest',
+      flow_name: 'flowNameTest',
+      flow_node_id: 'flowNodeIdTest',
+      flow_node_content_id: 'flowNodeContentIdTest',
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
       handoff_case_id: 'handoffCaseIdTest',
@@ -35,6 +43,10 @@ describe('Create handoff events', () => {
   test('should create handoff fail event', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffFail,
+      flowId: 'flowIdTest',
+      flowName: 'flowNameTest',
+      flowNodeId: 'flowNodeIdTest',
+      flowNodeContentId: 'flowNodeContentIdTest',
       queueId: 'handoffQueueIdTest',
       queueName: 'handoffQueueNameTest',
       isQueueOpen: false,
@@ -47,8 +59,12 @@ describe('Create handoff events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.HandoffFail,
+      flow_id: 'flowIdTest',
+      flow_name: 'flowNameTest',
+      flow_node_id: 'flowNodeIdTest',
+      flow_node_content_id: 'flowNodeContentIdTest',
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
       handoff_is_queue_open: false,
@@ -62,6 +78,10 @@ describe('Create handoff events', () => {
   test('should create handoff option event, with all params', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffOption,
+      flowId: 'flowIdTest',
+      flowName: 'flowNameTest',
+      flowNodeId: 'flowNodeIdTest',
+      flowNodeContentId: 'flowNodeContentIdTest',
       queueId: 'handoffQueueIdTest',
       queueName: 'handoffQueueNameTest',
     })
@@ -71,8 +91,12 @@ describe('Create handoff events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.HandoffOption,
+      flow_id: 'flowIdTest',
+      flow_name: 'flowNameTest',
+      flow_node_id: 'flowNodeIdTest',
+      flow_node_content_id: 'flowNodeContentIdTest',
       handoff_queue_id: 'handoffQueueIdTest',
       handoff_queue_name: 'handoffQueueNameTest',
       bot_interaction_id: 'testInteractionId',
@@ -83,6 +107,10 @@ describe('Create handoff events', () => {
   test('should create handoff option event, without params', () => {
     const htEvent = createHtEvent(requestData, {
       action: EventAction.HandoffOption,
+      flowId: 'flowIdTest',
+      flowName: 'flowNameTest',
+      flowNodeId: 'flowNodeIdTest',
+      flowNodeContentId: 'flowNodeContentIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -90,8 +118,12 @@ describe('Create handoff events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.HandoffOption,
+      flow_id: 'flowIdTest',
+      flow_name: 'flowNameTest',
+      flow_node_id: 'flowNodeIdTest',
+      flow_node_content_id: 'flowNodeContentIdTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

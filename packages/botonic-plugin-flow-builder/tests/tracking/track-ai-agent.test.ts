@@ -26,7 +26,14 @@ describe('Check tracked events when a contents are displayed', () => {
           },
         },
       ],
-      toolsExecuted: ['tool1'],
+      toolsExecuted: [
+        {
+          toolName: 'retrieve_knowledge',
+          toolArguments: { query: 'I want to cancel my flight' },
+          knowledgebaseSourcesIds: ['105c2045-1968-4e37-bb2c-b9a3647b1bda'],
+          knowledgebaseChunksIds: ['106c2045-1968-4e37-bb2c-b9a3647b1bda'],
+        },
+      ],
     }
 
     await createFlowBuilderPluginAndGetContents({
@@ -55,7 +62,14 @@ describe('Check tracked events when a contents are displayed', () => {
         flowNodeId: '0196f202-a5ea-713e-a3f9-287cf8f0303a',
         flowNodeIsMeaningful: true,
         flowThreadId: 'testFlowThreadId',
-        toolsExecuted: ['tool1'],
+        toolsExecuted: [
+          {
+            toolName: 'retrieve_knowledge',
+            toolArguments: { query: 'I want to cancel my flight' },
+            knowledgebaseSourcesIds: ['105c2045-1968-4e37-bb2c-b9a3647b1bda'],
+            knowledgebaseChunksIds: ['106c2045-1968-4e37-bb2c-b9a3647b1bda'],
+          },
+        ],
         inputMessageId: 'testMessageId',
         memoryLength: 0,
         inputGuardrailsTriggered: [],

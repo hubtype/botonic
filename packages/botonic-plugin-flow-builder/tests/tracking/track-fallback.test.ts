@@ -31,6 +31,10 @@ describe('Check tracked events when a contents are displayed', () => {
       expect.anything(),
       EventAction.Fallback,
       {
+        flowId: expect.anything(),
+        flowName: expect.anything(),
+        flowNodeId: expect.anything(),
+        flowNodeContentId: expect.anything(),
         userInput: userInput,
         fallbackOut: 1,
         fallbackMessageId: expect.anything(),

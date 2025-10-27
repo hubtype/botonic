@@ -1,5 +1,9 @@
 // @ts-nocheck
-import { BotonicAction, PATH_PAYLOAD_IDENTIFIER } from '../src'
+import {
+  BotonicAction,
+  EventFormatVersion,
+  PATH_PAYLOAD_IDENTIFIER,
+} from '../src'
 import { HandOffBuilder, HelpdeskEvent, humanHandOff } from '../src/handoff'
 
 describe('Handoff', () => {
@@ -143,6 +147,30 @@ describe('Handoff', () => {
       .withOnFinishPayload('payload1')
     builder.handOff()
     const expectedBotonicAction = `${BotonicAction.CreateCase}:{"force_assign_if_not_available":true,"on_finish":"payload1","subscribe_helpdesk_events":["queue_position_changed"]}`
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
+
+  test('Create a handoff with the bot event data in v4 format', () => {
+    const builder = new HandOffBuilder({}).withBotEvent({
+      format_version: EventFormatVersion.V4,
+      flow_id: 'flow-123',
+      flow_name: 'Test Flow',
+      flow_node_id: 'node-456',
+      flow_node_content_id: 'content-789',
+    })
+    builder.handOff()
+    const expectedBotonicAction =
+      `${BotonicAction.CreateCase}:` +
+      JSON.stringify({
+        force_assign_if_not_available: true,
+        bot_event: {
+          format_version: 4,
+          flow_id: 'flow-123',
+          flow_name: 'Test Flow',
+          flow_node_id: 'node-456',
+          flow_node_content_id: 'content-789',
+        },
+      })
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 })
