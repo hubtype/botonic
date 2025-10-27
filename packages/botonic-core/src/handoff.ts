@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import { BotonicAction, BotonicActionType, Session } from './models'
+import {
+  BotonicAction,
+  BotonicActionType,
+  EventFormatVersion,
+  Session,
+} from './models'
 
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
@@ -30,8 +35,11 @@ export type HandoffExtraData = {
 }
 
 interface BotEventData {
-  language: string
-  country: string
+  format_version: EventFormatVersion
+  flow_id: string
+  flow_name: string
+  flow_node_id: string
+  flow_node_content_id: string
 }
 
 export enum HelpdeskEvent {

@@ -14,6 +14,7 @@ import {
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,
+  ToolExecution,
   WebviewEndFailType,
 } from '@botonic/core'
 
@@ -61,5 +62,6 @@ export {
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,
+  ToolExecution,
   WebviewEndFailType,
 }

@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { EventAction, EventAiAgent, EventType, RequestData } from '../types'
+import {
+  EventAction,
+  EventAiAgent,
+  EventType,
+  RequestData,
+  ToolExecution,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventAiAgent extends HtEvent {
@@ -9,7 +15,7 @@ export class HtEventAiAgent extends HtEvent {
   flow_node_id: string
   flow_node_content_id: string
   flow_node_is_meaningful: boolean
-  tools_executed: string[]
+  tools_executed: ToolExecution[]
   memory_length: number
   input_message_id: string
   input_guardrails_triggered: string[]
