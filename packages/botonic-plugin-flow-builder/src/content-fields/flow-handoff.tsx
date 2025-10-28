@@ -1,8 +1,8 @@
 import { HandOffBuilder, HelpdeskEvent, isDev, isWebchat } from '@botonic/core'
 import { ActionRequest, WebchatSettings } from '@botonic/react'
-import React from 'react'
 
 import { FlowBuilderApi } from '../api'
+import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { HtHandoffNode, HtQueueLocale } from './hubtype-fields'
 
@@ -56,13 +56,19 @@ export class FlowHandoff extends ContentFieldsBase {
 
     if (this.queue) {
       const language = request.getSystemLocale()
-      const country = request.getUserCountry()
 
       handOffBuilder.withQueue(this.queue.id)
+
+      const { flowId, flowName, flowNodeId, flowNodeContentId } =
+        getCommonFlowContentEventArgsForContentId(request, this.id)
+
       handOffBuilder.withBotEvent({
-        language,
-        country,
+        flowId,
+        flowName,
+        flowNodeId,
+        flowNodeContentId,
       })
+
       handOffBuilder.withExtraData({
         language,
       })

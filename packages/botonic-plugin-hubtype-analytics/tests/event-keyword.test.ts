@@ -12,7 +12,9 @@ describe('Create nlu keyword events', () => {
       userInput: 'hello',
       flowThreadId: 'flowThreadId',
       flowId: 'flowId',
+      flowName: 'flowName',
       flowNodeId: 'keywordNodeId',
+      flowNodeContentId: 'keywordNodeContentId',
     })
 
     expect(htEvent).toEqual({
@@ -20,7 +22,7 @@ describe('Create nlu keyword events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.Keyword,
       nlu_keyword_name: 'hello',
       nlu_keyword_is_regex: false,
@@ -28,7 +30,9 @@ describe('Create nlu keyword events', () => {
       user_input: 'hello',
       flow_thread_id: 'flowThreadId',
       flow_id: 'flowId',
+      flow_name: 'flowName',
       flow_node_id: 'keywordNodeId',
+      flow_node_content_id: 'keywordNodeContentId',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

@@ -33,7 +33,9 @@ describe('Check tracked events when a contents are displayed', () => {
       EventAction.Keyword,
       {
         flowId: '43a736f8-4837-4fbb-a661-021291749b4f',
+        flowName: expect.anything(),
         flowNodeId: '8ec6a479-dca5-4623-8bab-41fa49c9d6e8',
+        flowNodeContentId: expect.anything(),
         flowThreadId: 'testFlowThreadId',
         nluKeywordName: 'flowText',
         nluKeywordIsRegex: false,

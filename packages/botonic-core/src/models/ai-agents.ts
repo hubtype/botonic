@@ -49,9 +49,16 @@ export type OutputMessage =
 
 export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
 
+export interface ToolExecution {
+  toolName: string
+  toolArguments: Record<string, any>
+  knowledgebaseSourcesIds?: string[]
+  knowledgebaseChunksIds?: string[]
+}
+
 export interface RunResult {
   messages: AgenticOutputMessage[]
-  toolsExecuted: string[]
+  toolsExecuted: ToolExecution[]
   memoryLength: number
   exit: boolean
   error: boolean

@@ -34,7 +34,7 @@ export default class BotonicPluginAiAgents<
   }
 
   async getInference(
-    request: BotContext,
+    request: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentArgs
   ): Promise<InferenceResponse> {
     try {
@@ -46,7 +46,7 @@ export default class BotonicPluginAiAgents<
       const tools = this.buildTools(
         aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
-      const agent = new AIAgentBuilder(
+      const agent = new AIAgentBuilder<TPlugins, TExtraData>(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
         tools,
@@ -60,13 +60,19 @@ export default class BotonicPluginAiAgents<
         authToken,
         MAX_MEMORY_LENGTH
       )
-      const context: Context = {
+      const context: Context<TPlugins, TExtraData> = {
         authToken,
+        sourceIds: aiAgentArgs.sourceIds || [],
+        knowledgeUsed: {
+          query: '',
+          sourceIds: [],
+          chunksIds: [],
+          chunkTexts: [],
+        },
         request,
-        sources: aiAgentArgs.sourceIds || [],
       }
 
-      const runner = new AIAgentRunner(agent)
+      const runner = new AIAgentRunner<TPlugins, TExtraData>(agent)
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)

@@ -1,8 +1,12 @@
 import axios from 'axios'
 
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import { BotonicAction, BotonicActionType, Session } from './models'
-
+import {
+  BotonicAction,
+  BotonicActionType,
+  EVENT_FORMAT_VERSION,
+  Session,
+} from './models'
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
 export interface HubtypeAgentsInfo {
@@ -29,9 +33,19 @@ export type HandoffExtraData = {
   location?: string
 }
 
-interface BotEventData {
-  language: string
-  country: string
+export interface BotEventData {
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+}
+
+export interface FormattedBotEventData {
+  format_version: number
+  flow_id: string
+  flow_name: string
+  flow_node_id: string
+  flow_node_content_id: string
 }
 
 export enum HelpdeskEvent {
@@ -79,7 +93,7 @@ export class HandOffBuilder {
   _autoIdleMessage: string
   _shadowing: boolean
   _extraData: HandoffExtraData
-  _bot_event: BotEventData
+  _bot_event: FormattedBotEventData
   _subscribeHelpdeskEvents: HelpdeskEvent[]
 
   constructor(session: Session) {
@@ -147,7 +161,13 @@ export class HandOffBuilder {
   }
 
   withBotEvent(botEvent: BotEventData): this {
-    this._bot_event = botEvent
+    this._bot_event = {
+      format_version: EVENT_FORMAT_VERSION,
+      flow_id: botEvent.flowId,
+      flow_name: botEvent.flowName,
+      flow_node_id: botEvent.flowNodeId,
+      flow_node_content_id: botEvent.flowNodeContentId,
+    }
     return this
   }
 
@@ -208,7 +228,7 @@ export interface HubtypeHandoffParams {
   shadowing?: boolean
   on_finish?: string
   case_extra_data?: HandoffExtraData
-  bot_event?: BotEventData
+  bot_event?: FormattedBotEventData
   subscribe_helpdesk_events?: HelpdeskEvent[]
 }
 async function _humanHandOff(
@@ -224,7 +244,7 @@ async function _humanHandOff(
   autoIdleMessage = '',
   shadowing = false,
   extraData: HandoffExtraData | undefined = undefined,
-  botEvent: BotEventData,
+  botEvent: FormattedBotEventData,
   subscribeHelpdeskEvents: HelpdeskEvent[] = []
 ) {
   const params: HubtypeHandoffParams = {}

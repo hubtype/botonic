@@ -1,3 +1,7 @@
+import { ToolExecution } from './ai-agents'
+
+export const EVENT_FORMAT_VERSION = 4
+
 export enum EventAction {
   AiAgent = 'ai_agent',
   FeedbackCase = 'feedback_case',
@@ -63,6 +67,10 @@ export interface EventFlow extends HtBaseEventProps {
 export interface EventHandoff extends HtBaseEventProps {
   action: EventAction.HandoffSuccess | EventAction.HandoffFail
   flowThreadId?: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
   queueId: string
   queueName: string
   caseId?: string
@@ -74,6 +82,10 @@ export interface EventHandoff extends HtBaseEventProps {
 export interface EventHandoffOption extends HtBaseEventProps {
   action: EventAction.HandoffOption
   flowThreadId?: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
   queueId?: string
   queueName?: string
 }
@@ -82,7 +94,9 @@ export interface EventKeyword extends HtBaseEventProps {
   action: EventAction.Keyword
   flowThreadId: string
   flowId: string
+  flowName: string
   flowNodeId: string
+  flowNodeContentId: string
   nluKeywordName: string
   nluKeywordIsRegex?: boolean
   nluKeywordMessageId: string
@@ -93,7 +107,9 @@ export interface EventIntentSmart extends HtBaseEventProps {
   action: EventAction.IntentSmart
   flowThreadId: string
   flowId: string
+  flowName: string
   flowNodeId: string
+  flowNodeContentId: string
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
@@ -104,7 +120,9 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   action: EventAction.Knowledgebase
   flowThreadId: string
   flowId: string
+  flowName: string
   flowNodeId: string
+  flowNodeContentId: string
   knowledgebaseInferenceId: string
   knowledgebaseFailReason?: KnowledgebaseFailReason
   knowledgebaseSourcesIds: string[]
@@ -121,7 +139,7 @@ export interface EventAiAgent extends HtBaseEventProps {
   flowNodeId: string
   flowNodeContentId: string
   flowNodeIsMeaningful: boolean
-  toolsExecuted: string[]
+  toolsExecuted: ToolExecution[]
   inputMessageId: string
   memoryLength: number
   inputGuardrailsTriggered: string[]
@@ -137,6 +155,10 @@ export enum KnowledgebaseFailReason {
 
 export interface EventFallback extends HtBaseEventProps {
   action: EventAction.Fallback
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
   userInput: string
   fallbackOut: number
   fallbackMessageId: string

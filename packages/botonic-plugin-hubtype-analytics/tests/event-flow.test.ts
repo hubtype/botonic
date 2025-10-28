@@ -19,7 +19,7 @@ describe('Create flow event', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.FlowNode,
       flow_thread_id: 'flowThreadIdTest',
       flow_id: 'flowIdTest',

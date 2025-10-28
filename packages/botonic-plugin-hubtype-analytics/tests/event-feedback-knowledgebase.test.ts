@@ -21,7 +21,7 @@ describe('Create feedback knowledgebase event', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 3,
+      format_version: 4,
       action: EventAction.FeedbackKnowledgebase,
       feedback_target_id: 'messageIdTest',
       feedback_group_id: 'groupIdTest',

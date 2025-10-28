@@ -22,8 +22,14 @@ export interface Context<
   TExtraData = any,
 > {
   authToken: string
+  sourceIds: string[]
+  knowledgeUsed: {
+    query: string
+    sourceIds: string[]
+    chunksIds: string[]
+    chunkTexts: string[]
+  }
   request: BotContext<TPlugins, TExtraData>
-  sources: string[]
 }
 
 export type RunContext<
@@ -42,6 +48,11 @@ export interface CustomTool<
     input?: any,
     runContext?: RunContext<TPlugins, TExtraData>
   ) => Promise<any>
+}
+
+export interface Chunk {
+  id: string
+  text: string
 }
 
 export type ContactInfo = Record<string, string>

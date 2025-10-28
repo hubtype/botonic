@@ -5,7 +5,10 @@ import axios from 'axios'
 import { FlowBuilderApi } from '../api'
 import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
 import { getFlowBuilderPlugin } from '../helpers'
-import { trackEvent } from '../tracking'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { SmartIntentResponse } from '../types'
 
 export interface SmartIntentsInferenceParams {
@@ -55,6 +58,12 @@ export class SmartIntentsApi {
           payload: targetPayload,
         }
 
+        const { flowId, flowName, flowNodeId, flowNodeContentId } =
+          getCommonFlowContentEventArgsForContentId(
+            this.currentRequest,
+            smartIntentNode.id
+          )
+
         const event: EventIntentSmart = {
           action: EventAction.IntentSmart,
           nluIntentSmartTitle: response.data.smart_intent_title,
@@ -62,8 +71,10 @@ export class SmartIntentsApi {
           nluIntentSmartMessageId: this.currentRequest.input.message_id,
           userInput: this.currentRequest.input.data,
           flowThreadId: this.currentRequest.session.flow_thread_id as string,
-          flowId: smartIntentNode.flow_id,
-          flowNodeId: smartIntentNode.id,
+          flowId,
+          flowName,
+          flowNodeContentId,
+          flowNodeId,
         }
         const { action, ...eventArgs } = event
 

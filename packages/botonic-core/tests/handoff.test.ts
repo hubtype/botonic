@@ -145,4 +145,27 @@ describe('Handoff', () => {
     const expectedBotonicAction = `${BotonicAction.CreateCase}:{"force_assign_if_not_available":true,"on_finish":"payload1","subscribe_helpdesk_events":["queue_position_changed"]}`
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
+
+  test('Create a handoff with the bot event data', () => {
+    const builder = new HandOffBuilder({}).withBotEvent({
+      flowId: 'flow-123',
+      flowName: 'Test Flow',
+      flowNodeId: 'node-456',
+      flowNodeContentId: 'content-789',
+    })
+    builder.handOff()
+    const expectedBotonicAction =
+      `${BotonicAction.CreateCase}:` +
+      JSON.stringify({
+        force_assign_if_not_available: true,
+        bot_event: {
+          format_version: 4,
+          flow_id: 'flow-123',
+          flow_name: 'Test Flow',
+          flow_node_id: 'node-456',
+          flow_node_content_id: 'content-789',
+        },
+      })
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 })

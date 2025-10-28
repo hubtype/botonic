@@ -12,9 +12,10 @@ import {
   FlowContent,
   FlowKnowledgeBase,
 } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields/nodes'
-import { getFlowBuilderPlugin } from '../helpers'
-import { trackEvent } from '../tracking'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { KnowledgeBaseFunction } from '../types'
 import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
 import { FlowBuilderContext } from './index'
@@ -121,11 +122,6 @@ async function trackKnowledgeBase(
   request: BotContext,
   knowledgeBaseContent: FlowKnowledgeBase
 ) {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const flowId = flowBuilderPlugin.cmsApi.getNodeById<HtNodeWithContent>(
-    knowledgeBaseContent.id
-  ).flow_id
-
   const getKnowledgeFailReason = (): KnowledgebaseFailReason | undefined => {
     let knowledgebaseFailReason: KnowledgebaseFailReason | undefined
 
@@ -139,6 +135,9 @@ async function trackKnowledgeBase(
     return knowledgebaseFailReason
   }
 
+  const { flowId, flowName, flowNodeId, flowNodeContentId } =
+    getCommonFlowContentEventArgsForContentId(request, knowledgeBaseContent.id)
+
   const event: EventKnowledgeBase = {
     action: EventAction.Knowledgebase,
     knowledgebaseInferenceId: response.inferenceId,
@@ -150,8 +149,10 @@ async function trackKnowledgeBase(
     knowledgebaseMessageId: request.input.message_id,
     userInput: request.input.data as string,
     flowThreadId: request.session.flow_thread_id as string,
-    flowId: flowId,
-    flowNodeId: knowledgeBaseContent.id,
+    flowId,
+    flowName,
+    flowNodeId,
+    flowNodeContentId,
   }
 
   const { action, ...eventArgs } = event

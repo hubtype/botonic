@@ -36,7 +36,9 @@ describe('Check tracked events when a contents are displayed after match with sm
         nluIntentSmartMessageId: expect.anything(),
         userInput: 'How can I add a bag to my booking?',
         flowId: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+        flowName: expect.anything(),
         flowNodeId: 'a962b2e5-9424-4fe5-81bd-8cb398b59875',
+        flowNodeContentId: expect.anything(),
         flowThreadId: 'testFlowThreadId',
       }
     )
