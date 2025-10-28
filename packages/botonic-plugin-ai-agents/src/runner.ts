@@ -1,4 +1,4 @@
-import { ToolExecution } from '@botonic/core'
+import { ResolvedPlugins, ToolExecution } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
   Runner,
@@ -14,16 +14,19 @@ import {
   RunResult,
 } from './types'
 
-export class AIAgentRunner {
-  private agent: AIAgent
+export class AIAgentRunner<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
+  private agent: AIAgent<TPlugins, TExtraData>
 
-  constructor(agent: AIAgent) {
+  constructor(agent: AIAgent<TPlugins, TExtraData>) {
     this.agent = agent
   }
 
   async run(
     messages: AgenticInputMessage[],
-    context: Context,
+    context: Context<TPlugins, TExtraData>,
     maxRetries: number = 1
   ): Promise<RunResult> {
     return this.runWithRetry(messages, context, maxRetries, 1)
@@ -31,7 +34,7 @@ export class AIAgentRunner {
 
   private async runWithRetry(
     inputMessages: AgenticInputMessage[],
-    context: Context,
+    context: Context<TPlugins, TExtraData>,
     maxRetries: number,
     attempt: number
   ): Promise<RunResult> {
@@ -79,7 +82,10 @@ export class AIAgentRunner {
     }
   }
 
-  private getToolsExecuted(result, context: Context): ToolExecution[] {
+  private getToolsExecuted(
+    result,
+    context: Context<TPlugins, TExtraData>
+  ): ToolExecution[] {
     return (
       result.newItems
         ?.filter(item => item instanceof RunToolCallItem)
@@ -94,7 +100,7 @@ export class AIAgentRunner {
 
   private getToolExecutionInfo(
     item: RunToolCallItem,
-    context: Context
+    context: Context<TPlugins, TExtraData>
   ): ToolExecution {
     if (item.rawItem.type !== 'function_call') {
       return {

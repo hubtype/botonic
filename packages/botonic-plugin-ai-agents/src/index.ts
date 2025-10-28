@@ -1,4 +1,4 @@
-import { AiAgentArgs, BotContext, Plugin } from '@botonic/core'
+import { AiAgentArgs, BotContext, Plugin, ResolvedPlugins } from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
@@ -15,11 +15,15 @@ import {
   Tool,
 } from './types'
 
-export default class BotonicPluginAiAgents implements Plugin {
+export default class BotonicPluginAiAgents<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> implements Plugin
+{
   private readonly authToken?: string
-  public toolDefinitions: CustomTool[] = []
+  public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
-  constructor(options?: PluginAiAgentOptions) {
+  constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     setUpOpenAI()
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
@@ -30,7 +34,7 @@ export default class BotonicPluginAiAgents implements Plugin {
   }
 
   async getInference(
-    request: BotContext,
+    request: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentArgs
   ): Promise<InferenceResponse> {
     try {
@@ -42,7 +46,7 @@ export default class BotonicPluginAiAgents implements Plugin {
       const tools = this.buildTools(
         aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
-      const agent = new AIAgentBuilder(
+      const agent = new AIAgentBuilder<TPlugins, TExtraData>(
         aiAgentArgs.name,
         aiAgentArgs.instructions,
         tools,
@@ -56,7 +60,7 @@ export default class BotonicPluginAiAgents implements Plugin {
         authToken,
         MAX_MEMORY_LENGTH
       )
-      const context: Context = {
+      const context: Context<TPlugins, TExtraData> = {
         authToken,
         sourceIds: aiAgentArgs.sourceIds || [],
         knowledgeUsed: {
@@ -65,9 +69,10 @@ export default class BotonicPluginAiAgents implements Plugin {
           chunksIds: [],
           chunkTexts: [],
         },
+        request,
       }
 
-      const runner = new AIAgentRunner(agent)
+      const runner = new AIAgentRunner<TPlugins, TExtraData>(agent)
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)
@@ -96,12 +101,12 @@ export default class BotonicPluginAiAgents implements Plugin {
     return await hubtypeClient.getLocalMessages(memoryLength)
   }
 
-  private buildTools(activeToolNames: string[]): Tool[] {
+  private buildTools(activeToolNames: string[]): Tool<TPlugins, TExtraData>[] {
     const availableTools = this.toolDefinitions.filter(tool =>
       activeToolNames.includes(tool.name)
     )
     return availableTools.map(toolDefinition => {
-      return tool<any, Context, any>({
+      return tool<any, Context<TPlugins, TExtraData>, any>({
         name: toolDefinition.name,
         description: toolDefinition.description,
         parameters: toolDefinition.schema,
