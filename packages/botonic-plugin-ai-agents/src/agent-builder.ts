@@ -38,8 +38,17 @@ export class AIAgentBuilder<
 
     if (this.tools.includes(retrieveKnowledge)) {
       modelSettings.toolChoice = retrieveKnowledge.name
+      // For model gpt-5-xxx
+      modelSettings.temperature = 1
+      // For model gpt-5-xxx in AZURE
+      modelSettings.providerData = {
+        reasoning_effort: 'minimal',
+        text_verbosity: 'low',
+      }
+      // For model gpt-5-xxx directly in OPENAI
+      // modelSettings.reasoning = { effort: 'low' }
+      // text: { verbosity: 'low' }
     }
-
     return new Agent({
       name: this.name,
       instructions: this.instructions,
@@ -48,6 +57,7 @@ export class AIAgentBuilder<
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
       modelSettings,
+      model: 'gpt-5-nano', //'gpt-5-mini', //'gpt-4.1-mini',
     })
   }
 

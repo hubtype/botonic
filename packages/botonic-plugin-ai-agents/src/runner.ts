@@ -13,6 +13,7 @@ import {
   Context,
   RunResult,
 } from './types'
+import { setAzureOpenAIClientGpt5 } from './openai'
 
 export class AIAgentRunner<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -42,6 +43,7 @@ export class AIAgentRunner<
       const runner = new Runner({
         modelSettings: { temperature: 0 },
       })
+      setAzureOpenAIClientGpt5()
       const result = await runner.run(this.agent, inputMessages, { context })
 
       const outputMessages = result.finalOutput?.messages || []

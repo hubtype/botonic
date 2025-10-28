@@ -4,7 +4,7 @@ import { tool } from '@openai/agents'
 import { AIAgentBuilder } from './agent-builder'
 import { isProd, MAX_MEMORY_LENGTH } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
-import { setUpOpenAI } from './openai'
+import { setAzureOpenAIClientGpt41, setAzureOpenAIClientGpt5 } from './openai'
 import { AIAgentRunner } from './runner'
 import {
   AgenticInputMessage,
@@ -24,7 +24,7 @@ export default class BotonicPluginAiAgents<
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
-    setUpOpenAI()
+    setAzureOpenAIClientGpt41()
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
   }

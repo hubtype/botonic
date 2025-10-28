@@ -2,6 +2,7 @@ import { Agent, InputGuardrail, run, UserMessageItem } from '@openai/agents'
 import { z } from 'zod'
 
 import { GuardrailRule } from '../types'
+import { setAzureOpenAIClientGpt41, setAzureOpenAIClientGpt5 } from '../openai'
 
 export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
   const outputType = z.object(
@@ -15,21 +16,26 @@ export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
     instructions:
       'Check if the user triggers some of the following guardrails.',
     outputType,
+    model: 'gpt-4.1-mini',
   })
 
   return {
     name: 'InputGuardrail',
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
+      setAzureOpenAIClientGpt41()
       const result = await run(agent, [lastMessage], { context })
+      setAzureOpenAIClientGpt5()
       const finalOutput = result.finalOutput
       if (finalOutput === undefined) {
         throw new Error('Guardrail agent failed to produce output')
       }
+
       const triggered = Object.values(finalOutput).some(value => value === true)
       const triggeredGuardrails = Object.keys(finalOutput).filter(
         key => finalOutput[key] === true
       )
+
       return {
         outputInfo: triggeredGuardrails,
         tripwireTriggered: triggered,

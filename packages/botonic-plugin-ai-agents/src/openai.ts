@@ -7,25 +7,34 @@ import { AzureOpenAI } from 'openai'
 
 import {
   AZURE_OPENAI_API_BASE,
-  AZURE_OPENAI_API_DEPLOYMENT_NAME,
   AZURE_OPENAI_API_KEY,
-  AZURE_OPENAI_API_VERSION,
   isProd,
 } from './constants'
 
-export function setUpOpenAI() {
-  setAzureOpenAIClient()
+function configureOpenAIClient(client: AzureOpenAI) {
+  setDefaultOpenAIClient(client)
   setOpenAIAPI('chat_completions')
   setTracingDisabled(true)
 }
 
-function setAzureOpenAIClient() {
-  const client = new AzureOpenAI({
+export function setAzureOpenAIClientGpt41() {
+  const clientGpt41 = new AzureOpenAI({
     apiKey: AZURE_OPENAI_API_KEY,
-    apiVersion: AZURE_OPENAI_API_VERSION,
-    deployment: AZURE_OPENAI_API_DEPLOYMENT_NAME,
     baseURL: AZURE_OPENAI_API_BASE,
+    apiVersion: '2025-01-01-preview',
+    deployment: 'gpt-41-mini_p1',
     dangerouslyAllowBrowser: !isProd,
   })
-  setDefaultOpenAIClient(client)
+  configureOpenAIClient(clientGpt41)
+}
+
+export function setAzureOpenAIClientGpt5() {
+  const clientGpt5 = new AzureOpenAI({
+    apiKey: AZURE_OPENAI_API_KEY,
+    baseURL: AZURE_OPENAI_API_BASE,
+    apiVersion: '2025-04-01-preview', // '2025-01-01-preview',
+    deployment: 'gpt-5-nano_p1', //'gpt-5-nano_p1',
+    dangerouslyAllowBrowser: !isProd,
+  })
+  configureOpenAIClient(clientGpt5)
 }
