@@ -1,10 +1,4 @@
-import {
-  EventFormatVersion,
-  HandOffBuilder,
-  HelpdeskEvent,
-  isDev,
-  isWebchat,
-} from '@botonic/core'
+import { HandOffBuilder, HelpdeskEvent, isDev, isWebchat } from '@botonic/core'
 import { ActionRequest, WebchatSettings } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
@@ -69,11 +63,10 @@ export class FlowHandoff extends ContentFieldsBase {
         getCommonFlowContentEventArgsForContentId(request, this.id)
 
       handOffBuilder.withBotEvent({
-        format_version: EventFormatVersion.V4,
-        flow_id: flowId,
-        flow_name: flowName,
-        flow_node_id: flowNodeId,
-        flow_node_content_id: flowNodeContentId,
+        flowId,
+        flowName,
+        flowNodeId,
+        flowNodeContentId,
       })
 
       handOffBuilder.withExtraData({

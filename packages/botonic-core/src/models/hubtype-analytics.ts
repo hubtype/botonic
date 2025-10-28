@@ -1,5 +1,7 @@
 import { ToolExecution } from './ai-agents'
 
+export const EVENT_FORMAT_VERSION = 4
+
 export enum EventAction {
   AiAgent = 'ai_agent',
   FeedbackCase = 'feedback_case',
@@ -192,8 +194,4 @@ export interface EventCustom extends HtBaseEventProps {
   action: EventAction.Custom
   customFields?: Record<string, any>
   customSensitiveFields?: Record<string, any>
-}
-
-export enum EventFormatVersion {
-  V4 = 4,
 }

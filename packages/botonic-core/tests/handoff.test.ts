@@ -1,9 +1,5 @@
 // @ts-nocheck
-import {
-  BotonicAction,
-  EventFormatVersion,
-  PATH_PAYLOAD_IDENTIFIER,
-} from '../src'
+import { BotonicAction, PATH_PAYLOAD_IDENTIFIER } from '../src'
 import { HandOffBuilder, HelpdeskEvent, humanHandOff } from '../src/handoff'
 
 describe('Handoff', () => {
@@ -150,9 +146,8 @@ describe('Handoff', () => {
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 
-  test('Create a handoff with the bot event data in v4 format', () => {
+  test('Create a handoff with the bot event data', () => {
     const builder = new HandOffBuilder({}).withBotEvent({
-      format_version: EventFormatVersion.V4,
       flow_id: 'flow-123',
       flow_name: 'Test Flow',
       flow_node_id: 'node-456',
@@ -164,7 +159,6 @@ describe('Handoff', () => {
       JSON.stringify({
         force_assign_if_not_available: true,
         bot_event: {
-          format_version: 4,
           flow_id: 'flow-123',
           flow_name: 'Test Flow',
           flow_node_id: 'node-456',
