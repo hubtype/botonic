@@ -148,10 +148,10 @@ describe('Handoff', () => {
 
   test('Create a handoff with the bot event data', () => {
     const builder = new HandOffBuilder({}).withBotEvent({
-      flow_id: 'flow-123',
-      flow_name: 'Test Flow',
-      flow_node_id: 'node-456',
-      flow_node_content_id: 'content-789',
+      flowId: 'flow-123',
+      flowName: 'Test Flow',
+      flowNodeId: 'node-456',
+      flowNodeContentId: 'content-789',
     })
     builder.handOff()
     const expectedBotonicAction =
@@ -159,6 +159,7 @@ describe('Handoff', () => {
       JSON.stringify({
         force_assign_if_not_available: true,
         bot_event: {
+          format_version: 4,
           flow_id: 'flow-123',
           flow_name: 'Test Flow',
           flow_node_id: 'node-456',
