@@ -17,7 +17,7 @@ export const getKeywordEventConfig = (
 ): DebugEventConfig => {
   const title = (
     <>
-      Keyword triggered <span>- {data.nlu_keyword_name}</span>
+      Keyword matched <span>- "{data.nlu_keyword_name}"</span>
     </>
   )
 

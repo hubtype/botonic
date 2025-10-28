@@ -19,14 +19,8 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>Queue Name</StyledDebugLabel>
+        <StyledDebugLabel>Queue</StyledDebugLabel>
         <StyledDebugValue>{props.queue_name}</StyledDebugValue>
-      </StyledDebugDetail>
-      <StyledDebugDetail>
-        <StyledDebugLabel>Is Queue Open</StyledDebugLabel>
-        <StyledDebugValue>
-          {props.is_queue_open ? 'Yes' : 'No'}
-        </StyledDebugValue>
       </StyledDebugDetail>
     </>
   )
@@ -39,7 +33,7 @@ export const getHandoffSuccessEventConfig = (
     action: EventAction.HandoffSuccess,
     title: (
       <>
-        Handoff success <span>- {data.queue_name}</span>
+        Handoff to agent <span>- {data.queue_name}</span>
       </>
     ),
     component: HandoffSuccess,

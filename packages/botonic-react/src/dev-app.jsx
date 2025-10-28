@@ -176,12 +176,12 @@ export class DevApp extends WebchatApp {
             knowledgebase_inference_id: '220e8400-e29b-41d4-a716-446655440012',
             knowledgebase_fail_reason: '',
             knowledgebase_sources_ids: [
-              '330e8400-e29b-41d4-a716-446655440013',
-              '440e8400-e29b-41d4-a716-446655440014',
+              '0197440e-9297-7332-aee1-3fe3579125b4',
+              '019743f9-34a2-7b73-a4b1-b354d153a8c4',
             ],
             knowledgebase_chunks_ids: [
-              '550e8400-e29b-41d4-a716-446655440015',
-              '660e8400-e29b-41d4-a716-446655440016',
+              '0197440e-9e3b-7de3-affe-d5e9f3bd6112',
+              '0197440e-9cbc-7cd3-b10d-2ade9769dcc3',
             ],
             knowledgebase_message_id: '770e8400-e29b-41d4-a716-446655440017',
             flow_thread_id: '880e8400-e29b-41d4-a716-446655440018',
@@ -213,8 +213,14 @@ export class DevApp extends WebchatApp {
               {
                 tool_name: 'search_knowledge_base',
                 tool_arguments: { query: 'What is the capital of France?' },
-                knowledgebase_sources_ids: ['123', '456'],
-                knowledgebase_chunks_ids: ['789', '101'],
+                knowledgebase_sources_ids: [
+                  '0197440e-9297-7332-aee1-3fe3579125b4',
+                  '019743f9-34a2-7b73-a4b1-b354d153a8c4',
+                ],
+                knowledgebase_chunks_ids: [
+                  '0197440e-9e3b-7de3-affe-d5e9f3bd6112',
+                  '0197440e-9cbc-7cd3-b10d-2ade9769dcc3',
+                ],
               },
               {
                 tool_name: 'get_weather',

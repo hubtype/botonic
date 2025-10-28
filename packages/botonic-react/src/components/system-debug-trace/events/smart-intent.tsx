@@ -14,7 +14,7 @@ export const getSmartIntentEventConfig = (
 ): DebugEventConfig => {
   const title = (
     <>
-      Intent triggered <span>- {data.nlu_intent_smart_title}</span>
+      Smart intent triggered <span>- "{data.nlu_intent_smart_title}"</span>
     </>
   )
   return {

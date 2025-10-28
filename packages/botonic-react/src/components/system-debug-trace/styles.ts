@@ -13,12 +13,11 @@ export const StyledDebugContainer = styled.div`
   border-radius: 4px;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
-  margin: 8px;
+  margin: 4px 8px;
   max-width: calc(100% - 16px);
   width: 100%;
 
   &.expanded {
-    border: 1px solid ${COLORS.N100};
     padding-bottom: 8px;
   }
 `
@@ -92,10 +91,21 @@ export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
 
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 4px;
+    bottom: 0;
+    width: 1px;
+    background-color: ${COLORS.N100};
+  }
 `
 
 export const StyledDebugDetail = styled.div`
@@ -122,6 +132,35 @@ export const StyledDebugValue = styled.div`
   font-size: 12px;
   color: ${COLORS.N700};
   line-height: 1.5;
+
+  > svg {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    flex-shrink: 0;
+    display: block;
+  }
+`
+
+export const StyledDebugItemWithIcon = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  font-weight: 600;
+  font-size: 12px;
+  color: ${COLORS.N700};
+  line-height: 1.5;
+
+  > svg {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    flex-shrink: 0;
+    display: block;
+  }
 `
 
 export const StyledDebugMetadata = styled.div`
@@ -134,6 +173,53 @@ export const StyledDebugMetadata = styled.div`
 
   > div {
     margin-top: 6px;
+    font-weight: 400;
+  }
+`
+
+export const StyledSeeChunksButton = styled.button`
+  border: 1px solid #c4c6d0;
+  border-radius: 4px;
+  padding: 8px;
+  height: 28px;
+  background-color: transparent;
+  color: #413f48;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  margin-left: 12px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: ${COLORS.N50};
+  }
+`
+
+export const StyledGuardrailItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 32px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${COLORS.N700};
+
+  svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  .value {
     font-weight: 400;
   }
 `
