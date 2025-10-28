@@ -25,6 +25,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3115](https://github.com/hubtype/botonic/pull/3115): Update and standardize events to format v4 in botonic.
+- [PR-3116](https://github.com/hubtype/botonic/pull/3116): Fix getValueFromKeyPath function to get variables from `input` and `session` correctly.
 
 ### Changed
 
