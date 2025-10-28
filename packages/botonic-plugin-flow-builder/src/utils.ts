@@ -28,7 +28,7 @@ export function getValueFromKeyPath(
   request: ActionRequest,
   keyPath: string
 ): any {
-  if (keyPath.startsWith('input') || keyPath.startsWith('session')) {
+  if (keyPath.startsWith('input.') || keyPath.startsWith('session.')) {
     return keyPath
       .split('.')
       .reduce((object, key) => resolveObjectKey(object, key), request)
