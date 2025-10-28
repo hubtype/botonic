@@ -4,8 +4,8 @@ import { createRoot } from 'react-dom/client'
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
-import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
+import { WebchatDev } from './webchat/webchat-dev'
 
 export class DevApp extends WebchatApp {
   constructor({
@@ -119,7 +119,7 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'nlu_keyword',
-            format_version: 2,
+            format_version: 4,
             bot_version: '1.2.3',
             flow_version: '4.5.6',
             chat_language: 'en-US',
@@ -132,7 +132,9 @@ export class DevApp extends WebchatApp {
             nlu_keyword_message_id: '770e8400-e29b-41d4-a716-446655440002',
             flow_thread_id: '880e8400-e29b-41d4-a716-446655440003',
             flow_id: '990e8400-e29b-41d4-a716-446655440004',
+            flow_name: 'Flight Booking Flow',
             flow_node_id: 'aa0e8400-e29b-41d4-a716-446655440005',
+            flow_node_content_id: 'nlu_keyword_node_1',
           })
           /* eslint-enable @typescript-eslint/naming-convention */
         },
@@ -141,7 +143,7 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'nlu_intent_smart',
-            format_version: 2,
+            format_version: 4,
             bot_version: '1.2.3',
             flow_version: '4.5.6',
             chat_language: 'en-US',
@@ -153,7 +155,9 @@ export class DevApp extends WebchatApp {
             nlu_intent_smart_message_id: 'cc0e8400-e29b-41d4-a716-446655440007',
             flow_thread_id: 'dd0e8400-e29b-41d4-a716-446655440008',
             flow_id: 'ee0e8400-e29b-41d4-a716-446655440009',
+            flow_name: 'Customer Support Flow',
             flow_node_id: 'ff0e8400-e29b-41d4-a716-446655440010',
+            flow_node_content_id: 'nlu_intent_smart_node_1',
           })
           /* eslint-enable @typescript-eslint/naming-convention */
         },
@@ -162,7 +166,7 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'knowledgebase',
-            format_version: 2,
+            format_version: 4,
             bot_version: '1.2.3',
             flow_version: '4.5.6',
             chat_language: 'en-US',
@@ -182,7 +186,9 @@ export class DevApp extends WebchatApp {
             knowledgebase_message_id: '770e8400-e29b-41d4-a716-446655440017',
             flow_thread_id: '880e8400-e29b-41d4-a716-446655440018',
             flow_id: '990e8400-e29b-41d4-a716-446655440019',
+            flow_name: 'Knowledge Base Flow',
             flow_node_id: 'aa0e8400-e29b-41d4-a716-446655440020',
+            flow_node_content_id: 'knowledgebase_node_1',
           })
           /* eslint-enable @typescript-eslint/naming-convention */
         },
@@ -191,7 +197,7 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'ai_agent',
-            format_version: 2,
+            format_version: 4,
             bot_version: '1.2.3',
             flow_version: '4.5.6',
             chat_language: 'en-US',
@@ -199,11 +205,22 @@ export class DevApp extends WebchatApp {
             bot_interaction_id: 'bb0e8400-e29b-41d4-a716-446655440021',
             flow_thread_id: 'cc0e8400-e29b-41d4-a716-446655440022',
             flow_id: 'dd0e8400-e29b-41d4-a716-446655440023',
-            flow_name: 'Customer Support Flow',
+            flow_name: 'AI Agent Flow',
             flow_node_id: 'ee0e8400-e29b-41d4-a716-446655440024',
             flow_node_content_id: 'ai_agent_node_1',
             flow_node_is_meaningful: true,
-            tools_executed: ['search_knowledge_base', 'calculate_price'],
+            tools_executed: [
+              {
+                tool_name: 'search_knowledge_base',
+                tool_arguments: { query: 'What is the capital of France?' },
+                knowledgebase_sources_ids: ['123', '456'],
+                knowledgebase_chunks_ids: ['789', '101'],
+              },
+              {
+                tool_name: 'get_weather',
+                tool_arguments: { query: 'which is the weather?' },
+              },
+            ],
             memory_length: 5,
             input_message_id: 'ff0e8400-e29b-41d4-a716-446655440025',
             input_guardrails_triggered: [],
@@ -218,13 +235,17 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'fallback',
-            format_version: 2,
+            format_version: 4,
             bot_version: '1.2.3',
             flow_version: '4.5.6',
             chat_language: 'en-US',
             chat_country: 'US',
             bot_interaction_id: '110e8400-e29b-41d4-a716-446655440026',
             user_input: 'asdfghjkl',
+            flow_id: '123',
+            flow_name: 'Fallback Flow',
+            flow_node_id: '456',
+            flow_node_content_id: 'fallback_node_1',
             fallback_message_id: '220e8400-e29b-41d4-a716-446655440027',
             fallback_out: 1,
           })
@@ -235,10 +256,21 @@ export class DevApp extends WebchatApp {
           // @ts-expect-error - Calling dev helper
           window.Botonic.devTestSystemDebugTrace({
             action: 'handoff_success',
+            format_version: 4,
+            bot_version: '1.2.3',
+            flow_version: '4.5.6',
+            chat_language: 'en-US',
+            chat_country: 'US',
+            bot_interaction_id: '110e8400-e29b-41d4-a716-446655440026',
+            user_input: 'asdfghjkl',
             flow_thread_id: '880e8400-e29b-41d4-a716-446655440028',
             queue_id: '990e8400-e29b-41d4-a716-446655440029',
             queue_name: 'Support Queue',
             case_id: '330e8400-e29b-41d4-a716-446655440030',
+            flow_id: '123',
+            flow_name: 'Handoff Success Flow',
+            flow_node_id: '456',
+            flow_node_content_id: 'handoff_success_node_1',
             is_queue_open: true,
             is_available_agent: true,
             is_threshold_reached: false,
