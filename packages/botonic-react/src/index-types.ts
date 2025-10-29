@@ -48,6 +48,7 @@ export interface WebchatRef {
     session,
     lastRoutePath,
   }: AddBotResponseArgs) => void
+  addSystemResponse: ({ response }: AddSystemResponseArgs) => void
   setTyping: (typing: boolean) => void
   addUserMessage: (message: any) => Promise<void>
   updateUser: (userToUpdate: any) => void
@@ -73,6 +74,10 @@ interface AddBotResponseArgs {
   response: any
   session?: any
   lastRoutePath?: any
+}
+
+interface AddSystemResponseArgs {
+  response: any
 }
 
 export interface WebchatArgs {
@@ -134,6 +139,7 @@ export enum SENDERS {
   bot = 'bot',
   user = 'user',
   agent = 'agent',
+  system = 'system',
 }
 
 export enum Typing {

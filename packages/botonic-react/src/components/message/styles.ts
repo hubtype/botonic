@@ -4,6 +4,7 @@ import { COLORS } from '../../constants'
 
 interface MessageContainerProps {
   isSentByUser: boolean
+  isSentBySystem: boolean
 }
 
 export const MessageContainer = styled.div<MessageContainerProps>`
@@ -21,15 +22,17 @@ export const BotMessageImageContainer = styled.div`
   align-items: center;
   justify-content: center;
 `
-interface BolbContainerProps {
+interface BlobContainerProps {
   bgcolor: string
   blob: boolean
   blobwidth?: string
+  issentbysystem: boolean
 }
 
-export const BlobContainer = styled.div<BolbContainerProps>`
+export const BlobContainer = styled.div<BlobContainerProps>`
   position: relative;
   margin: 8px;
+  padding: ${props => (props.issentbysystem ? '4px 8px' : 'inherit')};
   border-radius: 8px;
   background-color: ${props => props.bgcolor};
   color: ${props => props.color};

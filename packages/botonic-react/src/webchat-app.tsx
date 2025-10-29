@@ -257,16 +257,18 @@ export class WebchatApp {
     } else if (event.message?.type === 'sender_action') {
       this.setTyping(event.message.data === Typing.On)
     } else {
-      // TODO: onMessage function should receive a WebchatMessage
-      // and message.type is typed as enum of INPUT
-      // INPUT not contain 'update_webchat_settings' or 'sender_action'
-      // so we need to cast it to unknown to avoid type error
+      const isSystemMessage = (event.message as any)?.sent_by === SENDERS.system
       this.onMessage &&
         this.onMessage(this, {
-          sentBy: SENDERS.bot,
+          sentBy: isSystemMessage ? SENDERS.system : SENDERS.bot,
           ...event.message,
         } as unknown as WebchatMessage)
-      this.addBotMessage(event.message)
+
+      if (isSystemMessage) {
+        this.addSystemMessage(event.message)
+      } else {
+        this.addBotMessage(event.message)
+      }
     }
   }
 
@@ -294,6 +296,18 @@ export class WebchatApp {
     const response = msgToBotonic(message, this.theme?.message?.customTypes)
 
     this.webchatRef.current?.addBotResponse({
+      response,
+    })
+  }
+
+  addSystemMessage(message: any) {
+    message.ack = 0
+    message.isUnread = true
+    message.sentBy = SENDERS.system
+    delete message.sent_by
+    const response = msgToBotonic(message, this.theme?.message?.customTypes)
+
+    this.webchatRef.current?.addSystemResponse({
       response,
     })
   }

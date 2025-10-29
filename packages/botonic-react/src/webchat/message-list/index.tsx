@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
+import { SENDERS } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'
 import { BotonicContainerId } from '../constants'
 import TypingIndicator from '../typing-indicator'
@@ -9,13 +10,17 @@ import { ScrollButton } from './scroll-button'
 import { ContainerMessage, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
-
 const SCROLL_TIMEOUT = 200
 const scrollOptionsEnd: ScrollIntoViewOptions = {
   block: 'end',
 }
 const scrollOptionsCenter: ScrollIntoViewOptions = {
   block: 'center',
+}
+
+interface ContainerMessageProps {
+  role: string
+  id?: string
 }
 
 export const WebchatMessageList = () => {
@@ -133,10 +138,20 @@ export const WebchatMessageList = () => {
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
+          const containerMessageProps: ContainerMessageProps = {
+            role: ROLES.MESSAGE,
+          }
+          const messageComponentId = messageComponent.props.id
+          if (
+            messageComponentId &&
+            messageComponent.props.sentBy === SENDERS.system
+          ) {
+            containerMessageProps.id = `${SENDERS.system}:${messageComponentId}`
+          }
           return (
-            <React.Fragment key={messageComponent.props.id}>
-              <ContainerMessage role={ROLES.MESSAGE}>
-                {showUnreadMessagesBanner(messageComponent.props.id) && (
+            <React.Fragment key={messageComponentId}>
+              <ContainerMessage {...containerMessageProps}>
+                {showUnreadMessagesBanner(messageComponentId) && (
                   <UnreadMessagesBanner
                     unreadMessagesBannerRef={unreadMessagesBannerRef}
                   />

@@ -47,6 +47,7 @@ export const Message = props => {
 
   const isSentByUser = sentBy === SENDERS.user
   const isSentByBot = sentBy === SENDERS.bot
+  const isSentBySystem = sentBy === SENDERS.system
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
   const [state] = useState({
@@ -231,6 +232,7 @@ export const Message = props => {
             <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
             <BlobContainer
               className={className}
+              issentbysystem={isSentBySystem}
               bgcolor={getBgColor()}
               color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
               blobwidth={getThemeProperty(

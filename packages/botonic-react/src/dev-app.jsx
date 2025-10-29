@@ -117,7 +117,7 @@ export class DevApp extends WebchatApp {
           isUnread: true,
           sentBy: 'system',
         }
-        this.addBotMessage(message)
+        this.addSystemMessage(message)
       }
 
       // @ts-expect-error - Adding dev test samples to Botonic namespace
