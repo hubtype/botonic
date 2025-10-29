@@ -1,19 +1,8 @@
 import { EventAction } from '@botonic/core'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 
-import {
-  DebugHubtypeApiService,
-  HubtypeChunk,
-  HubtypeSource,
-} from '../api-service'
-import {
-  FilePdfSvg,
-  FileWordSvg,
-  HandSvg,
-  LinkSvg,
-  ScrewdriverWrenchSvg,
-  WandSvg,
-} from '../icons'
+import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
+import { HandSvg, ScrewdriverWrenchSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
@@ -40,61 +29,47 @@ export interface AiAgentDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
+  knowledge_base_sources?: any[]
+  knowledge_base_chunks?: any[]
+  messageId?: string
 }
 
 export const AiAgent = (props: AiAgentDebugEvent) => {
-  const debugHubtypeApiService = new DebugHubtypeApiService()
   // Collect all sources, chunks, and query from all tools
-  const [allSources, setAllSources] = useState<HubtypeSource[]>([])
-  const allSourcesIds: string[] = []
-  const [allChunks, setAllChunks] = useState<HubtypeChunk[]>([])
-  const allChunksIds: string[] = []
-  let query: string | undefined
+  const { allSourcesIds, allChunksIds, query } = useMemo(() => {
+    const allSourcesIds: string[] = []
+    const allChunksIds: string[] = []
+    let query: string | undefined
 
-  const fetchSources = async () => {
-    const sources = await debugHubtypeApiService.getSourcesByIds(allSourcesIds)
-    setAllSources(sources)
-  }
-  const fetchChunks = async () => {
-    const chunks = await debugHubtypeApiService.getChunksByIds(allChunksIds)
-    setAllChunks(chunks)
-  }
+    props.tools_executed.forEach(tool => {
+      if (
+        tool.tool_arguments?.query &&
+        typeof tool.tool_arguments.query === 'string'
+      ) {
+        query = tool.tool_arguments.query
+      }
+      if (tool.knowledgebase_sources_ids) {
+        allSourcesIds.push(...tool.knowledgebase_sources_ids)
+      }
+      if (tool.knowledgebase_chunks_ids) {
+        allChunksIds.push(...tool.knowledgebase_chunks_ids)
+      }
+    })
 
-  props.tools_executed.forEach(tool => {
-    if (
-      tool.tool_arguments?.query &&
-      typeof tool.tool_arguments.query === 'string'
-    ) {
-      query = tool.tool_arguments.query
-    }
-    if (tool.knowledgebase_sources_ids) {
-      allSourcesIds.push(...tool.knowledgebase_sources_ids)
-    }
-    if (tool.knowledgebase_chunks_ids) {
-      allChunksIds.push(...tool.knowledgebase_chunks_ids)
-    }
+    return { allSourcesIds, allChunksIds, query }
+  }, [props.tools_executed])
+
+  const {
+    sources: allSources,
+    chunks: allChunks,
+    getIconForSourceType,
+  } = useKnowledgeSources({
+    sourceIds: allSourcesIds,
+    chunkIds: allChunksIds,
+    messageId: props.messageId,
+    existingSources: props.knowledge_base_sources,
+    existingChunks: props.knowledge_base_chunks,
   })
-
-  useEffect(() => {
-    fetchSources()
-    fetchChunks()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const getIconForSourceType = (source: HubtypeSource) => {
-    switch (source.type) {
-      case 'file':
-        if (source.active_extraction_job.file_name.endsWith('.pdf')) {
-          return <FilePdfSvg />
-        } else {
-          return <FileWordSvg />
-        }
-      case 'url':
-        return <LinkSvg />
-      default:
-        return null
-    }
-  }
   return (
     <>
       {query && (

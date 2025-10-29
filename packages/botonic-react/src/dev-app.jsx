@@ -1,11 +1,12 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { v7 as uuidv7 } from 'uuid'
 
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
-import { WebchatApp } from './webchat-app'
 import { WebchatDev } from './webchat/webchat-dev'
+import { WebchatApp } from './webchat-app'
 
 export class DevApp extends WebchatApp {
   constructor({
@@ -104,12 +105,19 @@ export class DevApp extends WebchatApp {
       // Development helper to test system debug trace events
       // @ts-expect-error - Adding dev helper to Botonic namespace
       window.Botonic.devTestSystemDebugTrace = eventData => {
-        const dataString =
-          typeof eventData === 'string' ? eventData : JSON.stringify(eventData)
-        this.addBotMessage({
+        const message = {
           type: 'system_debug_trace',
-          data: dataString,
-        })
+          data: eventData,
+          payload: {},
+          id: uuidv7(),
+          feedbackEnabled: false,
+          inferenceId: null,
+          botInteractionId: null,
+          ack: 0,
+          isUnread: true,
+          sentBy: 'system',
+        }
+        this.addBotMessage(message)
       }
 
       // @ts-expect-error - Adding dev test samples to Botonic namespace
@@ -121,10 +129,9 @@ export class DevApp extends WebchatApp {
             action: 'nlu_keyword',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: '550e8400-e29b-41d4-a716-446655440000',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             user_input: 'I want to book a flight',
             nlu_keyword_id: '660e8400-e29b-41d4-a716-446655440001',
             nlu_keyword_name: 'booking_intent',
@@ -145,10 +152,9 @@ export class DevApp extends WebchatApp {
             action: 'nlu_intent_smart',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: 'bb0e8400-e29b-41d4-a716-446655440006',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             user_input: 'What are your business hours?',
             nlu_intent_smart_title: 'Business Hours Inquiry',
             nlu_intent_smart_num_used: 3,
@@ -168,10 +174,9 @@ export class DevApp extends WebchatApp {
             action: 'knowledgebase',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: '110e8400-e29b-41d4-a716-446655440011',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             user_input: 'How do I reset my password?',
             knowledgebase_inference_id: '220e8400-e29b-41d4-a716-446655440012',
             knowledgebase_fail_reason: '',
@@ -199,10 +204,9 @@ export class DevApp extends WebchatApp {
             action: 'ai_agent',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: 'bb0e8400-e29b-41d4-a716-446655440021',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             flow_thread_id: 'cc0e8400-e29b-41d4-a716-446655440022',
             flow_id: 'dd0e8400-e29b-41d4-a716-446655440023',
             flow_name: 'AI Agent Flow',
@@ -243,10 +247,9 @@ export class DevApp extends WebchatApp {
             action: 'fallback',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: '110e8400-e29b-41d4-a716-446655440026',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             user_input: 'asdfghjkl',
             flow_id: '123',
             flow_name: 'Fallback Flow',
@@ -264,10 +267,9 @@ export class DevApp extends WebchatApp {
             action: 'handoff_success',
             format_version: 4,
             bot_version: '1.2.3',
-            flow_version: '4.5.6',
-            chat_language: 'en-US',
-            chat_country: 'US',
-            bot_interaction_id: '110e8400-e29b-41d4-a716-446655440026',
+            user_locale: 'en',
+            user_country: 'US',
+            system_locale: 'en',
             user_input: 'asdfghjkl',
             flow_thread_id: '880e8400-e29b-41d4-a716-446655440028',
             queue_id: '990e8400-e29b-41d4-a716-446655440029',
@@ -281,6 +283,7 @@ export class DevApp extends WebchatApp {
             is_available_agent: true,
             is_threshold_reached: false,
           })
+          /* eslint-enable @typescript-eslint/naming-convention */
         },
       }
     }

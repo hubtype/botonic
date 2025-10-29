@@ -8,20 +8,17 @@ import { DebugMessage } from './debug-message'
 interface SystemDebugTraceProps {
   type: string
   data: Record<string, any> | string
+  id?: string
 }
 
 const serialize = (props: SystemDebugTraceProps) => {
-  const { type, data } = props
-  const parsedData = typeof data === 'string' ? JSON.parse(data) : data
-  // Flatten the structure - merge type and all data fields at the same level
-  return {
-    type,
-    ...parsedData,
-  }
+  const { data } = props
+  // Return the event data as an object, ensuring it's not stringified
+  return typeof data === 'string' ? JSON.parse(data) : data
 }
 
 export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
-  const { data } = props
+  const { data, id, ...otherProps } = props
 
   // Parse data if it's a string
   const parsedData = typeof data === 'string' ? JSON.parse(data) : data
@@ -35,10 +32,11 @@ export const SystemDebugTrace = (props: SystemDebugTraceProps) => {
       <Message
         role={ROLES.SYSTEM_DEBUG_TRACE_MESSAGE}
         json={serialize(props)}
-        {...props}
+        {...otherProps}
         type={INPUT.SYSTEM_DEBUG_TRACE}
+        id={id}
       >
-        <DebugMessage debugEvent={eventData} />
+        <DebugMessage debugEvent={eventData} messageId={id} />
       </Message>
     )
   }

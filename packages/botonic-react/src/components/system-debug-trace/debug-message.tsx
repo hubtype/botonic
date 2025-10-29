@@ -43,9 +43,10 @@ const getEventConfig = (
 
 interface DebugMessageProps {
   debugEvent: DebugEvent
+  messageId?: string
 }
 
-export const DebugMessage = ({ debugEvent }: DebugMessageProps) => {
+export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const eventConfig = getEventConfig(debugEvent)
@@ -78,9 +79,9 @@ export const DebugMessage = ({ debugEvent }: DebugMessageProps) => {
           </StyledDebugArrow>
         )}
       </StyledDebugHeader>
-      {isExpanded && Component && (
-        <StyledDebugContent>
-          <Component {...debugEvent} />
+      {Component && (
+        <StyledDebugContent style={{ display: isExpanded ? 'block' : 'none' }}>
+          <Component {...debugEvent} messageId={messageId} />
         </StyledDebugContent>
       )}
     </StyledDebugContainer>

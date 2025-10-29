@@ -246,6 +246,7 @@ export class WebchatApp {
   }
 
   onServiceEvent(event: Event) {
+    console.log('onServiceEvent', event)
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current?.setOnline(event.online)
@@ -255,8 +256,6 @@ export class WebchatApp {
       this.updateWebchatSettings(event.message.data)
     } else if (event.message?.type === 'sender_action') {
       this.setTyping(event.message.data === Typing.On)
-      // } else if (event.message?.type === 'system_debug_trace') {
-      //   console.log('system_debug_trace', event.message.data)
     } else {
       // TODO: onMessage function should receive a WebchatMessage
       // and message.type is typed as enum of INPUT

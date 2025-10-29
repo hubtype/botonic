@@ -1,18 +1,8 @@
 import { EventAction } from '@botonic/core'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import {
-  DebugHubtypeApiService,
-  HubtypeChunk,
-  HubtypeSource,
-} from '../api-service'
-import {
-  CircleCheckSvg,
-  FilePdfSvg,
-  FileWordSvg,
-  LinkSvg,
-  WandSvg,
-} from '../icons'
+import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
+import { CircleCheckSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
@@ -32,12 +22,19 @@ export interface KnowledgeBaseDebugEvent {
   knowledgebase_sources_ids: string[]
   knowledgebase_chunks_ids: string[]
   user_input: string
+  knowledge_base_sources?: any[]
+  knowledge_base_chunks?: any[]
+  messageId?: string
 }
 
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
-  const debugHubtypeApiService = new DebugHubtypeApiService()
-  const [sources, setSources] = useState<HubtypeSource[]>([])
-  const [chunks, setChunks] = useState<HubtypeChunk[]>([])
+  const { sources, chunks, getIconForSourceType } = useKnowledgeSources({
+    sourceIds: props.knowledgebase_sources_ids,
+    chunkIds: props.knowledgebase_chunks_ids,
+    messageId: props.messageId,
+    existingSources: props.knowledge_base_sources,
+    existingChunks: props.knowledge_base_chunks,
+  })
 
   // Infer states from knowledgebase_fail_reason
   const hasKnowledge =
@@ -48,45 +45,6 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   const showFailReason =
     props.knowledgebase_fail_reason &&
     props.knowledgebase_fail_reason !== 'hallucination'
-
-  const fetchSources = async () => {
-    const fetchedSources = await debugHubtypeApiService.getSourcesByIds(
-      props.knowledgebase_sources_ids
-    )
-    setSources(fetchedSources)
-  }
-
-  const fetchChunks = async () => {
-    const fetchedChunks = await debugHubtypeApiService.getChunksByIds(
-      props.knowledgebase_chunks_ids
-    )
-    setChunks(fetchedChunks)
-  }
-
-  useEffect(() => {
-    if (props.knowledgebase_sources_ids.length > 0) {
-      fetchSources()
-    }
-    if (props.knowledgebase_chunks_ids.length > 0) {
-      fetchChunks()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const getIconForSourceType = (source: HubtypeSource) => {
-    switch (source.type) {
-      case 'file':
-        if (source.active_extraction_job.file_name.endsWith('.pdf')) {
-          return <FilePdfSvg />
-        } else {
-          return <FileWordSvg />
-        }
-      case 'url':
-        return <LinkSvg />
-      default:
-        return null
-    }
-  }
 
   return (
     <>

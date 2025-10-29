@@ -111,7 +111,7 @@ export const StyledDebugContent = styled.div`
 export const StyledDebugDetail = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   padding: 0 32px;
   line-height: 1.5;
 `
@@ -153,6 +153,10 @@ export const StyledDebugItemWithIcon = styled.div`
   color: ${COLORS.N700};
   line-height: 1.5;
 
+  &:not(:last-child) {
+    margin-bottom: 4px;
+  }
+
   > svg {
     width: 12px;
     height: 12px;
@@ -189,11 +193,12 @@ export const StyledSeeChunksButton = styled.button`
   font-weight: 500;
   line-height: 1.5;
   cursor: pointer;
-  margin-left: 12px;
-  margin-top: 4px;
+  margin-left: 0;
+  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: fit-content;
 
   &:hover {
     background-color: ${COLORS.N50};
