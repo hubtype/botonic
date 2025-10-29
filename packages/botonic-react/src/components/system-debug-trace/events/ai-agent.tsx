@@ -70,6 +70,18 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
     existingSources: props.knowledge_base_sources,
     existingChunks: props.knowledge_base_chunks,
   })
+
+  const handleSeeChunks = () => {
+    window.dispatchEvent(
+      new CustomEvent('see-chunks-clicked', {
+        detail: {
+          messageId: props.messageId,
+          chunks: allChunks,
+          sources: allSources,
+        },
+      })
+    )
+  }
   return (
     <>
       {query && (
@@ -91,7 +103,9 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
             </StyledDebugItemWithIcon>
           ))}
           {allChunks.length > 0 && (
-            <StyledSeeChunksButton>See chunks</StyledSeeChunksButton>
+            <StyledSeeChunksButton onClick={handleSeeChunks}>
+              See chunks
+            </StyledSeeChunksButton>
           )}
         </StyledDebugDetail>
       )}

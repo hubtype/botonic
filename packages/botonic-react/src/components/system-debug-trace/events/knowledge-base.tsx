@@ -46,6 +46,18 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
     props.knowledgebase_fail_reason &&
     props.knowledgebase_fail_reason !== 'hallucination'
 
+  const handleSeeChunks = () => {
+    window.dispatchEvent(
+      new CustomEvent('see-chunks-clicked', {
+        detail: {
+          messageId: props.messageId,
+          chunks,
+          sources,
+        },
+      })
+    )
+  }
+
   return (
     <>
       <StyledDebugDetail>
@@ -72,7 +84,9 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
                 </StyledDebugItemWithIcon>
               ))}
               {chunks.length > 0 && (
-                <StyledSeeChunksButton>See chunks</StyledSeeChunksButton>
+                <StyledSeeChunksButton onClick={handleSeeChunks}>
+                  See chunks
+                </StyledSeeChunksButton>
               )}
             </StyledDebugDetail>
           )}
