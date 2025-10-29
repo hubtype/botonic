@@ -8,6 +8,7 @@ import {
   StyledDebugValue,
 } from '../styles'
 import { DebugEventConfig } from '../types'
+import { LABELS } from './constants'
 
 export interface HandoffSuccessDebugEvent {
   action: EventAction.HandoffSuccess
@@ -17,12 +18,10 @@ export interface HandoffSuccessDebugEvent {
 
 export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   return (
-    <>
-      <StyledDebugDetail>
-        <StyledDebugLabel>Queue</StyledDebugLabel>
-        <StyledDebugValue>{props.queue_name}</StyledDebugValue>
-      </StyledDebugDetail>
-    </>
+    <StyledDebugDetail>
+      <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
+      <StyledDebugValue>{props.queue_name}</StyledDebugValue>
+    </StyledDebugDetail>
   )
 }
 

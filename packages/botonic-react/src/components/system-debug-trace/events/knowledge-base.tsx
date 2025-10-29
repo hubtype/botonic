@@ -1,17 +1,20 @@
 import { EventAction } from '@botonic/core'
 import React from 'react'
 
+import { HubtypeChunk, HubtypeSource } from '../api-service'
 import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
 import { CircleCheckSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
-  StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledDebugValue,
   StyledGuardrailItem,
-  StyledSeeChunksButton,
+  StyledGuardrailLabel,
 } from '../styles'
 import { DebugEventConfig } from '../types'
+import { SourcesSection } from './components'
+import { LABELS } from './constants'
+import { useChunksModal } from './hooks'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase
@@ -22,12 +25,13 @@ export interface KnowledgeBaseDebugEvent {
   knowledgebase_sources_ids: string[]
   knowledgebase_chunks_ids: string[]
   user_input: string
-  knowledge_base_sources?: any[]
-  knowledge_base_chunks?: any[]
+  knowledge_base_sources?: HubtypeSource[]
+  knowledge_base_chunks?: HubtypeChunk[]
   messageId?: string
 }
 
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
+  const { openChunksModal } = useChunksModal()
   const { sources, chunks, getIconForSourceType } = useKnowledgeSources({
     sourceIds: props.knowledgebase_sources_ids,
     chunkIds: props.knowledgebase_chunks_ids,
@@ -47,61 +51,51 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
     props.knowledgebase_fail_reason !== 'hallucination'
 
   const handleSeeChunks = () => {
-    window.dispatchEvent(
-      new CustomEvent('see-chunks-clicked', {
-        detail: {
-          messageId: props.messageId,
-          chunks,
-          sources,
-        },
-      })
-    )
+    openChunksModal({
+      messageId: props.messageId,
+      chunks,
+      sources,
+    })
   }
 
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>Query</StyledDebugLabel>
+        <StyledDebugLabel>{LABELS.QUERY}</StyledDebugLabel>
         <StyledDebugValue>&quot;{props.user_input}&quot;</StyledDebugValue>
       </StyledDebugDetail>
 
       {showFailReason ? (
         <StyledDebugDetail>
-          <StyledDebugLabel>Knowledge Base Fail Reason</StyledDebugLabel>
+          <StyledDebugLabel>
+            {LABELS.KNOWLEDGE_BASE_FAIL_REASON}
+          </StyledDebugLabel>
           <StyledDebugValue>{props.knowledgebase_fail_reason}</StyledDebugValue>
         </StyledDebugDetail>
       ) : (
         <>
-          {sources.length > 0 && (
-            <StyledDebugDetail>
-              <StyledDebugLabel>Sources</StyledDebugLabel>
-              {sources.map((source, index) => (
-                <StyledDebugItemWithIcon key={index}>
-                  {getIconForSourceType(source)}
-                  <span className='value'>
-                    {source.active_extraction_job.file_name}
-                  </span>
-                </StyledDebugItemWithIcon>
-              ))}
-              {chunks.length > 0 && (
-                <StyledSeeChunksButton onClick={handleSeeChunks}>
-                  See chunks
-                </StyledSeeChunksButton>
-              )}
-            </StyledDebugDetail>
-          )}
+          <SourcesSection
+            sources={sources}
+            chunks={chunks}
+            getIconForSourceType={getIconForSourceType}
+            onSeeChunks={handleSeeChunks}
+          />
 
           {hasKnowledge && (
             <StyledGuardrailItem>
               <CircleCheckSvg />
-              <span className='label'>Knowledge found</span>
+              <StyledGuardrailLabel>
+                {LABELS.KNOWLEDGE_FOUND}
+              </StyledGuardrailLabel>
             </StyledGuardrailItem>
           )}
 
           {isFaithful && (
             <StyledGuardrailItem>
               <CircleCheckSvg />
-              <span className='label'>Faithful answer</span>
+              <StyledGuardrailLabel>
+                {LABELS.FAITHFUL_ANSWER}
+              </StyledGuardrailLabel>
             </StyledGuardrailItem>
           )}
         </>

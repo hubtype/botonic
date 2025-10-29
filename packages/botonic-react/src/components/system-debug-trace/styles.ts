@@ -219,12 +219,25 @@ export const StyledGuardrailItem = styled.div`
     height: 12px;
     flex-shrink: 0;
   }
+`
 
-  .label {
-    font-weight: 600;
-  }
+export const StyledGuardrailLabel = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${COLORS.N700};
+`
 
-  .value {
-    font-weight: 400;
-  }
+export const StyledGuardrailValue = styled.span`
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${COLORS.N700};
+`
+
+export const StyledSourceValue = styled.span`
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${COLORS.N700};
 `

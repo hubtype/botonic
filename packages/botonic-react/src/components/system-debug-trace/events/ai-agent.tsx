@@ -1,17 +1,21 @@
 import { EventAction } from '@botonic/core'
 import React, { useMemo } from 'react'
 
+import { HubtypeChunk, HubtypeSource } from '../api-service'
 import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
-import { HandSvg, ScrewdriverWrenchSvg, WandSvg } from '../icons'
+import { ScrewdriverWrenchSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledDebugValue,
-  StyledGuardrailItem,
   StyledSeeChunksButton,
+  StyledSourceValue,
 } from '../styles'
 import { DebugEventConfig } from '../types'
+import { GuardrailList } from './components'
+import { LABELS } from './constants'
+import { useChunksModal } from './hooks'
 
 interface ToolExecuted {
   tool_name: string
@@ -29,12 +33,14 @@ export interface AiAgentDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
-  knowledge_base_sources?: any[]
-  knowledge_base_chunks?: any[]
+  knowledge_base_sources?: HubtypeSource[]
+  knowledge_base_chunks?: HubtypeChunk[]
   messageId?: string
 }
 
 export const AiAgent = (props: AiAgentDebugEvent) => {
+  const { openChunksModal } = useChunksModal()
+
   // Collect all sources, chunks, and query from all tools
   const { allSourcesIds, allChunksIds, query } = useMemo(() => {
     const allSourcesIds: string[] = []
@@ -72,39 +78,35 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
   })
 
   const handleSeeChunks = () => {
-    window.dispatchEvent(
-      new CustomEvent('see-chunks-clicked', {
-        detail: {
-          messageId: props.messageId,
-          chunks: allChunks,
-          sources: allSources,
-        },
-      })
-    )
+    openChunksModal({
+      messageId: props.messageId,
+      chunks: allChunks,
+      sources: allSources,
+    })
   }
   return (
     <>
       {query && (
         <StyledDebugDetail>
-          <StyledDebugLabel>Query</StyledDebugLabel>
+          <StyledDebugLabel>{LABELS.QUERY}</StyledDebugLabel>
           <StyledDebugValue>&quot;{query}&quot;</StyledDebugValue>
         </StyledDebugDetail>
       )}
 
       {allSources.length > 0 && (
         <StyledDebugDetail>
-          <StyledDebugLabel>Knowledge gathered</StyledDebugLabel>
-          {allSources.map((source, index) => (
-            <StyledDebugItemWithIcon key={index}>
+          <StyledDebugLabel>{LABELS.KNOWLEDGE_GATHERED}</StyledDebugLabel>
+          {allSources.map(source => (
+            <StyledDebugItemWithIcon key={source.id}>
               {getIconForSourceType(source)}
-              <span className='value'>
+              <StyledSourceValue>
                 {source.active_extraction_job.file_name}
-              </span>
+              </StyledSourceValue>
             </StyledDebugItemWithIcon>
           ))}
           {allChunks.length > 0 && (
             <StyledSeeChunksButton onClick={handleSeeChunks}>
-              See chunks
+              {LABELS.SEE_CHUNKS_BUTTON}
             </StyledSeeChunksButton>
           )}
         </StyledDebugDetail>
@@ -112,7 +114,7 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
 
       {props.tools_executed.length > 0 && (
         <StyledDebugDetail>
-          <StyledDebugLabel>Executed tools</StyledDebugLabel>
+          <StyledDebugLabel>{LABELS.EXECUTED_TOOLS}</StyledDebugLabel>
           {props.tools_executed.map((tool, index) => (
             <StyledDebugItemWithIcon key={`${tool.tool_name}-${index}`}>
               <ScrewdriverWrenchSvg />
@@ -122,30 +124,24 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
         </StyledDebugDetail>
       )}
 
-      {props.input_guardrails_triggered.map((guardrail, index) => (
-        <StyledGuardrailItem key={`input-${index}`}>
-          <HandSvg />
-          <span className='label'>Guardrail triggered</span>
-          <span className='value'>- {guardrail}</span>
-        </StyledGuardrailItem>
-      ))}
-      {props.output_guardrails_triggered.map((guardrail, index) => (
-        <StyledGuardrailItem key={`output-${index}`}>
-          <HandSvg />
-          <span className='label'>Guardrail triggered</span>
-          <span className='value'>- {guardrail}</span>
-        </StyledGuardrailItem>
-      ))}
+      <GuardrailList
+        keyPrefix='input'
+        guardrails={props.input_guardrails_triggered}
+      />
+      <GuardrailList
+        keyPrefix='output'
+        guardrails={props.output_guardrails_triggered}
+      />
 
       {props.exit && (
         <StyledDebugDetail>
-          <StyledDebugLabel>Exit</StyledDebugLabel>
+          <StyledDebugLabel>{LABELS.EXIT}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
 
       {props.error && (
         <StyledDebugDetail>
-          <StyledDebugLabel>Error</StyledDebugLabel>
+          <StyledDebugLabel>{LABELS.ERROR}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
     </>

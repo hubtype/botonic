@@ -138,20 +138,12 @@ export const WebchatMessageList = () => {
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
-          const containerMessageProps: ContainerMessageProps = {
-            role: ROLES.MESSAGE,
-          }
-          const messageComponentId = messageComponent.props.id
-          if (
-            messageComponentId &&
-            messageComponent.props.sentBy === SENDERS.system
-          ) {
-            containerMessageProps.id = `${SENDERS.system}:${messageComponentId}`
-          }
+          const messageId = messageComponent.props.id
+
           return (
-            <React.Fragment key={messageComponentId}>
-              <ContainerMessage {...containerMessageProps}>
-                {showUnreadMessagesBanner(messageComponentId) && (
+            <React.Fragment key={messageId}>
+              <ContainerMessage role={ROLES.MESSAGE}>
+                {showUnreadMessagesBanner(messageId) && (
                   <UnreadMessagesBanner
                     unreadMessagesBannerRef={unreadMessagesBannerRef}
                   />

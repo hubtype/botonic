@@ -32,7 +32,8 @@ interface BlobContainerProps {
 export const BlobContainer = styled.div<BlobContainerProps>`
   position: relative;
   margin: 8px;
-  padding: ${props => (props.issentbysystem ? '4px 8px' : 'inherit')};
+  padding: ${props =>
+    props.issentbysystem ? '4px 8px !important' : 'inherit'};
   border-radius: 8px;
   background-color: ${props => props.bgcolor};
   color: ${props => props.color};
