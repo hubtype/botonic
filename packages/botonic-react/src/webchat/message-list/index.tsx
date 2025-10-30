@@ -9,7 +9,7 @@ import TypingIndicator from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
 import {
-  ContainerMessage,
+  BaseContainerMessage,
   ScrollableMessageList,
   SystemContainerMessage,
 } from './styles'
@@ -76,14 +76,6 @@ export const WebchatMessageList = () => {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isSystemMessage = (messageComponent: any) => {
-    return (
-      messageComponent.props?.sentBy === SENDERS.system ||
-      messageComponent.props?.type === INPUT.SYSTEM_DEBUG_TRACE
-    )
-  }
-
   useEffect(() => {
     const firstUnreadMessage = webchatState.messagesComponents.find(
       message => message.props.isUnread
@@ -147,10 +139,10 @@ export const WebchatMessageList = () => {
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
           const messageId = messageComponent.props.id
-          const isCurrentSystemMessage = isSystemMessage(messageComponent)
-          const MessageContainer = isCurrentSystemMessage
-            ? SystemContainerMessage
-            : ContainerMessage
+          const MessageContainer =
+            messageComponent.props?.sentBy === SENDERS.system
+              ? SystemContainerMessage
+              : BaseContainerMessage
 
           return (
             <React.Fragment key={messageId}>

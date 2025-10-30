@@ -1,6 +1,5 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { v7 as uuidv7 } from 'uuid'
 
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'

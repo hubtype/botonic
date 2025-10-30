@@ -11,16 +11,10 @@ export interface FallbackDebugEvent {
   fallback_message_id: string
 }
 
-const getOrdinalSuffix = (num: number): string => {
-  if (num === 1) return '1st'
-  if (num === 2) return '2nd'
-  return ''
-}
-
 export const getFallbackEventConfig = (
   data: FallbackDebugEvent
 ): DebugEventConfig => {
-  const ordinal = getOrdinalSuffix(data.fallback_out)
+  const ordinal = data.fallback_out === 1 ? '1st' : '2nd'
   const title = (
     <>
       Fallback message triggered <span>- {ordinal} message</span>
