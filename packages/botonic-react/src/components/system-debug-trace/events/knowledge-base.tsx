@@ -2,7 +2,7 @@ import { EventAction } from '@botonic/core'
 import React from 'react'
 
 import { HubtypeChunk, HubtypeSource } from '../api-service'
-import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
+import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { CircleCheckSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
@@ -33,7 +33,7 @@ export interface KnowledgeBaseDebugEvent {
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   const { openChunksModal } = useChunksModal()
   const { sources, chunks, getIconForSourceType, hasKnowledge, isFaithful } =
-    useKnowledgeSources({
+    useKnowledgeBaseInfo({
       sourceIds: props.knowledgebase_sources_ids,
       chunkIds: props.knowledgebase_chunks_ids,
       messageId: props.messageId,

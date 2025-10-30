@@ -9,7 +9,7 @@ import {
 } from '../api-service'
 import { FilePdfSvg, FileWordSvg, LinkSvg } from '../icons'
 
-interface UseKnowledgeSourcesParams {
+interface UseKnowledgeBaseInfoParams {
   sourceIds: string[]
   chunkIds: string[]
   messageId?: string
@@ -18,14 +18,14 @@ interface UseKnowledgeSourcesParams {
   failReason?: string
 }
 
-export const useKnowledgeSources = ({
+export const useKnowledgeBaseInfo = ({
   sourceIds,
   chunkIds,
   messageId,
   existingSources,
   existingChunks,
   failReason,
-}: UseKnowledgeSourcesParams) => {
+}: UseKnowledgeBaseInfoParams) => {
   const { updateMessage, webchatState } = useContext(WebchatContext)
 
   // Check if we have cached data (existingSources/existingChunks are defined, even if empty arrays)

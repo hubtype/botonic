@@ -2,7 +2,7 @@ import { EventAction } from '@botonic/core'
 import React, { useMemo } from 'react'
 
 import { HubtypeChunk, HubtypeSource } from '../api-service'
-import { useKnowledgeSources } from '../hooks/use-knowledge-sources'
+import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { ScrewdriverWrenchSvg, WandSvg } from '../icons'
 import {
   StyledDebugDetail,
@@ -69,7 +69,7 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
     sources: allSources,
     chunks: allChunks,
     getIconForSourceType,
-  } = useKnowledgeSources({
+  } = useKnowledgeBaseInfo({
     sourceIds: allSourcesIds,
     chunkIds: allChunksIds,
     messageId: props.messageId,
