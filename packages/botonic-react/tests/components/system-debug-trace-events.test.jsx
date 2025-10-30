@@ -73,7 +73,7 @@ describe('System Debug Trace - Event Components', () => {
   })
 
   describe('AiAgent Component', () => {
-    test('renders without tools', async () => {
+    test('renders without tools and displays no tools executed label', async () => {
       const props = {
         action: EventAction.AiAgent,
         flow_node_content_id: 'content-1',
@@ -98,6 +98,7 @@ describe('System Debug Trace - Event Components', () => {
       })
 
       expect(container).toBeTruthy()
+      expect(container.textContent).toContain('No tools executed')
     })
 
     test('renders with tools executed', async () => {
@@ -460,6 +461,298 @@ describe('System Debug Trace - Event Components', () => {
       })
 
       expect(container).toBeTruthy()
+    })
+
+    test('displays query from tool arguments', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [
+          {
+            tool_name: 'search_tool',
+            tool_arguments: { query: 'What is the return policy?' },
+          },
+        ],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Query')
+      expect(container.textContent).toContain('"What is the return policy?"')
+    })
+
+    test('displays query from last tool with query', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [
+          {
+            tool_name: 'tool_without_query',
+            tool_arguments: { param: 'value' },
+          },
+          {
+            tool_name: 'tool_with_query',
+            tool_arguments: { query: 'first query' },
+          },
+          {
+            tool_name: 'another_tool_with_query',
+            tool_arguments: { query: 'second query' },
+          },
+        ],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      // The implementation uses the last query found in tools_executed
+      expect(container.textContent).toContain('"second query"')
+      expect(container.textContent).not.toContain('"first query"')
+    })
+
+    test('displays exit flag', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: true,
+        error: false,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Exit')
+    })
+
+    test('displays error flag', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: true,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Error')
+    })
+
+    test('displays both exit and error flags', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: true,
+        error: true,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Exit')
+      expect(container.textContent).toContain('Error')
+    })
+
+    test('renders with knowledge base sources and chunks from props', async () => {
+      const mockSources = [
+        {
+          id: 'src-1',
+          name: 'Test Source 1',
+          source_type: 'pdf',
+          url: 'http://example.com/doc1.pdf',
+        },
+        {
+          id: 'src-2',
+          name: 'Test Source 2',
+          source_type: 'webpage',
+          url: 'http://example.com/page1',
+        },
+      ]
+
+      const mockChunks = [
+        {
+          id: 'chunk-1',
+          source_id: 'src-1',
+          content: 'Test chunk content',
+        },
+      ]
+
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [
+          {
+            tool_name: 'search_tool',
+            tool_arguments: { query: 'test query' },
+            knowledgebase_sources_ids: ['src-1', 'src-2'],
+            knowledgebase_chunks_ids: ['chunk-1'],
+          },
+        ],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+        knowledge_base_sources: mockSources,
+        knowledge_base_chunks: mockChunks,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Knowledge gathered')
+      expect(container).toBeTruthy()
+    })
+
+    test('handles multiple tools with knowledge base references', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [
+          {
+            tool_name: 'tool_1',
+            tool_arguments: { query: 'first query' },
+            knowledgebase_sources_ids: ['src-1'],
+            knowledgebase_chunks_ids: ['chunk-1'],
+          },
+          {
+            tool_name: 'tool_2',
+            tool_arguments: {},
+            knowledgebase_sources_ids: ['src-2'],
+            knowledgebase_chunks_ids: ['chunk-2', 'chunk-3'],
+          },
+        ],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('tool_1')
+      expect(container.textContent).toContain('tool_2')
+      expect(container.textContent).toContain('Executed tools')
+    })
+
+    test('does not display query when no tools have query argument', async () => {
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [
+          {
+            tool_name: 'some_tool',
+            tool_arguments: { param: 'value' },
+          },
+        ],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).not.toContain('Query')
+      expect(container.textContent).toContain('some_tool')
     })
   })
 })

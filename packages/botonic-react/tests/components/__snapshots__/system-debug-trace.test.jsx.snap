@@ -53,7 +53,17 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
         "display": "none",
       }
     }
-  />
+  >
+    <div
+      className="sc-gsFSXq bZGSqH"
+    >
+      <strong
+        className="sc-kAyceB DSINm"
+      >
+        No tools executed
+      </strong>
+    </div>
+  </div>
 </div>
 `;
 

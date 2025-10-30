@@ -6,6 +6,7 @@ export const LABELS = {
   SOURCES: 'Sources',
   KNOWLEDGE_GATHERED: 'Knowledge gathered',
   EXECUTED_TOOLS: 'Executed tools',
+  NO_TOOLS_EXECUTED: 'No tools executed',
   EXIT: 'Exit',
   ERROR: 'Error',
   QUEUE: 'Queue',

@@ -109,6 +109,12 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
         </StyledDebugDetail>
       )}
 
+      {props.tools_executed.length === 0 && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.NO_TOOLS_EXECUTED}</StyledDebugLabel>
+        </StyledDebugDetail>
+      )}
+
       <GuardrailList
         keyPrefix='input'
         guardrails={props.input_guardrails_triggered}
