@@ -131,16 +131,17 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       <GuardrailList
         keyPrefix='output'
         guardrails={props.output_guardrails_triggered}
+        $isLastItem={!props.exit && !props.error}
       />
 
       {props.exit && (
-        <StyledDebugDetail>
+        <StyledDebugDetail $isLastItem={props.exit && !props.error}>
           <StyledDebugLabel>{LABELS.EXIT}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
 
       {props.error && (
-        <StyledDebugDetail>
+        <StyledDebugDetail $isLastItem={props.exit && props.error}>
           <StyledDebugLabel>{LABELS.ERROR}</StyledDebugLabel>
         </StyledDebugDetail>
       )}

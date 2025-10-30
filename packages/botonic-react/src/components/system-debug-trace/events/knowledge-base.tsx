@@ -91,7 +91,7 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
           )}
 
           {isFaithful && (
-            <StyledGuardrailItem>
+            <StyledGuardrailItem $isLastItem={true}>
               <CircleCheckSvg />
               <StyledGuardrailLabel>
                 {LABELS.FAITHFUL_ANSWER}

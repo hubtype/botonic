@@ -1,12 +1,27 @@
 import styled from 'styled-components'
 
-export const ContainerMessage = styled.div`
+const BaseContainerMessage = styled.div`
   display: flex;
   overflow-x: hidden;
   flex-direction: column;
   flex: none;
   white-space: pre;
   word-wrap: break-word;
+`
+
+export const ContainerMessage = styled(BaseContainerMessage)`
+  /* Default spacing for regular messages */
+`
+
+export const SystemContainerMessage = styled(BaseContainerMessage)`
+  /* No margin between consecutive system messages */
+  margin-top: 0;
+
+  /* Add spacing when transitioning between message types */
+  /* ${ContainerMessage} + &,
+  & + ${ContainerMessage} {
+    margin-top: 12px;
+  } */
 `
 
 export const DefaultIntroImage = styled.img`

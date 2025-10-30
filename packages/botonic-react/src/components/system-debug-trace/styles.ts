@@ -16,10 +16,6 @@ export const StyledDebugContainer = styled.div`
   margin: 4px 8px;
   max-width: calc(100% - 16px);
   width: 100%;
-
-  &.expanded {
-    padding-bottom: 8px;
-  }
 `
 
 export const StyledDebugHeader = styled.div`
@@ -107,12 +103,15 @@ export const StyledDebugContent = styled.div`
     background-color: ${COLORS.N100};
   }
 `
-
-export const StyledDebugDetail = styled.div`
+interface StyledDebugDetailProps {
+  $isLastItem?: boolean
+}
+export const StyledDebugDetail = styled.div<StyledDebugDetailProps>`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 32px;
+  gap: 4px;
+  padding-left: 28px;
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
   line-height: 1.5;
 `
 
@@ -127,7 +126,6 @@ export const StyledDebugValue = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 12px;
   font-weight: 600;
   font-size: 12px;
   color: ${COLORS.N700};
@@ -173,7 +171,7 @@ export const StyledDebugMetadata = styled.div`
   border-top: 1px solid ${COLORS.N100};
   color: ${COLORS.N700};
   font-size: 12px;
-  padding: 0 32px;
+  padding-left: 28px;
 
   > div {
     margin-top: 6px;
@@ -194,7 +192,7 @@ export const StyledSeeChunksButton = styled.button`
   line-height: 1.5;
   cursor: pointer;
   margin-left: 0;
-  margin-top: 8px;
+  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,12 +202,15 @@ export const StyledSeeChunksButton = styled.button`
     background-color: ${COLORS.N50};
   }
 `
-
-export const StyledGuardrailItem = styled.div`
+interface StyledGuardrailItemProps {
+  $isLastItem?: boolean
+}
+export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 32px;
+  padding-left: 28px;
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};

@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
@@ -7,7 +8,11 @@ import { BotonicContainerId } from '../constants'
 import TypingIndicator from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
-import { ContainerMessage, ScrollableMessageList } from './styles'
+import {
+  ContainerMessage,
+  ScrollableMessageList,
+  SystemContainerMessage,
+} from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
 const SCROLL_TIMEOUT = 200
@@ -16,11 +21,6 @@ const scrollOptionsEnd: ScrollIntoViewOptions = {
 }
 const scrollOptionsCenter: ScrollIntoViewOptions = {
   block: 'center',
-}
-
-interface ContainerMessageProps {
-  role: string
-  id?: string
 }
 
 export const WebchatMessageList = () => {
@@ -73,6 +73,14 @@ export const WebchatMessageList = () => {
       firstUnreadMessageId &&
       messageComponentId === firstUnreadMessageId &&
       webchatState.numUnreadMessages > 0
+    )
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isSystemMessage = (messageComponent: any) => {
+    return (
+      messageComponent.props?.sentBy === SENDERS.system ||
+      messageComponent.props?.type === INPUT.SYSTEM_DEBUG_TRACE
     )
   }
 
@@ -139,17 +147,21 @@ export const WebchatMessageList = () => {
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
           const messageId = messageComponent.props.id
+          const isCurrentSystemMessage = isSystemMessage(messageComponent)
+          const MessageContainer = isCurrentSystemMessage
+            ? SystemContainerMessage
+            : ContainerMessage
 
           return (
             <React.Fragment key={messageId}>
-              <ContainerMessage role={ROLES.MESSAGE}>
+              <MessageContainer role={ROLES.MESSAGE}>
                 {showUnreadMessagesBanner(messageId) && (
                   <UnreadMessagesBanner
                     unreadMessagesBannerRef={unreadMessagesBannerRef}
                   />
                 )}
                 {messageComponent}
-              </ContainerMessage>
+              </MessageContainer>
               {index === webchatState.messagesComponents.length - 1 && (
                 <div
                   ref={lastMessageRef}
