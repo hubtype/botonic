@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { KnowledgebaseFailReason } from '@botonic/core'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
 import {
@@ -14,6 +15,7 @@ interface UseKnowledgeSourcesParams {
   messageId?: string
   existingSources?: HubtypeSource[]
   existingChunks?: HubtypeChunk[]
+  failReason?: string
 }
 
 export const useKnowledgeSources = ({
@@ -22,6 +24,7 @@ export const useKnowledgeSources = ({
   messageId,
   existingSources,
   existingChunks,
+  failReason,
 }: UseKnowledgeSourcesParams) => {
   const { updateMessage, webchatState } = useContext(WebchatContext)
 
@@ -114,6 +117,27 @@ export const useKnowledgeSources = ({
     }
   }
 
+  const { hasKnowledge, isFaithful } = useMemo(() => {
+    const typedFailReason = failReason as unknown as KnowledgebaseFailReason
+
+    if (typedFailReason === KnowledgebaseFailReason.NoKnowledge) {
+      return {
+        hasKnowledge: false,
+        isFaithful: false,
+      }
+    }
+    if (typedFailReason === KnowledgebaseFailReason.Hallucination) {
+      return {
+        hasKnowledge: true,
+        isFaithful: false,
+      }
+    }
+    return {
+      hasKnowledge: true,
+      isFaithful: true,
+    }
+  }, [failReason])
+
   useEffect(() => {
     // If we already have cached data (even if empty), don't fetch again
     if (hasCachedData) {
@@ -144,5 +168,7 @@ export const useKnowledgeSources = ({
     chunks,
     isLoading,
     getIconForSourceType,
+    hasKnowledge,
+    isFaithful,
   }
 }

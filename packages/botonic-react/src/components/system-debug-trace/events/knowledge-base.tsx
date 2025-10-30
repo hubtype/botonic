@@ -32,23 +32,17 @@ export interface KnowledgeBaseDebugEvent {
 
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   const { openChunksModal } = useChunksModal()
-  const { sources, chunks, getIconForSourceType } = useKnowledgeSources({
-    sourceIds: props.knowledgebase_sources_ids,
-    chunkIds: props.knowledgebase_chunks_ids,
-    messageId: props.messageId,
-    existingSources: props.knowledge_base_sources,
-    existingChunks: props.knowledge_base_chunks,
-  })
+  const { sources, chunks, getIconForSourceType, hasKnowledge, isFaithful } =
+    useKnowledgeSources({
+      sourceIds: props.knowledgebase_sources_ids,
+      chunkIds: props.knowledgebase_chunks_ids,
+      messageId: props.messageId,
+      existingSources: props.knowledge_base_sources,
+      existingChunks: props.knowledge_base_chunks,
+      failReason: props.knowledgebase_fail_reason,
+    })
 
-  // Infer states from knowledgebase_fail_reason
-  const hasKnowledge =
-    !props.knowledgebase_fail_reason ||
-    props.knowledgebase_fail_reason === 'hallucination'
-  const isFaithful =
-    !props.knowledgebase_fail_reason || props.knowledgebase_fail_reason === ''
-  const showFailReason =
-    props.knowledgebase_fail_reason &&
-    props.knowledgebase_fail_reason !== 'hallucination'
+  const showFailReason = !hasKnowledge || !isFaithful
 
   const handleSeeChunks = () => {
     openChunksModal({

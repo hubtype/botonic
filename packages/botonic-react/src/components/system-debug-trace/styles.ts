@@ -55,8 +55,8 @@ export const StyledDebugIcon = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   margin-right: 8px;
   flex-shrink: 0;
 
@@ -132,10 +132,10 @@ export const StyledDebugValue = styled.div`
   line-height: 1.5;
 
   > svg {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
     flex-shrink: 0;
     display: block;
   }
@@ -156,10 +156,10 @@ export const StyledDebugItemWithIcon = styled.div`
   }
 
   > svg {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
     flex-shrink: 0;
     display: block;
   }
@@ -216,8 +216,8 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
   color: ${COLORS.N700};
 
   svg {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
   }
 `
@@ -241,4 +241,30 @@ export const StyledSourceValue = styled.span`
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
+`
+
+export const StyledFileSourceValue = styled(StyledSourceValue)`
+  display: block;
+`
+
+export const StyledUrlSourceValue = styled.a`
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${COLORS.N700};
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+
+  &:hover {
+    text-decoration: underline;
+    color: ${COLORS.BOTONIC_BLUE};
+  }
+
+  &:visited {
+    color: ${COLORS.N700};
+  }
 `

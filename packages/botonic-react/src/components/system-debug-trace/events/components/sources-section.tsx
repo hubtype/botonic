@@ -5,8 +5,9 @@ import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
   StyledDebugLabel,
+  StyledFileSourceValue,
   StyledSeeChunksButton,
-  StyledSourceValue,
+  StyledUrlSourceValue,
 } from '../../styles'
 import { LABELS } from '../constants'
 
@@ -30,14 +31,31 @@ export const SourcesSection: React.FC<SourcesSectionProps> = ({
   return (
     <StyledDebugDetail>
       <StyledDebugLabel>{label}</StyledDebugLabel>
-      {sources.map(source => (
-        <StyledDebugItemWithIcon key={source.id}>
-          {getIconForSourceType(source)}
-          <StyledSourceValue>
-            {source.active_extraction_job.file_name}
-          </StyledSourceValue>
-        </StyledDebugItemWithIcon>
-      ))}
+      {sources.map(source => {
+        const icon = getIconForSourceType(source)
+        const isUrl = source.type === 'url'
+        const value = isUrl
+          ? source.active_extraction_job.url || ''
+          : source.active_extraction_job.file_name
+
+        return (
+          <StyledDebugItemWithIcon key={source.id}>
+            {icon}
+            {isUrl ? (
+              <StyledUrlSourceValue
+                href={value}
+                target='_blank'
+                rel='noopener noreferrer'
+                title={value}
+              >
+                {value}
+              </StyledUrlSourceValue>
+            ) : (
+              <StyledFileSourceValue>{value}</StyledFileSourceValue>
+            )}
+          </StyledDebugItemWithIcon>
+        )
+      })}
       {chunks.length > 0 && (
         <StyledSeeChunksButton onClick={onSeeChunks}>
           {LABELS.SEE_CHUNKS_BUTTON}
