@@ -17,6 +17,10 @@ import {
   ReplyProps,
   WebchatSettingsProps,
 } from './components'
+import {
+  HubtypeChunk,
+  HubtypeSource,
+} from './components/system-debug-trace/events/knowledge-bases-types'
 import { CloseWebviewOptions } from './contexts'
 import { UseWebchat } from './webchat/context/use-webchat'
 import {
@@ -80,6 +84,12 @@ interface AddSystemResponseArgs {
   response: any
 }
 
+export interface PreviewUtils {
+  getSourcesByIds: (ids: string[]) => Promise<HubtypeSource[]>
+  getChunksByIds: (ids: string[]) => Promise<HubtypeChunk[]>
+  onClickOpenChunks: (chunks: HubtypeChunk[], sources: HubtypeSource[]) => void
+}
+
 export interface WebchatArgs {
   theme?: Partial<WebchatTheme>
   persistentMenu?: PersistentMenuOptionsTheme
@@ -104,6 +114,7 @@ export interface WebchatArgs {
   appId?: string
   visibility?: boolean | (() => boolean) | 'dynamic'
   server?: ServerConfig
+  previewUtils?: PreviewUtils
 }
 
 export interface WebchatProps {
@@ -126,6 +137,7 @@ export interface WebchatProps {
   host?: any
   server?: ServerConfig
   localWebviews?: React.ComponentType[]
+  previewUtils?: PreviewUtils
 }
 
 export type EventArgs = { [key: string]: any }
@@ -203,4 +215,8 @@ interface UpdateMessageInfoEvent {
 }
 
 export { CaseEventQueuePositionChangedInput } from '@botonic/core'
+export {
+  HubtypeChunk,
+  HubtypeSource,
+} from './components/system-debug-trace/events/knowledge-bases-types'
 export { WebchatTheme }

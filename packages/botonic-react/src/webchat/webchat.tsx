@@ -671,6 +671,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
         trackEvent: props.onTrackEvent,
+        previewUtils: props.previewUtils,
         webchatState,
         webchatContainerRef,
         chatAreaRef,

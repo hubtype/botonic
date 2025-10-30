@@ -1,6 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
+import React, { useContext } from 'react'
 
+import { WebchatContext } from '../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { CircleCheckSvg, WandSvg } from '../icons'
 import {
@@ -13,7 +14,6 @@ import {
 import { DebugEventConfig } from '../types'
 import { SourcesSection } from './components'
 import { LABELS } from './constants'
-import { useChunksModal } from './hooks'
 import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 export interface KnowledgeBaseDebugEvent {
@@ -31,7 +31,7 @@ export interface KnowledgeBaseDebugEvent {
 }
 
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
-  const { openChunksModal } = useChunksModal()
+  const { previewUtils } = useContext(WebchatContext)
   const { sources, chunks, getIconForSourceType, hasKnowledge, isFaithful } =
     useKnowledgeBaseInfo({
       sourceIds: props.knowledgebase_sources_ids,
@@ -45,11 +45,9 @@ export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   const showFailReason = !hasKnowledge || !isFaithful
 
   const handleSeeChunks = () => {
-    openChunksModal({
-      messageId: props.messageId,
-      chunks,
-      sources,
-    })
+    if (previewUtils?.onClickOpenChunks) {
+      previewUtils.onClickOpenChunks(chunks, sources)
+    }
   }
 
   return (

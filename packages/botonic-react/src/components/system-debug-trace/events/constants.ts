@@ -1,7 +1,3 @@
-export const EVENT_NAMES = {
-  SEE_CHUNKS_CLICKED: 'see-chunks-clicked',
-} as const
-
 export const LABELS = {
   GUARDRAIL_TRIGGERED: 'Guardrail triggered',
   KNOWLEDGE_FOUND: 'Knowledge found',

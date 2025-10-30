@@ -1,6 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 
+import { WebchatContext } from '../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { ScrewdriverWrenchSvg, WandSvg } from '../icons'
 import {
@@ -12,7 +13,6 @@ import {
 import { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
-import { useChunksModal } from './hooks'
 import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 interface ToolExecuted {
@@ -37,7 +37,7 @@ export interface AiAgentDebugEvent {
 }
 
 export const AiAgent = (props: AiAgentDebugEvent) => {
-  const { openChunksModal } = useChunksModal()
+  const { previewUtils } = useContext(WebchatContext)
 
   // Collect all sources, chunks, and query from all tools
   const { allSourcesIds, allChunksIds, query } = useMemo(() => {
@@ -76,11 +76,9 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
   })
 
   const handleSeeChunks = () => {
-    openChunksModal({
-      messageId: props.messageId,
-      chunks: allChunks,
-      sources: allSources,
-    })
+    if (previewUtils?.onClickOpenChunks) {
+      previewUtils.onClickOpenChunks(allChunks, allSources)
+    }
   }
   return (
     <>

@@ -2,7 +2,6 @@ import { KnowledgebaseFailReason } from '@botonic/core'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
-import { useExternalServices } from '../../../webchat/external-services/context'
 import { HubtypeChunk, HubtypeSource } from '../events/knowledge-bases-types'
 import { FilePdfSvg, FileWordSvg, LinkSvg } from '../icons'
 
@@ -23,14 +22,8 @@ export const useKnowledgeBaseInfo = ({
   existingChunks,
   failReason,
 }: UseKnowledgeBaseInfoParams) => {
-  const { updateMessage, webchatState } = useContext(WebchatContext)
-  const externalServices = useExternalServices()
-  const knowledgeBasesApiService =
-    externalServices?.knowledgeBasesApiService || undefined
-
-  if (!knowledgeBasesApiService) {
-    throw new Error('KnowledgeBasesApiService is not available')
-  }
+  const { updateMessage, webchatState, previewUtils } =
+    useContext(WebchatContext)
 
   // Check if we have cached data (existingSources/existingChunks are defined, even if empty arrays)
   const hasCachedData =
@@ -76,11 +69,10 @@ export const useKnowledgeBaseInfo = ({
   }
 
   const fetchSources = async () => {
-    if (sourceIds.length === 0 || !knowledgeBasesApiService) return []
+    if (sourceIds.length === 0 || !previewUtils) return []
     setIsLoading(true)
     try {
-      const fetchedSources =
-        await knowledgeBasesApiService.getSourcesByIds(sourceIds)
+      const fetchedSources = await previewUtils.getSourcesByIds(sourceIds)
       return fetchedSources
     } catch (error) {
       console.error('Error fetching sources:', error)
@@ -91,11 +83,10 @@ export const useKnowledgeBaseInfo = ({
   }
 
   const fetchChunks = async () => {
-    if (chunkIds.length === 0 || !knowledgeBasesApiService) return []
+    if (chunkIds.length === 0 || !previewUtils) return []
 
     try {
-      const fetchedChunks =
-        await knowledgeBasesApiService.getChunksByIds(chunkIds)
+      const fetchedChunks = await previewUtils.getChunksByIds(chunkIds)
       return fetchedChunks
     } catch (error) {
       console.error('Error fetching chunks:', error)
@@ -106,7 +97,7 @@ export const useKnowledgeBaseInfo = ({
   const getIconForSourceType = (source: HubtypeSource) => {
     switch (source.type) {
       case 'file':
-        if (source.active_extraction_job.file_name.endsWith('.pdf')) {
+        if (source.activeExtractionJob.fileName.endsWith('.pdf')) {
           return <FilePdfSvg />
         } else {
           return <FileWordSvg />
@@ -142,6 +133,11 @@ export const useKnowledgeBaseInfo = ({
   useEffect(() => {
     // If we already have cached data (even if empty), don't fetch again
     if (hasCachedData) {
+      return
+    }
+
+    // Only fetch if previewUtils is available
+    if (!previewUtils) {
       return
     }
 

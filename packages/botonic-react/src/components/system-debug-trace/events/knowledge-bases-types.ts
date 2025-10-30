@@ -1,25 +1,25 @@
 interface HubtypeExtractionJob {
   id: string
-  file_name: string
-  file_url: string
+  fileName: string
+  fileUrl: string
   url: string | null
-  is_active: boolean
+  isActive: boolean
   status: string
   hash: string
-  created_at: string
+  createdAt: string
 }
 
 export interface HubtypeSource {
   id: string
   name: string
   type: string
-  scraping_country_code: string | null
-  created_at: string
-  created_by: string
-  last_updated_at: string
-  last_updated_by: string
-  active_extraction_job: HubtypeExtractionJob
-  last_extraction_job: HubtypeExtractionJob
+  scrapingCountryCode: string | null
+  createdAt: string
+  createdBy: string
+  lastUpdatedAt: string
+  lastUpdatedBy: string
+  activeExtractionJob: HubtypeExtractionJob
+  lastExtractionJob: HubtypeExtractionJob
 }
 
 export interface HubtypeChunk {

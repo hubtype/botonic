@@ -2,7 +2,11 @@ import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 
 import { Reply, WebchatSettingsProps, Webview } from '../../components'
 import { CloseWebviewOptions } from '../../contexts'
-import { TrackEventFunction, WebchatMessage } from '../../index-types'
+import {
+  PreviewUtils,
+  TrackEventFunction,
+  WebchatMessage,
+} from '../../index-types'
 import { WebchatTheme } from '../theme/types'
 
 export interface ErrorMessage {
@@ -86,6 +90,7 @@ export interface WebchatContextProps {
   updateUser: (user: Partial<ClientUser>) => void
   updateWebchatDevSettings: (settings: WebchatSettingsProps) => void
   trackEvent?: TrackEventFunction
+  previewUtils?: PreviewUtils
   webchatState: WebchatState
   webchatContainerRef: React.MutableRefObject<HTMLDivElement | null>
   chatAreaRef: React.MutableRefObject<HTMLDivElement | null>

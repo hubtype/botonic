@@ -12,6 +12,7 @@ import {
   EventArgs,
   OnStateChangeArgs,
   OnUserInputArgs,
+  PreviewUtils,
   SENDERS,
   Typing,
   WebchatArgs,
@@ -56,6 +57,7 @@ export class WebchatApp {
   public appId?: string
   public visibility?: boolean | (() => boolean) | 'dynamic'
   public server?: ServerConfig
+  public previewUtils?: PreviewUtils
   public webchatRef: React.RefObject<WebchatRef | null>
 
   private reactRoot: Root | null = null
@@ -86,6 +88,7 @@ export class WebchatApp {
     appId,
     visibility,
     server,
+    previewUtils,
   }: WebchatArgs) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -117,6 +120,7 @@ export class WebchatApp {
     this.onConnectionChange = onConnectionChange
     this.visibility = visibility
     this.server = server
+    this.previewUtils = previewUtils
     this.webchatRef = createRef<WebchatRef>()
     this.appId = appId
 
@@ -480,6 +484,7 @@ export class WebchatApp {
       visibility,
       server,
       hostId,
+      previewUtils,
       ...webchatOptions
     } = optionsAtRuntime
     theme = this.createInitialTheme(optionsAtRuntime)
@@ -497,6 +502,7 @@ export class WebchatApp {
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     this.hostId = hostId || this.hostId
+    this.previewUtils = previewUtils || this.previewUtils
     this.createRootElement(host)
 
     return (
@@ -510,6 +516,7 @@ export class WebchatApp {
         storageKey={this.storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
+        previewUtils={this.previewUtils}
         onInit={(...args: [any]) => this.onInitWebchat(...args)}
         onOpen={(...args: [any]) => this.onOpenWebchat(...args)}
         onClose={(...args: [any]) => this.onCloseWebchat(...args)}

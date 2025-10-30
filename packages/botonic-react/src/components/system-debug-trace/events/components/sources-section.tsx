@@ -35,8 +35,8 @@ export const SourcesSection = ({
         const icon = getIconForSourceType(source)
         const isUrl = source.type === 'url'
         const value = isUrl
-          ? source.active_extraction_job?.url
-          : source.active_extraction_job?.file_name
+          ? source.activeExtractionJob?.url
+          : source.activeExtractionJob?.fileName
 
         return (
           <StyledDebugItemWithIcon key={source.id}>
