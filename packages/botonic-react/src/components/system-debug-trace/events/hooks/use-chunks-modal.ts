@@ -1,5 +1,5 @@
-import { HubtypeChunk, HubtypeSource } from '../../api-service'
 import { EVENT_NAMES } from '../constants'
+import { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
 
 export interface ChunksModalDetail {
   messageId?: string

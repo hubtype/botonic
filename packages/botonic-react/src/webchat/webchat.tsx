@@ -487,20 +487,16 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       updateLastMessageDate(currentDateString())
     },
     addSystemResponse: ({ response }) => {
-      const isUnread =
-        !webchatState.isLastMessageVisible || webchatState.numUnreadMessages > 0
-
       if (Array.isArray(response)) {
         response.forEach(r => {
-          addMessageComponent({ ...r, props: { ...r.props, isUnread } })
+          addMessageComponent({ ...r, props: { ...r.props, isUnread: false } })
         })
       } else if (response) {
         addMessageComponent({
           ...response,
-          props: { ...response.props, isUnread },
+          props: { ...response.props, isUnread: false },
         })
       }
-
       updateLastMessageDate(currentDateString())
     },
     setTyping: (typing: boolean) => updateTyping(typing),

@@ -1,7 +1,6 @@
 import { EventAction } from '@botonic/core'
 import React, { useMemo } from 'react'
 
-import { HubtypeChunk, HubtypeSource } from '../api-service'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { ScrewdriverWrenchSvg, WandSvg } from '../icons'
 import {
@@ -9,13 +8,12 @@ import {
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledDebugValue,
-  StyledSeeChunksButton,
-  StyledSourceValue,
 } from '../styles'
 import { DebugEventConfig } from '../types'
-import { GuardrailList } from './components'
+import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
 import { useChunksModal } from './hooks'
+import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 interface ToolExecuted {
   tool_name: string
@@ -93,24 +91,13 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
         </StyledDebugDetail>
       )}
 
-      {allSources.length > 0 && (
-        <StyledDebugDetail>
-          <StyledDebugLabel>{LABELS.KNOWLEDGE_GATHERED}</StyledDebugLabel>
-          {allSources.map(source => (
-            <StyledDebugItemWithIcon key={source.id}>
-              {getIconForSourceType(source)}
-              <StyledSourceValue>
-                {source.active_extraction_job.file_name}
-              </StyledSourceValue>
-            </StyledDebugItemWithIcon>
-          ))}
-          {allChunks.length > 0 && (
-            <StyledSeeChunksButton onClick={handleSeeChunks}>
-              {LABELS.SEE_CHUNKS_BUTTON}
-            </StyledSeeChunksButton>
-          )}
-        </StyledDebugDetail>
-      )}
+      <SourcesSection
+        sources={allSources}
+        chunks={allChunks}
+        getIconForSourceType={getIconForSourceType}
+        onSeeChunks={handleSeeChunks}
+        label={LABELS.KNOWLEDGE_GATHERED}
+      />
 
       {props.tools_executed.length > 0 && (
         <StyledDebugDetail>

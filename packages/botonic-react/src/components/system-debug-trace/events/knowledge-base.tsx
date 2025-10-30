@@ -1,7 +1,6 @@
 import { EventAction } from '@botonic/core'
 import React from 'react'
 
-import { HubtypeChunk, HubtypeSource } from '../api-service'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
 import { CircleCheckSvg, WandSvg } from '../icons'
 import {
@@ -15,6 +14,7 @@ import { DebugEventConfig } from '../types'
 import { SourcesSection } from './components'
 import { LABELS } from './constants'
 import { useChunksModal } from './hooks'
+import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase

@@ -2,11 +2,8 @@ import { KnowledgebaseFailReason } from '@botonic/core'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
-import {
-  DebugHubtypeApiService,
-  HubtypeChunk,
-  HubtypeSource,
-} from '../api-service'
+import { useExternalServices } from '../../../webchat/external-services/context'
+import { HubtypeChunk, HubtypeSource } from '../events/knowledge-bases-types'
 import { FilePdfSvg, FileWordSvg, LinkSvg } from '../icons'
 
 interface UseKnowledgeBaseInfoParams {
@@ -27,6 +24,13 @@ export const useKnowledgeBaseInfo = ({
   failReason,
 }: UseKnowledgeBaseInfoParams) => {
   const { updateMessage, webchatState } = useContext(WebchatContext)
+  const externalServices = useExternalServices()
+  const knowledgeBasesApiService =
+    externalServices?.knowledgeBasesApiService || undefined
+
+  if (!knowledgeBasesApiService) {
+    throw new Error('KnowledgeBasesApiService is not available')
+  }
 
   // Check if we have cached data (existingSources/existingChunks are defined, even if empty arrays)
   const hasCachedData =
@@ -35,8 +39,6 @@ export const useKnowledgeBaseInfo = ({
   const [sources, setSources] = useState<HubtypeSource[]>(existingSources || [])
   const [chunks, setChunks] = useState<HubtypeChunk[]>(existingChunks || [])
   const [isLoading, setIsLoading] = useState(false)
-
-  const debugHubtypeApiService = new DebugHubtypeApiService()
 
   const updateMessageWithKnowledgeData = (
     fetchedSources: HubtypeSource[],
@@ -74,12 +76,11 @@ export const useKnowledgeBaseInfo = ({
   }
 
   const fetchSources = async () => {
-    if (sourceIds.length === 0) return []
-
+    if (sourceIds.length === 0 || !knowledgeBasesApiService) return []
     setIsLoading(true)
     try {
       const fetchedSources =
-        await debugHubtypeApiService.getSourcesByIds(sourceIds)
+        await knowledgeBasesApiService.getSourcesByIds(sourceIds)
       return fetchedSources
     } catch (error) {
       console.error('Error fetching sources:', error)
@@ -90,11 +91,11 @@ export const useKnowledgeBaseInfo = ({
   }
 
   const fetchChunks = async () => {
-    if (chunkIds.length === 0) return []
+    if (chunkIds.length === 0 || !knowledgeBasesApiService) return []
 
     try {
       const fetchedChunks =
-        await debugHubtypeApiService.getChunksByIds(chunkIds)
+        await knowledgeBasesApiService.getChunksByIds(chunkIds)
       return fetchedChunks
     } catch (error) {
       console.error('Error fetching chunks:', error)

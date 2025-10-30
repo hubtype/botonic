@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { HubtypeChunk, HubtypeSource } from '../../api-service'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
@@ -10,6 +9,7 @@ import {
   StyledUrlSourceValue,
 } from '../../styles'
 import { LABELS } from '../constants'
+import { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
 
 interface SourcesSectionProps {
   sources: HubtypeSource[]
@@ -19,13 +19,13 @@ interface SourcesSectionProps {
   label?: string
 }
 
-export const SourcesSection: React.FC<SourcesSectionProps> = ({
+export const SourcesSection = ({
   sources,
   chunks,
   getIconForSourceType,
   onSeeChunks,
   label = LABELS.SOURCES,
-}) => {
+}: SourcesSectionProps) => {
   if (sources.length === 0) return null
 
   return (
@@ -35,18 +35,18 @@ export const SourcesSection: React.FC<SourcesSectionProps> = ({
         const icon = getIconForSourceType(source)
         const isUrl = source.type === 'url'
         const value = isUrl
-          ? source.active_extraction_job.url || ''
-          : source.active_extraction_job.file_name
+          ? source.active_extraction_job?.url
+          : source.active_extraction_job?.file_name
 
         return (
           <StyledDebugItemWithIcon key={source.id}>
             {icon}
             {isUrl ? (
               <StyledUrlSourceValue
-                href={value}
+                href={value ?? ''}
                 target='_blank'
                 rel='noopener noreferrer'
-                title={value}
+                title={value ?? 'Not detected'}
               >
                 {value}
               </StyledUrlSourceValue>
