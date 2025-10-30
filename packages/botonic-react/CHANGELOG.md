@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.41.0] - 2025-10-30
+
+### Added
+
+- [PR-3111](https://github.com/hubtype/botonic/pull/3111): Render system debug trace events in webchat preview.
+
 ## [0.40.1] - 2025-10-20
 
 ### Added
