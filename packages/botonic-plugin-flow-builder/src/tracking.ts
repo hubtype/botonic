@@ -68,6 +68,11 @@ type CommonFlowContentEventArgs = {
   flowNodeContentId: string
 }
 
+const getSafeFlowNodeContentId = (nodeContent: HtNodeWithContent): string => {
+  // TODO: Some nodes comes without code, we need to handle this case by giving a valid id in uuid format
+  return nodeContent.code || nodeContent.id
+}
+
 function getCommonFlowContentEventArgs(
   request: ActionRequest,
   nodeContent: HtNodeWithContent
@@ -79,7 +84,7 @@ function getCommonFlowContentEventArgs(
     flowId: nodeContent.flow_id,
     flowName,
     flowNodeId: nodeContent.id,
-    flowNodeContentId: nodeContent.code,
+    flowNodeContentId: getSafeFlowNodeContentId(nodeContent),
   }
 }
 
