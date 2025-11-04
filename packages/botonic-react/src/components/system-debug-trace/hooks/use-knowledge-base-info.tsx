@@ -1,6 +1,7 @@
 import { KnowledgebaseFailReason } from '@botonic/core'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 
+import { ChunkIdsGroupedBySourceData } from '../../../index-types'
 import { WebchatContext } from '../../../webchat/context'
 import { HubtypeChunk, HubtypeSource } from '../events/knowledge-bases-types'
 import { FilePdfSvg, FileWordSvg, LinkSvg } from '../icons'
@@ -9,8 +10,7 @@ interface UseKnowledgeBaseInfoParams {
   sourceIds: string[]
   chunkIds: string[]
   messageId?: string
-  existingSources?: HubtypeSource[]
-  existingChunks?: HubtypeChunk[]
+  existingChunksWithSources?: ChunkIdsGroupedBySourceData[]
   failReason?: string
 }
 
@@ -18,24 +18,29 @@ export const useKnowledgeBaseInfo = ({
   sourceIds,
   chunkIds,
   messageId,
-  existingSources,
-  existingChunks,
+  existingChunksWithSources,
   failReason,
 }: UseKnowledgeBaseInfoParams) => {
   const { updateMessage, webchatState, previewUtils } =
     useContext(WebchatContext)
 
-  // Check if we have cached data (existingSources/existingChunks are defined, even if empty arrays)
-  const hasCachedData =
-    existingSources !== undefined || existingChunks !== undefined
+  // Check if we have cached data
+  const hasCachedData = existingChunksWithSources !== undefined
 
-  const [sources, setSources] = useState<HubtypeSource[]>(existingSources || [])
-  const [chunks, setChunks] = useState<HubtypeChunk[]>(existingChunks || [])
+  // Initialize state from existing chunks with sources if available
+  const initialChunksWithSources = existingChunksWithSources || []
+  const initialSources = initialChunksWithSources.map(item => item.source)
+  const initialChunks = initialChunksWithSources.flatMap(item => item.chunks)
+
+  const [chunksWithSources, setChunksWithSources] = useState<
+    ChunkIdsGroupedBySourceData[]
+  >(initialChunksWithSources)
+  const [sources, setSources] = useState<HubtypeSource[]>(initialSources)
+  const [chunks, setChunks] = useState<HubtypeChunk[]>(initialChunks)
   const [isLoading, setIsLoading] = useState(false)
 
   const updateMessageWithKnowledgeData = (
-    fetchedSources: HubtypeSource[],
-    fetchedChunks: HubtypeChunk[]
+    fetchedChunksWithSources: ChunkIdsGroupedBySourceData[]
   ) => {
     if (!messageId) {
       return
@@ -50,15 +55,15 @@ export const useKnowledgeBaseInfo = ({
     const parsedData =
       typeof message.data === 'string' ? JSON.parse(message.data) : message.data
 
-    // Update with fetched sources and chunks, preserving the original IDs
+    // Update with fetched chunks with sources and preserve original IDs
     const updatedData = {
       ...parsedData,
-      // Preserve the original IDs (they're already in parsedData, but being explicit)
-      // These IDs are needed for reference and debugging
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      knowledge_base_sources: fetchedSources,
+      knowledgebase_sources_ids: sourceIds,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      knowledge_base_chunks: fetchedChunks,
+      knowledgebase_chunks_ids: chunkIds,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      knowledge_base_chunks_with_sources: fetchedChunksWithSources,
     }
 
     // Update the message in webchat state - keep data as object
@@ -68,29 +73,18 @@ export const useKnowledgeBaseInfo = ({
     })
   }
 
-  const fetchSources = async () => {
-    if (sourceIds.length === 0 || !previewUtils) return []
+  const fetchChunksWithSources = async () => {
+    if (chunkIds.length === 0 || !previewUtils) return []
     setIsLoading(true)
     try {
-      const fetchedSources = await previewUtils.getSourcesByIds(sourceIds)
-      return fetchedSources
+      const fetchedChunksWithSources =
+        await previewUtils.getChunkIdsGroupedBySource(chunkIds)
+      return fetchedChunksWithSources
     } catch (error) {
-      console.error('Error fetching sources:', error)
+      console.error('Error fetching chunks with sources:', error)
       return []
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  const fetchChunks = async () => {
-    if (chunkIds.length === 0 || !previewUtils) return []
-
-    try {
-      const fetchedChunks = await previewUtils.getChunksByIds(chunkIds)
-      return fetchedChunks
-    } catch (error) {
-      console.error('Error fetching chunks:', error)
-      return []
     }
   }
 
@@ -143,17 +137,21 @@ export const useKnowledgeBaseInfo = ({
 
     // Otherwise, fetch the data
     const fetchData = async () => {
-      const [fetchedSources, fetchedChunks] = await Promise.all([
-        fetchSources(),
-        fetchChunks(),
-      ])
+      const fetchedChunksWithSources = await fetchChunksWithSources()
 
+      // Extract sources and chunks from chunks with sources
+      const fetchedSources = fetchedChunksWithSources.map(item => item.source)
+      const fetchedChunks = fetchedChunksWithSources.flatMap(
+        item => item.chunks
+      )
+
+      setChunksWithSources(fetchedChunksWithSources)
       setSources(fetchedSources)
       setChunks(fetchedChunks)
 
       // Always update the message with the fetched data (even if empty arrays)
       // This marks the data as fetched so we don't fetch again
-      updateMessageWithKnowledgeData(fetchedSources, fetchedChunks)
+      updateMessageWithKnowledgeData(fetchedChunksWithSources)
     }
 
     fetchData()
@@ -163,6 +161,7 @@ export const useKnowledgeBaseInfo = ({
   return {
     sources,
     chunks,
+    chunksWithSources,
     isLoading,
     getIconForSourceType,
     hasKnowledge,

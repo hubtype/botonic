@@ -14,7 +14,6 @@ import {
 import { DebugEventConfig } from '../types'
 import { SourcesSection } from './components'
 import { LABELS } from './constants'
-import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase
@@ -25,28 +24,32 @@ export interface KnowledgeBaseDebugEvent {
   knowledgebase_sources_ids: string[]
   knowledgebase_chunks_ids: string[]
   user_input: string
-  knowledge_base_sources?: HubtypeSource[]
-  knowledge_base_chunks?: HubtypeChunk[]
+  knowledge_base_chunks_with_sources?: import('../../../index-types').ChunkIdsGroupedBySourceData[]
   messageId?: string
 }
 
 export const KnowledgeBase = (props: KnowledgeBaseDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
-  const { sources, chunks, getIconForSourceType, hasKnowledge, isFaithful } =
-    useKnowledgeBaseInfo({
-      sourceIds: props.knowledgebase_sources_ids,
-      chunkIds: props.knowledgebase_chunks_ids,
-      messageId: props.messageId,
-      existingSources: props.knowledge_base_sources,
-      existingChunks: props.knowledge_base_chunks,
-      failReason: props.knowledgebase_fail_reason,
-    })
+  const {
+    sources,
+    chunks,
+    chunksWithSources,
+    getIconForSourceType,
+    hasKnowledge,
+    isFaithful,
+  } = useKnowledgeBaseInfo({
+    sourceIds: props.knowledgebase_sources_ids,
+    chunkIds: props.knowledgebase_chunks_ids,
+    messageId: props.messageId,
+    existingChunksWithSources: props.knowledge_base_chunks_with_sources,
+    failReason: props.knowledgebase_fail_reason,
+  })
 
   const showFailReason = !hasKnowledge || !isFaithful
 
   const handleSeeChunks = () => {
     if (previewUtils?.onClickOpenChunks) {
-      previewUtils.onClickOpenChunks(chunks, sources)
+      previewUtils.onClickOpenChunks(chunksWithSources)
     }
   }
 

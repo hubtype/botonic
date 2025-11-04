@@ -84,10 +84,17 @@ interface AddSystemResponseArgs {
   response: any
 }
 
+export interface ChunkIdsGroupedBySourceData {
+  source: HubtypeSource
+  chunks: HubtypeChunk[]
+}
 export interface PreviewUtils {
-  getSourcesByIds: (ids: string[]) => Promise<HubtypeSource[]>
-  getChunksByIds: (ids: string[]) => Promise<HubtypeChunk[]>
-  onClickOpenChunks: (chunks: HubtypeChunk[], sources: HubtypeSource[]) => void
+  getChunkIdsGroupedBySource: (
+    chunkIds: string[]
+  ) => Promise<ChunkIdsGroupedBySourceData[]>
+  onClickOpenChunks: (
+    chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
+  ) => void
 }
 
 export interface WebchatArgs {

@@ -13,7 +13,6 @@ import {
 import { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
-import { HubtypeChunk, HubtypeSource } from './knowledge-bases-types'
 
 interface ToolExecuted {
   tool_name: string
@@ -31,15 +30,14 @@ export interface AiAgentDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
-  knowledge_base_sources?: HubtypeSource[]
-  knowledge_base_chunks?: HubtypeChunk[]
+  knowledge_base_chunks_with_sources?: import('../../../index-types').ChunkIdsGroupedBySourceData[]
   messageId?: string
 }
 
 export const AiAgent = (props: AiAgentDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
 
-  // Collect all sources, chunks, and query from all tools
+  // Collect all sources IDs, chunk IDs and query from all tools
   const { allSourcesIds, allChunksIds, query } = useMemo(() => {
     const allSourcesIds: string[] = []
     const allChunksIds: string[] = []
@@ -66,18 +64,18 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
   const {
     sources: allSources,
     chunks: allChunks,
+    chunksWithSources,
     getIconForSourceType,
   } = useKnowledgeBaseInfo({
     sourceIds: allSourcesIds,
     chunkIds: allChunksIds,
     messageId: props.messageId,
-    existingSources: props.knowledge_base_sources,
-    existingChunks: props.knowledge_base_chunks,
+    existingChunksWithSources: props.knowledge_base_chunks_with_sources,
   })
 
   const handleSeeChunks = () => {
     if (previewUtils?.onClickOpenChunks) {
-      previewUtils.onClickOpenChunks(allChunks, allSources)
+      previewUtils.onClickOpenChunks(chunksWithSources)
     }
   }
   return (

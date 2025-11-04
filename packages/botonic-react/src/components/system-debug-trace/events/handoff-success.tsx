@@ -12,15 +12,15 @@ import { LABELS } from './constants'
 
 export interface HandoffSuccessDebugEvent {
   action: EventAction.HandoffSuccess
-  queue_name: string
-  is_queue_open: boolean
+  handoff_queue_name: string
+  handoff_is_queue_open: boolean
 }
 
 export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   return (
     <StyledDebugDetail>
       <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
-      <StyledDebugValue>{props.queue_name}</StyledDebugValue>
+      <StyledDebugValue>{props.handoff_queue_name}</StyledDebugValue>
     </StyledDebugDetail>
   )
 }
@@ -32,7 +32,7 @@ export const getHandoffSuccessEventConfig = (
     action: EventAction.HandoffSuccess,
     title: (
       <>
-        Handoff to agent <span>- {data.queue_name}</span>
+        Handoff to agent <span>- {data.handoff_queue_name}</span>
       </>
     ),
     component: HandoffSuccess,
