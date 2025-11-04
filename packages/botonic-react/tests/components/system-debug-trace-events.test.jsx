@@ -26,11 +26,14 @@ const renderToJSON = sut => TestRenderer.create(sut).toJSON()
 const mockWebchatContext = {
   previewUtils: {
     onClickOpenChunks: jest.fn(),
-    getSourcesByIds: jest.fn().mockResolvedValue([]),
-    getChunksByIds: jest.fn().mockResolvedValue([]),
+    getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
   },
   getKnowledgeBaseSources: jest.fn(),
   getKnowledgeBaseChunks: jest.fn(),
+  updateMessage: jest.fn(),
+  webchatState: {
+    messagesJSON: [],
+  },
 }
 
 describe('System Debug Trace - Event Components', () => {
@@ -38,11 +41,11 @@ describe('System Debug Trace - Event Components', () => {
     test('renders queue name correctly', () => {
       const props = {
         action: EventAction.HandoffSuccess,
-        queue_name: 'Premium Support',
-        is_queue_open: true,
+        handoff_queue_name: 'Premium Support',
+        handoff_is_queue_open: true,
       }
 
-      const { container } = render(<HandoffSuccess {...props} />)
+      const { container} = render(<HandoffSuccess {...props} />)
 
       expect(container.textContent).toContain('Premium Support')
     })
@@ -50,8 +53,8 @@ describe('System Debug Trace - Event Components', () => {
     test('displays queue label', () => {
       const props = {
         action: EventAction.HandoffSuccess,
-        queue_name: 'General Support',
-        is_queue_open: false,
+        handoff_queue_name: 'General Support',
+        handoff_is_queue_open: false,
       }
 
       const { container } = render(<HandoffSuccess {...props} />)
@@ -62,8 +65,8 @@ describe('System Debug Trace - Event Components', () => {
     test('matches snapshot', () => {
       const props = {
         action: EventAction.HandoffSuccess,
-        queue_name: 'Test Queue',
-        is_queue_open: true,
+        handoff_queue_name: 'Test Queue',
+        handoff_is_queue_open: true,
       }
 
       const sut = <HandoffSuccess {...props} />
@@ -660,8 +663,12 @@ describe('System Debug Trace - Event Components', () => {
         output_guardrails_triggered: [],
         exit: false,
         error: false,
-        knowledge_base_sources: mockSources,
-        knowledge_base_chunks: mockChunks,
+        knowledge_base_chunks_with_sources: [
+          {
+            source: mockSources[0],
+            chunks: mockChunks,
+          },
+        ],
       }
 
       let container

@@ -131,7 +131,6 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
       Handoff to agent 
       <span>
         - 
-        Support Queue
       </span>
     </span>
     <span
@@ -167,9 +166,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
       </strong>
       <div
         className="sc-imWYAI devbtc"
-      >
-        Support Queue
-      </div>
+      />
     </div>
   </div>
 </div>
