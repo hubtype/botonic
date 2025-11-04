@@ -17,10 +17,7 @@ import {
   ReplyProps,
   WebchatSettingsProps,
 } from './components'
-import {
-  HubtypeChunk,
-  HubtypeSource,
-} from './components/system-debug-trace/events/knowledge-bases-types'
+import { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
 import { CloseWebviewOptions } from './contexts'
 import { UseWebchat } from './webchat/context/use-webchat'
 import {
@@ -84,10 +81,6 @@ interface AddSystemResponseArgs {
   response: any
 }
 
-export interface ChunkIdsGroupedBySourceData {
-  source: HubtypeSource
-  chunks: HubtypeChunk[]
-}
 export interface PreviewUtils {
   getChunkIdsGroupedBySource: (
     chunkIds: string[]
@@ -222,8 +215,4 @@ interface UpdateMessageInfoEvent {
 }
 
 export { CaseEventQueuePositionChangedInput } from '@botonic/core'
-export {
-  HubtypeChunk,
-  HubtypeSource,
-} from './components/system-debug-trace/events/knowledge-bases-types'
-export { WebchatTheme }
+export { ChunkIdsGroupedBySourceData, WebchatTheme }

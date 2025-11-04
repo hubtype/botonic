@@ -26,3 +26,8 @@ export interface HubtypeChunk {
   id: string
   text: string
 }
+
+export interface ChunkIdsGroupedBySourceData {
+  source: HubtypeSource
+  chunks: HubtypeChunk[]
+}

@@ -13,6 +13,7 @@ import {
 import { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
+import { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 
 interface ToolExecuted {
   tool_name: string
@@ -30,7 +31,7 @@ export interface AiAgentDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
-  knowledge_base_chunks_with_sources?: import('../../../index-types').ChunkIdsGroupedBySourceData[]
+  knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string
 }
 

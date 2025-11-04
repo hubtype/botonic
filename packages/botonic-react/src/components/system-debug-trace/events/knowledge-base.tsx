@@ -14,6 +14,7 @@ import {
 import { DebugEventConfig } from '../types'
 import { SourcesSection } from './components'
 import { LABELS } from './constants'
+import { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase
@@ -24,7 +25,7 @@ export interface KnowledgeBaseDebugEvent {
   knowledgebase_sources_ids: string[]
   knowledgebase_chunks_ids: string[]
   user_input: string
-  knowledge_base_chunks_with_sources?: import('../../../index-types').ChunkIdsGroupedBySourceData[]
+  knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string
 }
 
