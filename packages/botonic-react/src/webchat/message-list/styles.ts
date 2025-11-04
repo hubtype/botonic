@@ -1,12 +1,16 @@
 import styled from 'styled-components'
 
-export const ContainerMessage = styled.div`
+export const BaseContainerMessage = styled.div`
   display: flex;
   overflow-x: hidden;
   flex-direction: column;
   flex: none;
   white-space: pre;
   word-wrap: break-word;
+`
+
+export const SystemContainerMessage = styled(BaseContainerMessage)`
+  margin-top: 0;
 `
 
 export const DefaultIntroImage = styled.img`

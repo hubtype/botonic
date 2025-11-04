@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapshot 1`] = `
+<div
+  className="sc-aXZVg boJSyX collapsible"
+>
+  <div
+    className="sc-gEvEer iOyPIh"
+    onClick={[Function]}
+  >
+    <span
+      className="sc-fqkvVR hryAHs"
+    >
+      <svg
+        fill="#6D6A78"
+        viewBox="0 0 576 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M234.7 42.7L197 56.8c-3 1.1-5 4-5 7.2s2 6.1 5 7.2l37.7 14.1L248.8 123c1.1 3 4 5 7.2 5s6.1-2 7.2-5l14.1-37.7L315 71.2c3-1.1 5-4 5-7.2s-2-6.1-5-7.2L277.3 42.7 263.2 5c-1.1-3-4-5-7.2-5s-6.1 2-7.2 5L234.7 42.7zM46.1 395.4c-18.7 18.7-18.7 49.1 0 67.9l34.6 34.6c18.7 18.7 49.1 18.7 67.9 0L529.9 116.5c18.7-18.7 18.7-49.1 0-67.9L495.3 14.1c-18.7-18.7-49.1-18.7-67.9 0L46.1 395.4zM484.6 82.6l-105 105-23.3-23.3 105-105 23.3 23.3zM7.5 117.2C3 118.9 0 123.2 0 128s3 9.1 7.5 10.8L64 160l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L128 160l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L128 96 106.8 39.5C105.1 35 100.8 32 96 32s-9.1 3-10.8 7.5L64 96 7.5 117.2zm352 256c-4.5 1.7-7.5 6-7.5 10.8s3 9.1 7.5 10.8L416 416l21.2 56.5c1.7 4.5 6 7.5 10.8 7.5s9.1-3 10.8-7.5L480 416l56.5-21.2c4.5-1.7 7.5-6 7.5-10.8s-3-9.1-7.5-10.8L480 352l-21.2-56.5c-1.7-4.5-6-7.5-10.8-7.5s-9.1 3-10.8 7.5L416 352l-56.5 21.2z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span
+      className="sc-dcJsrY cxwzHl"
+    >
+      AI Agent triggered 
+      <span>
+        - 
+        content-1
+      </span>
+    </span>
+    <span
+      className="sc-eqUAAy caIsqy"
+    >
+      <svg
+        color="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M300.3 440.8C312.9 451 331.4 450.3 343.1 438.6L471.1 310.6C480.3 301.4 483 287.7 478 275.7C473 263.7 461.4 256 448.5 256L192.5 256C179.6 256 167.9 263.8 162.9 275.8C157.9 287.8 160.7 301.5 169.9 310.6L297.9 438.6L300.3 440.8z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+  </div>
+  <div
+    className="sc-iGgWBj fiRDSL"
+    style={
+      {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="sc-gsFSXq bZGSqH"
+    >
+      <strong
+        className="sc-kAyceB DSINm"
+      >
+        No tools executed
+      </strong>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapshot 1`] = `
+<div
+  className="sc-aXZVg boJSyX"
+>
+  <div
+    className="sc-gEvEer iOyPIh"
+    onClick={[Function]}
+  >
+    <span
+      className="sc-fqkvVR hryAHs"
+    >
+      <svg
+        color="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M431.2 476.5C399.9 498.9 361.5 512 320 512C278.5 512 240.1 498.9 208.8 476.5L266.8 418.5C282.6 427.1 300.8 432 320.1 432C339.4 432 357.5 427.1 373.4 418.5L431.4 476.5zM521.9 477.3C555.7 433.9 575.9 379.3 575.9 320C575.9 260.7 555.8 206.1 522 162.7C531 150.2 529.9 132.6 518.6 121.4C507.3 110.2 489.8 109 477.3 118C433.9 84.2 379.3 64 320 64C260.7 64 206.1 84.2 162.7 118C150.2 109 132.6 110.1 121.4 121.4C110.2 132.7 109 150.2 118 162.7C84.2 206.1 64 260.7 64 320C64 379.3 84.2 433.9 118 477.3C109 489.8 110.1 507.4 121.4 518.6C132.7 529.8 150.2 531 162.7 522C206.1 555.8 260.7 576 320 576C379.3 576 433.9 555.8 477.3 522C489.8 531 507.4 529.9 518.6 518.6C529.8 507.3 531 489.8 522 477.3zM476.4 431.2L418.4 373.2C427 357.4 431.9 339.2 431.9 319.9C431.9 300.6 427 282.5 418.4 266.6L476.4 208.6C498.9 240.1 512 278.5 512 320C512 361.5 498.9 399.9 476.5 431.2zM431.2 163.5L373.2 221.5C357.4 212.9 339.2 208 319.9 208C300.6 208 282.5 212.9 266.6 221.5L208.6 163.5C240.1 141.1 278.5 128 320 128C361.5 128 399.9 141.1 431.2 163.5zM221.5 373.3L163.5 431.3C141.1 399.9 128 361.5 128 320C128 278.5 141.1 240.1 163.5 208.8L221.5 266.8C212.9 282.6 208 300.8 208 320.1C208 339.4 212.9 357.5 221.5 373.4zM272 320C272 293.5 293.5 272 320 272C346.5 272 368 293.5 368 320C368 346.5 346.5 368 320 368C293.5 368 272 346.5 272 320z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span
+      className="sc-dcJsrY cxwzHl"
+    >
+      Fallback message triggered 
+      <span>
+        - 
+        1st
+         message
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches snapshot 1`] = `
+<div
+  className="sc-aXZVg boJSyX collapsible"
+>
+  <div
+    className="sc-gEvEer iOyPIh"
+    onClick={[Function]}
+  >
+    <span
+      className="sc-fqkvVR hryAHs"
+    >
+      <svg
+        fill="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M320 128C241 128 175.3 185.3 162.3 260.7C171.6 257.7 181.6 256 192 256L208 256C234.5 256 256 277.5 256 304L256 400C256 426.5 234.5 448 208 448L192 448C139 448 96 405 96 352L96 288C96 164.3 196.3 64 320 64C443.7 64 544 164.3 544 288L544 456.1C544 522.4 490.2 576.1 423.9 576.1L336 576L304 576C277.5 576 256 554.5 256 528C256 501.5 277.5 480 304 480L336 480C362.5 480 384 501.5 384 528L384 528L424 528C463.8 528 496 495.8 496 456L496 435.1C481.9 443.3 465.5 447.9 448 447.9L432 447.9C405.5 447.9 384 426.4 384 399.9L384 303.9C384 277.4 405.5 255.9 432 255.9L448 255.9C458.4 255.9 468.3 257.5 477.7 260.6C464.7 185.3 399.1 127.9 320 127.9z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span
+      className="sc-dcJsrY cxwzHl"
+    >
+      Handoff to agent 
+      <span>
+        - 
+      </span>
+    </span>
+    <span
+      className="sc-eqUAAy caIsqy"
+    >
+      <svg
+        color="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M300.3 440.8C312.9 451 331.4 450.3 343.1 438.6L471.1 310.6C480.3 301.4 483 287.7 478 275.7C473 263.7 461.4 256 448.5 256L192.5 256C179.6 256 167.9 263.8 162.9 275.8C157.9 287.8 160.7 301.5 169.9 310.6L297.9 438.6L300.3 440.8z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+  </div>
+  <div
+    className="sc-iGgWBj fiRDSL"
+    style={
+      {
+        "display": "none",
+      }
+    }
+  >
+    <div
+      className="sc-gsFSXq bZGSqH"
+    >
+      <strong
+        className="sc-kAyceB DSINm"
+      >
+        Queue
+      </strong>
+      <div
+        className="sc-imWYAI devbtc"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapshot 1`] = `
+<div
+  className="sc-aXZVg boJSyX"
+>
+  <div
+    className="sc-gEvEer iOyPIh"
+    onClick={[Function]}
+  >
+    <span
+      className="sc-fqkvVR hryAHs"
+    >
+      <svg
+        color="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M544 360C544 426.3 490.3 480 424 480L416 480C398.3 480 384 465.7 384 448C384 430.3 398.3 416 416 416L424 416C454.9 416 480 390.9 480 360L480 352L416 352C380.7 352 352 323.3 352 288L352 224C352 188.7 380.7 160 416 160L480 160C515.3 160 544 188.7 544 224L544 360zM288 360C288 426.3 234.3 480 168 480L160 480C142.3 480 128 465.7 128 448C128 430.3 142.3 416 160 416L168 416C198.9 416 224 390.9 224 360L224 352L160 352C124.7 352 96 323.3 96 288L96 224C96 188.7 124.7 160 160 160L224 160C259.3 160 288 188.7 288 224L288 360z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span
+      className="sc-dcJsrY cxwzHl"
+    >
+      Keyword matched 
+      <span>
+        - "
+        hello
+        "
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`SystemDebugTrace Component Snapshot Tests smart intent event matches snapshot 1`] = `
+<div
+  className="sc-aXZVg boJSyX"
+>
+  <div
+    className="sc-gEvEer iOyPIh"
+    onClick={[Function]}
+  >
+    <span
+      className="sc-fqkvVR hryAHs"
+    >
+      <svg
+        fill="#6D6A78"
+        viewBox="0 0 640 640"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M184 120C184 89.1 209.1 64 240 64L264 64C281.7 64 296 78.3 296 96L296 544C296 561.7 281.7 576 264 576L232 576C202.2 576 177.1 555.6 170 528C169.3 528 168.7 528 168 528C123.8 528 88 492.2 88 448C88 430 94 413.4 104 400C84.6 385.4 72 362.2 72 336C72 305.1 89.6 278.2 115.2 264.9C108.1 252.9 104 238.9 104 224C104 179.8 139.8 144 184 144L184 120zM456 120L456 144C500.2 144 536 179.8 536 224C536 239 531.9 253 524.8 264.9C550.5 278.2 568 305 568 336C568 362.2 555.4 385.4 536 400C546 413.4 552 430 552 448C552 492.2 516.2 528 472 528C471.3 528 470.7 528 470 528C462.9 555.6 437.8 576 408 576L376 576C358.3 576 344 561.7 344 544L344 96C344 78.3 358.3 64 376 64L400 64C430.9 64 456 89.1 456 120z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span
+      className="sc-dcJsrY cxwzHl"
+    >
+      Smart intent triggered 
+      <span>
+        - "
+        Book Flight
+        "
+      </span>
+    </span>
+  </div>
+</div>
+`;

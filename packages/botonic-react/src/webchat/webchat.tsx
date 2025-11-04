@@ -486,6 +486,19 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
       updateLastMessageDate(currentDateString())
     },
+    addSystemResponse: ({ response }) => {
+      if (Array.isArray(response)) {
+        response.forEach(r => {
+          addMessageComponent({ ...r, props: { ...r.props, isUnread: false } })
+        })
+      } else if (response) {
+        addMessageComponent({
+          ...response,
+          props: { ...response.props, isUnread: false },
+        })
+      }
+      updateLastMessageDate(currentDateString())
+    },
     setTyping: (typing: boolean) => updateTyping(typing),
     addUserMessage: message => sendInput(message),
     updateUser: updateSessionWithUser,
@@ -658,6 +671,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateUser: updateSessionWithUser,
         updateWebchatDevSettings: updateWebchatDevSettings,
         trackEvent: props.onTrackEvent,
+        previewUtils: props.previewUtils,
         webchatState,
         webchatContainerRef,
         chatAreaRef,

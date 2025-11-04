@@ -12,6 +12,7 @@ import {
   EventArgs,
   OnStateChangeArgs,
   OnUserInputArgs,
+  PreviewUtils,
   SENDERS,
   Typing,
   WebchatArgs,
@@ -56,6 +57,7 @@ export class WebchatApp {
   public appId?: string
   public visibility?: boolean | (() => boolean) | 'dynamic'
   public server?: ServerConfig
+  public previewUtils?: PreviewUtils
   public webchatRef: React.RefObject<WebchatRef | null>
 
   private reactRoot: Root | null = null
@@ -86,6 +88,7 @@ export class WebchatApp {
     appId,
     visibility,
     server,
+    previewUtils,
   }: WebchatArgs) {
     this.theme = theme
     this.persistentMenu = persistentMenu
@@ -117,6 +120,7 @@ export class WebchatApp {
     this.onConnectionChange = onConnectionChange
     this.visibility = visibility
     this.server = server
+    this.previewUtils = previewUtils
     this.webchatRef = createRef<WebchatRef>()
     this.appId = appId
 
@@ -246,6 +250,7 @@ export class WebchatApp {
   }
 
   onServiceEvent(event: Event) {
+    console.log('onServiceEvent', event)
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current?.setOnline(event.online)
@@ -256,16 +261,18 @@ export class WebchatApp {
     } else if (event.message?.type === 'sender_action') {
       this.setTyping(event.message.data === Typing.On)
     } else {
-      // TODO: onMessage function should receive a WebchatMessage
-      // and message.type is typed as enum of INPUT
-      // INPUT not contain 'update_webchat_settings' or 'sender_action'
-      // so we need to cast it to unknown to avoid type error
+      const isSystemMessage = (event.message as any)?.sent_by === SENDERS.system
       this.onMessage &&
         this.onMessage(this, {
-          sentBy: SENDERS.bot,
+          sentBy: isSystemMessage ? SENDERS.system : SENDERS.bot,
           ...event.message,
         } as unknown as WebchatMessage)
-      this.addBotMessage(event.message)
+
+      if (isSystemMessage) {
+        this.addSystemMessage(event.message)
+      } else {
+        this.addBotMessage(event.message)
+      }
     }
   }
 
@@ -293,6 +300,18 @@ export class WebchatApp {
     const response = msgToBotonic(message, this.theme?.message?.customTypes)
 
     this.webchatRef.current?.addBotResponse({
+      response,
+    })
+  }
+
+  addSystemMessage(message: any) {
+    message.ack = 0
+    message.isUnread = true
+    message.sentBy = SENDERS.system
+    delete message.sent_by
+    const response = msgToBotonic(message, this.theme?.message?.customTypes)
+
+    this.webchatRef.current?.addSystemResponse({
       response,
     })
   }
@@ -465,6 +484,7 @@ export class WebchatApp {
       visibility,
       server,
       hostId,
+      previewUtils,
       ...webchatOptions
     } = optionsAtRuntime
     theme = this.createInitialTheme(optionsAtRuntime)
@@ -482,6 +502,7 @@ export class WebchatApp {
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     this.hostId = hostId || this.hostId
+    this.previewUtils = previewUtils || this.previewUtils
     this.createRootElement(host)
 
     return (
@@ -495,6 +516,7 @@ export class WebchatApp {
         storageKey={this.storageKey}
         defaultDelay={defaultDelay}
         defaultTyping={defaultTyping}
+        previewUtils={this.previewUtils}
         onInit={(...args: [any]) => this.onInitWebchat(...args)}
         onOpen={(...args: [any]) => this.onOpenWebchat(...args)}
         onClose={(...args: [any]) => this.onCloseWebchat(...args)}

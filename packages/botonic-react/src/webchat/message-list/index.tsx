@@ -1,15 +1,20 @@
+import { INPUT } from '@botonic/core'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
+import { SENDERS } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'
 import { BotonicContainerId } from '../constants'
 import TypingIndicator from '../typing-indicator'
 import { IntroMessage } from './intro-message'
 import { ScrollButton } from './scroll-button'
-import { ContainerMessage, ScrollableMessageList } from './styles'
+import {
+  BaseContainerMessage,
+  ScrollableMessageList,
+  SystemContainerMessage,
+} from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
-
 const SCROLL_TIMEOUT = 200
 const scrollOptionsEnd: ScrollIntoViewOptions = {
   block: 'end',
@@ -133,16 +138,22 @@ export const WebchatMessageList = () => {
       >
         <IntroMessage />
         {webchatState.messagesComponents.map((messageComponent, index) => {
+          const messageId = messageComponent.props.id
+          const MessageContainer =
+            messageComponent.props?.sentBy === SENDERS.system
+              ? SystemContainerMessage
+              : BaseContainerMessage
+
           return (
-            <React.Fragment key={messageComponent.props.id}>
-              <ContainerMessage role={ROLES.MESSAGE}>
-                {showUnreadMessagesBanner(messageComponent.props.id) && (
+            <React.Fragment key={messageId}>
+              <MessageContainer role={ROLES.MESSAGE}>
+                {showUnreadMessagesBanner(messageId) && (
                   <UnreadMessagesBanner
                     unreadMessagesBannerRef={unreadMessagesBannerRef}
                   />
                 )}
                 {messageComponent}
-              </ContainerMessage>
+              </MessageContainer>
               {index === webchatState.messagesComponents.length - 1 && (
                 <div
                   ref={lastMessageRef}

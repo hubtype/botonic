@@ -47,6 +47,7 @@ export const Message = props => {
 
   const isSentByUser = sentBy === SENDERS.user
   const isSentByBot = sentBy === SENDERS.bot
+  const isSentBySystem = sentBy === SENDERS.system
   const { webchatState, addMessage, updateReplies, getThemeProperty } =
     useContext(WebchatContext)
   const [state] = useState({
@@ -168,6 +169,10 @@ export const Message = props => {
     const messageJSON = webchatState.messagesJSON.find(m => m.id === state.id)
     if (!messageJSON || !messageJSON.display) return <></>
 
+    if (messageJSON?.type === INPUT.SYSTEM_DEBUG_TRACE) {
+      return children
+    }
+
     const getBlobTick = pointerSize => {
       // to add a border to the blobTick we need to create two triangles and overlap them
       // that is why the color depends on the pointerSize
@@ -227,6 +232,7 @@ export const Message = props => {
             <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
             <BlobContainer
               className={className}
+              issentbysystem={isSentBySystem}
               bgcolor={getBgColor()}
               color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
               blobwidth={getThemeProperty(

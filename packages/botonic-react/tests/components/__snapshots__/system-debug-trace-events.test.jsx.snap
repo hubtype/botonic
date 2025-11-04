@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`System Debug Trace - Event Components HandoffSuccess Component matches snapshot 1`] = `
+<div
+  className="sc-gsFSXq bZGSqH"
+>
+  <strong
+    className="sc-kAyceB DSINm"
+  >
+    Queue
+  </strong>
+  <div
+    className="sc-imWYAI devbtc"
+  >
+    Test Queue
+  </div>
+</div>
+`;

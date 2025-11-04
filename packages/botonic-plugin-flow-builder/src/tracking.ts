@@ -79,7 +79,7 @@ function getCommonFlowContentEventArgs(
     flowId: nodeContent.flow_id,
     flowName,
     flowNodeId: nodeContent.id,
-    flowNodeContentId: nodeContent.code,
+    flowNodeContentId: nodeContent.code ?? '',
   }
 }
 

@@ -17,6 +17,7 @@ import {
   ReplyProps,
   WebchatSettingsProps,
 } from './components'
+import { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
 import { CloseWebviewOptions } from './contexts'
 import { UseWebchat } from './webchat/context/use-webchat'
 import {
@@ -48,6 +49,7 @@ export interface WebchatRef {
     session,
     lastRoutePath,
   }: AddBotResponseArgs) => void
+  addSystemResponse: ({ response }: AddSystemResponseArgs) => void
   setTyping: (typing: boolean) => void
   addUserMessage: (message: any) => Promise<void>
   updateUser: (userToUpdate: any) => void
@@ -75,6 +77,19 @@ interface AddBotResponseArgs {
   lastRoutePath?: any
 }
 
+interface AddSystemResponseArgs {
+  response: any
+}
+
+export interface PreviewUtils {
+  getChunkIdsGroupedBySource: (
+    chunkIds: string[]
+  ) => Promise<ChunkIdsGroupedBySourceData[]>
+  onClickOpenChunks: (
+    chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
+  ) => void
+}
+
 export interface WebchatArgs {
   theme?: Partial<WebchatTheme>
   persistentMenu?: PersistentMenuOptionsTheme
@@ -99,6 +114,7 @@ export interface WebchatArgs {
   appId?: string
   visibility?: boolean | (() => boolean) | 'dynamic'
   server?: ServerConfig
+  previewUtils?: PreviewUtils
 }
 
 export interface WebchatProps {
@@ -121,6 +137,7 @@ export interface WebchatProps {
   host?: any
   server?: ServerConfig
   localWebviews?: React.ComponentType[]
+  previewUtils?: PreviewUtils
 }
 
 export type EventArgs = { [key: string]: any }
@@ -134,6 +151,7 @@ export enum SENDERS {
   bot = 'bot',
   user = 'user',
   agent = 'agent',
+  system = 'system',
 }
 
 export enum Typing {
@@ -197,4 +215,4 @@ interface UpdateMessageInfoEvent {
 }
 
 export { CaseEventQueuePositionChangedInput } from '@botonic/core'
-export { WebchatTheme }
+export { ChunkIdsGroupedBySourceData, WebchatTheme }
