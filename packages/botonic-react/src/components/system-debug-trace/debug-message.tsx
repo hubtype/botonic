@@ -9,6 +9,7 @@ import {
   getKnowledgeBaseEventConfig,
   getSmartIntentEventConfig,
 } from './events'
+import { useLastLabelPosition } from './hooks/use-last-label-position'
 import { CaretDownSvg, CaretUpSvg } from './icons'
 import {
   StyledDebugArrow,
@@ -20,7 +21,6 @@ import {
   StyledDebugTitle,
 } from './styles'
 import { DebugEvent, DebugEventConfig } from './types'
-import { useLastLabelPosition } from './use-last-label-position'
 
 const getEventConfig = (
   debugEvent: DebugEvent
