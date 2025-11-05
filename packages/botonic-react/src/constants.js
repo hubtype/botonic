@@ -175,6 +175,7 @@ export const ROLES = {
   WEBVIEW: 'webview',
   WEBVIEW_HEADER: 'webview-header',
   MESSAGE: 'message',
+  SYSTEM_MESSAGE: 'system-message',
   IMAGE_MESSAGE: 'image-message',
   AUDIO_MESSAGE: 'audio-message',
   VIDEO_MESSAGE: 'video-message',
