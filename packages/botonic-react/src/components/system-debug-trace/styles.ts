@@ -86,22 +86,11 @@ export const StyledDebugTitle = styled.span`
 export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
   position: relative;
 
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 13px;
-    top: 4px;
-    bottom: 0;
-    width: 1px;
-    background-color: ${COLORS.N100};
-  }
 `
 interface StyledDebugDetailProps {
   $isLastItem?: boolean
@@ -219,6 +208,25 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
     width: 14px;
     height: 14px;
     flex-shrink: 0;
+  }
+`
+
+export const StyledDebugContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+
+  /* Create line from first label to last label */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    width: 1px;
+    background-color: ${COLORS.N100};
+    top: 0;
+    /* Height ends at last label's bottom position */
+    height: var(--last-label-bottom, 100%);
   }
 `
 

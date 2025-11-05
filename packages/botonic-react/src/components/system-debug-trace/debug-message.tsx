@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import {
   getAiAgentEventConfig,
@@ -14,6 +14,7 @@ import {
   StyledDebugArrow,
   StyledDebugContainer,
   StyledDebugContent,
+  StyledDebugContentWrapper,
   StyledDebugHeader,
   StyledDebugIcon,
   StyledDebugTitle,
@@ -48,6 +49,7 @@ interface DebugMessageProps {
 
 export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   const eventConfig = getEventConfig(debugEvent)
 
@@ -65,6 +67,58 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
     }
   }
 
+  // Measure last label position and set CSS variable for line height
+  useEffect(() => {
+    if (!isExpanded || !wrapperRef.current) {
+      if (wrapperRef.current) {
+        wrapperRef.current.style.setProperty('--last-label-bottom', '0px')
+      }
+      return
+    }
+
+    const measure = () => {
+      const wrapper = wrapperRef.current
+      if (!wrapper) return
+
+      // Check if visible
+      const parent = wrapper.parentElement
+      if (parent && window.getComputedStyle(parent).display === 'none') {
+        return
+      }
+
+      // Find last container and its label
+      const children = Array.from(wrapper.children) as HTMLElement[]
+      const lastContainer = children[children.length - 1]
+      if (!lastContainer) return
+
+      const lastLabel = lastContainer.querySelector('strong, span[class*="GuardrailLabel"]') as HTMLElement | null
+      if (!lastLabel) return
+
+      // Calculate distance from wrapper top to label bottom
+      const wrapperTop = wrapper.getBoundingClientRect().top
+      const labelBottom = lastLabel.getBoundingClientRect().bottom
+      const labelBottomPosition = labelBottom - wrapperTop
+
+      // Set CSS variable for line height calculation
+      wrapper.style.setProperty('--last-label-bottom', `${labelBottomPosition}px`)
+    }
+
+    // Measure after render
+    const timeoutId = setTimeout(measure, 0)
+    const resizeObserver = 'ResizeObserver' in window
+      ? new ResizeObserver(measure)
+      : null
+
+    if (resizeObserver && wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current)
+    }
+
+    return () => {
+      clearTimeout(timeoutId)
+      resizeObserver?.disconnect()
+    }
+  }, [isExpanded, debugEvent])
+
   let containerClassName = collapsible ? 'collapsible' : ''
   containerClassName += collapsible && isExpanded ? ' expanded' : ''
 
@@ -81,7 +135,9 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
       </StyledDebugHeader>
       {Component && (
         <StyledDebugContent style={{ display: isExpanded ? 'block' : 'none' }}>
-          <Component {...debugEvent} messageId={messageId} />
+          <StyledDebugContentWrapper ref={wrapperRef}>
+            <Component {...debugEvent} messageId={messageId} />
+          </StyledDebugContentWrapper>
         </StyledDebugContent>
       )}
     </StyledDebugContainer>
