@@ -16,6 +16,15 @@ export const StyledDebugContainer = styled.div`
   margin: 4px 8px;
   max-width: calc(100% - 16px);
   width: 100%;
+
+  /* When collapsible (expanded or collapsed), entire container is hoverable and clickable */
+  &.collapsible {
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${COLORS.N50};
+    }
+  }
 `
 
 export const StyledDebugHeader = styled.div`
@@ -28,14 +37,16 @@ export const StyledDebugHeader = styled.div`
   padding: 8px 12px;
   width: 100%;
 
-  /* Apply hover to all headers with gray background */
+  /* Default hover for non-collapsible headers */
   &:hover {
     background-color: ${COLORS.N50};
   }
 
-  /* Collapsible headers get pointer cursor */
+  /* For collapsible components, header should not have its own hover - container handles it */
   .collapsible & {
-    cursor: pointer;
+    &:hover {
+      background-color: transparent;
+    }
   }
 `
 

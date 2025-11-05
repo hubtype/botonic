@@ -61,9 +61,17 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const Component = component
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (collapsible) {
-      setIsExpanded(!isExpanded)
+      // Check if click came from a button or interactive element
+      const target = e.target as HTMLElement
+      const isButton = target.closest('button, a, [role="button"]')
+      
+      // Only toggle if not clicking on a button
+      if (!isButton) {
+        e.stopPropagation() // Prevent bubbling when clicking header
+        setIsExpanded(!isExpanded)
+      }
     }
   }
 
@@ -119,12 +127,16 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
     }
   }, [isExpanded, debugEvent])
 
-  let containerClassName = collapsible ? 'collapsible' : ''
-  containerClassName += collapsible && isExpanded ? ' expanded' : ''
+  const containerClassName = collapsible
+    ? `collapsible${isExpanded ? ' expanded' : ''}`
+    : ''
 
   return (
-    <StyledDebugContainer className={containerClassName}>
-      <StyledDebugHeader onClick={handleClick}>
+    <StyledDebugContainer
+      className={containerClassName}
+      onClick={collapsible ? handleClick : undefined}
+    >
+      <StyledDebugHeader>
         <StyledDebugIcon>{icon}</StyledDebugIcon>
         <StyledDebugTitle>{title}</StyledDebugTitle>
         {collapsible && (
