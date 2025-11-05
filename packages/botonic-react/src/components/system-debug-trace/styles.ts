@@ -113,7 +113,7 @@ export const StyledDebugDetail = styled.div<StyledDebugDetailProps>`
   flex-direction: column;
   gap: 4px;
   padding-left: 28px;
-  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   line-height: 1.5;
 `
 
@@ -168,7 +168,7 @@ export const StyledDebugItemWithIcon = styled.div`
 `
 
 export const StyledDebugMetadata = styled.div`
-  margin-top: 16px;
+  margin-top: 8px;
   padding-top: 12px;
   border-top: 1px solid ${COLORS.N100};
   color: ${COLORS.N700};
@@ -212,7 +212,7 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
   align-items: center;
   gap: 8px;
   padding-left: 28px;
-  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
@@ -227,7 +227,7 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
 export const StyledDebugContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   position: relative;
 
   /* Create line from first label to last label */
