@@ -10,12 +10,21 @@ export const StyledDebugContainer = styled.div`
   gap: 12px;
 
   background-color: ${COLORS.SOLID_WHITE};
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   margin: 4px 8px;
   max-width: calc(100% - 16px);
   width: 100%;
+
+  /* When collapsible (expanded or collapsed), entire container is hoverable and clickable */
+  &.collapsible {
+    cursor: pointer;
+
+    &:hover {
+      background-color: ${COLORS.N50};
+    }
+  }
 `
 
 export const StyledDebugHeader = styled.div`
@@ -24,15 +33,19 @@ export const StyledDebugHeader = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   user-select: none;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-radius: 6px;
   padding: 8px 12px;
   width: 100%;
 
+  /* Default hover for non-collapsible headers */
+  &:hover {
+    background-color: ${COLORS.N50};
+  }
+
+  /* For collapsible components, header should not have its own hover - container handles it */
   .collapsible & {
-    cursor: pointer;
     &:hover {
-      background-color: ${COLORS.N50};
+      background-color: transparent;
     }
   }
 `
@@ -86,22 +99,11 @@ export const StyledDebugTitle = styled.span`
 export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
   position: relative;
 
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 13px;
-    top: 4px;
-    bottom: 0;
-    width: 1px;
-    background-color: ${COLORS.N100};
-  }
 `
 interface StyledDebugDetailProps {
   $isLastItem?: boolean
@@ -111,7 +113,7 @@ export const StyledDebugDetail = styled.div<StyledDebugDetailProps>`
   flex-direction: column;
   gap: 4px;
   padding-left: 28px;
-  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   line-height: 1.5;
 `
 
@@ -166,7 +168,7 @@ export const StyledDebugItemWithIcon = styled.div`
 `
 
 export const StyledDebugMetadata = styled.div`
-  margin-top: 16px;
+  margin-top: 8px;
   padding-top: 12px;
   border-top: 1px solid ${COLORS.N100};
   color: ${COLORS.N700};
@@ -181,7 +183,7 @@ export const StyledDebugMetadata = styled.div`
 
 export const StyledSeeChunksButton = styled.button`
   border: 1px solid #c4c6d0;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 8px;
   height: 28px;
   background-color: transparent;
@@ -210,7 +212,7 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
   align-items: center;
   gap: 8px;
   padding-left: 28px;
-  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '16px')};
+  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   font-size: 12px;
   line-height: 1.5;
   color: ${COLORS.N700};
@@ -219,6 +221,25 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
     width: 14px;
     height: 14px;
     flex-shrink: 0;
+  }
+`
+
+export const StyledDebugContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+
+  /* Create line from first label to last label */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    width: 1px;
+    background-color: ${COLORS.N100};
+    top: 0;
+    /* Height ends at last label's bottom position */
+    height: var(--last-label-bottom, 100%);
   }
 `
 

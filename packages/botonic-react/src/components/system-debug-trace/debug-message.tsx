@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import {
   getAiAgentEventConfig,
@@ -9,11 +9,13 @@ import {
   getKnowledgeBaseEventConfig,
   getSmartIntentEventConfig,
 } from './events'
+import { useLastLabelPosition } from './hooks/use-last-label-position'
 import { CaretDownSvg, CaretUpSvg } from './icons'
 import {
   StyledDebugArrow,
   StyledDebugContainer,
   StyledDebugContent,
+  StyledDebugContentWrapper,
   StyledDebugHeader,
   StyledDebugIcon,
   StyledDebugTitle,
@@ -48,8 +50,16 @@ interface DebugMessageProps {
 
 export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   const eventConfig = getEventConfig(debugEvent)
+
+  useLastLabelPosition({
+    wrapperRef,
+    isExpanded,
+    debugEvent,
+    isCollapsible: eventConfig?.collapsible ?? false,
+  })
 
   if (!eventConfig) {
     return null
@@ -59,18 +69,28 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const Component = component
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (collapsible) {
-      setIsExpanded(!isExpanded)
+      const target = e.target as HTMLElement
+      const isButton = target.closest('button, a, [role="button"]')
+
+      if (!isButton) {
+        e.stopPropagation()
+        setIsExpanded(!isExpanded)
+      }
     }
   }
 
-  let containerClassName = collapsible ? 'collapsible' : ''
-  containerClassName += collapsible && isExpanded ? ' expanded' : ''
+  const containerClassName = collapsible
+    ? `collapsible${isExpanded ? ' expanded' : ''}`
+    : ''
 
   return (
-    <StyledDebugContainer className={containerClassName}>
-      <StyledDebugHeader onClick={handleClick}>
+    <StyledDebugContainer
+      className={containerClassName}
+      onClick={collapsible ? handleClick : undefined}
+    >
+      <StyledDebugHeader>
         <StyledDebugIcon>{icon}</StyledDebugIcon>
         <StyledDebugTitle>{title}</StyledDebugTitle>
         {collapsible && (
@@ -81,7 +101,9 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
       </StyledDebugHeader>
       {Component && (
         <StyledDebugContent style={{ display: isExpanded ? 'block' : 'none' }}>
-          <Component {...debugEvent} messageId={messageId} />
+          <StyledDebugContentWrapper ref={wrapperRef}>
+            <Component {...debugEvent} messageId={messageId} />
+          </StyledDebugContentWrapper>
         </StyledDebugContent>
       )}
     </StyledDebugContainer>

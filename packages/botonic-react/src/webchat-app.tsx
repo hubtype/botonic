@@ -250,7 +250,6 @@ export class WebchatApp {
   }
 
   onServiceEvent(event: Event) {
-    console.log('onServiceEvent', event)
     if (event.action === 'connectionChange') {
       this.onConnectionChange && this.onConnectionChange(this, event.online)
       this.webchatRef.current?.setOnline(event.online)

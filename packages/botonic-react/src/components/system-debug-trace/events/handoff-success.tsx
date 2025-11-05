@@ -35,8 +35,9 @@ export const getHandoffSuccessEventConfig = (
         Handoff to agent <span>- {data.handoff_queue_name}</span>
       </>
     ),
-    component: HandoffSuccess,
     icon: <HeadSetSvg />,
-    collapsible: true,
+    // TODO: Disable component and collapsible for now because we are only showing the queue name
+    component: null,
+    collapsible: false,
   }
 }
