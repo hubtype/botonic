@@ -227,7 +227,7 @@ describe('SystemDebugTrace Component', () => {
       expect(config2.action).toBe(EventAction.Fallback)
     })
 
-    test('getHandoffSuccessEventConfig returns collapsible config', () => {
+    test('getHandoffSuccessEventConfig returns non-collapsible config', () => {
       const data = {
         action: EventAction.HandoffSuccess,
         queue_name: 'Support Queue',
@@ -237,8 +237,8 @@ describe('SystemDebugTrace Component', () => {
       const config = getHandoffSuccessEventConfig(data)
 
       expect(config.action).toBe(EventAction.HandoffSuccess)
-      expect(config.component).toBeTruthy()
-      expect(config.collapsible).toBe(true)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
     })
@@ -285,12 +285,17 @@ describe('SystemDebugTrace Component', () => {
   })
 
   describe('Collapsible Functionality', () => {
-    test('handoff event toggles expansion on click', async () => {
+    test('ai agent event toggles expansion on click', async () => {
       const user = userEvent.setup()
       const debugEvent = {
-        action: EventAction.HandoffSuccess,
-        queue_name: 'Support Queue',
-        is_queue_open: true,
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        user_input: 'test',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
       }
 
       const { container } = render(
