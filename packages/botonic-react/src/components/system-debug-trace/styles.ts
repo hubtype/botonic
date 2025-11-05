@@ -10,7 +10,7 @@ export const StyledDebugContainer = styled.div`
   gap: 12px;
 
   background-color: ${COLORS.SOLID_WHITE};
-  border-radius: 4px;
+  border-radius: 6px;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
   margin: 4px 8px;
@@ -24,16 +24,18 @@ export const StyledDebugHeader = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   user-select: none;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-radius: 6px;
   padding: 8px 12px;
   width: 100%;
 
+  /* Apply hover to all headers with gray background */
+  &:hover {
+    background-color: ${COLORS.N50};
+  }
+
+  /* Collapsible headers get pointer cursor */
   .collapsible & {
     cursor: pointer;
-    &:hover {
-      background-color: ${COLORS.N50};
-    }
   }
 `
 
@@ -170,7 +172,7 @@ export const StyledDebugMetadata = styled.div`
 
 export const StyledSeeChunksButton = styled.button`
   border: 1px solid #c4c6d0;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 8px;
   height: 28px;
   background-color: transparent;
