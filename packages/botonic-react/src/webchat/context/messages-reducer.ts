@@ -50,7 +50,8 @@ function addMessageComponent(
   const messageComponent = action.payload
   const isUnreadMessage =
     messageComponent.props?.isUnread &&
-    messageComponent.props?.sentBy !== SENDERS.user
+    messageComponent.props?.sentBy !== SENDERS.user &&
+    messageComponent.props?.sentBy !== SENDERS.system
 
   const numUnreadMessages = isUnreadMessage
     ? state.numUnreadMessages + 1
