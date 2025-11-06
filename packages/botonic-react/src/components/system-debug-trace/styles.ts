@@ -189,7 +189,7 @@ export const StyledSeeChunksButton = styled.button`
   width: fit-content;
 
   &:hover {
-    background-color: ${COLORS.N50};
+    background-color: ${COLORS.N200};
   }
 `
 interface StyledGuardrailItemProps {
