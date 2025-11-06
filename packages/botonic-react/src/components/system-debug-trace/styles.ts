@@ -13,7 +13,7 @@ export const StyledDebugContainer = styled.div`
   border-radius: 6px;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;
-  margin: 4px 8px;
+  margin: 0px 8px;
   max-width: calc(100% - 16px);
   width: 100%;
 
@@ -36,18 +36,6 @@ export const StyledDebugHeader = styled.div`
   border-radius: 6px;
   padding: 8px 12px;
   width: 100%;
-
-  /* Default hover for non-collapsible headers */
-  &:hover {
-    background-color: ${COLORS.N50};
-  }
-
-  /* For collapsible components, header should not have its own hover - container handles it */
-  .collapsible & {
-    &:hover {
-      background-color: transparent;
-    }
-  }
 `
 
 export const StyledDebugArrow = styled.span`
@@ -201,7 +189,7 @@ export const StyledSeeChunksButton = styled.button`
   width: fit-content;
 
   &:hover {
-    background-color: ${COLORS.N50};
+    background-color: ${COLORS.N200};
   }
 `
 interface StyledGuardrailItemProps {
@@ -240,6 +228,13 @@ export const StyledDebugContentWrapper = styled.div`
     top: 0;
     /* Height ends at last label's bottom position */
     height: var(--last-label-bottom, 100%);
+  }
+
+  /* Change line color to N200 when collapsible event is hovered */
+  .collapsible:hover & {
+    &::before {
+      background-color: ${COLORS.N200};
+    }
   }
 `
 

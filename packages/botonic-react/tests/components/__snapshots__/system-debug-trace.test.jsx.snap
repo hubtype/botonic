@@ -2,11 +2,11 @@
 
 exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg fBBbFQ collapsible"
+  className="sc-aXZVg eXgWCs collapsible"
   onClick={[Function]}
 >
   <div
-    className="sc-gEvEer jnNmpb"
+    className="sc-gEvEer ezpUwU"
   >
     <span
       className="sc-fqkvVR hryAHs"
@@ -55,7 +55,7 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
     }
   >
     <div
-      className="sc-jlZhew gKOaGs"
+      className="sc-jlZhew gYpjLn"
     >
       <div
         className="sc-gsFSXq DIlHA"
@@ -73,10 +73,10 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
 
 exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg fBBbFQ"
+  className="sc-aXZVg eXgWCs"
 >
   <div
-    className="sc-gEvEer jnNmpb"
+    className="sc-gEvEer ezpUwU"
   >
     <span
       className="sc-fqkvVR hryAHs"
@@ -108,10 +108,10 @@ exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapsh
 
 exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg fBBbFQ"
+  className="sc-aXZVg eXgWCs"
 >
   <div
-    className="sc-gEvEer jnNmpb"
+    className="sc-gEvEer ezpUwU"
   >
     <span
       className="sc-fqkvVR hryAHs"
@@ -141,10 +141,10 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
 
 exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg fBBbFQ"
+  className="sc-aXZVg eXgWCs"
 >
   <div
-    className="sc-gEvEer jnNmpb"
+    className="sc-gEvEer ezpUwU"
   >
     <span
       className="sc-fqkvVR hryAHs"
@@ -176,10 +176,10 @@ exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapsho
 
 exports[`SystemDebugTrace Component Snapshot Tests smart intent event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg fBBbFQ"
+  className="sc-aXZVg eXgWCs"
 >
   <div
-    className="sc-gEvEer jnNmpb"
+    className="sc-gEvEer ezpUwU"
   >
     <span
       className="sc-fqkvVR hryAHs"
