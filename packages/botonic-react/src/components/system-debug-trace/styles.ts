@@ -229,6 +229,13 @@ export const StyledDebugContentWrapper = styled.div`
     /* Height ends at last label's bottom position */
     height: var(--last-label-bottom, 100%);
   }
+
+  /* Change line color to N200 when collapsible event is hovered */
+  .collapsible:hover & {
+    &::before {
+      background-color: ${COLORS.N200};
+    }
+  }
 `
 
 export const StyledGuardrailLabel = styled.span`

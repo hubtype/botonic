@@ -29,10 +29,11 @@ export const COLORS = {
   TASMAN_GRAY: '#D1D8CF',
   TRANSPARENT: 'rgba(0, 0, 0, 0)',
   WILD_SAND_WHITE: '#F4F4F4',
-  N700: '#393B45',
-  N500: '#6D6A78',
-  N100: '#E8E8EA',
   N50: '#F0F0F3',
+  N100: '#E8E8EA',
+  N200: '#CAC9CE',
+  N500: '#6D6A78',
+  N700: '#393B45',
 }
 
 export const WEBCHAT = {
