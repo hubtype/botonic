@@ -50,7 +50,8 @@ function addMessageComponent(
   const messageComponent = action.payload
   const isUnreadMessage =
     messageComponent.props?.isUnread &&
-    messageComponent.props?.sentBy !== SENDERS.user
+    messageComponent.props?.sentBy !== SENDERS.user &&
+    messageComponent.props?.sentBy !== SENDERS.system
 
   const numUnreadMessages = isUnreadMessage
     ? state.numUnreadMessages + 1
@@ -115,8 +116,11 @@ function updateMessageReducer(
       ? getUpdatedMessagesJSON(state, msgIndex, action.payload)
       : state.messagesJSON
 
-    const numUnreadMessages = state.messagesComponents.filter(
-      messageComponent => messageComponent.props.isUnread
+    const numUnreadMessages = updatedMessagesComponents.filter(
+      messageComponent =>
+        messageComponent.props?.isUnread &&
+        messageComponent.props?.sentBy !== SENDERS.user &&
+        messageComponent.props?.sentBy !== SENDERS.system
     ).length
 
     return {
