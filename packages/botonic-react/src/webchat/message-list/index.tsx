@@ -137,10 +137,18 @@ export const WebchatMessageList = () => {
           const messageId = messageComponent.props.id
           const sentBySystem = messageComponent.props?.sentBy === SENDERS.system
 
+          // Check if system message is followed by a regular message (user/bot)
+          const nextMessage = webchatState.messagesComponents[index + 1]
+          const isSystemMessageFollowedByMessage =
+            sentBySystem &&
+            nextMessage &&
+            nextMessage.props?.sentBy !== SENDERS.system
+
           return (
             <React.Fragment key={messageId}>
               <MessageContainer
                 role={sentBySystem ? ROLES.SYSTEM_MESSAGE : ROLES.MESSAGE}
+                $isLastSystemMessage={isSystemMessageFollowedByMessage}
               >
                 {showUnreadMessagesBanner(messageId) && (
                   <UnreadMessagesBanner
