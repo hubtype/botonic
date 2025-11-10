@@ -88,6 +88,9 @@ export const StyledDebugContent = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 
   font-size: 12px;
   line-height: 1.5;
@@ -100,9 +103,13 @@ export const StyledDebugDetail = styled.div<StyledDebugDetailProps>`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding-left: 28px;
+  padding: 0 28px;
   margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   line-height: 1.5;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 `
 
 export const StyledDebugLabel = styled.strong`
@@ -140,6 +147,8 @@ export const StyledDebugItemWithIcon = styled.div`
   font-size: 12px;
   color: ${COLORS.N700};
   line-height: 1.5;
+  min-width: 0;
+  width: 100%;
 
   &:not(:last-child) {
     margin-bottom: 4px;
@@ -217,6 +226,9 @@ export const StyledDebugContentWrapper = styled.div`
   flex-direction: column;
   gap: 8px;
   position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 
   /* Create line from first label to last label */
   &::before {
@@ -261,6 +273,11 @@ export const StyledSourceValue = styled.span`
 
 export const StyledFileSourceValue = styled(StyledSourceValue)`
   display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 `
 
 export const StyledUrlSourceValue = styled.a`
@@ -269,11 +286,12 @@ export const StyledUrlSourceValue = styled.a`
   line-height: 1.5;
   color: ${COLORS.N700};
   text-decoration: none;
-  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
+  min-width: 0;
+  width: 0;
+  flex: 1 1 0%;
 
   &:hover {
     text-decoration: underline;
