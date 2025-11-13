@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "esModuleInterop": true,
-    "jsx": "react-jsx"
-  }
-}
