@@ -1,12 +1,7 @@
 {
   "extends": "../tsconfig",
-  // include need to be specified for running tsc on tests
-  "include": ["**/*.ts", "**/*.tsx", "../src/**/*.ts", "../src/**/*.tsx"],
   "compilerOptions": {
-    "rootDir": "../",
-    // Options below are for compiling @botonic js/jsx files
-    "allowJs": true, //when set, jest does not validate types anymore https://github.com/kulshekhar/ts-jest/issues/740#issuecomment-424123303
-    "declaration": false,
-    "declarationDir": null
-  }
+    "noEmit": true
+  },
+  "references": [{ "path": ".." }]
 }

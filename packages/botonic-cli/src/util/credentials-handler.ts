@@ -5,20 +5,20 @@ import {
   BOTONIC_HOME_DIRNAME,
   BOTONIC_PROJECT_PATH,
   GLOBAL_CREDENTIALS_FILENAME,
-} from '../constants'
+} from '../constants.js'
 import {
   BotCredentials,
   CredentialsHandlerArgs,
   GlobalCredentials,
   JSONObject,
-} from '../interfaces'
+} from '../interfaces.js'
 import {
   createDir,
   getHomeDirectory,
   pathExists,
   readJSON,
   writeJSON,
-} from '../util/file-system'
+} from '../util/file-system.js'
 
 export class CredentialsHandler {
   homeDir: string

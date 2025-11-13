@@ -1,4 +1,4 @@
-import { Config } from '@oclif/config'
+import { Config } from '@oclif/core'
 import { assert } from 'console'
 import { join } from 'path'
 import { chdir } from 'process'
@@ -6,7 +6,7 @@ import { chdir } from 'process'
 import { EXAMPLES } from '../../src/botonic-examples'
 import { default as NewCommand } from '../../src/commands/new'
 import {
-  copy,
+  copyRecursively,
   createTempDir,
   readDir,
   readJSON,
@@ -59,7 +59,7 @@ describe('TEST: New command (installing project)', () => {
   it('Succeeds to install', async () => {
     const tmpPath = createTempDir('botonic-tmp')
     // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
-    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
+    copyRecursively(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
     const sut = readDir('.')
@@ -72,7 +72,7 @@ describe('TEST: New command (installing project)', () => {
   it('Fails to install', async () => {
     const tmpPath = createTempDir('botonic-tmp')
     // await newCommand.downloadSelectedProjectIntoPath(BLANK_EXAMPLE, tmpPath)
-    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
+    copyRecursively(BLANK_EXAMPLE.localTestPath, tmpPath)
     await expect(
       newCommand.installDependencies('npm instal-typo')
     ).rejects.toThrow(Error)

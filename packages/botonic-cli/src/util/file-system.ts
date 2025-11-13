@@ -1,4 +1,5 @@
 import {
+  cpSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -7,13 +8,12 @@ import {
   rmSync,
   writeFileSync,
 } from 'fs'
-import { copySync } from 'fs-extra'
 import { homedir } from 'os'
 import { basename } from 'path'
 
-import { JSONObject } from '../interfaces'
-import { isWindows } from './environment-info'
-import { execCommand } from './system'
+import { JSONObject } from '../interfaces.js'
+import { isWindows } from './environment-info.js'
+import { execCommand } from './system.js'
 
 export function pathExists(path: string): boolean {
   return existsSync(path)
@@ -42,13 +42,13 @@ export function createTempDir(name: string): string {
   return mkdtempSync(name)
 }
 
-export function copy(from: string, to: string): void {
+export function copyRecursively(from: string, to: string): void {
   /*
    * Copy a file or directory.
    * src: if src is a directory it will copy everything inside of this directory, not the entire directory itself.
    * dest: Note that if src is a file, dest cannot be a directory
    */
-  copySync(from, to)
+  cpSync(from, to, { recursive: true })
 }
 
 export function removeRecursively(path: string): void {

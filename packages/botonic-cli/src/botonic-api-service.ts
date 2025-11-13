@@ -6,7 +6,7 @@ import axios, {
   AxiosResponse,
 } from 'axios'
 import childProcess from 'child_process'
-import colors from 'colors'
+import pc from 'picocolors'
 import FormData from 'form-data'
 import { createReadStream, unlinkSync } from 'fs'
 import ora from 'ora'
@@ -14,18 +14,18 @@ import { stringify } from 'qs'
 import * as util from 'util'
 
 import {
-  BotCredentialsHandler,
-  GlobalCredentialsHandler,
-} from './analytics/credentials-handler'
-import {
   BotDetail,
   BotListItem,
   Me,
   OAuth,
   PaginatedResponse,
-} from './interfaces'
-import { BotConfigJSON } from './util/bot-config'
-import { pathExists } from './util/file-system'
+} from './interfaces.js'
+import { BotConfigJSON } from './util/bot-config.js'
+import {
+  BotCredentialsHandler,
+  GlobalCredentialsHandler,
+} from './util/credentials-handler.js'
+import { pathExists } from './util/file-system.js'
 
 const exec = util.promisify(childProcess.exec)
 
@@ -48,8 +48,8 @@ export class BotonicAPIService {
   globalCredentialsHandler = new GlobalCredentialsHandler()
   oauth?: OAuth
   me?: Me
-  bot: BotDetail | null
-  headers: AxiosHeaders
+  bot: BotDetail | null = null
+  headers = new AxiosHeaders()
   apiClient: AxiosInstance
 
   constructor() {
@@ -143,8 +143,7 @@ export class BotonicAPIService {
     } catch (error: any) {
       spinner.fail()
       console.log(
-        `${String(error.stdout)}` +
-          colors.red(`\n\nBuild error:\n${String(error)}`)
+        `${String(error.stdout)}` + pc.red(`\n\nBuild error:\n${String(error)}`)
       )
       return false
     }
@@ -272,7 +271,10 @@ export class BotonicAPIService {
     return botsResponse
   }
 
-  private async getMoreBots(bots: BotListItem[], nextUrl: string | null) {
+  private async getMoreBots(
+    bots: BotListItem[],
+    nextUrl: string | null
+  ): Promise<BotListItem[]> {
     if (!nextUrl) {
       return bots
     }

@@ -1,0 +1,191 @@
+{
+  "commands": {
+    "deploy": {
+      "aliases": [],
+      "args": {
+        "provider": {
+          "description": "Provider to deploy to",
+          "name": "provider",
+          "options": [
+            "hubtype"
+          ]
+        }
+      },
+      "description": "Deploy Botonic project to cloud provider",
+      "examples": [
+        "$ botonic deploy\nBuilding...\nCreating bundle...\nUploading...\n🚀 Bot deployed!"
+      ],
+      "flags": {
+        "command": {
+          "char": "c",
+          "description": "Command to execute from the package \"scripts\" object",
+          "name": "command",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "email": {
+          "char": "e",
+          "description": "Email from Hubtype Organization",
+          "name": "email",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "password": {
+          "char": "p",
+          "description": "Password from Hubtype Organization",
+          "name": "password",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "botName": {
+          "char": "b",
+          "description": "Name of the bot from Hubtype where you want to deploy",
+          "name": "botName",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "deploy",
+      "pluginAlias": "@botonic/cli",
+      "pluginName": "@botonic/cli",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": true,
+      "relativePath": [
+        "lib",
+        "src",
+        "commands",
+        "deploy.js"
+      ]
+    },
+    "login": {
+      "aliases": [],
+      "args": {},
+      "description": "Log in to Botonic",
+      "examples": [],
+      "flags": {
+        "path": {
+          "char": "p",
+          "description": "Path to botonic project. Defaults to current dir.",
+          "name": "path",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "login",
+      "pluginAlias": "@botonic/cli",
+      "pluginName": "@botonic/cli",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": true,
+      "relativePath": [
+        "lib",
+        "src",
+        "commands",
+        "login.js"
+      ]
+    },
+    "logout": {
+      "aliases": [],
+      "args": {},
+      "description": "Log out of Botonic",
+      "examples": [],
+      "flags": {
+        "path": {
+          "char": "p",
+          "description": "Path to botonic project. Defaults to current dir.",
+          "name": "path",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "logout",
+      "pluginAlias": "@botonic/cli",
+      "pluginName": "@botonic/cli",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": true,
+      "relativePath": [
+        "lib",
+        "src",
+        "commands",
+        "logout.js"
+      ]
+    },
+    "new": {
+      "aliases": [],
+      "args": {
+        "name": {
+          "description": "name of the bot folder",
+          "name": "name",
+          "required": true
+        },
+        "projectName": {
+          "description": "OPTIONAL name of the bot project",
+          "name": "projectName",
+          "required": false
+        }
+      },
+      "description": "Create a new Botonic project",
+      "examples": [
+        "$ botonic new test_bot\nCreating...\n✨ test_bot was successfully created!"
+      ],
+      "flags": {},
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "new",
+      "pluginAlias": "@botonic/cli",
+      "pluginName": "@botonic/cli",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": true,
+      "relativePath": [
+        "lib",
+        "src",
+        "commands",
+        "new.js"
+      ]
+    },
+    "serve": {
+      "aliases": [],
+      "args": {},
+      "description": "Serve your bot in your localhost",
+      "examples": [
+        "$ botonic serve\n> Project is running at http://localhost:8080/"
+      ],
+      "flags": {},
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "serve",
+      "pluginAlias": "@botonic/cli",
+      "pluginName": "@botonic/cli",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": true,
+      "relativePath": [
+        "lib",
+        "src",
+        "commands",
+        "serve.js"
+      ]
+    }
+  },
+  "version": "0.41.0-alpha.2"
+}

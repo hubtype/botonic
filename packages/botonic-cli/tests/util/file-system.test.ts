@@ -2,16 +2,16 @@ import { readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 
 import {
-  copy,
   createDir,
   createTempDir,
+  copyRecursively,
   pathExists,
   readDir,
   readJSON,
   removeRecursively,
   writeJSON,
-} from '../../src/util/file-system'
-import { execCommandSafe } from '../../src/util/system'
+} from '../../src/util/file-system.js'
+import { execCommandSafe } from '../../src/util/system.js'
 
 const createFile = (path: string, content: string) => {
   writeFileSync(path, content, { encoding: 'utf-8' })
@@ -62,11 +62,11 @@ describe('TEST: File System utilities', () => {
     expect(sut).toThrow()
   })
 
-  it('Copy content', () => {
+  it('Copy content recursively', () => {
     const tmp1 = createTempDir('botonic-tmp1')
     createFile(join(tmp1, 'dummy-file.txt'), 'dummy content')
     const tmp2 = createTempDir('botonic-tmp2')
-    copy(tmp1, tmp2)
+    copyRecursively(tmp1, tmp2)
     expect(readDir(tmp2)).toContain('dummy-file.txt')
     removeRecursively(tmp1)
     removeRecursively(tmp2)
