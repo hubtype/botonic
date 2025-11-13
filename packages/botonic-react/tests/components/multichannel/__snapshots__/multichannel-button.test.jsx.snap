@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Multichannel buttons: truncate text if more than 20 chars in whatsapp buttons 1`] = `
 <button

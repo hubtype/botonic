@@ -104,7 +104,6 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
       actionRequest,
       contentID
     )
-    console.log(contents)
     expect((contents[0] as FlowText).text).toBe('Welcome message')
     expect(contents.length).toBe(2)
   })
