@@ -1,6 +1,6 @@
-import { Config } from '@oclif/config'
+import { Config } from '@oclif/core'
 import { assert } from 'console'
-// import { promises } from 'fs'
+import { jest } from '@jest/globals'
 import { join } from 'path'
 import { chdir } from 'process'
 
@@ -9,7 +9,7 @@ import { EXAMPLES } from '../../src/botonic-examples'
 import { default as DeployCommand } from '../../src/commands/deploy'
 import { default as NewCommand } from '../../src/commands/new'
 import {
-  copy,
+  copyRecursively,
   createTempDir,
   readDir,
   removeRecursively,
@@ -25,7 +25,7 @@ assert(BLANK_EXAMPLE.name === 'blank')
 describe('TEST: Deploy pipeline', () => {
   test('Install, build and deploy a project', async () => {
     const tmpPath = createTempDir('botonic-tmp')
-    copy(BLANK_EXAMPLE.localTestPath, tmpPath)
+    copyRecursively(BLANK_EXAMPLE.localTestPath, tmpPath)
     chdir(tmpPath)
     await newCommand.installDependencies()
 

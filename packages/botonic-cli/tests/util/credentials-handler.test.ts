@@ -1,13 +1,12 @@
 import {
   BotCredentialsHandler,
   CredentialsHandler,
-  GlobalCredentialsHandler,
-} from '../../src/analytics/credentials-handler'
+} from '../../src/util/credentials-handler.js'
 import {
   createTempDir,
   pathExists,
   removeRecursively,
-} from '../../src/util/file-system'
+} from '../../src/util/file-system.js'
 
 describe('TEST: CredentialsHandler', () => {
   let tempDir = ''
@@ -17,7 +16,7 @@ describe('TEST: CredentialsHandler', () => {
     tempDir = createTempDir('botonic-tmp')
     credentialsHandler = new CredentialsHandler({
       homeDir: tempDir,
-      filename: '.botonic-creds',
+      filename: '.botonic-credentials',
     })
   })
 
@@ -52,7 +51,7 @@ describe('TEST: BotCredentialsHandler', () => {
     const sut = pathExists(botCredentialsHandler.homeDir)
     expect(sut).toBeTruthy()
   })
-  it('Loads/Dumps correclty', () => {
+  it('Loads/Dumps correctly', () => {
     expect(botCredentialsHandler.load()).toBeFalsy()
     const botInfo = {
       bot: {

@@ -71,11 +71,8 @@ export class BotConfig {
 
   static async loadBotConfig(appDirectory: string) {
     try {
-      const configPath = path.join(appDirectory, 'dist', 'bot-config.js')
-
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const botConfig = require(path.resolve(configPath))
-      fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
+      const botConfig = await this.getBotConfig(appDirectory)
+      await this.deleteBotConfig(appDirectory)
 
       return {
         tools: botConfig?.tools || [],
@@ -83,8 +80,9 @@ export class BotConfig {
         webviews: botConfig?.webviews || [],
       }
     } catch (error) {
-      console.warn(
-        `Error loading dist/bot-config.js. This file is not required but is used to share config with flow builder frontend.
+      console.log(
+        `\nError loading dist/bot-config.js. 
+        This file is not required but is used to share config with flow builder frontend.
         To create this file update your build process to include the bot-config.js file in dest folder. 
         You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
       )
@@ -94,6 +92,18 @@ export class BotConfig {
         webviews: [],
       }
     }
+  }
+
+  private static async getBotConfig(appDirectory: string) {
+    const configPath = path.join(appDirectory, 'dist', 'bot-config.js')
+    const module = await import(path.resolve(configPath))
+    const botConfig = module.default
+
+    return botConfig
+  }
+
+  private static async deleteBotConfig(appDirectory: string) {
+    await fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
   }
 
   private static async getBotonicDependencies(

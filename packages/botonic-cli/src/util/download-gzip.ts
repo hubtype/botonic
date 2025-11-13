@@ -7,7 +7,7 @@ import { exec } from 'child_process'
 import path from 'path'
 import { extract } from 'tar'
 
-import { removeRecursively } from './file-system'
+import { removeRecursively } from './file-system.js'
 
 function pathByOS(...paths: string[]): string {
   const devPlatform = platform()

@@ -1,10 +1,10 @@
 import { arch, platform } from 'os'
 import { join } from 'path'
 
-import { BOTONIC_NPM_NAMESPACE } from '../constants'
-import { SystemInformation } from '../interfaces'
-import { readJSON } from './file-system'
-import { execCommandSafe } from './system'
+import { BOTONIC_NPM_NAMESPACE } from '../constants.js'
+import { SystemInformation } from '../interfaces.js'
+import { readJSON } from './file-system.js'
+import { execCommandSafe } from './system.js'
 
 export function isWindows(): boolean {
   return platform() === 'win32'
