@@ -9,12 +9,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/react": "^0.40.0"
+    "@botonic/react": "^0.41.0"
   },
   "devDependencies": {
-    "@botonic/dx": "^0.40.0"
+    "@botonic/dx": "^0.41.0"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=22.19.0",
+    "npm": ">=10.0.0"
   }
 }
