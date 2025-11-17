@@ -2,6 +2,7 @@ import { Configuration } from '@rspack/cli'
 import * as rspack from '@rspack/core'
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
 import path from 'path'
 
 const ROOT_PATH = path.resolve(__dirname, 'src')
@@ -258,6 +259,10 @@ function botonicDevConfig(mode: Mode): Configuration {
     },
     plugins: [
       getHtmlWebpackPlugin(TEMPLATES.WEBCHAT),
+      new NodePolyfillPlugin({ onlyAliases: ['stream'] }),
+      new rspack.NormalModuleReplacementPlugin(/node:stream/, resource => {
+        resource.request = resource.request.replace(/^node:/, '')
+      }),
       ...getPlugins(mode, BotonicTarget.DEV),
     ],
   }

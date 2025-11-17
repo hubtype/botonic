@@ -22,6 +22,7 @@
     "imagemin-jpegtran": "^8.0.0",
     "imagemin-optipng": "^8.0.0",
     "imagemin-svgo": "^11.0.1",
+    "node-polyfill-webpack-plugin": "^4.1.0",
     "null-loader": "^4.0.1",
     "react-refresh": "^0.16.0",
     "sass": "^1.93.2",
