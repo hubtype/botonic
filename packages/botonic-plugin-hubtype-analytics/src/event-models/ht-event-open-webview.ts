@@ -7,6 +7,7 @@ export class HtEventOpenWebview extends HtEvent {
   flow_node_id: string
   flow_node_content_id: string
   webview_name: string
+  webview_target_id: string
 
   constructor(event: EventOpenWebview, requestData: RequestData) {
     super(event, requestData)
@@ -17,5 +18,6 @@ export class HtEventOpenWebview extends HtEvent {
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
     this.webview_name = event.webviewName
+    this.webview_target_id = event.webviewTargetId
   }
 }

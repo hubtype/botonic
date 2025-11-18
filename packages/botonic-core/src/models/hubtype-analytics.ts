@@ -1,6 +1,6 @@
 import { ToolExecution } from './ai-agents'
 
-export const EVENT_FORMAT_VERSION = 4
+export const EVENT_FORMAT_VERSION = 5
 
 export enum EventAction {
   AiAgent = 'ai_agent',
@@ -106,7 +106,7 @@ export interface EventConditionalCustom extends HtBaseEventProps {
   flowName: string
   flowNodeId: string
   flowNodeContentId: string
-  conditionVariable: string
+  conditionalVariable: string
   variableFormat: string
 }
 
@@ -192,6 +192,7 @@ export interface EventOpenWebview extends HtBaseEventProps {
   flowName: string
   flowNodeId: string
   flowNodeContentId: string
+  webviewTargetId: string
   webviewName: string
 }
 

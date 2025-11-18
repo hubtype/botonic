@@ -12,7 +12,7 @@ export class HtEventConditionalCustom extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
-  condition_variable: string
+  conditional_variable: string
   variable_format: string
 
   constructor(event: EventConditionalCustom, requestData: RequestData) {
@@ -23,7 +23,7 @@ export class HtEventConditionalCustom extends HtEvent {
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
-    this.condition_variable = event.conditionVariable
+    this.conditional_variable = event.conditionalVariable
     this.variable_format = event.variableFormat
   }
 }
