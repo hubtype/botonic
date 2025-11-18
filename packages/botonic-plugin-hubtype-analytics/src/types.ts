@@ -1,6 +1,11 @@
 import {
   EventAction,
   EventAiAgent,
+  EventBotAction,
+  EventConditionalChannel,
+  EventConditionalCountry,
+  EventConditionalCustom,
+  EventConditionalQueueStatus,
   EventCustom,
   EventFallback,
   EventFeedback,
@@ -11,6 +16,7 @@ import {
   EventIntentSmart,
   EventKeyword,
   EventKnowledgeBase,
+  EventOpenWebview,
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,
@@ -27,11 +33,17 @@ export type HtEventProps =
   | EventFeedback
   | EventFeedbackKnowledgebase
   | EventFlow
+  | EventBotAction
+  | EventConditionalChannel
+  | EventConditionalCountry
+  | EventConditionalCustom
+  | EventConditionalQueueStatus
   | EventHandoff
   | EventHandoffOption
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase
+  | EventOpenWebview
   | EventFallback
   | EventWebviewStep
   | EventWebviewEnd
@@ -49,6 +61,11 @@ export interface RequestData {
 export {
   EventAction,
   EventAiAgent,
+  EventBotAction,
+  EventConditionalChannel,
+  EventConditionalCountry,
+  EventConditionalCustom,
+  EventConditionalQueueStatus,
   EventCustom,
   EventFallback,
   EventFeedback,
@@ -59,6 +76,7 @@ export {
   EventIntentSmart,
   EventKeyword,
   EventKnowledgeBase,
+  EventOpenWebview,
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,

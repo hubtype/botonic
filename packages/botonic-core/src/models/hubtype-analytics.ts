@@ -10,6 +10,12 @@ export enum EventAction {
   FeedbackKnowledgebase = 'feedback_knowledgebase',
   FeedbackWebview = 'feedback_webview',
   FlowNode = 'flow_node',
+  ConditionalCountry = 'conditional_country',
+  ConditionalQueueStatus = 'conditional_queue_status',
+  ConditionalCustom = 'conditional_custom',
+  ConditionalChannel = 'conditional_channel',
+  BotAction = 'bot_action',
+  OpenWebview = 'open_webview',
   HandoffOption = 'handoff_option',
   HandoffSuccess = 'handoff_success',
   HandoffFail = 'handoff_fail',
@@ -62,6 +68,55 @@ export interface EventFlow extends HtBaseEventProps {
   flowNodeId: string
   flowNodeContentId: string
   flowNodeIsMeaningful?: boolean
+}
+
+export interface EventBotAction extends HtBaseEventProps {
+  action: EventAction.BotAction
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  payload: string
+}
+
+export interface EventConditionalCountry extends HtBaseEventProps {
+  action: EventAction.ConditionalCountry
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  country: string
+}
+
+export interface EventConditionalQueueStatus extends HtBaseEventProps {
+  action: EventAction.ConditionalQueueStatus
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  queueId: string
+  queueName: string
+  isQueueOpen: boolean
+  isAvailableAgent: boolean
+}
+
+export interface EventConditionalCustom extends HtBaseEventProps {
+  action: EventAction.ConditionalCustom
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  conditionVariable: string
+  variableFormat: string
+}
+
+export interface EventConditionalChannel extends HtBaseEventProps {
+  action: EventAction.ConditionalChannel
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  channel: string
 }
 
 export interface EventHandoff extends HtBaseEventProps {
@@ -129,6 +184,15 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   knowledgebaseChunksIds: string[]
   knowledgebaseMessageId: string
   userInput: string
+}
+
+export interface EventOpenWebview extends HtBaseEventProps {
+  action: EventAction.OpenWebview
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  webviewName: string
 }
 
 export interface EventAiAgent extends HtBaseEventProps {
