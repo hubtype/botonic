@@ -14,6 +14,8 @@ export class HtEventHandoff extends HtEvent {
   handoff_is_queue_open: boolean
   handoff_is_available_agent: boolean
   handoff_is_threshold_reached: boolean
+  handoff_note_id?: string
+  handoff_has_auto_assign: boolean
 
   constructor(event: EventHandoff, requestData: RequestData) {
     super(event, requestData)
@@ -30,5 +32,7 @@ export class HtEventHandoff extends HtEvent {
     this.handoff_is_queue_open = event.isQueueOpen || false
     this.handoff_is_available_agent = event.isAvailableAgent || false
     this.handoff_is_threshold_reached = event.isThresholdReached || false
+    this.handoff_note_id = event.handoffNoteId
+    this.handoff_has_auto_assign = event.handoffHasAutoAssign
   }
 }

@@ -132,6 +132,8 @@ export interface EventHandoff extends HtBaseEventProps {
   isQueueOpen?: boolean
   isAvailableAgent?: boolean
   isThresholdReached?: boolean
+  handoffNoteId?: string
+  handoffHasAutoAssign: boolean
 }
 
 export interface EventHandoffOption extends HtBaseEventProps {
