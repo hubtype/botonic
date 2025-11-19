@@ -32,4 +32,3 @@ describe('Create conditional country event', () => {
     })
   })
 })
-

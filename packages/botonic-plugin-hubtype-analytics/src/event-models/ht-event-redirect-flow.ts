@@ -16,6 +16,7 @@ export class HtEventRedirectFlow extends HtEvent {
     super(event, requestData)
     this.type = EventType.BotEvent
     this.action = EventAction.RedirectFlow
+    this.flow_thread_id = event.flowThreadId
     this.flow_id = event.flowId
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId

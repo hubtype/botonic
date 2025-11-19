@@ -82,6 +82,7 @@ export interface EventBotAction extends HtBaseEventProps {
 
 export interface EventConditionalCountry extends HtBaseEventProps {
   action: EventAction.ConditionalCountry
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -91,6 +92,7 @@ export interface EventConditionalCountry extends HtBaseEventProps {
 
 export interface EventConditionalQueueStatus extends HtBaseEventProps {
   action: EventAction.ConditionalQueueStatus
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -103,6 +105,7 @@ export interface EventConditionalQueueStatus extends HtBaseEventProps {
 
 export interface EventConditionalCustom extends HtBaseEventProps {
   action: EventAction.ConditionalCustom
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -113,6 +116,7 @@ export interface EventConditionalCustom extends HtBaseEventProps {
 
 export interface EventConditionalChannel extends HtBaseEventProps {
   action: EventAction.ConditionalChannel
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -191,6 +195,7 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
 
 export interface EventWebviewActionTriggered extends HtBaseEventProps {
   action: EventAction.WebviewActionTriggered
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -218,6 +223,7 @@ export interface EventAiAgent extends HtBaseEventProps {
 
 export interface EventRedirectFlow extends HtBaseEventProps {
   action: EventAction.RedirectFlow
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string

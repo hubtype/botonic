@@ -86,7 +86,7 @@ export function createHtEvent(
     case EventAction.BotAction:
       return new HtEventBotAction(htEventProps, requestData)
 
-    case EventAction.OpenWebview:
+    case EventAction.WebviewActionTriggered:
       return new HtEventOpenWebview(htEventProps, requestData)
 
     default:
