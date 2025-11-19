@@ -61,6 +61,9 @@ const serialize = (message: string) => {
   return { text: message }
 }
 
+/*
+  Reference: https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/media-card-carousel-templates
+*/
 export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
   const renderBrowser = () => {
     // Return a dummy message for browser

@@ -37,6 +37,10 @@ export {
   WhatsappCTAUrlHeaderType,
 } from './whatsapp-cta-url-button'
 export {
+  WhatsappInteractiveMediaCarousel,
+  WhatsappInteractiveMediaCarouselProps,
+} from './whatsapp-interactive-media-carousel'
+export {
   WhatsappMediaCarousel,
   WhatsappMediaCarouselProps,
 } from './whatsapp-media-carousel'

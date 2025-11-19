@@ -35,6 +35,7 @@ export interface TextProps extends MessageProps {
 
 export interface CarouselProps extends MessageProps {
   children: React.ReactNode[]
+  text?: string // Only for Whatsapp Interactive Media Carousel
 }
 
 export interface Webview {
