@@ -22,7 +22,7 @@ describe('Create nlu keyword events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 4,
+      format_version: 5,
       action: EventAction.Keyword,
       nlu_keyword_name: 'hello',
       nlu_keyword_is_regex: false,

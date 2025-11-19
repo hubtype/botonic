@@ -38,7 +38,6 @@ export interface BotEventData {
   flowName: string
   flowNodeId: string
   flowNodeContentId: string
-  handoffHasAutoAssign: boolean
 }
 
 export interface FormattedBotEventData {
@@ -47,7 +46,6 @@ export interface FormattedBotEventData {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
-  handoff_has_auto_assign: boolean
 }
 
 export enum HelpdeskEvent {
@@ -169,7 +167,6 @@ export class HandOffBuilder {
       flow_name: botEvent.flowName,
       flow_node_id: botEvent.flowNodeId,
       flow_node_content_id: botEvent.flowNodeContentId,
-      handoff_has_auto_assign: botEvent.handoffHasAutoAssign,
     }
     return this
   }
