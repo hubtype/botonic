@@ -14,6 +14,8 @@ export interface HandoffSuccessDebugEvent {
   action: EventAction.HandoffSuccess
   handoff_queue_name: string
   handoff_is_queue_open: boolean
+  handoff_has_auto_assign: boolean
+  handoff_note_id: string
 }
 
 export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
