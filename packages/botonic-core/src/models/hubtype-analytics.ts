@@ -15,7 +15,7 @@ export enum EventAction {
   ConditionalCustom = 'conditional_custom',
   ConditionalChannel = 'conditional_channel',
   BotAction = 'bot_action',
-  OpenWebview = 'open_webview',
+  WebviewActionTriggered = 'webview_action_triggered',
   HandoffOption = 'handoff_option',
   HandoffSuccess = 'handoff_success',
   HandoffFail = 'handoff_fail',
@@ -26,6 +26,7 @@ export enum EventAction {
   WebviewStep = 'webview_step',
   WebviewEnd = 'webview_end',
   Custom = 'custom',
+  RedirectFlow = 'redirect_flow',
 }
 
 export interface HtBaseEventProps {
@@ -188,8 +189,8 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   userInput: string
 }
 
-export interface EventOpenWebview extends HtBaseEventProps {
-  action: EventAction.OpenWebview
+export interface EventWebviewActionTriggered extends HtBaseEventProps {
+  action: EventAction.WebviewActionTriggered
   flowId: string
   flowName: string
   flowNodeId: string
@@ -213,6 +214,16 @@ export interface EventAiAgent extends HtBaseEventProps {
   outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
+}
+
+export interface EventRedirectFlow extends HtBaseEventProps {
+  action: EventAction.RedirectFlow
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+  flowTargetId: string
+  flowTargetName: string
 }
 
 export enum KnowledgebaseFailReason {

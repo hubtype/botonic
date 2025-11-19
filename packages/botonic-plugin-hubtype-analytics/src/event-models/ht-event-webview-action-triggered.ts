@@ -1,4 +1,9 @@
-import { EventAction, EventOpenWebview, EventType, RequestData } from '../types'
+import {
+  EventAction,
+  EventWebviewActionTriggered,
+  EventType,
+  RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventOpenWebview extends HtEvent {
@@ -9,7 +14,7 @@ export class HtEventOpenWebview extends HtEvent {
   webview_name: string
   webview_target_id: string
 
-  constructor(event: EventOpenWebview, requestData: RequestData) {
+  constructor(event: EventWebviewActionTriggered, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.BotEvent
     this.action = EventAction.OpenWebview
