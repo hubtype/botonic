@@ -88,6 +88,7 @@ export interface PreviewUtils {
   onClickOpenChunks: (
     chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
   ) => void
+  getNoteById: (noteId: string) => Promise<string>
 }
 
 export interface WebchatArgs {

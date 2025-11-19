@@ -1,6 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
+import React, { useContext } from 'react'
 
+import { WebchatContext } from '../../../webchat/context'
 import { HeadSetSvg } from '../icons'
 import {
   StyledDebugDetail,
@@ -18,7 +19,12 @@ export interface HandoffSuccessDebugEvent {
   handoff_note_id: string
 }
 
-export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
+export const HandoffSuccess = async (props: HandoffSuccessDebugEvent) => {
+  const { previewUtils } = useContext(WebchatContext)
+  const note = await previewUtils?.getNoteById(props.handoff_note_id)
+  if (!note) {
+    return null
+  }
   return (
     <StyledDebugDetail>
       <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
@@ -39,7 +45,7 @@ export const getHandoffSuccessEventConfig = (
     ),
     icon: <HeadSetSvg />,
     // TODO: Disable component and collapsible for now because we are only showing the queue name
-    component: null,
-    collapsible: false,
+    component: HandoffSuccess,
+    collapsible: true,
   }
 }
