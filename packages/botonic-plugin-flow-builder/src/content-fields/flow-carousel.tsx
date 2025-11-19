@@ -33,12 +33,32 @@ export class FlowCarousel extends ContentFieldsBase {
     carouselMessage: CarouselMessage,
     request: ActionRequest
   ): JSX.Element {
-    if (isWhatsapp(request.session)) {
+    const canUseWhatsappInteractiveMediaCarousel = () => {
+      const isValid =
+        carouselMessage.content.text &&
+        !carouselMessage.content.elements.some(
+          element => element.button.payload
+        ) &&
+        carouselMessage.content.elements.every(element => element.button.url)
+
+      if (!isValid) {
+        console.warn(
+          'Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent',
+          carouselMessage.content
+        )
+      }
+      return isValid
+    }
+
+    if (
+      isWhatsapp(request.session) &&
+      canUseWhatsappInteractiveMediaCarousel()
+    ) {
       return (
         <WhatsappInteractiveMediaCarousel
           cards={carouselMessage.content.elements.map(element => {
             const buttonText = element.button.text
-            const buttonUrl = element.button.url || ''
+            const buttonUrl = element.button.url!
             const imageLink = element.image
 
             return {
@@ -46,7 +66,7 @@ export class FlowCarousel extends ContentFieldsBase {
               action: { buttonText, buttonUrl, imageLink },
             }
           })}
-          textMessage={carouselMessage.content.text || ''}
+          textMessage={carouselMessage.content.text!}
         />
       )
     }
