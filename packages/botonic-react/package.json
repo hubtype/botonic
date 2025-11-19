@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.41.0",
+  "version": "0.41.1-alpha.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -21,7 +21,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "^0.41.0",
+    "@botonic/core": "0.41.1-alpha.0",
     "axios": "^1.12.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
