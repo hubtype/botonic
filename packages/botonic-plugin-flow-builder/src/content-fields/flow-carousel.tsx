@@ -28,17 +28,34 @@ export class FlowCarousel extends ContentFieldsBase {
     return newCarousel
   }
 
-  static fromAiAgent({
-    id,
-    carouselMessage,
-  }: {
-    id: string
-    carouselMessage: CarouselMessage
-  }): JSX.Element {
+  static fromAiAgent(
+    id: string,
+    carouselMessage: CarouselMessage,
+    request: ActionRequest
+  ): JSX.Element {
+    if (isWhatsapp(request.session)) {
+      return (
+        <WhatsappInteractiveMediaCarousel
+          cards={carouselMessage.content.elements.map(element => {
+            const buttonText = element.button.text
+            const buttonUrl = element.button.url || ''
+            const imageLink = element.image
+
+            return {
+              text: element.title,
+              action: { buttonText, buttonUrl, imageLink },
+            }
+          })}
+          textMessage={carouselMessage.content.text || ''}
+        />
+      )
+    }
     return (
       <Carousel key={id}>
-        {carouselMessage.content.elements.map(element =>
-          FlowElement.fromAIAgent(id, element).toBotonic(id)
+        {carouselMessage.content.elements.map((element, index) =>
+          FlowElement.fromAIAgent(`${id}-element-${index}`, element).toBotonic(
+            id
+          )
         )}
       </Carousel>
     )

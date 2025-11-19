@@ -1,15 +1,9 @@
-import { AgenticOutputMessage, isWhatsapp } from '@botonic/core'
-import {
-  ActionRequest,
-  Button,
-  Carousel,
-  Text,
-  WhatsappInteractiveMediaCarousel,
-} from '@botonic/react'
+import { AgenticOutputMessage } from '@botonic/core'
+import { ActionRequest, Button, Text } from '@botonic/react'
 
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
-import { FlowElement } from './flow-element'
+import { FlowCarousel } from './flow-carousel'
 import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
@@ -60,33 +54,7 @@ export class FlowAiAgent extends ContentFieldsBase {
           }
 
           if (response.type === 'carousel') {
-            if (isWhatsapp(request.session)) {
-              return (
-                <WhatsappInteractiveMediaCarousel
-                  cards={response.content.elements.map(element => {
-                    const buttonText = element.button.text
-                    const buttonUrl = element.button.url || ''
-                    const imageLink = element.image
-
-                    return {
-                      text: element.title,
-                      action: { buttonText, buttonUrl, imageLink },
-                    }
-                  })}
-                  textMessage={response.content.text || ''}
-                />
-              )
-            }
-            return (
-              <Carousel key={id}>
-                {response.content.elements.map((element, index) =>
-                  FlowElement.fromAIAgent(
-                    `${id}-element-${index}`,
-                    element
-                  ).toBotonic(id)
-                )}
-              </Carousel>
-            )
+            return FlowCarousel.fromAiAgent(id, response, request)
           }
 
           return <></>
