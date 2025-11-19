@@ -3,11 +3,18 @@ import React, { useRef, useState } from 'react'
 
 import {
   getAiAgentEventConfig,
+  getBotActionEventConfig,
+  getConditionalChannelEventConfig,
+  getConditionalCountryEventConfig,
+  getConditionalCustomEventConfig,
+  getConditionalQueueStatusEventConfig,
   getFallbackEventConfig,
   getHandoffSuccessEventConfig,
   getKeywordEventConfig,
   getKnowledgeBaseEventConfig,
+  getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
+  getWebviewActionTriggeredEventConfig,
 } from './events'
 import { useLastLabelPosition } from './hooks/use-last-label-position'
 import { CaretDownSvg, CaretUpSvg } from './icons'
@@ -38,6 +45,20 @@ const getEventConfig = (
       return getKnowledgeBaseEventConfig(debugEvent)
     case EventAction.Fallback:
       return getFallbackEventConfig(debugEvent)
+    case EventAction.BotAction:
+      return getBotActionEventConfig(debugEvent)
+    case EventAction.ConditionalChannel:
+      return getConditionalChannelEventConfig(debugEvent)
+    case EventAction.ConditionalCountry:
+      return getConditionalCountryEventConfig(debugEvent)
+    case EventAction.ConditionalCustom:
+      return getConditionalCustomEventConfig(debugEvent)
+    case EventAction.ConditionalQueueStatus:
+      return getConditionalQueueStatusEventConfig(debugEvent)
+    case EventAction.RedirectFlow:
+      return getRedirectFlowEventConfig(debugEvent)
+    case EventAction.WebviewActionTriggered:
+      return getWebviewActionTriggeredEventConfig(debugEvent)
     default:
       return undefined
   }
