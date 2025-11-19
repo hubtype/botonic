@@ -1,4 +1,9 @@
-import { Carousel } from '@botonic/react'
+import { CarouselMessage, isWhatsapp } from '@botonic/core'
+import {
+  ActionRequest,
+  Carousel,
+  WhatsappInteractiveMediaCarousel,
+} from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -23,7 +28,40 @@ export class FlowCarousel extends ContentFieldsBase {
     return newCarousel
   }
 
-  toBotonic(id: string): JSX.Element {
+  static fromAiAgent({
+    id,
+    carouselMessage,
+  }: {
+    id: string
+    carouselMessage: CarouselMessage
+  }): JSX.Element {
+    return (
+      <Carousel key={id}>
+        {carouselMessage.content.elements.map(element =>
+          FlowElement.fromAIAgent(id, element).toBotonic(id)
+        )}
+      </Carousel>
+    )
+  }
+
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
+    if (isWhatsapp(request.session)) {
+      return (
+        <WhatsappInteractiveMediaCarousel
+          cards={this.elements.map(element => {
+            const buttonText = element.button?.text || ''
+            const buttonUrl = element.button?.url || ''
+            const imageLink = element.image || ''
+
+            return {
+              text: element.title,
+              action: { buttonText, buttonUrl, imageLink },
+            }
+          })}
+          textMessage={'These are the options'} // TODO: Add the text message in flow builder frontend and take it from the carousel node with different languages
+        />
+      )
+    }
     return (
       <Carousel key={id}>
         {this.elements.map(element => element.toBotonic(id))}

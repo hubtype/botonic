@@ -7,6 +7,7 @@ export const CarouselSchema = z
   .object({
     type: z.enum(['carousel']),
     content: z.object({
+      text: z.string().nullable().optional(),
       elements: z.array(
         z.object({
           title: z.string(),

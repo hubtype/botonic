@@ -44,7 +44,7 @@ export class FlowElement extends ContentFieldsBase {
     newElement.subtitle = element.subtitle
     newElement.image = element.image
     newElement.button = FlowButton.fromAIAgent({
-      id: '',
+      id: `${id}-button`,
       text: element.button.text,
       url: element.button.url,
     })

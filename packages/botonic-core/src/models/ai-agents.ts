@@ -33,6 +33,7 @@ interface CarouselElement {
 export interface CarouselMessage extends BaseMessage {
   type: 'carousel'
   content: {
+    text?: string
     elements: CarouselElement[]
   }
 }
