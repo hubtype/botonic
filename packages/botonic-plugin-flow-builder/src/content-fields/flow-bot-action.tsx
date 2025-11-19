@@ -26,10 +26,11 @@ export class FlowBotAction extends ContentFieldsBase {
   }
 
   private async trackBotActionEvent(request: ActionRequest): Promise<void> {
-    const { flowId, flowName, flowNodeId, flowNodeContentId } =
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
       getCommonFlowContentEventArgsForContentId(request, this.id)
     const eventBotAction: EventBotAction = {
       action: EventAction.BotAction,
+      flowThreadId,
       flowId,
       flowName,
       flowNodeId,

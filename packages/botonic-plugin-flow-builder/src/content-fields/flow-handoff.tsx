@@ -67,7 +67,6 @@ export class FlowHandoff extends ContentFieldsBase {
         flowName,
         flowNodeId,
         flowNodeContentId,
-        handoffHasAutoAssign: this.handoffAutoAssign,
       })
 
       handOffBuilder.withExtraData({

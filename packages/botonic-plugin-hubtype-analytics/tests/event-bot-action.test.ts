@@ -6,6 +6,7 @@ describe('Create bot action event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
       action: EventAction.BotAction,
+      flowThreadId: 'flowThreadIdTest',
       flowId: 'flowIdTest',
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
@@ -20,6 +21,7 @@ describe('Create bot action event', () => {
       system_locale: 'es',
       format_version: 5,
       action: EventAction.BotAction,
+      flow_thread_id: 'flowThreadIdTest',
       flow_id: 'flowIdTest',
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',

@@ -33,6 +33,14 @@ export interface HtBaseEventProps {
   action: EventAction
 }
 
+export interface HtBaseEventAllFlowProps extends HtBaseEventProps {
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
+}
+
 export interface EventFeedback extends HtBaseEventProps {
   action:
     | EventAction.FeedbackCase
@@ -71,56 +79,32 @@ export interface EventFlow extends HtBaseEventProps {
   flowNodeIsMeaningful?: boolean
 }
 
-export interface EventBotAction extends HtBaseEventProps {
+export interface EventBotAction extends HtBaseEventAllFlowProps {
   action: EventAction.BotAction
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   payload: string
 }
 
-export interface EventConditionalCountry extends HtBaseEventProps {
+export interface EventConditionalCountry extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalCountry
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   country: string
 }
 
-export interface EventConditionalQueueStatus extends HtBaseEventProps {
+export interface EventConditionalQueueStatus extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalQueueStatus
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   queueId: string
   queueName: string
   isQueueOpen: boolean
   isAvailableAgent: boolean
 }
 
-export interface EventConditionalCustom extends HtBaseEventProps {
+export interface EventConditionalCustom extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalCustom
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   conditionalVariable: string
   variableFormat: string
 }
 
-export interface EventConditionalChannel extends HtBaseEventProps {
+export interface EventConditionalChannel extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalChannel
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   channel: string
 }
 
@@ -191,24 +175,14 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   userInput: string
 }
 
-export interface EventWebviewActionTriggered extends HtBaseEventProps {
+export interface EventWebviewActionTriggered extends HtBaseEventAllFlowProps {
   action: EventAction.WebviewActionTriggered
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   webviewTargetId: string
   webviewName: string
 }
 
-export interface EventAiAgent extends HtBaseEventProps {
+export interface EventAiAgent extends HtBaseEventAllFlowProps {
   action: EventAction.AiAgent
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   flowNodeIsMeaningful: boolean
   toolsExecuted: ToolExecution[]
   inputMessageId: string
@@ -219,13 +193,8 @@ export interface EventAiAgent extends HtBaseEventProps {
   error: boolean
 }
 
-export interface EventRedirectFlow extends HtBaseEventProps {
+export interface EventRedirectFlow extends HtBaseEventAllFlowProps {
   action: EventAction.RedirectFlow
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   flowTargetId: string
   flowTargetName: string
 }
