@@ -1,12 +1,12 @@
 import {
   EventAction,
-  EventWebviewActionTriggered,
   EventType,
+  EventWebviewActionTriggered,
   RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 
-export class HtEventOpenWebview extends HtEvent {
+export class HtEventWebviewActionTriggered extends HtEvent {
   flow_thread_id: string
   flow_id: string
   flow_name: string

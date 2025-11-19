@@ -17,7 +17,7 @@ import {
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
-  HtEventOpenWebview,
+  HtEventWebviewActionTriggered,
   HtEventWebviewEnd,
   HtEventWebviewStep,
 } from './event-models'
@@ -87,7 +87,7 @@ export function createHtEvent(
       return new HtEventBotAction(htEventProps, requestData)
 
     case EventAction.WebviewActionTriggered:
-      return new HtEventOpenWebview(htEventProps, requestData)
+      return new HtEventWebviewActionTriggered(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)
