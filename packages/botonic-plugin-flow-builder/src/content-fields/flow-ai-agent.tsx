@@ -1,9 +1,9 @@
 import { AgenticOutputMessage } from '@botonic/core'
-import { ActionRequest, Button, Text } from '@botonic/react'
+import { ActionRequest } from '@botonic/react'
 
-import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
+import { FlowText } from './flow-text'
 import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
@@ -31,30 +31,12 @@ export class FlowAiAgent extends ContentFieldsBase {
     return (
       <>
         {this.responses.map((response: AgenticOutputMessage) => {
-          if (response.type === 'text') {
-            return <Text key={id}>{response.content.text}</Text>
-          }
-
-          if (response.type === 'textWithButtons') {
-            return (
-              <Text key={id}>
-                {response.content.text}
-                {response.content.buttons.map((button, buttonIndex) => {
-                  return (
-                    <Button
-                      key={buttonIndex}
-                      payload={`${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
-                    >
-                      {button.text}
-                    </Button>
-                  )
-                })}
-              </Text>
-            )
+          if (response.type === 'text' || response.type === 'textWithButtons') {
+            return FlowText.fromAIAgent(id, response)
           }
 
           if (response.type === 'carousel') {
-            return FlowCarousel.fromAiAgent(id, response, request)
+            return FlowCarousel.fromAIAgent(id, response, request)
           }
 
           return <></>

@@ -28,7 +28,7 @@ export class FlowCarousel extends ContentFieldsBase {
     return newCarousel
   }
 
-  static fromAiAgent(
+  static fromAIAgent(
     id: string,
     carouselMessage: CarouselMessage,
     request: ActionRequest

@@ -1,8 +1,14 @@
+import { TextMessage, TextWithButtonsMessage } from '@botonic/core'
 import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import { ACCESS_TOKEN_VARIABLE_KEY, VARIABLE_PATTERN } from '../constants'
+import {
+  ACCESS_TOKEN_VARIABLE_KEY,
+  EMPTY_PAYLOAD,
+  SOURCE_INFO_SEPARATOR,
+  VARIABLE_PATTERN,
+} from '../constants'
 import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
@@ -53,6 +59,32 @@ export class FlowText extends ContentFieldsBase {
   private static isValidType(botVariable: any): boolean {
     const validTypes = ['boolean', 'string', 'number']
     return validTypes.includes(typeof botVariable)
+  }
+
+  static fromAIAgent(
+    id: string,
+    textMessage: TextMessage | TextWithButtonsMessage
+  ): JSX.Element {
+    if (textMessage.type === 'text') {
+      return <Text key={id}>{textMessage.content.text}</Text>
+    }
+
+    return (
+      <Text key={id}>
+        {textMessage.content.text}
+        {textMessage.content.buttons.map((button, buttonIndex) => {
+          const buttonData = {
+            id: `${id}-button-${buttonIndex}`,
+            text: button.text,
+            url: button.url,
+            payload: button.payload
+              ? `${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`
+              : undefined,
+          }
+          return FlowButton.fromAIAgent(buttonData).renderButton(buttonIndex)
+        })}
+      </Text>
+    )
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
