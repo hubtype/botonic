@@ -1,6 +1,9 @@
 import { HtAiAgentNode } from './ai-agent'
 import { HtBotActionNode } from './bot-action'
 import { HtCarouselNode } from './carousel'
+// import { HtChannelConditionalNode } from './channel-conditional'
+// import { HtCountryConditionalNode } from './country-conditional'
+// import { HtCustomConditionalNode } from './custom-conditional'
 import { HtFallbackNode } from './fallback'
 import { HtFunctionNode } from './function'
 import { HtGoToFlow } from './go-to-flow'
@@ -9,6 +12,7 @@ import { HtImageNode } from './image'
 import { HtKeywordNode } from './keyword'
 import { HtKnowledgeBaseNode } from './knowledge-base'
 import { HtPayloadNode } from './payload'
+// import { HtQueueStatusConditionalNode } from './queue-status-conditional'
 import { HtRatingNode } from './rating'
 import { HtSmartIntentNode } from './smart-intent'
 import { HtTextNode } from './text'
@@ -36,6 +40,10 @@ export type HtNodeWithContent =
   | HtRatingNode
   | HtWebviewNode
   | HtGoToFlow
+// | HtChannelConditionalNode
+// | HtCountryConditionalNode
+// | HtCustomConditionalNode
+// | HtQueueStatusConditionalNode
 
 export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode
 

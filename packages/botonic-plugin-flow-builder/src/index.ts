@@ -223,6 +223,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     if (content && content.followUp) {
       return this.getContentsById(content.followUp.id, contents)
     } else if (node.follow_up) {
+      console.log('FOLLOWUP FROM NODE-------> OLD SYSTEM')
       return this.getContentsById(node.follow_up.id, contents)
     }
 
