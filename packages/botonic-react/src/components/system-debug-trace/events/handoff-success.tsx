@@ -31,6 +31,9 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
       const noteMessage = await previewUtils.getMessageById(
         props.handoff_note_id
       )
+      if (!noteMessage) {
+        return
+      }
       setNoteMessage(noteMessage.text)
     }
     fetchNoteMessage()
