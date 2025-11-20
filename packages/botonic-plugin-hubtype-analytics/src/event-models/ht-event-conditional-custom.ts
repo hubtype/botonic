@@ -18,7 +18,8 @@ export class HtEventConditionalCustom extends HtEvent {
   constructor(event: EventConditionalCustom, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.BotEvent
-    this.action = EventAction.ConditionalCountry
+    this.action = EventAction.ConditionalCustom
+    this.flow_thread_id = event.flowThreadId
     this.flow_id = event.flowId
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId

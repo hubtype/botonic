@@ -54,15 +54,21 @@ export async function trackOneContent(
   }
 }
 
+function setSessionFlowThreadId(
+  request: ActionRequest,
+  flowThreadId: string
+): void {
+  request.session.flow_thread_id = flowThreadId
+}
+
 function getContentEventArgs(
   request: ActionRequest,
   nodeContent: HtNodeWithContent
 ): EventFlow {
-  const { flowId, flowName, flowNodeId, flowNodeContentId } =
+  const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
     getCommonFlowContentEventArgs(request, nodeContent)
 
-  const flowThreadId = request.session.flow_thread_id ?? uuidv7()
-  request.session.flow_thread_id = flowThreadId
+  setSessionFlowThreadId(request, flowThreadId)
 
   return {
     action: EventAction.FlowNode,
@@ -76,6 +82,7 @@ function getContentEventArgs(
 }
 
 type CommonFlowContentEventArgs = {
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -88,8 +95,10 @@ function getCommonFlowContentEventArgs(
 ): CommonFlowContentEventArgs {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const flowName = flowBuilderPlugin.getFlowName(nodeContent.flow_id)
+  const flowThreadId = request.session.flow_thread_id ?? uuidv7()
 
   return {
+    flowThreadId,
     flowId: nodeContent.flow_id,
     flowName,
     flowNodeId: nodeContent.id,

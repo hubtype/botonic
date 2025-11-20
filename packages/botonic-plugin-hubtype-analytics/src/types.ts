@@ -16,7 +16,8 @@ import {
   EventIntentSmart,
   EventKeyword,
   EventKnowledgeBase,
-  EventOpenWebview,
+  EventRedirectFlow,
+  EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,
@@ -43,12 +44,13 @@ export type HtEventProps =
   | EventKeyword
   | EventIntentSmart
   | EventKnowledgeBase
-  | EventOpenWebview
+  | EventWebviewActionTriggered
   | EventFallback
   | EventWebviewStep
   | EventWebviewEnd
   | EventCustom
   | EventAiAgent
+  | EventRedirectFlow
 
 export interface RequestData {
   userId?: string
@@ -76,7 +78,7 @@ export {
   EventIntentSmart,
   EventKeyword,
   EventKnowledgeBase,
-  EventOpenWebview,
+  EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,
   KnowledgebaseFailReason,

@@ -21,6 +21,7 @@ export class HtEventConditionalQueueStatus extends HtEvent {
     super(event, requestData)
     this.type = EventType.BotEvent
     this.action = EventAction.ConditionalQueueStatus
+    this.flow_thread_id = event.flowThreadId
     this.flow_id = event.flowId
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId

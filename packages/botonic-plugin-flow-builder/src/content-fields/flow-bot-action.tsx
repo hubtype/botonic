@@ -30,6 +30,7 @@ export class FlowBotAction extends ContentFieldsBase {
       getCommonFlowContentEventArgsForContentId(request, this.id)
     const eventBotAction: EventBotAction = {
       action: EventAction.BotAction,
+      flowThreadId,
       flowId,
       flowName,
       flowNodeId,

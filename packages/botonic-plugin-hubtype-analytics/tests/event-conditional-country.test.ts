@@ -1,17 +1,17 @@
 import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 
-describe('Create flow event', () => {
-  test('should create flow event', () => {
+describe('Create conditional country event', () => {
+  test('should create conditional country event', () => {
     const requestData = getRequestData()
     const htEvent = createHtEvent(requestData, {
-      action: EventAction.FlowNode,
+      action: EventAction.ConditionalCountry,
       flowThreadId: 'flowThreadIdTest',
       flowId: 'flowIdTest',
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
-      flowNodeIsMeaningful: undefined,
+      country: 'ES',
     })
 
     expect(htEvent).toEqual({
@@ -20,13 +20,13 @@ describe('Create flow event', () => {
       user_country: 'ES',
       system_locale: 'es',
       format_version: 5,
-      action: EventAction.FlowNode,
+      action: EventAction.ConditionalCountry,
       flow_thread_id: 'flowThreadIdTest',
       flow_id: 'flowIdTest',
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
-      flow_node_is_meaningful: false,
+      country: 'ES',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

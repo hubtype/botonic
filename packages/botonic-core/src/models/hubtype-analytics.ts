@@ -15,7 +15,7 @@ export enum EventAction {
   ConditionalCustom = 'conditional_custom',
   ConditionalChannel = 'conditional_channel',
   BotAction = 'bot_action',
-  OpenWebview = 'open_webview',
+  WebviewActionTriggered = 'webview_action_triggered',
   HandoffOption = 'handoff_option',
   HandoffSuccess = 'handoff_success',
   HandoffFail = 'handoff_fail',
@@ -26,10 +26,19 @@ export enum EventAction {
   WebviewStep = 'webview_step',
   WebviewEnd = 'webview_end',
   Custom = 'custom',
+  RedirectFlow = 'redirect_flow',
 }
 
 export interface HtBaseEventProps {
   action: EventAction
+}
+
+export interface HtBaseEventAllFlowProps extends HtBaseEventProps {
+  flowThreadId: string
+  flowId: string
+  flowName: string
+  flowNodeId: string
+  flowNodeContentId: string
 }
 
 export interface EventFeedback extends HtBaseEventProps {
@@ -70,52 +79,32 @@ export interface EventFlow extends HtBaseEventProps {
   flowNodeIsMeaningful?: boolean
 }
 
-export interface EventBotAction extends HtBaseEventProps {
+export interface EventBotAction extends HtBaseEventAllFlowProps {
   action: EventAction.BotAction
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   payload: string
 }
 
-export interface EventConditionalCountry extends HtBaseEventProps {
+export interface EventConditionalCountry extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalCountry
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   country: string
 }
 
-export interface EventConditionalQueueStatus extends HtBaseEventProps {
+export interface EventConditionalQueueStatus extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalQueueStatus
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   queueId: string
   queueName: string
   isQueueOpen: boolean
   isAvailableAgent: boolean
 }
 
-export interface EventConditionalCustom extends HtBaseEventProps {
+export interface EventConditionalCustom extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalCustom
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   conditionalVariable: string
   variableFormat: string
 }
 
-export interface EventConditionalChannel extends HtBaseEventProps {
+export interface EventConditionalChannel extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalChannel
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   channel: string
 }
 
@@ -132,8 +121,6 @@ export interface EventHandoff extends HtBaseEventProps {
   isQueueOpen?: boolean
   isAvailableAgent?: boolean
   isThresholdReached?: boolean
-  handoffNoteId?: string
-  handoffHasAutoAssign: boolean
 }
 
 export interface EventHandoffOption extends HtBaseEventProps {
@@ -188,23 +175,14 @@ export interface EventKnowledgeBase extends HtBaseEventProps {
   userInput: string
 }
 
-export interface EventOpenWebview extends HtBaseEventProps {
-  action: EventAction.OpenWebview
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
+export interface EventWebviewActionTriggered extends HtBaseEventAllFlowProps {
+  action: EventAction.WebviewActionTriggered
   webviewTargetId: string
   webviewName: string
 }
 
-export interface EventAiAgent extends HtBaseEventProps {
+export interface EventAiAgent extends HtBaseEventAllFlowProps {
   action: EventAction.AiAgent
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
   flowNodeIsMeaningful: boolean
   toolsExecuted: ToolExecution[]
   inputMessageId: string
@@ -213,6 +191,12 @@ export interface EventAiAgent extends HtBaseEventProps {
   outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
+}
+
+export interface EventRedirectFlow extends HtBaseEventAllFlowProps {
+  action: EventAction.RedirectFlow
+  flowTargetId: string
+  flowTargetName: string
 }
 
 export enum KnowledgebaseFailReason {

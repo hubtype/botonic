@@ -1,7 +1,13 @@
-import { EventAction, EventOpenWebview, EventType, RequestData } from '../types'
+import {
+  EventAction,
+  EventType,
+  EventWebviewActionTriggered,
+  RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
-export class HtEventOpenWebview extends HtEvent {
+export class HtEventWebviewActionTriggered extends HtEvent {
+  flow_thread_id: string
   flow_id: string
   flow_name: string
   flow_node_id: string
@@ -9,10 +15,11 @@ export class HtEventOpenWebview extends HtEvent {
   webview_name: string
   webview_target_id: string
 
-  constructor(event: EventOpenWebview, requestData: RequestData) {
+  constructor(event: EventWebviewActionTriggered, requestData: RequestData) {
     super(event, requestData)
     this.type = EventType.BotEvent
-    this.action = EventAction.OpenWebview
+    this.action = EventAction.WebviewActionTriggered
+    this.flow_thread_id = event.flowThreadId
     this.flow_id = event.flowId
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
