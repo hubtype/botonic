@@ -1,7 +1,7 @@
 import { INPUT, PROVIDER, ProviderType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import { FlowChannelConditional, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
@@ -24,7 +24,8 @@ describe('Check the contents returned by the plugin after conditional channel no
         },
       })
 
-      expect((contents[0] as FlowText).text).toBe(messageExpected)
+      expect(contents[0]).toBeInstanceOf(FlowChannelConditional)
+      expect((contents[1] as FlowText).text).toBe(messageExpected)
     }
   )
 })

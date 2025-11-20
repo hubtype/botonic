@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import { FlowCustomConditional, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
@@ -20,8 +20,8 @@ describe('Check the contents returned by the plugin after conditional custom nod
         },
       })
 
-      const contentFlowText = contents[0] as FlowText
-      expect(contentFlowText.text).toBe(
+      expect(contents[0]).toBeInstanceOf(FlowCustomConditional)
+      expect((contents[1] as FlowText).text).toBe(
         `The booking is ${bookingType || '{bookingType}'}`
       )
     }
@@ -38,8 +38,8 @@ describe('Check the contents returned by the plugin after conditional custom nod
         },
       })
 
-      const contentFlowText = contents[0] as FlowText
-      expect(contentFlowText.text).toBe(
+      expect(contents[0]).toBeInstanceOf(FlowCustomConditional)
+      expect((contents[1] as FlowText).text).toBe(
         `User is logged ${isLogged ? 'in' : 'out'}`
       )
     }
@@ -70,8 +70,8 @@ describe('Check the contents returned by the plugin after conditional custom nod
         },
       })
 
-      const contentFlowText = contents[0] as FlowText
-      expect(contentFlowText.text).toBe(messageExpected)
+      expect(contents[0]).toBeInstanceOf(FlowCustomConditional)
+      expect((contents[1] as FlowText).text).toBe(messageExpected)
     }
   )
 })

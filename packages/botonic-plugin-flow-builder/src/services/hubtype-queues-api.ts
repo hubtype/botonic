@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
-interface AvailabilityData {
+export interface AvailabilityData {
   available: boolean
   waiting_cases: number
   availability_threshold_waiting_cases: number
