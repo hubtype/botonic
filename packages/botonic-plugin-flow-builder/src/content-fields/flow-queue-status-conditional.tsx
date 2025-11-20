@@ -1,12 +1,8 @@
 import { ActionRequest } from '@botonic/react'
 import React from 'react'
 
-import {
-  ConditionalQueueStatusArgs,
-  HubtypeQueuesApi,
-  QueueStatusResult,
-} from '../functions/conditional-queue-status'
-import { getArgumentsByLocale } from '../functions/utils'
+import { getArgumentsByLocale } from '../functions'
+import { HubtypeQueuesApi } from '../functions/conditional-queue-status'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtFunctionArguments,
@@ -16,6 +12,19 @@ import {
   HtQueueStatusConditionalNode,
   HtQueueStatusConditionalResultMapping,
 } from './hubtype-fields/queue-status-conditional'
+
+enum QueueStatusResult {
+  OPEN = 'open',
+  CLOSED = 'closed',
+  OPEN_WITHOUT_AGENTS = 'open-without-agents',
+}
+
+type ConditionalQueueStatusArgs = {
+  request: ActionRequest
+  queue_id: string
+  queue_name: string
+  check_available_agents: boolean
+}
 
 export class FlowQueueStatusConditional extends ContentFieldsBase {
   public arguments: HtFunctionArguments[] = []

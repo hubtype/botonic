@@ -20,14 +20,11 @@ import { FlowContent } from './content-fields'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
-  HtFunctionArgument,
-  HtFunctionArguments,
-  HtFunctionNode,
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { FlowFactory } from './flow-factory'
-import { DEFAULT_FUNCTION_NAMES } from './functions'
+import { CustomFunction, DEFAULT_FUNCTION_NAMES } from './functions'
 import {
   AiAgentFunction,
   BotonicPluginFlowBuilderOptions,
@@ -198,7 +195,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       node.type === HtNodeWithContentType.FUNCTION &&
       !DEFAULT_FUNCTION_NAMES.includes(node.content.action)
     ) {
-      const targetId = await this.callFunction(node, resolvedLocale)
+      const customFunctionResolver = new CustomFunction(
+        this.functions,
+        this.currentRequest,
+        resolvedLocale
+      )
+      const targetId = await customFunctionResolver.call(node)
       return this.getContentsById(targetId, contents)
     }
 
@@ -225,57 +227,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     return contents
-  }
-
-  private async callFunction(
-    functionNode: HtFunctionNode,
-    locale: string
-  ): Promise<string> {
-    const functionNodeId = functionNode.id
-    const functionArguments = this.getArgumentsByLocale(
-      functionNode.content.arguments,
-      locale
-    )
-    const nameValues = functionArguments.map(arg => {
-      return { [arg.name]: arg.value }
-    })
-
-    const args = Object.assign(
-      {
-        request: this.currentRequest,
-        results: functionNode.content.result_mapping.map(r => r.result),
-      },
-      ...nameValues
-    )
-    const functionResult =
-      await this.functions[functionNode.content.action](args)
-    // TODO define result_mapping per locale??
-    const result = functionNode.content.result_mapping.find(
-      r => r.result === functionResult
-    )
-    if (!result?.target) {
-      throw new Error(
-        `No result found for result_mapping for node with id: ${functionNodeId}`
-      )
-    }
-    return result.target.id
-  }
-
-  private getArgumentsByLocale(
-    args: HtFunctionArguments[],
-    locale: string
-  ): HtFunctionArgument[] {
-    let resultArguments: HtFunctionArgument[] = []
-    for (const arg of args) {
-      if ('locale' in arg && arg.locale === locale) {
-        resultArguments = [...resultArguments, ...arg.values]
-      }
-      if ('type' in arg) {
-        resultArguments = [...resultArguments, arg]
-      }
-    }
-
-    return resultArguments
   }
 
   getPayloadParams<T extends PayloadParamsBase>(payload: string): T {
