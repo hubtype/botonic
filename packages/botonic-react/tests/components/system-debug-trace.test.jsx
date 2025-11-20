@@ -19,8 +19,22 @@ import {
   getKnowledgeBaseEventConfig,
   getAiAgentEventConfig,
 } from '../../src/components/system-debug-trace/events'
+import { WebchatContext } from '../../src/webchat/context'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+
+const mockWebchatContext = {
+  previewUtils: {
+    onClickOpenChunks: jest.fn(),
+    getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
+  },
+  getKnowledgeBaseSources: jest.fn(),
+  getKnowledgeBaseChunks: jest.fn(),
+  updateMessage: jest.fn(),
+  webchatState: {
+    messagesJSON: [],
+  },
+}
 
 // Mock isBrowser to return true for rendering components
 jest.mock('@botonic/core', () => {
@@ -227,7 +241,7 @@ describe('SystemDebugTrace Component', () => {
       expect(config2.action).toBe(EventAction.Fallback)
     })
 
-    test('getHandoffSuccessEventConfig returns non-collapsible config', () => {
+    test('getHandoffSuccessEventConfig returns collapsible config', () => {
       const data = {
         action: EventAction.HandoffSuccess,
         queue_name: 'Support Queue',
@@ -237,8 +251,8 @@ describe('SystemDebugTrace Component', () => {
       const config = getHandoffSuccessEventConfig(data)
 
       expect(config.action).toBe(EventAction.HandoffSuccess)
-      expect(config.component).toBeNull()
-      expect(config.collapsible).toBe(false)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
     })
@@ -299,7 +313,9 @@ describe('SystemDebugTrace Component', () => {
       }
 
       const { container } = render(
-        <DebugMessage debugEvent={debugEvent} messageId='msg-1' />
+        <WebchatContext.Provider value={mockWebchatContext}>
+          <DebugMessage debugEvent={debugEvent} messageId='msg-1' />
+        </WebchatContext.Provider>
       )
 
       const header = container.querySelector('.collapsible')
