@@ -112,7 +112,6 @@ export class FlowFactory {
       case 'check-queue-status':
         return FlowQueueStatusConditional.fromHubtypeCMS(
           hubtypeContent,
-          this.currentRequest,
           this.locale
         )
       case 'check-bot-variable':

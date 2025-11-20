@@ -18,7 +18,6 @@ export class FlowCountryConditional extends ContentFieldsBase {
     component: HtCountryConditionalNode,
     request: ActionRequest
   ): FlowCountryConditional {
-    console.log('FlowCountryConditional fromHubtypeCMS', { component })
     const newCountryConditional = new FlowCountryConditional(component.id)
     newCountryConditional.code = component.code
     newCountryConditional.resultMapping = component.content.result_mapping
@@ -42,7 +41,7 @@ export class FlowCountryConditional extends ContentFieldsBase {
   }
 
   async trackFlow(request: ActionRequest): Promise<void> {
-    const { flowId, flowName, flowNodeId, flowNodeContentId } =
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
       getCommonFlowContentEventArgsForContentId(request, this.id)
     if (!this.conditionalResult?.result) {
       console.warn(
@@ -51,6 +50,7 @@ export class FlowCountryConditional extends ContentFieldsBase {
     }
     const eventCountryConditional: EventConditionalCountry = {
       action: EventAction.ConditionalCountry,
+      flowThreadId,
       flowId,
       flowName,
       flowNodeId,
@@ -61,8 +61,7 @@ export class FlowCountryConditional extends ContentFieldsBase {
     await trackEvent(request, action, eventArgs)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toBotonic(_id: string, _request: ActionRequest): JSX.Element {
+  toBotonic(): JSX.Element {
     return <></>
   }
 }

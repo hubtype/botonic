@@ -1,8 +1,13 @@
+import { EventAction, EventConditionalQueueStatus } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import React from 'react'
 
 import { getArgumentsByLocale } from '../functions'
 import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtFunctionArguments,
@@ -20,20 +25,22 @@ enum QueueStatusResult {
 }
 
 type ConditionalQueueStatusArgs = {
-  request: ActionRequest
-  queue_id: string
-  queue_name: string
-  check_available_agents: boolean
+  queueId: string
+  queueName: string
+  checkAvailableAgents: boolean
 }
 
 export class FlowQueueStatusConditional extends ContentFieldsBase {
   public arguments: HtFunctionArguments[] = []
   public resultMapping: HtQueueStatusConditionalResultMapping
   public conditionalResult?: HtFunctionResult
+  public queueId: string = ''
+  public queueName: string = ''
+  public isQueueOpen: boolean = false
+  public isAvailableAgent: boolean = false
 
   static async fromHubtypeCMS(
     component: HtQueueStatusConditionalNode,
-    request: ActionRequest,
     locale: string
   ): Promise<FlowQueueStatusConditional> {
     const newChannelConditional = new FlowQueueStatusConditional(component.id)
@@ -41,28 +48,24 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
     newChannelConditional.arguments = component.content.arguments
     newChannelConditional.resultMapping = component.content
       .result_mapping as HtQueueStatusConditionalResultMapping
-    await newChannelConditional.setConditionalResult(request, locale)
+    await newChannelConditional.setConditionalResult(locale)
 
     return newChannelConditional
   }
 
-  async setConditionalResult(
-    request: ActionRequest,
-    locale: string
-  ): Promise<void> {
+  async setConditionalResult(locale: string): Promise<void> {
     const args = getArgumentsByLocale(this.arguments, locale)
 
-    const queue_id = args.find(arg => arg.name === 'queue_id')?.value || ''
-    const queue_name = args.find(arg => arg.name === 'queue_name')?.value || ''
-    const check_available_agents =
+    const queueId = args.find(arg => arg.name === 'queue_id')?.value || ''
+    const queueName = args.find(arg => arg.name === 'queue_name')?.value || ''
+    const checkAvailableAgents =
       (args.find(arg => arg.name === 'check_available_agents')
         ?.value as unknown as boolean) || false
 
     const queueStatus = await this.conditionalQueueStatus({
-      request,
-      queue_id,
-      queue_name,
-      check_available_agents,
+      queueId,
+      queueName,
+      checkAvailableAgents,
     })
 
     const conditionalResult = this.resultMapping.find(
@@ -71,7 +74,7 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
 
     if (!conditionalResult) {
       throw new Error(
-        `No conditional result found for node ${this.code} with queue: ${queue_name}`
+        `No conditional result found for node ${this.code} with queue: ${queueName}`
       )
     }
     this.conditionalResult = conditionalResult
@@ -79,24 +82,49 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
   }
 
   async conditionalQueueStatus({
-    queue_id,
-    check_available_agents,
+    queueId,
+    checkAvailableAgents,
+    queueName,
   }: ConditionalQueueStatusArgs): Promise<QueueStatusResult> {
-    const queuesApi = new HubtypeQueuesApi(queue_id, check_available_agents)
+    const queuesApi = new HubtypeQueuesApi(queueId, checkAvailableAgents)
     const data = await queuesApi.getAvailability()
-    if (check_available_agents && data.open && data.available_agents === 0) {
+    this.queueId = queueId
+    this.queueName = queueName
+    this.isQueueOpen = data.open
+    this.isAvailableAgent = data.available_agents > 0
+
+    if (checkAvailableAgents && data.open && data.available_agents === 0) {
       return QueueStatusResult.OPEN_WITHOUT_AGENTS
     }
+
     return data.open ? QueueStatusResult.OPEN : QueueStatusResult.CLOSED
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
-    // TODO: Implement tracking for queue status conditional
+  async trackFlow(request: ActionRequest): Promise<void> {
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
+      getCommonFlowContentEventArgsForContentId(request, this.id)
+    if (!this.conditionalResult?.result) {
+      console.warn(
+        `Tracking event for node ${this.code} but no conditional result found`
+      )
+    }
+    const eventQueueStatusConditional: EventConditionalQueueStatus = {
+      action: EventAction.ConditionalQueueStatus,
+      flowThreadId,
+      flowId,
+      flowName,
+      flowNodeId,
+      flowNodeContentId,
+      queueId: this.queueId,
+      queueName: this.queueName,
+      isQueueOpen: this.isQueueOpen,
+      isAvailableAgent: this.isAvailableAgent,
+    }
+    const { action, ...eventArgs } = eventQueueStatusConditional
+    await trackEvent(request, action, eventArgs)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toBotonic(_id: string, _request: ActionRequest): JSX.Element {
+  toBotonic(): JSX.Element {
     return <></>
   }
 }
