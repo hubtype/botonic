@@ -24,7 +24,7 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   const [noteMessage, setNoteMessage] = useState<string>()
 
   useEffect(() => {
-    const fetchNoteMessageContent = async () => {
+    const fetchNoteMessage = async () => {
       if (!previewUtils || !props.handoff_note_id) {
         return
       }
@@ -33,7 +33,7 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
       )
       setNoteMessage(noteMessage.text)
     }
-    fetchNoteMessageContent()
+    fetchNoteMessage()
   }, [previewUtils, props.handoff_note_id])
 
   return (

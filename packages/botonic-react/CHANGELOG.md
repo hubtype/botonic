@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.42.0] - TBD
+
+### Added
+
+- [PR-3127](https://github.com/hubtype/botonic/pull/3127): Added new system events in webchat preview.
+
 ## [0.41.0] - 2025-10-30
 
 ### Added

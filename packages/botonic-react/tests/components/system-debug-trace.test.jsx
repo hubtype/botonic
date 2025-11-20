@@ -18,6 +18,13 @@ import {
   getHandoffSuccessEventConfig,
   getKnowledgeBaseEventConfig,
   getAiAgentEventConfig,
+  getBotActionEventConfig,
+  getConditionalChannelEventConfig,
+  getConditionalCountryEventConfig,
+  getConditionalCustomEventConfig,
+  getConditionalQueueStatusEventConfig,
+  getRedirectFlowEventConfig,
+  getWebviewActionTriggeredEventConfig,
 } from '../../src/components/system-debug-trace/events'
 import { WebchatContext } from '../../src/webchat/context'
 
@@ -182,6 +189,113 @@ describe('SystemDebugTrace Component', () => {
 
       expect(container.textContent).toContain('2nd message')
     })
+
+    test('renders bot action event', () => {
+      const debugEvent = {
+        action: EventAction.BotAction,
+        payload: 'testAction',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-5' />
+      )
+
+      expect(container.textContent).toContain('Bot action triggered')
+      expect(container.textContent).toContain('testAction')
+    })
+
+    test('renders conditional channel event', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalChannel,
+        channel: 'whatsapp',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-6' />
+      )
+
+      expect(container.textContent).toContain('Channel checked')
+      expect(container.textContent).toContain('whatsapp')
+    })
+
+    test('renders conditional country event', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalCountry,
+        country: 'US',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-7' />
+      )
+
+      expect(container.textContent).toContain('Country checked')
+      expect(container.textContent).toContain('US')
+    })
+
+    test('renders conditional custom event', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalCustom,
+        conditional_variable: 'user.age',
+        variable_format: 'number',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-8' />
+      )
+
+      expect(container.textContent).toContain('Custom condition checked')
+      expect(container.textContent).toContain('user.age')
+    })
+
+    test('renders conditional queue status event', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalQueueStatus,
+        queue_id: 'queue-123',
+        queue_name: 'Support',
+        is_queue_open: true,
+        is_available_agent: true,
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-9' />
+      )
+
+      expect(container.textContent).toContain('Queue status checked')
+      expect(container.textContent).toContain('Open')
+      expect(container.textContent).toContain('Available')
+    })
+
+    test('renders redirect flow event', () => {
+      const debugEvent = {
+        action: EventAction.RedirectFlow,
+        flow_id: 'flow-1',
+        flow_name: 'Main Flow',
+        flow_target_id: 'flow-2',
+        flow_target_name: 'Target Flow',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-10' />
+      )
+
+      expect(container.textContent).toContain('Redirected to flow')
+      expect(container.textContent).toContain('Target Flow')
+    })
+
+    test('renders webview action triggered event', () => {
+      const debugEvent = {
+        action: EventAction.WebviewActionTriggered,
+        webview_target_id: 'webview-1',
+        webview_name: 'Payment Form',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-11' />
+      )
+
+      expect(container.textContent).toContain('Webview action triggered')
+      expect(container.textContent).toContain('Payment Form')
+    })
   })
 
   describe('Event Configuration Functions', () => {
@@ -295,6 +409,119 @@ describe('SystemDebugTrace Component', () => {
       expect(config.component).toBeTruthy()
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
+    })
+
+    test('getBotActionEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.BotAction,
+        payload: 'testAction',
+      }
+
+      const config = getBotActionEventConfig(data)
+
+      expect(config.action).toBe(EventAction.BotAction)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getConditionalChannelEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.ConditionalChannel,
+        channel: 'whatsapp',
+      }
+
+      const config = getConditionalChannelEventConfig(data)
+
+      expect(config.action).toBe(EventAction.ConditionalChannel)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getConditionalCountryEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.ConditionalCountry,
+        country: 'US',
+      }
+
+      const config = getConditionalCountryEventConfig(data)
+
+      expect(config.action).toBe(EventAction.ConditionalCountry)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getConditionalCustomEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.ConditionalCustom,
+        conditional_variable: 'user.age',
+        variable_format: 'number',
+      }
+
+      const config = getConditionalCustomEventConfig(data)
+
+      expect(config.action).toBe(EventAction.ConditionalCustom)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getConditionalQueueStatusEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.ConditionalQueueStatus,
+        queue_id: 'queue-123',
+        queue_name: 'Support',
+        is_queue_open: true,
+        is_available_agent: true,
+      }
+
+      const config = getConditionalQueueStatusEventConfig(data)
+
+      expect(config.action).toBe(EventAction.ConditionalQueueStatus)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getRedirectFlowEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.RedirectFlow,
+        flow_id: 'flow-1',
+        flow_name: 'Main Flow',
+        flow_target_id: 'flow-2',
+        flow_target_name: 'Target Flow',
+      }
+
+      const config = getRedirectFlowEventConfig(data)
+
+      expect(config.action).toBe(EventAction.RedirectFlow)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
+    })
+
+    test('getWebviewActionTriggeredEventConfig returns non-collapsible config', () => {
+      const data = {
+        action: EventAction.WebviewActionTriggered,
+        webview_target_id: 'webview-1',
+        webview_name: 'Payment Form',
+      }
+
+      const config = getWebviewActionTriggeredEventConfig(data)
+
+      expect(config.action).toBe(EventAction.WebviewActionTriggered)
+      expect(config.component).toBeNull()
+      expect(config.collapsible).toBe(false)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBeTruthy()
     })
   })
 
