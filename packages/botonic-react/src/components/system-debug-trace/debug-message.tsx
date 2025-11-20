@@ -1,6 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
+import { WebchatContext } from '../../webchat/context'
 import {
   getAiAgentEventConfig,
   getBotActionEventConfig,
@@ -72,7 +73,7 @@ interface DebugMessageProps {
 export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
-
+  const { previewUtils } = useContext(WebchatContext)
   const eventConfig = getEventConfig(debugEvent)
 
   useLastLabelPosition({
@@ -81,6 +82,12 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
     debugEvent,
     isCollapsible: eventConfig?.collapsible ?? false,
   })
+
+  useEffect(() => {
+    if (isExpanded) {
+      previewUtils?.trackPreviewEventOpened?.({ action: debugEvent.action })
+    }
+  }, [previewUtils, isExpanded, debugEvent])
 
   if (!eventConfig) {
     return null
