@@ -7,6 +7,8 @@ export const LABELS = {
   KNOWLEDGE_GATHERED: 'Knowledge gathered',
   EXECUTED_TOOLS: 'Executed tools',
   NO_TOOLS_EXECUTED: 'No tools executed',
+  AUTO_ASSIGN_ON: 'ON',
+  AUTO_ASSIGN_OFF: 'OFF',
   EXIT: 'Exit',
   ERROR: 'Error',
   QUEUE: 'Queue',

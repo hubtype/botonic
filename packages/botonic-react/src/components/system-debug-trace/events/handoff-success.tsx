@@ -21,8 +21,7 @@ export interface HandoffSuccessDebugEvent {
 
 export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
-  const [noteMessageContent, setNoteMessageContent] =
-    useState<string>('Without note')
+  const [noteMessage, setNoteMessage] = useState<string>()
 
   useEffect(() => {
     const fetchNoteMessageContent = async () => {
@@ -32,7 +31,7 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
       const noteMessage = await previewUtils.getMessageById(
         props.handoff_note_id
       )
-      setNoteMessageContent(noteMessage.text)
+      setNoteMessage(noteMessage.text)
     }
     fetchNoteMessageContent()
   }, [previewUtils, props.handoff_note_id])
@@ -46,13 +45,17 @@ export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
       <StyledDebugDetail>
         <StyledDebugLabel>{LABELS.AUTO_ASSIGN}</StyledDebugLabel>
         <StyledDebugValue>
-          {props.handoff_has_auto_assign ? 'ON' : 'OFF'}
+          {props.handoff_has_auto_assign
+            ? LABELS.AUTO_ASSIGN_ON
+            : LABELS.AUTO_ASSIGN_OFF}
         </StyledDebugValue>
       </StyledDebugDetail>
-      <StyledDebugDetail>
-        <StyledDebugLabel>{LABELS.NOTE}</StyledDebugLabel>
-        <StyledDebugValue>{noteMessageContent}</StyledDebugValue>
-      </StyledDebugDetail>
+      {Boolean(noteMessage) && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.NOTE}</StyledDebugLabel>
+          <StyledDebugValue>{noteMessage}</StyledDebugValue>
+        </StyledDebugDetail>
+      )}
     </>
   )
 }

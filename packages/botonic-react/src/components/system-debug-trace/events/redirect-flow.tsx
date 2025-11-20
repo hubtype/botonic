@@ -17,11 +17,7 @@ export const getRedirectFlowEventConfig = (
 ): DebugEventConfig => {
   const title = (
     <>
-      Redirected to flow{' '}
-      <span>
-        - From &quot;{data.flow_name}&quot; to &quot;{data.flow_target_name}
-        &quot;
-      </span>
+      Redirected to flow <span>- {data.flow_target_name}</span>
     </>
   )
 
