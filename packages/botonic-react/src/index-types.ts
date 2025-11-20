@@ -81,6 +81,13 @@ interface AddSystemResponseArgs {
   response: any
 }
 
+interface MinimalHubtypeMessage {
+  id: string
+  type: string
+  action: string
+  text: string
+}
+
 export interface PreviewUtils {
   getChunkIdsGroupedBySource: (
     chunkIds: string[]
@@ -88,7 +95,7 @@ export interface PreviewUtils {
   onClickOpenChunks: (
     chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
   ) => void
-  getNoteById: (noteId: string) => Promise<string>
+  getMessageById: (messageId: string) => Promise<MinimalHubtypeMessage>
 }
 
 export interface WebchatArgs {

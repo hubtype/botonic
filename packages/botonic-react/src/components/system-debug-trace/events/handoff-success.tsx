@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
 import { HeadSetSvg } from '../icons'
@@ -19,17 +19,41 @@ export interface HandoffSuccessDebugEvent {
   handoff_note_id: string
 }
 
-export const HandoffSuccess = async (props: HandoffSuccessDebugEvent) => {
+export const HandoffSuccess = (props: HandoffSuccessDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
-  const note = await previewUtils?.getNoteById(props.handoff_note_id)
-  if (!note) {
-    return null
-  }
+  const [noteMessageContent, setNoteMessageContent] =
+    useState<string>('Without note')
+
+  useEffect(() => {
+    const fetchNoteMessageContent = async () => {
+      if (!previewUtils || !props.handoff_note_id) {
+        return
+      }
+      const noteMessage = await previewUtils.getMessageById(
+        props.handoff_note_id
+      )
+      setNoteMessageContent(noteMessage.text)
+    }
+    fetchNoteMessageContent()
+  }, [previewUtils, props.handoff_note_id])
+
   return (
-    <StyledDebugDetail>
-      <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
-      <StyledDebugValue>{props.handoff_queue_name}</StyledDebugValue>
-    </StyledDebugDetail>
+    <>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
+        <StyledDebugValue>{props.handoff_queue_name}</StyledDebugValue>
+      </StyledDebugDetail>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.AUTO_ASSIGN}</StyledDebugLabel>
+        <StyledDebugValue>
+          {props.handoff_has_auto_assign ? 'ON' : 'OFF'}
+        </StyledDebugValue>
+      </StyledDebugDetail>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.NOTE}</StyledDebugLabel>
+        <StyledDebugValue>{noteMessageContent}</StyledDebugValue>
+      </StyledDebugDetail>
+    </>
   )
 }
 
@@ -44,7 +68,6 @@ export const getHandoffSuccessEventConfig = (
       </>
     ),
     icon: <HeadSetSvg />,
-    // TODO: Disable component and collapsible for now because we are only showing the queue name
     component: HandoffSuccess,
     collapsible: true,
   }

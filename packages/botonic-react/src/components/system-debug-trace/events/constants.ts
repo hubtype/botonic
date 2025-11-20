@@ -10,6 +10,8 @@ export const LABELS = {
   EXIT: 'Exit',
   ERROR: 'Error',
   QUEUE: 'Queue',
+  AUTO_ASSIGN: 'Auto-assign',
+  NOTE: 'Note',
   KNOWLEDGE_BASE_FAIL_REASON: 'Knowledge Base Fail Reason',
   SEE_CHUNKS_BUTTON: 'See chunks',
 } as const
