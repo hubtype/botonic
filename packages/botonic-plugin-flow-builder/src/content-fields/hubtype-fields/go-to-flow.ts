@@ -1,8 +1,9 @@
-import { HtNodeWithoutContentType } from './node-types'
+import { HtBaseNode } from './common'
+import { HtNodeWithContentType } from './node-types'
 
-export interface HtGoToFlow {
+export interface HtGoToFlow extends HtBaseNode {
   id: string
-  type: HtNodeWithoutContentType.GO_TO_FLOW
+  type: HtNodeWithContentType.GO_TO_FLOW
   content: {
     flow_id: string
   }

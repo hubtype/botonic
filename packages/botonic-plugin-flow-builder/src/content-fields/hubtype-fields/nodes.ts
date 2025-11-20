@@ -35,7 +35,8 @@ export type HtNodeWithContent =
   | HtAiAgentNode
   | HtRatingNode
   | HtWebviewNode
+  | HtGoToFlow
 
-export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode | HtGoToFlow
+export type HtNodeWithoutContent = HtUrlNode | HtPayloadNode
 
 export type HtNodeComponent = HtNodeWithContent | HtNodeWithoutContent

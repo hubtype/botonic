@@ -9,6 +9,7 @@ import {
   FlowContent,
   FlowCountryConditional,
   FlowCustomConditional,
+  FlowGoToFlow,
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
@@ -85,6 +86,9 @@ export class FlowFactory {
 
       case HtNodeWithContentType.FUNCTION:
         return this.resolveFlowFunctionContent(hubtypeContent)
+
+      case HtNodeWithContentType.GO_TO_FLOW:
+        return FlowGoToFlow.fromHubtypeCMS(hubtypeContent, this.cmsApi)
 
       default:
         return undefined

@@ -4,6 +4,7 @@ import { FlowCarousel } from './flow-carousel'
 import { FlowChannelConditional } from './flow-channel-conditional'
 import { FlowCountryConditional } from './flow-country-conditional'
 import { FlowCustomConditional } from './flow-custom-conditional'
+import { FlowGoToFlow } from './flow-go-to-flow'
 import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
 import {
@@ -27,6 +28,7 @@ export {
   FlowChannelConditional,
   FlowCountryConditional,
   FlowCustomConditional,
+  FlowGoToFlow,
   FlowHandoff,
   FlowImage,
   FlowKnowledgeBase,
@@ -54,5 +56,6 @@ export type FlowContent =
   | FlowChannelConditional
   | FlowQueueStatusConditional
   | FlowCustomConditional
+  | FlowGoToFlow
 
 export { DISABLED_MEMORY_LENGTH }
