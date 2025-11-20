@@ -16,34 +16,17 @@ import {
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import {
-  FlowAiAgent,
-  FlowBotAction,
-  FlowCarousel,
-  FlowContent,
-  FlowHandoff,
-  FlowImage,
-  FlowKnowledgeBase,
-  FlowRating,
-  FlowText,
-  FlowVideo,
-  FlowWhatsappButtonList,
-  FlowWhatsappCtaUrlButtonNode,
-} from './content-fields'
-import { FlowChannelConditional } from './content-fields/flow-channel-conditional'
-import { FlowCountryConditional } from './content-fields/flow-country-conditional'
-import { FlowCustomConditional } from './content-fields/flow-custom-conditional'
-import { FlowQueueStatusConditional } from './content-fields/flow-queue-status-conditional'
+import { FlowContent } from './content-fields'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
   HtFunctionArgument,
   HtFunctionArguments,
   HtFunctionNode,
-  HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
+import { FlowFactory } from './flow-factory'
 import { DEFAULT_FUNCTION_NAMES } from './functions'
 import {
   AiAgentFunction,
@@ -219,7 +202,12 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       return this.getContentsById(targetId, contents)
     }
 
-    const content = await this.getFlowContent(node, resolvedLocale)
+    const flowFactory = new FlowFactory(
+      this.currentRequest,
+      this.cmsApi,
+      resolvedLocale
+    )
+    const content = await flowFactory.getFlowContent(node)
     if (content) {
       contents.push(content)
     }
@@ -237,84 +225,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     return contents
-  }
-
-  private async getFlowContent(
-    hubtypeContent: HtNodeComponent,
-    locale: string
-  ): Promise<FlowContent | undefined> {
-    switch (hubtypeContent.type) {
-      case HtNodeWithContentType.TEXT:
-        return FlowText.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-      case HtNodeWithContentType.IMAGE:
-        return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
-      case HtNodeWithContentType.CAROUSEL:
-        return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-      case HtNodeWithContentType.VIDEO:
-        return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
-      case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
-        return FlowWhatsappButtonList.fromHubtypeCMS(
-          hubtypeContent,
-          locale,
-          this.cmsApi
-        )
-      case HtNodeWithContentType.WHATSAPP_CTA_URL_BUTTON:
-        return FlowWhatsappCtaUrlButtonNode.fromHubtypeCMS(
-          hubtypeContent,
-          locale,
-          this.cmsApi
-        )
-      case HtNodeWithContentType.HANDOFF:
-        return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-
-      case HtNodeWithContentType.KNOWLEDGE_BASE:
-        return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
-
-      case HtNodeWithContentType.AI_AGENT:
-        return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
-
-      case HtNodeWithContentType.RATING:
-        return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
-
-      case HtNodeWithContentType.BOT_ACTION:
-        return FlowBotAction.fromHubtypeCMS(hubtypeContent, this.cmsApi)
-
-      case HtNodeWithContentType.FUNCTION:
-        if (hubtypeContent.content.action === 'check-country') {
-          const countryConditional = FlowCountryConditional.fromHubtypeCMS(
-            hubtypeContent,
-            this.currentRequest
-          )
-          return countryConditional
-        }
-        if (hubtypeContent.content.action === 'get-channel-type') {
-          const channelConditional = FlowChannelConditional.fromHubtypeCMS(
-            hubtypeContent,
-            this.currentRequest
-          )
-          return channelConditional
-        }
-        if (hubtypeContent.content.action === 'check-queue-status') {
-          const queueStatusConditional =
-            await FlowQueueStatusConditional.fromHubtypeCMS(
-              hubtypeContent,
-              this.currentRequest,
-              locale
-            )
-          return queueStatusConditional
-        }
-        if (hubtypeContent.content.action === 'check-bot-variable') {
-          const customConditional = FlowCustomConditional.fromHubtypeCMS(
-            hubtypeContent,
-            this.currentRequest
-          )
-          return customConditional
-        }
-        return undefined
-
-      default:
-        return undefined
-    }
   }
 
   private async callFunction(
