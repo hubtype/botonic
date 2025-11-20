@@ -2,7 +2,7 @@ import { ActionRequest } from '@botonic/react'
 import React from 'react'
 
 import { getArgumentsByLocale } from '../functions'
-import { HubtypeQueuesApi } from '../functions/conditional-queue-status'
+import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtFunctionArguments,
