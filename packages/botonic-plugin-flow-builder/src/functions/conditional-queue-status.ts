@@ -3,14 +3,14 @@ import axios from 'axios'
 
 const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
-type ConditionalQueueStatusArgs = {
+export type ConditionalQueueStatusArgs = {
   request: ActionRequest
   queue_id: string
   queue_name: string
   check_available_agents: boolean
 }
 
-enum QueueStatusResult {
+export enum QueueStatusResult {
   OPEN = 'open',
   CLOSED = 'closed',
   OPEN_WITHOUT_AGENTS = 'open-without-agents',

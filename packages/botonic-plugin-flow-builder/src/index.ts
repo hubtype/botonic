@@ -30,6 +30,10 @@ import {
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
 } from './content-fields'
+import { FlowChannelConditional } from './content-fields/flow-channel-conditional'
+import { FlowCountryConditional } from './content-fields/flow-country-conditional'
+import { FlowCustomConditional } from './content-fields/flow-custom-conditional'
+import { FlowQueueStatusConditional } from './content-fields/flow-queue-status-conditional'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
@@ -40,7 +44,7 @@ import {
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
-import { DEFAULT_FUNCTIONS } from './functions'
+import { DEFAULT_FUNCTION_NAMES } from './functions'
 import {
   AiAgentFunction,
   BotonicPluginFlowBuilderOptions,
@@ -89,7 +93,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
     }
     const customFunctions = options.customFunctions || {}
-    this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
+    this.functions = customFunctions
     this.inShadowing = {
       allowKeywords: options.inShadowing?.allowKeywords || false,
       allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
@@ -207,12 +211,15 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const contents = prevContents || []
     const resolvedLocale = this.cmsApi.getResolvedLocale()
 
-    if (node.type === HtNodeWithContentType.FUNCTION) {
+    if (
+      node.type === HtNodeWithContentType.FUNCTION &&
+      !DEFAULT_FUNCTION_NAMES.includes(node.content.action)
+    ) {
       const targetId = await this.callFunction(node, resolvedLocale)
       return this.getContentsById(targetId, contents)
     }
 
-    const content = this.getFlowContent(node, resolvedLocale)
+    const content = await this.getFlowContent(node, resolvedLocale)
     if (content) {
       contents.push(content)
     }
@@ -223,17 +230,19 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     // TODO: prevent infinite recursive calls
-    if (node.follow_up) {
+    if (content && content.followUp) {
+      return this.getContentsById(content.followUp.id, contents)
+    } else if (node.follow_up) {
       return this.getContentsById(node.follow_up.id, contents)
     }
 
     return contents
   }
 
-  private getFlowContent(
+  private async getFlowContent(
     hubtypeContent: HtNodeComponent,
     locale: string
-  ): FlowContent | undefined {
+  ): Promise<FlowContent | undefined> {
     switch (hubtypeContent.type) {
       case HtNodeWithContentType.TEXT:
         return FlowText.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
@@ -268,7 +277,40 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
 
       case HtNodeWithContentType.BOT_ACTION:
-        return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
+        return FlowBotAction.fromHubtypeCMS(hubtypeContent, this.cmsApi)
+
+      case HtNodeWithContentType.FUNCTION:
+        if (hubtypeContent.content.action === 'check-country') {
+          const countryConditional = FlowCountryConditional.fromHubtypeCMS(
+            hubtypeContent,
+            this.currentRequest
+          )
+          return countryConditional
+        }
+        if (hubtypeContent.content.action === 'get-channel-type') {
+          const channelConditional = FlowChannelConditional.fromHubtypeCMS(
+            hubtypeContent,
+            this.currentRequest
+          )
+          return channelConditional
+        }
+        if (hubtypeContent.content.action === 'check-queue-status') {
+          const queueStatusConditional =
+            await FlowQueueStatusConditional.fromHubtypeCMS(
+              hubtypeContent,
+              this.currentRequest,
+              locale
+            )
+          return queueStatusConditional
+        }
+        if (hubtypeContent.content.action === 'check-bot-variable') {
+          const customConditional = FlowCustomConditional.fromHubtypeCMS(
+            hubtypeContent,
+            this.currentRequest
+          )
+          return customConditional
+        }
+        return undefined
 
       default:
         return undefined

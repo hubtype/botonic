@@ -10,3 +10,5 @@ export const DEFAULT_FUNCTIONS = {
   'check-country': conditionalCountry,
   'check-bot-variable': conditionalBotVariable,
 }
+
+export const DEFAULT_FUNCTION_NAMES = Object.keys(DEFAULT_FUNCTIONS)
