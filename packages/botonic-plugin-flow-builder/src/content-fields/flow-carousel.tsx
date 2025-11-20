@@ -2,6 +2,8 @@ import { CarouselMessage, isWhatsapp } from '@botonic/core'
 import {
   ActionRequest,
   Carousel,
+  WhatsappCTAUrlButton,
+  WhatsappCTAUrlHeaderType,
   WhatsappInteractiveMediaCarousel,
 } from '@botonic/react'
 import React from 'react'
@@ -11,6 +13,7 @@ import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
 import { HtCarouselNode } from './hubtype-fields'
 
+const DEFAULT_TEXT_MESSAGE = 'These are the options'
 export class FlowCarousel extends ContentFieldsBase {
   public code = ''
   public elements: FlowElement[] = []
@@ -33,9 +36,8 @@ export class FlowCarousel extends ContentFieldsBase {
     carouselMessage: CarouselMessage,
     request: ActionRequest
   ): JSX.Element {
-    const canUseWhatsappInteractiveMediaCarousel = () => {
+    const areAllButtonsValid = () => {
       const isValid =
-        carouselMessage.content.text &&
         !carouselMessage.content.elements.some(
           element => element.button.payload
         ) &&
@@ -50,10 +52,24 @@ export class FlowCarousel extends ContentFieldsBase {
       return isValid
     }
 
-    if (
-      isWhatsapp(request.session) &&
-      canUseWhatsappInteractiveMediaCarousel()
-    ) {
+    if (isWhatsapp(request.session) && areAllButtonsValid()) {
+      if (carouselMessage.content.elements.length === 1) {
+        const element = carouselMessage.content.elements[0]
+        console.log('displaying whatsapp cta url button with element', element)
+        // TODO: Add a new fromAIAgent method in FlowWhatsappCtaUrlButtonNode to create a WhatsappCTAUrlButton from an AIAgent message
+        return (
+          <WhatsappCTAUrlButton
+            key={id}
+            body={element.title}
+            headerType={WhatsappCTAUrlHeaderType.Image}
+            headerImage={element.image}
+            footer={element.subtitle}
+            displayText={element.button.text}
+            url={element.button.url!}
+          />
+        )
+      }
+
       return (
         <WhatsappInteractiveMediaCarousel
           cards={carouselMessage.content.elements.map(element => {
@@ -62,11 +78,11 @@ export class FlowCarousel extends ContentFieldsBase {
             const imageLink = element.image
 
             return {
-              text: element.title,
+              text: `*${element.title}*\n${element.subtitle}`,
               action: { buttonText, buttonUrl, imageLink },
             }
           })}
-          textMessage={carouselMessage.content.text!}
+          textMessage={carouselMessage.content.text || DEFAULT_TEXT_MESSAGE}
         />
       )
     }
@@ -83,6 +99,22 @@ export class FlowCarousel extends ContentFieldsBase {
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
     if (isWhatsapp(request.session)) {
+      // TODO: Improve this logic to ensure what to do if the buttons are not CTA URL buttons
+      if (this.elements.length === 1) {
+        const element = this.elements[0]
+
+        return (
+          <WhatsappCTAUrlButton
+            key={id}
+            body={element.title}
+            headerType={WhatsappCTAUrlHeaderType.Image}
+            headerImage={element.image}
+            displayText={element.button!.text}
+            url={element.button!.url!}
+          />
+        )
+      }
+
       return (
         <WhatsappInteractiveMediaCarousel
           cards={this.elements.map(element => {
@@ -95,7 +127,8 @@ export class FlowCarousel extends ContentFieldsBase {
               action: { buttonText, buttonUrl, imageLink },
             }
           })}
-          textMessage={'These are the options'} // TODO: Add the text message in flow builder frontend and take it from the carousel node with different languages
+          // TODO: Add the text message in flow builder frontend and take it from the carousel node with different languages
+          textMessage={DEFAULT_TEXT_MESSAGE}
         />
       )
     }
