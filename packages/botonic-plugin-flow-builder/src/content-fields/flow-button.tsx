@@ -1,4 +1,4 @@
-import { Button, Reply, Webview } from '@botonic/react'
+import { ActionRequest, Button, Reply, Webview } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
@@ -116,6 +116,11 @@ export class FlowButton extends ContentFieldsBase {
       return undefined
     }
     return FlowWebview.fromHubtypeCMS(targetNode)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // Not apply for these content because it is a child of another Message
   }
 
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {

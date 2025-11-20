@@ -1,5 +1,5 @@
 import { Button } from '@botonic/core'
-import { Element, Pic, Subtitle, Title } from '@botonic/react'
+import { ActionRequest, Element, Pic, Subtitle, Title } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
@@ -49,6 +49,11 @@ export class FlowElement extends ContentFieldsBase {
       url: element.button.url,
     })
     return newElement
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // TODO: Not apply for this content, because it is a child of the FlowCarousel content
   }
 
   toBotonic(parentId: string): JSX.Element {

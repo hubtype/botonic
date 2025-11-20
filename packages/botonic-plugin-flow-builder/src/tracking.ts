@@ -2,6 +2,7 @@ import { EventAction, EventFlow } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
+import { FlowBuilderApi } from './api'
 import { FlowContent } from './content-fields'
 import {
   HtNodeWithContent,
@@ -28,15 +29,28 @@ export async function trackFlowContent(
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
   for (const content of contents) {
-    const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
-    if (
-      nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE &&
-      nodeContent.type !== HtNodeWithContentType.AI_AGENT
-    ) {
-      const event = getContentEventArgs(request, nodeContent)
-      const { action, ...eventArgs } = event
-      await trackEvent(request, action, eventArgs)
-    }
+    await trackOneContent(request, content, cmsApi)
+  }
+}
+
+export async function trackOneContent(
+  request: ActionRequest,
+  content: FlowContent,
+  cmsApi?: FlowBuilderApi
+) {
+  if (!cmsApi) {
+    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+    cmsApi = flowBuilderPlugin.cmsApi
+  }
+
+  const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
+  if (
+    nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE &&
+    nodeContent.type !== HtNodeWithContentType.AI_AGENT
+  ) {
+    const event = getContentEventArgs(request, nodeContent)
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
   }
 }
 
