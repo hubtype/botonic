@@ -22,7 +22,7 @@ describe('Create nlu intent smart events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 4,
+      format_version: 5,
       action: EventAction.IntentSmart,
       nlu_intent_smart_title: 'ADD_A_BAG',
       nlu_intent_smart_num_used: 2,

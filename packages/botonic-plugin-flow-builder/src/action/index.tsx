@@ -71,7 +71,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       content => content instanceof FlowBotAction
     ) as FlowBotAction
     if (botActionContent) {
-      botActionContent.doBotAction(request)
+      await botActionContent.doBotAction(request)
     }
   }
 
