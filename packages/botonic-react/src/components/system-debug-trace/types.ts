@@ -2,11 +2,18 @@ import React from 'react'
 
 import {
   AiAgentDebugEvent,
+  BotActionDebugEvent,
+  ConditionalChannelDebugEvent,
+  ConditionalCountryDebugEvent,
+  ConditionalCustomDebugEvent,
+  ConditionalQueueStatusDebugEvent,
   FallbackDebugEvent,
   HandoffSuccessDebugEvent,
   KeywordDebugEvent,
   KnowledgeBaseDebugEvent,
+  RedirectFlowDebugEvent,
   SmartIntentDebugEvent,
+  WebviewActionTriggeredDebugEvent,
 } from './events'
 
 export interface IconProps {
@@ -21,6 +28,13 @@ export type DebugEvent =
   | FallbackDebugEvent
   | SmartIntentDebugEvent
   | HandoffSuccessDebugEvent
+  | BotActionDebugEvent
+  | ConditionalChannelDebugEvent
+  | ConditionalCountryDebugEvent
+  | ConditionalCustomDebugEvent
+  | ConditionalQueueStatusDebugEvent
+  | RedirectFlowDebugEvent
+  | WebviewActionTriggeredDebugEvent
 
 export interface DebugEventConfig {
   action: string

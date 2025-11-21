@@ -4,6 +4,10 @@ All notable changes to Botonic will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- [PR-3127](https://github.com/hubtype/botonic/pull/3127): Added new system events in webchat preview.
+
 <details>
   <summary>
     Changes that have landed in master-lts but are not yet released.

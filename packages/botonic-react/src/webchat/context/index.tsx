@@ -1,5 +1,7 @@
 import { createContext } from 'react'
 
+import { ChunkIdsGroupedBySourceData } from '../../components/system-debug-trace/events/knowledge-bases-types'
+import { MinimalHubtypeMessage } from '../../index-types'
 import { WebchatContextProps, WebchatState } from './types'
 
 export { ClientSession, WebchatState } from './types'
@@ -73,6 +75,21 @@ export const WebchatContext = createContext<WebchatContextProps>({
     return
   },
   webchatState: {} as WebchatState,
+  previewUtils: {
+    trackPreviewEventOpened: () => {
+      return
+    },
+    getChunkIdsGroupedBySource: async () => {
+      return [] as ChunkIdsGroupedBySourceData[]
+    },
+    onClickOpenChunks: () => {
+      return
+    },
+    getMessageById: async () => {
+      return {} as MinimalHubtypeMessage
+    },
+  },
+
   trackEvent: async () => {
     return
   },
