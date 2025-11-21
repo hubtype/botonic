@@ -7,6 +7,7 @@ export class HtEventBotAction extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
+  flow_node_is_meaningful: boolean
   payload: string
 
   constructor(event: EventBotAction, requestData: RequestData) {
@@ -18,6 +19,7 @@ export class HtEventBotAction extends HtEvent {
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
+    this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.payload = event.payload
   }
 }

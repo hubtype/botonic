@@ -39,6 +39,7 @@ export interface HtBaseEventAllFlowProps extends HtBaseEventProps {
   flowName: string
   flowNodeId: string
   flowNodeContentId: string
+  flowNodeIsMeaningful: boolean
 }
 
 export interface EventFeedback extends HtBaseEventProps {
@@ -183,7 +184,6 @@ export interface EventWebviewActionTriggered extends HtBaseEventAllFlowProps {
 
 export interface EventAiAgent extends HtBaseEventAllFlowProps {
   action: EventAction.AiAgent
-  flowNodeIsMeaningful: boolean
   toolsExecuted: ToolExecution[]
   inputMessageId: string
   memoryLength: number

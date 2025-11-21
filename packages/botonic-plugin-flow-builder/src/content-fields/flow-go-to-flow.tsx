@@ -19,6 +19,7 @@ export class FlowGoToFlow extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): FlowGoToFlow {
     const newGoToFlow = new FlowGoToFlow(component.id)
+    newGoToFlow.code = component.code
     newGoToFlow.flowTargetId = component.content.flow_id
     const targetId = cmsApi.getNodeByFlowId(component.content.flow_id).id
     newGoToFlow.targetId = targetId
@@ -37,9 +38,10 @@ export class FlowGoToFlow extends ContentFieldsBase {
       flowId,
       flowName,
       flowNodeId,
-      flowNodeContentId,
+      flowNodeContentId: flowNodeContentId || 'Go to flow',
       flowTargetId: this.flowTargetId,
       flowTargetName: this.flowTargetName,
+      flowNodeIsMeaningful: false,
     }
     const { action, ...eventArgs } = eventGoToFlow
     await trackEvent(request, action, eventArgs)

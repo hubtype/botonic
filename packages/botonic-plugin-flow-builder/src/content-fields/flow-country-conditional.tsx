@@ -55,6 +55,7 @@ export class FlowCountryConditional extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
+      flowNodeIsMeaningful: false,
       country: this.conditionalResult?.result ?? '',
     }
     const { action, ...eventArgs } = eventCountryConditional

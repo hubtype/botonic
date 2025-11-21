@@ -35,6 +35,7 @@ export class FlowBotAction extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
+      flowNodeIsMeaningful: false,
       payload: this.payload,
     }
     const { action, ...eventArgs } = eventBotAction

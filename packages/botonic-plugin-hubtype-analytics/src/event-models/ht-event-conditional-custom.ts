@@ -12,6 +12,7 @@ export class HtEventConditionalCustom extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
+  flow_node_is_meaningful: boolean
   conditional_variable: string
   variable_format: string
 
@@ -25,6 +26,7 @@ export class HtEventConditionalCustom extends HtEvent {
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
     this.conditional_variable = event.conditionalVariable
+    this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.variable_format = event.variableFormat
   }
 }

@@ -115,6 +115,7 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
+      flowNodeIsMeaningful: false,
       queueId: this.queueId,
       queueName: this.queueName,
       isQueueOpen: this.isQueueOpen,

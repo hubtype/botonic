@@ -12,6 +12,7 @@ export class HtEventConditionalQueueStatus extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
+  flow_node_is_meaningful: boolean
   queue_id: string
   queue_name: string
   is_queue_open: boolean
@@ -26,6 +27,7 @@ export class HtEventConditionalQueueStatus extends HtEvent {
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
+    this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.queue_id = event.queueId
     this.queue_name = event.queueName
     this.is_queue_open = event.isQueueOpen

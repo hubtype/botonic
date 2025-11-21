@@ -19,7 +19,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
   public arguments: HtFunctionArguments[] = []
   public resultMapping: HtFunctionResult[]
   public conditionalResult?: HtFunctionResult = undefined
-  public customResult: string = ''
+  public customResult: boolean = false
   public variableFormat: string = ''
 
   static fromHubtypeCMS(
@@ -66,7 +66,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
     }
 
     this.conditionalResult = conditionalResult
-    this.customResult = conditionalResult.result
+    this.customResult = conditionalResult.result as unknown as boolean
     this.followUp = conditionalResult.target
   }
 
@@ -85,7 +85,8 @@ export class FlowCustomConditional extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
-      conditionalVariable: this.customResult,
+      flowNodeIsMeaningful: false,
+      conditionalVariable: this.customResult.toString(),
       variableFormat: this.variableFormat,
     }
     const { action, ...eventArgs } = eventCustomConditional

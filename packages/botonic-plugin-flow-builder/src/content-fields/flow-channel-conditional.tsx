@@ -53,6 +53,7 @@ export class FlowChannelConditional extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
+      flowNodeIsMeaningful: false,
       channel: this.channelResult,
     }
     const { action, ...eventArgs } = eventChannelConditional
