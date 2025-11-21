@@ -1,13 +1,21 @@
 import { EventAction } from '@botonic/core'
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
+import { WebchatContext } from '../../webchat/context'
 import {
   getAiAgentEventConfig,
+  getBotActionEventConfig,
+  getConditionalChannelEventConfig,
+  getConditionalCountryEventConfig,
+  getConditionalCustomEventConfig,
+  getConditionalQueueStatusEventConfig,
   getFallbackEventConfig,
   getHandoffSuccessEventConfig,
   getKeywordEventConfig,
   getKnowledgeBaseEventConfig,
+  getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
+  getWebviewActionTriggeredEventConfig,
 } from './events'
 import { useLastLabelPosition } from './hooks/use-last-label-position'
 import { CaretDownSvg, CaretUpSvg } from './icons'
@@ -38,6 +46,20 @@ const getEventConfig = (
       return getKnowledgeBaseEventConfig(debugEvent)
     case EventAction.Fallback:
       return getFallbackEventConfig(debugEvent)
+    case EventAction.BotAction:
+      return getBotActionEventConfig(debugEvent)
+    case EventAction.ConditionalChannel:
+      return getConditionalChannelEventConfig(debugEvent)
+    case EventAction.ConditionalCountry:
+      return getConditionalCountryEventConfig(debugEvent)
+    case EventAction.ConditionalCustom:
+      return getConditionalCustomEventConfig(debugEvent)
+    case EventAction.ConditionalQueueStatus:
+      return getConditionalQueueStatusEventConfig(debugEvent)
+    case EventAction.RedirectFlow:
+      return getRedirectFlowEventConfig(debugEvent)
+    case EventAction.WebviewActionTriggered:
+      return getWebviewActionTriggeredEventConfig(debugEvent)
     default:
       return undefined
   }
@@ -51,7 +73,7 @@ interface DebugMessageProps {
 export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
-
+  const { previewUtils } = useContext(WebchatContext)
   const eventConfig = getEventConfig(debugEvent)
 
   useLastLabelPosition({
@@ -60,6 +82,12 @@ export const DebugMessage = ({ debugEvent, messageId }: DebugMessageProps) => {
     debugEvent,
     isCollapsible: eventConfig?.collapsible ?? false,
   })
+
+  useEffect(() => {
+    if (isExpanded) {
+      previewUtils?.trackPreviewEventOpened?.({ action: debugEvent.action })
+    }
+  }, [previewUtils, isExpanded, debugEvent])
 
   if (!eventConfig) {
     return null
