@@ -41,7 +41,7 @@ export class FlowBotAction extends ContentFieldsBase {
     await trackEvent(request, action, eventArgs)
   }
 
-  async doBotAction(request: ActionRequest): Promise<void> {
+  doBotAction(request: ActionRequest): void {
     request.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
   }
 
