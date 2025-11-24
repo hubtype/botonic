@@ -96,15 +96,12 @@ export const StyledDebugContent = styled.div`
   line-height: 1.5;
   color: ${COLORS.N700};
 `
-interface StyledDebugDetailProps {
-  $isLastItem?: boolean
-}
-export const StyledDebugDetail = styled.div<StyledDebugDetailProps>`
+
+export const StyledDebugDetail = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 0 28px;
-  margin-bottom: ${({ $isLastItem }) => ($isLastItem ? '0' : '8px')};
   line-height: 1.5;
   width: 100%;
   min-width: 0;
@@ -120,13 +117,14 @@ export const StyledDebugLabel = styled.strong`
 `
 
 export const StyledDebugValue = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-weight: 600;
   font-size: 12px;
   color: ${COLORS.N700};
   line-height: 1.5;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
 
   > svg {
     width: 14px;
@@ -134,7 +132,9 @@ export const StyledDebugValue = styled.div`
     min-width: 14px;
     min-height: 14px;
     flex-shrink: 0;
-    display: block;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
   }
 `
 
@@ -198,7 +198,7 @@ export const StyledSeeChunksButton = styled.button`
   width: fit-content;
 
   &:hover {
-    background-color: ${COLORS.N200};
+    background-color: ${COLORS.N100};
   }
 `
 interface StyledGuardrailItemProps {
@@ -229,6 +229,7 @@ export const StyledDebugContentWrapper = styled.div`
   width: 100%;
   min-width: 0;
   overflow: hidden;
+  margin-bottom: 8px;
 
   /* Create line from first label to last label */
   &::before {

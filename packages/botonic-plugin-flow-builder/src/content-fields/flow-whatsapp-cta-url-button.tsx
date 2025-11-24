@@ -9,12 +9,12 @@ import {
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
+import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtUrlNode, HtWhatsappCTAUrlButtonNode } from './hubtype-fields'
 
 export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
-  public code = ''
   public text = ''
   public header?: string
   public headerType?: WhatsappCTAUrlHeaderType
@@ -56,6 +56,8 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       const urlNode = cmsApi.getNodeById<HtUrlNode>(urlId)
       whatsappCtaUrlButton.url = urlNode.content.url
     }
+    whatsappCtaUrlButton.followUp = component.follow_up
+
     return whatsappCtaUrlButton
   }
 
@@ -108,6 +110,10 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
         component.content.header_document
       )
     }
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    await trackOneContent(request, this)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {

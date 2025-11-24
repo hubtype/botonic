@@ -45,7 +45,7 @@ describe('Check tracked events when a bot generates a response using a knowledge
       },
     })
 
-    expect(trackEventMock).toHaveBeenCalledTimes(3)
+    expect(trackEventMock).toHaveBeenCalledTimes(4)
     expect(trackEventMock).toHaveBeenNthCalledWith(
       1,
       expect.anything(),

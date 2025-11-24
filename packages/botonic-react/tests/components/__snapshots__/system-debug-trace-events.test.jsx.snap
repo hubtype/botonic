@@ -1,18 +1,34 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`System Debug Trace - Event Components HandoffSuccess Component matches snapshot 1`] = `
-<div
-  className="sc-gsFSXq hsyeoP"
->
-  <strong
-    className="sc-kAyceB DSINm"
-  >
-    Queue
-  </strong>
+[
   <div
-    className="sc-imWYAI devbtc"
+    className="sc-gsFSXq eLrleL"
   >
-    Test Queue
-  </div>
-</div>
+    <strong
+      className="sc-kAyceB DSINm"
+    >
+      Queue
+    </strong>
+    <div
+      className="sc-imWYAI hVMbiq"
+    >
+      Test Queue
+    </div>
+  </div>,
+  <div
+    className="sc-gsFSXq eLrleL"
+  >
+    <strong
+      className="sc-kAyceB DSINm"
+    >
+      Auto-assign
+    </strong>
+    <div
+      className="sc-imWYAI hVMbiq"
+    >
+      OFF
+    </div>
+  </div>,
+]
 `;

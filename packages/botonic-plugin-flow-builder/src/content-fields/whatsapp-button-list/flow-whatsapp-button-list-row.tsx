@@ -1,4 +1,4 @@
-import { WhatsappButtonListRowProps } from '@botonic/react'
+import { ActionRequest, WhatsappButtonListRowProps } from '@botonic/react'
 
 import { FlowBuilderApi } from '../../api'
 import { SOURCE_INFO_SEPARATOR } from '../../constants'
@@ -19,7 +19,13 @@ export class FlowWhatsappButtonListRow extends ContentFieldsBase {
     newRow.title = this.getTextByLocale(locale, component.text)
     newRow.description = this.getTextByLocale(locale, component.description)
     newRow.targetId = cmsApi.getPayload(component.target)
+
     return newRow
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // Not apply for this content, because it is a child of the FlowWhatsappButtonList content
   }
 
   toBotonic(

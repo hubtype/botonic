@@ -2,6 +2,7 @@ import { EventAction, EventFlow } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
+import { FlowBuilderApi } from './api'
 import { FlowContent } from './content-fields'
 import {
   HtNodeWithContent,
@@ -28,27 +29,46 @@ export async function trackFlowContent(
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
   for (const content of contents) {
-    const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
-    if (
-      nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE &&
-      nodeContent.type !== HtNodeWithContentType.AI_AGENT
-    ) {
-      const event = getContentEventArgs(request, nodeContent)
-      const { action, ...eventArgs } = event
-      await trackEvent(request, action, eventArgs)
-    }
+    await trackOneContent(request, content, cmsApi)
   }
+}
+
+export async function trackOneContent(
+  request: ActionRequest,
+  content: FlowContent,
+  cmsApi?: FlowBuilderApi
+) {
+  if (!cmsApi) {
+    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+    cmsApi = flowBuilderPlugin.cmsApi
+  }
+
+  const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(content.id)
+  if (
+    nodeContent.type !== HtNodeWithContentType.KNOWLEDGE_BASE &&
+    nodeContent.type !== HtNodeWithContentType.AI_AGENT
+  ) {
+    const event = getContentEventArgs(request, nodeContent)
+    const { action, ...eventArgs } = event
+    await trackEvent(request, action, eventArgs)
+  }
+}
+
+function setSessionFlowThreadId(
+  request: ActionRequest,
+  flowThreadId: string
+): void {
+  request.session.flow_thread_id = flowThreadId
 }
 
 function getContentEventArgs(
   request: ActionRequest,
   nodeContent: HtNodeWithContent
 ): EventFlow {
-  const { flowId, flowName, flowNodeId, flowNodeContentId } =
+  const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
     getCommonFlowContentEventArgs(request, nodeContent)
 
-  const flowThreadId = request.session.flow_thread_id ?? uuidv7()
-  request.session.flow_thread_id = flowThreadId
+  setSessionFlowThreadId(request, flowThreadId)
 
   return {
     action: EventAction.FlowNode,
@@ -62,6 +82,7 @@ function getContentEventArgs(
 }
 
 type CommonFlowContentEventArgs = {
+  flowThreadId: string
   flowId: string
   flowName: string
   flowNodeId: string
@@ -74,8 +95,10 @@ function getCommonFlowContentEventArgs(
 ): CommonFlowContentEventArgs {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const flowName = flowBuilderPlugin.getFlowName(nodeContent.flow_id)
+  const flowThreadId = request.session.flow_thread_id ?? uuidv7()
 
   return {
+    flowThreadId,
     flowId: nodeContent.flow_id,
     flowName,
     flowNodeId: nodeContent.id,

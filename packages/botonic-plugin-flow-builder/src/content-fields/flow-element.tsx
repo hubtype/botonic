@@ -1,5 +1,5 @@
 import { Button } from '@botonic/core'
-import { Element, Pic, Subtitle, Title } from '@botonic/react'
+import { ActionRequest, Element, Pic, Subtitle, Title } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
@@ -49,6 +49,12 @@ export class FlowElement extends ContentFieldsBase {
       url: element.button.url,
     })
     return newElement
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    if (this.button) {
+      await this.button.trackFlow(request)
+    }
   }
 
   toBotonic(parentId: string): JSX.Element {

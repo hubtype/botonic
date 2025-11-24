@@ -1,7 +1,8 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowBuilderAction, FlowText } from '../src/index'
+import { FlowBuilderAction } from '../src/action/index'
+import { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
@@ -29,8 +30,9 @@ describe('Check the contents returned by the plugin in first interaction', () =>
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(2)
+    expect((contents[1] as FlowText).text).toBe('Welcome message')
+    expect((contents[2] as FlowText).text).toBe('How can I help you?')
+    expect((contents[2] as FlowText).buttons.length).toBe(5)
   })
 
   test('The start contents is displayed because user input matches a keyword or intent that points to the first content', async () => {
@@ -42,8 +44,8 @@ describe('Check the contents returned by the plugin in first interaction', () =>
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(2)
+    expect((contents[1] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(3)
   })
 
   test('The start contents are displayed followed by more contents obtained by matching a keyword', async () => {
@@ -55,9 +57,9 @@ describe('Check the contents returned by the plugin in first interaction', () =>
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(3)
-    expect((contents[2] as FlowText).text).toBe('All types of messages')
+    expect((contents[1] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(4)
+    expect((contents[3] as FlowText).text).toBe('All types of messages')
   })
 })
 
@@ -81,6 +83,7 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
       actionRequest,
       contentID
     )
+
     expect(contents.length).toBe(1)
     expect((contents[0] as FlowText).text).toBe('How can I help you?')
     expect((contents[0] as FlowText).buttons.length).toBe(5)
@@ -104,8 +107,9 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
       actionRequest,
       contentID
     )
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(2)
+
+    expect((contents[1] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(3)
   })
 })
 
@@ -126,9 +130,9 @@ describe('Check the contents returned by the plugin in first interaction with sm
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe('Welcome message')
-    expect(contents.length).toBe(3)
-    expect((contents[2] as FlowText).text).toBe(
+    expect((contents[1] as FlowText).text).toBe('Welcome message')
+    expect(contents.length).toBe(4)
+    expect((contents[3] as FlowText).text).toBe(
       'Message explaining how to add a bag'
     )
   })
@@ -170,8 +174,8 @@ describe('Check the contents returned by the plugin in first interaction with kn
     })
 
     expect((contents[0] as FlowText).text).toBe('Welcome')
-    expect(contents.length).toBe(4)
-    expect((contents[2] as FlowText).text).toBe(answer)
-    expect((contents[3] as FlowText).text).toBe('FollowUp Knowledge base')
+    expect(contents.length).toBe(5)
+    expect((contents[3] as FlowText).text).toBe(answer)
+    expect((contents[4] as FlowText).text).toBe('FollowUp Knowledge base')
   })
 })

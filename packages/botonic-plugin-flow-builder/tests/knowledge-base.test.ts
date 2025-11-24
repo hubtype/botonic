@@ -1,7 +1,11 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src'
+import {
+  FlowCountryConditional,
+  FlowKnowledgeBase,
+  FlowText,
+} from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
@@ -40,13 +44,16 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe(
-      'message Spain before knowledge response'
-    )
+    expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
 
     expect((contents[1] as FlowText).text).toBe(
+      'message Spain before knowledge response'
+    )
+    expect(contents[2]).toBeInstanceOf(FlowKnowledgeBase)
+    expect((contents[2] as FlowKnowledgeBase).text).toBe(
       'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
     )
+    expect((contents[3] as FlowText).text).toBe('FollowUp Knowledge base')
   })
 
   test('Knowledge base response is not allowed when user is in handoff with shadowing', async () => {
@@ -103,13 +110,15 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe(
+    expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
+    expect((contents[1] as FlowText).text).toBe(
       'message Spain before knowledge response'
     )
-
-    expect((contents[1] as FlowText).text).toBe(
+    expect(contents[2]).toBeInstanceOf(FlowKnowledgeBase)
+    expect((contents[2] as FlowKnowledgeBase).text).toBe(
       'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
     )
+    expect((contents[3] as FlowText).text).toBe('FollowUp Knowledge base')
   })
 
   test('When the knowledge base flow does not end with a knowledge base node', async () => {
@@ -139,9 +148,9 @@ describe('Check the contents returned by the plugin when it use a knowledge base
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe('message Other country')
-
-    expect((contents[0] as FlowText).buttons.length).toBe(2)
+    expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
+    expect((contents[1] as FlowText).text).toBe('message Other country')
+    expect((contents[1] as FlowText).buttons.length).toBe(2)
   })
 
   test("When the knowledge base's response does not have sufficient knowledge, the fallback content is displayed.", async () => {

@@ -16,31 +16,15 @@ import {
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import {
-  FlowAiAgent,
-  FlowBotAction,
-  FlowCarousel,
-  FlowContent,
-  FlowHandoff,
-  FlowImage,
-  FlowKnowledgeBase,
-  FlowRating,
-  FlowText,
-  FlowVideo,
-  FlowWhatsappButtonList,
-  FlowWhatsappCtaUrlButtonNode,
-} from './content-fields'
+import { FlowContent } from './content-fields'
 import {
   HtBotActionNode,
   HtFlowBuilderData,
-  HtFunctionArgument,
-  HtFunctionArguments,
-  HtFunctionNode,
-  HtNodeComponent,
   HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
-import { DEFAULT_FUNCTIONS } from './functions'
+import { FlowFactory } from './flow-factory'
+import { CustomFunction, DEFAULT_FUNCTION_NAMES } from './functions'
 import {
   AiAgentFunction,
   BotonicPluginFlowBuilderOptions,
@@ -89,7 +73,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       useLatest: this.jsonVersion === FlowBuilderJSONVersion.LATEST,
     }
     const customFunctions = options.customFunctions || {}
-    this.functions = { ...DEFAULT_FUNCTIONS, ...customFunctions }
+    this.functions = customFunctions
     this.inShadowing = {
       allowKeywords: options.inShadowing?.allowKeywords || false,
       allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
@@ -207,12 +191,25 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     const contents = prevContents || []
     const resolvedLocale = this.cmsApi.getResolvedLocale()
 
-    if (node.type === HtNodeWithContentType.FUNCTION) {
-      const targetId = await this.callFunction(node, resolvedLocale)
+    if (
+      node.type === HtNodeWithContentType.FUNCTION &&
+      !DEFAULT_FUNCTION_NAMES.includes(node.content.action)
+    ) {
+      const customFunctionResolver = new CustomFunction(
+        this.functions,
+        this.currentRequest,
+        resolvedLocale
+      )
+      const targetId = await customFunctionResolver.call(node)
       return this.getContentsById(targetId, contents)
     }
 
-    const content = this.getFlowContent(node, resolvedLocale)
+    const flowFactory = new FlowFactory(
+      this.currentRequest,
+      this.cmsApi,
+      resolvedLocale
+    )
+    const content = await flowFactory.getFlowContent(node)
     if (content) {
       contents.push(content)
     }
@@ -223,107 +220,14 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     // TODO: prevent infinite recursive calls
-    if (node.follow_up) {
+    if (content && content.followUp) {
+      return this.getContentsById(content.followUp.id, contents)
+    } else if (node.follow_up) {
+      console.log('FOLLOWUP FROM NODE-------> OLD SYSTEM')
       return this.getContentsById(node.follow_up.id, contents)
     }
 
     return contents
-  }
-
-  private getFlowContent(
-    hubtypeContent: HtNodeComponent,
-    locale: string
-  ): FlowContent | undefined {
-    switch (hubtypeContent.type) {
-      case HtNodeWithContentType.TEXT:
-        return FlowText.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-      case HtNodeWithContentType.IMAGE:
-        return FlowImage.fromHubtypeCMS(hubtypeContent, locale)
-      case HtNodeWithContentType.CAROUSEL:
-        return FlowCarousel.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-      case HtNodeWithContentType.VIDEO:
-        return FlowVideo.fromHubtypeCMS(hubtypeContent, locale)
-      case HtNodeWithContentType.WHATSAPP_BUTTON_LIST:
-        return FlowWhatsappButtonList.fromHubtypeCMS(
-          hubtypeContent,
-          locale,
-          this.cmsApi
-        )
-      case HtNodeWithContentType.WHATSAPP_CTA_URL_BUTTON:
-        return FlowWhatsappCtaUrlButtonNode.fromHubtypeCMS(
-          hubtypeContent,
-          locale,
-          this.cmsApi
-        )
-      case HtNodeWithContentType.HANDOFF:
-        return FlowHandoff.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-
-      case HtNodeWithContentType.KNOWLEDGE_BASE:
-        return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
-
-      case HtNodeWithContentType.AI_AGENT:
-        return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
-
-      case HtNodeWithContentType.RATING:
-        return FlowRating.fromHubtypeCMS(hubtypeContent, locale)
-
-      case HtNodeWithContentType.BOT_ACTION:
-        return FlowBotAction.fromHubtypeCMS(hubtypeContent, locale, this.cmsApi)
-
-      default:
-        return undefined
-    }
-  }
-
-  private async callFunction(
-    functionNode: HtFunctionNode,
-    locale: string
-  ): Promise<string> {
-    const functionNodeId = functionNode.id
-    const functionArguments = this.getArgumentsByLocale(
-      functionNode.content.arguments,
-      locale
-    )
-    const nameValues = functionArguments.map(arg => {
-      return { [arg.name]: arg.value }
-    })
-
-    const args = Object.assign(
-      {
-        request: this.currentRequest,
-        results: functionNode.content.result_mapping.map(r => r.result),
-      },
-      ...nameValues
-    )
-    const functionResult =
-      await this.functions[functionNode.content.action](args)
-    // TODO define result_mapping per locale??
-    const result = functionNode.content.result_mapping.find(
-      r => r.result === functionResult
-    )
-    if (!result?.target) {
-      throw new Error(
-        `No result found for result_mapping for node with id: ${functionNodeId}`
-      )
-    }
-    return result.target.id
-  }
-
-  private getArgumentsByLocale(
-    args: HtFunctionArguments[],
-    locale: string
-  ): HtFunctionArgument[] {
-    let resultArguments: HtFunctionArgument[] = []
-    for (const arg of args) {
-      if ('locale' in arg && arg.locale === locale) {
-        resultArguments = [...resultArguments, ...arg.values]
-      }
-      if ('type' in arg) {
-        resultArguments = [...resultArguments, arg]
-      }
-    }
-
-    return resultArguments
   }
 
   getPayloadParams<T extends PayloadParamsBase>(payload: string): T {

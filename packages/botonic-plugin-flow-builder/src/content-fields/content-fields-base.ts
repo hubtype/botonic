@@ -1,12 +1,20 @@
+import { ActionRequest } from '@botonic/react'
+
 import {
   HtMediaFileLocale,
+  HtNodeLink,
   HtQueueLocale,
   HtTextLocale,
   HtVideoLocale,
 } from './hubtype-fields'
 
 export abstract class ContentFieldsBase {
+  public code: string
+  public followUp?: HtNodeLink
+
   constructor(public readonly id: string) {}
+
+  abstract trackFlow(request: ActionRequest): Promise<void>
 
   static getTextByLocale(locale: string, text: HtTextLocale[]): string {
     const result = text.find(t => t.locale === locale)

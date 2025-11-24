@@ -1,7 +1,11 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import {
+  FlowHandoff,
+  FlowQueueStatusConditional,
+  FlowText,
+} from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockQueueAvailability } from './__mocks__/conditional-queue'
@@ -21,9 +25,11 @@ describe('Check the content returned by the plugin, when the queue is open', () 
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe(
+    expect(contents[0]).toBeInstanceOf(FlowQueueStatusConditional)
+    expect((contents[1] as FlowText).text).toBe(
       'Soon you will be served by a human agent'
     )
+    expect(contents[2]).toBeInstanceOf(FlowHandoff)
     expect(request.session._botonic_action).toBeDefined()
   })
 })
@@ -41,7 +47,8 @@ describe('The content connected to the closed queue status is displayed and the 
       },
     })
 
-    expect((contents[0] as FlowText).text).toBe(
+    expect(contents[0]).toBeInstanceOf(FlowQueueStatusConditional)
+    expect((contents[1] as FlowText).text).toBe(
       'At the moment we are out of office hours'
     )
     expect(request.session._botonic_action).toBeUndefined()
