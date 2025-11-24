@@ -46,6 +46,7 @@ describe('Track redirect flow', () => {
         flowNodeId: '019aa152-d310-769f-be54-318e68352bcb',
         flowTargetId: '019aa153-cc65-716a-88e5-fc0bc43d9f1e',
         flowTargetName: 'Second flow',
+        flowNodeIsMeaningful: false,
         flowThreadId: expect.anything(),
       }
     )

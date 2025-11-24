@@ -48,6 +48,7 @@ describe('Track conditional custom', () => {
         flowNodeContentId: 'BOOKING_TYPE_CONDITIONAL',
         flowNodeId: '70f5a184-4949-45a0-8651-d0c90dee32f1',
         flowThreadId: 'testFlowThreadId',
+        flowNodeIsMeaningful: false,
         variableFormat: 'string',
       }
     )

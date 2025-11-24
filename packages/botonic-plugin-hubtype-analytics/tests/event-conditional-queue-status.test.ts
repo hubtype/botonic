@@ -11,6 +11,7 @@ describe('Create conditional queue status event', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       queueId: 'queueIdTest',
       queueName: 'queueNameTest',
       isQueueOpen: true,
@@ -29,6 +30,7 @@ describe('Create conditional queue status event', () => {
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
+      flow_node_is_meaningful: false,
       queue_id: 'queueIdTest',
       queue_name: 'queueNameTest',
       is_queue_open: true,
@@ -38,4 +40,3 @@ describe('Create conditional queue status event', () => {
     })
   })
 })
-

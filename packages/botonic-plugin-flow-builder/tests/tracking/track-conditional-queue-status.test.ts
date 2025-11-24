@@ -55,6 +55,7 @@ describe('Track conditional queue status', () => {
         flowNodeContentId: 'QUEUE-STATUS_48',
         flowNodeId: '3b363ae7-c7e5-4e6a-9df0-333cb2667637',
         flowThreadId: 'testFlowThreadId',
+        flowNodeIsMeaningful: false,
         isAvailableAgent: false,
         isQueueOpen: true,
         queueId: 'e7a2304d-f73c-409d-b272-239a9b8a9e0e',

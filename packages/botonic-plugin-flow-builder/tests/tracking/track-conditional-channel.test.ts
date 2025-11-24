@@ -51,6 +51,7 @@ describe('Track conditional channel', () => {
         flowNodeContentId: 'CHANNEL_CONDITIONAL',
         flowNodeId: 'ddaf7bf5-0677-4a59-89e0-c3859a6fb7ce',
         flowThreadId: 'testFlowThreadId',
+        flowNodeIsMeaningful: false,
       }
     )
     expect(trackEventMock).toHaveBeenNthCalledWith(

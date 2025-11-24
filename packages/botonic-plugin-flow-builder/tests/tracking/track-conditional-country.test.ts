@@ -55,6 +55,7 @@ describe('Track conditional country', () => {
         flowNodeContentId: 'COUNTRY_CONDITIONAL',
         flowNodeId: 'c16d06b0-7b05-4771-94fe-065357bd6407',
         flowThreadId: 'testFlowThreadId',
+        flowNodeIsMeaningful: false,
       }
     )
     expect(trackEventMock).toHaveBeenNthCalledWith(
