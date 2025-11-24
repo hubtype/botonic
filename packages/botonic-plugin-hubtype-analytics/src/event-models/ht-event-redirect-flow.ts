@@ -9,6 +9,7 @@ export class HtEventRedirectFlow extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
+  flow_node_is_meaningful: boolean
   flow_target_id: string
   flow_target_name: string
 
@@ -21,6 +22,7 @@ export class HtEventRedirectFlow extends HtEvent {
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
+    this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.flow_target_id = event.flowTargetId
     this.flow_target_name = event.flowTargetName
   }

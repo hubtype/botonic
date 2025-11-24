@@ -15,7 +15,6 @@ import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import BotonicPluginFlowBuilder from '../index'
-import { trackFlowContent } from '../tracking'
 import { inputHasTextData } from '../utils'
 import { getContentsByAiAgent } from './ai-agent'
 import { getContentsByFallback } from './fallback'
@@ -38,7 +37,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const context = getContext(request)
     const contents = await getContentsByFirstInteraction(context)
     const filteredContents = await filterContents(request, contents)
-    await trackFlowContent(request, filteredContents)
+    await FlowBuilderAction.trackAllContents(request, filteredContents)
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
     return { contents: filteredContents }
@@ -50,10 +49,19 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
     const filteredContents = await filterContents(request, contents)
-    await trackFlowContent(request, filteredContents)
+    await FlowBuilderAction.trackAllContents(request, filteredContents)
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
     return { contents: filteredContents }
+  }
+
+  static async trackAllContents(
+    request: ActionRequest,
+    contents: FlowContent[]
+  ) {
+    for (const content of contents) {
+      await content.trackFlow(request)
+    }
   }
 
   static async doHandoffAndBotActions(
@@ -71,7 +79,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       content => content instanceof FlowBotAction
     ) as FlowBotAction
     if (botActionContent) {
-      await botActionContent.doBotAction(request)
+      botActionContent.doBotAction(request)
     }
   }
 

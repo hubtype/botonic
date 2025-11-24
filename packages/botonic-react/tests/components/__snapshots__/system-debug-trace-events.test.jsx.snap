@@ -3,7 +3,7 @@
 exports[`System Debug Trace - Event Components HandoffSuccess Component matches snapshot 1`] = `
 [
   <div
-    className="sc-gsFSXq hsyeoP"
+    className="sc-gsFSXq eLrleL"
   >
     <strong
       className="sc-kAyceB DSINm"
@@ -17,7 +17,7 @@ exports[`System Debug Trace - Event Components HandoffSuccess Component matches 
     </div>
   </div>,
   <div
-    className="sc-gsFSXq hsyeoP"
+    className="sc-gsFSXq eLrleL"
   >
     <strong
       className="sc-kAyceB DSINm"

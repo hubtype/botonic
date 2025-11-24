@@ -3,12 +3,12 @@ import { ActionRequest, Button, Text, WhatsappButtonList } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../../api'
+import { trackOneContent } from '../../tracking'
 import { ContentFieldsBase } from '../content-fields-base'
 import { HtWhatsappButtonListNode } from '../hubtype-fields'
 import { FlowWhatsappButtonListSection } from './flow-whatsapp-button-list-section'
 
 export class FlowWhatsappButtonList extends ContentFieldsBase {
-  public code = ''
   public text = ''
   public listButtonText = ''
   public sections: FlowWhatsappButtonListSection[] = []
@@ -31,7 +31,13 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     newWhatsappButtonList.sections = component.content.sections.map(section =>
       FlowWhatsappButtonListSection.fromHubtypeCMS(section, locale, cmsApi)
     )
+    newWhatsappButtonList.followUp = component.follow_up
+
     return newWhatsappButtonList
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    await trackOneContent(request, this)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {

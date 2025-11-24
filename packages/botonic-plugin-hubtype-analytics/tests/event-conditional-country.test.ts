@@ -11,6 +11,7 @@ describe('Create conditional country event', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       country: 'ES',
     })
 
@@ -25,6 +26,7 @@ describe('Create conditional country event', () => {
       flow_id: 'flowIdTest',
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
+      flow_node_is_meaningful: false,
       flow_node_content_id: 'flowNodeContentIdTest',
       country: 'ES',
       bot_interaction_id: 'testInteractionId',

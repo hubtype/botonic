@@ -3,7 +3,7 @@ import { jest } from '@jest/globals'
 import {
   AvailabilityData,
   HubtypeQueuesApi,
-} from '../../src/functions/conditional-queue-status'
+} from '../../src/services/hubtype-queues-api'
 
 interface QueueAvailabilityMockOptions {
   availableAgents?: number

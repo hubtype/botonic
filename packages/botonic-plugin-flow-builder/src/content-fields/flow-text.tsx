@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FlowBuilderApi } from '../api'
 import { ACCESS_TOKEN_VARIABLE_KEY, VARIABLE_PATTERN } from '../constants'
+import { trackOneContent } from '../tracking'
 import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
@@ -10,7 +11,6 @@ import { HtButtonStyle, HtTextNode } from './hubtype-fields'
 
 export class FlowText extends ContentFieldsBase {
   public text = ''
-  public code = ''
   public buttons: FlowButton[] = []
   public buttonStyle = HtButtonStyle.BUTTON
 
@@ -26,6 +26,8 @@ export class FlowText extends ContentFieldsBase {
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )
+    newText.followUp = cmsText.follow_up
+
     return newText
   }
 
@@ -53,6 +55,13 @@ export class FlowText extends ContentFieldsBase {
   private static isValidType(botVariable: any): boolean {
     const validTypes = ['boolean', 'string', 'number']
     return validTypes.includes(typeof botVariable)
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    await trackOneContent(request, this)
+    for (const button of this.buttons) {
+      await button.trackFlow(request)
+    }
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {

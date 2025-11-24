@@ -55,10 +55,10 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
     }
   >
     <div
-      className="sc-jlZhew kkfNYh"
+      className="sc-jlZhew SyVDK"
     >
       <div
-        className="sc-gsFSXq hsyeoP"
+        className="sc-gsFSXq eLrleL"
       >
         <strong
           className="sc-kAyceB DSINm"
@@ -160,10 +160,10 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
     }
   >
     <div
-      className="sc-jlZhew kkfNYh"
+      className="sc-jlZhew SyVDK"
     >
       <div
-        className="sc-gsFSXq hsyeoP"
+        className="sc-gsFSXq eLrleL"
       >
         <strong
           className="sc-kAyceB DSINm"
@@ -175,7 +175,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
         />
       </div>
       <div
-        className="sc-gsFSXq hsyeoP"
+        className="sc-gsFSXq eLrleL"
       >
         <strong
           className="sc-kAyceB DSINm"

@@ -16,6 +16,7 @@ describe('Create webview events', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       webviewTargetId: 'webviewTargetIdTest',
       webviewName: 'ADD_A_BAG',
     })
@@ -32,6 +33,7 @@ describe('Create webview events', () => {
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
+      flow_node_is_meaningful: false,
       webview_target_id: 'webviewTargetIdTest',
       webview_name: 'ADD_A_BAG',
       bot_interaction_id: 'testInteractionId',

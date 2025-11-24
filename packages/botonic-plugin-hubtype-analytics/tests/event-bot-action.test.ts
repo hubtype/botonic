@@ -11,6 +11,7 @@ describe('Create bot action event', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       payload: 'payloadTest',
     })
 
@@ -26,10 +27,10 @@ describe('Create bot action event', () => {
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
+      flow_node_is_meaningful: false,
       payload: 'payloadTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
   })
 })
-

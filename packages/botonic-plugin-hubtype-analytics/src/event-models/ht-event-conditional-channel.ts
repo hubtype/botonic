@@ -12,6 +12,7 @@ export class HtEventConditionalChannel extends HtEvent {
   flow_name: string
   flow_node_id: string
   flow_node_content_id: string
+  flow_node_is_meaningful: boolean
   channel: string
 
   constructor(event: EventConditionalChannel, requestData: RequestData) {
@@ -23,6 +24,7 @@ export class HtEventConditionalChannel extends HtEvent {
     this.flow_name = event.flowName
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
+    this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.channel = event.channel
   }
 }

@@ -11,6 +11,7 @@ describe('Create conditional channel event', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       channel: 'webchat',
     })
 
@@ -26,6 +27,7 @@ describe('Create conditional channel event', () => {
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
+      flow_node_is_meaningful: false,
       channel: 'webchat',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,

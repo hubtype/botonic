@@ -7,12 +7,12 @@ import {
 } from '@botonic/react'
 
 import { getFlowBuilderPlugin } from '../helpers'
+import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtRatingNode, RatingType } from './hubtype-fields'
 
 export class FlowRating extends ContentFieldsBase {
-  public code = ''
   public text = ''
   public sendButtonText = ''
   public ratingType = RatingType.Stars
@@ -35,8 +35,13 @@ export class FlowRating extends ContentFieldsBase {
       locale,
       cmsText.content.open_list_button_text
     )
+    newRating.followUp = cmsText.follow_up
 
     return newRating
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    await trackOneContent(request, this)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {

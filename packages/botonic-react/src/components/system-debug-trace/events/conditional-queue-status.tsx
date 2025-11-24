@@ -17,12 +17,13 @@ export const getConditionalQueueStatusEventConfig = (
 ): DebugEventConfig => {
   const queueStatus = data.is_queue_open ? 'Open' : 'Closed'
   const agentStatus = data.is_available_agent ? 'Available' : 'Unavailable'
+  const statusText = `${queueStatus}${queueStatus === 'Open' ? ` (Agent ${agentStatus})` : ''}`
 
   const title = (
     <>
       Queue status checked{' '}
       <span>
-        - {queueStatus} (Agent {agentStatus})
+        - {statusText} ( Queue: {data.queue_name})
       </span>
     </>
   )

@@ -1,4 +1,5 @@
 import {
+  ActionRequest,
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
 } from '@botonic/react'
@@ -23,6 +24,11 @@ export class FlowWhatsappButtonListSection extends ContentFieldsBase {
       FlowWhatsappButtonListRow.fromHubtypeCMS(row, locale, cmsApi)
     )
     return newButton
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // Not apply for this content, because it is a child of the FlowWhatsappButtonList content
   }
 
   toBotonic(sectionIndex: number): WhatsappButtonListSectionProps {

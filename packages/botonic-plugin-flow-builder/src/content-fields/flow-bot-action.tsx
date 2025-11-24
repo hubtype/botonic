@@ -15,17 +15,17 @@ export class FlowBotAction extends ContentFieldsBase {
 
   static fromHubtypeCMS(
     cmsBotAction: HtBotActionNode,
-    _locale: string,
     cmsApi: FlowBuilderApi
   ): FlowBotAction {
     const newBotAction = new FlowBotAction(cmsBotAction.id)
     newBotAction.code = cmsBotAction.code
     newBotAction.payload = cmsApi.createPayloadWithParams(cmsBotAction)
+    newBotAction.followUp = cmsBotAction.follow_up
 
     return newBotAction
   }
 
-  private async trackBotActionEvent(request: ActionRequest): Promise<void> {
+  async trackFlow(request: ActionRequest): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
       getCommonFlowContentEventArgsForContentId(request, this.id)
     const eventBotAction: EventBotAction = {
@@ -35,14 +35,14 @@ export class FlowBotAction extends ContentFieldsBase {
       flowName,
       flowNodeId,
       flowNodeContentId,
+      flowNodeIsMeaningful: false,
       payload: this.payload,
     }
     const { action, ...eventArgs } = eventBotAction
     await trackEvent(request, action, eventArgs)
   }
 
-  async doBotAction(request: ActionRequest): Promise<void> {
-    await this.trackBotActionEvent(request)
+  doBotAction(request: ActionRequest): void {
     request.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
   }
 

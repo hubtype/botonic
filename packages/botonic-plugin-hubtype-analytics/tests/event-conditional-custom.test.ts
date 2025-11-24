@@ -11,6 +11,7 @@ describe('Create conditional custom event', () => {
       flowName: 'flowNameTest',
       flowNodeId: 'flowNodeIdTest',
       flowNodeContentId: 'flowNodeContentIdTest',
+      flowNodeIsMeaningful: false,
       conditionalVariable: 'customVariable',
       variableFormat: 'string',
     })
@@ -27,6 +28,7 @@ describe('Create conditional custom event', () => {
       flow_name: 'flowNameTest',
       flow_node_id: 'flowNodeIdTest',
       flow_node_content_id: 'flowNodeContentIdTest',
+      flow_node_is_meaningful: false,
       conditional_variable: 'customVariable',
       variable_format: 'string',
       bot_interaction_id: 'testInteractionId',
@@ -34,4 +36,3 @@ describe('Create conditional custom event', () => {
     })
   })
 })
-
