@@ -10,12 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.40.x] - 2025-mm-dd
+## [0.42.0] - 2025-mm-dd
 
 ### Added
 
-- [PR-3059](https://github.com/hubtype/botonic/pull/3059): Add default tool `retrieve_knowledge`.
-- [PR-3109](https://github.com/hubtype/botonic/pull/3109): Add bot request in context for tools. This way you can use session and plugins in a function tool.
+- [PR-3125](https://github.com/hubtype/botonic/pull/3125): Add Azure timeout and retries. Remove custom retries.
 
 ### Changed
 
@@ -23,7 +22,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.41.0] - TBD
+## [0.41.0] - 2025-11-11
 
 ### Added
 
@@ -36,6 +35,9 @@ All notable changes to Botonic will be documented in this file.
 ## [0.40.0] - 2025-09-30
 
 ### Added
+
+- [PR-3059](https://github.com/hubtype/botonic/pull/3059): Add default tool `retrieve_knowledge`.
+- [PR-3109](https://github.com/hubtype/botonic/pull/3109): Add bot request in context for tools. This way you can use session and plugins in a function tool.
 
 ### Changed
 
