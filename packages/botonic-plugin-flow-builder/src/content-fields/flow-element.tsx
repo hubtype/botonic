@@ -51,9 +51,10 @@ export class FlowElement extends ContentFieldsBase {
     return newElement
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
-    // TODO: Not apply for this content, because it is a child of the FlowCarousel content
+  async trackFlow(request: ActionRequest): Promise<void> {
+    if (this.button) {
+      await this.button.trackFlow(request)
+    }
   }
 
   toBotonic(parentId: string): JSX.Element {

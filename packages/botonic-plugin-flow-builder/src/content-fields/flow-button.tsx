@@ -20,6 +20,7 @@ export class FlowButton extends ContentFieldsBase {
   public payload?: string
   public target?: string
   public webview?: Webview
+  public flowWebview?: FlowWebview // Used for tracking
   public params?: Record<string, string>
 
   static fromHubtypeCMS(
@@ -34,6 +35,7 @@ export class FlowButton extends ContentFieldsBase {
     if (cmsButton.target) {
       const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
       if (webview) {
+        newButton.flowWebview = webview
         const params = this.getWebviewParams(webview, cmsApi)
         newButton.webview = { name: webview.webviewComponentName }
         newButton.params = params
@@ -118,9 +120,10 @@ export class FlowButton extends ContentFieldsBase {
     return FlowWebview.fromHubtypeCMS(targetNode)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
-    // Not apply for these content because it is a child of another Message
+  async trackFlow(request: ActionRequest): Promise<void> {
+    if (this.flowWebview) {
+      await this.flowWebview.trackFlow(request)
+    }
   }
 
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {

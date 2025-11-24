@@ -27,6 +27,9 @@ export class FlowCarousel extends ContentFieldsBase {
 
   async trackFlow(request: ActionRequest): Promise<void> {
     await trackOneContent(request, this)
+    for (const element of this.elements) {
+      await element.trackFlow(request)
+    }
   }
 
   toBotonic(id: string): JSX.Element {

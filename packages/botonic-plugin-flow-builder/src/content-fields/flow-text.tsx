@@ -59,6 +59,9 @@ export class FlowText extends ContentFieldsBase {
 
   async trackFlow(request: ActionRequest): Promise<void> {
     await trackOneContent(request, this)
+    for (const button of this.buttons) {
+      await button.trackFlow(request)
+    }
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
