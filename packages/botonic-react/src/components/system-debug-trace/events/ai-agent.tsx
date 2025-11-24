@@ -125,13 +125,13 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       />
 
       {props.exit && (
-        <StyledDebugDetail $isLastItem={props.exit && !props.error}>
+        <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.EXIT}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
 
       {props.error && (
-        <StyledDebugDetail $isLastItem={props.exit && props.error}>
+        <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.ERROR}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
