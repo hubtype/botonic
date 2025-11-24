@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3125](https://github.com/hubtype/botonic/pull/3125): Add Azure timeout and retries. Remove custom retries.
+- [PR-3128](https://github.com/hubtype/botonic/pull/3128): Add new message Whatsapp Interactive Media Carousel.
 
 ### Changed
 

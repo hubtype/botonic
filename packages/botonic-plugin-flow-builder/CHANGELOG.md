@@ -17,6 +17,7 @@ All notable changes to Botonic will be documented in this file.
 ### Changed
 
 - [PR-3129](https://github.com/hubtype/botonic/pull/3129): Send new events for bot-action, conditionals, redirect and webview triggered.
+- [PR-3128](https://github.com/hubtype/botonic/pull/3128): Add new message Whatsapp Interactive Media Carousel.
 
 ### Fixed
 
