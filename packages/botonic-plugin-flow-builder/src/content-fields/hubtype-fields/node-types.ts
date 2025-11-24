@@ -15,12 +15,12 @@ export enum HtNodeWithContentType {
   AI_AGENT = 'ai-agent',
   RATING = 'rating',
   WEBVIEW = 'webview',
+  GO_TO_FLOW = 'go-to-flow',
 }
 
 export enum HtNodeWithoutContentType {
   URL = 'url',
   PAYLOAD = 'payload',
-  GO_TO_FLOW = 'go-to-flow',
 }
 
 export enum HtButtonStyle {

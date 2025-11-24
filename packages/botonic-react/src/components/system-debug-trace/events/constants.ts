@@ -7,9 +7,13 @@ export const LABELS = {
   KNOWLEDGE_GATHERED: 'Knowledge gathered',
   EXECUTED_TOOLS: 'Executed tools',
   NO_TOOLS_EXECUTED: 'No tools executed',
+  AUTO_ASSIGN_ON: 'ON',
+  AUTO_ASSIGN_OFF: 'OFF',
   EXIT: 'Exit',
   ERROR: 'Error',
   QUEUE: 'Queue',
+  AUTO_ASSIGN: 'Auto-assign',
+  NOTE: 'Note',
   KNOWLEDGE_BASE_FAIL_REASON: 'Knowledge Base Fail Reason',
   SEE_CHUNKS_BUTTON: 'See chunks',
 } as const

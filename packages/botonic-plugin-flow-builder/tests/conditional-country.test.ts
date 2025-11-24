@@ -1,7 +1,7 @@
-import { INPUT } from '@botonic/core'
+import { EventAction, INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/index'
+import { FlowCountryConditional, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
@@ -29,7 +29,8 @@ describe('Check the contents returned by the plugin after conditional country no
         },
       })
 
-      expect((contents[0] as FlowText).text).toBe(messageExpected)
+      expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
+      expect((contents[1] as FlowText).text).toBe(messageExpected)
     }
   )
 })

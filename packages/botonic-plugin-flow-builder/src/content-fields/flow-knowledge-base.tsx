@@ -1,13 +1,13 @@
 import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
+import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { HtKnowledgeBaseNode } from './hubtype-fields'
 
 export const DISABLED_MEMORY_LENGTH = 1
 
 export class FlowKnowledgeBase extends ContentFieldsBase {
-  public code: string = ''
   public feedbackEnabled: boolean = false
   public sources: string[] = []
   public text: string = ''
@@ -26,8 +26,16 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
     newKnowledgeBase.hasMemory = component.content.has_memory || false
     newKnowledgeBase.memoryLength =
       component.content.memory_length || DISABLED_MEMORY_LENGTH
+    newKnowledgeBase.followUp = component.follow_up
 
     return newKnowledgeBase
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // TODO: Review how we can track here the knowledge base event here.
+    // We should store event args in an attribute of FlowKnowledgeBase
+    // when knowledge base is resolved inside the flow builder action
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {

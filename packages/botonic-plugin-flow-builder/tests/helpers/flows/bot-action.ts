@@ -1,0 +1,135 @@
+export const botActionFlow = {
+  version: 'draft',
+  name: 'Test data',
+  comments: null,
+  published_by: null,
+  published_on: null,
+  hash: 'aaa784e8bcb3d45f6e47e82be29120bfac0eaeb7',
+  default_locale_code: 'en',
+  locales: ['en'],
+  translated_locales: [],
+  start_node_id: '0199102a-01e4-776d-b696-a4489e4cc644',
+  ai_model_id: null,
+  is_knowledge_base_active: false,
+  is_ai_agent_active: false,
+  nodes: [
+    {
+      id: '019aa1ae-b870-769e-b063-216c62da41e7',
+      type: 'payload',
+      content: {
+        payload: 'WELCOME_PAYLOAD',
+      },
+    },
+    {
+      id: 'f3931bce-7de3-5c7a-8287-81f0292ee4f3',
+      code: 'Fallback',
+      is_code_ai_generated: false,
+      meta: {
+        x: 300.0,
+        y: 0.0,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'fallback',
+      content: {
+        first_message: {
+          id: '0199102a-3fc4-72ee-bc1e-67a8f1272c82',
+          type: 'text',
+        },
+        second_message: null,
+        is_knowledge_base_active: false,
+        knowledge_base_followup: null,
+      },
+    },
+    {
+      id: '0199102a-01e4-776d-b696-a4489e4cc644',
+      code: 'welcome-msg',
+      is_code_ai_generated: false,
+      meta: {
+        x: 435.0,
+        y: 51.000000000000014,
+      },
+      follow_up: {
+        id: '019ab4fb-96a1-75fb-83ff-84e9d82eed4b',
+        type: 'bot-action',
+      },
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Welcome',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '0199102a-3fc4-72ee-bc1e-67a8f1272c82',
+      code: 'fallback-msg',
+      is_code_ai_generated: false,
+      meta: {
+        x: 741.25,
+        y: 72.25,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'Fallback',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '019ab4fb-96a1-75fb-83ff-84e9d82eed4b',
+      code: 'BOT_ACTION',
+      is_code_ai_generated: false,
+      meta: {
+        x: 750.4386224999844,
+        y: 106.0824531211967,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'bot-action',
+      content: {
+        payload_id: '019aa1ae-b870-769e-b063-216c62da41e7',
+        payload_params: '',
+      },
+    },
+  ],
+  flows: [
+    {
+      id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      name: 'Main',
+      start_node_id: '0199102a-01e4-776d-b696-a4489e4cc644',
+    },
+    {
+      id: '03bafba6-c0fa-5449-9d42-bd98b44fe370',
+      name: 'Fallback',
+      start_node_id: 'f3931bce-7de3-5c7a-8287-81f0292ee4f3',
+    },
+  ],
+  webviews: [],
+  webview_contents: [],
+  bot_variables: [],
+}

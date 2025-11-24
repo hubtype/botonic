@@ -1,4 +1,4 @@
-import { Input, PluginPreRequest } from '@botonic/core'
+import { PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
 import {
@@ -18,7 +18,6 @@ import {
   HtNodeLink,
   HtNodeWithContent,
   HtNodeWithContentType,
-  HtNodeWithoutContentType,
   HtPayloadNode,
   HtRatingButton,
   HtRatingNode,
@@ -77,9 +76,7 @@ export class FlowBuilderApi {
   getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
     if (!node) console.error(`Node with id: '${id}' not found`)
-    if (node?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
-      return this.getNodeByFlowId(node.content.flow_id) as T
-    }
+
     return node as T
   }
 
@@ -213,12 +210,7 @@ export class FlowBuilderApi {
       ? this.getNodeById<HtNodeWithContent | HtGoToFlow>(id)
       : undefined
 
-    if (followUpNode?.type === HtNodeWithoutContentType.GO_TO_FLOW) {
-      return this.getNodeById<HtNodeWithContent>(followUpNode?.content.flow_id)
-        .code
-    } else {
-      return followUpNode?.code
-    }
+    return followUpNode?.code
   }
 
   getFlowName(flowId: string): string {

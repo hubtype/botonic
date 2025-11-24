@@ -46,9 +46,9 @@ describe('FlowBuilderAction.executeConversationStart', () => {
       const { contents } =
         await FlowBuilderAction.executeConversationStart(actionRequest)
 
-      expect((contents[0] as FlowText).text).toBe(firstMessage)
-      expect(contents.length).toBe(3)
-      expect((contents[2] as FlowText).text).toBe(
+      expect((contents[1] as FlowText).text).toBe(firstMessage)
+      expect(contents.length).toBe(4)
+      expect((contents[3] as FlowText).text).toBe(
         'Message explaining how to add a bag'
       )
     }

@@ -1,6 +1,12 @@
+/* eslint-disable complexity */
 import {
   HtEvent,
   HtEventAiAgent,
+  HtEventBotAction,
+  HtEventConditionalChannel,
+  HtEventConditionalCountry,
+  HtEventConditionalCustom,
+  HtEventConditionalQueueStatus,
   HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
@@ -11,6 +17,8 @@ import {
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventKnowledgeBase,
+  HtEventRedirectFlow,
+  HtEventWebviewActionTriggered,
   HtEventWebviewEnd,
   HtEventWebviewStep,
 } from './event-models'
@@ -63,6 +71,27 @@ export function createHtEvent(
 
     case EventAction.AiAgent:
       return new HtEventAiAgent(htEventProps, requestData)
+
+    case EventAction.ConditionalCountry:
+      return new HtEventConditionalCountry(htEventProps, requestData)
+
+    case EventAction.ConditionalQueueStatus:
+      return new HtEventConditionalQueueStatus(htEventProps, requestData)
+
+    case EventAction.ConditionalCustom:
+      return new HtEventConditionalCustom(htEventProps, requestData)
+
+    case EventAction.ConditionalChannel:
+      return new HtEventConditionalChannel(htEventProps, requestData)
+
+    case EventAction.BotAction:
+      return new HtEventBotAction(htEventProps, requestData)
+
+    case EventAction.WebviewActionTriggered:
+      return new HtEventWebviewActionTriggered(htEventProps, requestData)
+
+    case EventAction.RedirectFlow:
+      return new HtEventRedirectFlow(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

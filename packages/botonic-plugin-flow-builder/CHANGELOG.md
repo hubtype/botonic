@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.39.x] - 2025-mm-dd
+## [0.42.0] - 2025-mm-dd
 
 ### Added
 
 ### Changed
+
+- [PR-3129](https://github.com/hubtype/botonic/pull/3129): Send new events for bot-action, conditionals, redirect and webview triggered.
 
 ### Fixed
 

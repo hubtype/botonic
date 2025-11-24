@@ -33,11 +33,11 @@ describe('Content filters', () => {
       },
     })
 
-    expect(contents).toHaveLength(2)
-    expect((contents[1] as FlowText).buttons).toHaveLength(4)
-    expect((contents[1] as FlowText).buttons[0].text).toBe('Add a bag')
-    expect((contents[1] as FlowText).buttons[1].text).toBe('Select a seat')
-    expect((contents[1] as FlowText).buttons[2].text).toBe('Conditionals')
-    expect((contents[1] as FlowText).buttons[3].text).toBe('Different messages')
+    expect(contents).toHaveLength(3)
+    expect((contents[2] as FlowText).buttons).toHaveLength(4)
+    expect((contents[2] as FlowText).buttons[0].text).toBe('Add a bag')
+    expect((contents[2] as FlowText).buttons[1].text).toBe('Select a seat')
+    expect((contents[2] as FlowText).buttons[2].text).toBe('Conditionals')
+    expect((contents[2] as FlowText).buttons[3].text).toBe('Different messages')
   })
 })
