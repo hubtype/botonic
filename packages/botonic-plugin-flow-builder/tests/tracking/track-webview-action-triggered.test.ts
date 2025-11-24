@@ -1,7 +1,7 @@
 import { EventAction, INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../../src/content-fields/index'
+import { FlowCarousel, FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { trackEventMock } from '../__mocks__/track-event'
@@ -15,7 +15,7 @@ describe('Track webview action triggered', () => {
     trackEventMock.mockClear()
   })
 
-  test('should track webview action triggered, when a text has a button with a Open Webview target node ', async () => {
+  test('should track webview action triggered, when a text has a button that targets an Open Webview node', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: openWebviewFlow, trackEvent: trackEventMock },
       requestArgs: {
@@ -43,7 +43,50 @@ describe('Track webview action triggered', () => {
       {
         flowId: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
         flowName: 'Main',
-        flowNodeContentId: 'TestWebview',
+        flowNodeContentId: 'Test Webview',
+        flowNodeId: '019ab584-d30d-777f-bfb2-2912f74744dc',
+        flowNodeIsMeaningful: false,
+        flowThreadId: expect.anything(),
+        webviewName: 'TestWebview',
+        webviewTargetId: '0199102d-90b9-771d-a927-7329bd348a5e',
+      }
+    )
+  })
+
+  test('should track webview action triggered, when a carousel has an element with a button that targets an Open Webview node', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: openWebviewFlow, trackEvent: trackEventMock },
+      requestArgs: {
+        input: {
+          type: INPUT.TEXT,
+          data: 'carousel',
+        },
+      },
+    })
+
+    expect(contents[0]).toBeInstanceOf(FlowCarousel)
+
+    expect(trackEventMock).toHaveBeenCalledTimes(3)
+    expect(trackEventMock).toHaveBeenNthCalledWith(
+      1,
+      expect.anything(),
+      EventAction.Keyword,
+      expect.anything()
+    )
+    expect(trackEventMock).toHaveBeenNthCalledWith(
+      2,
+      expect.anything(),
+      EventAction.FlowNode,
+      expect.anything()
+    )
+    expect(trackEventMock).toHaveBeenNthCalledWith(
+      3,
+      expect.anything(),
+      EventAction.WebviewActionTriggered,
+      {
+        flowId: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+        flowName: 'Main',
+        flowNodeContentId: 'Test Webview',
         flowNodeId: '019ab584-d30d-777f-bfb2-2912f74744dc',
         flowNodeIsMeaningful: false,
         flowThreadId: expect.anything(),
