@@ -25,6 +25,7 @@ function setAzureOpenAIClient() {
     apiVersion: AZURE_OPENAI_API_VERSION,
     deployment: AZURE_OPENAI_API_DEPLOYMENT_NAME,
     baseURL: AZURE_OPENAI_API_BASE,
+    timeout: 8000, // 8 seconds
     dangerouslyAllowBrowser: !isProd,
   })
   setDefaultOpenAIClient(client)

@@ -26,23 +26,13 @@ export class AIAgentRunner<
 
   async run(
     messages: AgenticInputMessage[],
-    context: Context<TPlugins, TExtraData>,
-    maxRetries: number = 1
-  ): Promise<RunResult> {
-    return this.runWithRetry(messages, context, maxRetries, 1)
-  }
-
-  private async runWithRetry(
-    inputMessages: AgenticInputMessage[],
-    context: Context<TPlugins, TExtraData>,
-    maxRetries: number,
-    attempt: number
+    context: Context<TPlugins, TExtraData>
   ): Promise<RunResult> {
     try {
       const runner = new Runner({
         modelSettings: { temperature: 0 },
       })
-      const result = await runner.run(this.agent, inputMessages, { context })
+      const result = await runner.run(this.agent, messages, { context })
 
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
@@ -58,7 +48,7 @@ export class AIAgentRunner<
             ) as AgenticOutputMessage[]),
         toolsExecuted,
         exit: hasExit,
-        memoryLength: inputMessages.length,
+        memoryLength: messages.length,
         error: false,
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
@@ -75,10 +65,7 @@ export class AIAgentRunner<
           outputGuardrailsTriggered: [],
         }
       }
-      if (attempt > maxRetries) {
-        throw error
-      }
-      return this.runWithRetry(inputMessages, context, maxRetries, attempt + 1)
+      throw error
     }
   }
 
