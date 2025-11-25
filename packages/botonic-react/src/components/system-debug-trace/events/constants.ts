@@ -16,4 +16,10 @@ export const LABELS = {
   NOTE: 'Note',
   KNOWLEDGE_BASE_FAIL_REASON: 'Knowledge Base Fail Reason',
   SEE_CHUNKS_BUTTON: 'See chunks',
+  STATUS: 'Status',
+  YES: 'Yes',
+  NO: 'No',
+  OPEN: 'Open',
+  CLOSED: 'Closed',
+  AGENTS_AVAILABLE: 'Agents available',
 } as const

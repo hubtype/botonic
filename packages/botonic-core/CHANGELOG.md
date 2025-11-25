@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.42.x] - 2025-mm-dd
+## [0.43.x] - 2025-mm-dd
 
 ### Added
 
@@ -19,6 +19,13 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.42.0] - 2025-11-25
+
+### Changed
+
+- [PR-3126](https://github.com/hubtype/botonic/pull/3126): Change hubtype analytics to use format v5.
+- [PR-3128](https://github.com/hubtype/botonic/pull/3128): Update Ai Agent CarouselMessage to accept a text.
 
 ## [0.41.0] - 2025-11-11
 

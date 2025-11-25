@@ -262,7 +262,7 @@ describe('SystemDebugTrace Component', () => {
 
       expect(container.textContent).toContain('Queue status checked')
       expect(container.textContent).toContain('Open')
-      expect(container.textContent).toContain('Available')
+      expect(container.textContent).toContain('Yes')
     })
 
     test('renders redirect flow event', () => {
@@ -484,8 +484,8 @@ describe('SystemDebugTrace Component', () => {
       const config = getConditionalQueueStatusEventConfig(data)
 
       expect(config.action).toBe(EventAction.ConditionalQueueStatus)
-      expect(config.component).toBeNull()
-      expect(config.collapsible).toBe(false)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
     })
