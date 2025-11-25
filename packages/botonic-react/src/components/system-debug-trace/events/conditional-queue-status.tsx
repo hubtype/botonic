@@ -2,7 +2,13 @@ import { EventAction } from '@botonic/core'
 import React from 'react'
 
 import { SplitSvg } from '../icons/split'
+import {
+  StyledDebugDetail,
+  StyledDebugLabel,
+  StyledDebugValue,
+} from '../styles'
 import { DebugEventConfig } from '../types'
+import { LABELS } from './constants'
 
 export interface ConditionalQueueStatusDebugEvent {
   action: EventAction.ConditionalQueueStatus
@@ -12,27 +18,44 @@ export interface ConditionalQueueStatusDebugEvent {
   is_available_agent: boolean
 }
 
+export const ConditionalQueueStatus = (
+  props: ConditionalQueueStatusDebugEvent
+) => {
+  const queueStatus = props.is_queue_open ? LABELS.OPEN : LABELS.CLOSED
+  const agentStatus = props.is_available_agent ? LABELS.YES : LABELS.NO
+
+  return (
+    <>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.QUEUE}</StyledDebugLabel>
+        <StyledDebugValue>{props.queue_name}</StyledDebugValue>
+      </StyledDebugDetail>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.STATUS}</StyledDebugLabel>
+        <StyledDebugValue>{queueStatus}</StyledDebugValue>
+      </StyledDebugDetail>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.AGENTS_AVAILABLE}</StyledDebugLabel>
+        <StyledDebugValue>{agentStatus}</StyledDebugValue>
+      </StyledDebugDetail>
+    </>
+  )
+}
+
 export const getConditionalQueueStatusEventConfig = (
   data: ConditionalQueueStatusDebugEvent
 ): DebugEventConfig => {
-  const queueStatus = data.is_queue_open ? 'Open' : 'Closed'
-  const agentStatus = data.is_available_agent ? 'Available' : 'Unavailable'
-  const statusText = `${queueStatus}${queueStatus === 'Open' ? ` (Agent ${agentStatus})` : ''}`
-
   const title = (
     <>
-      Queue status checked{' '}
-      <span>
-        - {statusText} ( Queue: {data.queue_name})
-      </span>
+      Queue status checked <span>- {data.queue_name}</span>
     </>
   )
 
   return {
     action: EventAction.ConditionalQueueStatus,
     title,
-    component: null,
+    component: ConditionalQueueStatus,
     icon: <SplitSvg />,
-    collapsible: false,
+    collapsible: true,
   }
 }
