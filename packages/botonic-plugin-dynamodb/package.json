@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-dynamodb",
-  "version": "0.41.0",
+  "version": "0.42.0",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/cjs/index.d.ts",
@@ -12,13 +12,13 @@
     "ts-node": "ts-node -O '{ \"noUnusedLocals\":false}'",
     "lint": "npm run lint_core -- --fix",
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*' 'tests/**/*.ts*'",
-    "prepublishOnly": "npm run lint_core && rm -rf lib && npm i && npm run build && npm run test"
+    "prepublishOnly": "rm -rf lib && npm i && npm run build"
   },
   "dependencies": {
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@babel/runtime": "^7.23.9",
-    "@botonic/core": "^0.41.0",
+    "@botonic/core": "^0.42.0",
     "aws-sdk": "^2.1554.0"
   },
   "devDependencies": {

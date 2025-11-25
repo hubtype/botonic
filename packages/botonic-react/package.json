@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.42.0-alpha.4",
+  "version": "0.42.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -11,8 +11,7 @@
     "test": "../../node_modules/.bin/jest -c ./jest.config.js --coverage",
     "updateSnapshot": "../../node_modules/.bin/jest -c ./jest.config.js --updateSnapshot",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepublishOnly": "npm run clean; npm i; npm run build; npm run copy-files;",
-    "clean": "rm -rf ./lib/",
+    "prepublishOnly": "rm -rf lib && npm i && npm run build && npm run copy-files;",
     "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
@@ -21,7 +20,7 @@
     "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
   },
   "dependencies": {
-    "@botonic/core": "0.42.0-alpha.4",
+    "@botonic/core": "^0.42.0",
     "axios": "^1.12.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
