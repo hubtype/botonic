@@ -40,28 +40,30 @@ export class FlowCarousel extends ContentFieldsBase {
     }
   }
 
+  static areElementsValidForWhatsapp = (carouselMessage: CarouselMessage) => {
+    const isValid =
+      !carouselMessage.content.elements.some(
+        element => element.button.payload
+      ) && carouselMessage.content.elements.every(element => element.button.url)
+
+    if (!isValid) {
+      console.warn(
+        'Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent',
+        carouselMessage.content
+      )
+    }
+    return isValid
+  }
+
   static fromAIAgent(
     id: string,
     carouselMessage: CarouselMessage,
     request: ActionRequest
   ): JSX.Element {
-    const areAllButtonsValid = () => {
-      const isValid =
-        !carouselMessage.content.elements.some(
-          element => element.button.payload
-        ) &&
-        carouselMessage.content.elements.every(element => element.button.url)
-
-      if (!isValid) {
-        console.warn(
-          'Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent',
-          carouselMessage.content
-        )
-      }
-      return isValid
-    }
-
-    if (isWhatsapp(request.session) && areAllButtonsValid()) {
+    if (
+      isWhatsapp(request.session) &&
+      FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
+    ) {
       if (carouselMessage.content.elements.length === 1) {
         const element = carouselMessage.content.elements[0]
         console.log('displaying whatsapp cta url button with element', element)
@@ -106,9 +108,32 @@ export class FlowCarousel extends ContentFieldsBase {
     )
   }
 
+  private toCarouselMessage(elements: FlowElement[]): CarouselMessage {
+    return {
+      type: 'carousel',
+      content: {
+        elements: elements.map(element => {
+          return {
+            button: {
+              text: element.button?.text || '',
+              payload: element.button?.payload,
+              url: element.button?.url,
+            },
+            title: element.title,
+            subtitle: element.subtitle,
+            image: element.image,
+          }
+        }),
+      },
+    }
+  }
+
   toBotonic(id: string, request: ActionRequest): JSX.Element {
-    if (isWhatsapp(request.session)) {
-      // TODO: Improve this logic to ensure what to do if the buttons are not CTA URL buttons
+    const carouselMessage = this.toCarouselMessage(this.elements)
+    if (
+      isWhatsapp(request.session) &&
+      FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
+    ) {
       if (this.elements.length === 1) {
         const element = this.elements[0]
 
