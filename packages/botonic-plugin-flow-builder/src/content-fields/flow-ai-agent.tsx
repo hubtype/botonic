@@ -1,10 +1,10 @@
 import { AgenticOutputMessage } from '@botonic/core'
-import { ActionRequest, Button, Carousel, Text } from '@botonic/react'
+import { ActionRequest } from '@botonic/react'
 
-import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { FlowElement } from './flow-element'
+import { FlowCarousel } from './flow-carousel'
+import { FlowText } from './flow-text'
 import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
@@ -36,40 +36,16 @@ export class FlowAiAgent extends ContentFieldsBase {
     await trackOneContent(request, this)
   }
 
-  toBotonic(id: string): JSX.Element {
+  toBotonic(id: string, request: ActionRequest): JSX.Element {
     return (
       <>
         {this.responses.map((response: AgenticOutputMessage) => {
-          if (response.type === 'text') {
-            return <Text key={id}>{response.content.text}</Text>
-          }
-
-          if (response.type === 'textWithButtons') {
-            return (
-              <Text key={id}>
-                {response.content.text}
-                {response.content.buttons.map((button, buttonIndex) => {
-                  return (
-                    <Button
-                      key={buttonIndex}
-                      payload={`${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`}
-                    >
-                      {button.text}
-                    </Button>
-                  )
-                })}
-              </Text>
-            )
+          if (response.type === 'text' || response.type === 'textWithButtons') {
+            return FlowText.fromAIAgent(id, response)
           }
 
           if (response.type === 'carousel') {
-            return (
-              <Carousel key={id}>
-                {response.content.elements.map(element =>
-                  FlowElement.fromAIAgent(id, element).toBotonic(id)
-                )}
-              </Carousel>
-            )
+            return FlowCarousel.fromAIAgent(id, response, request)
           }
 
           return <></>
