@@ -41,10 +41,9 @@ export class FlowCarousel extends ContentFieldsBase {
   }
 
   static areElementsValidForWhatsapp = (carouselMessage: CarouselMessage) => {
-    const isValid =
-      !carouselMessage.content.elements.some(
-        element => element.button.payload
-      ) && carouselMessage.content.elements.every(element => element.button.url)
+    const isValid = carouselMessage.content.elements.every(
+      element => element.button.url
+    )
 
     if (!isValid) {
       console.warn(
@@ -53,6 +52,16 @@ export class FlowCarousel extends ContentFieldsBase {
       )
     }
     return isValid
+  }
+
+  static generateWhatsappElementText(element: {
+    title: string
+    subtitle?: string
+  }): string {
+    if (element.subtitle) {
+      return `*${element.title}*\n${element.subtitle}`
+    }
+    return element.title
   }
 
   static fromAIAgent(
@@ -66,7 +75,6 @@ export class FlowCarousel extends ContentFieldsBase {
     ) {
       if (carouselMessage.content.elements.length === 1) {
         const element = carouselMessage.content.elements[0]
-        console.log('displaying whatsapp cta url button with element', element)
         // TODO: Add a new fromAIAgent method in FlowWhatsappCtaUrlButtonNode to create a WhatsappCTAUrlButton from an AIAgent message
         return (
           <WhatsappCTAUrlButton
@@ -87,9 +95,10 @@ export class FlowCarousel extends ContentFieldsBase {
             const buttonText = element.button.text
             const buttonUrl = element.button.url!
             const imageLink = element.image
+            const text = FlowCarousel.generateWhatsappElementText(element)
 
             return {
-              text: `*${element.title}*\n${element.subtitle}`,
+              text,
               action: { buttonText, buttonUrl, imageLink },
             }
           })}
@@ -152,12 +161,13 @@ export class FlowCarousel extends ContentFieldsBase {
       return (
         <WhatsappInteractiveMediaCarousel
           cards={this.elements.map(element => {
-            const buttonText = element.button?.text || ''
-            const buttonUrl = element.button?.url || ''
-            const imageLink = element.image || ''
+            const text = FlowCarousel.generateWhatsappElementText(element)
+            const buttonText = element.button!.text!
+            const buttonUrl = element.button!.url!
+            const imageLink = element.image!
 
             return {
-              text: element.title,
+              text,
               action: { buttonText, buttonUrl, imageLink },
             }
           })}
