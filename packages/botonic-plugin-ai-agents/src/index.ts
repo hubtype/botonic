@@ -24,7 +24,7 @@ export default class BotonicPluginAiAgents<
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
-    setUpOpenAI()
+    setUpOpenAI(options?.maxRetries, options?.timeout)
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
   }
