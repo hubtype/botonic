@@ -32,7 +32,7 @@ export class FlowAiAgent extends ContentFieldsBase {
 
   async trackFlow(request: ActionRequest): Promise<void> {
     // We can call trackFlowContent here but the function no track events for AiAgent contents
-    // Review how we can track here the knowledge base event
+    // Review how we can track here the ai agent event
     await trackOneContent(request, this)
   }
 

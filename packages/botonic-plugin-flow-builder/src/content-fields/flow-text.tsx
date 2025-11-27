@@ -86,9 +86,9 @@ export class FlowText extends ContentFieldsBase {
             id: `${id}-button-${buttonIndex}`,
             text: button.text,
             url: button.url,
-            payload: button.payload
-              ? `${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`
-              : undefined,
+            payload:
+              button.payload ||
+              `${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`,
           }
           return FlowButton.fromAIAgent(buttonData).renderButton(buttonIndex)
         })}

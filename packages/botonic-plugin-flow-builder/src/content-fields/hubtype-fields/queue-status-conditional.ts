@@ -1,6 +1,8 @@
 import { HtBaseNode, HtNodeLink } from './common'
 import { HtFunctionArguments, HtFunctionResult } from './function'
-import { HtNodeWithContentType, HtNodeWithoutContentType } from './node-types'
+import { HtNodeWithContentType } from './node-types'
+
+/*  TODO: In the future, refactor the conditional nodes so they are not of type FUNCTION and can use type-hints for all exact arguments and results. */
 
 // interface HtQueueArgument {
 //   locale: string
