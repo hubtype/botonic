@@ -71,6 +71,8 @@ export interface PluginAiAgentOptions<
 > {
   authToken?: string
   customTools?: CustomTool<TPlugins, TExtraData>[]
+  maxRetries?: number
+  timeout?: number
 }
 
 export type AgenticInputMessage = AgentInputItem
