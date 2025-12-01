@@ -13,7 +13,7 @@ import { HtFunctionResult } from './hubtype-fields/function'
 export class FlowChannelConditional extends ContentFieldsBase {
   public resultMapping: HtFunctionResult[] = []
   public conditionalResult?: HtFunctionResult = undefined
-  public channelResult: string = ''
+  public channelResult: string | boolean | number = ''
 
   static fromHubtypeCMS(
     component: HtChannelConditionalNode,
@@ -54,7 +54,7 @@ export class FlowChannelConditional extends ContentFieldsBase {
       flowNodeId,
       flowNodeContentId,
       flowNodeIsMeaningful: false,
-      channel: this.channelResult,
+      channel: this.channelResult.toString(),
     }
     const { action, ...eventArgs } = eventChannelConditional
     await trackEvent(request, action, eventArgs)
