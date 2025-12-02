@@ -1,6 +1,5 @@
 import { EventAction, EventConditionalCountry } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import React from 'react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -56,7 +55,7 @@ export class FlowCountryConditional extends ContentFieldsBase {
       flowNodeId,
       flowNodeContentId,
       flowNodeIsMeaningful: false,
-      country: this.conditionalResult?.result?.toString() ?? '',
+      country: (this.conditionalResult?.result as string) ?? '',
     }
     const { action, ...eventArgs } = eventCountryConditional
     await trackEvent(request, action, eventArgs)

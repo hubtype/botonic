@@ -1,6 +1,5 @@
 import { EventAction, EventConditionalChannel } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import React from 'react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -13,7 +12,7 @@ import { HtFunctionResult } from './hubtype-fields/function'
 export class FlowChannelConditional extends ContentFieldsBase {
   public resultMapping: HtFunctionResult[] = []
   public conditionalResult?: HtFunctionResult = undefined
-  public channelResult: string | boolean | number = ''
+  public channelResult: string = ''
 
   static fromHubtypeCMS(
     component: HtChannelConditionalNode,
@@ -38,7 +37,7 @@ export class FlowChannelConditional extends ContentFieldsBase {
       )
     }
     this.conditionalResult = conditionalResult
-    this.channelResult = conditionalResult.result
+    this.channelResult = conditionalResult.result as string
     this.followUp = conditionalResult.target
   }
 
@@ -54,7 +53,7 @@ export class FlowChannelConditional extends ContentFieldsBase {
       flowNodeId,
       flowNodeContentId,
       flowNodeIsMeaningful: false,
-      channel: this.channelResult.toString(),
+      channel: this.channelResult,
     }
     const { action, ...eventArgs } = eventChannelConditional
     await trackEvent(request, action, eventArgs)
