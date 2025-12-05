@@ -3,6 +3,7 @@ import { MAIN_FLOW_NAME } from '../constants'
 import { FlowBotAction, FlowContent } from '../content-fields'
 import BotonicPluginFlowBuilder from '../index'
 import { inputHasTextData } from '../utils'
+import { getContentsByAiAgent } from './ai-agent'
 import { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
@@ -10,7 +11,7 @@ import { getContentsByPayload } from './payload'
 export async function getContentsByFirstInteraction(
   context: FlowBuilderContext
 ): Promise<FlowContent[]> {
-  const { contentID, flowBuilderPlugin, request } = context
+  const { cmsApi, contentID, flowBuilderPlugin, request } = context
 
   /*
    * If the contentID is provided, the firstInteractionContents are obtained even if they are not used
@@ -40,24 +41,27 @@ export async function getContentsByFirstInteraction(
    * and avoid to render the match with keywords,intents or knowledge base
    */
   if (firstInteractionContents.at(-1) instanceof FlowBotAction) {
+    console.log('getContentsByFirstInteraction: FlowBotAction')
     return firstInteractionContents
   }
 
   if (request.input.nluResolution || inputHasTextData(request.input)) {
+    console.log('getContentsByFirstInteraction: inputHasTextData')
     const contentsByUserInput = await getContentsByUserInput(context)
 
+    //TODO: We can split getContentsByUserInput in getContentsByKeywordsIntentsOrKnowledgeBase and getContentsByAiAgent
+    // and then if AI agent responds no join firstInteractionContents
     return [...firstInteractionContents, ...contentsByUserInput]
   }
 
+  console.log('getContentsByFirstInteraction: default')
   return firstInteractionContents
 }
 
-async function getContentsByUserInput({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
+async function getContentsByUserInput(
+  context: FlowBuilderContext
+): Promise<FlowContent[]> {
+  const { cmsApi, flowBuilderPlugin, request, resolvedLocale } = context
   const payloadByNlu = request.input.nluResolution?.payload
 
   if (payloadByNlu) {
@@ -89,12 +93,20 @@ async function getContentsByUserInput({
     }
   }
 
-  return await getContentsByKnowledgeBase({
+  const contentsByKnowledgeBase = await getContentsByKnowledgeBase({
     cmsApi,
     flowBuilderPlugin,
     request,
     resolvedLocale,
   })
+
+  if (contentsByKnowledgeBase.length > 0) {
+    console.log('getContentsByFirstInteraction: contentsByKnowledgeBase')
+    return contentsByKnowledgeBase
+  }
+
+  const contentsByAiAgent = await getContentsByAiAgent(context)
+  return contentsByAiAgent
 }
 
 function getConversationStartId(cmsApi: FlowBuilderApi) {
