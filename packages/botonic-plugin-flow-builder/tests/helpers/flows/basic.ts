@@ -18,6 +18,97 @@ export const basicFlow = {
   is_knowledge_base_active: false,
   nodes: [
     {
+      id: '019a2d19-b9f2-77b6-a412-212aa35ed909',
+      code: '',
+      is_code_ai_generated: false,
+      meta: {
+        x: 719.9231002944924,
+        y: 443.7341623436571,
+      },
+      follow_up: null,
+      target: {
+        id: '019a2d19-b9f2-77b6-a412-150354e799aa',
+        type: 'function',
+      },
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          {
+            values: ['anyVariableForBooleanCondition'],
+            locale: 'en',
+          },
+        ],
+      },
+    },
+    {
+      id: '019a2d19-0400-72dd-8ab2-01ecbd1098e6',
+      text: [
+        {
+          message: 'Boolean variable for non booleans',
+          locale: 'en',
+        },
+      ],
+      url: [],
+      payload: [],
+      target: {
+        id: '019a2d19-b9f2-77b6-a412-150354e799aa',
+        type: 'function',
+      },
+      hidden: [],
+    },
+    {
+      id: '019a2d19-b9f2-77b6-a412-150354e799aa',
+      code: 'LOGGED_VALUE_CONDITIONAL',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1023.8867922795762,
+        y: 553.7725409200418,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'function',
+      content: {
+        action: 'check-bot-variable',
+        arguments: [
+          {
+            type: 'boolean',
+            name: 'keyPath',
+            value: 'loggedValue',
+          },
+        ],
+        result_mapping: [
+          {
+            result: 'default',
+            target: {
+              id: '019a2d19-b9f2-77b6-a412-2ae57ebb35cf',
+              type: 'text',
+            },
+          },
+          {
+            result: true,
+            target: {
+              id: '019a2d19-b9f2-77b6-a412-264f6d9ea6bf',
+              type: 'text',
+            },
+          },
+          {
+            result: false,
+            target: {
+              id: '019a2d19-b9f2-77b6-a412-2ae57ebb35cf',
+              type: 'text',
+            },
+          },
+        ],
+      },
+    },
+    {
       id: '164be5e1-9147-4d7d-938b-73e9698a3d18',
       type: 'url',
       content: {
@@ -1429,6 +1520,56 @@ export const basicFlow = {
       },
     },
     {
+      id: '019a2d19-b9f2-77b6-a412-264f6d9ea6bf',
+      code: 'USER_LOGGED_IN_2',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1320.9046759437942,
+        y: 610.547445870454,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'User is logged in',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
+      id: '019a2d19-b9f2-77b6-a412-2ae57ebb35cf',
+      code: 'LOGGED_OUT_2',
+      is_code_ai_generated: false,
+      meta: {
+        x: 1323.1510858021954,
+        y: 763.4829623979001,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: 'e9ccb6ea-99e2-4bc4-9376-4508aafb6c24',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'text',
+      content: {
+        text: [
+          {
+            message: 'User is logged out',
+            locale: 'en',
+          },
+        ],
+        buttons_style: 'button',
+        buttons: [],
+      },
+    },
+    {
       id: '981be6fb-f2f8-4dfd-b997-6b1b0d0ab080',
       code: 'NO_SUITCASES_IN_BOOKING',
       is_code_ai_generated: true,
@@ -2697,6 +2838,7 @@ export const basicFlow = {
     'bagsAdded',
     'bookingType',
     'isLogged',
+    'loggedValue',
     'session.is_first_interaction',
   ],
 }

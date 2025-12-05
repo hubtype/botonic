@@ -20,7 +20,7 @@ export interface HtFunctionArgumentLocale {
 }
 
 export interface HtFunctionResult {
-  result: string
+  result: string | boolean | number
   target?: HtNodeLink
 }
 

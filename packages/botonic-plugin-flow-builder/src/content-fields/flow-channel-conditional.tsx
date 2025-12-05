@@ -1,6 +1,5 @@
 import { EventAction, EventConditionalChannel } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import React from 'react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -38,7 +37,7 @@ export class FlowChannelConditional extends ContentFieldsBase {
       )
     }
     this.conditionalResult = conditionalResult
-    this.channelResult = conditionalResult.result
+    this.channelResult = conditionalResult.result as string
     this.followUp = conditionalResult.target
   }
 
