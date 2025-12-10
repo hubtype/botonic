@@ -13,6 +13,7 @@ export interface HtFlowBuilderData {
   nodes: HtNodeComponent[]
   flows: HtFlows[]
   webviews: HtFlowWebview[]
+  campaigns: HtCampaign[]
 }
 
 export interface HtFlows {
@@ -25,6 +26,12 @@ export interface HtFlowWebview {
   id: string
   name: string
   component_name: string
+}
+
+export interface HtCampaign {
+  id: string
+  name: string
+  start_node_id: string
 }
 
 export interface HtNodeLink {

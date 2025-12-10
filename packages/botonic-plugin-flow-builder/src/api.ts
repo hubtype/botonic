@@ -73,6 +73,12 @@ export class FlowBuilderApi {
     return this.getNodeById<HtNodeWithContent>(subFlow.start_node_id)
   }
 
+  getNodeByCampaignId<T extends HtNodeComponent>(id: string): T {
+    const campaign = this.flow.campaigns.find(campaign => campaign.id === id)
+    if (!campaign) throw Error(`Campaign with id: '${id}' not found`)
+    return this.getNodeById<T>(campaign.start_node_id)
+  }
+
   getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
     if (!node) console.error(`Node with id: '${id}' not found`)

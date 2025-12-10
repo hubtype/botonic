@@ -11,6 +11,7 @@ export const UUID_REGEXP =
 
 /* ********** PAYLOADS ********** */
 export const AGENT_RATING_PAYLOAD = 'agent-rating'
+export const PUSH_FLOW_PAYLOAD = 'push-flow'
 
 /* ********** FLOW NAMES ********** */
 export const MAIN_FLOW_NAME = 'Main'
