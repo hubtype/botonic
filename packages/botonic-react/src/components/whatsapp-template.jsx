@@ -8,6 +8,8 @@ const serialize = whatsappTemplateProps => {
   return { text: whatsappTemplateProps }
 }
 
+// TODO: Type correctly these props
+
 export const WhatsappTemplate = props => {
   const renderBrowser = () => {
     // Return a dummy message for browser
