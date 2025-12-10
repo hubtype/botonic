@@ -11,8 +11,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   public templateLanguage = ''
 
   static fromHubtypeCMS(
-    component: HtWhatsappTemplateNode,
-    locale: string
+    component: HtWhatsappTemplateNode
   ): FlowWhatsappTemplate {
     const whatsappTemplate = new FlowWhatsappTemplate(component.id)
     whatsappTemplate.code = component.code

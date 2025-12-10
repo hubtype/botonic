@@ -21,6 +21,7 @@ import { HtVideoNode } from './video'
 import { HtWebviewNode } from './webview'
 import { HtWhatsappButtonListNode } from './whatsapp-button-list'
 import { HtWhatsappCTAUrlButtonNode } from './whatsapp-cta-url-button'
+import { HtWhatsappTemplateNode } from './whatsapp-template'
 
 export type HtNodeWithContent =
   | HtTextNode
@@ -40,6 +41,7 @@ export type HtNodeWithContent =
   | HtRatingNode
   | HtWebviewNode
   | HtGoToFlow
+  | HtWhatsappTemplateNode
 // | HtChannelConditionalNode
 // | HtCountryConditionalNode
 // | HtCustomConditionalNode
