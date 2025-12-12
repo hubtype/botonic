@@ -46,6 +46,37 @@ describe('Check the contents returned by the plugin after conditional custom nod
   )
 
   test.each([
+    'yes',
+    '',
+    {},
+    { value: 'yes' },
+    [],
+    [true, false],
+    [1, 2],
+    0,
+    2,
+    null,
+    undefined,
+  ])(
+    'The expected content is displayed after using a non boolean variable in a boolean conditional with value: %s',
+    async (loggedValue?: any) => {
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'anyVariableForBooleanCondition', type: INPUT.TEXT },
+          extraData: { loggedValue },
+        },
+      })
+
+      expect(contents[0]).toBeInstanceOf(FlowCustomConditional)
+      expect(contents[1]).toBeInstanceOf(FlowText)
+      expect((contents[1] as FlowText).text).toBe(
+        `User is logged ${loggedValue !== undefined && loggedValue !== null ? 'in' : 'out'}`
+      )
+    }
+  )
+
+  test.each([
     { messageExpected: 'The user has no bags in the booking', bagsAdded: 0 },
     { messageExpected: 'The user has 1 bag in the booking', bagsAdded: 1 },
     { messageExpected: 'The user has 2 bags in the booking', bagsAdded: 2 },

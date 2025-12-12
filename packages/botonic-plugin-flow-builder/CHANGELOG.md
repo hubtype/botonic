@@ -20,6 +20,19 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.42.2] - 2025-12-02
+
+### Added
+
+- [PR-3132](https://github.com/hubtype/botonic/pull/3132): Allow using a Boolean condition of a Bot variable conditional to check non boolean variables.
+
+## [0.42.1] - 2025-11-27
+
+### Fixed
+
+- [PR-3131](https://github.com/hubtype/botonic/pull/3131): Fix payload of AI Agent generated Text with buttons
+
+
 ## [0.42.0] - 2025-11-25
 
 ### Changed

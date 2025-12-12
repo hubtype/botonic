@@ -1,6 +1,5 @@
 import { EventAction, EventConditionalCustom } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
-import React from 'react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -55,9 +54,21 @@ export class FlowCustomConditional extends ContentFieldsBase {
     }
 
     const botVariable = getValueFromKeyPath(request, keyPath)
-    const conditionalResult =
+
+    let conditionalResult =
       this.resultMapping.find(rMap => rMap.result === botVariable) ||
       this.resultMapping.find(rMap => rMap.result === 'default')
+
+    if (
+      this.isBooleanConditional(this.resultMapping) &&
+      typeof botVariable !== 'boolean'
+    ) {
+      conditionalResult =
+        this.resultMapping.find(
+          rMap =>
+            rMap.result === (botVariable !== undefined && botVariable !== null)
+        ) || this.resultMapping.find(rMap => rMap.result === 'default')
+    }
 
     if (!conditionalResult) {
       throw new Error(
@@ -91,6 +102,14 @@ export class FlowCustomConditional extends ContentFieldsBase {
     }
     const { action, ...eventArgs } = eventCustomConditional
     await trackEvent(request, action, eventArgs)
+  }
+
+  private isBooleanConditional(resultMapping: HtFunctionResult[]): boolean {
+    return (
+      resultMapping.some(rMap => rMap.result === true) &&
+      resultMapping.some(rMap => rMap.result === false) &&
+      resultMapping.some(rMap => rMap.result === 'default')
+    )
   }
 
   toBotonic() {
