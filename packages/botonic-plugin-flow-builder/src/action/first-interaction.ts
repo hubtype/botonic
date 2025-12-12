@@ -11,7 +11,7 @@ import { getContentsByPayload } from './payload'
 export async function getContentsByFirstInteraction(
   context: FlowBuilderContext
 ): Promise<FlowContent[]> {
-  const { cmsApi, contentID, flowBuilderPlugin, request } = context
+  const { contentID, flowBuilderPlugin, request } = context
 
   /*
    * If the contentID is provided, the firstInteractionContents are obtained even if they are not used
@@ -41,20 +41,15 @@ export async function getContentsByFirstInteraction(
    * and avoid to render the match with keywords,intents or knowledge base
    */
   if (firstInteractionContents.at(-1) instanceof FlowBotAction) {
-    console.log('getContentsByFirstInteraction: FlowBotAction')
     return firstInteractionContents
   }
 
   if (request.input.nluResolution || inputHasTextData(request.input)) {
-    console.log('getContentsByFirstInteraction: inputHasTextData')
     const contentsByUserInput = await getContentsByUserInput(context)
 
-    //TODO: We can split getContentsByUserInput in getContentsByKeywordsIntentsOrKnowledgeBase and getContentsByAiAgent
-    // and then if AI agent responds no join firstInteractionContents
     return [...firstInteractionContents, ...contentsByUserInput]
   }
 
-  console.log('getContentsByFirstInteraction: default')
   return firstInteractionContents
 }
 
@@ -101,7 +96,6 @@ async function getContentsByUserInput(
   })
 
   if (contentsByKnowledgeBase.length > 0) {
-    console.log('getContentsByFirstInteraction: contentsByKnowledgeBase')
     return contentsByKnowledgeBase
   }
 
