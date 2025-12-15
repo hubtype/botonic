@@ -52,6 +52,11 @@ export interface WhatsappTemplateFooter {
   }[]
 }
 
+export interface WhatsappTemplateButtons {
+  type: WhatsAppTemplateComponentType.BUTTONS
+  buttons: WhatsappTemplateButton[]
+}
+
 export interface WhatsappTemplateQuickReplyButton {
   type: WhatsAppTemplateComponentType.BUTTON
   sub_type: WhatsAppTemplateButtonSubType.QUICK_REPLY

@@ -11,6 +11,7 @@ import {
   WhatsappTemplateHeader,
   WhatsAppTemplateParameterType,
 } from '@botonic/react'
+import { WhatsappTemplateButtons } from '@botonic/react/lib/cjs/components/whatsapp-template/types'
 import React from 'react'
 
 import { trackOneContent } from '../tracking'
@@ -27,7 +28,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   public header?: WhatsappTemplateHeader
   public body?: WhatsappTemplateBody
   public footer?: WhatsappTemplateFooter
-  public buttons?: WhatsappTemplateButton[]
+  public buttons?: WhatsappTemplateButtons
 
   static fromHubtypeCMS(
     component: HtWhatsappTemplateNode
@@ -115,7 +116,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
   private static getButtons(
     component: HtWhatsappTemplateNode
-  ): WhatsappTemplateButton[] | undefined {
+  ): WhatsappTemplateButtons | undefined {
     const whatsappTemplate = component.content.template
     const htWhatsappTemplateButtonsComponent = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.BUTTONS
@@ -123,7 +124,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     const buttonNodes = component.content.buttons
 
     if (htWhatsappTemplateButtonsComponent) {
-      return htWhatsappTemplateButtonsComponent.buttons
+      const buttons = htWhatsappTemplateButtonsComponent.buttons
         .filter(
           button => button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY
         )
@@ -159,12 +160,18 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
           // TODO: Implement buttons with PHONE_NUMBER??
         })
+      return {
+        type: WhatsAppTemplateComponentType.BUTTONS,
+        // @ts-ignore
+        buttons: buttons,
+      }
     }
     return undefined
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async trackFlow(_request: ActionRequest): Promise<void> {
+    // await trackOneContent(request, this)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
