@@ -2,6 +2,7 @@ export enum WhatsAppTemplateButtonSubType {
   URL = 'URL',
   QUICK_REPLY = 'QUICK_REPLY',
   PHONE_NUMBER = 'PHONE_NUMBER',
+  VOICE_CALL = 'VOICE_CALL',
 }
 
 export enum WhatsAppTemplateParameterType {

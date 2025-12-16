@@ -77,15 +77,8 @@ export interface HtWhatsappTemplateNode extends HtBaseNode {
       media?: HtMediaFileLocale[]
     }
     variable_values: Record<string, string>
-    /*
-    // TODO: Should we store different variables for header, body
-    variable_values: {
-    header: Record<string, string>
-    body: Record<string, string>
-    // Buttons payloads (solved?) urls and phone numbers?
-    buttons: Record<string, string>
-    }
-    */
+
     buttons: HtButton[]
+    url_variable_values?: Record<string, string>
   }
 }

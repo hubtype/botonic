@@ -56,18 +56,10 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     )
 
     whatsappTemplate.variableValues = component.content.variable_values
-
-    // TODO: For now we don't support variables in header
-    // whatsappTemplate.header = this.getHeaderComponent(
-    //   component.content.template
-    // )
     whatsappTemplate.body = this.getBodyComponent(
       component.content.variable_values
     )
-    // TODO: For now we don't support variables in footer
-    // whatsappTemplate.footer = this.getFooterComponent(
-    //   component.content.template
-    // )
+
     whatsappTemplate.buttons = this.getButtons(component)
 
     whatsappTemplate.followUp = component.follow_up
@@ -125,35 +117,23 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   ): WhatsappTemplateComponentBody {
     return {
       type: WhatsAppTemplateComponentType.BODY,
-      parameters: Object.entries(variableValues).map(([key, value]) => ({
-        type: WhatsAppTemplateParameterType.TEXT,
-        parameter_name: key,
-        text: value,
-      })),
+      parameters: Object.entries(variableValues).map(([key, value]) => {
+        const keyIsNumber = /^[0-9]+$/.test(key)
+        if (keyIsNumber) {
+          return {
+            type: WhatsAppTemplateParameterType.TEXT,
+            parameter_name: key,
+            text: value,
+          }
+        }
+        return {
+          type: WhatsAppTemplateParameterType.TEXT,
+          parameter_name: key,
+          text: 'lalalala',
+        }
+      }),
     }
   }
-
-  // private static getFooterComponent(
-  //   whatsappTemplate: HtWhatsAppTemplate
-  // ): WhatsappTemplateFooter | undefined {
-  //   const footerComponent = whatsappTemplate.components.find(
-  //     component => component.type === WhatsAppTemplateComponentType.FOOTER
-  //   ) as HtWhatsAppTemplateFooterComponent | undefined
-
-  //   if (footerComponent) {
-  //     return {
-  //       type: WhatsAppTemplateComponentType.FOOTER,
-  //       parameters: [
-  //         {
-  //           type: WhatsAppTemplateParameterType.TEXT,
-  //           parameter_name: footerComponent.parameter_name, // TODO: Store in HtWhatsappTemplateNode variables for footer
-  //           text: footerComponent.text, // TODO: Use here param for footer
-  //         },
-  //       ],
-  //     }
-  //   }
-  //   return undefined
-  // }
 
   private static getButtons(
     component: HtWhatsappTemplateNode
@@ -165,26 +145,27 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     const buttonNodes = component.content.buttons
 
     if (htWhatsappTemplateButtonsComponent) {
-      const buttons = htWhatsappTemplateButtonsComponent.buttons
-        .filter(
-          button => button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY
-        )
-        .map((_button, index) => {
-          // TODO: Implement buttons with dynamic URLs??
-          // if (button.type === WhatsAppTemplateButtonSubType.URL) {
-          //   return {
-          //     type: WhatsAppTemplateComponentType.BUTTON,
-          //     sub_type: WhatsAppTemplateButtonSubType.URL,
-          //     index: index,
-          //     parameters: [
-          //       {
-          //         type: WhatsAppTemplateParameterType.TEXT,
-          //         text: button.url || '', // URL dynamic param
-          //       },
-          //     ],
-          //   }
-          // }
+      const buttons = htWhatsappTemplateButtonsComponent.buttons.map(
+        (button, index) => {
+          if (button.type === WhatsAppTemplateButtonSubType.URL) {
+            const urlParam =
+              component.content.url_variable_values?.[String(index)]
+            return {
+              type: WhatsAppTemplateComponentType.BUTTON,
+              sub_type: WhatsAppTemplateButtonSubType.URL,
+              index: index,
+              parameters: urlParam
+                ? [
+                    {
+                      type: WhatsAppTemplateParameterType.TEXT,
+                      text: urlParam,
+                    },
+                  ]
+                : [],
+            }
+          }
 
+          if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
             return {
               type: WhatsAppTemplateComponentType.BUTTON,
               sub_type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
@@ -196,7 +177,15 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
                 },
               ],
             }
-        })
+          }
+          return {
+            type: WhatsAppTemplateComponentType.BUTTON,
+            sub_type: WhatsAppTemplateButtonSubType.VOICE_CALL,
+            index: index,
+            parameters: [],
+          }
+        }
+      )
       return {
         type: WhatsAppTemplateComponentType.BUTTONS,
         buttons: buttons as WhatsappTemplateQuickReplyButton[],
@@ -211,15 +200,16 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    console.log('toBotonic header', this.header?.parameters)
+    console.log('toBotonic buttons', this.buttons?.buttons)
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappTemplate
           key={id}
           name={this.templateName}
           language={this.templateLanguage}
-          // header={this.header}
+          header={this.header}
           body={this.body}
-          // footer={this.footer}
           buttons={this.buttons}
         />
       )
