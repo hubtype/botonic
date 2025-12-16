@@ -5,8 +5,11 @@ export enum WhatsAppTemplateButtonSubType {
 }
 
 export enum WhatsAppTemplateParameterType {
-  TEXT = 'TEXT',
   PAYLOAD = 'PAYLOAD',
+  TEXT = 'TEXT',
+  IMAGE = 'IMAGE',
+  VIDEO = 'VIDEO',
+  DOCUMENT = 'DOCUMENT',
 }
 
 export enum WhatsAppTemplateComponentType {
@@ -17,24 +20,34 @@ export enum WhatsAppTemplateComponentType {
   BUTTON = 'BUTTON',
 }
 
-export enum WhatsAppTemplateComponentFormat {
-  TEXT = 'TEXT',
-  IMAGE = 'IMAGE',
-  VIDEO = 'VIDEO',
-  DOCUMENT = 'DOCUMENT',
-  GIF = 'GIF',
+export interface WhatsappTemplateHeaderTextParameter {
+  type: WhatsAppTemplateParameterType.TEXT
+  text: string
 }
 
-export interface WhatsappTemplateHeader {
+export interface WhatsappTemplateHeaderImageParameter {
+  type: WhatsAppTemplateParameterType.IMAGE
+  image: {
+    link: string
+  }
+}
+
+export interface WhatsappTemplateComponentHeader {
   type: WhatsAppTemplateComponentType.HEADER
-  parameters: {
-    type: WhatsAppTemplateParameterType.TEXT //| 'image' | 'video' | 'document'
-    parameter_name: string
-    text: string
-  }[]
+  parameters:
+    | WhatsappTemplateHeaderTextParameter[]
+    | WhatsappTemplateHeaderImageParameter[]
+  // | {
+  //     type: WhatsAppTemplateParameterType.VIDEO
+  //     video: string
+  //   }[]
+  // | {
+  //     type: WhatsAppTemplateParameterType.DOCUMENT
+  //     document: string
+  //   }[]
 }
 
-export interface WhatsappTemplateBody {
+export interface WhatsappTemplateComponentBody {
   type: WhatsAppTemplateComponentType.BODY
   parameters: {
     type: WhatsAppTemplateParameterType.TEXT
@@ -43,7 +56,7 @@ export interface WhatsappTemplateBody {
   }[]
 }
 
-export interface WhatsappTemplateFooter {
+export interface WhatsappTemplateComponentFooter {
   type: WhatsAppTemplateComponentType.FOOTER
   parameters: {
     type: WhatsAppTemplateParameterType.TEXT
@@ -52,7 +65,7 @@ export interface WhatsappTemplateFooter {
   }[]
 }
 
-export interface WhatsappTemplateButtons {
+export interface WhatsappTemplateComponentButtons {
   type: WhatsAppTemplateComponentType.BUTTONS
   buttons: WhatsappTemplateButton[]
 }

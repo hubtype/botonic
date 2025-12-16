@@ -56,15 +56,4 @@ export {
   WhatsappProductListSection,
 } from './whatsapp-product-list'
 export { WhatsappTemplate } from './whatsapp-template/index'
-export {
-  WhatsappTemplateBody,
-  WhatsappTemplateButton,
-  WhatsAppTemplateButtonSubType,
-  WhatsAppTemplateComponentFormat,
-  WhatsAppTemplateComponentType,
-  WhatsappTemplateFooter,
-  WhatsappTemplateHeader,
-  WhatsAppTemplateParameterType,
-  WhatsappTemplateQuickReplyButton,
-  WhatsappTemplateUrlButton,
-} from './whatsapp-template/types'
+export * from './whatsapp-template/types'

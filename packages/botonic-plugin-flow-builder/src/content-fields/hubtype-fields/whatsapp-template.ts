@@ -1,11 +1,11 @@
 import {
   WhatsAppTemplateButtonSubType,
-  WhatsAppTemplateComponentFormat,
   WhatsAppTemplateComponentType,
+  WhatsAppTemplateParameterType,
 } from '@botonic/react'
 
 import { HtButton } from './button'
-import { HtBaseNode } from './common'
+import { HtBaseNode, HtMediaFileLocale } from './common'
 import { HtNodeWithContentType } from './node-types'
 
 type HtWhatsAppTemplateButton =
@@ -30,8 +30,11 @@ type HtWhatsAppTemplateButton =
 
 export interface HtWhatsAppTemplateHeaderComponent {
   type: WhatsAppTemplateComponentType.HEADER
-  format: WhatsAppTemplateComponentFormat.TEXT
-  text: string
+  format:
+    | WhatsAppTemplateParameterType.TEXT
+    | WhatsAppTemplateParameterType.IMAGE
+  text?: string
+  image?: { link: string }
 }
 
 export interface HtWhatsAppTemplateBodyComponent {
@@ -68,17 +71,21 @@ export interface HtWhatsappTemplateNode extends HtBaseNode {
   type: HtNodeWithContentType.WHATSAPP_TEMPLATE
   content: {
     template: HtWhatsAppTemplate
+    header_variables?: {
+      type: WhatsAppTemplateParameterType
+      text?: Record<string, string>
+      media?: HtMediaFileLocale[]
+    }
     variable_values: Record<string, string>
-    // TODO: Should we store different variables for header, body and footer?
-    // header_variables: Record<string, string>
-    // body_variables: Record<string, string>
-    // footer_variables: Record<string, string>
-    // TODO: Should we store variables for dynamic urls buttons
-    // url_variables: Record<string, string>
-    // TODO: Should we store variables for quick reply buttons
-    // quick_reply_variables: Record<string, string>
-    // TODO: Should we store variables for phone number buttons
-    // phone_number_variables: Record<string, string>
+    /*
+    // TODO: Should we store different variables for header, body
+    variable_values: {
+    header: Record<string, string>
+    body: Record<string, string>
+    // Buttons payloads (solved?) urls and phone numbers?
+    buttons: Record<string, string>
+    }
+    */
     buttons: HtButton[]
   }
 }
