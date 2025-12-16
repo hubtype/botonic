@@ -3,20 +3,24 @@ import {
   ActionRequest,
   Text,
   WhatsappTemplate,
+  WhatsappTemplateButton,
   WhatsAppTemplateButtonSubType,
   WhatsappTemplateComponentBody,
   WhatsappTemplateComponentButtons,
-  WhatsappTemplateComponentFooter,
   WhatsappTemplateComponentHeader,
   WhatsAppTemplateComponentType,
   WhatsAppTemplateParameterType,
   WhatsappTemplateQuickReplyButton,
+  WhatsappTemplateUrlButton,
+  WhatsappTemplateVoiceCallButton,
 } from '@botonic/react'
 import React from 'react'
 
+import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import {
+  HtButton,
   HtMediaFileLocale,
   HtWhatsAppTemplate,
   HtWhatsAppTemplateButtonsComponent,
@@ -31,47 +35,32 @@ interface HeaderVariables {
 }
 
 export class FlowWhatsappTemplate extends ContentFieldsBase {
-  public templateName = ''
-  public templateLanguage = ''
+  public htWhatsappTemplate: HtWhatsAppTemplate
   public variableValues: Record<string, string> = {}
-  public header?: WhatsappTemplateComponentHeader
-  public body?: WhatsappTemplateComponentBody
-  public footer?: WhatsappTemplateComponentFooter
-  public buttons?: WhatsappTemplateComponentButtons
   public headerVariables?: HeaderVariables
+  public buttons?: HtButton[]
+  public urlVariableValues?: Record<string, string>
 
   static fromHubtypeCMS(
     component: HtWhatsappTemplateNode
   ): FlowWhatsappTemplate {
     const whatsappTemplate = new FlowWhatsappTemplate(component.id)
     whatsappTemplate.code = component.code
-    whatsappTemplate.templateName = component.content.template.name
-    whatsappTemplate.templateLanguage = component.content.template.language
-
+    whatsappTemplate.htWhatsappTemplate = component.content.template
     whatsappTemplate.headerVariables = component.content.header_variables
-    whatsappTemplate.header = this.getHeaderComponent(
-      component.content.template,
-      component.content.header_variables || ({} as HeaderVariables),
-      'en'
-    )
-
     whatsappTemplate.variableValues = component.content.variable_values
-    whatsappTemplate.body = this.getBodyComponent(
-      component.content.variable_values
-    )
-
-    whatsappTemplate.buttons = this.getButtons(component)
+    whatsappTemplate.buttons = component.content.buttons
+    whatsappTemplate.urlVariableValues = component.content.url_variable_values
 
     whatsappTemplate.followUp = component.follow_up
 
     return whatsappTemplate
   }
 
-  private static getHeaderComponent(
+  private getHeaderComponent(
     whatsappTemplate: HtWhatsAppTemplate,
     headerVariables: HeaderVariables,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _locale: string
+    locale: string
   ): WhatsappTemplateComponentHeader | undefined {
     const headerComponent = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.HEADER
@@ -81,38 +70,51 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       headerComponent &&
       headerComponent.format === WhatsAppTemplateParameterType.TEXT
     ) {
-      return {
-        type: WhatsAppTemplateComponentType.HEADER,
-        parameters: Object.values(headerVariables.text || {}).map(value => ({
-          type: WhatsAppTemplateParameterType.TEXT,
-          text: value,
-        })),
-      }
+      return this.createHeaderTextComponent(headerVariables)
     }
 
     if (
       headerComponent &&
       headerComponent.format === WhatsAppTemplateParameterType.IMAGE
     ) {
-      return {
-        type: WhatsAppTemplateComponentType.HEADER,
-        parameters: [
-          {
-            type: WhatsAppTemplateParameterType.IMAGE,
-            image: {
-              link:
-                headerVariables.media?.find(m => m.locale === _locale)?.file ||
-                '',
-            },
-          },
-        ],
-      }
+      return this.createHeaderImageComponent(headerVariables, locale)
     }
+
     return undefined
   }
 
+  private createHeaderTextComponent(
+    headerVariables: HeaderVariables
+  ): WhatsappTemplateComponentHeader {
+    return {
+      type: WhatsAppTemplateComponentType.HEADER,
+      parameters: Object.values(headerVariables.text || {}).map(value => ({
+        type: WhatsAppTemplateParameterType.TEXT,
+        text: value,
+      })),
+    }
+  }
+
+  private createHeaderImageComponent(
+    headerVariables: HeaderVariables,
+    locale: string
+  ): WhatsappTemplateComponentHeader {
+    return {
+      type: WhatsAppTemplateComponentType.HEADER,
+      parameters: [
+        {
+          type: WhatsAppTemplateParameterType.IMAGE,
+          image: {
+            link:
+              headerVariables.media?.find(m => m.locale === locale)?.file || '',
+          },
+        },
+      ],
+    }
+  }
+
   // TODO: To use named variables (contact_info_fields) we need to take it from request.session.user.contact_info, this only be able in toBotonic method
-  private static getBodyComponent(
+  private getBodyComponent(
     variableValues: Record<string, string>
   ): WhatsappTemplateComponentBody {
     return {
@@ -127,89 +129,134 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     }
   }
 
-  private static getButtons(
-    component: HtWhatsappTemplateNode
+  private getButtons(
+    whatsappTemplate: HtWhatsAppTemplate,
+    buttonNodes: HtButton[],
+    urlVariableValues: Record<string, string>
   ): WhatsappTemplateComponentButtons | undefined {
-    const whatsappTemplate = component.content.template
-    const htWhatsappTemplateButtonsComponent = whatsappTemplate.components.find(
+    const htWhatsappTemplateButtons = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.BUTTONS
     ) as HtWhatsAppTemplateButtonsComponent | undefined
-    const buttonNodes = component.content.buttons
 
-    if (htWhatsappTemplateButtonsComponent) {
-      const buttons = htWhatsappTemplateButtonsComponent.buttons.map(
-        (button, index) => {
-          if (button.type === WhatsAppTemplateButtonSubType.URL) {
-            const urlParam =
-              component.content.url_variable_values?.[String(index)]
-            return {
-              type: WhatsAppTemplateComponentType.BUTTON,
-              sub_type: WhatsAppTemplateButtonSubType.URL,
-              index: index,
-              parameters: urlParam
-                ? [
-                    {
-                      type: WhatsAppTemplateParameterType.TEXT,
-                      text: urlParam,
-                    },
-                  ]
-                : [],
-            }
-          }
-
-          if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
-            return {
-              type: WhatsAppTemplateComponentType.BUTTON,
-              sub_type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
-              index: index,
-              parameters: [
-                {
-                  type: WhatsAppTemplateParameterType.PAYLOAD,
-                  payload: buttonNodes[index].target?.id || '',
-                },
-              ],
-            }
-          }
-          return {
-            type: WhatsAppTemplateComponentType.BUTTON,
-            sub_type: WhatsAppTemplateButtonSubType.VOICE_CALL,
-            index: index,
-            parameters: [],
-          }
+    if (htWhatsappTemplateButtons) {
+      const buttons = htWhatsappTemplateButtons.buttons.map((button, index) => {
+        if (button.type === WhatsAppTemplateButtonSubType.URL) {
+          const urlParam = urlVariableValues?.[String(index)]
+          return this.createUrlButtonComponent(index, urlParam)
         }
-      )
+
+        if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
+          const payload = buttonNodes[index].target?.id || ''
+          return this.createQuickReplyButtonComponent(index, payload)
+        }
+
+        return this.createVoiceCallButtonComponent(index)
+      })
+
       return {
         type: WhatsAppTemplateComponentType.BUTTONS,
-        buttons: buttons as WhatsappTemplateQuickReplyButton[],
+        buttons: buttons as WhatsappTemplateButton[],
       }
     }
+
     return undefined
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
-    // await trackOneContent(request, this)
+  private createUrlButtonComponent(
+    index: number,
+    urlParam?: string
+  ): WhatsappTemplateUrlButton {
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.URL,
+      index: index,
+      parameters: urlParam
+        ? [
+            {
+              type: WhatsAppTemplateParameterType.TEXT,
+              text: urlParam,
+            },
+          ]
+        : [],
+    }
+  }
+
+  private createQuickReplyButtonComponent(
+    index: number,
+    payload: string
+  ): WhatsappTemplateQuickReplyButton {
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
+      index: index,
+      parameters: [
+        {
+          type: WhatsAppTemplateParameterType.PAYLOAD,
+          payload: payload,
+        },
+      ],
+    }
+  }
+
+  private createVoiceCallButtonComponent(
+    index: number
+  ): WhatsappTemplateVoiceCallButton {
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.VOICE_CALL,
+      index: index,
+      parameters: [],
+    }
+  }
+
+  async trackFlow(request: ActionRequest): Promise<void> {
+    await trackOneContent(request, this)
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
-    console.log('toBotonic header', this.header?.parameters)
-    console.log('toBotonic buttons', this.buttons?.buttons)
+    const templateName = this.htWhatsappTemplate.name
+    const templateLanguage = this.htWhatsappTemplate.language
+    const body = this.getBodyComponent(this.variableValues)
+    const pluginFlowBuilder = getFlowBuilderPlugin(request.plugins)
+    const resolvedLocale = pluginFlowBuilder.cmsApi.getResolvedLocale()
+
+    const header = this.getHeaderComponent(
+      this.htWhatsappTemplate,
+      this.headerVariables || ({} as HeaderVariables),
+      resolvedLocale
+    )
+    const buttons = this.getButtons(
+      this.htWhatsappTemplate,
+      this.buttons || [],
+      this.urlVariableValues || {}
+    )
+
+    console.log('toBotonic templateName', templateName)
+    console.log('toBotonic templateLanguage', templateLanguage)
+    console.log('toBotonic resolvedLocale', resolvedLocale)
+    console.log('toBotonic header', JSON.stringify(header, null, 2))
+    console.log('toBotonic body', JSON.stringify(body, null, 2))
+    console.log('toBotonic buttons', JSON.stringify(buttons, null, 2))
+
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappTemplate
           key={id}
-          name={this.templateName}
-          language={this.templateLanguage}
-          header={this.header}
-          body={this.body}
-          buttons={this.buttons}
+          name={templateName}
+          language={templateLanguage}
+          header={header}
+          body={body}
+          buttons={buttons}
         />
       )
     }
 
     return (
       <Text key={id}>
-        {`WhatsApp Template: ${this.templateName} (${this.templateLanguage})`}
+        {`WhatsApp Template: ${templateName} (${templateLanguage})`}
+        {header && `${JSON.stringify(header, null, 2)}`}
+        {body && `${JSON.stringify(body, null, 2)}`}
+        {buttons && `${JSON.stringify(buttons, null, 2)}`}
       </Text>
     )
   }

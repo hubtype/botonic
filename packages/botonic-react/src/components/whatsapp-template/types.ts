@@ -91,6 +91,14 @@ export interface WhatsappTemplateUrlButton {
   }[]
 }
 
+export interface WhatsappTemplateVoiceCallButton {
+  type: WhatsAppTemplateComponentType.BUTTON
+  sub_type: WhatsAppTemplateButtonSubType.VOICE_CALL
+  index: number
+  parameters: []
+}
+
 export type WhatsappTemplateButton =
   | WhatsappTemplateQuickReplyButton
   | WhatsappTemplateUrlButton
+  | WhatsappTemplateVoiceCallButton

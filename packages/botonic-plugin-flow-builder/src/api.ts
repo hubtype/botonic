@@ -221,7 +221,14 @@ export class FlowBuilderApi {
 
   getFlowName(flowId: string): string {
     const flow = this.flow.flows.find(flow => flow.id === flowId)
-    return flow ? flow.name : ''
+    return flow ? flow.name : this.getCampaignFlowName(flowId)
+  }
+
+  getCampaignFlowName(campaignId: string): string {
+    const campaign = this.flow.campaigns.find(
+      campaign => campaign.id === campaignId
+    )
+    return campaign ? campaign.name : ''
   }
 
   getStartNodeKnowledgeBaseFlow(): HtNodeWithContent | undefined {
