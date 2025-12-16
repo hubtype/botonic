@@ -118,18 +118,10 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return {
       type: WhatsAppTemplateComponentType.BODY,
       parameters: Object.entries(variableValues).map(([key, value]) => {
-        const keyIsNumber = /^[0-9]+$/.test(key)
-        if (keyIsNumber) {
-          return {
-            type: WhatsAppTemplateParameterType.TEXT,
-            parameter_name: key,
-            text: value,
-          }
-        }
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           parameter_name: key,
-          text: 'lalalala',
+          text: value,
         }
       }),
     }
