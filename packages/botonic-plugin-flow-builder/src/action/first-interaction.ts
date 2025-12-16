@@ -3,6 +3,7 @@ import { MAIN_FLOW_NAME } from '../constants'
 import { FlowBotAction, FlowContent } from '../content-fields'
 import BotonicPluginFlowBuilder from '../index'
 import { inputHasTextData } from '../utils'
+import { getContentsByAiAgent } from './ai-agent'
 import { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
@@ -52,12 +53,10 @@ export async function getContentsByFirstInteraction(
   return firstInteractionContents
 }
 
-async function getContentsByUserInput({
-  cmsApi,
-  flowBuilderPlugin,
-  request,
-  resolvedLocale,
-}: FlowBuilderContext): Promise<FlowContent[]> {
+async function getContentsByUserInput(
+  context: FlowBuilderContext
+): Promise<FlowContent[]> {
+  const { cmsApi, flowBuilderPlugin, request, resolvedLocale } = context
   const payloadByNlu = request.input.nluResolution?.payload
 
   if (payloadByNlu) {
@@ -89,12 +88,19 @@ async function getContentsByUserInput({
     }
   }
 
-  return await getContentsByKnowledgeBase({
+  const contentsByKnowledgeBase = await getContentsByKnowledgeBase({
     cmsApi,
     flowBuilderPlugin,
     request,
     resolvedLocale,
   })
+
+  if (contentsByKnowledgeBase.length > 0) {
+    return contentsByKnowledgeBase
+  }
+
+  const contentsByAiAgent = await getContentsByAiAgent(context)
+  return contentsByAiAgent
 }
 
 function getConversationStartId(cmsApi: FlowBuilderApi) {
