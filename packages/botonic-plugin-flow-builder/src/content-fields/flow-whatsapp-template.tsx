@@ -16,8 +16,10 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
+import { VARIABLE_PATTERN } from '../constants'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
+import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtButton,
@@ -60,7 +62,8 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   private getHeaderComponent(
     whatsappTemplate: HtWhatsAppTemplate,
     headerVariables: HeaderVariables,
-    locale: string
+    locale: string,
+    request: ActionRequest
   ): WhatsappTemplateComponentHeader | undefined {
     const headerComponent = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.HEADER
@@ -70,7 +73,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       headerComponent &&
       headerComponent.format === WhatsAppTemplateParameterType.TEXT
     ) {
-      return this.createHeaderTextComponent(headerVariables)
+      return this.createHeaderTextComponent(headerVariables, request)
     }
 
     if (
@@ -83,15 +86,29 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return undefined
   }
 
+  private resolveValueVariable(value: string, request: ActionRequest): string {
+    const isMatched = value.match(VARIABLE_PATTERN)
+    if (!isMatched) {
+      return value
+    }
+    const keyPath = isMatched[0].slice(1, -1)
+    const valueVariable = getValueFromKeyPath(request, keyPath)
+    return valueVariable ? valueVariable.toString() : ''
+  }
+
   private createHeaderTextComponent(
-    headerVariables: HeaderVariables
+    headerVariables: HeaderVariables,
+    request: ActionRequest
   ): WhatsappTemplateComponentHeader {
     return {
       type: WhatsAppTemplateComponentType.HEADER,
-      parameters: Object.values(headerVariables.text || {}).map(value => ({
-        type: WhatsAppTemplateParameterType.TEXT,
-        text: value,
-      })),
+      parameters: Object.values(headerVariables.text || {}).map(value => {
+        const valueVariable = this.resolveValueVariable(value, request)
+        return {
+          type: WhatsAppTemplateParameterType.TEXT,
+          text: valueVariable,
+        }
+      }),
     }
   }
 
@@ -115,15 +132,17 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
   // TODO: To use named variables (contact_info_fields) we need to take it from request.session.user.contact_info, this only be able in toBotonic method
   private getBodyComponent(
-    variableValues: Record<string, string>
+    variableValues: Record<string, string>,
+    request: ActionRequest
   ): WhatsappTemplateComponentBody {
     return {
       type: WhatsAppTemplateComponentType.BODY,
       parameters: Object.entries(variableValues).map(([key, value]) => {
+        const valueVariable = this.resolveValueVariable(value, request)
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           parameter_name: key,
-          text: value,
+          text: valueVariable,
         }
       }),
     }
@@ -216,14 +235,15 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   toBotonic(id: string, request: ActionRequest): JSX.Element {
     const templateName = this.htWhatsappTemplate.name
     const templateLanguage = this.htWhatsappTemplate.language
-    const body = this.getBodyComponent(this.variableValues)
+    const body = this.getBodyComponent(this.variableValues, request)
     const pluginFlowBuilder = getFlowBuilderPlugin(request.plugins)
     const resolvedLocale = pluginFlowBuilder.cmsApi.getResolvedLocale()
 
     const header = this.getHeaderComponent(
       this.htWhatsappTemplate,
       this.headerVariables || ({} as HeaderVariables),
-      resolvedLocale
+      resolvedLocale,
+      request
     )
     const buttons = this.getButtons(
       this.htWhatsappTemplate,

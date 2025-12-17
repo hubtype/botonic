@@ -7,7 +7,7 @@ import {
   ACCESS_TOKEN_VARIABLE_KEY,
   EMPTY_PAYLOAD,
   SOURCE_INFO_SEPARATOR,
-  VARIABLE_PATTERN,
+  VARIABLE_PATTERN_GLOBAL,
 } from '../constants'
 import { trackOneContent } from '../tracking'
 import { getValueFromKeyPath } from '../utils'
@@ -38,7 +38,7 @@ export class FlowText extends ContentFieldsBase {
   }
 
   static replaceVariables(text: string, request: ActionRequest): string {
-    const matches = text.match(VARIABLE_PATTERN)
+    const matches = text.match(VARIABLE_PATTERN_GLOBAL)
 
     let replacedText = text
     if (matches && request) {
