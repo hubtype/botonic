@@ -143,6 +143,7 @@ export interface Input {
   type: InputType
   context?: {
     campaign?: Campaign
+    campaign_v2?: CampaignV2
     salesforce?: {
       access_token: string
     }
@@ -207,6 +208,13 @@ export interface Campaign {
   end_date: string
   bot_path: string
   template_name: string
+}
+
+export interface CampaignV2 {
+  id: string
+  name: string
+  agent_context?: string
+  end_date?: string
 }
 
 export interface SessionUser<TExtraData = any> {

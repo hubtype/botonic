@@ -1,10 +1,23 @@
-import { ResolvedPlugins } from '@botonic/core'
+import { CampaignV2, ResolvedPlugins } from '@botonic/core'
 import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
 
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
 import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
+
+interface AIAgentBuilderOptions<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
+  name: string
+  instructions: string
+  tools: Tool<TPlugins, TExtraData>[]
+  campaignContext?: CampaignV2
+  contactInfo: ContactInfo
+  inputGuardrailRules: GuardrailRule[]
+  sourceIds: string[]
+}
 
 export class AIAgentBuilder<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -15,20 +28,17 @@ export class AIAgentBuilder<
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
 
-  constructor(
-    name: string,
-    instructions: string,
-    tools: Tool<TPlugins, TExtraData>[],
-    contactInfo: ContactInfo,
-    inputGuardrailRules: GuardrailRule[],
-    sourceIds: string[]
-  ) {
-    this.name = name
-    this.instructions = this.addExtraInstructions(instructions, contactInfo)
-    this.tools = this.addHubtypeTools(tools, sourceIds)
+  constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
+    this.name = options.name
+    this.instructions = this.addExtraInstructions(
+      options.instructions,
+      options.contactInfo,
+      options.campaignContext
+    )
+    this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
-    if (inputGuardrailRules.length > 0) {
-      const inputGuardrail = createInputGuardrail(inputGuardrailRules)
+    if (options.inputGuardrailRules.length > 0) {
+      const inputGuardrail = createInputGuardrail(options.inputGuardrailRules)
       this.inputGuardrails.push(inputGuardrail)
     }
   }
@@ -53,13 +63,15 @@ export class AIAgentBuilder<
 
   private addExtraInstructions(
     initialInstructions: string,
-    contactInfo: ContactInfo
+    contactInfo: ContactInfo,
+    campaignContext?: CampaignV2
   ): string {
     const instructions = `<instructions>\n${initialInstructions}\n</instructions>`
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
+    const campaignInstructions = this.getCampaignInstructions(campaignContext)
     const outputInstructions = this.getOutputInstructions()
-    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
+    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
   }
 
   private getContactInfoInstructions(contactInfo: ContactInfo): string {
@@ -72,6 +84,13 @@ export class AIAgentBuilder<
   private getMetadataInstructions(): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
     return `<metadata>\n${metadata}\n</metadata>`
+  }
+
+  private getCampaignInstructions(campaignContext?: CampaignV2): string {
+    if (!campaignContext || !campaignContext.agent_context) {
+      return ''
+    }
+    return `<campaign_context>\n${campaignContext.agent_context}\n</campaign_context>`
   }
 
   private getOutputInstructions(): string {

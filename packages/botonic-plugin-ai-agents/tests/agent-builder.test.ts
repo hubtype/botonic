@@ -35,6 +35,13 @@ describe('AIAgentBuilder', () => {
       description: 'Description for custom tool 2',
     } as Tool,
   ]
+
+  const campaignContext = {
+    id: '1234-5678-9012-3456',
+    name: 'Campaign 1',
+    agent_context: 'This is some context coming from campaigns',
+  }
+
   const contactInfo = {
     email: 'test@test.com',
     phone: '1234567890',
@@ -59,15 +66,16 @@ describe('AIAgentBuilder', () => {
     jest.restoreAllMocks()
   })
   it('should initialize correctly with name, instructions and tools', () => {
-    const aiAgent = new AIAgentBuilder(
-      agentName,
-      agentInstructions,
-      agentCustomTools,
+    const aiAgent = new AIAgentBuilder({
+      name: agentName,
+      instructions: agentInstructions,
+      tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules,
-      sourceIds
-    ).build()
-    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
+      sourceIds,
+      campaignContext,
+    }).build()
+    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<campaign_context>\nThis is some context coming from campaigns\n</campaign_context>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
