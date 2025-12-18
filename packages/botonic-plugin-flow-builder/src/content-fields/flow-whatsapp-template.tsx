@@ -86,15 +86,15 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return undefined
   }
 
-  private resolveValueVariable(value: string, request: ActionRequest): string {
-    const isMatched = value.match(VARIABLE_PATTERN)
-    if (!isMatched) {
-      return value
-    }
-    const keyPath = isMatched[0].slice(1, -1)
-    const valueVariable = getValueFromKeyPath(request, keyPath)
-    return valueVariable ? valueVariable.toString() : ''
-  }
+  // private resolveValueVariable(value: string, request: ActionRequest): string {
+  //   const isMatched = value.match(VARIABLE_PATTERN)
+  //   if (!isMatched) {
+  //     return value
+  //   }
+  //   const keyPath = isMatched[0].slice(1, -1)
+  //   const valueVariable = getValueFromKeyPath(request, keyPath)
+  //   return valueVariable ? valueVariable.toString() : ''
+  // }
 
   private createHeaderTextComponent(
     headerVariables: HeaderVariables,
@@ -103,7 +103,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return {
       type: WhatsAppTemplateComponentType.HEADER,
       parameters: Object.values(headerVariables.text || {}).map(value => {
-        const valueVariable = this.resolveValueVariable(value, request)
+        const valueVariable = this.replaceVariables(value, request)
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           text: valueVariable,
@@ -138,7 +138,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return {
       type: WhatsAppTemplateComponentType.BODY,
       parameters: Object.entries(variableValues).map(([key, value]) => {
-        const valueVariable = this.resolveValueVariable(value, request)
+        const valueVariable = this.replaceVariables(value, request)
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           parameter_name: key,
@@ -151,26 +151,33 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   private getButtons(
     whatsappTemplate: HtWhatsAppTemplate,
     buttonNodes: HtButton[],
-    urlVariableValues: Record<string, string>
+    urlVariableValues: Record<string, string>,
+    request: ActionRequest
   ): WhatsappTemplateComponentButtons | undefined {
     const htWhatsappTemplateButtons = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.BUTTONS
     ) as HtWhatsAppTemplateButtonsComponent | undefined
 
     if (htWhatsappTemplateButtons) {
-      const buttons = htWhatsappTemplateButtons.buttons.map((button, index) => {
-        if (button.type === WhatsAppTemplateButtonSubType.URL) {
-          const urlParam = urlVariableValues?.[String(index)]
-          return this.createUrlButtonComponent(index, urlParam)
-        }
+      const buttons = htWhatsappTemplateButtons.buttons
+        .map((button, index) => {
+          if (button.type === WhatsAppTemplateButtonSubType.URL) {
+            const urlParam: string | undefined =
+              urlVariableValues?.[String(index)]
+            if (!urlParam) {
+              return null
+            }
+            return this.createUrlButtonComponent(index, urlParam, request)
+          }
 
-        if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
-          const payload = buttonNodes[index].target?.id || ''
-          return this.createQuickReplyButtonComponent(index, payload)
-        }
+          if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
+            const payload = buttonNodes[index].target?.id || ''
+            return this.createQuickReplyButtonComponent(index, payload)
+          }
 
-        return this.createVoiceCallButtonComponent(index)
-      })
+          return this.createVoiceCallButtonComponent(index)
+        })
+        .filter(button => button !== null)
 
       return {
         type: WhatsAppTemplateComponentType.BUTTONS,
@@ -183,8 +190,10 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
   private createUrlButtonComponent(
     index: number,
-    urlParam?: string
+    urlParam: string,
+    request: ActionRequest
   ): WhatsappTemplateUrlButton {
+    const variableUrlParam = this.replaceVariables(urlParam, request)
     return {
       type: WhatsAppTemplateComponentType.BUTTON,
       sub_type: WhatsAppTemplateButtonSubType.URL,
@@ -193,7 +202,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
         ? [
             {
               type: WhatsAppTemplateParameterType.TEXT,
-              text: urlParam,
+              text: variableUrlParam,
             },
           ]
         : [],
@@ -248,7 +257,8 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     const buttons = this.getButtons(
       this.htWhatsappTemplate,
       this.buttons || [],
-      this.urlVariableValues || {}
+      this.urlVariableValues || {},
+      request
     )
 
     console.log('toBotonic templateName', templateName)
