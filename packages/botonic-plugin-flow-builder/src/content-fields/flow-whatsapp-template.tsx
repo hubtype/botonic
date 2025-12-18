@@ -16,10 +16,8 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import { VARIABLE_PATTERN } from '../constants'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
-import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtButton,
@@ -85,16 +83,6 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
     return undefined
   }
-
-  // private resolveValueVariable(value: string, request: ActionRequest): string {
-  //   const isMatched = value.match(VARIABLE_PATTERN)
-  //   if (!isMatched) {
-  //     return value
-  //   }
-  //   const keyPath = isMatched[0].slice(1, -1)
-  //   const valueVariable = getValueFromKeyPath(request, keyPath)
-  //   return valueVariable ? valueVariable.toString() : ''
-  // }
 
   private createHeaderTextComponent(
     headerVariables: HeaderVariables,

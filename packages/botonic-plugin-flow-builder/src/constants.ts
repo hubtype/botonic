@@ -3,7 +3,6 @@ export const FLOW_BUILDER_API_URL_PROD =
 export const SEPARATOR = '|'
 export const SOURCE_INFO_SEPARATOR = `${SEPARATOR}source_`
 export const EMPTY_PAYLOAD = 'fb-empty-payload'
-export const VARIABLE_PATTERN = /^{([^}]+)}$/
 export const VARIABLE_PATTERN_GLOBAL = /{([^}]+)}/g
 export const ACCESS_TOKEN_VARIABLE_KEY = '_access_token'
 export const REG_EXP_PATTERN = /^\/(.*)\/([gimyus]*)$/
