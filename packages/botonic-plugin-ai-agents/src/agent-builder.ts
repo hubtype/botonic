@@ -1,10 +1,16 @@
 import { CampaignV2, ResolvedPlugins } from '@botonic/core'
-import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
+import {
+  Agent,
+  AgentOutputType,
+  InputGuardrail,
+  ModelSettings,
+} from '@openai/agents'
 
+import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
-import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
+import { AIAgent, ContactInfo, Context, GuardrailRule, Tool } from './types'
 
 interface AIAgentBuilderOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -44,14 +50,30 @@ export class AIAgentBuilder<
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
-    const modelSettings: ModelSettings = {}
+    const modelSettings: ModelSettings = {
+      // @ts-expect-error - reasoning.effort is valid but we need to update openai and typescript dependencies
+      reasoning: { effort: 'none' },
+      text: { verbosity: 'medium' },
+    }
 
-    if (this.tools.includes(retrieveKnowledge)) {
+    // When using standard OpenAI API, we need to specify the model
+    // Azure OpenAI uses deployment name instead
+    const model = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : undefined
+
+    if (this.tools.includes(retrieveKnowledge) && OPENAI_PROVIDER === 'azure') {
       modelSettings.toolChoice = retrieveKnowledge.name
     }
 
-    return new Agent({
+    // TODO: Improve type safety - replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema>
+    // Currently using explicit type parameters to avoid type inference issues where Agent constructor
+    // infers ZodObject instead of AgentOutputType<typeof OutputSchema>. The explicit type parameters
+    // ensure compatibility with AIAgent type definition. Future improvements:
+    // 1. Update @openai/agents package to properly infer AgentOutputType from outputType parameter
+    // 2. Replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema> once type system allows
+    // 3. Consider updating AIAgent type definition if @openai/agents types change significantly
+    return new Agent<Context<TPlugins, TExtraData>, AgentOutputType<any>>({
       name: this.name,
+      model,
       instructions: this.instructions,
       tools: this.tools,
       outputType: OutputSchema,
@@ -66,7 +88,7 @@ export class AIAgentBuilder<
     contactInfo: ContactInfo,
     campaignContext?: CampaignV2
   ): string {
-    const instructions = `<instructions>\n${initialInstructions}\n</instructions>`
+    const instructions = `<instructions>\n${initialInstructions.trim()}\n</instructions>`
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
     const campaignInstructions = this.getCampaignInstructions(campaignContext)

@@ -22,7 +22,7 @@ export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
       const result = await run(agent, [lastMessage], { context })
-      const finalOutput = result.finalOutput
+      const finalOutput = result.finalOutput as Record<string, boolean>
       if (finalOutput === undefined) {
         throw new Error('Guardrail agent failed to produce output')
       }

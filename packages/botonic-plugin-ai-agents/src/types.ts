@@ -10,6 +10,7 @@ import {
 import {
   Agent,
   AgentInputItem,
+  AgentOutputType,
   RunContext as OpenAIRunContext,
   Tool as OpenAITool,
 } from '@openai/agents'
@@ -64,7 +65,7 @@ export type Tool<
 export type AIAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
-> = Agent<Context<TPlugins, TExtraData>, typeof OutputSchema>
+> = Agent<Context<TPlugins, TExtraData>, AgentOutputType<typeof OutputSchema>>
 export interface PluginAiAgentOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
