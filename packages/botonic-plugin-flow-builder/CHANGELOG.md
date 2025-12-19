@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.42.5] - 2025-12-19
+
+### Added
+
+- [PR-3136](https://github.com/hubtype/botonic/pull/3136): Allow FlowButton to return buttons with URLs.
+
 ## [0.42.2] - 2025-12-02
 
 ### Added

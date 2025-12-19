@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.42.4] - 2025-12-19
+
+### Added
+
+- [PR-3136](https://github.com/hubtype/botonic/pull/3136): Allow the AI Agents to return buttons with URLs.
+
 ## [0.42.0] - 2025-11-25
 
 ### Added
