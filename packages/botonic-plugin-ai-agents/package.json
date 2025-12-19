@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.42.1",
+  "version": "0.42.4",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",

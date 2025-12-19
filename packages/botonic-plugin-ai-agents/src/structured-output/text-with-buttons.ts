@@ -11,6 +11,7 @@ export const TextWithButtonsSchema = z
       buttons: z.array(
         z.object({
           text: z.string(),
+          url: z.string().nullable().optional(),
         })
       ),
     }),
