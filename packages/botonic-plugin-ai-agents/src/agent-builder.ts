@@ -50,19 +50,20 @@ export class AIAgentBuilder<
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
-    const modelSettings: ModelSettings = {
+    const modelSettings: ModelSettings = {} as ModelSettings
+    if (OPENAI_PROVIDER === 'openai') {
       // @ts-expect-error - reasoning.effort is valid but we need to update openai and typescript dependencies
-      reasoning: { effort: 'none' },
-      text: { verbosity: 'medium' },
+      modelSettings.reasoning = { effort: 'none' }
+      modelSettings.text = { verbosity: 'medium' }
+    }
+
+    if (this.tools.includes(retrieveKnowledge) && OPENAI_PROVIDER === 'azure') {
+      modelSettings.toolChoice = retrieveKnowledge.name
     }
 
     // When using standard OpenAI API, we need to specify the model
     // Azure OpenAI uses deployment name instead
     const model = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : undefined
-
-    if (this.tools.includes(retrieveKnowledge) && OPENAI_PROVIDER === 'azure') {
-      modelSettings.toolChoice = retrieveKnowledge.name
-    }
 
     // TODO: Improve type safety - replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema>
     // Currently using explicit type parameters to avoid type inference issues where Agent constructor

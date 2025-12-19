@@ -21,7 +21,7 @@ export function setUpOpenAI(maxRetries?: number, timeout?: number) {
   } else {
     setOpenAIClient(maxRetries, timeout)
   }
-  setOpenAIAPI('responses')
+  setOpenAIAPI('chat_completions')
   setTracingDisabled(true)
 }
 
