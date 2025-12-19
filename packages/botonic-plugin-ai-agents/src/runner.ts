@@ -1,4 +1,4 @@
-import { ResolvedPlugins, ToolExecution } from '@botonic/core'
+import { OutputMessage, ResolvedPlugins, ToolExecution } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
   Runner,
@@ -13,6 +13,15 @@ import {
   Context,
   RunResult,
 } from './types'
+
+// Minimal interface matching the properties we actually use from Runner.run() result
+// This bypasses strict type checking while maintaining type safety for accessed properties
+interface AIAgentRunnerResult {
+  finalOutput?: {
+    messages?: OutputMessage[]
+  }
+  newItems?: RunToolCallItem[]
+}
 
 export class AIAgentRunner<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -32,7 +41,11 @@ export class AIAgentRunner<
       const runner = new Runner({
         modelSettings: { temperature: 0 },
       })
-      const result = await runner.run(this.agent, messages, { context })
+      // Type assertion to bypass strict type checking - the actual return type from runner.run()
+      // doesn't perfectly match our interface, but the properties we access are compatible
+      const result = (await runner.run(this.agent, messages, {
+        context,
+      })) as AIAgentRunnerResult
 
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =

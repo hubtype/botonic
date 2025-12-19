@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { HubtypeApiClient } from '../hubtype-api-client'
 import { Context } from '../types'
 
-export const retrieveKnowledge = tool<any, Context, any>({
+export const retrieveKnowledge = tool({
   name: 'retrieve_knowledge',
   description:
     'Consult the knowledge base for information before answering. Use this tool to make sure the information you provide is faithful.',
@@ -12,10 +12,11 @@ export const retrieveKnowledge = tool<any, Context, any>({
     query: z.string().describe('The query to search the knowledge base for'),
   }),
   execute: async (
-    { query }: { query: string },
+    input: { query: string },
     runContext?: RunContext<Context>
   ): Promise<string[]> => {
     const context = runContext?.context
+    const query = input.query
     if (!context) {
       throw new Error('Context is required')
     }
