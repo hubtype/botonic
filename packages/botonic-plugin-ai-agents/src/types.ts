@@ -65,6 +65,14 @@ export type AIAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
 > = Agent<Context<TPlugins, TExtraData>, typeof OutputSchema>
+export type MessageHistoryApiVersion = 'v1' | 'v2'
+
+export interface MessageHistoryV2Options {
+  maxMessages?: number
+  includeToolCalls?: boolean
+  maxFullToolResults?: number
+}
+
 export interface PluginAiAgentOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
@@ -73,6 +81,10 @@ export interface PluginAiAgentOptions<
   customTools?: CustomTool<TPlugins, TExtraData>[]
   maxRetries?: number
   timeout?: number
+  /** API version for message history endpoint. Defaults to 'v2'. */
+  messageHistoryApiVersion?: MessageHistoryApiVersion
+  /** Options for V2 message history API. Only used when messageHistoryApiVersion is 'v2'. */
+  messageHistoryV2Options?: MessageHistoryV2Options
 }
 
 export type AgenticInputMessage = AgentInputItem

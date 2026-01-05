@@ -17,6 +17,62 @@ interface HubtypeUserMessage {
 
 type HubtypeMessage = HubtypeAssistantMessage | HubtypeUserMessage
 
+// V2 API Types
+interface HubtypeToolCall {
+  id: string
+  type: 'function'
+  function: {
+    name: string
+    arguments: string
+  }
+}
+
+interface HubtypeUserMessageV2 {
+  role: 'user'
+  content: string | null
+}
+
+interface HubtypeAssistantMessageV2 {
+  role: 'assistant'
+  content: string | null
+  tool_calls?: HubtypeToolCall[] | null
+}
+
+interface HubtypeToolMessageV2 {
+  role: 'tool'
+  content: string | null
+  tool_call_id: string
+}
+
+interface HubtypeSystemMessageV2 {
+  role: 'system'
+  content: string | null
+}
+
+type HubtypeMessageV2 =
+  | HubtypeUserMessageV2
+  | HubtypeAssistantMessageV2
+  | HubtypeToolMessageV2
+  | HubtypeSystemMessageV2
+
+interface MessageHistoryResponseV2 {
+  messages: HubtypeMessageV2[]
+  conversation_id: string | null
+  truncated: boolean
+}
+
+export interface GetMessagesV2Options {
+  maxMessages?: number
+  includeToolCalls?: boolean
+  maxFullToolResults?: number
+}
+
+export interface GetMessagesV2Result {
+  messages: AgenticInputMessage[]
+  conversationId: string | null
+  truncated: boolean
+}
+
 export class HubtypeApiClient {
   private readonly authToken: string
 
@@ -89,6 +145,115 @@ export class HubtypeApiClient {
     } catch (error) {
       console.error(error)
       throw new Error('Failed to get messages from Hubtype')
+    }
+  }
+
+  async getMessagesV2(
+    request: BotContext,
+    options: GetMessagesV2Options = {}
+  ): Promise<GetMessagesV2Result> {
+    const url = `${HUBTYPE_API_URL}/external/v2/ai/agent/message_history/`
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authToken}`,
+    }
+    const params: Record<string, string | number | boolean> = {
+      last_message_id: request.input.message_id,
+    }
+
+    if (options.maxMessages !== undefined) {
+      params.max_messages = options.maxMessages
+    }
+    if (options.includeToolCalls !== undefined) {
+      params.include_tool_calls = options.includeToolCalls
+    }
+    if (options.maxFullToolResults !== undefined) {
+      params.max_full_tool_results = options.maxFullToolResults
+    }
+
+    try {
+      const response = await axios.get<MessageHistoryResponseV2>(url, {
+        headers,
+        params,
+      })
+      const { messages, conversation_id, truncated } = response.data
+      const formattedMessages = messages
+        .map(message => this.formatMessageV2(message))
+        .filter((message): message is AgenticInputMessage => message !== null)
+      return {
+        messages: formattedMessages,
+        conversationId: conversation_id,
+        truncated,
+      }
+    } catch (error) {
+      console.error(error)
+      throw new Error('Failed to get messages from Hubtype V2 API')
+    }
+  }
+
+  private formatMessageV2(
+    message: HubtypeMessageV2
+  ): AgenticInputMessage | null {
+    switch (message.role) {
+      case 'user':
+        return {
+          role: 'user',
+          content: message.content ?? '',
+        }
+      case 'assistant': {
+        const assistantMessage = message as HubtypeAssistantMessageV2
+        // If assistant message has tool_calls, include them for context
+        // Using double assertion as the OpenAI API supports this format,
+        // but the agents SDK types are more restrictive
+        if (
+          assistantMessage.tool_calls &&
+          assistantMessage.tool_calls.length > 0
+        ) {
+          return {
+            role: 'assistant',
+            content: assistantMessage.content ?? '',
+            tool_calls: assistantMessage.tool_calls.map(tc => ({
+              id: tc.id,
+              type: tc.type,
+              function: {
+                name: tc.function.name,
+                arguments: tc.function.arguments,
+              },
+            })),
+          } as unknown as AgenticInputMessage
+        }
+        // Regular assistant message without tool_calls
+        return {
+          role: 'assistant',
+          content: [
+            {
+              type: 'output_text',
+              text: assistantMessage.content ?? '',
+            },
+          ],
+          status: 'completed',
+        }
+      }
+      case 'tool': {
+        // Tool messages provide context about previous tool executions
+        // Using double assertion as the OpenAI API supports this format,
+        // but the agents SDK types are more restrictive
+        const toolMessage = message as HubtypeToolMessageV2
+        return {
+          role: 'tool',
+          tool_call_id: toolMessage.tool_call_id,
+          content: toolMessage.content ?? '',
+        } as unknown as AgenticInputMessage
+      }
+      case 'system':
+        return {
+          role: 'system',
+          content: message.content ?? '',
+        }
+      default:
+        throw new Error(
+          `Invalid message role: ${(message as HubtypeMessageV2).role}`
+        )
     }
   }
 

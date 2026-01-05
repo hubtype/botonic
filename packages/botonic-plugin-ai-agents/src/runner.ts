@@ -28,6 +28,10 @@ export class AIAgentRunner<
     messages: AgenticInputMessage[],
     context: Context<TPlugins, TExtraData>
   ): Promise<RunResult> {
+    console.log(
+      'Running agent with messages',
+      JSON.stringify(messages, null, 2)
+    )
     try {
       const runner = new Runner({
         modelSettings: { temperature: 0 },

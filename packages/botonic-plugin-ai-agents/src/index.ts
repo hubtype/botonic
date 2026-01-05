@@ -11,6 +11,8 @@ import {
   Context,
   CustomTool,
   InferenceResponse,
+  MessageHistoryApiVersion,
+  MessageHistoryV2Options,
   PluginAiAgentOptions,
   Tool,
 } from './types'
@@ -21,12 +23,27 @@ export default class BotonicPluginAiAgents<
 > implements Plugin
 {
   private readonly authToken?: string
+  private readonly messageHistoryApiVersion: MessageHistoryApiVersion
+  private readonly messageHistoryV2Options: MessageHistoryV2Options
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     setUpOpenAI(options?.maxRetries, options?.timeout)
+
+    if (
+      options?.messageHistoryApiVersion === 'v1' &&
+      options?.messageHistoryV2Options
+    ) {
+      throw new Error(
+        'Cannot use messageHistoryV2Options when messageHistoryApiVersion is "v1". ' +
+          'Either set messageHistoryApiVersion to "v2" or remove messageHistoryV2Options.'
+      )
+    }
+
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
+    this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
+    this.messageHistoryV2Options = options?.messageHistoryV2Options ?? {}
   }
 
   pre(): void {
@@ -93,12 +110,23 @@ export default class BotonicPluginAiAgents<
     authToken: string,
     memoryLength: number
   ): Promise<AgenticInputMessage[]> {
-    if (isProd) {
-      const hubtypeClient = new HubtypeApiClient(authToken)
+    const hubtypeClient = new HubtypeApiClient(authToken)
+
+    if (!isProd) {
+      return await hubtypeClient.getLocalMessages(memoryLength)
+    }
+
+    if (this.messageHistoryApiVersion === 'v1') {
       return await hubtypeClient.getMessages(request, memoryLength)
     }
-    const hubtypeClient = new HubtypeApiClient(authToken)
-    return await hubtypeClient.getLocalMessages(memoryLength)
+
+    // Default to V2
+    const result = await hubtypeClient.getMessagesV2(request, {
+      maxMessages: this.messageHistoryV2Options.maxMessages ?? memoryLength,
+      includeToolCalls: this.messageHistoryV2Options.includeToolCalls,
+      maxFullToolResults: this.messageHistoryV2Options.maxFullToolResults,
+    })
+    return result.messages
   }
 
   private buildTools(activeToolNames: string[]): Tool<TPlugins, TExtraData>[] {
