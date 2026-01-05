@@ -65,6 +65,7 @@ export interface GetMessagesV2Options {
   maxMessages?: number
   includeToolCalls?: boolean
   maxFullToolResults?: number
+  debugMode?: boolean
 }
 
 export interface GetMessagesV2Result {
@@ -169,6 +170,9 @@ export class HubtypeApiClient {
     }
     if (options.maxFullToolResults !== undefined) {
       params.max_full_tool_results = options.maxFullToolResults
+    }
+    if (options.debugMode !== undefined) {
+      params.debug_mode = options.debugMode
     }
 
     try {

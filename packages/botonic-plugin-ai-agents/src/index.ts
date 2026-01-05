@@ -11,8 +11,8 @@ import {
   Context,
   CustomTool,
   InferenceResponse,
+  MemoryOptions,
   MessageHistoryApiVersion,
-  MessageHistoryV2Options,
   PluginAiAgentOptions,
   Tool,
 } from './types'
@@ -24,26 +24,23 @@ export default class BotonicPluginAiAgents<
 {
   private readonly authToken?: string
   private readonly messageHistoryApiVersion: MessageHistoryApiVersion
-  private readonly messageHistoryV2Options: MessageHistoryV2Options
+  private readonly memory: MemoryOptions
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     setUpOpenAI(options?.maxRetries, options?.timeout)
 
-    if (
-      options?.messageHistoryApiVersion === 'v1' &&
-      options?.messageHistoryV2Options
-    ) {
+    if (options?.messageHistoryApiVersion === 'v1' && options?.memory) {
       throw new Error(
-        'Cannot use messageHistoryV2Options when messageHistoryApiVersion is "v1". ' +
-          'Either set messageHistoryApiVersion to "v2" or remove messageHistoryV2Options.'
+        'Cannot use memory when messageHistoryApiVersion is "v1". ' +
+          'Either set messageHistoryApiVersion to "v2" or remove memory.'
       )
     }
 
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
     this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
-    this.messageHistoryV2Options = options?.messageHistoryV2Options ?? {}
+    this.memory = options?.memory ?? {}
   }
 
   pre(): void {
@@ -122,9 +119,10 @@ export default class BotonicPluginAiAgents<
 
     // Default to V2
     const result = await hubtypeClient.getMessagesV2(request, {
-      maxMessages: this.messageHistoryV2Options.maxMessages ?? memoryLength,
-      includeToolCalls: this.messageHistoryV2Options.includeToolCalls,
-      maxFullToolResults: this.messageHistoryV2Options.maxFullToolResults,
+      maxMessages: this.memory.maxMessages ?? memoryLength,
+      includeToolCalls: this.memory.includeToolCalls ?? true,
+      maxFullToolResults: this.memory.maxFullToolResults ?? 1,
+      debugMode: this.memory.debugMode ?? false,
     })
     return result.messages
   }

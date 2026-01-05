@@ -67,10 +67,11 @@ export type AIAgent<
 > = Agent<Context<TPlugins, TExtraData>, typeof OutputSchema>
 export type MessageHistoryApiVersion = 'v1' | 'v2'
 
-export interface MessageHistoryV2Options {
+export interface MemoryOptions {
   maxMessages?: number
   includeToolCalls?: boolean
   maxFullToolResults?: number
+  debugMode?: boolean
 }
 
 export interface PluginAiAgentOptions<
@@ -84,7 +85,7 @@ export interface PluginAiAgentOptions<
   /** API version for message history endpoint. Defaults to 'v2'. */
   messageHistoryApiVersion?: MessageHistoryApiVersion
   /** Options for V2 message history API. Only used when messageHistoryApiVersion is 'v2'. */
-  messageHistoryV2Options?: MessageHistoryV2Options
+  memory?: MemoryOptions
 }
 
 export type AgenticInputMessage = AgentInputItem
