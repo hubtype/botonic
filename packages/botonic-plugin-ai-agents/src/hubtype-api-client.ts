@@ -74,6 +74,14 @@ export interface GetMessagesV2Result {
   truncated: boolean
 }
 
+interface MessageHistoryV2Params {
+  last_message_id: string
+  max_messages?: number
+  include_tool_calls?: boolean
+  max_full_tool_results?: number
+  debug_mode?: boolean
+}
+
 export class HubtypeApiClient {
   private readonly authToken: string
 
@@ -158,21 +166,20 @@ export class HubtypeApiClient {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.authToken}`,
     }
-    const params: Record<string, string | number | boolean> = {
+    const params: MessageHistoryV2Params = {
       last_message_id: request.input.message_id,
-    }
-
-    if (options.maxMessages !== undefined) {
-      params.max_messages = options.maxMessages
-    }
-    if (options.includeToolCalls !== undefined) {
-      params.include_tool_calls = options.includeToolCalls
-    }
-    if (options.maxFullToolResults !== undefined) {
-      params.max_full_tool_results = options.maxFullToolResults
-    }
-    if (options.debugMode !== undefined) {
-      params.debug_mode = options.debugMode
+      ...(options.maxMessages !== undefined && {
+        max_messages: options.maxMessages,
+      }),
+      ...(options.includeToolCalls !== undefined && {
+        include_tool_calls: options.includeToolCalls,
+      }),
+      ...(options.maxFullToolResults !== undefined && {
+        max_full_tool_results: options.maxFullToolResults,
+      }),
+      ...(options.debugMode !== undefined && {
+        debug_mode: options.debugMode,
+      }),
     }
 
     try {
