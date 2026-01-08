@@ -20,6 +20,7 @@ import { HtCarouselNode } from './hubtype-fields'
 
 const DEFAULT_TEXT_MESSAGE = 'These are the options'
 export class FlowCarousel extends ContentFieldsBase {
+  public whatsappText: string = ''
   public elements: FlowElement[] = []
 
   static fromHubtypeCMS(
@@ -31,6 +32,10 @@ export class FlowCarousel extends ContentFieldsBase {
     newCarousel.code = component.code
     newCarousel.elements = component.content.elements.map(element =>
       FlowElement.fromHubtypeCMS(element, locale, cmsApi)
+    )
+    newCarousel.whatsappText = this.getTextByLocale(
+      locale,
+      component.content.whatsapp_text
     )
     newCarousel.followUp = component.follow_up
 
@@ -237,7 +242,7 @@ export class FlowCarousel extends ContentFieldsBase {
         <WhatsappInteractiveMediaCarousel
           cards={FlowCarousel.createCardsFromElements(this.elements)}
           // TODO: Add the text message in flow builder frontend and take it from the carousel node with different languages
-          textMessage={DEFAULT_TEXT_MESSAGE}
+          textMessage={this.whatsappText || DEFAULT_TEXT_MESSAGE}
         />
       )
     }
