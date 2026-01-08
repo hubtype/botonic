@@ -187,6 +187,7 @@ export const openWebviewFlow = {
       ai_translated_locales: [],
       type: 'carousel',
       content: {
+        whatsapp_text: [],
         elements: [
           {
             id: '019ab5a0-f006-775a-96e3-39a5ac060e84',
