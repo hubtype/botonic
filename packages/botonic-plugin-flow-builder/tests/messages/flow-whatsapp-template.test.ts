@@ -23,13 +23,11 @@ describe('FlowWhatsappTemplate', () => {
       const mockNode: HtWhatsappTemplateNode = {
         id: 'test-node-id',
         code: 'TEST_TEMPLATE',
-        is_code_ai_generated: false,
         meta: { x: 0, y: 0 },
-        follow_up: { id: 'followup-id', type: 'text' },
-        target: null,
+        follow_up: { id: 'followup-id', type: HtNodeWithContentType.TEXT },
+        target: undefined,
         flow_id: 'test-flow',
         is_meaningful: false,
-        ai_translated_locales: [],
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
           template: {
@@ -57,8 +55,7 @@ describe('FlowWhatsappTemplate', () => {
               id: 'button-id',
               text: [{ message: 'Click me', locale: 'en' }],
               url: [],
-              payload: [],
-              target: { id: 'target-id', type: 'text' },
+              target: { id: 'target-id', type: HtNodeWithContentType.TEXT },
               hidden: [],
             },
           ],
@@ -82,7 +79,7 @@ describe('FlowWhatsappTemplate', () => {
       })
       expect(flowWhatsappTemplate.followUp).toEqual({
         id: 'followup-id',
-        type: 'text',
+        type: HtNodeWithContentType.TEXT,
       })
     })
 
@@ -90,13 +87,11 @@ describe('FlowWhatsappTemplate', () => {
       const mockNode: HtWhatsappTemplateNode = {
         id: 'test-node-id',
         code: 'TEST_TEMPLATE',
-        is_code_ai_generated: false,
         meta: { x: 0, y: 0 },
-        follow_up: null,
-        target: null,
+        follow_up: undefined,
+        target: undefined,
         flow_id: 'test-flow',
         is_meaningful: false,
-        ai_translated_locales: [],
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
           template: {
@@ -165,7 +160,8 @@ describe('FlowWhatsappTemplate', () => {
         },
       })
 
-      expect(contents).toHaveLength(1)
+      // 2 contents: WhatsApp template + follow-up text
+      expect(contents).toHaveLength(2)
       const template = contents[0] as FlowWhatsappTemplate
       expect(template.htWhatsappTemplate.name).toBe('support_options')
       expect(template.buttons).toHaveLength(3)
@@ -245,6 +241,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       expect(headerComponent?.type).toBe(WhatsAppTemplateComponentType.HEADER)
+      // @ts-ignore - text property exists for TEXT type headers
       expect(headerComponent?.parameters[0].text).toBe('ORD-99999')
     })
 
@@ -353,13 +350,11 @@ describe('FlowWhatsappTemplate', () => {
       const mockNode: HtWhatsappTemplateNode = {
         id: 'test-node-id',
         code: 'TEST_TEMPLATE',
-        is_code_ai_generated: false,
         meta: { x: 0, y: 0 },
-        follow_up: null,
-        target: null,
+        follow_up: undefined,
+        target: undefined,
         flow_id: 'test-flow',
         is_meaningful: false,
-        ai_translated_locales: [],
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
           template: {
@@ -396,16 +391,14 @@ describe('FlowWhatsappTemplate', () => {
               id: 'url-btn',
               text: [{ message: 'Visit', locale: 'en' }],
               url: [],
-              payload: [],
-              target: null,
+              target: undefined,
               hidden: [],
             },
             {
               id: 'ok-btn',
               text: [{ message: 'OK', locale: 'en' }],
               url: [],
-              payload: [],
-              target: { id: 'ok-target', type: 'text' },
+              target: { id: 'ok-target', type: HtNodeWithContentType.TEXT },
               hidden: [],
             },
           ],

@@ -22,9 +22,9 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
     expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
 
     const whatsappTemplate = contents[0] as FlowWhatsappTemplate
-    expect(whatsappTemplate.templateName).toBe('order_confirmation')
-    expect(whatsappTemplate.language).toBe('en')
-    expect(whatsappTemplate.namespace).toBe('test-namespace')
+    expect(whatsappTemplate.htWhatsappTemplate.name).toBe('order_confirmation')
+    expect(whatsappTemplate.htWhatsappTemplate.language).toBe('en')
+    expect(whatsappTemplate.htWhatsappTemplate.namespace).toBe('test-namespace')
   })
 
   test('should return FlowWhatsappTemplate when keyword triggers whatsapp-template node with image header', async () => {
@@ -40,8 +40,8 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
     expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
 
     const whatsappTemplate = contents[0] as FlowWhatsappTemplate
-    expect(whatsappTemplate.templateName).toBe('promotional_offer')
-    expect(whatsappTemplate.language).toBe('en')
+    expect(whatsappTemplate.htWhatsappTemplate.name).toBe('promotional_offer')
+    expect(whatsappTemplate.htWhatsappTemplate.language).toBe('en')
   })
 
   test('should return FlowWhatsappTemplate when keyword triggers whatsapp-template node with buttons', async () => {
@@ -57,8 +57,8 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
     expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
 
     const whatsappTemplate = contents[0] as FlowWhatsappTemplate
-    expect(whatsappTemplate.templateName).toBe('support_options')
-    expect(whatsappTemplate.language).toBe('en')
+    expect(whatsappTemplate.htWhatsappTemplate.name).toBe('support_options')
+    expect(whatsappTemplate.htWhatsappTemplate.language).toBe('en')
   })
 
   test('should return FlowWhatsappTemplate when keyword triggers whatsapp-template node without header', async () => {
@@ -74,8 +74,8 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
     expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
 
     const whatsappTemplate = contents[0] as FlowWhatsappTemplate
-    expect(whatsappTemplate.templateName).toBe('simple_notification')
-    expect(whatsappTemplate.language).toBe('en')
+    expect(whatsappTemplate.htWhatsappTemplate.name).toBe('simple_notification')
+    expect(whatsappTemplate.htWhatsappTemplate.language).toBe('en')
   })
 
   test('should correctly instantiate FlowWhatsappTemplate with all properties from CMS', async () => {
@@ -91,13 +91,13 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
 
     // Verify the factory correctly passed all properties
     expect(whatsappTemplate.id).toBe('whatsapp-template-text-header-node')
-    expect(whatsappTemplate.templateName).toBe('order_confirmation')
-    expect(whatsappTemplate.language).toBe('en')
-    expect(whatsappTemplate.namespace).toBe('test-namespace')
+    expect(whatsappTemplate.htWhatsappTemplate.name).toBe('order_confirmation')
+    expect(whatsappTemplate.htWhatsappTemplate.language).toBe('en')
+    expect(whatsappTemplate.htWhatsappTemplate.namespace).toBe('test-namespace')
 
     // Verify template components are available
-    expect(whatsappTemplate.components).toBeDefined()
-    expect(whatsappTemplate.components.length).toBeGreaterThan(0)
+    expect(whatsappTemplate.htWhatsappTemplate.components).toBeDefined()
+    expect(whatsappTemplate.htWhatsappTemplate.components.length).toBeGreaterThan(0)
   })
 
   test('should handle FlowWhatsappTemplate with locale-specific content', async () => {

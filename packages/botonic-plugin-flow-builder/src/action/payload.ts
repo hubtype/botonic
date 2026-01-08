@@ -81,17 +81,24 @@ async function resolvePushFlowPayload(
     return []
   }
 
-  const pushFlowId = request.input.payload.split(SEPARATOR)[1] || ''
+  const parts = request.input.payload.split(SEPARATOR)
+  const pushFlowId = parts.length > 1 ? parts[1] : ''
 
   if (!pushFlowId) {
     return []
   }
 
-  const pushFlowNode = cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
+  try {
+    const pushFlowNode =
+      cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
 
-  if (!pushFlowNode) {
+    if (!pushFlowNode) {
+      return []
+    }
+
+    return await flowBuilderPlugin.getContentsByNode(pushFlowNode)
+  } catch {
+    // Campaign not found - return empty to trigger fallback
     return []
   }
-
-  return await flowBuilderPlugin.getContentsByNode(pushFlowNode)
 }

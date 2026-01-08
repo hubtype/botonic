@@ -1,6 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
+import { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
@@ -29,7 +30,8 @@ describe('FlowBuilderApi - Campaign methods', () => {
       await flowBuilderPlugin.pre(request)
       const cmsApi = flowBuilderPlugin.cmsApi
 
-      const campaignNode = cmsApi.getNodeByCampaignId('campaign-uuid-1')
+      const campaignNode =
+        cmsApi.getNodeByCampaignId<HtNodeWithContent>('campaign-uuid-1')
 
       expect(campaignNode).toBeDefined()
       expect(campaignNode.id).toBe('campaign-1-start-node')
@@ -53,7 +55,8 @@ describe('FlowBuilderApi - Campaign methods', () => {
       await flowBuilderPlugin.pre(request)
       const cmsApi = flowBuilderPlugin.cmsApi
 
-      const campaignNode = cmsApi.getNodeByCampaignId('campaign-uuid-2')
+      const campaignNode =
+        cmsApi.getNodeByCampaignId<HtNodeWithContent>('campaign-uuid-2')
 
       expect(campaignNode).toBeDefined()
       expect(campaignNode.id).toBe('campaign-2-start-node')

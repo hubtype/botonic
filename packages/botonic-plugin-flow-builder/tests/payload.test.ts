@@ -105,11 +105,14 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
       },
     })
 
-    // Should return empty contents when campaign not found
-    expect(contents.length).toBe(0)
+    // Should return fallback when campaign not found
+    expect(contents.length).toBe(1)
+    expect((contents[0] as FlowText).text).toBe(
+      "Sorry, I didn't understand that."
+    )
   })
 
-  test('Should return empty contents when PUSH_FLOW_PAYLOAD is used without campaign ID', async () => {
+  test('Should return fallback when PUSH_FLOW_PAYLOAD is used without campaign ID', async () => {
     const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}`
 
     const { contents } = await createFlowBuilderPluginAndGetContents({
@@ -122,10 +125,14 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
       },
     })
 
-    expect(contents.length).toBe(0)
+    // Should return fallback when no campaign ID provided
+    expect(contents.length).toBe(1)
+    expect((contents[0] as FlowText).text).toBe(
+      "Sorry, I didn't understand that."
+    )
   })
 
-  test('Should return empty contents when PUSH_FLOW_PAYLOAD has no separator', async () => {
+  test('Should return fallback when PUSH_FLOW_PAYLOAD has no separator', async () => {
     const pushFlowPayload = PUSH_FLOW_PAYLOAD
 
     const { contents } = await createFlowBuilderPluginAndGetContents({
@@ -138,6 +145,10 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
       },
     })
 
-    expect(contents.length).toBe(0)
+    // Should return fallback when no separator in payload
+    expect(contents.length).toBe(1)
+    expect((contents[0] as FlowText).text).toBe(
+      "Sorry, I didn't understand that."
+    )
   })
 })

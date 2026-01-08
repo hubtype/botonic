@@ -119,7 +119,10 @@ export const whatsappTemplateFlow = {
       type: 'keyword',
       content: {
         title: [],
-        keywords: [{ values: ['templateImageHeader'], locale: 'en' }],
+        keywords: [
+          { values: ['templateImageHeader'], locale: 'en' },
+          { values: ['templateImageHeader'], locale: 'es' },
+        ],
       },
     },
     // WhatsApp template with image header
@@ -257,7 +260,6 @@ export const whatsappTemplateFlow = {
             id: 'url-button-id',
             text: [{ message: 'Visit Website', locale: 'en' }],
             url: [],
-            payload: [],
             target: null,
             hidden: [],
           },
@@ -265,7 +267,6 @@ export const whatsappTemplateFlow = {
             id: 'quick-reply-button-id',
             text: [{ message: 'Talk to Agent', locale: 'en' }],
             url: [],
-            payload: [],
             target: {
               id: 'agent-handoff-node',
               type: 'handoff',
@@ -276,7 +277,6 @@ export const whatsappTemplateFlow = {
             id: 'voice-call-button-id',
             text: [{ message: 'Call Support', locale: 'en' }],
             url: [],
-            payload: [],
             target: null,
             hidden: [],
           },
