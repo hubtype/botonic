@@ -1,9 +1,13 @@
 import { CarouselMessage, isWhatsapp } from '@botonic/core'
 import {
   ActionRequest,
+  Button,
+  CardType,
   Carousel,
+  Text,
   WhatsappCTAUrlButton,
   WhatsappCTAUrlHeaderType,
+  WhatsappInteractiveMediaCard,
   WhatsappInteractiveMediaCarousel,
 } from '@botonic/react'
 import React from 'react'
@@ -41,13 +45,13 @@ export class FlowCarousel extends ContentFieldsBase {
   }
 
   static areElementsValidForWhatsapp = (carouselMessage: CarouselMessage) => {
-    const isValid = carouselMessage.content.elements.every(
-      element => element.button.url
-    )
+    const isValid =
+      carouselMessage.content.elements.every(element => element.button.url) ||
+      carouselMessage.content.elements.every(element => element.button.payload)
 
     if (!isValid) {
       console.warn(
-        'Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent',
+        "Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent, all elements must have a url or a payload don't have both at the same time",
         carouselMessage.content
       )
     }
@@ -64,6 +68,42 @@ export class FlowCarousel extends ContentFieldsBase {
     return element.title
   }
 
+  private static createCardsFromElements(
+    elements: FlowElement[]
+  ): WhatsappInteractiveMediaCard[] {
+    return elements.map(element => {
+      const text = FlowCarousel.generateWhatsappElementText(element)
+
+      if (element.button?.url) {
+        return {
+          imageLink: element.image,
+          text,
+          type: CardType.CTA_URL as const,
+          action: {
+            buttonText: element.button.text,
+            buttonUrl: element.button.url,
+          },
+        }
+      }
+      if (element.button?.payload) {
+        return {
+          imageLink: element.image,
+          text,
+          type: CardType.QUICK_REPLY as const,
+          action: {
+            buttons: [
+              {
+                text: element.button.text,
+                payload: element.button.payload,
+              },
+            ],
+          },
+        }
+      }
+      throw new Error('Element must have a url or a payload')
+    })
+  }
+
   static fromAIAgent(
     id: string,
     carouselMessage: CarouselMessage,
@@ -73,8 +113,13 @@ export class FlowCarousel extends ContentFieldsBase {
       isWhatsapp(request.session) &&
       FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
     ) {
-      if (carouselMessage.content.elements.length === 1) {
+      if (
+        carouselMessage.content.elements.length === 1 &&
+        carouselMessage.content.elements[0].button?.url
+      ) {
         const element = carouselMessage.content.elements[0]
+        const buttonText = element.button.text
+        const url = carouselMessage.content.elements[0].button.url
         // TODO: Add a new fromAIAgent method in FlowWhatsappCtaUrlButtonNode to create a WhatsappCTAUrlButton from an AIAgent message
         return (
           <WhatsappCTAUrlButton
@@ -83,25 +128,35 @@ export class FlowCarousel extends ContentFieldsBase {
             headerType={WhatsappCTAUrlHeaderType.Image}
             headerImage={element.image}
             footer={element.subtitle}
-            displayText={element.button.text}
-            url={element.button.url!}
+            displayText={buttonText}
+            url={url}
           />
         )
       }
 
+      if (
+        carouselMessage.content.elements.length === 1 &&
+        carouselMessage.content.elements[0].button?.payload
+      ) {
+        const element = carouselMessage.content.elements[0]
+        const text = FlowCarousel.generateWhatsappElementText(element)
+        const buttonPayload = carouselMessage.content.elements[0].button.payload
+        const buttonText = carouselMessage.content.elements[0].button.text
+
+        return (
+          <Text>
+            {text}
+            <Button payload={buttonPayload}>{buttonText}</Button>
+          </Text>
+        )
+      }
+
+      const elements = carouselMessage.content.elements.map((element, index) =>
+        FlowElement.fromAIAgent(`${id}-element-${index}`, element)
+      )
       return (
         <WhatsappInteractiveMediaCarousel
-          cards={carouselMessage.content.elements.map(element => {
-            const buttonText = element.button.text
-            const buttonUrl = element.button.url!
-            const imageLink = element.image
-            const text = FlowCarousel.generateWhatsappElementText(element)
-
-            return {
-              text,
-              action: { buttonText, buttonUrl, imageLink },
-            }
-          })}
+          cards={FlowCarousel.createCardsFromElements(elements)}
           textMessage={carouselMessage.content.text || DEFAULT_TEXT_MESSAGE}
         />
       )
@@ -143,8 +198,10 @@ export class FlowCarousel extends ContentFieldsBase {
       isWhatsapp(request.session) &&
       FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
     ) {
-      if (this.elements.length === 1) {
+      if (this.elements.length === 1 && this.elements[0].button?.url) {
         const element = this.elements[0]
+        const buttonText = this.elements[0].button.text
+        const url = this.elements[0].button.url
 
         return (
           <WhatsappCTAUrlButton
@@ -152,25 +209,33 @@ export class FlowCarousel extends ContentFieldsBase {
             body={element.title}
             headerType={WhatsappCTAUrlHeaderType.Image}
             headerImage={element.image}
-            displayText={element.button!.text}
-            url={element.button!.url!}
+            displayText={buttonText}
+            url={url}
           />
+        )
+      }
+
+      if (
+        this.elements.length === 1 &&
+        this.elements[0].button &&
+        this.elements[0].button?.payload
+      ) {
+        const element = this.elements[0]
+        const text = FlowCarousel.generateWhatsappElementText(element)
+        const buttonPayload = this.elements[0].button.payload
+        const buttonText = this.elements[0].button.text
+
+        return (
+          <Text>
+            {text}
+            <Button payload={buttonPayload}>{buttonText}</Button>
+          </Text>
         )
       }
 
       return (
         <WhatsappInteractiveMediaCarousel
-          cards={this.elements.map(element => {
-            const text = FlowCarousel.generateWhatsappElementText(element)
-            const buttonText = element.button!.text!
-            const buttonUrl = element.button!.url!
-            const imageLink = element.image!
-
-            return {
-              text,
-              action: { buttonText, buttonUrl, imageLink },
-            }
-          })}
+          cards={FlowCarousel.createCardsFromElements(this.elements)}
           // TODO: Add the text message in flow builder frontend and take it from the carousel node with different languages
           textMessage={DEFAULT_TEXT_MESSAGE}
         />
