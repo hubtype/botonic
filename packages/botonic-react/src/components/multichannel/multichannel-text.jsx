@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { INPUT, isFacebook, isWhatsapp } from '@botonic/core'
+import { INPUT, isFacebook, isInstagram, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
@@ -288,7 +288,10 @@ export const MultichannelText = props => {
     return <>{messages}</>
   }
 
-  if (isFacebook(requestContext.session)) {
+  if (
+    isFacebook(requestContext.session) ||
+    isInstagram(requestContext.session)
+  ) {
     const text = getText(props.children)
     const multichannelFacebook = new MultichannelFacebook()
     const { texts, propsLastText, propsWithoutChildren } =
