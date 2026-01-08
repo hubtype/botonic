@@ -9,13 +9,13 @@ let setTracingDisabledCalled = false
 
 // Mock the @openai/agents module
 jest.mock('@openai/agents', () => ({
-  setDefaultOpenAIClient: jest.fn(client => {
+  setDefaultOpenAIClient: jest.fn(_client => {
     setDefaultOpenAIClientCalled = true
   }),
-  setOpenAIAPI: jest.fn(api => {
+  setOpenAIAPI: jest.fn(_api => {
     setOpenAIAPICalled = true
   }),
-  setTracingDisabled: jest.fn(disabled => {
+  setTracingDisabled: jest.fn(_disabled => {
     setTracingDisabledCalled = true
   }),
 }))

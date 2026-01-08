@@ -1,4 +1,4 @@
-import { AiAgentArgs, BotContext, PROVIDER } from '@botonic/core'
+import { AiAgentArgs, BotContext, INPUT, PROVIDER } from '@botonic/core'
 import {
   afterEach,
   beforeEach,
@@ -11,6 +11,7 @@ import {
 import BotonicPluginAiAgents from '../src/index'
 
 // Store the captured AIAgentBuilder arguments
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
 
 // Mock setUpOpenAI to avoid actual OpenAI setup
@@ -20,7 +21,8 @@ jest.mock('../src/openai', () => ({
 
 // Mock AIAgentBuilder to capture the arguments it receives
 jest.mock('../src/agent-builder', () => ({
-  AIAgentBuilder: jest.fn().mockImplementation(args => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  AIAgentBuilder: jest.fn().mockImplementation((args: any) => {
     capturedBuilderArgs = args
     return {
       build: jest.fn().mockReturnValue({
@@ -43,15 +45,15 @@ jest.mock('../src/runner', () => ({
       error: false,
       inputGuardrailsTriggered: [],
       outputGuardrailsTriggered: [],
-    }),
+    } as never),
   })),
 }))
 
 // Mock HubtypeApiClient to avoid actual API calls
 jest.mock('../src/hubtype-api-client', () => ({
   HubtypeApiClient: jest.fn().mockImplementation(() => ({
-    getMessages: jest.fn().mockResolvedValue([]),
-    getLocalMessages: jest.fn().mockResolvedValue([]),
+    getMessages: jest.fn().mockResolvedValue([] as never),
+    getLocalMessages: jest.fn().mockResolvedValue([] as never),
   })),
 }))
 
@@ -69,6 +71,9 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       user: {
         id: 'user-123',
         provider: PROVIDER.WEBCHAT,
+        locale: 'en',
+        country: 'US',
+        system_locale: 'en',
         contact_info: { email: 'test@test.com' },
         extra_data: {},
       },
@@ -79,7 +84,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       __retries: 0,
     },
     input: {
-      type: 'text',
+      type: INPUT.TEXT,
       data: 'Hello',
       bot_interaction_id: 'interaction-123',
       message_id: 'msg-123',
@@ -93,8 +98,11 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     getUserCountry: () => 'US',
     getUserLocale: () => 'en',
     getSystemLocale: () => 'en',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setUserCountry: jest.fn() as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setUserLocale: jest.fn() as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setSystemLocale: jest.fn() as any,
   })
 

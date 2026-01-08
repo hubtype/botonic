@@ -1,4 +1,3 @@
-import { AIAgentBuilder } from '../src/agent-builder'
 import { OutputSchema } from '../src/structured-output'
 import { GuardrailRule, Tool } from '../src/types'
 
@@ -27,6 +26,17 @@ jest.mock('../src/tools', () => ({
     description: 'Consult the knowledge base for information before answering.',
   },
 }))
+
+// Mock constants - can be overridden per test
+const mockConstants = {
+  OPENAI_PROVIDER: 'azure' as 'openai' | 'azure',
+  OPENAI_MODEL: 'gpt-4.1-mini',
+}
+
+jest.mock('../src/constants', () => mockConstants)
+
+// Import after mocks are set up
+import { AIAgentBuilder } from '../src/agent-builder'
 
 describe('AIAgentBuilder', () => {
   const agentName = 'Test Agent'
@@ -315,5 +325,116 @@ describe('AIAgentBuilder', () => {
       // Azure uses deployment name, not model
       expect(capturedAgentConfig.model).toBeUndefined()
     })
+
+    it('should NOT set reasoning and text settings for azure provider', () => {
+      // Default OPENAI_PROVIDER is 'azure'
+      const aiAgent = new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        campaignContext: undefined,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      // Azure should NOT have reasoning or text settings
+      expect(capturedAgentConfig.modelSettings.reasoning).toBeUndefined()
+      expect(capturedAgentConfig.modelSettings.text).toBeUndefined()
+    })
+  })
+})
+
+// Separate describe block for OpenAI provider tests
+describe('AIAgentBuilder - OpenAI Provider', () => {
+  const agentName = 'Test Agent'
+  const agentInstructions = 'Test instructions for the agent'
+  const agentCustomTools: Tool[] = []
+  const contactInfo = {
+    email: 'test@test.com',
+    phone: '1234567890',
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    capturedAgentConfig = null
+    jest
+      .spyOn(Date.prototype, 'toISOString')
+      .mockReturnValue('2024-01-01T00:00:00.000Z')
+
+    // Set provider to 'openai' for these tests
+    mockConstants.OPENAI_PROVIDER = 'openai'
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+    // Reset to default azure provider
+    mockConstants.OPENAI_PROVIDER = 'azure'
+  })
+
+  it('should set reasoning setting with effort: none for openai provider', () => {
+    new AIAgentBuilder({
+      name: agentName,
+      instructions: agentInstructions,
+      tools: agentCustomTools,
+      contactInfo,
+      inputGuardrailRules: [],
+      sourceIds: [],
+      campaignContext: undefined,
+    }).build()
+
+    expect(capturedAgentConfig).toBeDefined()
+    expect(capturedAgentConfig.modelSettings.reasoning).toEqual({
+      effort: 'none',
+    })
+  })
+
+  it('should set text setting with verbosity: medium for openai provider', () => {
+    new AIAgentBuilder({
+      name: agentName,
+      instructions: agentInstructions,
+      tools: agentCustomTools,
+      contactInfo,
+      inputGuardrailRules: [],
+      sourceIds: [],
+      campaignContext: undefined,
+    }).build()
+
+    expect(capturedAgentConfig).toBeDefined()
+    expect(capturedAgentConfig.modelSettings.text).toEqual({
+      verbosity: 'medium',
+    })
+  })
+
+  it('should set model to OPENAI_MODEL for openai provider', () => {
+    new AIAgentBuilder({
+      name: agentName,
+      instructions: agentInstructions,
+      tools: agentCustomTools,
+      contactInfo,
+      inputGuardrailRules: [],
+      sourceIds: [],
+      campaignContext: undefined,
+    }).build()
+
+    expect(capturedAgentConfig).toBeDefined()
+    expect(capturedAgentConfig.model).toBe('gpt-4.1-mini')
+  })
+
+  it('should NOT set toolChoice for openai provider even with retrieveKnowledge', () => {
+    new AIAgentBuilder({
+      name: agentName,
+      instructions: agentInstructions,
+      tools: agentCustomTools,
+      contactInfo,
+      inputGuardrailRules: [],
+      sourceIds: ['source-1'], // This adds retrieveKnowledge tool
+      campaignContext: undefined,
+    }).build()
+
+    expect(capturedAgentConfig).toBeDefined()
+    // OpenAI provider should NOT set toolChoice (only azure does)
+    expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
   })
 })
