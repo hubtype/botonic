@@ -51,7 +51,7 @@ export class FlowCarousel extends ContentFieldsBase {
 
     if (!isValid) {
       console.warn(
-        "Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent, all elements must have a url or a payload don't have both at the same time",
+        'Cannot use WhatsappInteractiveMediaCarousel for Whatsapp created by AIAgent, all elements must have either url or payload.',
         carouselMessage.content
       )
     }
