@@ -66,7 +66,7 @@ export type Tool<
 export type AIAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
-> = Agent<Context<TPlugins, TExtraData>, typeof OutputSchema>
+> = Agent<Context<TPlugins, TExtraData>, AgentOutputType<typeof OutputSchema>>
 
 export type MessageHistoryApiVersion = 'v1' | 'v2'
 
