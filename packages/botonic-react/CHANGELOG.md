@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.42.1] - 2026-01-08
+
+### Changed
+
+- [PR-3139](https://github.com/hubtype/botonic/pull/3139): Treat Instagram as Facebook in Multichannel
+
 ## [0.42.0] - 2025-11-25
 
 ### Added
