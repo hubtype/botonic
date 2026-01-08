@@ -249,13 +249,6 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       request
     )
 
-    console.log('toBotonic templateName', templateName)
-    console.log('toBotonic templateLanguage', templateLanguage)
-    console.log('toBotonic resolvedLocale', resolvedLocale)
-    console.log('toBotonic header', JSON.stringify(header, null, 2))
-    console.log('toBotonic body', JSON.stringify(body, null, 2))
-    console.log('toBotonic buttons', JSON.stringify(buttons, null, 2))
-
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappTemplate

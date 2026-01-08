@@ -1,5 +1,12 @@
 import { AiAgentArgs, BotContext, PROVIDER } from '@botonic/core'
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals'
 
 import BotonicPluginAiAgents from '../src/index'
 
@@ -49,9 +56,11 @@ jest.mock('../src/hubtype-api-client', () => ({
 }))
 
 describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
-  const createMockRequest = (
-    campaign_v2?: { id: string; name: string; agent_context?: string }
-  ): BotContext => ({
+  const createMockRequest = (campaign_v2?: {
+    id: string
+    name: string
+    agent_context?: string
+  }): BotContext => ({
     session: {
       is_first_interaction: false,
       organization: 'test-org',
@@ -258,4 +267,3 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(capturedBuilderArgs.contactInfo).toEqual({})
   })
 })
-
