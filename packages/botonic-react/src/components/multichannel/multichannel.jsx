@@ -1,4 +1,4 @@
-import { isFacebook, isWhatsapp } from '@botonic/core'
+import { isFacebook, isInstagram, isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
@@ -21,11 +21,15 @@ export const Multichannel = props => {
   const requestContext = useContext(RequestContext)
   if (
     !isWhatsapp(requestContext.session) &&
-    !isFacebook(requestContext.session)
+    !isFacebook(requestContext.session) &&
+    !isInstagram(requestContext.session)
   ) {
     return props.children
   }
-  if (isFacebook(requestContext.session)) {
+  if (
+    isFacebook(requestContext.session) ||
+    isInstagram(requestContext.session)
+  ) {
     const newChildren = deepMapWithIndex(props.children, child => {
       if (isNodeText(child)) {
         return (

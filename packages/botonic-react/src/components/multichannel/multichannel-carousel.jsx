@@ -1,4 +1,10 @@
-import { isDev, isFacebook, isWebchat, isWhatsapp } from '@botonic/core'
+import {
+  isDev,
+  isFacebook,
+  isInstagram,
+  isWebchat,
+  isWhatsapp,
+} from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
@@ -106,7 +112,7 @@ function parseCarouselElement(element) {
 
 function getTextMessage(session, title, subtitle) {
   const formattedTextMessage = `**${title}**${subtitle ? ` _${subtitle}_` : ''}`
-  return isWhatsapp(session) || isFacebook(session)
+  return isWhatsapp(session) || isFacebook(session) || isInstagram(session)
     ? convertToMarkdownMeta(formattedTextMessage)
     : formattedTextMessage
 }
