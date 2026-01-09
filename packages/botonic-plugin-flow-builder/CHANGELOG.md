@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3140](https://github.com/hubtype/botonic/pull/3140): Carousel node accepts a new text for Whatsapp Interactive Media Carousel.
+
 ### Changed
 
 ### Fixed
@@ -37,7 +39,6 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 - [PR-3131](https://github.com/hubtype/botonic/pull/3131): Fix payload of AI Agent generated Text with buttons
-
 
 ## [0.42.0] - 2025-11-25
 
