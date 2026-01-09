@@ -13,6 +13,7 @@ export interface HtCarouselElement {
 export interface HtCarouselNode extends HtBaseNode {
   type: HtNodeWithContentType.CAROUSEL
   content: {
+    whatsapp_text: HtTextLocale[]
     elements: HtCarouselElement[]
   }
 }

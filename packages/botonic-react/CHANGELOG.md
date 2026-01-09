@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3140](https://github.com/hubtype/botonic/pull/3140): Whatsapp Interactive Media Carousel can use buttons as quick replies.
+
 ### Changed
 
 ### Fixed
