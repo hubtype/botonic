@@ -37,6 +37,8 @@ export {
   WhatsappCTAUrlHeaderType,
 } from './whatsapp-cta-url-button'
 export {
+  CardType,
+  WhatsappInteractiveMediaCard,
   WhatsappInteractiveMediaCarousel,
   WhatsappInteractiveMediaCarouselProps,
 } from './whatsapp-interactive-media-carousel'

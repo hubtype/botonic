@@ -1961,6 +1961,7 @@ export const basicFlow = {
       ai_translated_locales: [],
       type: 'carousel',
       content: {
+        whatsapp_text: [],
         elements: [
           {
             id: 'fe84e80f-5b9c-4902-9285-17ca950325be',

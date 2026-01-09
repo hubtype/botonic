@@ -12,24 +12,42 @@ import {
 import { Pic } from './pic'
 import { Title } from './title'
 
-interface ActionCard {
-  buttonText: string
-  buttonUrl: string
+export enum CardType {
+  CTA_URL = 'cta_url',
+  QUICK_REPLY = 'quick_reply',
+}
+
+interface BaseCard {
   imageLink: string
-}
-
-interface Card {
   text: string
-  action: ActionCard
 }
 
+interface UrlCard extends BaseCard {
+  type: CardType.CTA_URL
+  action: {
+    buttonText: string
+    buttonUrl: string
+  }
+}
+
+interface QuickReplyCard extends BaseCard {
+  type: CardType.QUICK_REPLY
+  action: {
+    buttons: {
+      text: string
+      payload: string
+    }[]
+  }
+}
+
+export type WhatsappInteractiveMediaCard = UrlCard | QuickReplyCard
 export interface WhatsappInteractiveMediaCarouselProps {
-  cards: Card[]
+  cards: WhatsappInteractiveMediaCard[]
   textMessage: string
 }
 
 /*
-  Reference: https://developers.facebook.com/docs/whatsapp/cloud-api/messages/interactive-media-carousel-messages/
+  Reference: https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/interactive-media-carousel-messages?locale=en_US
 */
 export const WhatsappInteractiveMediaCarousel = (
   props: WhatsappInteractiveMediaCarouselProps
@@ -38,13 +56,21 @@ export const WhatsappInteractiveMediaCarousel = (
     <Carousel text={truncateText(props.textMessage, WHATSAPP_MAX_BODY_CHARS)}>
       {props.cards.map((card, index) => (
         <Element key={index}>
-          <Pic src={card.action.imageLink} />
+          <Pic src={card.imageLink} />
           <Title>
             {truncateText(card.text, WHATSAPP_MAX_CAROUSEL_CARD_TEXT_CHARS)}
           </Title>
-          <Button url={card.action.buttonUrl}>
-            {truncateText(card.action.buttonText, WHATSAPP_MAX_BUTTON_CHARS)}
-          </Button>
+          {card.type === CardType.CTA_URL && (
+            <Button url={card.action.buttonUrl}>
+              {truncateText(card.action.buttonText, WHATSAPP_MAX_BUTTON_CHARS)}
+            </Button>
+          )}
+          {card.type === CardType.QUICK_REPLY &&
+            card.action.buttons.map((button, index) => (
+              <Button key={index} payload={button.payload}>
+                {truncateText(button.text, WHATSAPP_MAX_BUTTON_CHARS)}
+              </Button>
+            ))}
         </Element>
       ))}
     </Carousel>
