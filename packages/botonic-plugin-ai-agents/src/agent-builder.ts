@@ -1,4 +1,4 @@
-import { CampaignV2, ResolvedPlugins } from '@botonic/core'
+import { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
   AgentOutputType,
@@ -10,7 +10,7 @@ import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
-import { AIAgent, ContactInfo, Context, GuardrailRule, Tool } from './types'
+import { AIAgent, Context, GuardrailRule, Tool } from './types'
 
 interface AIAgentBuilderOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -20,7 +20,7 @@ interface AIAgentBuilderOptions<
   instructions: string
   tools: Tool<TPlugins, TExtraData>[]
   campaignContext?: CampaignV2
-  contactInfo: ContactInfo
+  contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
 }
@@ -86,7 +86,7 @@ export class AIAgentBuilder<
 
   private addExtraInstructions(
     initialInstructions: string,
-    contactInfo: ContactInfo,
+    contactInfo: ContactInfo[],
     campaignContext?: CampaignV2
   ): string {
     const instructions = `<instructions>\n${initialInstructions.trim()}\n</instructions>`
@@ -97,11 +97,23 @@ export class AIAgentBuilder<
     return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
   }
 
-  private getContactInfoInstructions(contactInfo: ContactInfo): string {
-    const structuredContactInfo = Object.entries(contactInfo)
-      .map(([key, value]) => `${key}: ${value}`)
+  private getContactInfoInstructions(contactInfo: ContactInfo[]): string {
+    const structuredContactInfo = contactInfo
+      .map(
+        info =>
+          ` <contact_info>
+              <name>${info.name}</name>
+              <value>${info.value}</value>
+              <type>${info.type}</type>
+              ${
+                info.description
+                  ? `<description>${info.description}</description>`
+                  : ''
+              }
+            </contact_info>`
+      )
       .join('\n')
-    return `<contact_info>\n${structuredContactInfo}\n</contact_info>`
+    return `<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>`
   }
 
   private getMetadataInstructions(): string {

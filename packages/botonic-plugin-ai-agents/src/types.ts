@@ -56,8 +56,6 @@ export interface Chunk {
   text: string
 }
 
-export type ContactInfo = Record<string, string>
-
 export type Tool<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,

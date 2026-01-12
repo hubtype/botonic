@@ -217,6 +217,13 @@ export interface CampaignV2 {
   end_date?: string
 }
 
+export interface ContactInfo {
+  name: string
+  type: string
+  value: string
+  description?: string
+}
+
 export interface SessionUser<TExtraData = any> {
   id: string
   // login
@@ -227,7 +234,7 @@ export interface SessionUser<TExtraData = any> {
   provider: ProviderType
   // The provider's user id
   extra_data?: TExtraData
-  contact_info?: Record<string, string>
+  contact_info?: ContactInfo[]
   imp_id?: string
   provider_id?: string
   locale: string
