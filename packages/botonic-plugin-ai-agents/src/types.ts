@@ -10,6 +10,7 @@ import {
 import {
   Agent,
   AgentInputItem,
+  AgentOutputType,
   RunContext as OpenAIRunContext,
   Tool as OpenAITool,
 } from '@openai/agents'
@@ -55,16 +56,16 @@ export interface Chunk {
   text: string
 }
 
-export type ContactInfo = Record<string, string>
-
 export type Tool<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
 > = OpenAITool<Context<TPlugins, TExtraData>>
+
 export type AIAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
-> = Agent<Context<TPlugins, TExtraData>, typeof OutputSchema>
+> = Agent<Context<TPlugins, TExtraData>, AgentOutputType<typeof OutputSchema>>
+
 export type MessageHistoryApiVersion = 'v1' | 'v2'
 
 export interface MemoryOptions {

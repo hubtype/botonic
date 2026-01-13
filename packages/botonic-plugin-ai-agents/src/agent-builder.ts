@@ -1,10 +1,29 @@
-import { ResolvedPlugins } from '@botonic/core'
-import { Agent, InputGuardrail, ModelSettings } from '@openai/agents'
+import { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
+import {
+  Agent,
+  AgentOutputType,
+  InputGuardrail,
+  ModelSettings,
+} from '@openai/agents'
 
+import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
-import { AIAgent, ContactInfo, GuardrailRule, Tool } from './types'
+import { AIAgent, Context, GuardrailRule, Tool } from './types'
+
+interface AIAgentBuilderOptions<
+  TPlugins extends ResolvedPlugins = ResolvedPlugins,
+  TExtraData = any,
+> {
+  name: string
+  instructions: string
+  tools: Tool<TPlugins, TExtraData>[]
+  campaignContext?: CampaignV2
+  contactInfo: ContactInfo[]
+  inputGuardrailRules: GuardrailRule[]
+  sourceIds: string[]
+}
 
 export class AIAgentBuilder<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -15,33 +34,47 @@ export class AIAgentBuilder<
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
 
-  constructor(
-    name: string,
-    instructions: string,
-    tools: Tool<TPlugins, TExtraData>[],
-    contactInfo: ContactInfo,
-    inputGuardrailRules: GuardrailRule[],
-    sourceIds: string[]
-  ) {
-    this.name = name
-    this.instructions = this.addExtraInstructions(instructions, contactInfo)
-    this.tools = this.addHubtypeTools(tools, sourceIds)
+  constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
+    this.name = options.name
+    this.instructions = this.addExtraInstructions(
+      options.instructions,
+      options.contactInfo,
+      options.campaignContext
+    )
+    this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
-    if (inputGuardrailRules.length > 0) {
-      const inputGuardrail = createInputGuardrail(inputGuardrailRules)
+    if (options.inputGuardrailRules.length > 0) {
+      const inputGuardrail = createInputGuardrail(options.inputGuardrailRules)
       this.inputGuardrails.push(inputGuardrail)
     }
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
-    const modelSettings: ModelSettings = {}
+    const modelSettings: ModelSettings = {} as ModelSettings
+    if (OPENAI_PROVIDER === 'openai') {
+      // @ts-expect-error - reasoning.effort is valid but we need to update openai and typescript dependencies
+      modelSettings.reasoning = { effort: 'none' }
+      modelSettings.text = { verbosity: 'medium' }
+    }
 
-    if (this.tools.includes(retrieveKnowledge)) {
+    if (this.tools.includes(retrieveKnowledge) && OPENAI_PROVIDER === 'azure') {
       modelSettings.toolChoice = retrieveKnowledge.name
     }
 
-    return new Agent({
+    // When using standard OpenAI API, we need to specify the model
+    // Azure OpenAI uses deployment name instead
+    const model = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : undefined
+
+    // TODO: Improve type safety - replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema>
+    // Currently using explicit type parameters to avoid type inference issues where Agent constructor
+    // infers ZodObject instead of AgentOutputType<typeof OutputSchema>. The explicit type parameters
+    // ensure compatibility with AIAgent type definition. Future improvements:
+    // 1. Update @openai/agents package to properly infer AgentOutputType from outputType parameter
+    // 2. Replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema> once type system allows
+    // 3. Consider updating AIAgent type definition if @openai/agents types change significantly
+    return new Agent<Context<TPlugins, TExtraData>, AgentOutputType<any>>({
       name: this.name,
+      model,
       instructions: this.instructions,
       tools: this.tools,
       outputType: OutputSchema,
@@ -53,25 +86,46 @@ export class AIAgentBuilder<
 
   private addExtraInstructions(
     initialInstructions: string,
-    contactInfo: ContactInfo
+    contactInfo: ContactInfo[],
+    campaignContext?: CampaignV2
   ): string {
-    const instructions = `<instructions>\n${initialInstructions}\n</instructions>`
+    const instructions = `<instructions>\n${initialInstructions.trim()}\n</instructions>`
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
+    const campaignInstructions = this.getCampaignInstructions(campaignContext)
     const outputInstructions = this.getOutputInstructions()
-    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${outputInstructions}`
+    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
   }
 
-  private getContactInfoInstructions(contactInfo: ContactInfo): string {
-    const structuredContactInfo = Object.entries(contactInfo)
-      .map(([key, value]) => `${key}: ${value}`)
+  private getContactInfoInstructions(contactInfo: ContactInfo[]): string {
+    const structuredContactInfo = contactInfo
+      .map(
+        info =>
+          ` <contact_info>
+              <name>${info.name}</name>
+              <value>${info.value}</value>
+              <type>${info.type}</type>
+              ${
+                info.description
+                  ? `<description>${info.description}</description>`
+                  : ''
+              }
+            </contact_info>`
+      )
       .join('\n')
-    return `<contact_info>\n${structuredContactInfo}\n</contact_info>`
+    return `<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>`
   }
 
   private getMetadataInstructions(): string {
     const metadata = `Current Date: ${new Date().toISOString()}`
     return `<metadata>\n${metadata}\n</metadata>`
+  }
+
+  private getCampaignInstructions(campaignContext?: CampaignV2): string {
+    if (!campaignContext || !campaignContext.agent_context) {
+      return ''
+    }
+    return `<campaign_context>\n${campaignContext.agent_context}\n</campaign_context>`
   }
 
   private getOutputInstructions(): string {

@@ -7,7 +7,7 @@ import {
   ACCESS_TOKEN_VARIABLE_KEY,
   EMPTY_PAYLOAD,
   SOURCE_INFO_SEPARATOR,
-  VARIABLE_PATTERN,
+  VARIABLE_PATTERN_GLOBAL,
 } from '../constants'
 import { trackOneContent } from '../tracking'
 import { getValueFromKeyPath } from '../utils'
@@ -35,32 +35,6 @@ export class FlowText extends ContentFieldsBase {
     newText.followUp = cmsText.follow_up
 
     return newText
-  }
-
-  static replaceVariables(text: string, request: ActionRequest): string {
-    const matches = text.match(VARIABLE_PATTERN)
-
-    let replacedText = text
-    if (matches && request) {
-      matches.forEach(match => {
-        const keyPath = match.slice(1, -1)
-        const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
-          ? match
-          : getValueFromKeyPath(request, keyPath)
-        // TODO In local if change variable and render multiple times the value is always the last update
-        replacedText = replacedText.replace(
-          match,
-          this.isValidType(botVariable) ? botVariable : match
-        )
-      })
-    }
-
-    return replacedText
-  }
-
-  private static isValidType(botVariable: any): boolean {
-    const validTypes = ['boolean', 'string', 'number']
-    return validTypes.includes(typeof botVariable)
   }
 
   async trackFlow(request: ActionRequest): Promise<void> {
@@ -97,7 +71,7 @@ export class FlowText extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
-    const replacedText = FlowText.replaceVariables(this.text, request)
+    const replacedText = this.replaceVariables(this.text, request)
     return (
       <Text key={id}>
         {replacedText}

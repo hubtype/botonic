@@ -16,6 +16,7 @@ import { FlowRating } from './flow-rating'
 import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
+import { FlowWhatsappTemplate } from './flow-whatsapp-template'
 import { FlowWhatsappButtonList } from './whatsapp-button-list/flow-whatsapp-button-list'
 
 export { ContentFieldsBase } from './content-fields-base'
@@ -38,6 +39,7 @@ export {
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappTemplate,
 }
 
 export type FlowContent =
@@ -47,6 +49,7 @@ export type FlowContent =
   | FlowVideo
   | FlowWhatsappButtonList
   | FlowWhatsappCtaUrlButtonNode
+  | FlowWhatsappTemplate
   | FlowHandoff
   | FlowKnowledgeBase
   | FlowBotAction

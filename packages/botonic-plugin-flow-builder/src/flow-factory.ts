@@ -19,6 +19,7 @@ import {
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappTemplate,
 } from './content-fields'
 import {
   HtFunctionNode,
@@ -89,6 +90,9 @@ export class FlowFactory {
 
       case HtNodeWithContentType.GO_TO_FLOW:
         return FlowGoToFlow.fromHubtypeCMS(hubtypeContent, this.cmsApi)
+
+      case HtNodeWithContentType.WHATSAPP_TEMPLATE:
+        return FlowWhatsappTemplate.fromHubtypeCMS(hubtypeContent)
 
       default:
         return undefined

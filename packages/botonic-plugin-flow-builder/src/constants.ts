@@ -3,7 +3,7 @@ export const FLOW_BUILDER_API_URL_PROD =
 export const SEPARATOR = '|'
 export const SOURCE_INFO_SEPARATOR = `${SEPARATOR}source_`
 export const EMPTY_PAYLOAD = 'fb-empty-payload'
-export const VARIABLE_PATTERN = /{([^}]+)}/g
+export const VARIABLE_PATTERN_GLOBAL = /{([^}]+)}/g
 export const ACCESS_TOKEN_VARIABLE_KEY = '_access_token'
 export const REG_EXP_PATTERN = /^\/(.*)\/([gimyus]*)$/
 export const UUID_REGEXP =
@@ -11,6 +11,7 @@ export const UUID_REGEXP =
 
 /* ********** PAYLOADS ********** */
 export const AGENT_RATING_PAYLOAD = 'agent-rating'
+export const PUSH_FLOW_PAYLOAD = 'push-flow'
 
 /* ********** FLOW NAMES ********** */
 export const MAIN_FLOW_NAME = 'Main'

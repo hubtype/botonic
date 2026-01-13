@@ -60,14 +60,15 @@ export default class BotonicPluginAiAgents<
       const tools = this.buildTools(
         aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
-      const agent = new AIAgentBuilder<TPlugins, TExtraData>(
-        aiAgentArgs.name,
-        aiAgentArgs.instructions,
-        tools,
-        request.session.user.contact_info || {},
-        aiAgentArgs.inputGuardrailRules || [],
-        aiAgentArgs.sourceIds || []
-      ).build()
+      const agent = new AIAgentBuilder<TPlugins, TExtraData>({
+        name: aiAgentArgs.name,
+        instructions: aiAgentArgs.instructions,
+        tools: tools,
+        contactInfo: request.session.user.contact_info || [],
+        inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+        sourceIds: aiAgentArgs.sourceIds || [],
+        campaignContext: request.input.context?.campaign_v2,
+      }).build()
 
       const messages = await this.getMessages(
         request,

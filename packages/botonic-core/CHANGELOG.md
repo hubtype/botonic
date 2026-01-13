@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.43.x] - 2025-mm-dd
+## [0.43.0] - 2026-01-13
 
 ### Added
 
 ### Changed
+
+- [PR-3134](https://github.com/hubtype/botonic/pull/3134): Change ContactInfo format in Session.
 
 ### Fixed
 
