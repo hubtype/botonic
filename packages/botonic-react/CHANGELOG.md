@@ -10,13 +10,15 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.43.0] - 2025-mm-dd
+## [0.43.0] - 2026-01-13
 
 ### Added
 
 - [PR-3140](https://github.com/hubtype/botonic/pull/3140): Whatsapp Interactive Media Carousel can use buttons as quick replies.
 
 ### Changed
+
+- [PR-3134](https://github.com/hubtype/botonic/pull/3134): Update WhatsappTemplate message with header, body, footer and buttons.
 
 ### Fixed
 
