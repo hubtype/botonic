@@ -12,8 +12,8 @@ jobs:
       PACKAGE: botonic-cli
       # Temporal workaround until ts-jest is fixed
       UNIT_TEST_COMMAND: cp tsconfig.test.json tsconfig.json && npm run test_ci
-      PUBLISH_TESTS_RESULTS: 'yes'
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      PUBLISH_TESTS_RESULTS: "yes"
+      NEEDS_CODECOV_UPLOAD: "yes"
 
   botonic-core-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
@@ -21,7 +21,7 @@ jobs:
     with:
       PACKAGE_NAME: Botonic core tests
       PACKAGE: botonic-core
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      NEEDS_CODECOV_UPLOAD: "yes"
 
   botonic-plugin-ai-agents-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
@@ -29,55 +29,25 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin-ai-agents tests
       PACKAGE: botonic-plugin-ai-agents
-      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-ai-agents && npm run build'
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      BUILD_COMMAND: "cd ../botonic-core && npm run build && cd ../botonic-plugin-ai-agents && npm run build"
+      NEEDS_CODECOV_UPLOAD: "yes"
 
-  botonic-plugin-contentful-tests:
+  botonic-plugin-flow-builder-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
     secrets: inherit #pragma: allowlist secret
     with:
-      PACKAGE_NAME: Botonic plugin-contentful Tests
-      PACKAGE: botonic-plugin-contentful
-      BUILD_COMMAND: npm run build_unit_tests
-      NEEDS_CONTENTFUL_SECRETS: 'yes' #pragma: allowlist secret
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      PACKAGE_NAME: Botonic plugin-flow-builder tests
+      PACKAGE: botonic-plugin-flow-builder
+      BUILD_COMMAND: "cd ../botonic-core && npm run build && cd ../botonic-plugin-flow-builder && npm run build"
+      NEEDS_CODECOV_UPLOAD: "yes"
 
-  botonic-plugin-dashbot-tests:
+  botonic-hubtype-analytics-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
     secrets: inherit #pragma: allowlist secret
     with:
-      PACKAGE_NAME: Botonic plugin-dashbot tests
-      PACKAGE: botonic-plugin-dashbot
-      UNIT_TEST_COMMAND: ''
-      BUILD_COMMAND: ''
-
-  botonic-plugin-dynamodb-tests:
-    uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit #pragma: allowlist secret
-    with:
-      PACKAGE_NAME: Botonic plugin-dynamodb Tests
-      PACKAGE: botonic-plugin-dynamodb
-      BUILD_COMMAND: npm run build_unit_tests
-      NEEDS_CODECOV_UPLOAD: 'yes'
-      NEEDS_AWS_CRED: 'yes' #pragma: allowlist secret
-
-  botonic-plugin-google-analytics-tests:
-    uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit #pragma: allowlist secret
-    with:
-      PACKAGE_NAME: Botonic plugin-google-analytics tests
-      PACKAGE: botonic-plugin-google-analytics
-      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-google-analytics && npm run build'
-      UNIT_TEST_COMMAND: ''
-
-  botonic-plugin-segment-tests:
-    uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit #pragma: allowlist secret
-    with:
-      PACKAGE_NAME: Botonic plugin-segment tests
-      PACKAGE: botonic-plugin-segment
-      BUILD_COMMAND: ''
-      UNIT_TEST_COMMAND: ''
+      PACKAGE_NAME: Botonic hubtype-analytics tests
+      PACKAGE: botonic-hubtype-analytics
+      NEEDS_CODECOV_UPLOAD: "yes"
 
   botonic-react-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
@@ -85,5 +55,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic react tests
       PACKAGE: botonic-react
-      BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-react && npm run build'
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      BUILD_COMMAND: "cd ../botonic-core && npm run build && cd ../botonic-react && npm run build"
+      NEEDS_CODECOV_UPLOAD: "yes"
