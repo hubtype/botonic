@@ -4,7 +4,7 @@ import {
   FlowBuilderJSONVersion,
 } from '@botonic/plugin-flow-builder'
 import {
-  KnowledgeBaseResponse,
+  KnowledgeBasesResponse,
   type PluginKnowledgeBaseOptions,
 } from '@botonic/plugin-knowledge-bases/src/types'
 
@@ -35,7 +35,7 @@ function getFlowBuilderConfig(
       instructions: string,
       messageId: string,
       memoryLength: number
-    ): Promise<KnowledgeBaseResponse> => {
+    ): Promise<KnowledgeBasesResponse> => {
       try {
         const knowledgeBasePlugin = request.plugins.knowledgeBases
         const response = await knowledgeBasePlugin.getInference(
