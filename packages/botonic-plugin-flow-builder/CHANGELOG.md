@@ -10,6 +10,16 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
+## [0.43.x] - 2026-mm-dd
+
+### Added
+
+### Changed
+
+### Fixed
+
+</details>
+
 ## [0.43.0] - 2026-01-13
 
 ### Added
@@ -17,12 +27,6 @@ All notable changes to Botonic will be documented in this file.
 - [PR-3140](https://github.com/hubtype/botonic/pull/3140): Carousel node accepts a new text for Whatsapp Interactive Media Carousel.
 - [PR-3134](https://github.com/hubtype/botonic/pull/3134): Add Whatsapp Template node to send campaigns.
 - [PR-3134](https://github.com/hubtype/botonic/pull/3134): Use AiAgent with context campaign.
-
-### Changed
-
-### Fixed
-
-</details>
 
 ## [0.42.5] - 2025-12-19
 
