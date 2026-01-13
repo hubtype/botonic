@@ -74,7 +74,14 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
         locale: 'en',
         country: 'US',
         system_locale: 'en',
-        contact_info: { email: 'test@test.com' },
+        contact_info: [
+          {
+            name: 'email',
+            value: 'test@test.com',
+            type: 'string',
+            description: 'User email',
+          },
+        ],
         extra_data: {},
       },
       _access_token: 'test-token',
@@ -247,18 +254,38 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     })
 
     const request = createMockRequest()
-    request.session.user.contact_info = {
-      email: 'user@example.com',
-      phone: '+1234567890',
-    }
+    request.session.user.contact_info = [
+      {
+        name: 'email',
+        value: 'user@example.com',
+        type: 'string',
+        description: 'User email',
+      },
+      {
+        name: 'phone',
+        value: '+1234567890',
+        type: 'string',
+        description: 'User phone',
+      },
+    ]
 
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.contactInfo).toEqual({
-      email: 'user@example.com',
-      phone: '+1234567890',
-    })
+    expect(capturedBuilderArgs.contactInfo).toEqual([
+      {
+        name: 'email',
+        value: 'user@example.com',
+        type: 'string',
+        description: 'User email',
+      },
+      {
+        name: 'phone',
+        value: '+1234567890',
+        type: 'string',
+        description: 'User phone',
+      },
+    ])
   })
 
   it('should pass empty object for contactInfo when contact_info is undefined', async () => {
@@ -272,6 +299,6 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.contactInfo).toEqual({})
+    expect(capturedBuilderArgs.contactInfo).toEqual([])
   })
 })

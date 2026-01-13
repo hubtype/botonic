@@ -36,6 +36,8 @@ const mockConstants = {
 jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
+import { ContactInfo } from '@botonic/core'
+
 import { AIAgentBuilder } from '../src/agent-builder'
 
 describe('AIAgentBuilder', () => {
@@ -58,11 +60,26 @@ describe('AIAgentBuilder', () => {
     agent_context: 'This is some context coming from campaigns',
   }
 
-  const contactInfo = {
-    email: 'test@test.com',
-    phone: '1234567890',
-    address: '123 Main St, Anytown, USA',
-  }
+  const contactInfo: ContactInfo[] = [
+    {
+      name: 'email',
+      value: 'test@test.com',
+      type: 'string',
+      description: 'User email',
+    },
+    {
+      name: 'phone',
+      value: '1234567890',
+      type: 'string',
+      description: 'User phone',
+    },
+    {
+      name: 'address',
+      value: '123 Main St, Anytown, USA',
+      type: 'string',
+      description: 'User address',
+    },
+  ]
   const inputGuardrailRules: GuardrailRule[] = [
     {
       name: 'is_offensive',
@@ -92,7 +109,23 @@ describe('AIAgentBuilder', () => {
       sourceIds,
       campaignContext,
     }).build()
-    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info>\nemail: test@test.com\nphone: 1234567890\naddress: 123 Main St, Anytown, USA\n</contact_info>\n\n<campaign_context>\nThis is some context coming from campaigns\n</campaign_context>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
+    const structuredContactInfo = contactInfo
+      .map(
+        info =>
+          ` <contact_info>
+              <name>${info.name}</name>
+              <value>${info.value}</value>
+              <type>${info.type}</type>
+              ${
+                info.description
+                  ? `<description>${info.description}</description>`
+                  : ''
+              }
+            </contact_info>`
+      )
+      .join('\n')
+
+    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>\n\n<campaign_context>\nThis is some context coming from campaigns\n</campaign_context>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
@@ -351,10 +384,20 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
   const agentName = 'Test Agent'
   const agentInstructions = 'Test instructions for the agent'
   const agentCustomTools: Tool[] = []
-  const contactInfo = {
-    email: 'test@test.com',
-    phone: '1234567890',
-  }
+  const contactInfo: ContactInfo[] = [
+    {
+      name: 'email',
+      value: 'test@test.com',
+      type: 'string',
+      description: 'User email',
+    },
+    {
+      name: 'phone',
+      value: '1234567890',
+      type: 'string',
+      description: 'User phone',
+    },
+  ]
 
   beforeEach(() => {
     jest.clearAllMocks()
