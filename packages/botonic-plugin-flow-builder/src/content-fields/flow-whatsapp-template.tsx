@@ -81,6 +81,13 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       return this.createHeaderImageComponent(headerVariables, locale)
     }
 
+    if (
+      headerComponent &&
+      headerComponent.format === WhatsAppTemplateParameterType.VIDEO
+    ) {
+      return this.createHeaderVideoComponent(headerVariables, locale)
+    }
+
     return undefined
   }
 
@@ -110,6 +117,24 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
         {
           type: WhatsAppTemplateParameterType.IMAGE,
           image: {
+            link:
+              headerVariables.media?.find(m => m.locale === locale)?.file || '',
+          },
+        },
+      ],
+    }
+  }
+
+  private createHeaderVideoComponent(
+    headerVariables: HeaderVariables,
+    locale: string
+  ): WhatsappTemplateComponentHeader {
+    return {
+      type: WhatsAppTemplateComponentType.HEADER,
+      parameters: [
+        {
+          type: WhatsAppTemplateParameterType.VIDEO,
+          video: {
             link:
               headerVariables.media?.find(m => m.locale === locale)?.file || '',
           },

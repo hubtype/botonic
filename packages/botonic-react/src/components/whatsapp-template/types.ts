@@ -33,15 +33,19 @@ export interface WhatsappTemplateHeaderImageParameter {
   }
 }
 
+export interface WhatsappTemplateHeaderVideoParameter {
+  type: WhatsAppTemplateParameterType.VIDEO
+  video: {
+    link: string
+  }
+}
+
 export interface WhatsappTemplateComponentHeader {
   type: WhatsAppTemplateComponentType.HEADER
   parameters:
     | WhatsappTemplateHeaderTextParameter[]
     | WhatsappTemplateHeaderImageParameter[]
-  // | {
-  //     type: WhatsAppTemplateParameterType.VIDEO
-  //     video: string
-  //   }[]
+    | WhatsappTemplateHeaderVideoParameter[]
   // | {
   //     type: WhatsAppTemplateParameterType.DOCUMENT
   //     document: string
