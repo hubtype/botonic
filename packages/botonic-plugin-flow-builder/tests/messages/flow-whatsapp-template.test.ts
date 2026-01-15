@@ -152,6 +152,23 @@ describe('FlowWhatsappTemplate', () => {
       expect(template.headerVariables?.media).toHaveLength(2)
     })
 
+    test('should get WhatsApp template content with video header', async () => {
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: whatsappTemplateFlow },
+        requestArgs: {
+          input: { data: 'templateVideoHeader', type: INPUT.TEXT },
+        },
+      })
+
+      expect(contents).toHaveLength(1)
+      const template = contents[0] as FlowWhatsappTemplate
+      expect(template.htWhatsappTemplate.name).toBe('video_promo')
+      expect(template.headerVariables?.type).toBe(
+        WhatsAppTemplateParameterType.VIDEO
+      )
+      expect(template.headerVariables?.media).toHaveLength(2)
+    })
+
     test('should get WhatsApp template content with buttons', async () => {
       const { contents } = await createFlowBuilderPluginAndGetContents({
         flowBuilderOptions: { flow: whatsappTemplateFlow },
@@ -272,6 +289,36 @@ describe('FlowWhatsappTemplate', () => {
       // @ts-ignore
       expect(headerComponent?.parameters[0].image.link).toBe(
         'https://example.com/promo-es.jpg'
+      )
+    })
+
+    test('should create video header with correct locale', async () => {
+      const { contents, request } = await createFlowBuilderPluginAndGetContents(
+        {
+          flowBuilderOptions: { flow: whatsappTemplateFlow },
+          requestArgs: {
+            input: { data: 'templateVideoHeader', type: INPUT.TEXT },
+            user: { locale: 'es', country: 'ES', systemLocale: 'es' },
+          },
+        }
+      )
+
+      const template = contents[0] as FlowWhatsappTemplate
+      // @ts-ignore - accessing private method for testing
+      const headerComponent = template.getHeaderComponent(
+        template.htWhatsappTemplate,
+        template.headerVariables!,
+        'es',
+        request
+      )
+
+      expect(headerComponent?.type).toBe(WhatsAppTemplateComponentType.HEADER)
+      expect(headerComponent?.parameters[0].type).toBe(
+        WhatsAppTemplateParameterType.VIDEO
+      )
+      // @ts-ignore
+      expect(headerComponent?.parameters[0].video.link).toBe(
+        'https://example.com/video-es.mp4'
       )
     })
 
