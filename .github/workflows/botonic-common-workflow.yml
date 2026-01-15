@@ -5,42 +5,42 @@ on:
     inputs:
       NODE_VERSION:
         type: string
-        description: 'Node version of the package'
-        default: '22'
+        description: "Node version of the package"
+        default: "22"
         required: false
       PACKAGE_NAME:
         type: string
-        description: 'Package name'
+        description: "Package name"
         required: true
       PACKAGE:
         type: string
-        description: 'Relative path inside botonic/packages repo'
+        description: "Relative path inside botonic/packages repo"
         required: true
       UNIT_TEST_COMMAND:
         type: string
-        description: 'Command to execute unit tests with npm'
+        description: "Command to execute unit tests with npm"
         default: npm run test
         required: false
       BUILD_COMMAND:
         type: string
-        description: 'Command to execute the build of the package'
+        description: "Command to execute the build of the package"
         default: npm run build
         required: false
       PUBLISH_TESTS_RESULTS:
         type: string
-        description: 'Flag to know if tests should or should not be published'
+        description: "Flag to know if tests should or should not be published"
         required: false
       NEEDS_AWS_CRED:
         type: string
-        description: 'Flag to know if the CI needs AWS credentials'
+        description: "Flag to know if the CI needs AWS credentials"
         required: false
       NEEDS_CODECOV_UPLOAD:
         type: string
-        description: 'Flag to know if the CI needs to Upload Codecov coverage'
+        description: "Flag to know if the CI needs to Upload Codecov coverage"
         required: false
       NEEDS_CONTENTFUL_SECRETS:
         type: string
-        description: 'Flag to know if the tests need some contentful secrets'
+        description: "Flag to know if the tests need some contentful secrets"
         required: false
 
 jobs:
@@ -55,8 +55,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
 
       - name: Configure AWS Credentials with role
         if: ${{ inputs.NEEDS_AWS_CRED != '' && always() }}
@@ -70,7 +70,7 @@ jobs:
           role-session-name: HubtypeCITests
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         if: ${{ inputs.BUILD_COMMAND != '' }}

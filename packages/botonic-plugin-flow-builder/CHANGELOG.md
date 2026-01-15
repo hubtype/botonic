@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.43.1] - 2026-01-15
+
+### Added
+
+- [PR-3145](https://github.com/hubtype/botonic/pull/3145): Add video header support for WhatsApp template
+
 ## [0.43.0] - 2026-01-13
 
 ### Added

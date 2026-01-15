@@ -11,6 +11,7 @@ const WhatsAppTemplateComponentType = {
 const WhatsAppTemplateParameterType = {
   TEXT: 'TEXT',
   IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
 } as const
 
 const WhatsAppTemplateButtonSubType = {
@@ -174,6 +175,83 @@ export const whatsappTemplateFlow = {
         },
         variable_values: {
           discount: '25',
+        },
+        buttons: [],
+        url_variable_values: {},
+      },
+    },
+    // Keyword to trigger WhatsApp template with video header
+    {
+      id: 'keyword-whatsapp-template-video-header',
+      code: '',
+      is_code_ai_generated: false,
+      meta: { x: 0, y: 300 },
+      follow_up: null,
+      target: {
+        id: 'whatsapp-template-video-header-node',
+        type: 'whatsapp-template',
+      },
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [
+          { values: ['templateVideoHeader'], locale: 'en' },
+          { values: ['templateVideoHeader'], locale: 'es' },
+        ],
+      },
+    },
+    // WhatsApp template with video header
+    {
+      id: 'whatsapp-template-video-header-node',
+      code: 'WHATSAPP_TEMPLATE_VIDEO_HEADER',
+      is_code_ai_generated: false,
+      meta: { x: 300, y: 300 },
+      follow_up: null,
+      target: null,
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'whatsapp-template',
+      content: {
+        template: {
+          id: 'template-video-header-id',
+          name: 'video_promo',
+          language: 'en',
+          status: 'APPROVED',
+          category: 'MARKETING',
+          components: [
+            {
+              type: WhatsAppTemplateComponentType.HEADER,
+              format: WhatsAppTemplateParameterType.VIDEO,
+            },
+            {
+              type: WhatsAppTemplateComponentType.BODY,
+              text: 'Watch our latest video: {{title}}',
+            },
+          ],
+          namespace: 'test-namespace',
+          parameter_format: 'NAMED',
+        },
+        header_variables: {
+          type: WhatsAppTemplateParameterType.VIDEO,
+          media: [
+            {
+              id: 'video-en-id',
+              file: 'https://example.com/video-en.mp4',
+              locale: 'en',
+            },
+            {
+              id: 'video-es-id',
+              file: 'https://example.com/video-es.mp4',
+              locale: 'es',
+            },
+          ],
+        },
+        variable_values: {
+          title: 'New Product Launch',
         },
         buttons: [],
         url_variable_values: {},

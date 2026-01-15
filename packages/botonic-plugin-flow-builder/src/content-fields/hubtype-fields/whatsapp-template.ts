@@ -33,8 +33,10 @@ export interface HtWhatsAppTemplateHeaderComponent {
   format:
     | WhatsAppTemplateParameterType.TEXT
     | WhatsAppTemplateParameterType.IMAGE
+    | WhatsAppTemplateParameterType.VIDEO
   text?: string
   image?: { link: string }
+  video?: { link: string }
 }
 
 export interface HtWhatsAppTemplateBodyComponent {
