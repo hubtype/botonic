@@ -17,6 +17,7 @@ export enum HtNodeWithContentType {
   RATING = 'rating',
   WEBVIEW = 'webview',
   GO_TO_FLOW = 'go-to-flow',
+  CAPTURE_USER_INPUT = 'capture-user-input',
 }
 
 export enum HtNodeWithoutContentType {

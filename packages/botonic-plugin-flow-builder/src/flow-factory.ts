@@ -21,6 +21,7 @@ import {
   FlowWhatsappCtaUrlButtonNode,
   FlowWhatsappTemplate,
 } from './content-fields'
+import { FlowCaptureUserInput } from './content-fields/flow-capture-user-input'
 import {
   HtFunctionNode,
   HtNodeComponent,
@@ -93,6 +94,9 @@ export class FlowFactory {
 
       case HtNodeWithContentType.WHATSAPP_TEMPLATE:
         return FlowWhatsappTemplate.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.CAPTURE_USER_INPUT:
+        return FlowCaptureUserInput.fromHubtypeCMS(hubtypeContent)
 
       default:
         return undefined

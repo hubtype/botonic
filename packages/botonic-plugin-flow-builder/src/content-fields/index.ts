@@ -1,5 +1,6 @@
 import { FlowAiAgent } from './flow-ai-agent'
 import { FlowBotAction } from './flow-bot-action'
+import { FlowCaptureUserInput } from './flow-capture-user-input'
 import { FlowCarousel } from './flow-carousel'
 import { FlowChannelConditional } from './flow-channel-conditional'
 import { FlowCountryConditional } from './flow-country-conditional'
@@ -25,6 +26,7 @@ export { FlowElement } from './flow-element'
 export {
   FlowAiAgent,
   FlowBotAction,
+  FlowCaptureUserInput,
   FlowCarousel,
   FlowChannelConditional,
   FlowCountryConditional,
@@ -60,5 +62,6 @@ export type FlowContent =
   | FlowQueueStatusConditional
   | FlowCustomConditional
   | FlowGoToFlow
+  | FlowCaptureUserInput
 
 export { DISABLED_MEMORY_LENGTH }
