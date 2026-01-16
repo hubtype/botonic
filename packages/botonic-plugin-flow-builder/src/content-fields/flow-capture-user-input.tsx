@@ -32,9 +32,8 @@ export class FlowCaptureUserInput extends ContentFieldsBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toBotonic(_id: string, request: ActionRequest): JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     request.session.flow_builder = { capture_user_input_id: this.id }
-    console.log('FlowCaptureUserInput toBotonic session', request.session)
+
     return <></>
   }
 }
