@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3146](https://github.com/hubtype/botonic/pull/3146): Add CaptureUserInput node.
+
 ### Changed
 
 ### Fixed
