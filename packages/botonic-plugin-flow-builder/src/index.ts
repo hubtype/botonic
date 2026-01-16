@@ -36,7 +36,7 @@ import {
   RatingSubmittedInfo,
   TrackEventFunction,
 } from './types'
-import { getNodeByUserInput } from './user-input'
+import { getNextPayloadByUserInput } from './user-input'
 import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { inputHasTextData, resolveGetAccessToken } from './utils'
 
@@ -109,13 +109,13 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
     if (checkUserTextInput) {
       const resolvedLocale = this.cmsApi.getResolvedLocale()
-      const nodeByUserInput = await getNodeByUserInput(
+      const nextPayload = await getNextPayloadByUserInput(
         this.cmsApi,
         resolvedLocale,
         request as unknown as ActionRequest,
         this.smartIntentsConfig
       )
-      request.input.payload = this.cmsApi.getPayload(nodeByUserInput?.target)
+      request.input.payload = nextPayload
     }
 
     this.updateRequestBeforeRoutes(request)

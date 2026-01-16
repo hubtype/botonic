@@ -2,24 +2,31 @@ import { ActionRequest } from '@botonic/react'
 
 import { FlowBuilderApi } from '../api'
 import {
-  HtKeywordNode,
-  HtSmartIntentNode,
-} from '../content-fields/hubtype-fields'
-import {
   inputHasTextData,
   isKeywordsAllowed,
   isSmartIntentsAllowed,
+  shouldCaptureUserInput,
 } from '../utils'
+import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
 import { SmartIntentsApi, SmartIntentsInferenceConfig } from './smart-intent'
 
-export async function getNodeByUserInput(
+export async function getNextPayloadByUserInput(
   cmsApi: FlowBuilderApi,
   locale: string,
   request: ActionRequest,
   smartIntentsConfig: SmartIntentsInferenceConfig
-): Promise<HtSmartIntentNode | HtKeywordNode | undefined> {
+): Promise<string | undefined> {
   if (inputHasTextData(request.input)) {
+    if (shouldCaptureUserInput(request)) {
+      const captureUserInputApi = new CaptureUserInputApi(
+        cmsApi,
+        request as unknown as ActionRequest
+      )
+      const nextNodeId = await captureUserInputApi.getNextNodeId()
+      return nextNodeId
+    }
+
     if (isKeywordsAllowed(request)) {
       const keywordMatcher = new KeywordMatcher({
         cmsApi,
@@ -30,7 +37,7 @@ export async function getNodeByUserInput(
         request.input.data!
       )
       if (keywordNode) {
-        return keywordNode
+        return cmsApi.getPayload(keywordNode.target)
       }
     }
 
@@ -42,7 +49,7 @@ export async function getNodeByUserInput(
       )
       const smartIntentNode = await smartIntentsApi.getNodeByInput()
       if (smartIntentNode) {
-        return smartIntentNode
+        return cmsApi.getPayload(smartIntentNode.target)
       }
     }
   }
