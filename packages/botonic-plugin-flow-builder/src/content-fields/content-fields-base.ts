@@ -49,7 +49,8 @@ export abstract class ContentFieldsBase {
     let replacedText = text
     if (matches && request) {
       matches.forEach(match => {
-        const keyPath = match.slice(1, -1)
+        // remove \\ ( escape for _ ) added by text node with markdown
+        const keyPath = match.slice(1, -1).replaceAll('\\', '')
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? match
           : getValueFromKeyPath(request, keyPath)
