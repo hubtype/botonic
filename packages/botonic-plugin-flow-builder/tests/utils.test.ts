@@ -345,4 +345,28 @@ describe('getValueFromKeyPath', () => {
       expect(result).toBe('deep-value')
     })
   })
+
+  describe('contact_info variable', () => {
+    test('should return the contact_info.value when keyPath contains contact_info.name', () => {
+      const request = createRequest({
+        input: { data: 'test-value', type: INPUT.TEXT },
+        contactInfo: [
+          {
+            name: 'Customer Full Name',
+            description: '',
+            type: 'string',
+            value: 'John Doe',
+          },
+        ],
+      })
+      const actionRequest = getActionRequest(request)
+
+      const result = getValueFromKeyPath(
+        actionRequest,
+        'session.user.contact_info.Customer Full Name'
+      )
+
+      expect(result).toBe('John Doe')
+    })
+  })
 })

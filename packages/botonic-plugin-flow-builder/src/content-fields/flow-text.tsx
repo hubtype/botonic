@@ -3,14 +3,8 @@ import { ActionRequest, Text } from '@botonic/react'
 import React from 'react'
 
 import { FlowBuilderApi } from '../api'
-import {
-  ACCESS_TOKEN_VARIABLE_KEY,
-  EMPTY_PAYLOAD,
-  SOURCE_INFO_SEPARATOR,
-  VARIABLE_PATTERN_GLOBAL,
-} from '../constants'
+import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { trackOneContent } from '../tracking'
-import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { HtButtonStyle, HtTextNode } from './hubtype-fields'
