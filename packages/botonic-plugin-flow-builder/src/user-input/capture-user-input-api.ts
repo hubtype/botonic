@@ -38,6 +38,13 @@ export class CaptureUserInputApi {
       const captureUserInput =
         FlowCaptureUserInput.fromHubtypeCMS(captureUserInputNode)
 
+      if (captureUserInput.aiValidationType === 'None') {
+        this.request.session.user.extra_data[
+          captureUserInputNode.content.field_name
+        ] = this.request.input.data
+        return captureUserInput.captureSuccessId
+      }
+
       const aiCaptureResponse =
         await this.getAiCaptureResponse(captureUserInputNode)
       this.cmsApi.setCaptureUserInputId(undefined)
@@ -57,7 +64,7 @@ export class CaptureUserInputApi {
     captureUserInputNode: HtCaptureUserInputNode
   ): Promise<AiCaptureResponse> {
     try {
-      const url = `${process.env.HUBTYPE_API_URL}/external/v1/ai/capture_user_input/inference/`
+      const url = `${process.env.HUBTYPE_API_URL}/external/v1/capture_user_input/`
       const data = {
         field_name: captureUserInputNode.content.field_name,
         validation_type: captureUserInputNode.content.ai_validation_type,
