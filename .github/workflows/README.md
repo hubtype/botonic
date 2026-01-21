@@ -16,7 +16,6 @@ If you want to add an extra workflow follow the steps:
    - Does it need to be uploaded to Codecov?
    - Does it need to have AWS credentials?
    - Does it need to have the tests published?
-   - Does it need contentful secrets?
 
 - Every point in here will be needed to know which input to add later.
 
@@ -32,7 +31,6 @@ If you want to add an extra workflow follow the steps:
      _The rest of inputs from now on, will work similar as `PUBLISH_TESTS_RESULTS` due to being optional flags_.
    - `NEEDS_AWS_CRED`: some packages need AWS credentials to perform some steps inside the workflow, this flag enables the AWS credential generation (or verification).
    - `NEEDS_CODECOV_UPLOAD`: Flag to determinate if the workflow will upload the tests to Codecov or will ignore it.
-   - `NEEDS_CONTENTFUL_SECRETS`: Some packages need some specific secrets to execute an step, therefore, this flag enables such secrets to appear (this flag enables a test step and disables the default one).
 
 3. Write the workflow:
    To write the workflow, we know what each input does, now it is a matter of structure:
