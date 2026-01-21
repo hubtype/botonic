@@ -35,7 +35,6 @@
     "@eslint/compat": "^1.0.0",
     "@oclif/prettier-config": "^0.2.1",
     "@oclif/test": "^4.1.14",
-    "@swc/jest": "^0.2.39",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.0.0",
@@ -45,8 +44,7 @@
     "oclif": "^4.22.27",
     "shx": "^0.3.3",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "ts-node": "^10.9.2"
   },
   "engines": {
     "node": ">=22.19.0",

@@ -13,7 +13,7 @@
     "composite": true
   },
   "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
-  "exclude": ["templates", "dist", "lib", "tests"],
+  "exclude": ["templates", "dist", "lib"],
   "ts-node": {
     "esm": true
   }
