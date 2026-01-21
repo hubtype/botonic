@@ -4,16 +4,16 @@ import { jest } from '@jest/globals'
 import { join } from 'path'
 import { chdir } from 'process'
 
-import { BotonicAPIService } from '../../src/botonic-api-service'
-import { EXAMPLES } from '../../src/botonic-examples'
-import { default as DeployCommand } from '../../src/commands/deploy'
-import { default as NewCommand } from '../../src/commands/new'
+import { BotonicAPIService } from '../../src/botonic-api-service.js'
+import { EXAMPLES } from '../../src/botonic-examples.js'
+import { default as DeployCommand } from '../../src/commands/deploy.js'
+import { default as NewCommand } from '../../src/commands/new.js'
 import {
   copyRecursively,
   createTempDir,
   readDir,
   removeRecursively,
-} from '../../src/util/file-system'
+} from '../../src/util/file-system.js'
 
 const botonicApiService = new BotonicAPIService()
 const newCommand = new NewCommand(process.argv, new Config({ root: '' }))
