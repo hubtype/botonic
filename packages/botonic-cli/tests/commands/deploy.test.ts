@@ -22,7 +22,18 @@ const deployCommand = new DeployCommand(process.argv, new Config({ root: '' }))
 const BLANK_EXAMPLE = EXAMPLES[0]
 assert(BLANK_EXAMPLE.name === 'blank')
 
+function cleanupTempFolders(): void {
+  const currentDir = readDir('.')
+  const foldersToClean = currentDir.filter(
+    item => item.startsWith('botonic-tmp') || item === 'tmp'
+  )
+  foldersToClean.forEach(folder => removeRecursively(folder))
+}
+
 describe('TEST: Deploy pipeline', () => {
+  beforeAll(() => {
+    cleanupTempFolders()
+  })
   test('Install, build and deploy a project', async () => {
     const tmpPath = createTempDir('botonic-tmp')
     copyRecursively(BLANK_EXAMPLE.localTestPath, tmpPath)
