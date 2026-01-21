@@ -55,9 +55,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
-          # Temporarily disabled npm cache to fix @swc/core native binding issues
-          # cache: "npm"
-          # cache-dependency-path: "**/package-lock.json"
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
 
       - name: Configure AWS Credentials with role
         if: ${{ inputs.NEEDS_AWS_CRED != '' && always() }}
