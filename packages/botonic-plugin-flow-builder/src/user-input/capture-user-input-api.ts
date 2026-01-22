@@ -3,7 +3,10 @@ import axios from 'axios'
 
 import { FlowBuilderApi } from '../api'
 import { FlowCaptureUserInput } from '../content-fields'
-import { HtCaptureUserInputNode } from '../content-fields/hubtype-fields'
+import {
+  HtAiValidationType,
+  HtCaptureUserInputNode,
+} from '../content-fields/hubtype-fields'
 import { inputHasTextData, shouldCaptureUserInput } from '../utils'
 
 interface AiCaptureResponseSuccess {
@@ -38,7 +41,7 @@ export class CaptureUserInputApi {
       const captureUserInput =
         FlowCaptureUserInput.fromHubtypeCMS(captureUserInputNode)
 
-      if (captureUserInput.aiValidationType === 'None') {
+      if (captureUserInput.aiValidationType === HtAiValidationType.NONE) {
         this.request.session.user.extra_data[
           captureUserInputNode.content.field_name
         ] = this.request.input.data
@@ -67,7 +70,6 @@ export class CaptureUserInputApi {
       const url = `${process.env.HUBTYPE_API_URL}/external/v1/capture_user_input/`
       const data = {
         field_name: captureUserInputNode.content.field_name,
-        validation_type: captureUserInputNode.content.ai_validation_type,
         validation_instructions:
           captureUserInputNode.content.ai_validation_instructions,
         user_input: this.request.input.data,

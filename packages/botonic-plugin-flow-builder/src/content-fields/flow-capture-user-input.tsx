@@ -1,11 +1,14 @@
 import { ActionRequest } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
-import { HtCaptureUserInputNode } from './hubtype-fields/capture-user-input'
+import {
+  HtAiValidationType,
+  HtCaptureUserInputNode,
+} from './hubtype-fields/capture-user-input'
 
 export class FlowCaptureUserInput extends ContentFieldsBase {
   public fieldName = ''
-  public aiValidationType = 'None'
+  public aiValidationType = HtAiValidationType.NONE
   public aiValidationInstructions = ''
   public captureSuccessId = ''
   public captureFailId = ''
@@ -15,7 +18,7 @@ export class FlowCaptureUserInput extends ContentFieldsBase {
     newCaptureUserInput.code = cmsText.code
     newCaptureUserInput.fieldName = cmsText.content.field_name
     newCaptureUserInput.aiValidationType =
-      cmsText.content.ai_validation_type || 'None'
+      cmsText.content.ai_validation_type || HtAiValidationType.NONE
     newCaptureUserInput.aiValidationInstructions =
       cmsText.content.ai_validation_instructions || ''
     newCaptureUserInput.captureSuccessId = cmsText.content.capture_success.id
