@@ -28,6 +28,13 @@ export function getValueFromKeyPath(
   request: ActionRequest,
   keyPath: string
 ): any {
+  if (keyPath.startsWith('session.user.contact_info.')) {
+    const name = keyPath.split('.').at(-1)
+    return request.session.user.contact_info?.find(
+      contact => contact.name === name
+    )?.value
+  }
+
   if (keyPath.startsWith('input.') || keyPath.startsWith('session.')) {
     return keyPath
       .split('.')

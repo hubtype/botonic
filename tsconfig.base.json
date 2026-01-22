@@ -2,7 +2,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES2015",
+    "target": "ES2020",
     "lib": ["ES2022"],
     "strict": true,
     "esModuleInterop": true,

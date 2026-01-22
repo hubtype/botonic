@@ -38,10 +38,6 @@ on:
         type: string
         description: "Flag to know if the CI needs to Upload Codecov coverage"
         required: false
-      NEEDS_CONTENTFUL_SECRETS:
-        type: string
-        description: "Flag to know if the tests need some contentful secrets"
-        required: false
 
 jobs:
   botonic-tests:
@@ -51,7 +47,7 @@ jobs:
       - name: Checking out to current branch
         uses: actions/checkout@v4
 
-      - name: Setting up node with caching
+      - name: Setting up node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
@@ -77,16 +73,8 @@ jobs:
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.BUILD_COMMAND }})
 
       - name: Run tests
-        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() && inputs.NEEDS_CONTENTFUL_SECRETS == '' }}
+        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() }}
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
-
-      - name: Run tests (with contentful)
-        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() && inputs.NEEDS_CONTENTFUL_SECRETS != '' }}
-        run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
-        env:
-          CONTENTFUL_TEST_SPACE_ID: ${{ secrets.CONTENTFUL_TEST_SPACE_ID }}
-          CONTENTFUL_TEST_TOKEN: ${{ secrets.CONTENTFUL_TEST_TOKEN }}
-          CONTENTFUL_TEST_MANAGE_TOKEN: ${{ secrets.CONTENTFUL_TEST_MANAGE_TOKEN }}
 
       - name: Verify lint
         run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_core)

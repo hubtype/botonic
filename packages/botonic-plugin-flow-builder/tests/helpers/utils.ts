@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
+  ContactInfo,
   Input,
   PluginPostRequest,
   PluginPreRequest,
@@ -66,6 +67,7 @@ interface RequestArgs {
   }
   hubtypeCaseId?: string
   captureUserInputId?: string
+  contactInfo?: ContactInfo[]
 }
 
 export function createRequest({
@@ -82,6 +84,7 @@ export function createRequest({
   shadowing = false,
   hubtypeCaseId,
   captureUserInputId,
+  contactInfo = [],
 }: RequestArgs): PluginPreRequest {
   return {
     session: {
@@ -95,6 +98,7 @@ export function createRequest({
         locale: user.locale,
         country: user.country,
         system_locale: user.systemLocale,
+        contact_info: contactInfo,
         extra_data: extraData,
       },
       _shadowing: shadowing,
