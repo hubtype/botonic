@@ -80,7 +80,3 @@ export function isSmartIntentsAllowed(request: ActionRequest): boolean {
 export function isKnowledgeBasesAllowed(request: ActionRequest): boolean {
   return isNluAllowed(request, 'allowKnowledgeBases')
 }
-
-export function shouldCaptureUserInput(request: ActionRequest): boolean {
-  return !!request.session.flow_builder?.capture_user_input_id
-}

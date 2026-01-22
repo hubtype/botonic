@@ -7,7 +7,7 @@ import {
   HtAiValidationType,
   HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
-import { inputHasTextData, shouldCaptureUserInput } from '../utils'
+import { inputHasTextData } from '../utils'
 
 interface AiCaptureResponseSuccess {
   success: true
@@ -32,7 +32,7 @@ export class CaptureUserInputApi {
   async getNextNodeId(): Promise<string | undefined> {
     if (
       inputHasTextData(this.request.input) &&
-      shouldCaptureUserInput(this.request)
+      this.cmsApi.shouldCaptureUserInput()
     ) {
       const captureUserInputNode = this.cmsApi.getCaptureUserInputNode()
       if (!captureUserInputNode) {
@@ -86,9 +86,8 @@ export class CaptureUserInputApi {
         data,
         config
       )
-      if (aiCaptureResponse.status === 200) {
-        return aiCaptureResponse.data
-      }
+
+      return aiCaptureResponse.data
     } catch (error) {
       console.warn('Error getting ai/capture_user_input', error)
     }

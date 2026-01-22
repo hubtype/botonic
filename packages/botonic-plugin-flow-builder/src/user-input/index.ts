@@ -5,7 +5,6 @@ import {
   inputHasTextData,
   isKeywordsAllowed,
   isSmartIntentsAllowed,
-  shouldCaptureUserInput,
 } from '../utils'
 import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
@@ -18,7 +17,7 @@ export async function getNextPayloadByUserInput(
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<string | undefined> {
   if (inputHasTextData(request.input)) {
-    if (shouldCaptureUserInput(request)) {
+    if (cmsApi.shouldCaptureUserInput()) {
       const captureUserInputApi = new CaptureUserInputApi(
         cmsApi,
         request as unknown as ActionRequest

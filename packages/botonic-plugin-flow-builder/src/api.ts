@@ -267,7 +267,7 @@ export class FlowBuilderApi {
   }
 
   shouldCaptureUserInput(): boolean {
-    return !!this.request.session.flow_builder?.capture_user_input_id
+    return !!this.getCaptureUserInputId()
   }
 
   getCaptureUserInputId(): string | undefined {
