@@ -11,9 +11,11 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.43.0] - 2025-mm-dd
+## [0.44.0] - 2025-mm-dd
 
 ### Added
+
+- [PR-3146](https://github.com/hubtype/botonic/pull/3146): Add new event for capture user input.
 
 ### Changed
 
