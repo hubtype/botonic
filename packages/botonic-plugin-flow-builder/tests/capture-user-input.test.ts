@@ -17,7 +17,7 @@ describe('capture user input success', () => {
     mockCaptureUserInputResponse(true, bookingNumber)
   })
 
-  test('should capture user input when session has capture_user_input_id', async () => {
+  test('should capture user input when session has capture_user_input_id and input is of type TEXT', async () => {
     const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: captureUserInputFlow },
       requestArgs: {
@@ -29,7 +29,7 @@ describe('capture user input success', () => {
       },
     })
 
-    expect(request.session.flow_builder?.capture_user_input_id).toBe(undefined)
+    expect(request.session.capture_user_input?.node_id).toBe(undefined)
     expect(request.session.user.extra_data.booking_number).toBe(bookingNumber)
     expect((contents[0] as FlowText).text).toBe(`capture success`)
   })
@@ -42,7 +42,7 @@ describe('capture user input fail', () => {
     mockCaptureUserInputResponse(false)
   })
 
-  test('should not capture user input when capture user input response is false', async () => {
+  test('should not capture user input when capture user input response is false and input is of type TEXT', async () => {
     const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: captureUserInputFlow },
       requestArgs: {
@@ -54,11 +54,26 @@ describe('capture user input fail', () => {
       },
     })
 
-    expect(request.session.flow_builder?.capture_user_input_id).toBe(undefined)
+    expect(request.session.capture_user_input?.node_id).toBe(undefined)
     expect(request.session.user.extra_data.booking_number).toBe(undefined)
     expect((contents[0] as FlowText).text).toBe(`capture fail`)
   })
 
+  test('should not capture user input when session has capture_user_input_id but input has a payload', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: captureUserInputFlow },
+      requestArgs: {
+        input: {
+          type: INPUT.POSTBACK,
+          payload: 'welcome',
+        },
+      },
+    })
+
+    expect(request.session.flow_builder?.capture_user_input_id).toBe(undefined)
+    expect(request.session.user.extra_data.booking_number).toBe(undefined)
+    expect((contents[0] as FlowText).text).toBe(`Fallback`)
+  })
   test('not run capture user input logic if session has no capture_user_input_id', async () => {
     const { contents, request } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: captureUserInputFlow },
