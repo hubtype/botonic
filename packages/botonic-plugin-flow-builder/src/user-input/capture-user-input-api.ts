@@ -1,3 +1,4 @@
+import { EventAction, EventCaptureUserInput } from '@botonic/core'
 import { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
@@ -7,6 +8,10 @@ import {
   HtAiValidationType,
   HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { inputHasTextData } from '../utils'
 
 interface AiCaptureResponseSuccess {
@@ -42,9 +47,11 @@ export class CaptureUserInputApi {
         FlowCaptureUserInput.fromHubtypeCMS(captureUserInputNode)
 
       if (captureUserInput.aiValidationType === HtAiValidationType.NONE) {
-        this.request.session.user.extra_data[
-          captureUserInputNode.content.field_name
-        ] = this.request.input.data
+        this.cmsApi.setUserExtraDataVariable(
+          captureUserInputNode.content.field_name,
+          this.request.input.data as string
+        )
+        await this.trackUserInputCapture(captureUserInputNode, true)
         return captureUserInput.captureSuccessId
       }
 
@@ -52,12 +59,15 @@ export class CaptureUserInputApi {
         await this.getAiCaptureResponse(captureUserInputNode)
       this.cmsApi.setCaptureUserInputId(undefined)
       if (!aiCaptureResponse.success) {
+        await this.trackUserInputCapture(captureUserInputNode, false)
         return captureUserInput.captureFailId
       }
 
-      this.request.session.user.extra_data[
-        captureUserInputNode.content.field_name
-      ] = aiCaptureResponse.value
+      this.cmsApi.setUserExtraDataVariable(
+        captureUserInputNode.content.field_name,
+        aiCaptureResponse.value
+      )
+      await this.trackUserInputCapture(captureUserInputNode, true)
       return captureUserInput.captureSuccessId
     }
     return undefined
@@ -95,5 +105,30 @@ export class CaptureUserInputApi {
     return {
       success: false,
     }
+  }
+
+  async trackUserInputCapture(
+    captureUserInputNode: HtCaptureUserInputNode,
+    captureSuccess: boolean
+  ): Promise<void> {
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
+      getCommonFlowContentEventArgsForContentId(
+        this.request,
+        captureUserInputNode.id
+      )
+    const event: EventCaptureUserInput = {
+      action: EventAction.CaptureUserInput,
+      flowThreadId,
+      flowId,
+      flowName,
+      flowNodeId,
+      flowNodeContentId,
+      flowNodeIsMeaningful: false,
+      fieldName: captureUserInputNode.content.field_name,
+      userInput: this.request.input.data as string,
+      captureSuccess,
+    }
+    const { action, ...eventArgs } = event
+    await trackEvent(this.request, action, eventArgs)
   }
 }

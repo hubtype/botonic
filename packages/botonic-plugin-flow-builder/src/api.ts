@@ -281,6 +281,12 @@ export class FlowBuilderApi {
     this.request.session.flow_builder = { capture_user_input_id: id }
   }
 
+  setUserExtraDataVariable(key: string, value: string): void {
+    if (this.request.session.user.extra_data) {
+      this.request.session.user.extra_data[key] = value
+    }
+  }
+
   getCaptureUserInputNode(): HtCaptureUserInputNode | undefined {
     const captureUserInputId = this.getCaptureUserInputId()
     if (!captureUserInputId) {

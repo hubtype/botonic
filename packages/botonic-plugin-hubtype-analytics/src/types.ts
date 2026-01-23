@@ -2,6 +2,7 @@ import {
   EventAction,
   EventAiAgent,
   EventBotAction,
+  EventCaptureUserInput,
   EventConditionalChannel,
   EventConditionalCountry,
   EventConditionalCustom,
@@ -51,6 +52,7 @@ export type HtEventProps =
   | EventCustom
   | EventAiAgent
   | EventRedirectFlow
+  | EventCaptureUserInput
 
 export interface RequestData {
   userId?: string
@@ -64,6 +66,7 @@ export {
   EventAction,
   EventAiAgent,
   EventBotAction,
+  EventCaptureUserInput,
   EventConditionalChannel,
   EventConditionalCountry,
   EventConditionalCustom,
