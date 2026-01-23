@@ -52,7 +52,6 @@ export class AIAgentBuilder<
   build(): AIAgent<TPlugins, TExtraData> {
     const modelSettings: ModelSettings = {} as ModelSettings
     if (OPENAI_PROVIDER === 'openai') {
-      // @ts-expect-error - reasoning.effort is valid but we need to update openai and typescript dependencies
       modelSettings.reasoning = { effort: 'none' }
       modelSettings.text = { verbosity: 'medium' }
     }
