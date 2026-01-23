@@ -135,6 +135,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   private updateRequestBeforeRoutes(request: PluginPreRequest): void {
+    this.cmsApi.removeCaptureUserInputId()
     if (request.input.payload) {
       request.input.payload = this.removeSourceSuffix(request.input.payload)
 

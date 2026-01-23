@@ -271,14 +271,18 @@ export class FlowBuilderApi {
   }
 
   getCaptureUserInputId(): string | undefined {
-    return this.request.session.flow_builder?.capture_user_input_id
+    return this.request.session.capture_user_input?.node_id
   }
 
-  setCaptureUserInputId(id?: string): void {
-    if (this.request.session.flow_builder) {
-      this.request.session.flow_builder.capture_user_input_id = id
+  setCaptureUserInputId(id: string): void {
+    if (this.request.session.capture_user_input) {
+      this.request.session.capture_user_input.node_id = id
     }
-    this.request.session.flow_builder = { capture_user_input_id: id }
+    this.request.session.capture_user_input = { node_id: id }
+  }
+
+  removeCaptureUserInputId(): void {
+    this.request.session.capture_user_input = undefined
   }
 
   setUserExtraDataVariable(key: string, value: string): void {

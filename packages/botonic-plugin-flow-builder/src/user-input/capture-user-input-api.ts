@@ -57,7 +57,6 @@ export class CaptureUserInputApi {
 
       const aiCaptureResponse =
         await this.getAiCaptureResponse(captureUserInputNode)
-      this.cmsApi.setCaptureUserInputId(undefined)
       if (!aiCaptureResponse.success) {
         await this.trackUserInputCapture(captureUserInputNode, false)
         return captureUserInput.captureFailId

@@ -279,8 +279,8 @@ export interface Session<TExtraData = any> {
     path: string
     active: boolean
   }
-  flow_builder?: {
-    capture_user_input_id?: string
+  capture_user_input?: {
+    node_id: string
   }
 }
 

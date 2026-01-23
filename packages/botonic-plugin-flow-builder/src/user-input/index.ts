@@ -22,8 +22,7 @@ export async function getNextPayloadByUserInput(
         cmsApi,
         request as unknown as ActionRequest
       )
-      const nextNodeId = await captureUserInputApi.getNextNodeId()
-      return nextNodeId
+      return await captureUserInputApi.getNextNodeId()
     }
 
     if (isKeywordsAllowed(request)) {

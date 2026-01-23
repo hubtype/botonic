@@ -1,5 +1,6 @@
 import { ActionRequest } from '@botonic/react'
 
+import { getFlowBuilderPlugin } from '../helpers'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtAiValidationType,
@@ -35,7 +36,9 @@ export class FlowCaptureUserInput extends ContentFieldsBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toBotonic(_id: string, request: ActionRequest): JSX.Element {
-    request.session.flow_builder = { capture_user_input_id: this.id }
+    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+    const cmsApi = flowBuilderPlugin.cmsApi
+    cmsApi.setCaptureUserInputId(this.id)
 
     return <></>
   }
