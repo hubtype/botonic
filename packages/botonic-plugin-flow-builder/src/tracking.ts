@@ -108,11 +108,11 @@ function getCommonFlowContentEventArgs(
 
 export function getCommonFlowContentEventArgsForContentId(
   request: ActionRequest,
-  contentId: string
+  id: string
 ): CommonFlowContentEventArgs {
   const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
-  const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(contentId)
+  const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(id)
 
   return getCommonFlowContentEventArgs(request, nodeContent)
 }

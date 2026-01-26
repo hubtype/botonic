@@ -66,6 +66,7 @@ interface RequestArgs {
     systemLocale: string
   }
   hubtypeCaseId?: string
+  captureUserInputId?: string
   contactInfo?: ContactInfo[]
 }
 
@@ -82,6 +83,7 @@ export function createRequest({
   extraData = {},
   shadowing = false,
   hubtypeCaseId,
+  captureUserInputId,
   contactInfo = [],
 }: RequestArgs): PluginPreRequest {
   return {
@@ -106,6 +108,11 @@ export function createRequest({
       _hubtype_api: 'https://api.hubtype.com',
       is_test_integration: false,
       flow_thread_id: 'testFlowThreadId',
+      capture_user_input: captureUserInputId
+        ? {
+            node_id: captureUserInputId,
+          }
+        : undefined,
     },
     input: {
       bot_interaction_id: 'testInteractionId',

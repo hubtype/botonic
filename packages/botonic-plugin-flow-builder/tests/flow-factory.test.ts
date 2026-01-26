@@ -97,7 +97,9 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
 
     // Verify template components are available
     expect(whatsappTemplate.htWhatsappTemplate.components).toBeDefined()
-    expect(whatsappTemplate.htWhatsappTemplate.components.length).toBeGreaterThan(0)
+    expect(
+      whatsappTemplate.htWhatsappTemplate.components.length
+    ).toBeGreaterThan(0)
   })
 
   test('should handle FlowWhatsappTemplate with locale-specific content', async () => {
@@ -136,4 +138,3 @@ describe('FlowFactory - WHATSAPP_TEMPLATE case', () => {
     expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
   })
 })
-

@@ -279,6 +279,9 @@ export interface Session<TExtraData = any> {
     path: string
     active: boolean
   }
+  capture_user_input?: {
+    node_id: string
+  }
 }
 
 export type InputMatcher = (input: Input) => boolean

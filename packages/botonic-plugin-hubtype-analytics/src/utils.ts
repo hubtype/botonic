@@ -22,6 +22,7 @@ import {
   HtEventWebviewEnd,
   HtEventWebviewStep,
 } from './event-models'
+import { HtEventCaptureUserInput } from './event-models/ht-event-capture-user-input'
 import { EventAction, HtEventProps, RequestData } from './types'
 
 export function createHtEvent(
@@ -92,6 +93,9 @@ export function createHtEvent(
 
     case EventAction.RedirectFlow:
       return new HtEventRedirectFlow(htEventProps, requestData)
+
+    case EventAction.CaptureUserInput:
+      return new HtEventCaptureUserInput(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

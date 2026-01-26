@@ -27,6 +27,7 @@ export enum EventAction {
   WebviewEnd = 'webview_end',
   Custom = 'custom',
   RedirectFlow = 'redirect_flow',
+  CaptureUserInput = 'capture_user_input',
 }
 
 export interface HtBaseEventProps {
@@ -161,6 +162,10 @@ export interface EventIntentSmart extends HtBaseEventProps {
   userInput: string
 }
 
+export enum KnowledgebaseFailReason {
+  NoKnowledge = 'no_knowledge',
+  Hallucination = 'hallucination',
+}
 export interface EventKnowledgeBase extends HtBaseEventProps {
   action: EventAction.Knowledgebase
   flowThreadId: string
@@ -199,9 +204,12 @@ export interface EventRedirectFlow extends HtBaseEventAllFlowProps {
   flowTargetName: string
 }
 
-export enum KnowledgebaseFailReason {
-  NoKnowledge = 'no_knowledge',
-  Hallucination = 'hallucination',
+export interface EventCaptureUserInput extends HtBaseEventAllFlowProps {
+  action: EventAction.CaptureUserInput
+  fieldName: string
+  userInput: string
+  captureSuccess: boolean
+  messageId: string
 }
 
 export interface EventFallback extends HtBaseEventProps {

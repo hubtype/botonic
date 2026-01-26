@@ -1,5 +1,6 @@
 export * from './bot-action'
 export * from './button'
+export * from './capture-user-input'
 export * from './carousel'
 export * from './common'
 export * from './fallback'

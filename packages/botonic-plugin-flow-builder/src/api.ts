@@ -9,6 +9,7 @@ import {
 } from './constants'
 import {
   HtBotActionNode,
+  HtCaptureUserInputNode,
   HtFallbackNode,
   HtFlowBuilderData,
   HtFlowWebview,
@@ -21,8 +22,8 @@ import {
   HtPayloadNode,
   HtRatingButton,
   HtRatingNode,
+  HtSmartIntentNode,
 } from './content-fields/hubtype-fields'
-import { HtSmartIntentNode } from './content-fields/hubtype-fields/smart-intent'
 import { FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
 
 export class FlowBuilderApi {
@@ -263,6 +264,39 @@ export class FlowBuilderApi {
 
   getWebviewById(id: string): HtFlowWebview | undefined {
     return this.flow.webviews.find(webview => webview.id === id)
+  }
+
+  shouldCaptureUserInput(): boolean {
+    return !!this.getCaptureUserInputId()
+  }
+
+  getCaptureUserInputId(): string | undefined {
+    return this.request.session.capture_user_input?.node_id
+  }
+
+  setCaptureUserInputId(id: string): void {
+    if (this.request.session.capture_user_input) {
+      this.request.session.capture_user_input.node_id = id
+    }
+    this.request.session.capture_user_input = { node_id: id }
+  }
+
+  removeCaptureUserInputId(): void {
+    this.request.session.capture_user_input = undefined
+  }
+
+  setUserExtraDataVariable(key: string, value: string): void {
+    if (this.request.session.user.extra_data) {
+      this.request.session.user.extra_data[key] = value
+    }
+  }
+
+  getCaptureUserInputNode(): HtCaptureUserInputNode | undefined {
+    const captureUserInputId = this.getCaptureUserInputId()
+    if (!captureUserInputId) {
+      return undefined
+    }
+    return this.getNodeById<HtCaptureUserInputNode>(captureUserInputId)
   }
 
   getResolvedLocale(): string {

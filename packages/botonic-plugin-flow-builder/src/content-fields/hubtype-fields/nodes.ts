@@ -1,5 +1,6 @@
 import { HtAiAgentNode } from './ai-agent'
 import { HtBotActionNode } from './bot-action'
+import { HtCaptureUserInputNode } from './capture-user-input'
 import { HtCarouselNode } from './carousel'
 // import { HtChannelConditionalNode } from './channel-conditional'
 // import { HtCountryConditionalNode } from './country-conditional'
@@ -42,6 +43,7 @@ export type HtNodeWithContent =
   | HtWebviewNode
   | HtGoToFlow
   | HtWhatsappTemplateNode
+  | HtCaptureUserInputNode
 // | HtChannelConditionalNode
 // | HtCountryConditionalNode
 // | HtCustomConditionalNode
