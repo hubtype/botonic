@@ -16,6 +16,7 @@ export class HtEventCaptureUserInput extends HtEvent {
   field_name: string
   user_input: string
   capture_success: boolean
+  message_id: string
 
   constructor(event: EventCaptureUserInput, requestData: RequestData) {
     super(event, requestData)
@@ -30,5 +31,6 @@ export class HtEventCaptureUserInput extends HtEvent {
     this.field_name = event.fieldName
     this.user_input = event.userInput
     this.capture_success = event.captureSuccess
+    this.message_id = event.messageId
   }
 }

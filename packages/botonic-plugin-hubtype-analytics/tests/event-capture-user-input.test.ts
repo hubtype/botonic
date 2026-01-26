@@ -16,6 +16,7 @@ describe('Create capture user input events (format v5)', () => {
       fieldName: 'email',
       userInput: 'user@example.com',
       captureSuccess: true,
+      messageId: 'messageIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -34,6 +35,7 @@ describe('Create capture user input events (format v5)', () => {
       field_name: 'email',
       user_input: 'user@example.com',
       capture_success: true,
+      message_id: 'messageIdTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
@@ -51,6 +53,7 @@ describe('Create capture user input events (format v5)', () => {
       fieldName: 'phone',
       userInput: 'not-a-phone',
       captureSuccess: false,
+      messageId: 'messageIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -69,6 +72,7 @@ describe('Create capture user input events (format v5)', () => {
       field_name: 'phone',
       user_input: 'not-a-phone',
       capture_success: false,
+      message_id: 'messageIdTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
@@ -86,6 +90,7 @@ describe('Create capture user input events (format v5)', () => {
       fieldName: 'userEmail',
       userInput: 'customer@example.com',
       captureSuccess: true,
+      messageId: 'messageIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -104,6 +109,7 @@ describe('Create capture user input events (format v5)', () => {
       field_name: 'userEmail',
       user_input: 'customer@example.com',
       capture_success: true,
+      message_id: 'messageIdTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })
@@ -121,6 +127,7 @@ describe('Create capture user input events (format v5)', () => {
       fieldName: 'age',
       userInput: '25',
       captureSuccess: true,
+      messageId: 'messageIdTest',
     })
 
     expect(htEvent).toEqual({
@@ -139,6 +146,7 @@ describe('Create capture user input events (format v5)', () => {
       field_name: 'age',
       user_input: '25',
       capture_success: true,
+      message_id: 'messageIdTest',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

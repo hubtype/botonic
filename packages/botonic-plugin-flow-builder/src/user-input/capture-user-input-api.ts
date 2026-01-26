@@ -126,6 +126,7 @@ export class CaptureUserInputApi {
       fieldName: captureUserInputNode.content.field_name,
       userInput: this.request.input.data as string,
       captureSuccess,
+      messageId: this.request.input.message_id,
     }
     const { action, ...eventArgs } = event
     await trackEvent(this.request, action, eventArgs)

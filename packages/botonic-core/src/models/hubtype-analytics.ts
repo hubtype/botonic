@@ -209,6 +209,7 @@ export interface EventCaptureUserInput extends HtBaseEventAllFlowProps {
   fieldName: string
   userInput: string
   captureSuccess: boolean
+  messageId: string
 }
 
 export interface EventFallback extends HtBaseEventProps {
