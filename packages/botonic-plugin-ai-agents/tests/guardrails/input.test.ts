@@ -32,6 +32,7 @@ describe('createInputGuardrail', () => {
     outputTokens: 0,
     inputTokensDetails: [] as Record<string, number>[],
     outputTokensDetails: [] as Record<string, number>[],
+    requestUsageEntries: undefined,
     add: jest.fn(),
   }
 

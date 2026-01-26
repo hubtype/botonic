@@ -10,11 +10,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.43.x] - 2026-mm-dd
+## [0.44.x] - 2026-mm-dd
 
 ### Added
 
 ### Changed
+
+- [PR-3148](https://github.com/hubtype/botonic/pull/3148): Upgrade openai and openai/agents dependencies.
 
 ### Fixed
 
