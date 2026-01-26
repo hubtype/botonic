@@ -20,8 +20,7 @@ import {
 export default class BotonicPluginAiAgents<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
-> implements Plugin
-{
+> implements Plugin {
   private readonly authToken?: string
   private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions

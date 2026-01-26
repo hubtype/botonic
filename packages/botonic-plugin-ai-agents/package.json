@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@botonic/core": "^0.43.0",
-    "@openai/agents": "^0.1.11",
+    "@openai/agents": "^0.3.9",
     "axios": "^1.13.2",
-    "openai": "^5.23.2",
+    "openai": "^6.0.0",
     "uuid": "^10.0.0",
     "zod": "3.25.76"
   },
