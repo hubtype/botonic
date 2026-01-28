@@ -87,6 +87,8 @@ export interface PluginAiAgentOptions<
   messageHistoryApiVersion?: MessageHistoryApiVersion
   /** Options for V2 message history API. Only used when messageHistoryApiVersion is 'v2'. */
   memory?: MemoryOptions
+  /** Enable debug logging for AI agent configuration and execution details. */
+  enableDebug?: boolean
 }
 
 export type AgenticInputMessage = AgentInputItem
