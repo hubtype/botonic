@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { COLORS } from '../constants'
 import { renderComponent } from '../util/react'
+import { COMPONENT_DISPLAY_NAMES } from './constants'
 
 const SubtitleContainer = styled.div`
   font-size: 12px;
@@ -23,6 +24,8 @@ export const Subtitle = (props: SubtitleProps) => {
 
   return renderComponent({ renderBrowser, renderNode })
 }
+
+Subtitle.displayName = COMPONENT_DISPLAY_NAMES.Subtitle
 
 Subtitle.serialize = (props: SubtitleProps) => {
   return { subtitle: props.children }
