@@ -58,11 +58,13 @@ jest.mock('../src/hubtype-api-client', () => ({
 }))
 
 describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
-  const createMockRequest = (campaign_v2?: {
-    id: string
-    name: string
-    agent_context?: string
-  }): BotContext => ({
+  const createMockRequest = (
+    campaigns_v2?: {
+      id: string
+      name: string
+      agent_context?: string
+    }[]
+  ): BotContext => ({
     session: {
       is_first_interaction: false,
       organization: 'test-org',
@@ -95,7 +97,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       data: 'Hello',
       bot_interaction_id: 'interaction-123',
       message_id: 'msg-123',
-      context: campaign_v2 ? { campaign_v2 } : undefined,
+      context: campaigns_v2 ? { campaigns_v2 } : undefined,
     },
     lastRoutePath: '',
     params: {},
@@ -132,25 +134,27 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     jest.restoreAllMocks()
   })
 
-  it('should pass campaign_v2 to AIAgentBuilder when present in input.context', async () => {
-    const campaignContext = {
-      id: 'campaign-123',
-      name: 'Test Campaign',
-      agent_context: 'Additional context for the agent',
-    }
+  it('should pass campaigns_v2 to AIAgentBuilder when present in input.context', async () => {
+    const campaignsContext = [
+      {
+        id: 'campaign-123',
+        name: 'Test Campaign',
+        agent_context: 'Additional context for the agent',
+      },
+    ]
 
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
     })
 
-    const request = createMockRequest(campaignContext)
+    const request = createMockRequest(campaignsContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignContext).toEqual(campaignContext)
+    expect(capturedBuilderArgs.campaignsContext).toEqual(campaignsContext)
   })
 
-  it('should pass undefined campaignContext when campaign_v2 is not in input.context', async () => {
+  it('should pass undefined campaignsContext when campaigns_v2 is not in input.context', async () => {
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
     })
@@ -159,10 +163,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignContext).toBeUndefined()
+    expect(capturedBuilderArgs.campaignsContext).toBeUndefined()
   })
 
-  it('should pass undefined campaignContext when input.context is undefined', async () => {
+  it('should pass undefined campaignsContext when input.context is undefined', async () => {
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
     })
@@ -174,15 +178,17 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignContext).toBeUndefined()
+    expect(capturedBuilderArgs.campaignsContext).toBeUndefined()
   })
 
-  it('should pass campaign_v2 without agent_context', async () => {
-    const campaignWithoutAgentContext = {
-      id: 'campaign-456',
-      name: 'Campaign without agent context',
-      // No agent_context field
-    }
+  it('should pass campaigns_v2 without agent_context', async () => {
+    const campaignWithoutAgentContext = [
+      {
+        id: 'campaign-456',
+        name: 'Campaign without agent context',
+        // No agent_context field
+      },
+    ]
 
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
@@ -192,18 +198,22 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignContext).toEqual(
+    expect(capturedBuilderArgs.campaignsContext).toEqual(
       campaignWithoutAgentContext
     )
-    expect(capturedBuilderArgs.campaignContext.agent_context).toBeUndefined()
+    expect(
+      capturedBuilderArgs.campaignsContext[0].agent_context
+    ).toBeUndefined()
   })
 
-  it('should pass campaign_v2 with empty agent_context', async () => {
-    const campaignWithEmptyAgentContext = {
-      id: 'campaign-789',
-      name: 'Campaign with empty agent context',
-      agent_context: '',
-    }
+  it('should pass campaigns_v2 with empty agent_context', async () => {
+    const campaignWithEmptyAgentContext = [
+      {
+        id: 'campaign-789',
+        name: 'Campaign with empty agent context',
+        agent_context: '',
+      },
+    ]
 
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
@@ -213,10 +223,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, mockAiAgentArgs)
 
     expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignContext).toEqual(
+    expect(capturedBuilderArgs.campaignsContext).toEqual(
       campaignWithEmptyAgentContext
     )
-    expect(capturedBuilderArgs.campaignContext.agent_context).toBe('')
+    expect(capturedBuilderArgs.campaignsContext[0].agent_context).toBe('')
   })
 
   it('should pass correct name, instructions and sourceIds from aiAgentArgs', async () => {
