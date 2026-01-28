@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.44.0-alpha.2",
+  "version": "0.44.0-alpha.3",
   "description": "Continuous integration for botonic packages",
   "scripts": {
     "build": "echo Skipping build..."
@@ -18,8 +18,8 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@botonic/dx-bundler-rspack": "^0.44.0-alpha.2",
-    "@botonic/eslint-config": "^0.44.0-alpha.2",
+    "@botonic/dx-bundler-rspack": "^0.44.0-alpha.3",
+    "@botonic/eslint-config": "^0.44.0-alpha.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.19.1",
     "babel-loader": "^8.4.1",
