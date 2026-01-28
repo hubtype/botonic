@@ -27,65 +27,11 @@ repos:
         language: system
         files: ^packages/botonic-core/
 
-      - id: contentful
-        name: contentful
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-contentful
-        language: system
-        files: ^packages/botonic-plugin-contentful/
-
-      - id: dashbot
-        name: dashbot
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-dashbot
-        language: system
-        files: ^packages/botonic-plugin-dashbot/
-
-      - id: dialogflow
-        name: dialogflow
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-dialogflow
-        language: system
-        files: ^packages/botonic-plugin-dialogflow/
-
-      - id: dynamodb
-        name: dynamodb
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-dynamodb
-        language: system
-        files: ^packages/botonic-plugin-dynamodb/
-
-      - id: luis
-        name: luis
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-luis
-        language: system
-        files: ^packages/botonic-plugin-luis/
-
-      - id: segment
-        name: segment
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-segment
-        language: system
-        files: ^packages/botonic-plugin-segment/
-
-      - id: watson
-        name: watson
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-watson
-        language: system
-        files: ^packages/botonic-plugin-watson/
-
       - id: react
         name: react
         entry: scripts/qa/old/lint-package.sh packages/botonic-react
         language: system
         files: ^packages/botonic-react/
-
-      - id: google-analytics
-        name: google-analytics
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-google-analytics
-        language: system
-        files: ^packages/botonic-plugin-google-analytics/
-
-      - id: inbenta
-        name: inbenta
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-inbenta
-        language: system
-        files: ^packages/botonic-plugin-inbenta/
 
       - id: docs
         name: docs
@@ -104,6 +50,18 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
         language: system
         files: ^packages/botonic-plugin-hubtype-analytics/
+
+      - id: plugin-ai-agents
+        name: plugin-ai-agents
+        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ai-agents
+        language: system
+        files: ^packages/botonic-plugin-ai-agents/
+
+      - id: plugin-knowledge-bases
+        name: plugin-knowledge-bases
+        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-knowledge-bases
+        language: system
+        files: ^packages/botonic-plugin-knowledge-bases/
 
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
