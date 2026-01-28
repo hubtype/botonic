@@ -19,7 +19,7 @@ interface AIAgentBuilderOptions<
   name: string
   instructions: string
   tools: Tool<TPlugins, TExtraData>[]
-  campaignContext?: CampaignV2
+  campaignsContext?: CampaignV2[]
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
@@ -39,7 +39,7 @@ export class AIAgentBuilder<
     this.instructions = this.addExtraInstructions(
       options.instructions,
       options.contactInfo,
-      options.campaignContext
+      options.campaignsContext
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
@@ -86,12 +86,12 @@ export class AIAgentBuilder<
   private addExtraInstructions(
     initialInstructions: string,
     contactInfo: ContactInfo[],
-    campaignContext?: CampaignV2
+    campaignsContext?: CampaignV2[]
   ): string {
     const instructions = `<instructions>\n${initialInstructions.trim()}\n</instructions>`
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
-    const campaignInstructions = this.getCampaignInstructions(campaignContext)
+    const campaignInstructions = this.getCampaignInstructions(campaignsContext)
     const outputInstructions = this.getOutputInstructions()
     return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
   }
@@ -120,11 +120,16 @@ export class AIAgentBuilder<
     return `<metadata>\n${metadata}\n</metadata>`
   }
 
-  private getCampaignInstructions(campaignContext?: CampaignV2): string {
-    if (!campaignContext || !campaignContext.agent_context) {
+  private getCampaignInstructions(campaignsContext?: CampaignV2[]): string {
+    if (!campaignsContext || campaignsContext.length === 0) {
       return ''
     }
-    return `<campaign_context>\n${campaignContext.agent_context}\n</campaign_context>`
+    return campaignsContext
+      .map(
+        (campaign, index) =>
+          `<campaign_context${index + 1}>\n${campaign.agent_context}\n</campaign_context${index + 1}>`
+      )
+      .join('\n')
   }
 
   private getOutputInstructions(): string {
