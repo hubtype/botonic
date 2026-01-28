@@ -2,7 +2,9 @@ import { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
   AgentOutputType,
+  // hostedMcpTool,
   InputGuardrail,
+  MCPServerStreamableHttp,
   ModelSettings,
 } from '@openai/agents'
 
@@ -78,6 +80,17 @@ export class AIAgentBuilder<
       hasRetrieveKnowledge,
     })
 
+    // Only supported for the OpenAI Responses API
+    // const gitMcpServerAsTool = hostedMcpTool({
+    //   serverLabel: 'gitmcp',
+    //   serverUrl: 'https://gitmcp.io/hubtype/botonic',
+    // })
+
+    const gitMcpServer = new MCPServerStreamableHttp({
+      url: 'https://gitmcp.io/openai/codex',
+      name: 'GitMCP Documentation Server',
+    })
+
     return new Agent<
       Context<TPlugins, TExtraData>,
       AgentOutputType<typeof OutputSchema>
@@ -85,7 +98,8 @@ export class AIAgentBuilder<
       name: this.name,
       model,
       instructions: this.instructions,
-      tools: this.tools,
+      tools: this.tools, // [...this.tools, gitMcpServerAsTool]
+      mcpServers: [gitMcpServer],
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],

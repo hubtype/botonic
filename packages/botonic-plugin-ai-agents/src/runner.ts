@@ -48,6 +48,10 @@ export class AIAgentRunner<
       const runner = new Runner({
         modelSettings: { temperature: 0 },
       })
+      for (const mcpServer of this.agent.mcpServers) {
+        console.log(`MCP Server: ${mcpServer.name}`)
+        await mcpServer.connect()
+      }
       // Type assertion to bypass strict type checking - the actual return type from runner.run()
       // doesn't perfectly match our interface, but the properties we access are compatible
       const result = (await runner.run(this.agent, messages, {
