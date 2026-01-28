@@ -30,6 +30,7 @@ interface FlowBuilderOptions {
   getAiAgentResponse?: AiAgentFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
   contentFilters?: ContentFilter[]
+  disableAIAgentInFirstInteraction?: boolean
 }
 
 export function createFlowBuilderPlugin({
@@ -39,6 +40,7 @@ export function createFlowBuilderPlugin({
   getAiAgentResponse,
   inShadowing,
   contentFilters,
+  disableAIAgentInFirstInteraction,
 }: FlowBuilderOptions): BotonicPluginFlowBuilder {
   const flowBuilderPlugin = new BotonicPluginFlowBuilder({
     flow,
@@ -48,6 +50,7 @@ export function createFlowBuilderPlugin({
     getAiAgentResponse,
     inShadowing,
     contentFilters,
+    disableAIAgentInFirstInteraction,
   })
 
   return flowBuilderPlugin

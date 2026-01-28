@@ -99,8 +99,12 @@ async function getContentsByUserInput(
     return contentsByKnowledgeBase
   }
 
-  const contentsByAiAgent = await getContentsByAiAgent(context)
-  return contentsByAiAgent
+  if (!flowBuilderPlugin.disableAIAgentInFirstInteraction) {
+    const contentsByAiAgent = await getContentsByAiAgent(context)
+    return contentsByAiAgent
+  }
+
+  return []
 }
 
 function getConversationStartId(cmsApi: FlowBuilderApi) {

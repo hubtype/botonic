@@ -59,6 +59,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public jsonVersion: FlowBuilderJSONVersion
   public apiUrl: string
   public customRatingMessageEnabled: boolean
+  public disableAIAgentInFirstInteraction: boolean
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -82,6 +83,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.contentFilters = options.contentFilters || []
     this.customRatingMessageEnabled =
       options.customRatingMessageEnabled || false
+    this.disableAIAgentInFirstInteraction =
+      options.disableAIAgentInFirstInteraction || false
   }
 
   resolveFlowUrl(request: PluginPreRequest): string {

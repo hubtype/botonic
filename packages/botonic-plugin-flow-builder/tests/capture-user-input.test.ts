@@ -70,7 +70,7 @@ describe('capture user input fail', () => {
       },
     })
 
-    expect(request.session.flow_builder?.capture_user_input_id).toBe(undefined)
+    expect(request.session.capture_user_input?.node_id).toBe(undefined)
     expect(request.session.user.extra_data.booking_number).toBe(undefined)
     expect((contents[0] as FlowText).text).toBe(`Fallback`)
   })
@@ -85,7 +85,7 @@ describe('capture user input fail', () => {
       },
     })
 
-    expect(request.session.flow_builder?.capture_user_input_id).toBe(undefined)
+    expect(request.session.capture_user_input?.node_id).toBe(undefined)
     expect(request.session.user.extra_data.booking_number).toBe(undefined)
     expect((contents[0] as FlowText).text).toBe(`Fallback`)
   })

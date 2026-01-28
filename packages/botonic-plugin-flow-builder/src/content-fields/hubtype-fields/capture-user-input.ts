@@ -2,11 +2,11 @@ import { HtBaseNode, HtNodeLink } from './common'
 import { HtNodeWithContentType } from './node-types'
 
 export enum HtAiValidationType {
-  NONE = 'None',
-  NAME = 'Name',
-  EMAIL = 'Email',
-  PHONE = 'Phone number',
-  CUSTOM = 'Custom',
+  NONE = 'none',
+  NAME = 'name',
+  EMAIL = 'email',
+  PHONE = 'phone',
+  CUSTOM = 'custom',
 }
 
 export interface HtCaptureUserInputNode extends HtBaseNode {
