@@ -124,10 +124,16 @@ export class AIAgentBuilder<
     if (!campaignsContext || campaignsContext.length === 0) {
       return ''
     }
-    return campaignsContext
+    const campaignsWithContext = campaignsContext.filter(
+      campaign => campaign.agent_context
+    )
+    if (campaignsWithContext.length === 0) {
+      return ''
+    }
+    return campaignsWithContext
       .map(
         (campaign, index) =>
-          `<campaign_context${index + 1}>\n${campaign.agent_context}\n</campaign_context${index + 1}>`
+          `<campaign_context_${index + 1}>\n${campaign.agent_context}\n</campaign_context_${index + 1}>`
       )
       .join('\n')
   }
