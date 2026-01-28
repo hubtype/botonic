@@ -76,9 +76,7 @@ describe('DebugLogger', () => {
         inputGuardrailRules: [],
       }
 
-      logger.logAgentDebugInfo(aiAgentArgs, ['tool1'], [], {
-        maxMessages: 25,
-      })
+      logger.logAgentDebugInfo(aiAgentArgs, ['tool1'], [])
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] === AI Agent Debug Info ==='
@@ -160,12 +158,6 @@ describe('DebugLogger', () => {
         '[BotonicPluginAiAgents] === Agent Model Settings ==='
       )
       expect(consoleSpy).toHaveBeenCalledWith(
-        '[BotonicPluginAiAgents] Provider: openai'
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[BotonicPluginAiAgents] Model: gpt-4.1-mini'
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] Has Retrieve Knowledge Tool: true'
       )
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -185,10 +177,7 @@ describe('DebugLogger', () => {
       })
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        '[BotonicPluginAiAgents] Provider: azure'
-      )
-      expect(consoleSpy).toHaveBeenCalledWith(
-        '[BotonicPluginAiAgents] Model: Using deployment name'
+        '[BotonicPluginAiAgents] Has Retrieve Knowledge Tool: true'
       )
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] Tool Choice: retrieve_knowledge'
@@ -211,12 +200,7 @@ describe('DebugLogger', () => {
         customToolNames: [],
         memory: {},
       })
-      logger.logAgentDebugInfo(
-        { name: 'Test', instructions: '' },
-        [],
-        [],
-        {}
-      )
+      logger.logAgentDebugInfo({ name: 'Test', instructions: '' }, [], [])
       logger.logModelSettings({
         provider: 'azure',
         model: undefined,

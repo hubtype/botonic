@@ -101,8 +101,7 @@ export default class BotonicPluginAiAgents<
       this.logger.logAgentDebugInfo(
         aiAgentArgs,
         tools.map(t => t.name),
-        messages,
-        this.memory
+        messages
       )
 
       const runner = new AIAgentRunner<TPlugins, TExtraData>(agent, this.logger)

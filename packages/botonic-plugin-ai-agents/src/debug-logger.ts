@@ -33,8 +33,7 @@ export interface DebugLogger {
   logAgentDebugInfo(
     aiAgentArgs: AiAgentArgs,
     toolNames: string[],
-    messages: AgenticInputMessage[],
-    memory: MemoryOptions
+    messages: AgenticInputMessage[]
   ): void
   logModelSettings(settings: ModelSettingsInfo): void
   logRunnerStart(): void
@@ -83,25 +82,14 @@ class EnabledDebugLogger implements DebugLogger {
   logAgentDebugInfo(
     aiAgentArgs: AiAgentArgs,
     toolNames: string[],
-    messages: AgenticInputMessage[],
-    memory: MemoryOptions
+    messages: AgenticInputMessage[]
   ): void {
-    const { model, apiBase } = this.getModelInfo()
-
     console.log(`${PREFIX} === AI Agent Debug Info ===`)
-    console.log(`${PREFIX} Provider: ${OPENAI_PROVIDER}`)
-    console.log(`${PREFIX} Model/Deployment: ${model}`)
-    console.log(`${PREFIX} API Base: ${apiBase}`)
     console.log(`${PREFIX} Agent Name: ${aiAgentArgs.name}`)
     console.log(`${PREFIX} Active Tools: ${JSON.stringify(toolNames)}`)
     console.log(
       `${PREFIX} Source IDs: ${JSON.stringify(aiAgentArgs.sourceIds || [])}`
     )
-    console.log(`${PREFIX} Memory Settings:`, {
-      maxMessages: memory.maxMessages ?? MAX_MEMORY_LENGTH,
-      includeToolCalls: memory.includeToolCalls ?? true,
-      maxFullToolResults: memory.maxFullToolResults ?? 1,
-    })
     console.log(`${PREFIX} Message History Count: ${messages.length}`)
     console.log(
       `${PREFIX} Input Guardrail Rules: ${aiAgentArgs.inputGuardrailRules?.length || 0}`
@@ -113,8 +101,6 @@ class EnabledDebugLogger implements DebugLogger {
 
   logModelSettings(settings: ModelSettingsInfo): void {
     console.log(`${PREFIX} === Agent Model Settings ===`)
-    console.log(`${PREFIX} Provider: ${settings.provider}`)
-    console.log(`${PREFIX} Model: ${settings.model ?? 'Using deployment name'}`)
     console.log(
       `${PREFIX} Has Retrieve Knowledge Tool: ${settings.hasRetrieveKnowledge}`
     )
