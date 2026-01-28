@@ -1,5 +1,17 @@
+import { DebugLogger } from '../src/debug-logger'
 import { OutputSchema } from '../src/structured-output'
 import { GuardrailRule, Tool } from '../src/types'
+
+// Create a mock disabled logger for tests (no-op implementations)
+const mockLogger: DebugLogger = {
+  logInitialConfig: jest.fn(),
+  logAgentDebugInfo: jest.fn(),
+  logModelSettings: jest.fn(),
+  logRunnerStart: jest.fn(),
+  logRunResult: jest.fn(),
+  logGuardrailTriggered: jest.fn(),
+  logRunnerError: jest.fn(),
+}
 
 // Store captured Agent config for assertions
 let capturedAgentConfig: any = null
@@ -110,6 +122,7 @@ describe('AIAgentBuilder', () => {
       inputGuardrailRules,
       sourceIds,
       campaignsContext,
+      logger: mockLogger,
     }).build()
     const structuredContactInfo = contactInfo
       .map(
@@ -237,6 +250,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: undefined,
+        logger: mockLogger,
       }).build()
 
       expect(aiAgent.instructions).not.toContain('<campaign_context')
@@ -259,6 +273,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: campaignWithoutContext,
+        logger: mockLogger,
       }).build()
 
       expect(aiAgent.instructions).not.toContain('<campaign_context')
@@ -281,6 +296,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: campaignWithEmptyContext,
+        logger: mockLogger,
       }).build()
 
       // Empty string is falsy, so campaign_context should not be included
@@ -304,6 +320,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: campaignWithContext,
+        logger: mockLogger,
       }).build()
 
       expect(aiAgent.instructions).toContain('<campaign_context_1>')
@@ -324,6 +341,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: ['source-1'], // Triggers retrieveKnowledge tool
         campaignsContext: undefined,
+        logger: mockLogger,
       }).build()
 
       // When using azure provider with retrieveKnowledge, toolChoice should be set
@@ -343,6 +361,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [], // Empty - no retrieveKnowledge tool
         campaignsContext: undefined,
+        logger: mockLogger,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -360,6 +379,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: undefined,
+        logger: mockLogger,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -377,6 +397,7 @@ describe('AIAgentBuilder', () => {
         inputGuardrailRules: [],
         sourceIds: [],
         campaignsContext: undefined,
+        logger: mockLogger,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -433,6 +454,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       inputGuardrailRules: [],
       sourceIds: [],
       campaignsContext: undefined,
+      logger: mockLogger,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -450,6 +472,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       inputGuardrailRules: [],
       sourceIds: [],
       campaignsContext: undefined,
+      logger: mockLogger,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -467,6 +490,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       inputGuardrailRules: [],
       sourceIds: [],
       campaignsContext: undefined,
+      logger: mockLogger,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -482,6 +506,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       inputGuardrailRules: [],
       sourceIds: ['source-1'], // This adds retrieveKnowledge tool
       campaignsContext: undefined,
+      logger: mockLogger,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
