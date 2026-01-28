@@ -166,7 +166,7 @@ export const Button = (props: ButtonProps) => {
     if (props.onClick) {
       return null
     }
-    console.log('Button props', props)
+
     throw new Error('Button missing payload, path, webview, url or onClick')
   }
 
@@ -179,15 +179,6 @@ Button.serialize = (buttonProps: ButtonProps) => {
   const payload = buttonProps.path
     ? `__PATH_PAYLOAD__${buttonProps.path}`
     : buttonProps.payload
-
-  console.log('Button serialize', {
-    payload,
-    url: buttonProps.url,
-    target: buttonProps.target,
-    webview: buttonProps.webview && String(buttonProps.webview),
-    title: buttonProps.children && String(buttonProps.children),
-    ...ButtonsDisabler.withDisabledProps(buttonProps),
-  })
 
   return {
     button: {
