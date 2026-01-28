@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { renderComponent } from '../util/react'
+import { COMPONENT_DISPLAY_NAMES } from './constants'
 
 const TitleContainer = styled.div`
   font-size: 14px;
@@ -18,6 +19,8 @@ export const Title = (props: TitleProps) => {
 
   return renderComponent({ renderBrowser, renderNode })
 }
+
+Title.displayName = COMPONENT_DISPLAY_NAMES.Title
 
 Title.serialize = (props: TitleProps) => {
   return { title: props.children }

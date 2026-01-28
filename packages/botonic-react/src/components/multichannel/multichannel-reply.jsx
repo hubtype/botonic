@@ -2,6 +2,7 @@ import { isWhatsapp } from '@botonic/core'
 import React, { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
+import { COMPONENT_DISPLAY_NAMES } from '../constants'
 import { Reply } from '../reply'
 
 export const MultichannelReply = props => {
@@ -17,3 +18,5 @@ export const MultichannelReply = props => {
     return <Reply {...props}>{props.children}</Reply>
   }
 }
+
+MultichannelReply.displayName = COMPONENT_DISPLAY_NAMES.MultichannelReply

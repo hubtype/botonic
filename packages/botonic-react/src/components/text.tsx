@@ -2,6 +2,7 @@ import { INPUT } from '@botonic/core'
 import React, { Children } from 'react'
 
 import { mapObjectNonBooleanValues } from '../util/react'
+import { COMPONENT_DISPLAY_NAMES } from './constants'
 import { TextProps } from './index-types'
 import { serializeMarkdown, toMarkdownChildren } from './markdown'
 import { Message } from './message'
@@ -52,5 +53,7 @@ export const Text = (props: TextProps) => {
     </Message>
   )
 }
+
+Text.displayName = COMPONENT_DISPLAY_NAMES.Text
 
 Text.serialize = serialize

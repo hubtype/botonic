@@ -6,6 +6,7 @@ import { renderComponent } from '../../util/react'
 import { generateWebviewUrlWithParams } from '../../util/webviews'
 import { WebchatContext } from '../../webchat/context'
 import { ButtonsDisabler } from '../buttons-disabler'
+import { COMPONENT_DISPLAY_NAMES } from '../constants'
 import { ButtonProps } from '../index-types'
 import { StyledButton, StyledUrlImage } from './styles'
 
@@ -171,6 +172,8 @@ export const Button = (props: ButtonProps) => {
 
   return renderComponent({ renderBrowser, renderNode })
 }
+
+Button.displayName = COMPONENT_DISPLAY_NAMES.Button
 
 Button.serialize = (buttonProps: ButtonProps) => {
   const payload = buttonProps.path

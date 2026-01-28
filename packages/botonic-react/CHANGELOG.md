@@ -10,7 +10,9 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.43.x] - 2026-mm-dd
+## [0.44.x] - 2026-mm-dd
+
+- [PR-3150](https://github.com/hubtype/botonic/pull/3150): Add displayName in message components that need to be identified in the multichannel.
 
 ### Added
 

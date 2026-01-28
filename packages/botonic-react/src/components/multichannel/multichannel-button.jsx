@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { RequestContext } from '../../contexts'
 import { truncateText } from '../../util'
 import { Button } from '../button/index'
+import { COMPONENT_DISPLAY_NAMES } from '../constants'
 import { MultichannelContext } from './multichannel-context'
 import { WHATSAPP_MAX_BUTTON_CHARS } from './whatsapp/constants'
 
@@ -74,3 +75,5 @@ export const MultichannelButton = props => {
   }
   return <Button {...props}>{props.children}</Button>
 }
+
+MultichannelButton.displayName = COMPONENT_DISPLAY_NAMES.MultichannelButton

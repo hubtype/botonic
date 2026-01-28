@@ -8,6 +8,7 @@ import { COLORS, WEBCHAT } from '../constants'
 import { resolveImage } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
 import { ButtonsDisabler } from './buttons-disabler'
+import { COMPONENT_DISPLAY_NAMES } from './constants'
 import { CarouselProps } from './index-types'
 import { Message } from './message'
 
@@ -199,5 +200,7 @@ export const Carousel = (props: CarouselProps) => {
     </Message>
   )
 }
+
+Carousel.displayName = COMPONENT_DISPLAY_NAMES.Carousel
 
 Carousel.serialize = serialize

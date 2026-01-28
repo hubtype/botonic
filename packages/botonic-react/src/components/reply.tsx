@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS, WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
 import { WebchatContext } from '../webchat/context'
+import { COMPONENT_DISPLAY_NAMES } from './constants'
 import { ReplyProps } from './index-types'
 
 const StyledButton = styled.button`
@@ -66,6 +67,8 @@ export const Reply = (props: ReplyProps) => {
 
   return renderComponent({ renderBrowser, renderNode })
 }
+
+Reply.displayName = COMPONENT_DISPLAY_NAMES.Reply
 
 Reply.serialize = (replyProps: ReplyProps) => {
   let payload = replyProps.payload
