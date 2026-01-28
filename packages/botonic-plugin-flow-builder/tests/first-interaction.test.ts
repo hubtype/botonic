@@ -1,13 +1,16 @@
-import { INPUT } from '@botonic/core'
+import { InferenceResponse, INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowBuilderAction } from '../src/action/index'
-import { FlowText } from '../src/content-fields/index'
+import { FlowAiAgent, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
+// eslint-disable-next-line jest/no-mocks-import
+import { mockAiAgentResponse } from './__mocks__/ai-agent'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
+import { aiAgentTestFlow } from './helpers/flows/ai-agent'
 import { basicFlow } from './helpers/flows/basic'
 import { knowledgeBaseTestFlow } from './helpers/flows/knowledge-base'
 import {
@@ -177,5 +180,122 @@ describe('Check the contents returned by the plugin in first interaction with kn
     expect(contents.length).toBe(5)
     expect((contents[3] as FlowText).text).toBe(answer)
     expect((contents[4] as FlowText).text).toBe('FollowUp Knowledge base')
+  })
+})
+
+describe('Check the contents returned by the plugin in first interaction with AI agent disabled', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  const mockResponse: Partial<InferenceResponse> = {
+    messages: [
+      {
+        type: 'text',
+        content: {
+          text: 'AI agent response in first interaction',
+        },
+      },
+    ],
+  }
+
+  test('When disableAIAgentInFirstInteraction is true, the AI agent is not called in first interaction', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+        disableAIAgentInFirstInteraction: true,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect(aiAgentMock).not.toHaveBeenCalled()
+    expect((contents[0] as FlowText).text).toBe('Welcome')
+    expect(contents.length).toBe(1)
+  })
+
+  test('When disableAIAgentInFirstInteraction is false (default), the AI agent responds in first interaction', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+        disableAIAgentInFirstInteraction: false,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect(aiAgentMock).toHaveBeenCalled()
+    expect((contents[0] as FlowText).text).toBe('Welcome')
+    expect(contents.length).toBe(2)
+    expect((contents[1] as FlowAiAgent).responses[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'AI agent response in first interaction',
+      },
+    })
+  })
+
+  test('When disableAIAgentInFirstInteraction is not set, the AI agent responds in first interaction by default', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect(aiAgentMock).toHaveBeenCalled()
+    expect((contents[0] as FlowText).text).toBe('Welcome')
+    expect(contents.length).toBe(2)
+  })
+
+  test('When disableAIAgentInFirstInteraction is true but it is not first interaction, the AI agent still responds', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+        disableAIAgentInFirstInteraction: true,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: false,
+      },
+    })
+
+    expect(aiAgentMock).toHaveBeenCalled()
+    expect(contents.length).toBe(1)
+    expect((contents[0] as FlowAiAgent).responses[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'AI agent response in first interaction',
+      },
+    })
   })
 })

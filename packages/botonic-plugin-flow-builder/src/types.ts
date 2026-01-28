@@ -36,6 +36,7 @@ export interface BotonicPluginFlowBuilderOptions<
   inShadowing?: Partial<InShadowingConfig>
   contentFilters?: ContentFilter<TPlugins, TExtraData>[]
   customRatingMessageEnabled?: boolean
+  disableAIAgentInFirstInteraction?: boolean
 }
 
 export type TrackEventFunction<
