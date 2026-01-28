@@ -4,6 +4,7 @@ import { tool } from '@openai/agents'
 import { AIAgentBuilder } from './agent-builder'
 import { isProd, MAX_MEMORY_LENGTH } from './constants'
 import { HubtypeApiClient } from './hubtype-api-client'
+import { createDebugLogger, DebugLogger } from './debug-logger'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
@@ -24,6 +25,7 @@ export default class BotonicPluginAiAgents<
   private readonly authToken?: string
   private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions
+  private readonly logger: DebugLogger
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
@@ -40,6 +42,15 @@ export default class BotonicPluginAiAgents<
     this.toolDefinitions = options?.customTools || []
     this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
     this.memory = options?.memory ?? {}
+    this.logger = createDebugLogger(options?.enableDebug ?? false)
+
+    this.logger.logInitialConfig({
+      messageHistoryApiVersion: this.messageHistoryApiVersion,
+      maxRetries: options?.maxRetries ?? 2,
+      timeout: options?.timeout ?? 16000,
+      customToolNames: this.toolDefinitions.map(t => t.name),
+      memory: this.memory,
+    })
   }
 
   pre(): void {
@@ -86,7 +97,14 @@ export default class BotonicPluginAiAgents<
         request,
       }
 
-      const runner = new AIAgentRunner<TPlugins, TExtraData>(agent)
+      this.logger.logAgentDebugInfo(
+        aiAgentArgs,
+        tools.map(t => t.name),
+        messages,
+        this.memory
+      )
+
+      const runner = new AIAgentRunner<TPlugins, TExtraData>(agent, this.logger)
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)

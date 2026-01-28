@@ -5,6 +5,7 @@ import {
   RunToolCallItem,
 } from '@openai/agents'
 
+import { DebugLogger } from './debug-logger'
 import { retrieveKnowledge } from './tools'
 import {
   AgenticInputMessage,
@@ -28,15 +29,21 @@ export class AIAgentRunner<
   TExtraData = any,
 > {
   private agent: AIAgent<TPlugins, TExtraData>
+  private logger: DebugLogger
 
-  constructor(agent: AIAgent<TPlugins, TExtraData>) {
+  constructor(agent: AIAgent<TPlugins, TExtraData>, logger: DebugLogger) {
     this.agent = agent
+    this.logger = logger
   }
 
   async run(
     messages: AgenticInputMessage[],
     context: Context<TPlugins, TExtraData>
   ): Promise<RunResult> {
+    const startTime = Date.now()
+
+    this.logger.logRunnerStart()
+
     try {
       const runner = new Runner({
         modelSettings: { temperature: 0 },
@@ -53,7 +60,7 @@ export class AIAgentRunner<
         outputMessages.some(message => message.type === 'exit')
       const toolsExecuted = this.getToolsExecuted(result, context)
 
-      return {
+      const runResult: RunResult = {
         messages: hasExit
           ? []
           : (outputMessages.filter(
@@ -66,9 +73,13 @@ export class AIAgentRunner<
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
       }
+
+      this.logger.logRunResult(runResult, startTime)
+
+      return runResult
     } catch (error) {
       if (error instanceof InputGuardrailTripwireTriggered) {
-        return {
+        const runResult: RunResult = {
           messages: [],
           memoryLength: 0,
           toolsExecuted: [],
@@ -77,7 +88,15 @@ export class AIAgentRunner<
           inputGuardrailsTriggered: error.result.output.outputInfo,
           outputGuardrailsTriggered: [],
         }
+
+        this.logger.logGuardrailTriggered()
+        this.logger.logRunResult(runResult, startTime)
+
+        return runResult
       }
+
+      this.logger.logRunnerError(startTime, error)
+
       throw error
     }
   }
