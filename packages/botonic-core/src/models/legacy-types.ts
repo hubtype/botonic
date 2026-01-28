@@ -143,7 +143,7 @@ export interface Input {
   type: InputType
   context?: {
     campaign?: Campaign
-    campaign_v2?: CampaignV2
+    campaigns_v2?: CampaignV2[]
     salesforce?: {
       access_token: string
     }

@@ -66,7 +66,7 @@ export default class BotonicPluginAiAgents<
         contactInfo: request.session.user.contact_info || [],
         inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
         sourceIds: aiAgentArgs.sourceIds || [],
-        campaignContext: request.input.context?.campaign_v2,
+        campaignsContext: request.input.context?.campaigns_v2,
       }).build()
 
       const messages = await this.getMessages(

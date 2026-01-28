@@ -17,6 +17,7 @@ All notable changes to Botonic will be documented in this file.
 ### Changed
 
 - [PR-3148](https://github.com/hubtype/botonic/pull/3148): Upgrade openai and openai/agents dependencies.
+- [PR-3151](https://github.com/hubtype/botonic/pull/3151): The input.context.campaign_v2 becomes an array and is renamed campaigns_v2.
 
 ### Fixed
 

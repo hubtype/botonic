@@ -54,11 +54,13 @@ describe('AIAgentBuilder', () => {
     } as Tool,
   ]
 
-  const campaignContext = {
-    id: '1234-5678-9012-3456',
-    name: 'Campaign 1',
-    agent_context: 'This is some context coming from campaigns',
-  }
+  const campaignsContext = [
+    {
+      id: '1234-5678-9012-3456',
+      name: 'Campaign 1',
+      agent_context: 'This is some context coming from campaigns',
+    },
+  ]
 
   const contactInfo: ContactInfo[] = [
     {
@@ -107,7 +109,7 @@ describe('AIAgentBuilder', () => {
       contactInfo,
       inputGuardrailRules,
       sourceIds,
-      campaignContext,
+      campaignsContext,
     }).build()
     const structuredContactInfo = contactInfo
       .map(
@@ -125,7 +127,7 @@ describe('AIAgentBuilder', () => {
       )
       .join('\n')
 
-    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>\n\n<campaign_context>\nThis is some context coming from campaigns\n</campaign_context>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
+    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>\n\n<campaign_context_1>\nThis is some context coming from campaigns\n</campaign_context_1>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
@@ -226,7 +228,7 @@ describe('AIAgentBuilder', () => {
   })
 
   describe('Campaign context handling', () => {
-    it('should NOT include campaign_context when campaignContext is undefined', () => {
+    it('should NOT include campaign_context when campaignsContext is undefined', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
@@ -234,18 +236,20 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: undefined,
+        campaignsContext: undefined,
       }).build()
 
-      expect(aiAgent.instructions).not.toContain('<campaign_context>')
+      expect(aiAgent.instructions).not.toContain('<campaign_context')
     })
 
     it('should NOT include campaign_context when agent_context is undefined', () => {
-      const campaignWithoutContext = {
-        id: '1234-5678-9012-3456',
-        name: 'Campaign without context',
-        // agent_context is undefined
-      }
+      const campaignWithoutContext = [
+        {
+          id: '1234-5678-9012-3456',
+          name: 'Campaign without context',
+          // agent_context is undefined
+        },
+      ]
 
       const aiAgent = new AIAgentBuilder({
         name: agentName,
@@ -254,18 +258,20 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: campaignWithoutContext,
+        campaignsContext: campaignWithoutContext,
       }).build()
 
-      expect(aiAgent.instructions).not.toContain('<campaign_context>')
+      expect(aiAgent.instructions).not.toContain('<campaign_context')
     })
 
     it('should NOT include campaign_context when agent_context is empty string', () => {
-      const campaignWithEmptyContext = {
-        id: '1234-5678-9012-3456',
-        name: 'Campaign with empty context',
-        agent_context: '',
-      }
+      const campaignWithEmptyContext = [
+        {
+          id: '1234-5678-9012-3456',
+          name: 'Campaign with empty context',
+          agent_context: '',
+        },
+      ]
 
       const aiAgent = new AIAgentBuilder({
         name: agentName,
@@ -274,19 +280,21 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: campaignWithEmptyContext,
+        campaignsContext: campaignWithEmptyContext,
       }).build()
 
       // Empty string is falsy, so campaign_context should not be included
-      expect(aiAgent.instructions).not.toContain('<campaign_context>')
+      expect(aiAgent.instructions).not.toContain('<campaign_context')
     })
 
     it('should include campaign_context when agent_context has content', () => {
-      const campaignWithContext = {
-        id: '1234-5678-9012-3456',
-        name: 'Campaign with context',
-        agent_context: 'This is the campaign context for the agent',
-      }
+      const campaignWithContext = [
+        {
+          id: '1234-5678-9012-3456',
+          name: 'Campaign with context',
+          agent_context: 'This is the campaign context for the agent',
+        },
+      ]
 
       const aiAgent = new AIAgentBuilder({
         name: agentName,
@@ -295,10 +303,10 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: campaignWithContext,
+        campaignsContext: campaignWithContext,
       }).build()
 
-      expect(aiAgent.instructions).toContain('<campaign_context>')
+      expect(aiAgent.instructions).toContain('<campaign_context_1>')
       expect(aiAgent.instructions).toContain(
         'This is the campaign context for the agent'
       )
@@ -315,7 +323,7 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: ['source-1'], // Triggers retrieveKnowledge tool
-        campaignContext: undefined,
+        campaignsContext: undefined,
       }).build()
 
       // When using azure provider with retrieveKnowledge, toolChoice should be set
@@ -334,7 +342,7 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [], // Empty - no retrieveKnowledge tool
-        campaignContext: undefined,
+        campaignsContext: undefined,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -351,7 +359,7 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: undefined,
+        campaignsContext: undefined,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -368,7 +376,7 @@ describe('AIAgentBuilder', () => {
         contactInfo,
         inputGuardrailRules: [],
         sourceIds: [],
-        campaignContext: undefined,
+        campaignsContext: undefined,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -424,7 +432,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       contactInfo,
       inputGuardrailRules: [],
       sourceIds: [],
-      campaignContext: undefined,
+      campaignsContext: undefined,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -441,7 +449,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       contactInfo,
       inputGuardrailRules: [],
       sourceIds: [],
-      campaignContext: undefined,
+      campaignsContext: undefined,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -458,7 +466,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       contactInfo,
       inputGuardrailRules: [],
       sourceIds: [],
-      campaignContext: undefined,
+      campaignsContext: undefined,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -473,7 +481,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       contactInfo,
       inputGuardrailRules: [],
       sourceIds: ['source-1'], // This adds retrieveKnowledge tool
-      campaignContext: undefined,
+      campaignsContext: undefined,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
