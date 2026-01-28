@@ -7,6 +7,7 @@ import {
 } from '@openai/agents'
 
 import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
+import { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
@@ -23,6 +24,7 @@ interface AIAgentBuilderOptions<
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
+  logger: DebugLogger
 }
 
 export class AIAgentBuilder<
@@ -33,6 +35,7 @@ export class AIAgentBuilder<
   private instructions: string
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
+  private logger: DebugLogger
 
   constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
     this.name = options.name
@@ -43,6 +46,7 @@ export class AIAgentBuilder<
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
+    this.logger = options.logger
     if (options.inputGuardrailRules.length > 0) {
       const inputGuardrail = createInputGuardrail(options.inputGuardrailRules)
       this.inputGuardrails.push(inputGuardrail)
@@ -56,7 +60,8 @@ export class AIAgentBuilder<
       modelSettings.text = { verbosity: 'medium' }
     }
 
-    if (this.tools.includes(retrieveKnowledge) && OPENAI_PROVIDER === 'azure') {
+    const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
+    if (hasRetrieveKnowledge && OPENAI_PROVIDER === 'azure') {
       modelSettings.toolChoice = retrieveKnowledge.name
     }
 
@@ -64,14 +69,19 @@ export class AIAgentBuilder<
     // Azure OpenAI uses deployment name instead
     const model = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : undefined
 
-    // TODO: Improve type safety - replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema>
-    // Currently using explicit type parameters to avoid type inference issues where Agent constructor
-    // infers ZodObject instead of AgentOutputType<typeof OutputSchema>. The explicit type parameters
-    // ensure compatibility with AIAgent type definition. Future improvements:
-    // 1. Update @openai/agents package to properly infer AgentOutputType from outputType parameter
-    // 2. Replace AgentOutputType<any> with AgentOutputType<typeof OutputSchema> once type system allows
-    // 3. Consider updating AIAgent type definition if @openai/agents types change significantly
-    return new Agent<Context<TPlugins, TExtraData>, AgentOutputType<any>>({
+    this.logger.logModelSettings({
+      provider: OPENAI_PROVIDER,
+      model,
+      reasoning: modelSettings.reasoning as { effort: string } | undefined,
+      text: modelSettings.text as { verbosity: string } | undefined,
+      toolChoice: modelSettings.toolChoice as string | undefined,
+      hasRetrieveKnowledge,
+    })
+
+    return new Agent<
+      Context<TPlugins, TExtraData>,
+      AgentOutputType<typeof OutputSchema>
+    >({
       name: this.name,
       model,
       instructions: this.instructions,

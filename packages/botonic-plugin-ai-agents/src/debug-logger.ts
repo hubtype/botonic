@@ -19,6 +19,15 @@ export interface DebugLoggerConfig {
   memory: MemoryOptions
 }
 
+export interface ModelSettingsInfo {
+  provider: string
+  model: string | undefined
+  reasoning?: { effort: string }
+  text?: { verbosity: string }
+  toolChoice?: string
+  hasRetrieveKnowledge: boolean
+}
+
 export interface DebugLogger {
   logInitialConfig(config: DebugLoggerConfig): void
   logAgentDebugInfo(
@@ -27,6 +36,7 @@ export interface DebugLogger {
     messages: AgenticInputMessage[],
     memory: MemoryOptions
   ): void
+  logModelSettings(settings: ModelSettingsInfo): void
   logRunnerStart(): void
   logRunResult(runResult: RunResult, startTime: number): void
   logGuardrailTriggered(): void
@@ -101,6 +111,25 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} === End Debug Info ===`)
   }
 
+  logModelSettings(settings: ModelSettingsInfo): void {
+    console.log(`${PREFIX} === Agent Model Settings ===`)
+    console.log(`${PREFIX} Provider: ${settings.provider}`)
+    console.log(`${PREFIX} Model: ${settings.model ?? 'Using deployment name'}`)
+    console.log(
+      `${PREFIX} Has Retrieve Knowledge Tool: ${settings.hasRetrieveKnowledge}`
+    )
+    if (settings.reasoning) {
+      console.log(`${PREFIX} Reasoning Effort: ${settings.reasoning.effort}`)
+    }
+    if (settings.text) {
+      console.log(`${PREFIX} Text Verbosity: ${settings.text.verbosity}`)
+    }
+    if (settings.toolChoice) {
+      console.log(`${PREFIX} Tool Choice: ${settings.toolChoice}`)
+    }
+    console.log(`${PREFIX} === End Model Settings ===`)
+  }
+
   logRunnerStart(): void {
     console.log(`${PREFIX} === Runner Execution Start ===`)
   }
@@ -143,6 +172,7 @@ class EnabledDebugLogger implements DebugLogger {
 class DisabledDebugLogger implements DebugLogger {
   logInitialConfig(): void {}
   logAgentDebugInfo(): void {}
+  logModelSettings(): void {}
   logRunnerStart(): void {}
   logRunResult(): void {}
   logGuardrailTriggered(): void {}

@@ -3,8 +3,8 @@ import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
 import { isProd, MAX_MEMORY_LENGTH } from './constants'
-import { HubtypeApiClient } from './hubtype-api-client'
 import { createDebugLogger, DebugLogger } from './debug-logger'
+import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import {
@@ -78,6 +78,7 @@ export default class BotonicPluginAiAgents<
         inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
         sourceIds: aiAgentArgs.sourceIds || [],
         campaignsContext: request.input.context?.campaigns_v2,
+        logger: this.logger,
       }).build()
 
       const messages = await this.getMessages(

@@ -146,6 +146,54 @@ describe('DebugLogger', () => {
         error
       )
     })
+
+    it('should log model settings for OpenAI provider', () => {
+      logger.logModelSettings({
+        provider: 'openai',
+        model: 'gpt-4.1-mini',
+        reasoning: { effort: 'none' },
+        text: { verbosity: 'medium' },
+        hasRetrieveKnowledge: true,
+      })
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] === Agent Model Settings ==='
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Provider: openai'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model: gpt-4.1-mini'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Has Retrieve Knowledge Tool: true'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Reasoning Effort: none'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Text Verbosity: medium'
+      )
+    })
+
+    it('should log model settings for Azure provider with tool choice', () => {
+      logger.logModelSettings({
+        provider: 'azure',
+        model: undefined,
+        toolChoice: 'retrieve_knowledge',
+        hasRetrieveKnowledge: true,
+      })
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Provider: azure'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model: Using deployment name'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Tool Choice: retrieve_knowledge'
+      )
+    })
   })
 
   describe('DisabledDebugLogger', () => {
@@ -169,6 +217,11 @@ describe('DebugLogger', () => {
         [],
         {}
       )
+      logger.logModelSettings({
+        provider: 'azure',
+        model: undefined,
+        hasRetrieveKnowledge: false,
+      })
       logger.logRunnerStart()
       logger.logRunResult({} as any, Date.now())
       logger.logGuardrailTriggered()
