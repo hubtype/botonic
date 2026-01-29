@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-flow-builder-typescript",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "scripts": {
     "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "lint": "npm run lint-core -- --fix && npm run prettier",
@@ -13,12 +13,12 @@
     "preversion": "npm run lint-ci"
   },
   "dependencies": {
-    "@botonic/core": "^0.43.0",
-    "@botonic/plugin-ai-agents": "^0.43.0",
-    "@botonic/plugin-flow-builder": "^0.43.0",
-    "@botonic/plugin-hubtype-analytics": "^0.43.0",
-    "@botonic/plugin-knowledge-bases": "^0.43.0",
-    "@botonic/react": "^0.43.0",
+    "@botonic/core": "^0.44.0",
+    "@botonic/plugin-ai-agents": "^0.44.0",
+    "@botonic/plugin-flow-builder": "^0.44.0",
+    "@botonic/plugin-hubtype-analytics": "^0.44.0",
+    "@botonic/plugin-knowledge-bases": "^0.44.0",
+    "@botonic/react": "^0.44.0",
     "@reduxjs/toolkit": "1.9.7",
     "axios": "^1.12.2",
     "dotenv": "^17.2.0",
@@ -31,7 +31,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@botonic/dx": "^0.43.0",
+    "@botonic/dx": "^0.44.0",
     "@types/react": "18.3.13",
     "@types/react-dom": "18.3.1",
     "@types/react-redux": "^7.1.34",
