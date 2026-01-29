@@ -10,17 +10,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.44.0] - 2026-mm-dd
+## [0.44.x] - 2026-mm-dd
 
 ### Added
-
-- [PR-3146](https://github.com/hubtype/botonic/pull/3146): Add CaptureUserInput node.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.44.0] - 2026-01-29
+
+### Added
+
+- [PR-3146](https://github.com/hubtype/botonic/pull/3146): Add CaptureUserInput node.
 
 ## [0.43.1] - 2026-01-15
 
