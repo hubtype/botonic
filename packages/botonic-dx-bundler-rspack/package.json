@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-bundler-rspack",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "description": "Build Botonic bots with RSPack",
   "scripts": {
     "build": "echo Skipping build...",

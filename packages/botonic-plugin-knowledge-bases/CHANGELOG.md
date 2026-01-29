@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.39.x] - 2025-mm-dd
+## [0.44.x] - 2025-mm-dd
 
 ### Added
 
