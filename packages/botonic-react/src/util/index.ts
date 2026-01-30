@@ -1,6 +1,7 @@
 export * from './dom'
 export * from './environment'
 export * from './error-boundary'
+export * from './i18n'
 export * from './logs'
 export * from './objects'
 export * from './react'

@@ -1,4 +1,50 @@
+/* eslint-disable filenames/match-regex */
+/**
+ * Normalizes a locale string to a valid format.
+ * Keeps letter-based region codes (e.g., 'en-GB', 'es-ES') but strips
+ * numeric UN M.49 region codes (e.g., 'es-419' -> 'es').
+ * Handles both dash and underscore separators.
+ * @example
+ * normalizeLocale('en-GB') // 'en-GB' (letter region preserved)
+ * normalizeLocale('es-419') // 'es' (numeric region stripped)
+ * normalizeLocale('zh-Hans-CN') // 'zh-CN' (script stripped, letter region preserved)
+ * normalizeLocale('en_US') // 'en-US' (underscore normalized)
+ */
+export function normalizeLocale(locale = navigator.language) {
+  // Normalize underscore separators to dashes (some systems use underscores)
+  const normalizedLocale = locale.replace(/_/g, '-')
+  try {
+    const parsed = new Intl.Locale(normalizedLocale)
+    const language = parsed.language
+    const region = parsed.region
+
+    // If no region, return just the language
+    if (!region) {
+      return language
+    }
+
+    // If region is numeric (UN M.49 code like '419'), return just the language
+    if (/^\d+$/.test(region)) {
+      return language
+    }
+
+    // Otherwise, return language-REGION (letter-based region codes)
+    return `${language}-${region}`
+  } catch {
+    // Fallback: check if the part after dash is numeric
+    const parts = normalizedLocale.split('-')
+    if (parts.length > 1 && /^\d+$/.test(parts[1])) {
+      return parts[0]
+    }
+    return normalizedLocale
+  }
+}
+
 /* eslint-disable @typescript-eslint/naming-convention */
+/**
+ * Mapping of IANA time zones to ISO 3166-1 alpha-2 country codes.
+ * Used to infer a user's country from their browser's time zone.
+ */
 export const timeZoneToCountryCode: Record<string, string> = {
   'Africa/Abidjan': 'CI',
   'Africa/Accra': 'GH',
@@ -101,4 +147,19 @@ export const timeZoneToCountryCode: Record<string, string> = {
   'Europe/Stockholm': 'SE',
   'Europe/Warsaw': 'PL',
   'Pacific/Auckland': 'NZ',
+}
+/* eslint-enable @typescript-eslint/naming-convention */
+
+/**
+ * Gets the country code from a time zone string.
+ * @param timeZone - IANA time zone string (e.g., 'Europe/Madrid')
+ * @returns ISO 3166-1 alpha-2 country code (e.g., 'ES') or undefined if not found
+ * @example
+ * getCountryFromTimeZone('Europe/Madrid') // 'ES'
+ * getCountryFromTimeZone('America/New_York') // 'US'
+ */
+export function getCountryFromTimeZone(
+  timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
+): string | undefined {
+  return timeZoneToCountryCode[timeZone]
 }

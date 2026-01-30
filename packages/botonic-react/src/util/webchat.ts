@@ -3,9 +3,9 @@ import UAParser from 'ua-parser-js'
 import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../constants'
-import { timeZoneToCountryCode } from '../time-zone-to-country-code'
 import { ClientUser } from '../webchat/context/types'
 import { WebchatTheme } from '../webchat/theme/types'
+import { getCountryFromTimeZone, normalizeLocale } from './i18n'
 import { getProperty } from './objects'
 
 /**
@@ -60,24 +60,24 @@ export function updateUserLocaleAndCountry(user: Partial<ClientUser>) {
 
 function getLocale(user: Partial<ClientUser>) {
   if (user.locale) {
-    return user.locale
+    return normalizeLocale(user.locale)
   }
 
-  return user.extra_data?.language
+  const locale = user.extra_data?.language
     ? (user.extra_data?.language as string)
     : navigator.language
+
+  return normalizeLocale(locale)
 }
 
 function getCountry(user: Partial<ClientUser>) {
   if (user.country) {
     return user.country
   }
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-  const userCountry = timeZoneToCountryCode[timeZone]
 
   return user.extra_data?.country
     ? (user.extra_data?.country as string)
-    : userCountry
+    : getCountryFromTimeZone()
 }
 
 function getSystemLocale(user: Partial<ClientUser>) {
