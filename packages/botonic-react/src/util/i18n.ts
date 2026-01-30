@@ -40,6 +40,20 @@ export function normalizeLocale(locale = navigator.language) {
   }
 }
 
+/**
+ * Gets the country code from a time zone string.
+ * @param timeZone - IANA time zone string (e.g., 'Europe/Madrid')
+ * @returns ISO 3166-1 alpha-2 country code (e.g., 'ES') or undefined if not found
+ * @example
+ * getCountryFromTimeZone('Europe/Madrid') // 'ES'
+ * getCountryFromTimeZone('America/New_York') // 'US'
+ */
+export function getCountryFromTimeZone(
+  timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
+): string | undefined {
+  return timeZoneToCountryCode[timeZone]
+}
+
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
  * Mapping of IANA time zones to ISO 3166-1 alpha-2 country codes.
@@ -149,17 +163,3 @@ export const timeZoneToCountryCode: Record<string, string> = {
   'Pacific/Auckland': 'NZ',
 }
 /* eslint-enable @typescript-eslint/naming-convention */
-
-/**
- * Gets the country code from a time zone string.
- * @param timeZone - IANA time zone string (e.g., 'Europe/Madrid')
- * @returns ISO 3166-1 alpha-2 country code (e.g., 'ES') or undefined if not found
- * @example
- * getCountryFromTimeZone('Europe/Madrid') // 'ES'
- * getCountryFromTimeZone('America/New_York') // 'US'
- */
-export function getCountryFromTimeZone(
-  timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone
-): string | undefined {
-  return timeZoneToCountryCode[timeZone]
-}
