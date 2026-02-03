@@ -4,7 +4,7 @@ import {
   PATH_PAYLOAD_IDENTIFIER,
   PATH_PAYLOAD_REGEXP,
 } from '../constants'
-import {
+import type {
   Action,
   BotContext,
   Input,
@@ -61,7 +61,7 @@ export function pathParamsToParams(pathParams?: string): Params {
       params[key] = value
     }
     return params
-  } catch (e) {
+  } catch (_e) {
     return {}
   }
 }

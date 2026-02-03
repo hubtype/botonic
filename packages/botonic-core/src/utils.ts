@@ -1,7 +1,7 @@
-import { PROVIDER, Session } from './models/legacy-types'
+import { PROVIDER, type Session } from './models/legacy-types'
 
 export const isNode = (): boolean => {
-  // @ts-ignore
+  // @ts-expect-error
   return typeof IS_NODE !== 'undefined'
     ? // @ts-ignore
       IS_NODE
@@ -11,7 +11,7 @@ export const isNode = (): boolean => {
 }
 
 export const isBrowser = (): boolean => {
-  // @ts-ignore
+  // @ts-expect-error
   return typeof IS_BROWSER !== 'undefined'
     ? // @ts-ignore
       IS_BROWSER
@@ -69,7 +69,6 @@ export const join = (...segments: string[]): string => {
     else newParts.push(part)
   }
   // Preserve the initial slash if there was one.
-  // @ts-ignore
   if (parts[0] === '') newParts.unshift('')
   // Turn back into a single string path.
   return newParts.join('/') || (newParts.length ? '/' : '.')

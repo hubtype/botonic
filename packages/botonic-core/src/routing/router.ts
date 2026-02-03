@@ -1,6 +1,6 @@
 import { NOT_FOUND_PATH } from '../constants'
 import { RouteInspector } from '../debug/inspector'
-import {
+import type {
   Input,
   MatchedValue,
   Matcher,
@@ -19,7 +19,6 @@ import {
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
-  pathParamsToParams,
 } from './router-utils'
 
 export class Router {
@@ -68,7 +67,7 @@ export class Router {
      * Independently of whether the redirectionRoute is found or not, the intent is to trigger a redirection which by definition breaks the flow, so retries are set to 0.
      * It has preference over ignoring retries.
      */
-    if (matchedRoute && matchedRoute.redirect) {
+    if (matchedRoute?.redirect) {
       session.__retries = 0
       const redirectionRoute = this.getRouteByPath(matchedRoute.redirect)
       if (redirectionRoute) {
@@ -93,7 +92,7 @@ export class Router {
      * Ignore Retry Scenario:
      * We have matched a route with an ignore retry, so we return directly the new bot state. The intent is to break the flow, so retries are set to 0.
      */
-    if (matchedRoute && matchedRoute.ignoreRetry) {
+    if (matchedRoute?.ignoreRetry) {
       session.__retries = 0
       return {
         action: matchedRoute.action,
@@ -198,7 +197,7 @@ export class Router {
               // Strip '[Object: null prototype]' from groups result: https://stackoverflow.com/a/62945609/6237608
               params = { ...match.groups }
             }
-          } catch (e) {}
+          } catch (_e) {}
           return Boolean(match)
         })
     )
@@ -219,11 +218,7 @@ export class Router {
     for (const route of routeList) {
       // iterate over all routeList
       if (route.path === currentPath) {
-        if (
-          route.childRoutes &&
-          route.childRoutes.length &&
-          childPath.length > 0
-        ) {
+        if (route.childRoutes?.length && childPath.length > 0) {
           // evaluate childroute over next actions
           const computedRoute = this.getRouteByPath(
             childPath.join('/'),
@@ -309,7 +304,7 @@ export class Router {
     session: Session
   ): RoutingState {
     // get route depending of current ChildRoutes
-    if (currentRoute && currentRoute.childRoutes) {
+    if (currentRoute?.childRoutes) {
       const routeParams = this.getRoute(
         input,
         currentRoute.childRoutes,

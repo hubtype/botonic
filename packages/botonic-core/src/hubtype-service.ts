@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from 'axios'
-import Pusher, { AuthOptions, Channel } from 'pusher-js'
-import Channels from 'pusher-js/types/src/core/channels/channels'
+import axios, { type AxiosResponse } from 'axios'
+import Pusher, { type AuthOptions, type Channel } from 'pusher-js'
+import type Channels from 'pusher-js/types/src/core/channels/channels'
 
-import { Input, SessionUser } from './models'
+import type { Input, SessionUser } from './models'
 import { decompressData } from './pusher-utils'
 
 interface UnsentInput {
@@ -144,17 +144,15 @@ export class HubtypeService {
       })
       this.channel.bind('update_message_info', data => this.onPusherEvent(data))
 
-      this.pusher &&
-        this.pusher.connection.bind('error', event => {
-          if (event.type == 'WebSocketError') this.handleConnectionChange(false)
-          else {
-            const errorMsg =
-              event.error && event.error.data
-                ? event.error.data.code || event.error.data.message
-                : 'Connection error'
-            cleanAndReject(`Pusher error (${errorMsg})`)
-          }
-        })
+      this.pusher?.connection.bind('error', event => {
+        if (event.type === 'WebSocketError') this.handleConnectionChange(false)
+        else {
+          const errorMsg = event.error?.data
+            ? event.error.data.code || event.error.data.message
+            : 'Connection error'
+          cleanAndReject(`Pusher error (${errorMsg})`)
+        }
+      })
     })
     this.pusher.connection.bind('state_change', states => {
       if (states.current === 'connecting') this.updateAuthHeaders()
@@ -167,7 +165,7 @@ export class HubtypeService {
 
   constructHeaders(): BotonicHeaders {
     const headers = {}
-    if (this.user && this.user.id) {
+    if (this.user?.id) {
       headers['X-BOTONIC-USER-ID'] = this.user.id
     }
 
@@ -241,7 +239,7 @@ export class HubtypeService {
         }
       )
       this.handleSentInput(message)
-    } catch (e) {
+    } catch (_e) {
       this.handleUnsentInput(message)
     }
     return Promise.resolve()

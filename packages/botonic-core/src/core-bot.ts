@@ -1,16 +1,16 @@
 import { Inspector } from './debug'
 import {
-  BotContext,
+  type BotContext,
   BotonicAction,
-  BotRequest,
-  BotResponse,
+  type BotRequest,
+  type BotResponse,
   INPUT,
-  Input,
-  ProcessInputResult,
-  ResolvedPlugins,
-  Route,
-  Routes,
-  Session,
+  type Input,
+  type ProcessInputResult,
+  type ResolvedPlugins,
+  type Route,
+  type Routes,
+  type Session,
 } from './models'
 import { runPlugins } from './plugins'
 import { getComputedRoutes, Router } from './routing'
