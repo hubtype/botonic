@@ -11,11 +11,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-          cache: 'pip'
+          cache: "pip"
       - uses: actions/setup-node@v4
         with:
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+      # Install Biome for the local pre-commit hook
+      - name: Install Biome
+        run: npm install -g @biomejs/biome@2.3.13
       - uses: pre-commit/action@v3.0.0
         # this will push back fixes to the pull request branch.
         with:
