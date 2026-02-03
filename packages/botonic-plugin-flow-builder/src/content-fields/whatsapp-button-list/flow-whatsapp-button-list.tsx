@@ -41,6 +41,8 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, request)
+
     if (!isWhatsapp(request.session)) {
       const rows = this.sections.flatMap(section => section.rows)
       const buttons = rows.map(row => (
@@ -51,7 +53,7 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
 
       return (
         <Text>
-          {this.text}
+          {replacedText}
           {buttons}
         </Text>
       )
@@ -60,7 +62,7 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     return (
       <WhatsappButtonList
         key={id}
-        body={this.text}
+        body={replacedText}
         button={this.listButtonText}
         sections={this.sections.map((section, sectionIndex) =>
           section.toBotonic(sectionIndex)

@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.44.1] - 2026-02-03
+
+### Added
+
+- [PR-3156](https://github.com/hubtype/botonic/pull/3156): Replace variables in WhatsappList, WhatsappCTA and Rating components
+
 ## [0.44.0] - 2026-01-29
 
 ### Added

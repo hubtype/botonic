@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  botonic-plugin-hubtype-analytics-tests:
+  botonic-plugin-ai-agents-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
     secrets: inherit #pragma: allowlist secret
     with:

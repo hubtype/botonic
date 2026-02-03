@@ -149,6 +149,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
         request.input.payload =
           this.cmsApi.createPayloadWithParams(cmsBotAction)
+
+        // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
+        // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
+        this.convertWhatsappAiAgentEmptyPayloads(request)
       }
     }
   }
@@ -264,7 +268,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 }
 
 export * from './action'
-export { AGENT_RATING_PAYLOAD } from './constants'
+export { AGENT_RATING_PAYLOAD, EMPTY_PAYLOAD } from './constants'
 export * from './content-fields'
 export { HtBotActionNode } from './content-fields/hubtype-fields'
 export { trackFlowContent } from './tracking'

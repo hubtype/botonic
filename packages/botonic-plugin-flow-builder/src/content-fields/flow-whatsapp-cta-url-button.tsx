@@ -117,10 +117,12 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, request)
+
     if (!isWhatsapp(request.session)) {
       return (
         <Text>
-          {this.text}
+          {replacedText}
           <Button url={this.url}>{this.displayText}</Button>
         </Text>
       )
@@ -133,7 +135,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerImage={this.headerImage}
           footer={this.footer}
@@ -150,7 +152,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerVideo={this.headerVideo}
           footer={this.footer}
@@ -167,7 +169,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerDocument={this.headerDocument}
           footer={this.footer}
@@ -181,7 +183,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           header={this.header}
           headerType={this.headerType}
           footer={this.footer}
@@ -194,7 +196,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     return (
       <WhatsappCTAUrlButton
         key={id}
-        body={this.text}
+        body={replacedText}
         footer={this.footer}
         displayText={this.displayText}
         url={this.url}

@@ -20,7 +20,13 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.44.x] - 2026-01-29
+## [0.44.1] - 2026-02-03
+
+### Fixed
+
+- [PR-3155](https://github.com/hubtype/botonic/pull/3155): Fixes locale normalization to handle numeric UN M.49 region codes
+
+## [0.44.0] - 2026-01-29
 
 ### Added
 

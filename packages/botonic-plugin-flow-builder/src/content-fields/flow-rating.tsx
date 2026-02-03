@@ -48,11 +48,12 @@ export class FlowRating extends ContentFieldsBase {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const customRatingMessageEnabled =
       flowBuilderPlugin.customRatingMessageEnabled
+    const replacedText = this.replaceVariables(this.text, request)
 
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappButtonList
-          body={this.text}
+          body={replacedText}
           button={this.openListButtonText}
           sections={[
             {
@@ -77,9 +78,9 @@ export class FlowRating extends ContentFieldsBase {
 
       return (
         <CustomRatingMessage
-          alt={this.text}
+          alt={replacedText}
           payloads={payloads}
-          messageText={this.text}
+          messageText={replacedText}
           buttonText={this.sendButtonText}
           ratingType={this.ratingType}
         />
@@ -88,7 +89,7 @@ export class FlowRating extends ContentFieldsBase {
 
     return (
       <Text key={id}>
-        {this.text}
+        {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex)
         )}
