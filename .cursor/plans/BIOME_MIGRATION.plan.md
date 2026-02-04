@@ -1,65 +1,65 @@
 ---
-name: Migración a Biome
-overview: Migrar el monorepo de Botonic de ESLint + Prettier a Biome v2.3.13 en dos fases, con pre-commit híbrido que use Biome para paquetes migrados y ESLint para el resto.
+name: Biome Migration
+overview: Migrate the Botonic monorepo from ESLint + Prettier to Biome v2.3.13 in two phases, with a hybrid pre-commit that uses Biome for migrated packages and ESLint for the rest.
 todos:
-  - id: fase1-install
-    content: Instalar Biome v2.3.13 en el root y crear biome.json base
+  - id: phase1-install
+    content: Install Biome v2.3.13 at root and create base biome.json
     status: completed
-  - id: fase1-migrate-core
-    content: 'Migrar botonic-core: actualizar scripts y formatear código'
+  - id: phase1-migrate-core
+    content: 'Migrate botonic-core: update scripts and format code'
     status: completed
-  - id: fase1-update-precommit-core
-    content: 'Actualizar pre-commit: añadir hook de Biome para botonic-core'
+  - id: phase1-update-precommit-core
+    content: 'Update pre-commit: add Biome hook for botonic-core'
     status: completed
-  - id: fase1-migrate-analytics
-    content: Migrar botonic-plugin-hubtype-analytics + actualizar pre-commit
+  - id: phase1-migrate-analytics
+    content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
     status: pending
-  - id: fase1-migrate-kb
-    content: Migrar botonic-plugin-knowledge-bases + actualizar pre-commit
+  - id: phase1-migrate-kb
+    content: Migrate botonic-plugin-knowledge-bases + update pre-commit
     status: pending
-  - id: fase1-migrate-ai
-    content: Migrar botonic-plugin-ai-agents + actualizar pre-commit
+  - id: phase1-migrate-ai
+    content: Migrate botonic-plugin-ai-agents + update pre-commit
     status: pending
-  - id: fase1-migrate-react
-    content: Migrar botonic-react (incluye JSX) + actualizar pre-commit
+  - id: phase1-migrate-react
+    content: Migrate botonic-react (includes JSX) + update pre-commit
     status: pending
-  - id: fase1-migrate-fb
-    content: Migrar botonic-plugin-flow-builder + actualizar pre-commit
+  - id: phase1-migrate-fb
+    content: Migrate botonic-plugin-flow-builder + update pre-commit
     status: pending
-  - id: fase1-update-ci
-    content: Actualizar workflows de CI para Fase 1
+  - id: phase1-update-ci
+    content: Update CI workflows for Phase 1
     status: pending
-  - id: fase2-create-biome-config
-    content: Crear paquete @botonic/biome-config
+  - id: phase2-create-biome-config
+    content: Create @botonic/biome-config package
     status: pending
-  - id: fase2-deprecate-eslint-config
-    content: Deprecar @botonic/eslint-config
+  - id: phase2-deprecate-eslint-config
+    content: Deprecate @botonic/eslint-config
     status: pending
-  - id: fase2-migrate-cli
-    content: Migrar botonic-cli (ESLint v9)
+  - id: phase2-migrate-cli
+    content: Migrate botonic-cli (ESLint v9)
     status: pending
-  - id: fase2-migrate-dx
-    content: Migrar botonic-dx y bundlers
+  - id: phase2-migrate-dx
+    content: Migrate botonic-dx and bundlers
     status: pending
-  - id: fase2-migrate-examples
-    content: Migrar examples (blank, blank-typescript, flow-builder)
+  - id: phase2-migrate-examples
+    content: Migrate examples (blank, blank-typescript, flow-builder)
     status: pending
   - id: cleanup
-    content: 'Limpieza final: eliminar dependencias, archivos y simplificar pre-commit'
+    content: 'Final cleanup: remove dependencies, files and simplify pre-commit'
     status: pending
 isProject: false
 ---
 
-# Plan de Migración de ESLint/Prettier a Biome
+# ESLint/Prettier to Biome Migration Plan
 
-## Contexto actual
+## Current Context
 
-El monorepo usa npm workspaces con la siguiente estructura de linting:
+The monorepo uses npm workspaces with the following linting structure:
 
 - **Root**: ESLint v8.57.1, Prettier v3.2.5
-- **Configuración base**: `[packages/.eslintrc.js](packages/.eslintrc.js)`
-- **Paquete exportable**: `@botonic/eslint-config` (usado por proyectos externos)
-- **Prettier**: `[.prettierrc](.prettierrc)` con configuración personalizada
+- **Base configuration**: `[packages/.eslintrc.js](packages/.eslintrc.js)`
+- **Exportable package**: `@botonic/eslint-config` (used by external projects)
+- **Prettier**: `[.prettierrc](.prettierrc)` with custom configuration
 
 ```mermaid
 flowchart TD
@@ -70,11 +70,11 @@ flowchart TD
     end
 
     subgraph shared ["packages/.eslintrc.js"]
-        baseConfig["Configuracion base"]
+        baseConfig["Base configuration"]
     end
 
     subgraph pkgConfig ["@botonic/eslint-config"]
-        exportedConfig["Configuracion exportable"]
+        exportedConfig["Exportable configuration"]
     end
 
     root --> shared
@@ -82,89 +82,89 @@ flowchart TD
     shared --> react["botonic-react"]
     shared --> pluginsDir["plugins/*"]
 
-    pkgConfig --> external["Proyectos externos"]
+    pkgConfig --> external["External projects"]
 ```
 
-## Version de Biome
+## Biome Version
 
-Usar **Biome v2.3.13** (versión estable más reciente, publicada el 26 de enero de 2025).
+Use **Biome v2.3.13** (latest stable version, released January 26, 2025).
 
 ---
 
-## Estrategia de Pre-commit (Enfoque Hibrido)
+## Pre-commit Strategy (Hybrid Approach)
 
-El pre-commit usará un **enfoque híbrido** durante la migración:
+The pre-commit will use a **hybrid approach** during migration:
 
-- **Hook nativo de Biome**: Para paquetes ya migrados (más eficiente, solo analiza archivos staged)
-- **Script actual (npm run lint)**: Para paquetes que aún usan ESLint
+- **Native Biome hook**: For already migrated packages (more efficient, only analyzes staged files)
+- **Current script (npm run lint)**: For packages still using ESLint
 
-### Configuración del pre-commit híbrido
+### Hybrid pre-commit configuration
 
-Actualizar `[.pre-commit-config.yaml](.pre-commit-config.yaml)`:
+Update `[.pre-commit-config.yaml](.pre-commit-config.yaml)`:
 
 ```yaml
 repos:
-  # ... hooks existentes de pre-commit-hooks ...
+  # ... existing pre-commit-hooks ...
 
-  # Hook nativo de Biome para paquetes migrados
+  # Native Biome hook for migrated packages
   - repo: https://github.com/biomejs/pre-commit
     rev: v0.6.0
     hooks:
       - id: biome-check
         additional_dependencies: ['@biomejs/biome@2.3.13']
-        # Actualizar este patron conforme se migre cada paquete
+        # Update this pattern as each package is migrated
         files: ^packages/botonic-core/
 
-  # Hooks de ESLint para paquetes NO migrados (ir eliminando conforme se migre)
+  # ESLint hooks for packages NOT yet migrated (remove as they are migrated)
   - repo: local
     hooks:
-      # Eliminar este hook cuando se migre botonic-cli
+      # Remove this hook when botonic-cli is migrated
       - id: cli
         name: cli (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
 
-      # Eliminar este hook cuando se migre botonic-react
+      # Remove this hook when botonic-react is migrated
       - id: react
         name: react (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-react
         language: system
         files: ^packages/botonic-react/
 
-      # ... resto de hooks de ESLint ...
+      # ... rest of ESLint hooks ...
 ```
 
-### Actualización progresiva
+### Progressive update
 
-Cada vez que se migre un paquete:
+Each time a package is migrated:
 
-1. **Añadir** el patrón del paquete al hook de Biome:
+1. **Add** the package pattern to the Biome hook:
 
 ```yaml
 files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 ```
 
-1. **Eliminar** el hook local de ESLint correspondiente
+1. **Remove** the corresponding local ESLint hook
 
 ---
 
-## Fase 1: Core y Plugins principales
+## Phase 1: Core and Main Plugins
 
-### Paquetes incluidos
+### Included packages
 
-1. `botonic-core` (COMPLETADO)
+1. `botonic-core` (COMPLETED)
 2. `botonic-plugin-hubtype-analytics`
 3. `botonic-plugin-knowledge-bases`
 4. `botonic-plugin-ai-agents`
 5. `botonic-react`
 6. `botonic-plugin-flow-builder`
 
-### Pasos por paquete
+### Steps per package
 
-#### Para cada paquete:
+#### For each package:
 
-1. **Actualizar scripts** en `package.json`:
+1. **Update scripts** in `package.json`:
 
 ```json
 {
@@ -176,90 +176,90 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 }
 ```
 
-1. **Eliminar `eslintConfig**`del`package.json` si existe
-2. **Ejecutar Biome** para formatear y lint:
+1. **Remove `eslintConfig**`from`package.json` if it exists
+2. **Run Biome** to format and lint:
 
 ```bash
 npx biome check --write src/
 ```
 
-1. **Corregir errores** de TypeScript si Biome modifica `@ts-ignore` o imports
-2. **Verificar tests**:
+1. **Fix TypeScript errors** if Biome modifies `@ts-ignore` or imports
+2. **Verify tests**:
 
 ```bash
 npm test
 ```
 
-1. **Actualizar pre-commit**:
+1. **Update pre-commit**:
 
-- Añadir paquete al patrón `files` del hook de Biome
-- Eliminar hook local de ESLint del paquete
+- Add package to the `files` pattern of the Biome hook
+- Remove the local ESLint hook for the package
 
-### Checklist de CI para cada paquete migrado
+### CI Checklist for each migrated package
 
-Al migrar un paquete a Biome, seguir estos pasos:
+When migrating a package to Biome, follow these steps:
 
-#### 1. Actualizar workflow específico del paquete
+#### 1. Update package-specific workflow
 
-En `.github/workflows/botonic-<paquete>-tests.yml`, añadir el input `LINT_COMMAND`:
+In `.github/workflows/botonic-<package>-tests.yml`, add the `LINT_COMMAND` input:
 
 ```yaml
 jobs:
-  botonic-<paquete>-tests:
+  botonic-<package>-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
     secrets: inherit
     with:
-      PACKAGE_NAME: Botonic <paquete> tests
-      PACKAGE: botonic-<paquete>
-      LINT_COMMAND: npm run lint:check # <-- Añadir esta línea
-      # ... otros inputs ...
+      PACKAGE_NAME: Botonic <package> tests
+      PACKAGE: botonic-<package>
+      LINT_COMMAND: npm run lint:check # <-- Add this line
+      # ... other inputs ...
 ```
 
-> **Nota**: El `botonic-common-workflow.yml` ya tiene el input `LINT_COMMAND` con valor por defecto `npm run lint_core` para paquetes no migrados.
+> **Note**: The `botonic-common-workflow.yml` already has the `LINT_COMMAND` input with default value `npm run lint_core` for non-migrated packages.
 
-#### 2. Actualizar `.pre-commit-config.yaml`
+#### 2. Update `.pre-commit-config.yaml`
 
-Añadir el paquete al patrón `files` del hook de Biome:
+Add the package to the `files` pattern of the Biome hook:
 
 ```yaml
 - id: biome-check
   name: biome-check (Biome)
   entry: npx @biomejs/biome check --write
   language: system
-  files: ^packages/(botonic-core|botonic-<nuevo-paquete>)/ # <-- Añadir aquí
+  files: ^packages/(botonic-core|botonic-<new-package>)/ # <-- Add here
   types_or: [javascript, jsx, ts, tsx, json]
 ```
 
-Y **eliminar** el hook de ESLint del paquete migrado.
+And **remove** the ESLint hook for the migrated package.
 
-#### 3. Actualizar `.prettierignore`
+#### 3. Update `.prettierignore`
 
-Añadir el paquete para evitar conflictos entre Prettier y Biome:
+Add the package to avoid conflicts between Prettier and Biome:
 
 ```
 # Packages migrated to Biome (add more as they are migrated)
 packages/botonic-core/
-packages/botonic-<nuevo-paquete>/  # <-- Añadir aquí
+packages/botonic-<new-package>/  # <-- Add here
 ```
 
-#### 4. Formatear y corregir errores
+#### 4. Format and fix errors
 
 ```bash
-# Formatear con Biome
-cd packages/botonic-<paquete>
+# Format with Biome
+cd packages/botonic-<package>
 npx @biomejs/biome check --write src/ tests/
 
-# Verificar que no hay errores (solo warnings permitidos)
+# Verify there are no errors (only warnings allowed)
 npx @biomejs/biome check src/ tests/
 ```
 
-**Errores comunes a corregir:**
+**Common errors to fix:**
 
-- `noImplicitAnyLet`: Añadir tipos a variables `let` sin tipo
-- `noUnusedVariables`: Renombrar variables no usadas con prefijo `_`
-- Imports solo de tipos: Usar `import type { ... }`
+- `noImplicitAnyLet`: Add types to untyped `let` variables
+- `noUnusedVariables`: Rename unused variables with `_` prefix
+- Type-only imports: Use `import type { ... }`
 
-#### 5. Ejecutar tests
+#### 5. Run tests
 
 ```bash
 npm test
@@ -267,86 +267,86 @@ npm test
 
 ---
 
-### Archivos de configuración de CI (referencia)
+### CI Configuration Files (reference)
 
-| Archivo                                         | Propósito                                              |
-| ----------------------------------------------- | ------------------------------------------------------ |
-| `.github/workflows/botonic-common-workflow.yml` | Workflow reutilizable con input `LINT_COMMAND`         |
-| `.github/workflows/pre-commit.yml`              | Instala Biome globalmente antes de ejecutar pre-commit |
-| `.pre-commit-config.yaml`                       | Hook local de Biome para paquetes migrados             |
-| `.prettierignore`                               | Evita que Prettier reformatee paquetes migrados        |
-| `.vscode/settings.json`                         | Biome como formateador por defecto en el IDE           |
+| File                                            | Purpose                                               |
+| ----------------------------------------------- | ----------------------------------------------------- |
+| `.github/workflows/botonic-common-workflow.yml` | Reusable workflow with `LINT_COMMAND` input           |
+| `.github/workflows/pre-commit.yml`              | Installs Biome globally before running pre-commit     |
+| `.pre-commit-config.yaml`                       | Local Biome hook for migrated packages                |
+| `.prettierignore`                               | Prevents Prettier from reformatting migrated packages |
+| `.vscode/settings.json`                         | Biome as default formatter in the IDE                 |
 
 ---
 
-## Fase 2: CLI, DX, eslint-config y Examples
+## Phase 2: CLI, DX, eslint-config and Examples
 
-### Paquetes incluidos
+### Included packages
 
 1. `botonic-cli`
 2. `botonic-dx`
 3. `botonic-dx-bundler-webpack`
 4. `botonic-dx-bundler-rspack`
-5. `botonic-eslint-config` (deprecar y crear `@botonic/biome-config`)
+5. `botonic-eslint-config` (deprecate and create `@botonic/biome-config`)
 6. `examples/blank`
 7. `examples/blank-typescript`
 8. `examples/flow-builder-typescript`
 
-### Pasos
+### Steps
 
-#### 2.1 Crear nuevo paquete `@botonic/biome-config`
+#### 2.1 Create new `@botonic/biome-config` package
 
-Crear `[packages/botonic-biome-config/](packages/botonic-biome-config/)` con:
+Create `[packages/botonic-biome-config/](packages/botonic-biome-config/)` with:
 
-- `package.json` con la configuración exportable
-- `biome.json` con la configuración base para proyectos externos
-- `README.md` con instrucciones de uso
+- `package.json` with exportable configuration
+- `biome.json` with base configuration for external projects
+- `README.md` with usage instructions
 
-#### 2.2 Deprecar `@botonic/eslint-config`
+#### 2.2 Deprecate `@botonic/eslint-config`
 
-- Añadir notice de deprecación en el README
-- Marcar como deprecated en npm
-- Mantener para compatibilidad con proyectos antiguos
+- Add deprecation notice in README
+- Mark as deprecated on npm
+- Keep for backwards compatibility with old projects
 
-#### 2.3 Migrar `botonic-cli`
+#### 2.3 Migrate `botonic-cli`
 
-Nota: Este paquete usa ESLint v9 con configuración específica de oclif. Requiere atención especial.
+Note: This package uses ESLint v9 with oclif-specific configuration. Requires special attention.
 
-#### 2.4 Actualizar examples
+#### 2.4 Update examples
 
-- Actualizar dependencias a `@botonic/biome-config`
-- Eliminar archivos `.eslintrc*` y `.prettierrc*`
-- Crear `biome.json` que extienda la configuración base
+- Update dependencies to `@botonic/biome-config`
+- Remove `.eslintrc*` and `.prettierrc*` files
+- Create `biome.json` that extends base configuration
 
-#### 2.5 Actualizar `botonic-dx`
+#### 2.5 Update `botonic-dx`
 
-- Actualizar `[baseline/](packages/botonic-dx/baseline/)` con archivos de Biome
-- Eliminar configuraciones de ESLint/Prettier
+- Update `[baseline/](packages/botonic-dx/baseline/)` with Biome files
+- Remove ESLint/Prettier configurations
 
 ---
 
-## Limpieza final
+## Final Cleanup
 
-### Eliminar dependencias de ESLint/Prettier del root
+### Remove ESLint/Prettier dependencies from root
 
-Después de completar ambas fases, eliminar del `[package.json](package.json)` raíz:
+After completing both phases, remove from root `[package.json](package.json)`:
 
-- `eslint` y `eslint_d`
+- `eslint` and `eslint_d`
 - `eslint-config-prettier`
-- `eslint-plugin-*` (todos)
+- `eslint-plugin-*` (all)
 - `@typescript-eslint/*`
 - `prettier`
 - `eslint-import-resolver-typescript`
 
-### Eliminar archivos de configuración obsoletos
+### Remove obsolete configuration files
 
 - `[packages/.eslintrc.js](packages/.eslintrc.js)`
 - `[.prettierrc](.prettierrc)`
-- `.eslintignore` (si existe)
+- `.eslintignore` (if exists)
 
-### Simplificar pre-commit
+### Simplify pre-commit
 
-Al finalizar, el pre-commit solo tendrá el hook de Biome:
+At the end, pre-commit will only have the Biome hook:
 
 ```yaml
 - repo: https://github.com/biomejs/pre-commit
@@ -358,11 +358,11 @@ Al finalizar, el pre-commit solo tendrá el hook de Biome:
 
 ---
 
-## Mapeo de reglas ESLint a Biome
+## ESLint to Biome Rules Mapping
 
-Reglas clave mapeadas en `[biome.json](biome.json)`:
+Key rules mapped in `[biome.json](biome.json)`:
 
-- `prettier/prettier` -> Biome formatter (nativo)
+- `prettier/prettier` -> Biome formatter (native)
 - `simple-import-sort/*` -> `assist.actions.source.organizeImports`
 - `@typescript-eslint/no-explicit-any` -> `suspicious.noExplicitAny: warn`
 - `@typescript-eslint/no-unused-vars` -> `correctness.noUnusedVariables: warn`
@@ -373,8 +373,8 @@ Reglas clave mapeadas en `[biome.json](biome.json)`:
 
 ---
 
-## Consideraciones adicionales
+## Additional Considerations
 
-- **IDE Integration**: Instalar extensión de Biome para VS Code
-- **Editor config**: El archivo `.editorconfig` puede mantenerse como fallback
-- **Archivo del plan**: Este plan está en `[.cursor/plans/BIOME_MIGRATION.plan.md](.cursor/plans/BIOME_MIGRATION.plan.md)` para seguimiento del equipo
+- **IDE Integration**: Install Biome extension for VS Code
+- **Editor config**: The `.editorconfig` file can be kept as fallback
+- **Plan file**: This plan is located at `[.cursor/plans/BIOME_MIGRATION.plan.md](.cursor/plans/BIOME_MIGRATION.plan.md)` for team tracking
