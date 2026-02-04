@@ -1,8 +1,8 @@
-import { BotContext, Plugin } from '@botonic/core'
+import type { BotContext, Plugin } from '@botonic/core'
 import axios from 'axios'
 
-import { HtEvent } from './event-models'
-import { EventType, HtEventProps, RequestData } from './types'
+import type { HtEvent } from './event-models'
+import { EventType, type HtEventProps, type RequestData } from './types'
 import { createHtEvent } from './utils'
 
 export default class BotonicPluginHubtypeAnalytics implements Plugin {

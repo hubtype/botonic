@@ -1,8 +1,8 @@
 import {
   EventAction,
   EventType,
-  EventWebviewActionTriggered,
-  RequestData,
+  type EventWebviewActionTriggered,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

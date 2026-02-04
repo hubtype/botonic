@@ -1,4 +1,9 @@
-import { EventAction, EventType, EventWebviewEnd, RequestData } from '../types'
+import {
+  type EventAction,
+  EventType,
+  type EventWebviewEnd,
+  type RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventWebviewEnd extends HtEvent {

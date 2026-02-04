@@ -1,8 +1,8 @@
 import {
   EventAction,
-  EventConditionalQueueStatus,
+  type EventConditionalQueueStatus,
   EventType,
-  RequestData,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

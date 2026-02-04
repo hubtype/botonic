@@ -15,4 +15,5 @@ jobs:
       PACKAGE_NAME: Botonic plugin hubtype analytics tests
       PACKAGE: botonic-plugin-hubtype-analytics
       BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-plugin-hubtype-analytics && npm run build'
+      LINT_COMMAND: npm run lint:check
       NEEDS_CODECOV_UPLOAD: 'yes'

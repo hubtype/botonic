@@ -13,7 +13,7 @@ todos:
     status: completed
   - id: phase1-migrate-analytics
     content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
-    status: pending
+    status: completed
   - id: phase1-migrate-kb
     content: Migrate botonic-plugin-knowledge-bases + update pre-commit
     status: pending
@@ -154,7 +154,7 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 ### Included packages
 
 1. `botonic-core` (COMPLETED)
-2. `botonic-plugin-hubtype-analytics`
+2. `botonic-plugin-hubtype-analytics` (COMPLETED)
 3. `botonic-plugin-knowledge-bases`
 4. `botonic-plugin-ai-agents`
 5. `botonic-react`
