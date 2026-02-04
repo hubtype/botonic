@@ -195,13 +195,87 @@ npm test
 - Añadir paquete al patrón `files` del hook de Biome
 - Eliminar hook local de ESLint del paquete
 
-### Actualizaciones de CI
+### Checklist de CI para cada paquete migrado
 
-Actualizar workflows para usar `npm run lint:check` (ya usa Biome tras la migración):
+Al migrar un paquete a Biome, seguir estos pasos:
 
-- `[botonic-core-tests.yml](.github/workflows/botonic-core-tests.yml)` (COMPLETADO con botonic-core)
-- `botonic-react-tests.yml`
-- `botonic-plugin-*-tests.yml`
+#### 1. Actualizar workflow específico del paquete
+
+En `.github/workflows/botonic-<paquete>-tests.yml`, añadir el input `LINT_COMMAND`:
+
+```yaml
+jobs:
+  botonic-<paquete>-tests:
+    uses: ./.github/workflows/botonic-common-workflow.yml
+    secrets: inherit
+    with:
+      PACKAGE_NAME: Botonic <paquete> tests
+      PACKAGE: botonic-<paquete>
+      LINT_COMMAND: npm run lint:check # <-- Añadir esta línea
+      # ... otros inputs ...
+```
+
+> **Nota**: El `botonic-common-workflow.yml` ya tiene el input `LINT_COMMAND` con valor por defecto `npm run lint_core` para paquetes no migrados.
+
+#### 2. Actualizar `.pre-commit-config.yaml`
+
+Añadir el paquete al patrón `files` del hook de Biome:
+
+```yaml
+- id: biome-check
+  name: biome-check (Biome)
+  entry: npx @biomejs/biome check --write
+  language: system
+  files: ^packages/(botonic-core|botonic-<nuevo-paquete>)/ # <-- Añadir aquí
+  types_or: [javascript, jsx, ts, tsx, json]
+```
+
+Y **eliminar** el hook de ESLint del paquete migrado.
+
+#### 3. Actualizar `.prettierignore`
+
+Añadir el paquete para evitar conflictos entre Prettier y Biome:
+
+```
+# Packages migrated to Biome (add more as they are migrated)
+packages/botonic-core/
+packages/botonic-<nuevo-paquete>/  # <-- Añadir aquí
+```
+
+#### 4. Formatear y corregir errores
+
+```bash
+# Formatear con Biome
+cd packages/botonic-<paquete>
+npx @biomejs/biome check --write src/ tests/
+
+# Verificar que no hay errores (solo warnings permitidos)
+npx @biomejs/biome check src/ tests/
+```
+
+**Errores comunes a corregir:**
+
+- `noImplicitAnyLet`: Añadir tipos a variables `let` sin tipo
+- `noUnusedVariables`: Renombrar variables no usadas con prefijo `_`
+- Imports solo de tipos: Usar `import type { ... }`
+
+#### 5. Ejecutar tests
+
+```bash
+npm test
+```
+
+---
+
+### Archivos de configuración de CI (referencia)
+
+| Archivo                                         | Propósito                                              |
+| ----------------------------------------------- | ------------------------------------------------------ |
+| `.github/workflows/botonic-common-workflow.yml` | Workflow reutilizable con input `LINT_COMMAND`         |
+| `.github/workflows/pre-commit.yml`              | Instala Biome globalmente antes de ejecutar pre-commit |
+| `.pre-commit-config.yaml`                       | Hook local de Biome para paquetes migrados             |
+| `.prettierignore`                               | Evita que Prettier reformatee paquetes migrados        |
+| `.vscode/settings.json`                         | Biome como formateador por defecto en el IDE           |
 
 ---
 
