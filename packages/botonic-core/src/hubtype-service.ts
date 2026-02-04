@@ -101,7 +101,9 @@ export class HubtypeService {
   }
 
   _initPusher(): Promise<void> {
-    if (this.pusher) return Promise.resolve()
+    if (this.pusher) {
+      return Promise.resolve()
+    }
     if (!this.user.id || !this.appId) {
       // TODO recover user & appId somehow
       return Promise.reject('No User or appId. Clear cache and reload')
@@ -145,8 +147,9 @@ export class HubtypeService {
       this.channel.bind('update_message_info', data => this.onPusherEvent(data))
 
       this.pusher?.connection.bind('error', event => {
-        if (event.type === 'WebSocketError') this.handleConnectionChange(false)
-        else {
+        if (event.type === 'WebSocketError') {
+          this.handleConnectionChange(false)
+        } else {
           const errorMsg = event.error?.data
             ? event.error.data.code || event.error.data.message
             : 'Connection error'
@@ -155,9 +158,15 @@ export class HubtypeService {
       })
     })
     this.pusher.connection.bind('state_change', states => {
-      if (states.current === 'connecting') this.updateAuthHeaders()
-      if (states.current === 'connected') this.handleConnectionChange(true)
-      if (states.current === 'unavailable') this.handleConnectionChange(false)
+      if (states.current === 'connecting') {
+        this.updateAuthHeaders()
+      }
+      if (states.current === 'connected') {
+        this.handleConnectionChange(true)
+      }
+      if (states.current === 'unavailable') {
+        this.handleConnectionChange(false)
+      }
     })
 
     return connectionPromise
@@ -204,7 +213,9 @@ export class HubtypeService {
   }
 
   onPusherEvent(event: any): void {
-    if (this.onEvent && typeof this.onEvent === 'function') this.onEvent(event)
+    if (this.onEvent && typeof this.onEvent === 'function') {
+      this.onEvent(event)
+    }
   }
 
   get pusherChannel(): string {
@@ -254,7 +265,9 @@ export class HubtypeService {
   }
 
   destroyPusher(): void {
-    if (!this.pusher) return
+    if (!this.pusher) {
+      return
+    }
 
     this.pusher.disconnect()
     this.pusher.unsubscribe(this.pusherChannel)

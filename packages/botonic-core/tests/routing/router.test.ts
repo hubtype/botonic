@@ -1239,7 +1239,7 @@ describe('TEST: Converting Functional Routes to Routes', () => {
   })
 
   it('get expected routes given functional routes with functional childRoutes', async () => {
-    const functionalRoutes = async args => [
+    const functionalRoutes = async _args => [
       {
         path: '1',
         childRoutes: () => [

@@ -115,8 +115,7 @@ describe('Handoff', () => {
     const params = autoAssignOnWaiting
       ? { ...defaultParams, auto_assign_on_waiting: true }
       : defaultParams
-    const expectedBotonicAction =
-      `${BotonicAction.CreateCase}:` + JSON.stringify(params)
+    const expectedBotonicAction = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 

@@ -27,7 +27,9 @@ export class NoMatchingRouteError extends Error {
 }
 
 export function isPathPayload(payload?: string): boolean {
-  if (!payload) return false
+  if (!payload) {
+    return false
+  }
   const isPathPayload = PATH_PAYLOAD_REGEXP.exec(payload)
   return Boolean(isPathPayload)
 }
@@ -37,8 +39,12 @@ export function getPathParamsFromPathPayload(payload?: string): PathParams {
     path: null,
     params: {},
   }
-  if (!payload) return defaultPathParams
-  if (!isPathPayload(payload)) return defaultPathParams
+  if (!payload) {
+    return defaultPathParams
+  }
+  if (!isPathPayload(payload)) {
+    return defaultPathParams
+  }
   try {
     const pathWithParams = payload.split(PATH_PAYLOAD_IDENTIFIER)[1]
     if (!pathWithParams) {
@@ -53,7 +59,9 @@ export function getPathParamsFromPathPayload(payload?: string): PathParams {
 }
 
 export function pathParamsToParams(pathParams?: string): Params {
-  if (!pathParams) return {}
+  if (!pathParams) {
+    return {}
+  }
   try {
     const params = {}
     const searchParams = new URLSearchParams(pathParams)
@@ -67,15 +75,21 @@ export function pathParamsToParams(pathParams?: string): Params {
 }
 
 export function getEmptyAction(childRoutes?: Route[]): Action {
-  if (!childRoutes) return null
+  if (!childRoutes) {
+    return null
+  }
   const emptyActionRoute = childRoutes.find(r => r.path === EMPTY_ACTION_PATH)
-  if (!emptyActionRoute) return null
+  if (!emptyActionRoute) {
+    return null
+  }
   return emptyActionRoute.action
 }
 
 export function getNotFoundAction(input: Input, routes: Route[]): Action {
   const notFoundActionRoute = routes.find(r => r.path === NOT_FOUND_PATH)
-  if (!notFoundActionRoute) throw new NoMatchingRouteError(input)
+  if (!notFoundActionRoute) {
+    throw new NoMatchingRouteError(input)
+  }
   return notFoundActionRoute.action
 }
 

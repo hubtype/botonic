@@ -201,7 +201,9 @@ export class Router {
           return Boolean(match)
         })
     )
-    if (route) return { route: cloneObject(route), params }
+    if (route) {
+      return { route: cloneObject(route), params }
+    }
     return null
   }
 
@@ -213,7 +215,9 @@ export class Router {
     path: RoutePath,
     routeList: Route[] = this.routes
   ): Nullable<Route> {
-    if (!path) return null
+    if (!path) {
+      return null
+    }
     const [currentPath, ...childPath] = path.split('/')
     for (const route of routeList) {
       // iterate over all routeList
@@ -225,7 +229,9 @@ export class Router {
             route.childRoutes
           )
           // IMPORTANT: Returning a new object to avoid modifying dev routes and introduce side effects
-          if (computedRoute) return cloneObject(computedRoute)
+          if (computedRoute) {
+            return cloneObject(computedRoute)
+          }
         } else if (childPath.length === 0) {
           return cloneObject(route) // last action and found route
         }
@@ -249,11 +255,17 @@ export class Router {
     lastRoutePath: RoutePath
   ): MatchedValue {
     let value: any = null
-    if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
-    else if (prop === 'text') value = input.data
-    else if (prop === 'input') value = input
-    else if (prop === 'session') value = session
-    else if (prop === 'request') value = { input, session, lastRoutePath }
+    if (Object.keys(input).indexOf(prop) > -1) {
+      value = input[prop]
+    } else if (prop === 'text') {
+      value = input.data
+    } else if (prop === 'input') {
+      value = input
+    } else if (prop === 'session') {
+      value = session
+    } else if (prop === 'request') {
+      value = { input, session, lastRoutePath }
+    }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)
@@ -268,12 +280,18 @@ export class Router {
    * If there is a match, it will return a truthy value (true, RegExp result), o.w., it will return a falsy value.
    * */
   matchValue(matcher: Matcher, value: any): MatchedValue {
-    if (typeof matcher === 'string') return value === matcher
+    if (typeof matcher === 'string') {
+      return value === matcher
+    }
     if (matcher instanceof RegExp) {
-      if (value === undefined || value === null) return false
+      if (value === undefined || value === null) {
+        return false
+      }
       return matcher.exec(value)
     }
-    if (typeof matcher === 'function') return matcher(value)
+    if (typeof matcher === 'function') {
+      return matcher(value)
+    }
     return false
   }
 
@@ -288,7 +306,9 @@ export class Router {
     lastRoutePath: RoutePath
   ): RoutingState {
     const currentRoute = this.getRouteByPath(lastRoutePath)
-    if (currentRoute && lastRoutePath) currentRoute.path = lastRoutePath
+    if (currentRoute && lastRoutePath) {
+      currentRoute.path = lastRoutePath
+    }
     if (typeof input.payload === 'string' && isPathPayload(input.payload)) {
       return this.getRoutingStateFromPathPayload(currentRoute, input.payload)
     }
@@ -392,7 +412,9 @@ export class Router {
       const routingState = getRoutingStateFromPath(
         `${currentRoute.path}/${path}`
       )
-      if (routingState.matchedRoute) return routingState
+      if (routingState.matchedRoute) {
+        return routingState
+      }
     }
     // 2. Received __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
     return getRoutingStateFromPath(path as string)

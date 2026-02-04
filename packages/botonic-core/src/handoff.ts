@@ -363,7 +363,9 @@ export function cancelHandoff(
   typification: string | null = null
 ): void {
   let action: BotonicActionType = BotonicAction.DiscardCase
-  if (typification) action = `${action}:${JSON.stringify({ typification })}`
+  if (typification) {
+    action = `${action}:${JSON.stringify({ typification })}`
+  }
   session._botonic_action = action
 }
 

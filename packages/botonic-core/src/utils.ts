@@ -38,7 +38,9 @@ export function isFunction(o: any): boolean {
 }
 
 export function cloneObject(object: any): any {
-  if (!object) return {}
+  if (!object) {
+    return {}
+  }
   return { ...object }
 }
 
@@ -62,14 +64,22 @@ export const join = (...segments: string[]): string => {
     const part = parts[i]
     // Remove leading and trailing slashes
     // Also remove "." segments
-    if (!part || part === '.') continue
+    if (!part || part === '.') {
+      continue
+    }
     // Interpret ".." to pop the last segment
-    if (part === '..') newParts.pop()
+    if (part === '..') {
+      newParts.pop()
+    }
     // Push new path segments.
-    else newParts.push(part)
+    else {
+      newParts.push(part)
+    }
   }
   // Preserve the initial slash if there was one.
-  if (parts[0] === '') newParts.unshift('')
+  if (parts[0] === '') {
+    newParts.unshift('')
+  }
   // Turn back into a single string path.
   return newParts.join('/') || (newParts.length ? '/' : '.')
 }
