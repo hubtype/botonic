@@ -1,4 +1,4 @@
-import { BotRequest, INPUT, Input } from '../../src'
+import { type BotRequest, INPUT, type Input } from '../../src'
 import { Router } from '../../src/routing'
 import { testRoute, testSession } from '../helpers/routing'
 

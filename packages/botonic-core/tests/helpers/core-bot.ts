@@ -1,5 +1,5 @@
 import { CoreBot } from '../../src/core-bot'
-import { Session } from '../../src/models/legacy-types'
+import type { Session } from '../../src/models/legacy-types'
 
 export const LOCALE_EN = 'en'
 export const COUNTRY_GB = 'GB'

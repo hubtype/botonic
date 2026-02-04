@@ -1,4 +1,4 @@
-import { PATH_PAYLOAD_IDENTIFIER, PROVIDER, Session } from '../../src'
+import { PATH_PAYLOAD_IDENTIFIER, PROVIDER, type Session } from '../../src'
 import { COUNTRY_GB, LOCALE_EN } from './core-bot'
 
 export function testRoute(): any {

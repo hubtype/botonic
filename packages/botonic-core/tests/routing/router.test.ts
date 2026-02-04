@@ -1,4 +1,5 @@
 // @ts-nocheck
+import type { Session } from '../../src'
 import {
   getComputedRoutes,
   NoMatchingRouteError,
@@ -16,7 +17,7 @@ describe('TEST: Bad router initialization', () => {
     )
   })
   it('null routes throw TypeError', () => {
-    // @ts-ignore
+    // @ts-expect-error
     const router = new Router()
     expect(() => router.processInput(textInput, testSession())).toThrow(
       TypeError
@@ -932,7 +933,7 @@ const routesWithRetries = [
 ]
 
 describe('TEST: Retries', () => {
-  let retriesSession
+  let retriesSession: Session | null
   beforeEach(() => {
     retriesSession = testSession()
   })
@@ -1056,7 +1057,7 @@ const routesWithEmptyActionRetries = [
 ]
 
 describe('TEST: Retries (with empty action)', () => {
-  let retriesSession
+  let retriesSession: Session | null
   beforeEach(() => {
     retriesSession = testSession()
   })
