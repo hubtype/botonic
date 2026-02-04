@@ -3,8 +3,8 @@ name: Botonic core tests
 on:
   push:
     paths:
-      - 'packages/botonic-core/**'
-      - '.github/workflows/botonic-core-tests.yml'
+      - "packages/botonic-core/**"
+      - ".github/workflows/botonic-core-tests.yml"
   workflow_dispatch:
 
 jobs:
@@ -14,4 +14,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic core tests
       PACKAGE: botonic-core
-      NEEDS_CODECOV_UPLOAD: 'yes'
+      LINT_COMMAND: npm run lint:check
+      NEEDS_CODECOV_UPLOAD: "yes"
