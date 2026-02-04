@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: phase1-migrate-kb
     content: Migrate botonic-plugin-knowledge-bases + update pre-commit
-    status: pending
+    status: completed
   - id: phase1-migrate-ai
     content: Migrate botonic-plugin-ai-agents + update pre-commit
     status: pending
