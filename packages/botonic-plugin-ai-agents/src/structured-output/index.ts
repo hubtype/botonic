@@ -1,4 +1,4 @@
-import { OutputMessage } from '@botonic/core'
+import type { OutputMessage } from '@botonic/core'
 import { z } from 'zod'
 
 import { CarouselSchema } from './carousel'

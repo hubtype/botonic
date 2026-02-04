@@ -19,7 +19,7 @@ todos:
     status: completed
   - id: phase1-migrate-ai
     content: Migrate botonic-plugin-ai-agents + update pre-commit
-    status: pending
+    status: completed
   - id: phase1-migrate-react
     content: Migrate botonic-react (includes JSX) + update pre-commit
     status: pending
@@ -155,8 +155,8 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 
 1. `botonic-core` (COMPLETED)
 2. `botonic-plugin-hubtype-analytics` (COMPLETED)
-3. `botonic-plugin-knowledge-bases`
-4. `botonic-plugin-ai-agents`
+3. `botonic-plugin-knowledge-bases` (COMPLETED)
+4. `botonic-plugin-ai-agents` (COMPLETED)
 5. `botonic-react`
 6. `botonic-plugin-flow-builder`
 

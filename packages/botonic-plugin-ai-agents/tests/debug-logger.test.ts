@@ -1,4 +1,4 @@
-import { createDebugLogger, DebugLogger } from '../src/debug-logger'
+import { createDebugLogger, type DebugLogger } from '../src/debug-logger'
 
 describe('DebugLogger', () => {
   let consoleSpy: jest.SpyInstance

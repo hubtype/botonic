@@ -1,4 +1,9 @@
-import { AiAgentArgs, BotContext, INPUT, PROVIDER } from '@botonic/core'
+import {
+  type AiAgentArgs,
+  type BotContext,
+  INPUT,
+  PROVIDER,
+} from '@botonic/core'
 import {
   afterEach,
   beforeEach,

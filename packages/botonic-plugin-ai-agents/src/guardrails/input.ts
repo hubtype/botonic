@@ -1,7 +1,12 @@
-import { Agent, InputGuardrail, run, UserMessageItem } from '@openai/agents'
+import {
+  Agent,
+  type InputGuardrail,
+  run,
+  type UserMessageItem,
+} from '@openai/agents'
 import { z } from 'zod'
 
-import { GuardrailRule } from '../types'
+import type { GuardrailRule } from '../types'
 
 export function createInputGuardrail(rules: GuardrailRule[]): InputGuardrail {
   const outputType = z.object(

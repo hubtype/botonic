@@ -1,17 +1,17 @@
-import { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
+import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
-  AgentOutputType,
-  InputGuardrail,
-  ModelSettings,
+  type AgentOutputType,
+  type InputGuardrail,
+  type ModelSettings,
 } from '@openai/agents'
 
 import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
-import { DebugLogger } from './debug-logger'
+import type { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
-import { AIAgent, Context, GuardrailRule, Tool } from './types'
+import type { AIAgent, Context, GuardrailRule, Tool } from './types'
 
 interface AIAgentBuilderOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

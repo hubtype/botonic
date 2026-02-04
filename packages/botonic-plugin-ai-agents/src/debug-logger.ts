@@ -1,4 +1,4 @@
-import { AiAgentArgs } from '@botonic/core'
+import type { AiAgentArgs } from '@botonic/core'
 
 import {
   AZURE_OPENAI_API_BASE,
@@ -7,7 +7,7 @@ import {
   OPENAI_MODEL,
   OPENAI_PROVIDER,
 } from './constants'
-import { AgenticInputMessage, MemoryOptions, RunResult } from './types'
+import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
 
