@@ -1,28 +1,29 @@
-import { HubtypeService, INPUT, ServerConfig } from '@botonic/core'
+import { HubtypeService, INPUT, type ServerConfig } from '@botonic/core'
 import merge from 'lodash.merge'
-import React, { createRef } from 'react'
-import { createRoot, Root } from 'react-dom/client'
+import type React from 'react'
+import { createRef } from 'react'
+import { createRoot, type Root } from 'react-dom/client'
 
-import { BlockInputOption, WebchatSettingsProps } from './components'
+import type { BlockInputOption, WebchatSettingsProps } from './components'
 import { WEBCHAT } from './constants'
-import { CloseWebviewOptions } from './contexts'
+import type { CloseWebviewOptions } from './contexts'
 import {
-  ActionRequest,
-  Event,
-  EventArgs,
-  OnStateChangeArgs,
-  OnUserInputArgs,
-  PreviewUtils,
+  type ActionRequest,
+  type Event,
+  type EventArgs,
+  type OnStateChangeArgs,
+  type OnUserInputArgs,
+  type PreviewUtils,
   SENDERS,
   Typing,
-  WebchatArgs,
-  WebchatMessage,
-  WebchatRef,
+  type WebchatArgs,
+  type WebchatMessage,
+  type WebchatRef,
 } from './index-types'
 import { msgToBotonic } from './msg-to-botonic'
 import { isShadowDOMSupported, onDOMLoaded } from './util/dom'
 import { defaultTheme } from './webchat/theme/default-theme'
-import {
+import type {
   CoverComponentOptions,
   PersistentMenuOptionsTheme,
   WebchatTheme,
@@ -133,7 +134,7 @@ export class WebchatApp {
     // Create shadowDOM to root element if needed
     if (host) {
       if (host.id && this.hostId) {
-        if (host.id != this.hostId) {
+        if (host.id !== this.hostId) {
           console.warn(
             `[botonic] Host ID "${host.id}" don't match 'hostId' option: ${this.hostId}. Using value: ${host.id}.`
           )
@@ -180,26 +181,27 @@ export class WebchatApp {
   }
 
   onInitWebchat(...args: [any]) {
-    this.onInit && this.onInit(this, ...args)
+    this.onInit?.(this, ...args)
   }
 
   onOpenWebchat(...args: [any]) {
-    this.onOpen && this.onOpen(this, ...args)
+    this.onOpen?.(this, ...args)
   }
 
   onCloseWebchat(...args: [any]) {
-    this.onClose && this.onClose(this, ...args)
+    this.onClose?.(this, ...args)
   }
 
   async onUserInput({ user, input }: OnUserInputArgs): Promise<void> {
-    if (!user) return
+    if (!user) {
+      return
+    }
 
-    this.onMessage &&
-      this.onMessage(this, {
-        ...input,
-        sentBy: SENDERS.user,
-        isUnread: false,
-      } as unknown as WebchatMessage)
+    this.onMessage?.(this, {
+      ...input,
+      sentBy: SENDERS.user,
+      isUnread: false,
+    } as unknown as WebchatMessage)
     this.hubtypeService.postMessage(user, {
       ...input,
       // TODO: Review if this is correct add sent_by or this is added in backend
@@ -225,7 +227,7 @@ export class WebchatApp {
   onStateChange(args: OnStateChangeArgs) {
     const { user, messagesJSON } = args
     const lastMessage = messagesJSON[messagesJSON.length - 1]
-    const lastMessageId = lastMessage && lastMessage.id
+    const lastMessageId = lastMessage?.id
     const lastMessageUpdateDate = this.getLastMessageUpdate()
 
     if (this.hubtypeService) {
@@ -251,7 +253,7 @@ export class WebchatApp {
 
   onServiceEvent(event: Event) {
     if (event.action === 'connectionChange') {
-      this.onConnectionChange && this.onConnectionChange(this, event.online)
+      this.onConnectionChange?.(this, event.online)
       this.webchatRef.current?.setOnline(event.online)
     } else if (event.action === 'update_message_info' && event.message?.id) {
       this.updateMessageInfo(event.message.id, event.message)
@@ -261,11 +263,10 @@ export class WebchatApp {
       this.setTyping(event.message.data === Typing.On)
     } else {
       const isSystemMessage = (event.message as any)?.sent_by === SENDERS.system
-      this.onMessage &&
-        this.onMessage(this, {
-          sentBy: isSystemMessage ? SENDERS.system : SENDERS.bot,
-          ...event.message,
-        } as unknown as WebchatMessage)
+      this.onMessage?.(this, {
+        sentBy: isSystemMessage ? SENDERS.system : SENDERS.bot,
+        ...event.message,
+      } as unknown as WebchatMessage)
 
       if (isSystemMessage) {
         this.addSystemMessage(event.message)
@@ -383,7 +384,7 @@ export class WebchatApp {
 
   async getVisibility() {
     return this.resolveWebchatVisibility({
-      appId: this.appId!,
+      appId: this.appId,
       visibility: this.visibility,
     })
   }
@@ -426,7 +427,9 @@ export class WebchatApp {
     theme: WebchatTheme,
     optionsAtRuntime: WebchatArgs = {}
   ) {
-    if (!theme.userInput) theme.userInput = {}
+    if (!theme.userInput) {
+      theme.userInput = {}
+    }
 
     // Set main userInput properties
     theme.userInput = {
@@ -537,7 +540,7 @@ export class WebchatApp {
     try {
       const { status } = await HubtypeService.getWebchatVisibility(appId)
       return status === 200
-    } catch (e) {
+    } catch (_e) {
       return false
     }
   }
@@ -577,9 +580,13 @@ export class WebchatApp {
   }
 
   destroy() {
-    if (this.hubtypeService) this.hubtypeService.destroyPusher()
+    if (this.hubtypeService) {
+      this.hubtypeService.destroyPusher()
+    }
     this.reactRoot?.unmount()
-    if (this.storage) this.storage.removeItem(this.storageKey)
+    if (this.storage) {
+      this.storage.removeItem(this.storageKey)
+    }
   }
 
   async render(dest: HTMLDivElement, optionsAtRuntime?: WebchatArgs) {

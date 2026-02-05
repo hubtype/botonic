@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { BotonicAction, INPUT, params2queryString } from '@botonic/core'
 import merge from 'lodash.merge'
-import React, {
+import {
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -18,11 +19,11 @@ import {
   normalizeWebchatSettings,
   Text,
   Video,
-  WebchatSettingsProps,
+  type WebchatSettingsProps,
 } from '../components'
 import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
-import { CloseWebviewOptions } from '../contexts'
-import { SENDERS, WebchatProps, WebchatRef } from '../index-types'
+import type { CloseWebviewOptions } from '../contexts'
+import { SENDERS, type WebchatProps, type WebchatRef } from '../index-types'
 import {
   getMediaType,
   isAllowedSize,
@@ -47,7 +48,7 @@ import {
 import { ChatArea } from './chat-area'
 import { OpenedPersistentMenu } from './components/opened-persistent-menu'
 import { BotonicContainerId } from './constants'
-import { useWebchat, WebchatContext, WebchatState } from './context'
+import { useWebchat, WebchatContext, type WebchatState } from './context'
 import { CoverComponent } from './cover-component'
 import { WebchatHeader } from './header'
 import {
@@ -63,13 +64,12 @@ import {
   ErrorMessageContainer,
   StyledWebchat,
 } from './styles'
-import { WebchatTheme } from './theme/types'
+import type { WebchatTheme } from './theme/types'
 import { TriggerButton } from './trigger-button'
 import { useStorageState } from './use-storage-state-hook'
 import { getParsedAction } from './utils'
 import { WebviewContainer } from './webview/index'
 
-// eslint-disable-next-line complexity, react/display-name
 const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const {
     addMessage,
@@ -107,7 +107,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     headerRef,
     repliesRef,
     scrollableMessagesListRef,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
   } = props.webchatHooks || useWebchat(props.theme)
 
   const firstUpdate = useRef(true)
@@ -171,7 +170,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         user: webchatState.session.user,
         // TODO: Review if this input.sentBy exists in the frontend
         input: input,
-        //@ts-ignore
+        //@ts-expect-error
         session: webchatState.session,
         // TODO: Review why we were passing lastRoutePath, is only for devMode?
         lastRoutePath: webchatState.lastRoutePath,
@@ -180,8 +179,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }
 
   // Load styles stored in window._botonicInsertStyles by Webpack
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: this is a complex useEffect that needs to be refactored, but it's not a problem for now
   useComponentWillMount(() => {
-    if (window._botonicInsertStyles && window._botonicInsertStyles.length) {
+    if (window._botonicInsertStyles?.length) {
       for (const botonicStyle of window._botonicInsertStyles) {
         // Injecting styles at head is needed even if we use shadowDOM
         // as some dependencies like simplebar rely on creating ephemeral elements
@@ -189,7 +189,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         document.head.appendChild(botonicStyle)
 
         // injecting styles in host node too so that shadowDOM works
-        if (props.shadowDOM) host.appendChild(botonicStyle.cloneNode(true))
+        if (props.shadowDOM) {
+          host.appendChild(botonicStyle.cloneNode(true))
+        }
       }
       delete window._botonicInsertStyles
     }
@@ -198,11 +200,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       // emoji-picker-react injects styles in head, so we need to
       // re-inject them in our host node to make it work with shadowDOM
       for (const style of document.querySelectorAll('style')) {
-        if (
-          style.textContent &&
-          style.textContent.includes('emoji-picker-react')
-        )
+        if (style.textContent?.includes('emoji-picker-react')) {
           host.appendChild(style.cloneNode(true))
+        }
       }
     }
   })
@@ -227,15 +227,25 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
             { ...message, delay: 0, typing: 0 },
             props.theme?.message?.customTypes
           )
-          //@ts-ignore
-          if (newMessageComponent) addMessageComponent(newMessageComponent)
+          if (newMessageComponent) {
+            addMessageComponent(newMessageComponent as any)
+          }
         })
       }
-      if (initialSession) updateSession(merge(initialSession, session))
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
-    } else updateSession(merge(initialSession, session))
-    if (devSettings) updateDevSettings(devSettings)
-    else if (initialDevSettings) updateDevSettings(initialDevSettings)
+      if (initialSession) {
+        updateSession(merge(initialSession, session))
+      }
+      if (lastRoutePath) {
+        updateLastRoutePath(lastRoutePath)
+      }
+    } else {
+      updateSession(merge(initialSession, session))
+    }
+    if (devSettings) {
+      updateDevSettings(devSettings)
+    } else if (initialDevSettings) {
+      updateDevSettings(initialDevSettings)
+    }
 
     if (lastMessageUpdate) {
       updateLastMessageDate(lastMessageUpdate)
@@ -329,7 +339,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       : inputData
 
     return rule.match.some(regex => {
-      if (typeof regex === 'string') regex = deserializeRegex(regex)
+      if (typeof regex === 'string') {
+        regex = deserializeRegex(regex)
+      }
       return regex.test(processedInput)
     })
   }
@@ -337,14 +349,16 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const checkBlockInput = input => {
     // if is a text we check if it is a serialized RE
     const blockInputs = webchatState.theme.userInput?.blockInputs
-    if (!Array.isArray(blockInputs)) return false
+    if (!Array.isArray(blockInputs)) {
+      return false
+    }
     for (const rule of blockInputs) {
       if (getBlockInputs(rule, input.data)) {
         addMessageComponent(
           <Text
             // Is necessary to add the id of the input
             // to keep the input.id generated in the frontend as id of the message
-            // @ts-ignore
+            // @ts-expect-error input.id is not typed
             id={input.id}
             sentBy={SENDERS.user}
             blob={false}
@@ -382,14 +396,18 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const coverComponentProps = webchatState.theme.coverComponent?.props
 
   useEffect(() => {
-    if (!coverComponent) return
+    if (!coverComponent) {
+      return
+    }
     if (
       !botonicState ||
       (botonicState.messages && botonicState.messages.length === 0)
-    )
+    ) {
       toggleCoverComponent(true)
+    }
   }, [])
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: messageComponentFromInput is a complex
   const messageComponentFromInput = input => {
     let messageComponent: any = null
     if (isText(input)) {
@@ -397,10 +415,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         <Text
           // Is necessary to add the id of the input
           // to keep the input.id generated in the frontend as id of the message
-          // @ts-ignore
+          // @ts-expect-error input.id is not typed
           id={input.id}
           // Is necessary to add the payload of the input when user clicks a button
-          // @ts-ignore
           payload={input.payload}
           sentBy={SENDERS.user}
         >
@@ -424,22 +441,37 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       if (isImage(input)) {
         mediaProps.input = input
         messageComponent = <Image {...mediaProps} />
-      } else if (isAudio(input)) messageComponent = <Audio {...mediaProps} />
-      else if (isVideo(input)) messageComponent = <Video {...mediaProps} />
-      else if (isDocument(input))
+      } else if (isAudio(input)) {
+        messageComponent = <Audio {...mediaProps} />
+      } else if (isVideo(input)) {
+        messageComponent = <Video {...mediaProps} />
+      } else if (isDocument(input)) {
         messageComponent = <Document {...mediaProps} />
+      }
     }
     return messageComponent
   }
 
   const sendInput = async (input: any) => {
-    if (!input || Object.keys(input).length == 0) return
-    if (isText(input) && (!input.data || !input.data.trim())) return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
-    if (isText(input) && checkBlockInput(input)) return
-    if (!input.id) input.id = uuidv7()
+    if (!input || Object.keys(input).length === 0) {
+      return
+    }
+    if (isText(input) && (!input.data || !input.data.trim())) {
+      return // in case trim() doesn't work in a browser we can use !/\S/.test(input.data)
+    }
+    if (isText(input) && checkBlockInput(input)) {
+      return
+    }
+    if (!input.id) {
+      input.id = uuidv7()
+    }
     const messageComponent = messageComponentFromInput(input)
-    if (messageComponent) addMessageComponent(messageComponent)
-    if (isMedia(input)) input.data = await readDataURL(input.data)
+    if (messageComponent) {
+      addMessageComponent(messageComponent)
+    }
+    if (isMedia(input)) {
+      input.data = await readDataURL(input.data)
+    }
     sendUserInput(input)
     updateLatestInput(input)
     isOnline() && updateLastMessageDate(currentDateString())
@@ -478,11 +510,15 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         updateSession(merge(session, { user: webchatState.session.user }))
         const action = session._botonic_action || ''
         const handoff = action.startsWith(BotonicAction.CreateCase)
-        if (handoff && isDev) addMessageComponent(<Handoff />)
+        if (handoff && isDev) {
+          addMessageComponent(<Handoff />)
+        }
         updateHandoff(handoff)
       }
 
-      if (lastRoutePath) updateLastRoutePath(lastRoutePath)
+      if (lastRoutePath) {
+        updateLastRoutePath(lastRoutePath)
+      }
 
       updateLastMessageDate(currentDateString())
     },
@@ -527,7 +563,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
         m => m.id === msgId
       )[0]
       const updatedMsg = merge(messageToUpdate, messageInfo)
-      if (updatedMsg.ack === 1) delete updatedMsg.unsentInput
+      if (updatedMsg.ack === 1) {
+        delete updatedMsg.unsentInput
+      }
       updateMessage(updatedMsg)
     },
     updateWebchatSettings: (settings: WebchatSettingsProps) => {
@@ -555,18 +593,24 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     // Resume conversation after handoff
     if (prevSession?._botonic_action && !webchatState.session._botonic_action) {
       const action = getParsedAction(prevSession._botonic_action)
-      if (action?.on_finish) sendPayload(action.on_finish)
+      if (action?.on_finish) {
+        sendPayload(action.on_finish)
+      }
     }
   }, [webchatState.session._botonic_action])
 
   const sendText = async (text: string, payload?: string) => {
-    if (!text) return
+    if (!text) {
+      return
+    }
     const input = { type: INPUT.TEXT, data: text, payload }
     await sendInput(input)
   }
 
   const sendPayload = async (payload: string) => {
-    if (!payload) return
+    if (!payload) {
+      return
+    }
     const input = { type: INPUT.POSTBACK, payload }
     await sendInput(input)
   }
@@ -574,7 +618,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   const sendAttachment = async (attachment: File) => {
     if (attachment) {
       const attachmentType = getMediaType(attachment.type)
-      if (!attachmentType) return
+      if (!attachmentType) {
+        return
+      }
       const input = {
         type: attachmentType,
         data: attachment,
@@ -590,7 +636,9 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
       return
     }
 
-    if (webchatState.isWebchatOpen && props.onOpen) props.onOpen()
+    if (webchatState.isWebchatOpen && props.onOpen) {
+      props.onOpen()
+    }
 
     if (!webchatState.isWebchatOpen && props.onClose && !firstUpdate.current) {
       props.onClose()
@@ -615,7 +663,6 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 
   // Only needed for dev/serve mode
   const updateWebchatDevSettings = settings => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const themeUpdates = normalizeWebchatSettings(settings)
       updateTheme(
@@ -641,8 +688,11 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   }
 
   const _renderCustomComponent = () => {
-    if (!customComponent) return <></>
-    else return customComponent
+    if (!customComponent) {
+      return <></>
+    } else {
+      return customComponent
+    }
   }
 
   const WebchatComponent = (

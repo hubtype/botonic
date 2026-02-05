@@ -1,4 +1,3 @@
-import { INPUT } from '@botonic/core'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import { ROLES } from '../../constants'
@@ -11,6 +10,7 @@ import { ScrollButton } from './scroll-button'
 import { MessageContainer, ScrollableMessageList } from './styles'
 import { UnreadMessagesBanner } from './unread-messages-banner'
 import { useNotifications } from './use-notifications'
+
 const SCROLL_TIMEOUT = 200
 const scrollOptionsEnd: ScrollIntoViewOptions = {
   block: 'end',

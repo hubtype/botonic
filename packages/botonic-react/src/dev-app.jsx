@@ -1,4 +1,3 @@
-import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { SENDERS } from './index-types'
@@ -106,11 +105,10 @@ export class DevApp extends WebchatApp {
   }
 
   async onUserInput({ input, session, lastRoutePath }) {
-    this.onMessage &&
-      this.onMessage(this, {
-        sentBy: SENDERS.user,
-        message: input,
-      })
+    this.onMessage?.(this, {
+      sentBy: SENDERS.user,
+      message: input,
+    })
     const resp = await this.bot.input({ input, session, lastRoutePath })
     this.onMessage &&
       resp.response.map(r =>

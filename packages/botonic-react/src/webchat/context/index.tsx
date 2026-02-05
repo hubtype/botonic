@@ -1,8 +1,8 @@
 import { createContext } from 'react'
 
-import { ChunkIdsGroupedBySourceData } from '../../components/system-debug-trace/events/knowledge-bases-types'
-import { MinimalHubtypeMessage } from '../../index-types'
-import { WebchatContextProps, WebchatState } from './types'
+import type { ChunkIdsGroupedBySourceData } from '../../components/system-debug-trace/events/knowledge-bases-types'
+import type { MinimalHubtypeMessage } from '../../index-types'
+import type { WebchatContextProps, WebchatState } from './types'
 
 export { ClientSession, WebchatState } from './types'
 export { useWebchat } from './use-webchat'

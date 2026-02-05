@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { BotonicContainerId } from '../constants'
 import { WebchatContext } from '../context'
@@ -16,6 +16,7 @@ export const ChatArea = () => {
   const { calculateResizedPxChatAreaHeight } = useWebchatDimensions()
   const [chatAreaHeight, setChatAreaHeight] = useState(0)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount
   useEffect(() => {
     setChatAreaHeight(calculateResizedPxChatAreaHeight())
   }, [])

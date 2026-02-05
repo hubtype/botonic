@@ -6,7 +6,7 @@ import { SENDERS } from '../index-types'
 import { createErrorBoundary } from '../util/error-boundary'
 import { warnDeprecatedProps } from '../util/logs'
 import { mapObjectNonBooleanValues } from '../util/react'
-import { CustomMessageType } from './index-types'
+import type { CustomMessageType } from './index-types'
 import { Message } from './message'
 import { Reply } from './reply'
 
@@ -58,7 +58,7 @@ export const customMessage = ({
         replies: replies,
         childrenWithoutReplies,
       }
-    } catch (e) {
+    } catch (_e) {
       return { replies: null, childrenWithoutReplies: children }
     }
   }
@@ -91,7 +91,6 @@ export const customMessage = ({
     )
   }
   WrappedComponent.customTypeName = name
-  // eslint-disable-next-line react/display-name
   WrappedComponent.deserialize = (msg: any) => {
     return (
       <WrappedComponent

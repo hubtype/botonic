@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+/** biome-ignore-all lint/a11y/useAltText: we need to use alt text for the unread messages banner */
+import type React from 'react'
+import { useContext } from 'react'
 
 import ArrowDown from '../../assets/arrow-down.svg'
 import { resolveImage } from '../../util/environment'

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../constants'
@@ -33,7 +33,7 @@ const StyledButton = styled.button`
   cursor: pointer;
 `
 
-export const Handoff = props => {
+export const Handoff = _props => {
   const { resolveCase } = useContext(WebchatContext)
   const [state, setState] = useState({ showContinue: true })
 

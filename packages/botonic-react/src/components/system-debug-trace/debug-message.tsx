@@ -1,5 +1,6 @@
 import { EventAction } from '@botonic/core'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import type React from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import { WebchatContext } from '../../webchat/context'
 import {
@@ -28,7 +29,7 @@ import {
   StyledDebugIcon,
   StyledDebugTitle,
 } from './styles'
-import { DebugEvent, DebugEventConfig } from './types'
+import type { DebugEvent, DebugEventConfig } from './types'
 
 const getEventConfig = (
   debugEvent: DebugEvent

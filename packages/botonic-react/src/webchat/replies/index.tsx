@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../webchat/context'
@@ -38,7 +38,7 @@ export const WebchatReplies = () => {
         wrap={flexWrap}
       >
         {webchatState.replies?.map((reply, i) => (
-          // @ts-ignore TODO: In this point reply is the the component to render
+          // @ts-expect-error TODO: In this point reply is the the component to render
           <ReplyContainer key={`reply-${i}`}>{reply}</ReplyContainer>
         ))}
       </RepliesContainer>

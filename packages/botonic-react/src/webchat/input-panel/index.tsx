@@ -1,5 +1,6 @@
 import { INPUT } from '@botonic/core'
-import React, { useContext } from 'react'
+import type React from 'react'
+import { useContext } from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../../constants'
@@ -37,7 +38,9 @@ export const InputPanel = ({
   } = useContext(WebchatContext)
 
   const handleSelectedEmoji = event => {
-    if (!textareaRef.current) return
+    if (!textareaRef.current) {
+      return
+    }
 
     textareaRef.current.value += event.emoji
     textareaRef.current.focus()
@@ -52,7 +55,9 @@ export const InputPanel = ({
   }
 
   const sendTextAreaText = async () => {
-    if (!textareaRef.current) return
+    if (!textareaRef.current) {
+      return
+    }
 
     await sendText(textareaRef.current?.value)
     textareaRef.current.value = ''

@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
@@ -10,10 +10,10 @@ import {
   StyledDebugLabel,
   StyledDebugValue,
 } from '../styles'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
-import { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
+import type { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 
 interface ToolExecuted {
   tool_name: string

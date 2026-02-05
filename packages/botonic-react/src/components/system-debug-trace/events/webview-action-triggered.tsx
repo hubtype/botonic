@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { WindowRestoreSvg } from '../icons/window-restore'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface WebviewActionTriggeredDebugEvent {
   action: EventAction.WebviewActionTriggered

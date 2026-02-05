@@ -1,5 +1,5 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES } from '../constants'
@@ -35,7 +35,7 @@ export const Raw = props => {
   let content = props.children
   const data = JSON.stringify(props.data, null, ' ')
   const [isOpen, setIsOpen] = useState(false)
-  if (isBrowser())
+  if (isBrowser()) {
     content = (
       <>
         <div>{props.alt}</div>
@@ -49,6 +49,7 @@ export const Raw = props => {
         )}
       </>
     )
+  }
   return (
     <Message
       role={ROLES.RAW_MESSAGE}

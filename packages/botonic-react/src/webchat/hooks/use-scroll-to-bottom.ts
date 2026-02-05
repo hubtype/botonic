@@ -16,9 +16,13 @@ export const useScrollToBottom = ({
 }: UseScrollToBottom) => {
   const scrollToBottom = () => {
     const webchatElement = getWebchatElement(host)
-    if (!webchatElement) return
+    if (!webchatElement) {
+      return
+    }
     const scrollableMessagesListElement = getScrollableMessagesListElement(host)
-    if (!scrollableMessagesListElement) return
+    if (!scrollableMessagesListElement) {
+      return
+    }
 
     setTimeout(() => {
       scrollableMessagesListElement.scrollTo({

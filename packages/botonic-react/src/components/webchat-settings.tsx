@@ -1,14 +1,61 @@
 import { INPUT } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { renderComponent } from '../util/react'
 import { stringifyWithRegexs } from '../util/regexs'
 import { WebchatContext } from '../webchat/context'
-import {
+import type {
   PersistentMenuOptionsTheme,
   WebchatTheme,
 } from '../webchat/theme/types'
-import { BlockInputOption } from './index-types'
+import type { BlockInputOption } from './index-types'
+
+export const normalizeWebchatSettings = (settings: WebchatSettingsProps) => {
+  let {
+    theme,
+    blockInputs,
+    persistentMenu,
+    enableEmojiPicker,
+    enableAttachments,
+    enableUserInput,
+    enableAnimations,
+  } = settings
+  if (!theme) {
+    theme = {}
+  }
+  if (!theme.userInput) {
+    theme.userInput = {}
+  }
+  if (persistentMenu !== undefined) {
+    theme.userInput.persistentMenu = persistentMenu
+  }
+  if (enableEmojiPicker !== undefined) {
+    if (!theme.userInput.emojiPicker) {
+      theme.userInput.emojiPicker = {}
+    }
+    theme.userInput.emojiPicker.enable = enableEmojiPicker
+  }
+  if (enableAttachments !== undefined) {
+    if (!theme.userInput.attachments) {
+      theme.userInput.attachments = {}
+    }
+    theme.userInput.attachments.enable = enableAttachments
+  }
+  if (enableUserInput !== undefined) {
+    theme.userInput.enable = enableUserInput
+  }
+  if (blockInputs !== undefined) {
+    theme.userInput.blockInputs = blockInputs
+  }
+
+  if (!theme.animations) {
+    theme.animations = {}
+  }
+  if (enableAnimations !== undefined) {
+    theme.animations.enable = enableAnimations
+  }
+  return theme
+}
 
 export interface WebchatSettingsProps {
   blockInputs?: BlockInputOption[]
@@ -37,7 +84,7 @@ export const WebchatSettings = ({
   user,
 }: WebchatSettingsProps) => {
   const renderBrowser = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    // biome-ignore lint/correctness/useHookAtTopLevel: WebchatSettings is a component that renders a webchat settings
     const { updateWebchatDevSettings } = useContext(WebchatContext)
     updateWebchatDevSettings({
       theme,
@@ -61,7 +108,7 @@ export const WebchatSettings = ({
       enableAnimations,
     })
     return (
-      //@ts-ignore
+      //@ts-expect-error
       <message
         type={INPUT.WEBCHAT_SETTINGS}
         settings={stringifyWithRegexs({ theme: updatedTheme, user })}
@@ -69,39 +116,4 @@ export const WebchatSettings = ({
     )
   }
   return renderComponent({ renderBrowser, renderNode })
-}
-
-export const normalizeWebchatSettings = (settings: WebchatSettingsProps) => {
-  let {
-    theme,
-    blockInputs,
-    persistentMenu,
-    enableEmojiPicker,
-    enableAttachments,
-    enableUserInput,
-    enableAnimations,
-  } = settings
-  if (!theme) theme = {}
-  if (!theme.userInput) theme.userInput = {}
-  if (persistentMenu !== undefined) {
-    theme.userInput.persistentMenu = persistentMenu
-  }
-  if (enableEmojiPicker !== undefined) {
-    if (!theme.userInput.emojiPicker) theme.userInput.emojiPicker = {}
-    theme.userInput.emojiPicker.enable = enableEmojiPicker
-  }
-  if (enableAttachments !== undefined) {
-    if (!theme.userInput.attachments) theme.userInput.attachments = {}
-    theme.userInput.attachments.enable = enableAttachments
-  }
-  if (enableUserInput !== undefined) {
-    theme.userInput.enable = enableUserInput
-  }
-  if (blockInputs !== undefined) theme.userInput.blockInputs = blockInputs
-
-  if (!theme.animations) theme.animations = {}
-  if (enableAnimations !== undefined) {
-    theme.animations.enable = enableAnimations
-  }
-  return theme
 }

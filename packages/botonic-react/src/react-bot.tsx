@@ -1,9 +1,9 @@
 import { CoreBot } from '@botonic/core'
-import React from 'react'
+import type React from 'react'
 
 import { Text } from './components/text'
 import { RequestContext } from './contexts'
-import { ActionRequest } from './index-types'
+import type { ActionRequest } from './index-types'
 
 type ActionComponentType<P = any> = React.ComponentType<P> & {
   botonicInit?: (request: ActionRequest) => Promise<P>

@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
 import { HeadSetSvg } from '../icons'
@@ -8,7 +8,7 @@ import {
   StyledDebugLabel,
   StyledDebugValue,
 } from '../styles'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 import { LABELS } from './constants'
 
 export interface HandoffSuccessDebugEvent {

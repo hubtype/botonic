@@ -6,10 +6,10 @@ todos:
     content: Install Biome v2.3.13 at root and create base biome.json
     status: completed
   - id: phase1-migrate-core
-    content: 'Migrate botonic-core: update scripts and format code'
+    content: "Migrate botonic-core: update scripts and format code"
     status: completed
   - id: phase1-update-precommit-core
-    content: 'Update pre-commit: add Biome hook for botonic-core'
+    content: "Update pre-commit: add Biome hook for botonic-core"
     status: completed
   - id: phase1-migrate-analytics
     content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
@@ -22,7 +22,7 @@ todos:
     status: completed
   - id: phase1-migrate-react
     content: Migrate botonic-react (includes JSX) + update pre-commit
-    status: pending
+    status: in_progress
   - id: phase1-migrate-fb
     content: Migrate botonic-plugin-flow-builder + update pre-commit
     status: pending
@@ -45,7 +45,7 @@ todos:
     content: Migrate examples (blank, blank-typescript, flow-builder)
     status: pending
   - id: cleanup
-    content: 'Final cleanup: remove dependencies, files and simplify pre-commit'
+    content: "Final cleanup: remove dependencies, files and simplify pre-commit"
     status: pending
 isProject: false
 ---
@@ -84,6 +84,8 @@ flowchart TD
 
     pkgConfig --> external["External projects"]
 ```
+
+
 
 ## Biome Version
 
@@ -157,8 +159,64 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 2. `botonic-plugin-hubtype-analytics` (COMPLETED)
 3. `botonic-plugin-knowledge-bases` (COMPLETED)
 4. `botonic-plugin-ai-agents` (COMPLETED)
-5. `botonic-react`
+5. `botonic-react` (IN PROGRESS)
 6. `botonic-plugin-flow-builder`
+
+### Work in Progress: botonic-react Migration
+
+#### Completed Steps
+
+- Created `packages/botonic-react/biome.json` with React-specific rules
+- Updated `package.json` scripts (`lint`, `lint:check`, `format`)
+- Updated `.pre-commit-config.yaml` (added to Biome hook, removed ESLint hook)
+- Updated `.prettierignore`
+- Ran `biome check --write --unsafe src/` to format and auto-fix code
+- Fixed critical `useExhaustiveDependencies` issues in hooks (reverted incorrect dependency arrays)
+
+#### Known Issues
+
+1. **Removed React imports causing errors**
+
+- Biome's `noUnusedImports` rule auto-removed `import React from 'react'` in many files
+- While React 17+ with `"jsx": "react-jsx"` doesn't require explicit React imports for JSX, some edge cases may still need it
+- Files affected: multiple `.tsx` and `.jsx` components
+
+1. **Tests not executing (infinite loop)**
+
+- `tests/webchat/dev-app.test.jsx` - appears to enter infinite loop, never completes
+- `tests/webchat/storage.test.jsx` - not executed
+- `tests/webchat/webchat-app.jsx` - not executed
+
+1. **Failing test**
+
+- 1 test is failing (needs investigation)
+
+#### Fixed Issues
+
+1. **Hook dependency changes by Biome** (FIXED)
+
+- Biome's `useExhaustiveDependencies` rule incorrectly added dependencies to several `useEffect` hooks
+- Reverted all dependency arrays to their original values and added `biome-ignore` comments
+- Files fixed with `biome-ignore lint/correctness/useExhaustiveDependencies` comments:
+  - `src/webchat/webchat.tsx` (8 useEffect hooks)
+  - `src/webchat/message-list/index.tsx` (3 useEffect hooks)
+  - `src/webchat/hooks/use-device-adapter.ts` (2 useEffect hooks)
+  - `src/components/carousel.tsx` (1 useEffect hook)
+  - `src/components/message/index.jsx` (2 useEffect hooks)
+  - `src/webchat/webchat-dev.jsx` (1 useEffect hook)
+  - `src/components/system-debug-trace/hooks/use-knowledge-base-info.tsx`
+  - `src/components/message/message-feedback.tsx`
+  - `src/webchat/chat-area/index.tsx`
+
+#### Pending Tasks
+
+- Investigate and fix the infinite loop in `dev-app.test.jsx`
+- Investigate the 1 failing test
+- Ensure all tests pass
+- Review if any removed React imports need to be restored
+- Update CI workflow to use `LINT_COMMAND: npm run lint:check`
+
+---
 
 ### Steps per package
 
@@ -269,6 +327,7 @@ npm test
 
 ### CI Configuration Files (reference)
 
+
 | File                                            | Purpose                                               |
 | ----------------------------------------------- | ----------------------------------------------------- |
 | `.github/workflows/botonic-common-workflow.yml` | Reusable workflow with `LINT_COMMAND` input           |
@@ -276,6 +335,7 @@ npm test
 | `.pre-commit-config.yaml`                       | Local Biome hook for migrated packages                |
 | `.prettierignore`                               | Prevents Prettier from reformatting migrated packages |
 | `.vscode/settings.json`                         | Biome as default formatter in the IDE                 |
+
 
 ---
 
@@ -378,3 +438,4 @@ Key rules mapped in `[biome.json](biome.json)`:
 - **IDE Integration**: Install Biome extension for VS Code
 - **Editor config**: The `.editorconfig` file can be kept as fallback
 - **Plan file**: This plan is located at `[.cursor/plans/BIOME_MIGRATION.plan.md](.cursor/plans/BIOME_MIGRATION.plan.md)` for team tracking
+

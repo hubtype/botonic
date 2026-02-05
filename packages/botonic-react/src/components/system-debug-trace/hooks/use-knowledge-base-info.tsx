@@ -1,9 +1,12 @@
 import { KnowledgebaseFailReason } from '@botonic/core'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 
-import { ChunkIdsGroupedBySourceData } from '../../../index-types'
+import type { ChunkIdsGroupedBySourceData } from '../../../index-types'
 import { WebchatContext } from '../../../webchat/context'
-import { HubtypeChunk, HubtypeSource } from '../events/knowledge-bases-types'
+import type {
+  HubtypeChunk,
+  HubtypeSource,
+} from '../events/knowledge-bases-types'
 import { FilePdfSvg, FileWordSvg, LinkSvg } from '../icons'
 
 interface UseKnowledgeBaseInfoParams {
@@ -74,7 +77,9 @@ export const useKnowledgeBaseInfo = ({
   }
 
   const fetchChunksWithSources = async () => {
-    if (chunkIds.length === 0 || !previewUtils) return []
+    if (chunkIds.length === 0 || !previewUtils) {
+      return []
+    }
     setIsLoading(true)
     try {
       const fetchedChunksWithSources =
@@ -124,6 +129,7 @@ export const useKnowledgeBaseInfo = ({
     }
   }, [failReason])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount
   useEffect(() => {
     // If we already have cached data (even if empty), don't fetch again
     if (hasCachedData) {
@@ -155,7 +161,6 @@ export const useKnowledgeBaseInfo = ({
     }
 
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {

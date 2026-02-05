@@ -1,6 +1,6 @@
 import { PROVIDER } from '@botonic/core'
 import merge from 'lodash.merge'
-import React, { forwardRef, useEffect } from 'react'
+import { forwardRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
@@ -44,7 +44,6 @@ const initialSession = {
   },
 }
 
-// eslint-disable-next-line react/display-name
 export const WebchatDev = forwardRef((props, ref) => {
   const webchatHooks = useWebchat()
   const { webchatState, updateTheme } = webchatHooks

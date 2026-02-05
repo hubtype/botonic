@@ -3,7 +3,7 @@ import MarkdownIt from 'markdown-it'
 import { isInWebviewApp } from '../util/environment'
 
 const BR_STRING_TAG = '<br/>'
-const BR_STRING_TAG_REGEX = new RegExp('<br\\s*/?>', 'g')
+const BR_STRING_TAG_REGEX = /<br\s*\/?>/g
 export const ESCAPED_LINE_BREAK = '&lt;br&gt;'
 const ESCAPED_LINE_BREAK_REGEX = new RegExp(ESCAPED_LINE_BREAK, 'g')
 const isLineBreakElement = element => element.type === 'br'
@@ -12,19 +12,15 @@ const withLinksTarget = (renderer, target = '_blank') => {
   // Support opening links in new tabs: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
   const newRenderer =
     renderer.renderer.rules.link_open ||
-    function (tokens, idx, options, env, self) {
-      return self.renderToken(tokens, idx, options)
-    }
-  renderer.renderer.rules.link_open = function (
-    tokens,
-    idx,
-    options,
-    env,
-    self
-  ) {
+    ((tokens, idx, options, _env, self) =>
+      self.renderToken(tokens, idx, options))
+  renderer.renderer.rules.link_open = (tokens, idx, options, env, self) => {
     const aIndex = tokens[idx].attrIndex('target')
-    if (aIndex < 0) tokens[idx].attrPush(['target', target])
-    else tokens[idx].attrs[aIndex][1] = target
+    if (aIndex < 0) {
+      tokens[idx].attrPush(['target', target])
+    } else {
+      tokens[idx].attrs[aIndex][1] = target
+    }
     return newRenderer(tokens, idx, options, env, self)
   }
 }
@@ -55,12 +51,15 @@ export const renderMarkdown = text => {
   // Supporting multiline: https://stackoverflow.com/a/20543835
   text = text
     .map(e => {
-      if (isLineBreakElement(e)) return BR_STRING_TAG
-      else if (typeof e === 'string')
+      if (isLineBreakElement(e)) {
+        return BR_STRING_TAG
+      } else if (typeof e === 'string') {
         return e
           .replace(BR_STRING_TAG_REGEX, BR_STRING_TAG)
           .replace(ESCAPED_LINE_BREAK_REGEX, BR_STRING_TAG)
-      else return String(e)
+      } else {
+        return String(e)
+      }
     })
     .join('')
   return markdownRenderer.render(text)
@@ -76,9 +75,14 @@ export const serializeMarkdown = children => {
   const text = children
     .filter(e => isLineBreakElement(e) || !e.type)
     .map(e => {
-      if (Array.isArray(e)) return serializeMarkdown(e)
-      if (isLineBreakElement(e)) return ESCAPED_LINE_BREAK
-      else return String(e).replace(BR_STRING_TAG_REGEX, ESCAPED_LINE_BREAK)
+      if (Array.isArray(e)) {
+        return serializeMarkdown(e)
+      }
+      if (isLineBreakElement(e)) {
+        return ESCAPED_LINE_BREAK
+      } else {
+        return String(e).replace(BR_STRING_TAG_REGEX, ESCAPED_LINE_BREAK)
+      }
     })
     .join('')
   return text
@@ -86,9 +90,6 @@ export const serializeMarkdown = children => {
 
 export const toMarkdownChildren = children =>
   children.map(e => (isLineBreakElement(e) ? ESCAPED_LINE_BREAK : e))
-
-export const getMarkdownStyle = (getThemeFn, defaultColor) =>
-  getThemeFn('markdownStyle', getDefaultMarkdownStyle(defaultColor))
 
 export const getDefaultMarkdownStyle = color => `
 *{
@@ -164,3 +165,6 @@ table, td, th {
   padding:10px;
 }
 `
+export const getMarkdownStyle = (getThemeFn, defaultColor) => {
+  return getThemeFn('markdownStyle', getDefaultMarkdownStyle(defaultColor))
+}

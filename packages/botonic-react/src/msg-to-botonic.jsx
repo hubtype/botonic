@@ -1,6 +1,3 @@
-/* eslint-disable complexity */
-import React from 'react'
-
 import { Audio } from './components/audio'
 import { Button } from './components/button/index'
 import { ButtonsDisabler } from './components/buttons-disabler'
@@ -35,6 +32,7 @@ import {
  * @param customMessageTypes {{customTypeName}[]?}
  * @return {React.ReactNode}
  */
+// eslint-disable-next-line complexity
 export function msgToBotonic(msg, customMessageTypes = []) {
   delete msg.display
   if (isCustom(msg)) {
@@ -90,12 +88,10 @@ export function msgToBotonic(msg, customMessageTypes = []) {
   } else if (isButtonMessage(msg)) {
     const buttons = buttonsParse(msg.buttons)
     return (
-      <>
-        <Text {...msg} key={msg.key}>
-          {msg.text}
-          {buttons}
-        </Text>
-      </>
+      <Text {...msg} key={msg.key}>
+        {msg.text}
+        {buttons}
+      </Text>
     )
   } else if (isSystemDebugTrace(msg)) {
     return <SystemDebugTrace {...msg} key={msg.key} />
@@ -127,23 +123,22 @@ export function msgsToBotonic(msgs, customMessageTypes) {
 
 function textToBotonic(msg) {
   const txt = msg.data?.text ?? String(msg.data)
-  if (
-    (msg.replies && msg.replies.length) ||
-    (msg.keyboard && msg.keyboard.length)
-  )
+  if (msg.replies?.length || msg.keyboard?.length) {
     return (
       <Text {...msg} key={msg.key}>
         {txt}
         {parseQuickReplies(msg)}
       </Text>
     )
-  if (msg.buttons && msg.buttons.length)
+  }
+  if (msg.buttons?.length) {
     return (
       <Text {...msg} key={msg.key}>
         {txt}
         {buttonsParse(msg.buttons)}
       </Text>
     )
+  }
   return (
     <Text {...msg} key={msg.key}>
       {txt}
@@ -153,7 +148,8 @@ function textToBotonic(msg) {
 
 function elementsParse(elements) {
   return elements.map((e, i) => (
-    <Element key={i}>
+    // biome-ignore lint/suspicious/noArrayIndexKey: element key is unique
+    <Element key={`element-${i}`}>
       <Pic src={e.img || e.pic || e.image_url} />
       <Title>{e.title}</Title>
       <Subtitle>{e.subtitle}</Subtitle>
@@ -166,7 +162,9 @@ function buttonsParse(buttons) {
   return buttons.map((b, i) => {
     const props = b.props || b
     let payload = props.payload
-    if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
+    if (props.path) {
+      payload = `__PATH_PAYLOAD__${props.path}`
+    }
     const url = props.messenger_extensions ? null : props.url
     const target = props.messenger_extensions ? null : props.target
     const title = props.title
@@ -174,7 +172,8 @@ function buttonsParse(buttons) {
     const disabledProps = ButtonsDisabler.constructBrowserProps(props)
     return (
       <Button
-        key={i}
+        // biome-ignore lint/suspicious/noArrayIndexKey: button key is unique
+        key={`button-${i}`}
         payload={payload}
         url={url}
         target={target}
@@ -192,9 +191,12 @@ function parseQuickReplies(msg) {
   if (msg.replies) {
     replies = msg.replies.map((el, i) => {
       let payload = el.payload
-      if (el.path) payload = `__PATH_PAYLOAD__${el.path}`
+      if (el.path) {
+        payload = `__PATH_PAYLOAD__${el.path}`
+      }
       return (
-        <Reply key={i} payload={payload}>
+        // biome-ignore lint/suspicious/noArrayIndexKey: reply key is unique
+        <Reply key={`reply-${i}`} payload={payload}>
           {el.text}
         </Reply>
       )
@@ -202,7 +204,8 @@ function parseQuickReplies(msg) {
   }
   if (msg.keyboard) {
     replies = msg.keyboard.map((el, i) => (
-      <Reply key={i} payload={el.data}>
+      // biome-ignore lint/suspicious/noArrayIndexKey: reply key is unique
+      <Reply key={`reply-${i}`} payload={el.data}>
         {el.label}
       </Reply>
     ))

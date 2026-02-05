@@ -1,13 +1,14 @@
-import { isDev, Session as CoreSession, Session } from '@botonic/core'
-import React, { useContext, useEffect } from 'react'
+import { type Session as CoreSession, isDev } from '@botonic/core'
+import type React from 'react'
+import { useContext, useEffect } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import {
-  CloseWebviewOptions,
+  type CloseWebviewOptions,
   WebviewRequestContext,
-  WebviewRequestContextType,
+  type WebviewRequestContextType,
 } from '../../contexts'
-import { WebchatContext, WebchatState } from '../context'
+import { WebchatContext, type WebchatState } from '../context'
 import { WebviewHeader } from './header'
 import {
   StyledFrame,
@@ -47,7 +48,7 @@ export const WebviewContainer = ({
     return () => window.removeEventListener('message', close, false)
   }, [])
 
-  if (isDev(webchatState.session as Session)) {
+  if (isDev(webchatState.session as CoreSession)) {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const Webview = getWebviewInDevMode(localWebviews, webchatState)
 

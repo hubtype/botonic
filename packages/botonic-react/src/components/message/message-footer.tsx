@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { SENDERS } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'

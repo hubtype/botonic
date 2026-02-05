@@ -1,6 +1,6 @@
 import { SENDERS } from '../../index-types'
 import { WebchatAction } from './actions'
-import { WebchatState } from './types'
+import type { WebchatState } from './types'
 
 export const messagesReducer = (
   state: WebchatState,
@@ -138,11 +138,9 @@ function addMessageReducer(
   state: WebchatState,
   action: { type: WebchatAction; payload?: any }
 ) {
-  if (
-    state.messagesJSON &&
-    state.messagesJSON.find(m => m.id === action.payload.id)
-  )
+  if (state.messagesJSON?.find(m => m.id === action.payload.id)) {
     return state
+  }
   return {
     ...state,
     messagesJSON: [...(state.messagesJSON || []), action.payload],

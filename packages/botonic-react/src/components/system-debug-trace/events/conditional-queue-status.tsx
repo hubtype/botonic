@@ -1,5 +1,4 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { SplitSvg } from '../icons/split'
 import {
@@ -7,7 +6,7 @@ import {
   StyledDebugLabel,
   StyledDebugValue,
 } from '../styles'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 import { LABELS } from './constants'
 
 export interface ConditionalQueueStatusDebugEvent {

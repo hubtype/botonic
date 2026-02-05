@@ -14,7 +14,8 @@ export function warnDeprecatedProps(props, extraInfo) {
     { legacy: 'imageStyle', new: 'imagestyle' },
   ]
   legacyNewProps.forEach(p => {
-    if (getProperty(props, p.legacy) !== undefined)
+    if (getProperty(props, p.legacy) !== undefined) {
       warnDeprecated(p.legacy, p.new, extraInfo)
+    }
   })
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import { WebviewRequestContext } from '../../contexts'
