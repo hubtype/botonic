@@ -15,4 +15,5 @@ jobs:
       PACKAGE_NAME: Botonic react tests
       PACKAGE: botonic-react
       BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-react && npm run build'
+      LINT_COMMAND: npm run lint:check
       NEEDS_CODECOV_UPLOAD: 'yes'
