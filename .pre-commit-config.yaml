@@ -19,7 +19,7 @@ repos:
     hooks:
       - id: biome-check
         name: biome-check (Biome)
-        entry: npx @biomejs/biome check --write --diagnostic-level=error
+        entry: bash scripts/qa/biome-check.sh
         language: system
         files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases|botonic-plugin-ai-agents|botonic-react)/
         types_or: [javascript, jsx, ts, tsx, json]
@@ -41,7 +41,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
-
 
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0

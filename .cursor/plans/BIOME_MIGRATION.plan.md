@@ -22,7 +22,7 @@ todos:
     status: completed
   - id: phase1-migrate-react
     content: Migrate botonic-react (includes JSX) + update pre-commit
-    status: in_progress
+    status: completed
   - id: phase1-migrate-fb
     content: Migrate botonic-plugin-flow-builder + update pre-commit
     status: pending
@@ -214,7 +214,10 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 - Investigate the 1 failing test
 - Ensure all tests pass
 - Review if any removed React imports need to be restored
-- Update CI workflow to use `LINT_COMMAND: npm run lint:check`
+
+#### Completed Tasks
+
+- ✓ Update CI workflow to use `LINT_COMMAND: npm run lint:check`
 
 ---
 
