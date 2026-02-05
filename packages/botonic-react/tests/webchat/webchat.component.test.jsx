@@ -3,9 +3,9 @@
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
+import { PROVIDER } from '@botonic/core'
 import { act, render, screen } from '@testing-library/react'
 import merge from 'lodash.merge'
-import React from 'react'
 
 import { ROLES } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'
@@ -14,7 +14,6 @@ import {
   expectToHaveRoles,
   renderUseWebchatHook,
 } from '../helpers/test-utils'
-import { PROVIDER } from '@botonic/core'
 
 describe('TEST: Webchat Component', () => {
   const theme = {
@@ -33,7 +32,9 @@ describe('TEST: Webchat Component', () => {
   }
 
   // To avoid TypeError: frame.scrollTo is not a function
-  window.HTMLElement.prototype.scrollTo = function () {}
+  window.HTMLElement.prototype.scrollTo = () => {
+    return
+  }
 
   it('TEST: Webchat by default has TriggerButton', async () => {
     const { result } = renderUseWebchatHook()
@@ -214,22 +215,22 @@ describe('TEST: Webchat Component', () => {
     )
   })
 
-  it.each([PROVIDER.DEV, PROVIDER.WEBCHAT])(
-    'TEST: When calling updateWebview with provider %s a webview is displayed and has StyledWebview and StyledWebviewHeader',
-    async provider => {
-      const { result } = renderUseWebchatHook()
-      act(() => {
-        result.current.webchatState.session.user = { provider }
-        result.current.toggleWebchat(true)
-        result.current.updateWebview('webview')
-      })
-      await act(async () => {
-        render(<Webchat webchatHooks={result.current} />)
-      })
-      expectToHaveRoles(
-        [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
-        screen
-      )
-    }
-  )
+  it.each([
+    PROVIDER.DEV,
+    PROVIDER.WEBCHAT,
+  ])('TEST: When calling updateWebview with provider %s a webview is displayed and has StyledWebview and StyledWebviewHeader', async provider => {
+    const { result } = renderUseWebchatHook()
+    act(() => {
+      result.current.webchatState.session.user = { provider }
+      result.current.toggleWebchat(true)
+      result.current.updateWebview('webview')
+    })
+    await act(async () => {
+      render(<Webchat webchatHooks={result.current} />)
+    })
+    expectToHaveRoles(
+      [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
+      screen
+    )
+  })
 })

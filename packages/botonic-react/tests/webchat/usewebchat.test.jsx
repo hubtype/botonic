@@ -3,7 +3,6 @@
  */
 
 import { act } from '@testing-library/react'
-import React from 'react'
 
 import { Message } from '../../src/components'
 import { SENDERS } from '../../src/index-types'

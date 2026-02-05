@@ -3,6 +3,7 @@
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
 
+// eslint-disable-next-line filenames/match-regex
 import {
   getCountryFromTimeZone,
   normalizeLocale,
@@ -33,12 +34,9 @@ describe('TEST: normalizeLocale - locale normalization', () => {
       ['en-150', 'en'], // English - Europe
       ['ar-001', 'ar'], // Arabic - World
       ['pt-015', 'pt'], // Portuguese - Northern Africa
-    ])(
-      'strips numeric UN M.49 region code: "%s" -> "%s"',
-      (locale, expected) => {
-        expect(normalizeLocale(locale)).toBe(expected)
-      }
-    )
+    ])('strips numeric UN M.49 region code: "%s" -> "%s"', (locale, expected) => {
+      expect(normalizeLocale(locale)).toBe(expected)
+    })
   })
 
   describe('Script subtags (language-Script or language-Script-COUNTRY)', () => {
@@ -53,12 +51,9 @@ describe('TEST: normalizeLocale - locale normalization', () => {
       ['sr-Latn-RS', 'sr-RS'], // Serbian - Latin - Serbia (letter region preserved)
       ['az-Latn-AZ', 'az-AZ'], // Azerbaijani - Latin - Azerbaijan
       ['uz-Cyrl-UZ', 'uz-UZ'], // Uzbek - Cyrillic - Uzbekistan
-    ])(
-      'handles script subtag, preserves letter region: "%s" -> "%s"',
-      (locale, expected) => {
-        expect(normalizeLocale(locale)).toBe(expected)
-      }
-    )
+    ])('handles script subtag, preserves letter region: "%s" -> "%s"', (locale, expected) => {
+      expect(normalizeLocale(locale)).toBe(expected)
+    })
   })
 
   describe('Simple language codes (no region)', () => {
@@ -85,12 +80,9 @@ describe('TEST: normalizeLocale - locale normalization', () => {
       ['gsw', 'gsw'], // Swiss German - no ISO 639-1 equivalent
       ['nds', 'nds'], // Low German - no ISO 639-1 equivalent
       ['yue-HK', 'yue-HK'], // Cantonese - Hong Kong (letter region preserved)
-    ])(
-      'handles three-letter language codes: "%s" -> "%s"',
-      (locale, expected) => {
-        expect(normalizeLocale(locale)).toBe(expected)
-      }
-    )
+    ])('handles three-letter language codes: "%s" -> "%s"', (locale, expected) => {
+      expect(normalizeLocale(locale)).toBe(expected)
+    })
   })
 
   describe('Case insensitivity (normalized to lowercase language, uppercase region)', () => {
@@ -113,12 +105,9 @@ describe('TEST: normalizeLocale - locale normalization', () => {
       ['pt_BR', 'pt-BR'],
       ['zh_Hans_CN', 'zh-CN'],
       ['es_419', 'es'], // Numeric region stripped
-    ])(
-      'handles underscore separator: "%s" -> "%s"',
-      (locale, expected) => {
-        expect(normalizeLocale(locale)).toBe(expected)
-      }
-    )
+    ])('handles underscore separator: "%s" -> "%s"', (locale, expected) => {
+      expect(normalizeLocale(locale)).toBe(expected)
+    })
   })
 
   describe('Edge cases and malformed input', () => {
@@ -160,12 +149,9 @@ describe('TEST: normalizeLocale - locale normalization', () => {
       ['ca-ES', 'ca-ES'], // Catalan
       ['eu-ES', 'eu-ES'], // Basque
       ['gl-ES', 'gl-ES'], // Galician
-    ])(
-      'preserves real browser locale with letter region: "%s" -> "%s"',
-      (locale, expected) => {
-        expect(normalizeLocale(locale)).toBe(expected)
-      }
-    )
+    ])('preserves real browser locale with letter region: "%s" -> "%s"', (locale, expected) => {
+      expect(normalizeLocale(locale)).toBe(expected)
+    })
   })
 })
 
@@ -191,12 +177,9 @@ describe('TEST: timeZoneToCountryCode - timezone to country mapping', () => {
       ['Asia/Kolkata', 'IN'],
       ['Australia/Sydney', 'AU'],
       ['Pacific/Auckland', 'NZ'],
-    ])(
-      'maps "%s" -> "%s"',
-      (timeZone, expected) => {
-        expect(timeZoneToCountryCode[timeZone]).toBe(expected)
-      }
-    )
+    ])('maps "%s" -> "%s"', (timeZone, expected) => {
+      expect(timeZoneToCountryCode[timeZone]).toBe(expected)
+    })
   })
 
   describe('African time zones', () => {
@@ -206,12 +189,9 @@ describe('TEST: timeZoneToCountryCode - timezone to country mapping', () => {
       ['Africa/Lagos', 'NG'],
       ['Africa/Nairobi', 'KE'],
       ['Africa/Casablanca', 'MA'],
-    ])(
-      'maps "%s" -> "%s"',
-      (timeZone, expected) => {
-        expect(timeZoneToCountryCode[timeZone]).toBe(expected)
-      }
-    )
+    ])('maps "%s" -> "%s"', (timeZone, expected) => {
+      expect(timeZoneToCountryCode[timeZone]).toBe(expected)
+    })
   })
 
   it('returns undefined for unknown time zones', () => {
