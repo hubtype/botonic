@@ -169,7 +169,7 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       id: '16972707e231427fbeeb707ab79b0b19',
     }
     const sut = msgToBotonic(buttonMessage)
-    const buttons = sut.props.children.props.children[1]
+    const buttons = sut.props.children[1]
     const button1Props = buttons[0].props
     const button2Props = buttons[1].props
 
