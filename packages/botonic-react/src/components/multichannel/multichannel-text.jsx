@@ -214,7 +214,6 @@ export const MultichannelText = props => {
             if (message.type === INPUT.WHATSAPP_BUTTON_LIST) {
               return (
                 <WhatsappButtonList
-                  // biome-ignore lint/suspicious/noArrayIndexKey: message key is unique
                   key={`msg-${i}-whatsapp-list`}
                   {...message.props}
                 />
@@ -222,7 +221,6 @@ export const MultichannelText = props => {
             }
             return (
               <Text
-                // biome-ignore lint/suspicious/noArrayIndexKey: message key is unique
                 key={`msg-${i}-with-postback-buttons`}
                 {...MULTICHANNEL_WHATSAPP_PROPS}
                 {...props}
@@ -321,11 +319,7 @@ export const MultichannelText = props => {
     return (
       <>
         {texts?.map((message, i) => (
-          <Text
-            // biome-ignore lint/suspicious/noArrayIndexKey: message key is unique
-            key={`msg-${i}-text`}
-            {...propsWithoutChildren}
-          >
+          <Text key={`msg-${i}-text`} {...propsWithoutChildren}>
             {convertToMarkdownMeta(message)}
           </Text>
         ))}

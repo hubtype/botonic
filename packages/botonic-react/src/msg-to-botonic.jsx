@@ -148,7 +148,6 @@ function textToBotonic(msg) {
 
 function elementsParse(elements) {
   return elements.map((e, i) => (
-    // biome-ignore lint/suspicious/noArrayIndexKey: element key is unique
     <Element key={`element-${i}`}>
       <Pic src={e.img || e.pic || e.image_url} />
       <Title>{e.title}</Title>
@@ -172,7 +171,6 @@ function buttonsParse(buttons) {
     const disabledProps = ButtonsDisabler.constructBrowserProps(props)
     return (
       <Button
-        // biome-ignore lint/suspicious/noArrayIndexKey: button key is unique
         key={`button-${i}`}
         payload={payload}
         url={url}
@@ -195,7 +193,6 @@ function parseQuickReplies(msg) {
         payload = `__PATH_PAYLOAD__${el.path}`
       }
       return (
-        // biome-ignore lint/suspicious/noArrayIndexKey: reply key is unique
         <Reply key={`reply-${i}`} payload={payload}>
           {el.text}
         </Reply>
@@ -204,7 +201,6 @@ function parseQuickReplies(msg) {
   }
   if (msg.keyboard) {
     replies = msg.keyboard.map((el, i) => (
-      // biome-ignore lint/suspicious/noArrayIndexKey: reply key is unique
       <Reply key={`reply-${i}`} payload={el.data}>
         {el.label}
       </Reply>

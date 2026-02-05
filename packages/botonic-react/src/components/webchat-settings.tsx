@@ -84,7 +84,6 @@ export const WebchatSettings = ({
   user,
 }: WebchatSettingsProps) => {
   const renderBrowser = () => {
-    // biome-ignore lint/correctness/useHookAtTopLevel: WebchatSettings is a component that renders a webchat settings
     const { updateWebchatDevSettings } = useContext(WebchatContext)
     updateWebchatDevSettings({
       theme,

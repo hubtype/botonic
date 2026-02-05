@@ -129,6 +129,7 @@ export class WebchatApp {
     this.reactRoot = null
   }
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: createRootElement is a complex function that creates a root element for the webchat
   createRootElement(host: HTMLElement | null) {
     // Create root element <div id='root'> if not exists
     // Create shadowDOM to root element if needed

@@ -43,12 +43,10 @@ export const MessageFeedback = ({
     updateMessage(updatedMsg)
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount
   useEffect(() => {
     updateMsgWithFeedback(true)
   }, [])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: only re-run when disabled changes
   useEffect(() => {
     if (disabled.positive || disabled.negative) {
       setClassName('clicked')

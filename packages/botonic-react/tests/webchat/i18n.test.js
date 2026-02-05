@@ -196,7 +196,7 @@ describe('TEST: timeZoneToCountryCode - timezone to country mapping', () => {
 
   it('returns undefined for unknown time zones', () => {
     expect(timeZoneToCountryCode['Unknown/TimeZone']).toBeUndefined()
-    expect(timeZoneToCountryCode['Invalid']).toBeUndefined()
+    expect(timeZoneToCountryCode.Invalid).toBeUndefined()
   })
 })
 

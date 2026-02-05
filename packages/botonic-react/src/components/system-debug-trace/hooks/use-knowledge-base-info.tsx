@@ -129,7 +129,6 @@ export const useKnowledgeBaseInfo = ({
     }
   }, [failReason])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount
   useEffect(() => {
     // If we already have cached data (even if empty), don't fetch again
     if (hasCachedData) {

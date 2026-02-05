@@ -16,7 +16,6 @@ export const ChatArea = () => {
   const { calculateResizedPxChatAreaHeight } = useWebchatDimensions()
   const [chatAreaHeight, setChatAreaHeight] = useState(0)
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally run only on mount
   useEffect(() => {
     setChatAreaHeight(calculateResizedPxChatAreaHeight())
   }, [])
