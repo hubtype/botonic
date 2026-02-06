@@ -19,7 +19,7 @@ export default class Login extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   public async run(): Promise<void> {
-    const { flags } = await this.parse(Login)
+    const { flags: _flags } = await this.parse(Login)
 
     const userEmail = await input({ required: true, message: 'email:' })
     const userPassword = await password({ mask: true, message: 'password:' })
@@ -27,7 +27,7 @@ export default class Login extends Command {
     try {
       await this.botonicApiService.login(userEmail, userPassword)
       console.log(pc.green('Login successful!'))
-    } catch (error) {
+    } catch (_error) {
       console.error(pc.red('Failed to login'))
     } finally {
       this.botonicApiService.beforeExit()

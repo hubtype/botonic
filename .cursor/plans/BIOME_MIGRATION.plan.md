@@ -26,6 +26,9 @@ todos:
   - id: phase1-migrate-fb
     content: Migrate botonic-plugin-flow-builder + update pre-commit
     status: completed
+  - id: phase2-migrate-cli
+    content: Migrate botonic-cli (ESLint v9)
+    status: completed
   - id: phase1-update-ci
     content: Update CI workflows for Phase 1
     status: pending
@@ -34,9 +37,6 @@ todos:
     status: pending
   - id: phase2-deprecate-eslint-config
     content: Deprecate @botonic/eslint-config
-    status: pending
-  - id: phase2-migrate-cli
-    content: Migrate botonic-cli (ESLint v9)
     status: pending
   - id: phase2-migrate-dx
     content: Migrate botonic-dx and bundlers

@@ -1,7 +1,7 @@
+import { assert } from 'node:console'
+import { join } from 'node:path'
+import { chdir } from 'node:process'
 import { Config } from '@oclif/core'
-import { assert } from 'console'
-import { join } from 'path'
-import { chdir } from 'process'
 
 import { EXAMPLES } from '../../src/botonic-examples.js'
 import { default as NewCommand } from '../../src/commands/new.js'

@@ -1,10 +1,9 @@
+import { exec } from 'node:child_process'
 import { createReadStream } from 'node:fs'
 import { readFile, rename, writeFile } from 'node:fs/promises'
 import { platform } from 'node:os'
+import path from 'node:path'
 import { createGunzip } from 'node:zlib'
-
-import { exec } from 'child_process'
-import path from 'path'
 import { extract } from 'tar'
 
 import { removeRecursively } from './file-system.js'

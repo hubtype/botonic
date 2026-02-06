@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process'
+import { execSync, spawn } from 'node:child_process'
 
 export async function sleep(ms: number): Promise<number> {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -29,7 +29,7 @@ export function spawnProcess(
     process.stderr.write(stderr)
   })
   childProcess.on('close', code => {
-    onClose && onClose()
+    onClose?.()
     process.stdout.write(`child process exited with code ${String(code)}`)
   })
 }

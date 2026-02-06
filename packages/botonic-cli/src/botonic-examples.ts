@@ -1,8 +1,7 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { BotonicProject } from './interfaces.js'
+import type { BotonicProject } from './interfaces.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

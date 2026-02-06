@@ -1,8 +1,8 @@
-import { Config } from '@oclif/core'
-import { assert } from 'console'
+import { assert } from 'node:console'
+import { join } from 'node:path'
+import { chdir } from 'node:process'
 import { jest } from '@jest/globals'
-import { join } from 'path'
-import { chdir } from 'process'
+import { Config } from '@oclif/core'
 
 import { BotonicAPIService } from '../../src/botonic-api-service.js'
 import { EXAMPLES } from '../../src/botonic-examples.js'
@@ -27,7 +27,9 @@ function cleanupTempFolders(): void {
   const foldersToClean = currentDir.filter(
     item => item.startsWith('botonic-tmp') || item === 'tmp'
   )
-  foldersToClean.forEach(folder => removeRecursively(folder))
+  for (const folder of foldersToClean) {
+    removeRecursively(folder)
+  }
 }
 
 describe('TEST: Deploy pipeline', () => {

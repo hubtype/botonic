@@ -1,8 +1,8 @@
-import childProcess from 'child_process'
-import { promises as fs } from 'fs'
+import childProcess from 'node:child_process'
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
+import * as util from 'node:util'
 import ora from 'ora'
-import path from 'path'
-import * as util from 'util'
 
 const BOTONIC_PREFIX_PACKAGE = '@botonic'
 const BOTONIC_CORE_PACKAGE = `${BOTONIC_PREFIX_PACKAGE}/core`
@@ -43,16 +43,16 @@ export class BotConfig {
       text: 'Getting bot config...',
       spinner: 'bouncingBar',
     }).start()
-    const packages = await this.getBotonicDependencies(appDirectory)
+    const packages = await BotConfig.getBotonicDependencies(appDirectory)
     const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
       ['node -v', 'npm -v', 'botonic -v'].map(command =>
-        this.getOutputByCommand(command)
+        BotConfig.getOutputByCommand(command)
       )
     )
     const botonicCliVersion =
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
-    const configLoaded = await this.loadBotConfig(appDirectory)
+    const configLoaded = await BotConfig.loadBotConfig(appDirectory)
 
     spinner.succeed()
 
@@ -71,15 +71,15 @@ export class BotConfig {
 
   static async loadBotConfig(appDirectory: string) {
     try {
-      const botConfig = await this.getBotConfig(appDirectory)
-      await this.deleteBotConfig(appDirectory)
+      const botConfig = await BotConfig.getBotConfig(appDirectory)
+      await BotConfig.deleteBotConfig(appDirectory)
 
       return {
         tools: botConfig?.tools || [],
         payloads: botConfig?.payloads || [],
         webviews: botConfig?.webviews || [],
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(
         `\nError loading dist/bot-config.js. 
         This file is not required but is used to share config with flow builder frontend.
@@ -124,7 +124,7 @@ export class BotConfig {
 
       await Promise.all(
         botonicDependencies.map(botonicDependency => {
-          return this.setDependenciesVersion(
+          return BotConfig.setDependenciesVersion(
             botonicDependency,
             packages,
             botonicDependency === BOTONIC_CORE_PACKAGE
@@ -145,7 +145,7 @@ export class BotConfig {
     depth: number = NPM_DEPTH_0
   ): Promise<BotonicDependencies> {
     try {
-      const output = await this.getOutputByCommand(
+      const output = await BotConfig.getOutputByCommand(
         `npm ls ${dependency} --depth=${depth}`
       )
       const match = output.match(versionRegex)

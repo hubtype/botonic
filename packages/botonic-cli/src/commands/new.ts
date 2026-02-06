@@ -1,16 +1,16 @@
+import { exec as childProcessExec } from 'node:child_process'
+import { platform } from 'node:os'
+import path from 'node:path'
+import { promisify } from 'node:util'
 import { select } from '@inquirer/prompts'
-import { Args, Command, Flags } from '@oclif/core'
-import { exec as childProcessExec } from 'child_process'
+import { Args, Command } from '@oclif/core'
 import fsExtra from 'fs-extra'
 import ora from 'ora'
-import { platform } from 'os'
-import path from 'path'
 import pc from 'picocolors'
-import { promisify } from 'util'
 
 import { BotonicAPIService } from '../botonic-api-service.js'
 import { EXAMPLES } from '../botonic-examples.js'
-import { BotonicProject } from '../interfaces.js'
+import type { BotonicProject } from '../interfaces.js'
 import {
   downloadSelectedProject,
   editPackageJsonName,
@@ -101,7 +101,9 @@ export default class New extends Command {
     selectedProject: BotonicProject,
     userProjectDirName: string
   ): Promise<void> {
-    if (pathExists(userProjectDirName)) removeRecursively(userProjectDirName)
+    if (pathExists(userProjectDirName)) {
+      removeRecursively(userProjectDirName)
+    }
     const spinnerDownload = ora({
       text: 'Downloading files...',
       spinner: 'bouncingBar',
