@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals'
 
 import {
-  AvailabilityData,
+  type AvailabilityData,
   HubtypeQueuesApi,
 } from '../../src/services/hubtype-queues-api'
 

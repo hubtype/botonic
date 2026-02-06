@@ -1,12 +1,12 @@
-import {
+import type {
   WhatsAppTemplateButtonSubType,
   WhatsAppTemplateComponentType,
   WhatsAppTemplateParameterType,
 } from '@botonic/react'
 
-import { HtButton } from './button'
-import { HtBaseNode, HtMediaFileLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtButton } from './button'
+import type { HtBaseNode, HtMediaFileLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 type HtWhatsAppTemplateButton =
   | {

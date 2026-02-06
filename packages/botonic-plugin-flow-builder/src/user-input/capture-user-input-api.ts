@@ -1,12 +1,12 @@
-import { EventAction, EventCaptureUserInput } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventCaptureUserInput } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { FlowCaptureUserInput } from '../content-fields'
 import {
   HtAiValidationType,
-  HtCaptureUserInputNode,
+  type HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
 import {
   getCommonFlowContentEventArgsForContentId,

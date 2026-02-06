@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
-  ContactInfo,
-  Input,
-  PluginPostRequest,
-  PluginPreRequest,
+  type ContactInfo,
+  type Input,
+  type PluginPostRequest,
+  type PluginPreRequest,
   PROVIDER,
-  ProviderType,
-  ResolvedPlugins,
+  type ProviderType,
+  type ResolvedPlugins,
 } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
-  FlowBuilderActionProps,
-  FlowContent,
+  type FlowBuilderActionProps,
+  type FlowContent,
 } from '../../src'
-import {
+import type {
   AiAgentFunction,
   ContentFilter,
   InShadowingConfig,
@@ -179,7 +179,6 @@ export async function createFlowBuilderPluginAndGetContents({
   const request = createRequest({
     ...requestArgs,
     plugins: {
-      // @ts-ignore
       flowBuilderPlugin,
     },
   })

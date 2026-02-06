@@ -1,7 +1,7 @@
-import { BotContext } from '@botonic/core'
+import type { BotContext } from '@botonic/core'
 
-import { FlowContent } from '../content-fields'
-import { ContentFilter } from '../types'
+import type { FlowContent } from '../content-fields'
+import type { ContentFilter } from '../types'
 
 interface ContentFilterExecutorOptions {
   filters: ContentFilter[]

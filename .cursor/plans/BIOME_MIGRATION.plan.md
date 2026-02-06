@@ -25,7 +25,7 @@ todos:
     status: completed
   - id: phase1-migrate-fb
     content: Migrate botonic-plugin-flow-builder + update pre-commit
-    status: pending
+    status: completed
   - id: phase1-update-ci
     content: Update CI workflows for Phase 1
     status: pending
@@ -159,8 +159,8 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 2. `botonic-plugin-hubtype-analytics` (COMPLETED)
 3. `botonic-plugin-knowledge-bases` (COMPLETED)
 4. `botonic-plugin-ai-agents` (COMPLETED)
-5. `botonic-react` (IN PROGRESS)
-6. `botonic-plugin-flow-builder`
+5. `botonic-react` (COMPLETED)
+6. `botonic-plugin-flow-builder` (COMPLETED)
 
 ### Work in Progress: botonic-react Migration
 

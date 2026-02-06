@@ -1,6 +1,6 @@
-import { HtBaseNode } from './common'
-import { HtFunctionResult } from './function'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode } from './common'
+import type { HtFunctionResult } from './function'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtChannelConditionalNode extends HtBaseNode {
   type: HtNodeWithContentType.FUNCTION

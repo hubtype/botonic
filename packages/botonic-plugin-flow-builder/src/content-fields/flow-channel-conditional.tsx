@@ -1,13 +1,13 @@
-import { EventAction, EventConditionalChannel } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventConditionalChannel } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtChannelConditionalNode } from './hubtype-fields/channel-conditional'
-import { HtFunctionResult } from './hubtype-fields/function'
+import type { HtChannelConditionalNode } from './hubtype-fields/channel-conditional'
+import type { HtFunctionResult } from './hubtype-fields/function'
 
 export class FlowChannelConditional extends ContentFieldsBase {
   public resultMapping: HtFunctionResult[] = []

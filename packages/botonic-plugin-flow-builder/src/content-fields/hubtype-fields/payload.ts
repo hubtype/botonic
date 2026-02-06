@@ -1,4 +1,4 @@
-import { HtNodeWithoutContentType } from './node-types'
+import type { HtNodeWithoutContentType } from './node-types'
 
 export interface HtPayloadNode {
   id: string

@@ -1,9 +1,8 @@
-import { ActionRequest, Video } from '@botonic/react'
-import React from 'react'
+import { type ActionRequest, Video } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtVideoNode } from './hubtype-fields'
+import type { HtVideoNode } from './hubtype-fields'
 
 export class FlowVideo extends ContentFieldsBase {
   public src = ''
@@ -11,7 +10,7 @@ export class FlowVideo extends ContentFieldsBase {
   static fromHubtypeCMS(component: HtVideoNode, locale: string): FlowVideo {
     const newVideo = new FlowVideo(component.id)
     newVideo.code = component.code
-    newVideo.src = this.getVideoByLocale(locale, component.content.video)
+    newVideo.src = FlowVideo.getVideoByLocale(locale, component.content.video)
     newVideo.followUp = component.follow_up
 
     return newVideo

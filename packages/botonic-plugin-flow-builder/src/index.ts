@@ -1,12 +1,12 @@
 import {
   INPUT,
-  Plugin,
-  PluginPreRequest,
+  type Plugin,
+  type PluginPreRequest,
   PROVIDER,
-  ResolvedPlugins,
-  Session,
+  type ResolvedPlugins,
+  type Session,
 } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
@@ -16,28 +16,28 @@ import {
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import { FlowContent } from './content-fields'
+import type { FlowContent } from './content-fields'
 import {
-  HtBotActionNode,
-  HtFlowBuilderData,
-  HtNodeWithContent,
+  type HtBotActionNode,
+  type HtFlowBuilderData,
+  type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { FlowFactory } from './flow-factory'
 import { CustomFunction, DEFAULT_FUNCTION_NAMES } from './functions'
 import {
-  AiAgentFunction,
-  BotonicPluginFlowBuilderOptions,
-  ContentFilter,
+  type AiAgentFunction,
+  type BotonicPluginFlowBuilderOptions,
+  type ContentFilter,
   FlowBuilderJSONVersion,
-  InShadowingConfig,
-  KnowledgeBaseFunction,
-  PayloadParamsBase,
-  RatingSubmittedInfo,
-  TrackEventFunction,
+  type InShadowingConfig,
+  type KnowledgeBaseFunction,
+  type PayloadParamsBase,
+  type RatingSubmittedInfo,
+  type TrackEventFunction,
 } from './types'
 import { getNextPayloadByUserInput } from './user-input'
-import { SmartIntentsInferenceConfig } from './user-input/smart-intent'
+import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { inputHasTextData, resolveGetAccessToken } from './utils'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
@@ -228,7 +228,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     // TODO: prevent infinite recursive calls
-    if (content && content.followUp) {
+    if (content?.followUp) {
       return this.getContentsById(content.followUp.id, contents)
     } else if (node.follow_up) {
       console.log('FOLLOWUP FROM NODE-------> OLD SYSTEM')

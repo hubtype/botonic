@@ -1,5 +1,5 @@
-import { HtBaseNode, HtNodeLink } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode, HtNodeLink } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtFallbackNode extends HtBaseNode {
   type: HtNodeWithContentType.FALLBACK

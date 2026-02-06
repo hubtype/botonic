@@ -1,8 +1,8 @@
-import { INPUT, Input, Session } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { INPUT, type Input, type Session } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import { getFlowBuilderPlugin } from './helpers'
-import { InShadowingConfig, ProcessEnvNodeEnvs } from './types'
+import { type InShadowingConfig, ProcessEnvNodeEnvs } from './types'
 
 function getAccessTokenFromSession(session: Session): string {
   if (!session._access_token) {

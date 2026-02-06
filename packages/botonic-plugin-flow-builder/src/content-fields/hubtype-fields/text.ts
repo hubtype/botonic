@@ -1,6 +1,6 @@
-import { HtButton } from './button'
-import { HtBaseNode, HtTextLocale } from './common'
-import { HtButtonStyle, HtNodeWithContentType } from './node-types'
+import type { HtButton } from './button'
+import type { HtBaseNode, HtTextLocale } from './common'
+import type { HtButtonStyle, HtNodeWithContentType } from './node-types'
 
 export interface HtTextNode extends HtBaseNode {
   type: HtNodeWithContentType.TEXT

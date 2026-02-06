@@ -1,11 +1,14 @@
-import { AgenticOutputMessage } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import type { AgenticOutputMessage } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
 import { FlowText } from './flow-text'
-import { HtAiAgentNode, HtInputGuardrailRule } from './hubtype-fields/ai-agent'
+import type {
+  HtAiAgentNode,
+  HtInputGuardrailRule,
+} from './hubtype-fields/ai-agent'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''

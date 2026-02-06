@@ -1,13 +1,13 @@
-import { EventAction, EventConditionalCountry } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventConditionalCountry } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtFunctionResult } from './hubtype-fields'
-import { HtCountryConditionalNode } from './hubtype-fields/country-conditional'
+import type { HtFunctionResult } from './hubtype-fields'
+import type { HtCountryConditionalNode } from './hubtype-fields/country-conditional'
 
 export class FlowCountryConditional extends ContentFieldsBase {
   public resultMapping: HtFunctionResult[] = []

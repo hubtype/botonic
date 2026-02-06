@@ -1,12 +1,12 @@
-import { EventAction, EventWebviewActionTriggered } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventWebviewActionTriggered } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtWebviewExits, HtWebviewNode } from './hubtype-fields'
+import type { HtWebviewExits, HtWebviewNode } from './hubtype-fields'
 
 export class FlowWebview extends ContentFieldsBase {
   public webviewTargetId: string = ''

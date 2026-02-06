@@ -1,6 +1,6 @@
-import { HtButton } from './button'
-import { HtBaseNode, HtMediaFileLocale, HtTextLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtButton } from './button'
+import type { HtBaseNode, HtMediaFileLocale, HtTextLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtCarouselElement {
   id: string

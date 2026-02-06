@@ -1,5 +1,5 @@
-import { HtBaseNode, HtVideoLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode, HtVideoLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtVideoNode extends HtBaseNode {
   type: HtNodeWithContentType.VIDEO

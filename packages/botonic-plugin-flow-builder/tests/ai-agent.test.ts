@@ -1,7 +1,7 @@
-import { InferenceResponse, INPUT } from '@botonic/core'
+import { INPUT, type InferenceResponse } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowAiAgent, FlowText } from '../src'
+import type { FlowAiAgent, FlowText } from '../src'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'

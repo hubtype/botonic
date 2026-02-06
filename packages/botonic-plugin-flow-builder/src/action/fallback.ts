@@ -1,13 +1,13 @@
-import { EventAction, EventFallback } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventFallback } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
-import { FlowContent } from '../content-fields'
+import type { FlowBuilderApi } from '../api'
+import type { FlowContent } from '../content-fields'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './index'
 
 export async function getContentsByFallback({
   cmsApi,

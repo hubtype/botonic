@@ -1,7 +1,7 @@
-import { INPUT, InputType } from '@botonic/core'
+import { INPUT, type InputType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../src/content-fields/index'
+import type { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import {

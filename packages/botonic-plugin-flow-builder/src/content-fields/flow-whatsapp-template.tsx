@@ -1,25 +1,24 @@
 import { isWhatsapp } from '@botonic/core'
 import {
-  ActionRequest,
+  type ActionRequest,
   Text,
-  WhatsappTemplate,
-  WhatsappTemplateButton,
   WhatsAppTemplateButtonSubType,
-  WhatsappTemplateComponentBody,
-  WhatsappTemplateComponentButtons,
-  WhatsappTemplateComponentHeader,
   WhatsAppTemplateComponentType,
   WhatsAppTemplateParameterType,
-  WhatsappTemplateQuickReplyButton,
-  WhatsappTemplateUrlButton,
-  WhatsappTemplateVoiceCallButton,
+  WhatsappTemplate,
+  type WhatsappTemplateButton,
+  type WhatsappTemplateComponentBody,
+  type WhatsappTemplateComponentButtons,
+  type WhatsappTemplateComponentHeader,
+  type WhatsappTemplateQuickReplyButton,
+  type WhatsappTemplateUrlButton,
+  type WhatsappTemplateVoiceCallButton,
 } from '@botonic/react'
-import React from 'react'
 
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import {
+import type {
   HtButton,
   HtMediaFileLocale,
   HtWhatsAppTemplate,

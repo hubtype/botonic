@@ -1,10 +1,16 @@
-import { Button } from '@botonic/core'
-import { ActionRequest, Element, Pic, Subtitle, Title } from '@botonic/react'
+import type { Button } from '@botonic/core'
+import {
+  type ActionRequest,
+  Element,
+  Pic,
+  Subtitle,
+  Title,
+} from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtCarouselElement } from './hubtype-fields'
+import type { HtCarouselElement } from './hubtype-fields'
 
 export class FlowElement extends ContentFieldsBase {
   public title = ''
@@ -19,9 +25,12 @@ export class FlowElement extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): FlowElement {
     const newElement = new FlowElement(component.id)
-    newElement.title = this.getTextByLocale(locale, component.title)
-    newElement.subtitle = this.getTextByLocale(locale, component.subtitle)
-    newElement.image = this.getAssetByLocale(locale, component.image)
+    newElement.title = FlowElement.getTextByLocale(locale, component.title)
+    newElement.subtitle = FlowElement.getTextByLocale(
+      locale,
+      component.subtitle
+    )
+    newElement.image = FlowElement.getAssetByLocale(locale, component.image)
     newElement.button = FlowButton.fromHubtypeCMS(
       component.button,
       locale,

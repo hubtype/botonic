@@ -1,20 +1,20 @@
-import { BotContext, INPUT, isDev, isWebchat } from '@botonic/core'
+import { type BotContext, INPUT, isDev, isWebchat } from '@botonic/core'
 import {
-  ActionRequest,
+  type ActionRequest,
   Multichannel,
   RequestContext,
   WebchatSettings,
-  WebchatSettingsProps,
+  type WebchatSettingsProps,
 } from '@botonic/react'
 import React from 'react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD } from '../constants'
-import { FlowContent, FlowHandoff } from '../content-fields'
+import { type FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
-import BotonicPluginFlowBuilder from '../index'
+import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextData } from '../utils'
 import { getContentsByAiAgent } from './ai-agent'
 import { getContentsByFallback } from './fallback'

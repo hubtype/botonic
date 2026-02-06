@@ -1,4 +1,4 @@
-import { HtNodeLink, HtTextLocale, HtUrlLocale } from './common'
+import type { HtNodeLink, HtTextLocale, HtUrlLocale } from './common'
 
 export interface HtButton {
   id: string
