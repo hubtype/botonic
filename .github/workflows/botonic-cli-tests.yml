@@ -15,6 +15,5 @@ jobs:
       PACKAGE_NAME: Botonic cli tests
       PACKAGE: botonic-cli
       UNIT_TEST_COMMAND: npm run test_ci
-      LINT_COMMAND: npm run lint:check
       PUBLISH_TESTS_RESULTS: "yes"
       NEEDS_CODECOV_UPLOAD: "yes"

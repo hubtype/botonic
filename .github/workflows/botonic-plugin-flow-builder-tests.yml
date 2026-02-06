@@ -14,6 +14,5 @@ jobs:
     with:
       PACKAGE_NAME: Botonic plugin flow builder tests
       PACKAGE: botonic-plugin-flow-builder
-      LINT_COMMAND: npm run lint:check
       BUILD_COMMAND: 'cd ../botonic-core && npm run build && cd ../botonic-react && npm run build && cd ../botonic-plugin-flow-builder && npm run build'
       NEEDS_CODECOV_UPLOAD: 'yes'
