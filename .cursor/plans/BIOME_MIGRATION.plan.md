@@ -26,20 +26,14 @@ todos:
   - id: phase1-migrate-fb
     content: Migrate botonic-plugin-flow-builder + update pre-commit
     status: completed
-  - id: phase2-migrate-cli
-    content: Migrate botonic-cli (ESLint v9)
+  - id: phase1-migrate-cli
+    content: Migrate botonic-cli (ESLint v9) + update pre-commit
     status: completed
   - id: phase1-update-ci
     content: Update CI workflows for Phase 1
     status: pending
   - id: phase2-create-biome-config
     content: Create @botonic/biome-config package
-    status: pending
-  - id: phase2-deprecate-eslint-config
-    content: Deprecate @botonic/eslint-config
-    status: pending
-  - id: phase2-migrate-dx
-    content: Migrate botonic-dx and bundlers
     status: pending
   - id: phase2-migrate-examples
     content: Migrate examples (blank, blank-typescript, flow-builder)
@@ -161,6 +155,7 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 4. `botonic-plugin-ai-agents` (COMPLETED)
 5. `botonic-react` (COMPLETED)
 6. `botonic-plugin-flow-builder` (COMPLETED)
+7. `botonic-cli` (COMPLETED)
 
 ### Work in Progress: botonic-react Migration
 
@@ -342,18 +337,14 @@ npm test
 
 ---
 
-## Phase 2: CLI, DX, eslint-config and Examples
+## Phase 2: biome-config and Examples
 
 ### Included packages
 
-1. `botonic-cli`
-2. `botonic-dx`
-3. `botonic-dx-bundler-webpack`
-4. `botonic-dx-bundler-rspack`
-5. `botonic-eslint-config` (deprecate and create `@botonic/biome-config`)
-6. `examples/blank`
-7. `examples/blank-typescript`
-8. `examples/flow-builder-typescript`
+1. `botonic-biome-config` (new `@botonic/biome-config` package)
+2. `examples/blank`
+3. `examples/blank-typescript`
+4. `examples/flow-builder-typescript`
 
 ### Steps
 
@@ -365,26 +356,11 @@ Create `[packages/botonic-biome-config/](packages/botonic-biome-config/)` with:
 - `biome.json` with base configuration for external projects
 - `README.md` with usage instructions
 
-#### 2.2 Deprecate `@botonic/eslint-config`
-
-- Add deprecation notice in README
-- Mark as deprecated on npm
-- Keep for backwards compatibility with old projects
-
-#### 2.3 Migrate `botonic-cli`
-
-Note: This package uses ESLint v9 with oclif-specific configuration. Requires special attention.
-
-#### 2.4 Update examples
+#### 2.2 Update examples
 
 - Update dependencies to `@botonic/biome-config`
 - Remove `.eslintrc*` and `.prettierrc*` files
 - Create `biome.json` that extends base configuration
-
-#### 2.5 Update `botonic-dx`
-
-- Update `[baseline/](packages/botonic-dx/baseline/)` with Biome files
-- Remove ESLint/Prettier configurations
 
 ---
 
