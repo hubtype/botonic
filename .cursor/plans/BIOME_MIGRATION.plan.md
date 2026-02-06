@@ -6,10 +6,10 @@ todos:
     content: Install Biome v2.3.13 at root and create base biome.json
     status: completed
   - id: phase1-migrate-core
-    content: "Migrate botonic-core: update scripts and format code"
+    content: 'Migrate botonic-core: update scripts and format code'
     status: completed
   - id: phase1-update-precommit-core
-    content: "Update pre-commit: add Biome hook for botonic-core"
+    content: 'Update pre-commit: add Biome hook for botonic-core'
     status: completed
   - id: phase1-migrate-analytics
     content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
@@ -31,7 +31,7 @@ todos:
     status: completed
   - id: phase1-update-ci
     content: Update CI workflows for Phase 1
-    status: pending
+    status: completed
   - id: phase2-create-biome-config
     content: Create @botonic/biome-config package
     status: pending
@@ -39,7 +39,7 @@ todos:
     content: Migrate examples (blank, blank-typescript, flow-builder)
     status: pending
   - id: cleanup
-    content: "Final cleanup: remove dependencies, files and simplify pre-commit"
+    content: 'Final cleanup: remove dependencies, files and simplify pre-commit'
     status: pending
 isProject: false
 ---
@@ -78,8 +78,6 @@ flowchart TD
 
     pkgConfig --> external["External projects"]
 ```
-
-
 
 ## Biome Version
 
@@ -156,6 +154,7 @@ files: ^(packages/botonic-core/|packages/botonic-plugin-hubtype-analytics/)
 5. `botonic-react` (COMPLETED)
 6. `botonic-plugin-flow-builder` (COMPLETED)
 7. `botonic-cli` (COMPLETED)
+8. CI workflows update + cleanup (COMPLETED)
 
 ### Work in Progress: botonic-react Migration
 
@@ -255,23 +254,9 @@ npm test
 
 When migrating a package to Biome, follow these steps:
 
-#### 1. Update package-specific workflow
+#### 1. CI workflow
 
-In `.github/workflows/botonic-<package>-tests.yml`, add the `LINT_COMMAND` input:
-
-```yaml
-jobs:
-  botonic-<package>-tests:
-    uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
-    with:
-      PACKAGE_NAME: Botonic <package> tests
-      PACKAGE: botonic-<package>
-      LINT_COMMAND: npm run lint:check # <-- Add this line
-      # ... other inputs ...
-```
-
-> **Note**: The `botonic-common-workflow.yml` already has the `LINT_COMMAND` input with default value `npm run lint_core` for non-migrated packages.
+No changes needed per package. The `botonic-common-workflow.yml` default `LINT_COMMAND` is already `npm run lint:check` (Biome). Just make sure the package has the `lint:check` script in its `package.json`.
 
 #### 2. Update `.pre-commit-config.yaml`
 
@@ -323,17 +308,39 @@ npm test
 
 ---
 
+### CI workflows update + cleanup (COMPLETED)
+
+Once all packages were migrated to Biome, the following changes were applied:
+
+#### CI workflows
+
+- Changed the default `LINT_COMMAND` in `botonic-common-workflow.yml` from `npm run lint_core` to `npm run lint:check`
+- Removed redundant `LINT_COMMAND: npm run lint:check` from all 6 package-specific workflows (they now use the default)
+- This also fixed `botonic-ci-test-all-packages.yml` which was falling back to the old default
+
+#### Deleted files
+
+- `packages/.eslintrc.js` — Shared ESLint config no longer used by any package
+- `scripts/qa/lint-package.ts` — Unreferenced lint script
+- `scripts/qa/lint-all-packages.ts` — Unreferenced lint-all script
+- `scripts/qa/lint-d-ts.ts` — Unreferenced TypeScript type-checking script
+- `scripts/qa/old/lint-all-packages.sh` — Legacy bash lint-all script
+- `scripts/qa/old/lint-d-ts.sh` — Legacy bash type-checking script
+
+#### Kept files
+
+- `scripts/qa/biome-check.sh` — Used by the Biome pre-commit hook
+- `scripts/qa/old/lint-package.sh` — Still used by the `docs/` pre-commit hook
+
 ### CI Configuration Files (reference)
 
-
-| File                                            | Purpose                                               |
-| ----------------------------------------------- | ----------------------------------------------------- |
-| `.github/workflows/botonic-common-workflow.yml` | Reusable workflow with `LINT_COMMAND` input           |
-| `.github/workflows/pre-commit.yml`              | Installs Biome globally before running pre-commit     |
-| `.pre-commit-config.yaml`                       | Local Biome hook for migrated packages                |
-| `.prettierignore`                               | Prevents Prettier from reformatting migrated packages |
-| `.vscode/settings.json`                         | Biome as default formatter in the IDE                 |
-
+| File                                            | Purpose                                                                     |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
+| `.github/workflows/botonic-common-workflow.yml` | Reusable workflow with `LINT_COMMAND` input (default: `npm run lint:check`) |
+| `.github/workflows/pre-commit.yml`              | Installs Biome globally before running pre-commit                           |
+| `.pre-commit-config.yaml`                       | Local Biome hook for migrated packages                                      |
+| `.prettierignore`                               | Prevents Prettier from reformatting migrated packages                       |
+| `.vscode/settings.json`                         | Biome as default formatter in the IDE                                       |
 
 ---
 
@@ -379,7 +386,7 @@ After completing both phases, remove from root `[package.json](package.json)`:
 
 ### Remove obsolete configuration files
 
-- `[packages/.eslintrc.js](packages/.eslintrc.js)`
+- ~~`packages/.eslintrc.js`~~ (already removed in Phase 1)
 - `[.prettierrc](.prettierrc)`
 - `.eslintignore` (if exists)
 
@@ -394,6 +401,8 @@ At the end, pre-commit will only have the Biome hook:
     - id: biome-check
       additional_dependencies: ['@biomejs/biome@2.3.13']
 ```
+
+Remove `scripts/qa/old/lint-package.sh` once `docs/` is also migrated.
 
 ---
 
@@ -417,4 +426,3 @@ Key rules mapped in `[biome.json](biome.json)`:
 - **IDE Integration**: Install Biome extension for VS Code
 - **Editor config**: The `.editorconfig` file can be kept as fallback
 - **Plan file**: This plan is located at `[.cursor/plans/BIOME_MIGRATION.plan.md](.cursor/plans/BIOME_MIGRATION.plan.md)` for team tracking
-
