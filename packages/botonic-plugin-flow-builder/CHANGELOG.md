@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.44.2] - 2026-02-06
+
+### Fixed
+
+- [PR-3162](https://github.com/hubtype/botonic/pull/3162): Use getAccessToken for capture-user-input-api to work properly in local development
+
 ## [0.44.1] - 2026-02-03
 
 ### Added
