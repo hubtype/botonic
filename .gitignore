@@ -22,7 +22,5 @@ junit.xml
 packages/botonic-cli/tests/dummy-project/package-lock.json
 packages/botonic-cli/botonic-tmp*
 .botonic.json
-.vscode/*
-!.vscode/settings.json
 docs/website/package-lock.json
 *.tsbuildinfo
