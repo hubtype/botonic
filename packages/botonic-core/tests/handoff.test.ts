@@ -80,39 +80,44 @@ describe('Handoff', () => {
     expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
   })
 
-  test.each([undefined, true, false])(
-    'sends the force_assign_if_not_available parameter',
-    (forceAssign: boolean | undefined) => {
-      const builder =
-        forceAssign !== undefined
-          ? new HandOffBuilder({}).withForceAssignIfNotAvailable(forceAssign)
-          : new HandOffBuilder({})
-      const value = forceAssign ?? true
-      builder.handOff()
-      const expectedBotonicAction =
-        `${BotonicAction.CreateCase}:` +
-        JSON.stringify({ force_assign_if_not_available: value })
-      expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
-    }
-  )
+  test.each([
+    undefined,
+    true,
+    false,
+  ])('sends the force_assign_if_not_available parameter', (forceAssign:
+    | boolean
+    | undefined) => {
+    const builder =
+      forceAssign !== undefined
+        ? new HandOffBuilder({}).withForceAssignIfNotAvailable(forceAssign)
+        : new HandOffBuilder({})
+    const value = forceAssign ?? true
+    builder.handOff()
+    const expectedBotonicAction =
+      `${BotonicAction.CreateCase}:` +
+      JSON.stringify({ force_assign_if_not_available: value })
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 
-  test.each([undefined, true, false])(
-    'sends the auto_assign_on_waiting parameter',
-    (autoAssignOnWaiting: boolean | undefined) => {
-      const builder =
-        autoAssignOnWaiting !== undefined
-          ? new HandOffBuilder({}).withAutoAssignOnWaiting(autoAssignOnWaiting)
-          : new HandOffBuilder({})
-      builder.handOff()
-      const defaultParams = { force_assign_if_not_available: true }
-      const params = autoAssignOnWaiting
-        ? { ...defaultParams, auto_assign_on_waiting: true }
-        : defaultParams
-      const expectedBotonicAction =
-        `${BotonicAction.CreateCase}:` + JSON.stringify(params)
-      expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
-    }
-  )
+  test.each([
+    undefined,
+    true,
+    false,
+  ])('sends the auto_assign_on_waiting parameter', (autoAssignOnWaiting:
+    | boolean
+    | undefined) => {
+    const builder =
+      autoAssignOnWaiting !== undefined
+        ? new HandOffBuilder({}).withAutoAssignOnWaiting(autoAssignOnWaiting)
+        : new HandOffBuilder({})
+    builder.handOff()
+    const defaultParams = { force_assign_if_not_available: true }
+    const params = autoAssignOnWaiting
+      ? { ...defaultParams, auto_assign_on_waiting: true }
+      : defaultParams
+    const expectedBotonicAction = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
+    expect(builder._session._botonic_action).toEqual(expectedBotonicAction)
+  })
 
   test('receives the extra data', () => {
     const builder = new HandOffBuilder({}).withExtraData({

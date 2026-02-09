@@ -16,15 +16,12 @@ describe('TEST: getting path and params from path payload input', () => {
     [`${PATH_PAYLOAD_IDENTIFIER}path1`, 'path1', {}],
     [`${PATH_PAYLOAD_IDENTIFIER}path1?path1`, 'path1', { path1: '' }],
     [`${PATH_PAYLOAD_IDENTIFIER}path1?param1=5`, 'path1', { param1: '5' }],
-  ])(
-    'getOnFinishParams(%s)=>%s',
-    (inputPayload, expectedPath, expectedParams) => {
-      const input = { type: 'postback', payload: inputPayload }
-      const { path, params } = getPathParamsFromPathPayload(input.payload)
-      expect(path).toEqual(expectedPath)
-      expect(params).toEqual(expectedParams)
-    }
-  )
+  ])('getOnFinishParams(%s)=>%s', (inputPayload, expectedPath, expectedParams) => {
+    const input = { type: 'postback', payload: inputPayload }
+    const { path, params } = getPathParamsFromPathPayload(input.payload)
+    expect(path).toEqual(expectedPath)
+    expect(params).toEqual(expectedParams)
+  })
 })
 
 describe('TEST: convert pathParams to params', () => {

@@ -1,4 +1,4 @@
-import { BotContext, Plugin } from './models'
+import type { BotContext, Plugin } from './models'
 
 interface RunPluginArgs {
   botContext: BotContext

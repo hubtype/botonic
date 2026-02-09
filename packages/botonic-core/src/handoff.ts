@@ -3,10 +3,11 @@ import axios from 'axios'
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
 import {
   BotonicAction,
-  BotonicActionType,
+  type BotonicActionType,
   EVENT_FORMAT_VERSION,
-  Session,
+  type Session,
 } from './models'
+
 const HUBTYPE_API_URL = 'https://api.hubtype.com'
 
 export interface HubtypeAgentsInfo {
@@ -362,7 +363,9 @@ export function cancelHandoff(
   typification: string | null = null
 ): void {
   let action: BotonicActionType = BotonicAction.DiscardCase
-  if (typification) action = `${action}:${JSON.stringify({ typification })}`
+  if (typification) {
+    action = `${action}:${JSON.stringify({ typification })}`
+  }
   session._botonic_action = action
 }
 

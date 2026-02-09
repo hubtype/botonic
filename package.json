@@ -17,6 +17,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-typescript": "^7.26.0",
     "@babel/runtime": "^7.26.0",
+    "@biomejs/biome": "^2.3.13",
     "@jest/test-sequencer": "^30.2.0",
     "@swc/core": "^1.15.1",
     "@swc/jest": "^0.2.39",

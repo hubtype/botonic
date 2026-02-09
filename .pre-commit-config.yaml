@@ -13,52 +13,55 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
 
+  # ESLint hooks for packages NOT yet migrated (remove as each package is migrated)
+  # Biome hook for migrated packages (update 'files' pattern as packages are migrated)
   - repo: local
     hooks:
+      - id: biome-check
+        name: biome-check (Biome)
+        entry: npx @biomejs/biome check --write
+        language: system
+        files: ^packages/botonic-core/
+        types_or: [javascript, jsx, ts, tsx, json]
+
       - id: cli
-        name: cli
+        name: cli (ESLint)
         entry: bash scripts/qa/old/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
 
-      - id: core
-        name: core
-        entry: scripts/qa/old/lint-package.sh packages/botonic-core
-        language: system
-        files: ^packages/botonic-core/
-
       - id: react
-        name: react
+        name: react (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-react
         language: system
         files: ^packages/botonic-react/
 
       - id: docs
-        name: docs
+        name: docs (ESLint)
         entry: scripts/qa/old/lint-package.sh docs/
         language: system
         files: ^docs/
 
       - id: plugin-flow-builder
-        name: plugin-flow-builder
+        name: plugin-flow-builder (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
 
       - id: hubtype-analytics
-        name: hubtype-analytics
+        name: hubtype-analytics (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
         language: system
         files: ^packages/botonic-plugin-hubtype-analytics/
 
       - id: plugin-ai-agents
-        name: plugin-ai-agents
+        name: plugin-ai-agents (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ai-agents
         language: system
         files: ^packages/botonic-plugin-ai-agents/
 
       - id: plugin-knowledge-bases
-        name: plugin-knowledge-bases
+        name: plugin-knowledge-bases (ESLint)
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-knowledge-bases
         language: system
         files: ^packages/botonic-plugin-knowledge-bases/

@@ -26,6 +26,11 @@ on:
         description: "Command to execute the build of the package"
         default: npm run build
         required: false
+      LINT_COMMAND:
+        type: string
+        description: "Command to execute linting (use 'npm run lint:check' for Biome-migrated packages)"
+        default: npm run lint_core
+        required: false
       PUBLISH_TESTS_RESULTS:
         type: string
         description: "Flag to know if tests should or should not be published"
@@ -77,7 +82,7 @@ jobs:
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
 
       - name: Verify lint
-        run: (cd ./packages/${{ inputs.PACKAGE }} && npm run lint_core)
+        run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.LINT_COMMAND }})
 
       - name: Publish Unit Test Results
         if: ${{ inputs.PUBLISH_TESTS_RESULTS != '' && always() }}
