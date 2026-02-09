@@ -14,5 +14,4 @@ jobs:
     with:
       PACKAGE_NAME: Botonic core tests
       PACKAGE: botonic-core
-      LINT_COMMAND: npm run lint:check
       NEEDS_CODECOV_UPLOAD: "yes"

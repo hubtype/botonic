@@ -28,8 +28,8 @@ on:
         required: false
       LINT_COMMAND:
         type: string
-        description: "Command to execute linting (use 'npm run lint:check' for Biome-migrated packages)"
-        default: npm run lint_core
+        description: "Command to execute linting with Biome"
+        default: npm run lint:check
         required: false
       PUBLISH_TESTS_RESULTS:
         type: string
