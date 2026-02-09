@@ -1,53 +1,63 @@
 ---
+name: ''
+overview: ''
+todos: []
+isProject: false
+---
+
+---
+
 name: Biome Migration
 overview: Migrate the Botonic monorepo from ESLint + Prettier to Biome v2.3.13 in two phases, with a hybrid pre-commit that uses Biome for migrated packages and ESLint for the rest.
 todos:
-  - id: phase1-install
-    content: Install Biome v2.3.13 at root and create base biome.json
-    status: completed
-  - id: phase1-migrate-core
-    content: 'Migrate botonic-core: update scripts and format code'
-    status: completed
-  - id: phase1-update-precommit-core
-    content: 'Update pre-commit: add Biome hook for botonic-core'
-    status: completed
-  - id: phase1-migrate-analytics
-    content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
-    status: completed
-  - id: phase1-migrate-kb
-    content: Migrate botonic-plugin-knowledge-bases + update pre-commit
-    status: pending
-  - id: phase1-migrate-ai
-    content: Migrate botonic-plugin-ai-agents + update pre-commit
-    status: pending
-  - id: phase1-migrate-react
-    content: Migrate botonic-react (includes JSX) + update pre-commit
-    status: pending
-  - id: phase1-migrate-fb
-    content: Migrate botonic-plugin-flow-builder + update pre-commit
-    status: pending
-  - id: phase1-update-ci
-    content: Update CI workflows for Phase 1
-    status: pending
-  - id: phase2-create-biome-config
-    content: Create @botonic/biome-config package
-    status: pending
-  - id: phase2-deprecate-eslint-config
-    content: Deprecate @botonic/eslint-config
-    status: pending
-  - id: phase2-migrate-cli
-    content: Migrate botonic-cli (ESLint v9)
-    status: pending
-  - id: phase2-migrate-dx
-    content: Migrate botonic-dx and bundlers
-    status: pending
-  - id: phase2-migrate-examples
-    content: Migrate examples (blank, blank-typescript, flow-builder)
-    status: pending
-  - id: cleanup
-    content: 'Final cleanup: remove dependencies, files and simplify pre-commit'
-    status: pending
-isProject: false
+
+- id: phase1-install
+  content: Install Biome v2.3.13 at root and create base biome.json
+  status: completed
+- id: phase1-migrate-core
+  content: 'Migrate botonic-core: update scripts and format code'
+  status: completed
+- id: phase1-update-precommit-core
+  content: 'Update pre-commit: add Biome hook for botonic-core'
+  status: completed
+- id: phase1-migrate-analytics
+  content: Migrate botonic-plugin-hubtype-analytics + update pre-commit
+  status: completed
+- id: phase1-migrate-kb
+  content: Migrate botonic-plugin-knowledge-bases + update pre-commit
+  status: pending
+- id: phase1-migrate-ai
+  content: Migrate botonic-plugin-ai-agents + update pre-commit
+  status: pending
+- id: phase1-migrate-react
+  content: Migrate botonic-react (includes JSX) + update pre-commit
+  status: pending
+- id: phase1-migrate-fb
+  content: Migrate botonic-plugin-flow-builder + update pre-commit
+  status: pending
+- id: phase1-update-ci
+  content: Update CI workflows for Phase 1
+  status: pending
+- id: phase2-create-biome-config
+  content: Create @botonic/biome-config package
+  status: pending
+- id: phase2-deprecate-eslint-config
+  content: Deprecate @botonic/eslint-config
+  status: pending
+- id: phase2-migrate-cli
+  content: Migrate botonic-cli (ESLint v9)
+  status: pending
+- id: phase2-migrate-dx
+  content: Migrate botonic-dx and bundlers
+  status: pending
+- id: phase2-migrate-examples
+  content: Migrate examples (blank, blank-typescript, flow-builder)
+  status: pending
+- id: cleanup
+  content: 'Final cleanup: remove dependencies, files and simplify pre-commit'
+  status: pending
+  isProject: false
+
 ---
 
 # ESLint/Prettier to Biome Migration Plan
