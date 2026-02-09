@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.44.0",
+  "version": "0.45.0-alpha.0",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run.js"

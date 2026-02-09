@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.44.1",
+  "version": "0.45.0-alpha.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -15,7 +15,7 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "0.44.1",
+    "@botonic/react": "^0.45.0-alpha.0",
     "axios": "^1.13.2",
     "uuid": "^10.0.0"
   },
