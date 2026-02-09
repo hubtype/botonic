@@ -48,7 +48,6 @@ repos:
         language: system
         files: ^packages/botonic-plugin-flow-builder/
 
-
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
     hooks:
