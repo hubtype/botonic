@@ -1,3 +1,4 @@
 # Packages migrated to Biome (add more as they are migrated)
 packages/botonic-core/
 packages/botonic-plugin-hubtype-analytics/
+packages/botonic-plugin-knowledge-bases/

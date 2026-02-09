@@ -1,4 +1,4 @@
-import { KnowledgeBasesResponse } from '@botonic/core'
+import type { KnowledgeBasesResponse } from '@botonic/core'
 
 export interface PluginKnowledgeBaseOptions {
   host: string

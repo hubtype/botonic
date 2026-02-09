@@ -10,8 +10,9 @@
     "test": "echo Skipping tests...",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
-    "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint": "biome check --write src/",
+    "lint:check": "biome check src/",
+    "format": "biome format --write src/"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
@@ -44,9 +45,5 @@
     "conversational-ui",
     "typescript"
   ],
-  "eslintConfig": {
-    "extends": "../.eslintrc.js",
-    "root": true
-  },
   "license": "MIT"
 }

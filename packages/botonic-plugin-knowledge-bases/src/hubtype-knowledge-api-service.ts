@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import axios, { AxiosResponse } from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 
-import { Chunk } from './types'
+import type { Chunk } from './types'
 
 const DEFAULT_TIMEOUT = 20000
 
