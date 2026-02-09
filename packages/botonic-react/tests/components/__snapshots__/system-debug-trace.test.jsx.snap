@@ -2,14 +2,14 @@
 
 exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg eXgWCs collapsible"
+  className="sc-cPiKLX hiNMMD collapsible"
   onClick={[Function]}
 >
   <div
-    className="sc-gEvEer ezpUwU"
+    className="sc-dLMFU jqtbmw"
   >
     <span
-      className="sc-fqkvVR hryAHs"
+      className="sc-eldPxv cQDvHx"
     >
       <svg
         fill="#6D6A78"
@@ -23,7 +23,7 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
       </svg>
     </span>
     <span
-      className="sc-dcJsrY cxwzHl"
+      className="sc-fPXMVe dQbrss"
     >
       AI Agent triggered 
       <span>
@@ -32,7 +32,7 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
       </span>
     </span>
     <span
-      className="sc-eqUAAy caIsqy"
+      className="sc-eDPEul eogPNX"
     >
       <svg
         color="#6D6A78"
@@ -47,7 +47,7 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
     </span>
   </div>
   <div
-    className="sc-iGgWBj eoBoDk"
+    className="sc-gFqAkR kYneCa"
     style={
       {
         "display": "none",
@@ -55,13 +55,13 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
     }
   >
     <div
-      className="sc-jlZhew SyVDK"
+      className="sc-bXCLTC ZamDy"
     >
       <div
-        className="sc-gsFSXq eLrleL"
+        className="sc-ikkxIA bRKELq"
       >
         <strong
-          className="sc-kAyceB DSINm"
+          className="sc-dAbbOL hTGQij"
         >
           No tools executed
         </strong>
@@ -73,13 +73,13 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
 
 exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg eXgWCs"
+  className="sc-cPiKLX hiNMMD"
 >
   <div
-    className="sc-gEvEer ezpUwU"
+    className="sc-dLMFU jqtbmw"
   >
     <span
-      className="sc-fqkvVR hryAHs"
+      className="sc-eldPxv cQDvHx"
     >
       <svg
         color="#6D6A78"
@@ -93,7 +93,7 @@ exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapsh
       </svg>
     </span>
     <span
-      className="sc-dcJsrY cxwzHl"
+      className="sc-fPXMVe dQbrss"
     >
       Fallback message triggered 
       <span>
@@ -108,14 +108,14 @@ exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapsh
 
 exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg eXgWCs collapsible"
+  className="sc-cPiKLX hiNMMD collapsible"
   onClick={[Function]}
 >
   <div
-    className="sc-gEvEer ezpUwU"
+    className="sc-dLMFU jqtbmw"
   >
     <span
-      className="sc-fqkvVR hryAHs"
+      className="sc-eldPxv cQDvHx"
     >
       <svg
         fill="#6D6A78"
@@ -129,7 +129,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
       </svg>
     </span>
     <span
-      className="sc-dcJsrY cxwzHl"
+      className="sc-fPXMVe dQbrss"
     >
       Handoff to agent 
       <span>
@@ -137,7 +137,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
       </span>
     </span>
     <span
-      className="sc-eqUAAy caIsqy"
+      className="sc-eDPEul eogPNX"
     >
       <svg
         color="#6D6A78"
@@ -152,7 +152,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
     </span>
   </div>
   <div
-    className="sc-iGgWBj eoBoDk"
+    className="sc-gFqAkR kYneCa"
     style={
       {
         "display": "none",
@@ -160,30 +160,30 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
     }
   >
     <div
-      className="sc-jlZhew SyVDK"
+      className="sc-bXCLTC ZamDy"
     >
       <div
-        className="sc-gsFSXq eLrleL"
+        className="sc-ikkxIA bRKELq"
       >
         <strong
-          className="sc-kAyceB DSINm"
+          className="sc-dAbbOL hTGQij"
         >
           Queue
         </strong>
         <div
-          className="sc-imWYAI hVMbiq"
+          className="sc-feUZmu bqLLuw"
         />
       </div>
       <div
-        className="sc-gsFSXq eLrleL"
+        className="sc-ikkxIA bRKELq"
       >
         <strong
-          className="sc-kAyceB DSINm"
+          className="sc-dAbbOL hTGQij"
         >
           Auto-assign
         </strong>
         <div
-          className="sc-imWYAI hVMbiq"
+          className="sc-feUZmu bqLLuw"
         >
           OFF
         </div>
@@ -195,13 +195,13 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
 
 exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg eXgWCs"
+  className="sc-cPiKLX hiNMMD"
 >
   <div
-    className="sc-gEvEer ezpUwU"
+    className="sc-dLMFU jqtbmw"
   >
     <span
-      className="sc-fqkvVR hryAHs"
+      className="sc-eldPxv cQDvHx"
     >
       <svg
         color="#6D6A78"
@@ -215,7 +215,7 @@ exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapsho
       </svg>
     </span>
     <span
-      className="sc-dcJsrY cxwzHl"
+      className="sc-fPXMVe dQbrss"
     >
       Keyword matched 
       <span>
@@ -230,13 +230,13 @@ exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapsho
 
 exports[`SystemDebugTrace Component Snapshot Tests smart intent event matches snapshot 1`] = `
 <div
-  className="sc-aXZVg eXgWCs"
+  className="sc-cPiKLX hiNMMD"
 >
   <div
-    className="sc-gEvEer ezpUwU"
+    className="sc-dLMFU jqtbmw"
   >
     <span
-      className="sc-fqkvVR hryAHs"
+      className="sc-eldPxv cQDvHx"
     >
       <svg
         fill="#6D6A78"
@@ -250,7 +250,7 @@ exports[`SystemDebugTrace Component Snapshot Tests smart intent event matches sn
       </svg>
     </span>
     <span
-      className="sc-dcJsrY cxwzHl"
+      className="sc-fPXMVe dQbrss"
     >
       Smart intent triggered 
       <span>

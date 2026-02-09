@@ -1,6 +1,5 @@
-import React from 'react'
-
-import { RatingIconProps } from '../types'
+/** biome-ignore-all lint/a11y/noSvgWithoutTitle: we don't need a title for the svg */
+import type { RatingIconProps } from '../types'
 
 export const FaceMehSvg = ({ color, selected }: RatingIconProps) => {
   return selected ? (

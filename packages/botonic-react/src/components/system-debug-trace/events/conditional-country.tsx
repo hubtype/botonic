@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { SplitSvg } from '../icons/split'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface ConditionalCountryDebugEvent {
   action: EventAction.ConditionalCountry

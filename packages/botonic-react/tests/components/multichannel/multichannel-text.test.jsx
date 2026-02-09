@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Text } from '../../../src/components'
 import {
   MultichannelButton,

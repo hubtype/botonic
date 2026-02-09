@@ -3,11 +3,11 @@ import { jest } from '@jest/globals'
 import axios from 'axios'
 
 import { BotonicAPIService } from '../src/botonic-api-service.js'
+import type { BotDetail, Me, OAuth } from '../src/interfaces.js'
 import {
   BotCredentialsHandler,
   GlobalCredentialsHandler,
 } from '../src/util/credentials-handler.js'
-import type { BotDetail, Me, OAuth } from '../src/interfaces.js'
 
 describe('TEST: BotonicApiService', () => {
   let service: BotonicAPIService
@@ -201,7 +201,7 @@ describe('TEST: BotonicApiService', () => {
         headers: {},
         config: {} as any,
       })
-      const getSpy = jest
+      const _getSpy = jest
         .spyOn(service.apiClient, 'get')
         .mockResolvedValueOnce({
           data: mockMe,

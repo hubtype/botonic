@@ -1,0 +1,8 @@
+# Packages migrated to Biome (add more as they are migrated)
+packages/botonic-core/
+packages/botonic-cli/
+packages/botonic-plugin-hubtype-analytics/
+packages/botonic-plugin-knowledge-bases/
+packages/botonic-plugin-ai-agents/
+packages/botonic-react/
+packages/botonic-plugin-flow-builder/

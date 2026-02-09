@@ -1,11 +1,12 @@
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type React from 'react'
 
-import { WebchatMessage } from '../index-types'
+import type { WebchatMessage } from '../index-types'
 import { isCarousel } from '../message-utils'
 import { strToBool } from '../util/objects'
 import { deepMapWithIndex } from '../util/react'
 import { Button } from './button'
-import { ButtonProps } from './index-types'
+import type { ButtonProps } from './index-types'
 
 interface DisabledProps {
   disabled?: boolean
@@ -18,22 +19,27 @@ interface AdditionalProps {
   disabled?: boolean
   setDisabled: (disabled: boolean) => void
 }
+// biome-ignore lint/complexity/noStaticOnlyClass: ButtonsDisabler is a static class and should not be instantiated
 export class ButtonsDisabler {
   static constructBrowserProps(props: DisabledProps): DisabledProps {
     const disabledProps: DisabledProps = {}
-    if (props.autodisable !== undefined)
+    if (props.autodisable !== undefined) {
       disabledProps.autodisable = strToBool(props.autodisable)
-    if (props.disabledstyle !== undefined)
+    }
+    if (props.disabledstyle !== undefined) {
       disabledProps.disabledstyle = props.disabledstyle
+    }
     return disabledProps
   }
 
   static constructNodeProps(props: DisabledProps): DisabledProps {
     const disabledProps: DisabledProps = {}
-    if (props.autodisable !== undefined)
+    if (props.autodisable !== undefined) {
       disabledProps.autodisable = String(props.autodisable)
-    if (props.disabledstyle !== undefined)
+    }
+    if (props.disabledstyle !== undefined) {
       disabledProps.disabledstyle = JSON.stringify(props.disabledstyle)
+    }
     return disabledProps
   }
 
@@ -50,7 +56,9 @@ export class ButtonsDisabler {
     additionalProps?: AdditionalProps
   ): React.ReactNode {
     return deepMapWithIndex(children, (node: any) => {
-      if (node.type === Button) return this.updateButtons(node, additionalProps)
+      if (node.type === Button) {
+        return ButtonsDisabler.updateButtons(node, additionalProps)
+      }
       return node
     })
   }

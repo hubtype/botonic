@@ -1,5 +1,4 @@
-import React from 'react'
-
+/** biome-ignore-all lint/a11y/useAltText: This is a SVG icon */
 import ArrowScrollDown from '../../assets/arrow-scroll-down.svg'
 import { resolveImage } from '../../util/environment'
 import { ContainerScrollButton } from './styles'
@@ -20,15 +19,13 @@ export const ScrollButton = ({
   return (
     <>
       {scrollButtonEnabled && show ? (
-        <>
-          {CustomScrollButton ? (
-            <CustomScrollButton handleScrollToBottom={handleClick} />
-          ) : (
-            <ContainerScrollButton onClick={handleClick}>
-              <img src={resolveImage(ArrowScrollDown)} />
-            </ContainerScrollButton>
-          )}
-        </>
+        CustomScrollButton ? (
+          <CustomScrollButton handleScrollToBottom={handleClick} />
+        ) : (
+          <ContainerScrollButton onClick={handleClick}>
+            <img src={resolveImage(ArrowScrollDown)} />
+          </ContainerScrollButton>
+        )
       ) : null}
     </>
   )

@@ -17,7 +17,7 @@ import {
   EventIntentSmart,
   EventKeyword,
   EventKnowledgeBase,
-  EventRedirectFlow,
+  type EventRedirectFlow,
   EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,

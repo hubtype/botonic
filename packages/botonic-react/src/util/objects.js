@@ -6,12 +6,14 @@
  * getProperty(obj, 'a.b.z'), returns undefined
  */
 export const getProperty = (obj, property) => {
-  if (!property) return undefined
+  if (!property) {
+    return undefined
+  }
   const properties = property.split('.')
   for (let i = 0; i < properties.length; i++) {
     const prop = properties[i]
     // eslint-disable-next-line no-prototype-builtins
-    if (!obj || !obj.hasOwnProperty(prop)) {
+    if (!obj || !Object.hasOwn(obj, prop)) {
       return undefined
     } else {
       obj = obj[prop]
@@ -31,7 +33,7 @@ export const mapObject = (obj, conversion = ([key, value]) => [key, value]) => {
     obj &&
     Object.entries(obj)
       .map(conversion)
-      .reduce(function (prev, curr) {
+      .reduce((prev, curr) => {
         prev[curr[0]] = curr[1]
         return prev
       }, {})

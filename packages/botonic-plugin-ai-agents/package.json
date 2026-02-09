@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.44.0-alpha.3",
+  "version": "0.45.0-alpha.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
@@ -9,11 +9,12 @@
     "build:watch": "npm run build -- --watch",
     "test": "../../node_modules/.bin/jest --coverage",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
-    "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.44.0-alpha.3",
+    "@botonic/core": "^0.45.0-alpha.0",
     "@openai/agents": "^0.3.9",
     "axios": "^1.13.2",
     "openai": "^6.0.0",

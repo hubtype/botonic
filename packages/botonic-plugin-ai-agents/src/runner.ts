@@ -1,13 +1,17 @@
-import { OutputMessage, ResolvedPlugins, ToolExecution } from '@botonic/core'
+import type {
+  OutputMessage,
+  ResolvedPlugins,
+  ToolExecution,
+} from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
   Runner,
   RunToolCallItem,
 } from '@openai/agents'
 
-import { DebugLogger } from './debug-logger'
+import type { DebugLogger } from './debug-logger'
 import { retrieveKnowledge } from './tools'
-import {
+import type {
   AgenticInputMessage,
   AgenticOutputMessage,
   AIAgent,
@@ -152,7 +156,7 @@ export class AIAgentRunner<
   private getSafeToolArguments(rawToolArguments: string): Record<string, any> {
     try {
       return JSON.parse(rawToolArguments)
-    } catch (error) {
+    } catch (_error) {
       return {}
     }
   }

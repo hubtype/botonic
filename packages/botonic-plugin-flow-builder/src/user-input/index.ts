@@ -1,6 +1,6 @@
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import {
   inputHasTextData,
   isKeywordsAllowed,
@@ -8,7 +8,10 @@ import {
 } from '../utils'
 import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
-import { SmartIntentsApi, SmartIntentsInferenceConfig } from './smart-intent'
+import {
+  SmartIntentsApi,
+  type SmartIntentsInferenceConfig,
+} from './smart-intent'
 
 export async function getNextPayloadByUserInput(
   cmsApi: FlowBuilderApi,

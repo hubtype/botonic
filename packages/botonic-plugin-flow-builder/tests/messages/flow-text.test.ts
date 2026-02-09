@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowText } from '../../src/content-fields/index'
+import type { FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
 import { webviewFlow } from '../helpers/flows/webview'
@@ -42,7 +42,6 @@ describe('Check the contents and logic of a text node', () => {
     })
 
     const firstContent = contents[0] as FlowText
-    // @ts-ignore
     const renderedMessage = firstContent.toBotonic(firstContent.id, request)
     expect(renderedMessage.props.children[0]).toBe(
       'This text message contains buttons and replaces the variable 2'

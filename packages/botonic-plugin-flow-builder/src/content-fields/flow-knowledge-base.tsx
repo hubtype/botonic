@@ -1,9 +1,7 @@
-import { ActionRequest, Text } from '@botonic/react'
-import React from 'react'
+import { type ActionRequest, Text } from '@botonic/react'
 
-import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtKnowledgeBaseNode } from './hubtype-fields'
+import type { HtKnowledgeBaseNode } from './hubtype-fields'
 
 export const DISABLED_MEMORY_LENGTH = 1
 

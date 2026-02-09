@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.44.0-alpha.3",
+  "version": "0.45.0-alpha.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -10,11 +10,12 @@
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
-    "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "^0.44.0-alpha.3",
+    "@botonic/react": "^0.45.0-alpha.0",
     "axios": "^1.13.2",
     "uuid": "^10.0.0"
   },
@@ -43,10 +44,6 @@
     "conversational-ui",
     "javascript"
   ],
-  "eslintConfig": {
-    "extends": "../.eslintrc.js",
-    "root": true
-  },
   "devDependencies": {
     "@types/uuid": "^10.0.0"
   }

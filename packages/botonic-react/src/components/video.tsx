@@ -1,10 +1,9 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS, ROLES } from '../constants'
 import { staticAsset } from '../util/environment'
-import { VideoProps } from './index-types'
+import type { VideoProps } from './index-types'
 import { Message } from './message'
 
 const StyledVideo = styled.video`
@@ -22,12 +21,13 @@ const serialize = (videoProps: { src: string }) => {
 export const Video = (props: VideoProps) => {
   props = { ...props, src: staticAsset(props.src) }
   let content = props.children
-  if (isBrowser())
+  if (isBrowser()) {
     content = (
       <StyledVideo controls>
         <source src={props.src} />
       </StyledVideo>
     )
+  }
   return (
     <Message
       role={ROLES.VIDEO_MESSAGE}

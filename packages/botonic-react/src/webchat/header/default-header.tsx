@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import { Scale } from '../../shared/styles'
@@ -46,7 +46,7 @@ export const DefaultHeader = () => {
     >
       {headerImage && (
         <ImageContainer>
-          <img src={resolveImage(headerImage)} />
+          <img src={resolveImage(headerImage)} alt='Header' />
         </ImageContainer>
       )}
       <TextContainer>

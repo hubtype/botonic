@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { EVENT_FORMAT_VERSION } from '@botonic/core'
 
-import { EventAction, EventType, HtEventProps, RequestData } from '../types'
+import type {
+  EventAction,
+  EventType,
+  HtEventProps,
+  RequestData,
+} from '../types'
 export class HtEvent {
   chat_id?: string
   type: EventType

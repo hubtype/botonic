@@ -3,13 +3,21 @@
  */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { EventAction } from '@botonic/core'
-import { render } from '@testing-library/react'
-import { renderHook } from '@testing-library/react'
-import React from 'react'
+import { render, renderHook } from '@testing-library/react'
 
 import { GuardrailList } from '../../src/components/system-debug-trace/events/components/guardrail-item'
 import { SourcesSection } from '../../src/components/system-debug-trace/events/components/sources-section'
+import { LABELS } from '../../src/components/system-debug-trace/events/constants'
 import { useKnowledgeBaseInfo } from '../../src/components/system-debug-trace/hooks/use-knowledge-base-info'
+import {
+  BrainSvg,
+  CaretDownSvg,
+  CaretUpSvg,
+  HeadSetSvg,
+  WandSvg,
+} from '../../src/components/system-debug-trace/icons'
+import { LifeRingSvg } from '../../src/components/system-debug-trace/icons/life-ring'
+import { QuoteRightSvg } from '../../src/components/system-debug-trace/icons/quote-right'
 import { WebchatContext } from '../../src/webchat/context'
 
 describe('System Debug Trace - Utility Components', () => {
@@ -62,7 +70,9 @@ describe('System Debug Trace - Utility Components', () => {
           sources={[]}
           chunks={[]}
           getIconForSourceType={() => null}
-          onSeeChunks={() => {}}
+          onSeeChunks={() => {
+            return
+          }}
         />
       )
 
@@ -87,7 +97,9 @@ describe('System Debug Trace - Utility Components', () => {
           sources={sources}
           chunks={[]}
           getIconForSourceType={mockIcon}
-          onSeeChunks={() => {}}
+          onSeeChunks={() => {
+            return
+          }}
         />
       )
 
@@ -120,7 +132,9 @@ describe('System Debug Trace - Utility Components', () => {
           sources={sources}
           chunks={[]}
           getIconForSourceType={mockIcon}
-          onSeeChunks={() => {}}
+          onSeeChunks={() => {
+            return
+          }}
         />
       )
 
@@ -152,7 +166,9 @@ describe('System Debug Trace - Utility Components', () => {
           sources={sources}
           chunks={chunks}
           getIconForSourceType={() => <span>Icon</span>}
-          onSeeChunks={() => {}}
+          onSeeChunks={() => {
+            return
+          }}
         />
       )
 
@@ -198,19 +214,11 @@ describe('System Debug Trace - Utility Components', () => {
 
   describe('Event Constants', () => {
     test('LABELS constant should exist', () => {
-      const {
-        LABELS,
-      } = require('../../src/components/system-debug-trace/events/constants')
-
       expect(LABELS).toBeDefined()
       expect(typeof LABELS).toBe('object')
     })
 
     test('LABELS should contain expected keys', () => {
-      const {
-        LABELS,
-      } = require('../../src/components/system-debug-trace/events/constants')
-
       // Common labels that should exist
       expect(LABELS).toHaveProperty('QUEUE')
     })
@@ -218,22 +226,6 @@ describe('System Debug Trace - Utility Components', () => {
 
   describe('Icon Components', () => {
     test('icons render without errors', () => {
-      const {
-        QuoteRightSvg,
-      } = require('../../src/components/system-debug-trace/icons/quote-right')
-      const {
-        BrainSvg,
-      } = require('../../src/components/system-debug-trace/icons')
-      const {
-        LifeRingSvg,
-      } = require('../../src/components/system-debug-trace/icons/life-ring')
-      const {
-        HeadSetSvg,
-      } = require('../../src/components/system-debug-trace/icons')
-      const {
-        WandSvg,
-      } = require('../../src/components/system-debug-trace/icons')
-
       expect(() => render(<QuoteRightSvg />)).not.toThrow()
       expect(() => render(<BrainSvg />)).not.toThrow()
       expect(() => render(<LifeRingSvg />)).not.toThrow()
@@ -242,20 +234,11 @@ describe('System Debug Trace - Utility Components', () => {
     })
 
     test('caret icons render without errors', () => {
-      const {
-        CaretUpSvg,
-        CaretDownSvg,
-      } = require('../../src/components/system-debug-trace/icons')
-
       expect(() => render(<CaretUpSvg />)).not.toThrow()
       expect(() => render(<CaretDownSvg />)).not.toThrow()
     })
 
     test('icons accept color prop', () => {
-      const {
-        BrainSvg,
-      } = require('../../src/components/system-debug-trace/icons')
-
       const { container } = render(<BrainSvg color='#FF0000' />)
       expect(container).toBeTruthy()
     })
@@ -402,7 +385,9 @@ describe('System Debug Trace - Utility Components', () => {
       expect(event).toHaveProperty('knowledge_base_chunks_with_sources')
       expect(Array.isArray(event.tools_executed)).toBe(true)
       expect(event.tools_executed[0]).toHaveProperty('tool_name')
-      expect(event.tools_executed[0]).toHaveProperty('knowledgebase_sources_ids')
+      expect(event.tools_executed[0]).toHaveProperty(
+        'knowledgebase_sources_ids'
+      )
       expect(event.tools_executed[0]).toHaveProperty('knowledgebase_chunks_ids')
     })
   })

@@ -1,5 +1,5 @@
 import { isWhatsapp } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { truncateText } from '../../util'
@@ -23,7 +23,7 @@ export const MultichannelButton = props => {
   const hasWebview = () => Boolean(props.webview)
 
   const getUrl = () => props.url
-  const getWebview = () => props.webview
+  const _getWebview = () => props.webview
 
   const increaseCurrentIndex = () => {
     if (typeof multichannelContext.currentIndex === 'number') {
@@ -49,9 +49,9 @@ export const MultichannelButton = props => {
       ? `${formatIndex(multichannelContext.currentIndex + separator)} `
       : ''
     if (hasPostback()) {
-      text = newline + `${index}${text}`
+      text = `${newline}${index}${text}`
     } else if (hasUrl()) {
-      text = newline + `- ${text}`
+      text = `${newline}- ${text}`
     }
     return text
   }
@@ -65,7 +65,9 @@ export const MultichannelButton = props => {
         const text = getText()
         increaseCurrentIndex()
         return `${text}`
-      } else if (hasWebview()) return <Button {...props}>{getText()}</Button>
+      } else if (hasWebview()) {
+        return <Button {...props}>{getText()}</Button>
+      }
     }
     return (
       <Button {...props}>

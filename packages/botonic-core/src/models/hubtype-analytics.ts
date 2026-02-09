@@ -1,4 +1,4 @@
-import { ToolExecution } from './ai-agents'
+import type { ToolExecution } from './ai-agents'
 
 export const EVENT_FORMAT_VERSION = 5
 

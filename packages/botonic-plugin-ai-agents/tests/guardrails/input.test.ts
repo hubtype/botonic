@@ -1,7 +1,7 @@
-import { Agent, run, RunContext, Usage } from '@openai/agents'
+import { Agent, type RunContext, run, type Usage } from '@openai/agents'
 
 import { createInputGuardrail } from '../../src/guardrails/input'
-import { GuardrailRule } from '../../src/types'
+import type { GuardrailRule } from '../../src/types'
 
 // Mock OpenAI Agent and run function
 jest.mock('@openai/agents', () => ({

@@ -80,9 +80,15 @@ export type ButtonType = (typeof buttonTypes)[keyof typeof buttonTypes]
 export function getButtonType(
   multichannelButton?: ElementWithProps
 ): ButtonType | undefined {
-  if (elementHasUrl(multichannelButton)) return buttonTypes.URL
-  if (elementHasPostback(multichannelButton)) return buttonTypes.POSTBACK
-  if (elementHasWebview(multichannelButton)) return buttonTypes.WEBVIEW
+  if (elementHasUrl(multichannelButton)) {
+    return buttonTypes.URL
+  }
+  if (elementHasPostback(multichannelButton)) {
+    return buttonTypes.POSTBACK
+  }
+  if (elementHasWebview(multichannelButton)) {
+    return buttonTypes.WEBVIEW
+  }
 
   return undefined
 }
@@ -93,7 +99,9 @@ export function getFilteredElements<T extends ReactElementWithDisplayName>(
 ): T[] {
   const elements: T[] = []
   for (const n of node) {
-    if (filter(n)) elements.push(n)
+    if (filter(n)) {
+      elements.push(n)
+    }
   }
   return elements
 }

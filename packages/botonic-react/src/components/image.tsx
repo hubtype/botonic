@@ -1,11 +1,11 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { ROLES, WEBCHAT } from '../constants'
 import { staticAsset } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
-import { ImageProps } from './index-types'
+import type { ImageProps } from './index-types'
 import { Message } from './message'
 
 interface StyledImageProps {

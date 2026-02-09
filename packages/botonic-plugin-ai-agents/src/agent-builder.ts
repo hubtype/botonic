@@ -1,19 +1,18 @@
-import { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
+import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
-  AgentOutputType,
-  // hostedMcpTool,
-  InputGuardrail,
+  type AgentOutputType,
+  type InputGuardrail,
   MCPServerStreamableHttp,
-  ModelSettings,
+  type ModelSettings,
 } from '@openai/agents'
 
 import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
-import { DebugLogger } from './debug-logger'
+import type { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
-import { AIAgent, Context, GuardrailRule, Tool } from './types'
+import type { AIAgent, Context, GuardrailRule, Tool } from './types'
 
 interface AIAgentBuilderOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
@@ -80,12 +79,6 @@ export class AIAgentBuilder<
       hasRetrieveKnowledge,
     })
 
-    // Only supported for the OpenAI Responses API
-    // const gitMcpServerAsTool = hostedMcpTool({
-    //   serverLabel: 'gitmcp',
-    //   serverUrl: 'https://gitmcp.io/hubtype/botonic',
-    // })
-
     const gitMcpServer = new MCPServerStreamableHttp({
       url: 'https://gitmcp.io/openai/codex',
       name: 'GitMCP Documentation Server',
@@ -98,7 +91,7 @@ export class AIAgentBuilder<
       name: this.name,
       model,
       instructions: this.instructions,
-      tools: this.tools, // [...this.tools, gitMcpServerAsTool]
+      tools: this.tools,
       mcpServers: [gitMcpServer],
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,

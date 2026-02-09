@@ -1,8 +1,6 @@
 export const MAX_CHARACTERS_FACEBOOK = 640
 
 export class MultichannelFacebook {
-  constructor() {}
-
   convertText(props, originalText) {
     if (originalText.length > MAX_CHARACTERS_FACEBOOK) {
       const texts = this.splitText(originalText)
@@ -39,7 +37,9 @@ export class MultichannelFacebook {
     if (Array.isArray(props.children)) {
       props.children
         .filter(e => e.type)
-        .forEach(e => propsLastText.children.push(e))
+        .forEach(e => {
+          propsLastText.children.push(e)
+        })
     }
     const propsWithoutChildren = { ...props }
     delete propsWithoutChildren.children

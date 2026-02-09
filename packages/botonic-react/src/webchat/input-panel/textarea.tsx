@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import type React from 'react'
+import { useContext } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
-import { WEBCHAT } from '../../constants'
 import { Typing } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'
 import { useDeviceAdapter } from '../hooks'
@@ -25,7 +26,7 @@ export const Textarea = ({
   useDeviceAdapter(host, webchatState.isWebchatOpen)
 
   let isTyping = false
-  let typingTimeout
+  let typingTimeout: NodeJS.Timeout | null = null
 
   const persistentMenuOptions = webchatState.theme.userInput?.persistentMenu
 
@@ -42,7 +43,9 @@ export const Textarea = ({
   }
 
   const onKeyUp = () => {
-    if (!textareaRef.current) return
+    if (!textareaRef.current) {
+      return
+    }
 
     if (textareaRef.current.value === '') {
       stopTyping()
@@ -56,8 +59,12 @@ export const Textarea = ({
 
   const clearTimeoutWithReset = (reset: boolean) => {
     const waitTime = 20 * 1000
-    if (typingTimeout) clearTimeout(typingTimeout)
-    if (reset) typingTimeout = setTimeout(stopTyping, waitTime)
+    if (typingTimeout) {
+      clearTimeout(typingTimeout)
+    }
+    if (reset) {
+      typingTimeout = setTimeout(stopTyping, waitTime)
+    }
   }
 
   const startTyping = () => {
@@ -82,7 +89,9 @@ export const Textarea = ({
   return (
     <TextAreaContainer>
       <TextareaAutosize
-        ref={(ref: HTMLTextAreaElement) => (textareaRef.current = ref)}
+        ref={(ref: HTMLTextAreaElement) => {
+          textareaRef.current = ref
+        }}
         onFocus={handleFocus}
         onBlur={handleBlur}
         name='text'

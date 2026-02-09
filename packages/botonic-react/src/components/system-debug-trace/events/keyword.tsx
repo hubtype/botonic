@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { QuoteRightSvg } from '../icons/quote-right'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface KeywordDebugEvent {
   action: EventAction.Keyword

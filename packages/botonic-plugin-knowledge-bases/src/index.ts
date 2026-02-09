@@ -1,11 +1,14 @@
 import type { BotContext, Plugin, PluginPreRequest } from '@botonic/core'
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 
 import {
-  HtApiKnowledgeBaseResponse,
+  type HtApiKnowledgeBaseResponse,
   HubtypeApiService,
 } from './hubtype-knowledge-api-service'
-import { KnowledgeBasesResponse, PluginKnowledgeBaseOptions } from './types'
+import type {
+  KnowledgeBasesResponse,
+  PluginKnowledgeBaseOptions,
+} from './types'
 
 const isProd = process.env.NODE_ENV === 'production'
 const isDev = process.env.NODE_ENV === 'development'

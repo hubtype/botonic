@@ -1,13 +1,12 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import path, { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { BotonicProject } from './interfaces.js'
+import type { BotonicProject } from './interfaces.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const exampleTestPath = path.resolve(__dirname, '..', '..', '..', 'examples')
-const exampleVersion = '0.43.0'
+const exampleVersion = '0.44.0'
 
 export const EXAMPLES: BotonicProject[] = [
   {

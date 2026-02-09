@@ -1,5 +1,4 @@
 import { expect, test } from '@jest/globals'
-import React from 'react'
 import TestRenderer from 'react-test-renderer'
 
 import { WhatsappProduct } from '../../src/components'

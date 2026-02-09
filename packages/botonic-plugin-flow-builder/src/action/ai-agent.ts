@@ -1,16 +1,16 @@
 import {
-  BotContext,
+  type BotContext,
   EventAction,
-  EventAiAgent,
-  InferenceResponse,
+  type EventAiAgent,
+  type InferenceResponse,
 } from '@botonic/core'
 
-import { FlowAiAgent, FlowContent } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
+import { FlowAiAgent, type FlowContent } from '../content-fields'
+import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
 import { trackEvent } from '../tracking'
-import { GuardrailRule } from '../types'
-import { FlowBuilderContext } from './index'
+import type { GuardrailRule } from '../types'
+import type { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
   cmsApi,

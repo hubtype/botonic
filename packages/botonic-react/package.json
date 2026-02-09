@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.44.0-alpha.3",
+  "version": "0.45.0-alpha.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -15,12 +15,12 @@
     "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "prettier": "../../node_modules/.bin/prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
-    "lint": "npm run prettier; npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.44.0-alpha.3",
+    "@botonic/core": "^0.45.0-alpha.0",
     "axios": "^1.13.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",

@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { EventAction } from '@botonic/core'
 import { act, render, waitFor } from '@testing-library/react'
-import React from 'react'
 import TestRenderer from 'react-test-renderer'
 
 import {
@@ -45,7 +44,7 @@ describe('System Debug Trace - Event Components', () => {
         handoff_is_queue_open: true,
       }
 
-      const { container} = render(<HandoffSuccess {...props} />)
+      const { container } = render(<HandoffSuccess {...props} />)
 
       expect(container.textContent).toContain('Premium Support')
     })
@@ -97,7 +96,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container).toBeTruthy()
@@ -133,7 +137,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('search_flights')
@@ -160,7 +169,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('profanity_filter')
@@ -188,7 +202,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('toxicity_check')
@@ -215,7 +234,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('input_guard')
@@ -266,7 +290,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container).toBeTruthy()
@@ -293,7 +322,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container).toBeTruthy()
@@ -320,7 +354,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container).toBeTruthy()
@@ -425,7 +464,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('tool_one')
@@ -460,7 +504,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container).toBeTruthy()
@@ -492,7 +541,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('Query')
@@ -533,7 +587,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       // The implementation uses the last query found in tools_executed
@@ -562,7 +621,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('Exit')
@@ -589,7 +653,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('Error')
@@ -616,7 +685,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('Exit')
@@ -680,7 +754,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('Knowledge gathered')
@@ -721,7 +800,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).toContain('tool_1')
@@ -755,7 +839,12 @@ describe('System Debug Trace - Event Components', () => {
         )
         container = result.container
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(() => {}, { timeout: 100 })
+        await waitFor(
+          () => {
+            return
+          },
+          { timeout: 100 }
+        )
       })
 
       expect(container.textContent).not.toContain('Query')

@@ -1,13 +1,13 @@
-import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
+import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 
-import { Reply, WebchatSettingsProps, Webview } from '../../components'
-import { CloseWebviewOptions } from '../../contexts'
-import {
+import type { Reply, WebchatSettingsProps, Webview } from '../../components'
+import type { CloseWebviewOptions } from '../../contexts'
+import type {
   PreviewUtils,
   TrackEventFunction,
   WebchatMessage,
 } from '../../index-types'
-import { WebchatTheme } from '../theme/types'
+import type { WebchatTheme } from '../theme/types'
 
 export interface ErrorMessage {
   message?: string

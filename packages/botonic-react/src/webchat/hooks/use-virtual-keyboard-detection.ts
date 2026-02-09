@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
-export const useVirtualKeyboardDetection = originalHeight => {
+export const useVirtualKeyboardDetection = (originalHeight: number) => {
   const [isVirtualKeyboardVisible, setIsVirtualKeyboardVisible] =
     useState(false)
+
   useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
@@ -14,12 +15,10 @@ export const useVirtualKeyboardDetection = originalHeight => {
         return
       }
     }
-    window.visualViewport &&
-      window.visualViewport.addEventListener('resize', handleResize)
+    window.visualViewport?.addEventListener('resize', handleResize)
 
     return () => {
-      window.visualViewport &&
-        window.visualViewport.removeEventListener('resize', handleResize)
+      window.visualViewport?.removeEventListener('resize', handleResize)
     }
   }, [originalHeight])
 

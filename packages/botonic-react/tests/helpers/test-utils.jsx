@@ -1,5 +1,4 @@
 import { renderHook } from '@testing-library/react'
-import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 
 import { MultichannelContext } from '../../src/components/multichannel/multichannel-context'

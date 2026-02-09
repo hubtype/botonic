@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.44.0-alpha.3",
+  "version": "0.45.0-alpha.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -8,8 +8,9 @@
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
-    "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '*.js' 'src/**/*.ts*'",
+    "lint": "biome check --write src/",
+    "lint:check": "biome check src/",
+    "format": "biome format --write src/",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
     "cloc": "../../scripts/qa/cloc-package.sh ."
@@ -51,9 +52,5 @@
     "conversational-ui",
     "javascript"
   ],
-  "eslintConfig": {
-    "extends": "../.eslintrc.js",
-    "root": true
-  },
   "sideEffects": false
 }

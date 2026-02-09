@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { LifeRingSvg } from '../icons/life-ring'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface FallbackDebugEvent {
   action: EventAction.Fallback

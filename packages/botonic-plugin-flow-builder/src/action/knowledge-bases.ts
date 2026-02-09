@@ -1,24 +1,24 @@
 import {
-  BotContext,
+  type BotContext,
   EventAction,
-  EventKnowledgeBase,
+  type EventKnowledgeBase,
+  type KnowledgeBasesResponse,
   KnowledgebaseFailReason,
-  KnowledgeBasesResponse,
-  ResolvedPlugins,
+  type ResolvedPlugins,
 } from '@botonic/core'
 
 import {
   DISABLED_MEMORY_LENGTH,
-  FlowContent,
+  type FlowContent,
   FlowKnowledgeBase,
 } from '../content-fields'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { KnowledgeBaseFunction } from '../types'
+import type { KnowledgeBaseFunction } from '../types'
 import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
-import { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
   cmsApi,

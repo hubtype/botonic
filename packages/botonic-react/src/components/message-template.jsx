@@ -1,5 +1,4 @@
-import React from 'react'
-
+/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: MessageTemplate is a component that renders a message template */
 import { renderComponent } from '../util/react'
 
 export const MessageTemplate = props => {

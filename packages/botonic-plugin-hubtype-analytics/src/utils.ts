@@ -23,7 +23,7 @@ import {
   HtEventWebviewStep,
 } from './event-models'
 import { HtEventCaptureUserInput } from './event-models/ht-event-capture-user-input'
-import { EventAction, HtEventProps, RequestData } from './types'
+import { EventAction, type HtEventProps, type RequestData } from './types'
 
 export function createHtEvent(
   requestData: RequestData,

@@ -1,7 +1,7 @@
-import { Input as CoreInput, Session as CoreSession } from '@botonic/core'
+import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
 import { createContext } from 'react'
 
-import { ActionRequest } from './index-types'
+import type { ActionRequest } from './index-types'
 
 export const RequestContext = createContext<ActionRequest>({
   getUserCountry: () => '',

@@ -1,7 +1,5 @@
-import React from 'react'
-
 import { StarSvg } from './icons/index'
-import { RatingItemProps } from './types'
+import type { RatingItemProps } from './types'
 
 export const Stars = ({ color, ratingNumber, hover }: RatingItemProps) => {
   const isSelected = hover >= ratingNumber

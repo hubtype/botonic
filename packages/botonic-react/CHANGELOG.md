@@ -12,8 +12,6 @@ All notable changes to Botonic will be documented in this file.
 
 ## [0.44.x] - 2026-mm-dd
 
-- [PR-3150](https://github.com/hubtype/botonic/pull/3150): Add displayName in message components that need to be identified in the multichannel.
-
 ### Added
 
 ### Changed
@@ -21,6 +19,18 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.44.1] - 2026-02-03
+
+### Fixed
+
+- [PR-3155](https://github.com/hubtype/botonic/pull/3155): Fixes locale normalization to handle numeric UN M.49 region codes
+
+## [0.44.0] - 2026-01-29
+
+### Added
+
+- [PR-3150](https://github.com/hubtype/botonic/pull/3150): Add displayName in message components that need to be identified in the multichannel.
 
 ## [0.43.1] - 2026-01-15
 

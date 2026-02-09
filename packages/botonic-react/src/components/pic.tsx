@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import { COLORS, WEBCHAT } from '../constants'
@@ -24,7 +23,7 @@ export const Pic = (props: PicProps) => {
 
   const renderBrowser = () => <PicStyled src={props.src} />
 
-  // @ts-ignore
+  // @ts-expect-error
   const renderNode = () => <pic>{props.src}</pic>
 
   return renderComponent({ renderBrowser, renderNode })

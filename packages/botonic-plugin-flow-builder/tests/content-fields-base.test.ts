@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
-import { FlowText } from '../src/content-fields/flow-text'
+import type { FlowText } from '../src/content-fields/flow-text'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'

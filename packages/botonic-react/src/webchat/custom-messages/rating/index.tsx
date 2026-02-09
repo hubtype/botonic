@@ -1,12 +1,13 @@
-import { INPUT, InputType } from '@botonic/core'
-import React, { useContext, useState } from 'react'
+import { INPUT, type InputType } from '@botonic/core'
+import type React from 'react'
+import { useContext, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import { Button, customMessage } from '../../../components'
 import { WebchatContext } from '../../context'
 import { RatingSelector } from './rating-selector'
 import { MessageBubble } from './styles'
-import { RatingType } from './types'
+import type { RatingType } from './types'
 
 interface CustomRatingMessageProps {
   payloads: string[]
@@ -32,7 +33,9 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   }
 
   const handleButtonSend = () => {
-    if (ratingValue === -1) return
+    if (ratingValue === -1) {
+      return
+    }
 
     const json = {
       valueSent: ratingValue,

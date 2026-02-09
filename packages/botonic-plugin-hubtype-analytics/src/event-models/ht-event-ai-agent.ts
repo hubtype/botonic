@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   EventAction,
-  EventAiAgent,
+  type EventAiAgent,
   EventType,
-  RequestData,
-  ToolExecution,
+  type RequestData,
+  type ToolExecution,
 } from '../types'
 import { HtEvent } from './ht-event'
 

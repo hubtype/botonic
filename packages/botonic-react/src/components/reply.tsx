@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
-import { COLORS, WEBCHAT } from '../constants'
+import { WEBCHAT } from '../constants'
 import { renderComponent } from '../util/react'
 import { WebchatContext } from '../webchat/context'
 import { COMPONENT_DISPLAY_NAMES } from './constants'
-import { ReplyProps } from './index-types'
+import type { ReplyProps } from './index-types'
 
 const StyledButton = styled.button`
   width: 100%;
@@ -25,7 +25,9 @@ export const Reply = (props: ReplyProps) => {
     event.preventDefault()
     if (props.children) {
       let payload = props.payload
-      if (props.path) payload = `__PATH_PAYLOAD__${props.path}`
+      if (props.path) {
+        payload = `__PATH_PAYLOAD__${props.path}`
+      }
       sendText(props.children, payload)
     }
   }
@@ -56,11 +58,11 @@ export const Reply = (props: ReplyProps) => {
   const renderNode = () => {
     if (props.path) {
       const payload = `__PATH_PAYLOAD__${props.path}`
-      // @ts-ignore
+      // @ts-expect-error
       // eslint-disable-next-line react/no-unknown-property
       return <reply payload={payload}>{props.children}</reply>
     }
-    // @ts-ignore
+    // @ts-expect-error
     // eslint-disable-next-line react/no-unknown-property
     return <reply payload={props.payload}>{props.children}</reply>
   }
@@ -72,6 +74,8 @@ Reply.displayName = COMPONENT_DISPLAY_NAMES.Reply
 
 Reply.serialize = (replyProps: ReplyProps) => {
   let payload = replyProps.payload
-  if (replyProps.path) payload = `__PATH_PAYLOAD__${replyProps.path}`
+  if (replyProps.path) {
+    payload = `__PATH_PAYLOAD__${replyProps.path}`
+  }
   return { reply: { title: replyProps.children, payload } }
 }

@@ -16,7 +16,9 @@ describe('TEST: Dev App', () => {
   })
 
   // To avoid TypeError: frame.scrollTo is not a function
-  window.HTMLElement.prototype.scrollTo = function () {}
+  window.HTMLElement.prototype.scrollTo = () => {
+    return
+  }
 
   it('TEST: DevApp renders webchat and debug tab', async () => {
     const devApp = new DevApp({ routes: [] })

@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef } from 'react'
+import { type ForwardedRef, forwardRef } from 'react'
 
 import { COLORS, ROLES } from '../../constants'
 import { Dot, TypingContainer, TypingMsgWrapper } from './styles'

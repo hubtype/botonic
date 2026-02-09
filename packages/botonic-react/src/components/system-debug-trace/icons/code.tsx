@@ -1,7 +1,6 @@
-import React from 'react'
-
+/** biome-ignore-all lint/a11y/noSvgWithoutTitle: This is a SVG icon */
 import { COLORS } from '../../../constants'
-import { IconProps } from '../types'
+import type { IconProps } from '../types'
 
 export const CodeSvg = ({ color = COLORS.N500 }: IconProps) => {
   return (

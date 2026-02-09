@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { CodeSvg } from '../icons/code'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface BotActionDebugEvent {
   action: EventAction.BotAction

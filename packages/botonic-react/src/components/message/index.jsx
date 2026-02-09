@@ -68,10 +68,11 @@ export const Message = props => {
   let textChildren = React.Children.toArray(children).filter(
     e => ![Button, Reply].includes(e.type)
   )
-  if (isSentByUser)
+  if (isSentByUser) {
     textChildren = textChildren.map(e =>
       typeof e === 'string' ? renderLinks(e) : e
     )
+  }
 
   const { timestampsEnabled, getFormattedTimestamp } = resolveMessageTimestamps(
     getThemeProperty,
@@ -79,9 +80,15 @@ export const Message = props => {
   )
 
   const getEnvAck = () => {
-    if (isDev) return 1
-    if (!isSentByUser) return 1
-    if (props.ack !== undefined) return props.ack
+    if (isDev) {
+      return 1
+    }
+    if (!isSentByUser) {
+      return 1
+    }
+    if (props.ack !== undefined) {
+      return props.ack
+    }
     return 0
   }
 
@@ -115,7 +122,7 @@ export const Message = props => {
           url: r.props.url,
           text: r.props.children,
         })),
-        display: delay + typing == 0,
+        display: delay + typing === 0,
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
         isUnread: isUnread === 1 || isUnread === true,
@@ -131,9 +138,8 @@ export const Message = props => {
     if (isBrowser()) {
       const msg = webchatState.messagesJSON.find(m => m.id === state.id)
       if (
-        msg &&
-        msg.display &&
-        webchatState.messagesJSON.filter(m => !m.display).length == 0
+        msg?.display &&
+        webchatState.messagesJSON.filter(m => !m.display).length === 0
       ) {
         updateReplies(replies)
       }
@@ -143,7 +149,9 @@ export const Message = props => {
   const brandColor = getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.brandColor)
 
   const getBgColor = () => {
-    if (!blob) return COLORS.TRANSPARENT
+    if (!blob) {
+      return COLORS.TRANSPARENT
+    }
     if (isSentByUser) {
       return getThemeProperty(
         WEBCHAT.CUSTOM_PROPERTIES.userMessageBackground,
@@ -167,7 +175,9 @@ export const Message = props => {
 
   const renderBrowser = () => {
     const messageJSON = webchatState.messagesJSON.find(m => m.id === state.id)
-    if (!messageJSON || !messageJSON.display) return <></>
+    if (!messageJSON || !messageJSON.display) {
+      return <></>
+    }
 
     if (messageJSON?.type === INPUT.SYSTEM_DEBUG_TRACE) {
       return children
@@ -178,7 +188,7 @@ export const Message = props => {
       // that is why the color depends on the pointerSize
       // https://developpaper.com/realization-code-of-css-drawing-triangle-border-method/
       const color =
-        pointerSize == 5
+        pointerSize === 5
           ? getBgColor()
           : getThemeProperty(
               `message.${userOrBotMessage}.style.borderColor`,
@@ -222,62 +232,60 @@ export const Message = props => {
         condition={animationsEnabled}
         wrapper={children => <Fade>{children}</Fade>}
       >
-        <>
-          <MessageContainer
-            isSentByUser={isSentByUser}
+        <MessageContainer
+          isSentByUser={isSentByUser}
+          style={{
+            ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
+          }}
+        >
+          <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
+          <BlobContainer
+            className={className}
+            issentbysystem={isSentBySystem}
+            bgcolor={getBgColor()}
+            color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
+            blobwidth={getThemeProperty(
+              WEBCHAT.CUSTOM_PROPERTIES.botMessageBlobWidth
+            )}
+            blob={blob}
             style={{
-              ...getThemeProperty(WEBCHAT.CUSTOM_PROPERTIES.messageStyle),
+              ...getMessageStyle(),
+              ...style,
+              ...{ opacity: ack === 0 ? 0.6 : 1 },
             }}
+            {...otherProps}
           >
-            <MessageImage imagestyle={imagestyle} sentBy={sentBy} />
-            <BlobContainer
-              className={className}
-              issentbysystem={isSentBySystem}
-              bgcolor={getBgColor()}
-              color={isSentByUser ? COLORS.SOLID_WHITE : COLORS.SOLID_BLACK}
-              blobwidth={getThemeProperty(
-                WEBCHAT.CUSTOM_PROPERTIES.botMessageBlobWidth
-              )}
-              blob={blob}
-              style={{
-                ...getMessageStyle(),
-                ...style,
-                ...{ opacity: ack === 0 ? 0.6 : 1 },
-              }}
-              {...otherProps}
-            >
-              {markdown ? (
-                <BlobText
-                  blob={blob}
-                  dangerouslySetInnerHTML={{
-                    __html: renderMarkdown(textChildren),
-                  }}
-                  markdownstyle={getMarkdownStyle(
-                    getThemeProperty,
-                    isSentByUser ? COLORS.SEASHELL_WHITE : brandColor
-                  )}
-                />
-              ) : (
-                <BlobText blob={blob}>{textChildren}</BlobText>
-              )}
-              {!!buttons.length && (
-                <div className='message-buttons-container'>{buttons}</div>
-              )}
-              {Boolean(blob) && hasBlobTick() && getBlobTick(6)}
-              {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
-            </BlobContainer>
-          </MessageContainer>
-          {timestampsEnabled || feedbackEnabled ? (
-            <MessageFooter
-              enabletimestamps={timestampsEnabled}
-              messageJSON={messageJSON}
-              sentBy={sentBy}
-              feedbackEnabled={feedbackEnabled}
-              inferenceId={inferenceId}
-              botInteractionId={botInteractionId}
-            />
-          ) : null}
-        </>
+            {markdown ? (
+              <BlobText
+                blob={blob}
+                dangerouslySetInnerHTML={{
+                  __html: renderMarkdown(textChildren),
+                }}
+                markdownstyle={getMarkdownStyle(
+                  getThemeProperty,
+                  isSentByUser ? COLORS.SEASHELL_WHITE : brandColor
+                )}
+              />
+            ) : (
+              <BlobText blob={blob}>{textChildren}</BlobText>
+            )}
+            {!!buttons.length && (
+              <div className='message-buttons-container'>{buttons}</div>
+            )}
+            {Boolean(blob) && hasBlobTick() && getBlobTick(6)}
+            {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
+          </BlobContainer>
+        </MessageContainer>
+        {timestampsEnabled || feedbackEnabled ? (
+          <MessageFooter
+            enabletimestamps={timestampsEnabled}
+            messageJSON={messageJSON}
+            sentBy={sentBy}
+            feedbackEnabled={feedbackEnabled}
+            inferenceId={inferenceId}
+            botInteractionId={botInteractionId}
+          />
+        ) : null}
       </ConditionalWrapper>
     )
   }

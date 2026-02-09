@@ -1,18 +1,17 @@
-import { ActionRequest, Button, Reply, Webview } from '@botonic/react'
-import React from 'react'
+import { type ActionRequest, Button, Reply, type Webview } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowWebview } from './flow-webview'
 import {
-  HtButton,
+  type HtButton,
   HtButtonStyle,
-  HtNodeWithContent,
+  type HtNodeWithContent,
   HtNodeWithContentType,
-  HtUrlNode,
+  type HtUrlNode,
 } from './hubtype-fields'
-import { HtRatingButton } from './hubtype-fields/rating'
+import type { HtRatingButton } from './hubtype-fields/rating'
 
 export class FlowButton extends ContentFieldsBase {
   public text = ''
@@ -28,15 +27,15 @@ export class FlowButton extends ContentFieldsBase {
     locale: string,
     cmsApi: FlowBuilderApi
   ): FlowButton {
-    const urlId = this.getUrlId(cmsButton, locale)
+    const urlId = FlowButton.getUrlId(cmsButton, locale)
 
     const newButton = new FlowButton(cmsButton.id)
-    newButton.text = this.getTextByLocale(locale, cmsButton.text)
+    newButton.text = FlowButton.getTextByLocale(locale, cmsButton.text)
     if (cmsButton.target) {
-      const webview = this.getTargetWebview(cmsApi, cmsButton.target.id)
+      const webview = FlowButton.getTargetWebview(cmsApi, cmsButton.target.id)
       if (webview) {
         newButton.flowWebview = webview
-        const params = this.getWebviewParams(webview, cmsApi)
+        const params = FlowButton.getWebviewParams(webview, cmsApi)
         newButton.webview = { name: webview.webviewComponentName }
         newButton.params = params
       } else {
@@ -59,7 +58,10 @@ export class FlowButton extends ContentFieldsBase {
     const params: Record<string, string> = {
       webviewId: webview.webviewTargetId,
     }
-    const exitSuccessContentID = this.getExitSuccessContentID(webview, cmsApi)
+    const exitSuccessContentID = FlowButton.getExitSuccessContentID(
+      webview,
+      cmsApi
+    )
 
     if (exitSuccessContentID) {
       params.exitSuccessContentID = exitSuccessContentID

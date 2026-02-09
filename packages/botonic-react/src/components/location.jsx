@@ -1,5 +1,4 @@
 import { INPUT } from '@botonic/core'
-import React from 'react'
 import styled from 'styled-components'
 
 import { renderComponent } from '../util/react'

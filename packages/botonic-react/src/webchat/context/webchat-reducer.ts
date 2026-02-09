@@ -1,6 +1,6 @@
 import { WebchatAction } from './actions'
 import { messagesReducer } from './messages-reducer'
-import { WebchatState } from './types'
+import type { WebchatState } from './types'
 
 // eslint-disable-next-line complexity
 export function webchatReducer(

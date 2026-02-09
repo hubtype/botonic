@@ -1,4 +1,4 @@
-import { ExitMessage } from '@botonic/core'
+import type { ExitMessage } from '@botonic/core'
 import z from 'zod'
 
 export type { ExitMessage }

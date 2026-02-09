@@ -1,5 +1,4 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React from 'react'
 
 import { ROLES } from '../../constants'
 import { Message } from '../message'

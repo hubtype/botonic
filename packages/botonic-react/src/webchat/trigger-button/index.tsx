@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: we need to use static elements for the trigger button */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: we need to use key with click events for the trigger button */
+import { useContext } from 'react'
 
 import { ROLES, WEBCHAT } from '../../constants'
 import { resolveImage } from '../../util/environment'

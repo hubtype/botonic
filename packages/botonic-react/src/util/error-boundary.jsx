@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { isNode } from '@botonic/core'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Text } from '../components/text'
 
@@ -10,15 +10,15 @@ export const createErrorBoundary = ({
   ),
 } = {}) => {
   const ErrorBoundary = ({ children }) => {
-    const [error, setError] = useState(null)
+    const [error, _setError] = useState(null)
 
-    const componentDidCatch = (error, errorInfo) => {
+    const _componentDidCatch = (error, _errorInfo) => {
       if (isNode()) {
         console.error(`Failure at:`, error)
       }
     }
 
-    const getDerivedStateFromError = error => {
+    const _getDerivedStateFromError = error => {
       return { error }
     }
 

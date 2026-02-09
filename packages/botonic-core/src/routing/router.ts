@@ -1,6 +1,6 @@
 import { NOT_FOUND_PATH } from '../constants'
 import { RouteInspector } from '../debug/inspector'
-import {
+import type {
   Input,
   MatchedValue,
   Matcher,
@@ -19,7 +19,6 @@ import {
   getNotFoundAction,
   getPathParamsFromPathPayload,
   isPathPayload,
-  pathParamsToParams,
 } from './router-utils'
 
 export class Router {
@@ -68,7 +67,7 @@ export class Router {
      * Independently of whether the redirectionRoute is found or not, the intent is to trigger a redirection which by definition breaks the flow, so retries are set to 0.
      * It has preference over ignoring retries.
      */
-    if (matchedRoute && matchedRoute.redirect) {
+    if (matchedRoute?.redirect) {
       session.__retries = 0
       const redirectionRoute = this.getRouteByPath(matchedRoute.redirect)
       if (redirectionRoute) {
@@ -93,7 +92,7 @@ export class Router {
      * Ignore Retry Scenario:
      * We have matched a route with an ignore retry, so we return directly the new bot state. The intent is to break the flow, so retries are set to 0.
      */
-    if (matchedRoute && matchedRoute.ignoreRetry) {
+    if (matchedRoute?.ignoreRetry) {
       session.__retries = 0
       return {
         action: matchedRoute.action,
@@ -198,11 +197,13 @@ export class Router {
               // Strip '[Object: null prototype]' from groups result: https://stackoverflow.com/a/62945609/6237608
               params = { ...match.groups }
             }
-          } catch (e) {}
+          } catch (_e) {}
           return Boolean(match)
         })
     )
-    if (route) return { route: cloneObject(route), params }
+    if (route) {
+      return { route: cloneObject(route), params }
+    }
     return null
   }
 
@@ -214,23 +215,23 @@ export class Router {
     path: RoutePath,
     routeList: Route[] = this.routes
   ): Nullable<Route> {
-    if (!path) return null
+    if (!path) {
+      return null
+    }
     const [currentPath, ...childPath] = path.split('/')
     for (const route of routeList) {
       // iterate over all routeList
       if (route.path === currentPath) {
-        if (
-          route.childRoutes &&
-          route.childRoutes.length &&
-          childPath.length > 0
-        ) {
+        if (route.childRoutes?.length && childPath.length > 0) {
           // evaluate childroute over next actions
           const computedRoute = this.getRouteByPath(
             childPath.join('/'),
             route.childRoutes
           )
           // IMPORTANT: Returning a new object to avoid modifying dev routes and introduce side effects
-          if (computedRoute) return cloneObject(computedRoute)
+          if (computedRoute) {
+            return cloneObject(computedRoute)
+          }
         } else if (childPath.length === 0) {
           return cloneObject(route) // last action and found route
         }
@@ -254,11 +255,17 @@ export class Router {
     lastRoutePath: RoutePath
   ): MatchedValue {
     let value: any = null
-    if (Object.keys(input).indexOf(prop) > -1) value = input[prop]
-    else if (prop === 'text') value = input.data
-    else if (prop === 'input') value = input
-    else if (prop === 'session') value = session
-    else if (prop === 'request') value = { input, session, lastRoutePath }
+    if (Object.keys(input).indexOf(prop) > -1) {
+      value = input[prop]
+    } else if (prop === 'text') {
+      value = input.data
+    } else if (prop === 'input') {
+      value = input
+    } else if (prop === 'session') {
+      value = session
+    } else if (prop === 'request') {
+      value = { input, session, lastRoutePath }
+    }
     const matched = this.matchValue(matcher, value)
     if (matched) {
       this.routeInspector.routeMatched(route, prop, matcher, value)
@@ -273,12 +280,18 @@ export class Router {
    * If there is a match, it will return a truthy value (true, RegExp result), o.w., it will return a falsy value.
    * */
   matchValue(matcher: Matcher, value: any): MatchedValue {
-    if (typeof matcher === 'string') return value === matcher
+    if (typeof matcher === 'string') {
+      return value === matcher
+    }
     if (matcher instanceof RegExp) {
-      if (value === undefined || value === null) return false
+      if (value === undefined || value === null) {
+        return false
+      }
       return matcher.exec(value)
     }
-    if (typeof matcher === 'function') return matcher(value)
+    if (typeof matcher === 'function') {
+      return matcher(value)
+    }
     return false
   }
 
@@ -293,7 +306,9 @@ export class Router {
     lastRoutePath: RoutePath
   ): RoutingState {
     const currentRoute = this.getRouteByPath(lastRoutePath)
-    if (currentRoute && lastRoutePath) currentRoute.path = lastRoutePath
+    if (currentRoute && lastRoutePath) {
+      currentRoute.path = lastRoutePath
+    }
     if (typeof input.payload === 'string' && isPathPayload(input.payload)) {
       return this.getRoutingStateFromPathPayload(currentRoute, input.payload)
     }
@@ -309,7 +324,7 @@ export class Router {
     session: Session
   ): RoutingState {
     // get route depending of current ChildRoutes
-    if (currentRoute && currentRoute.childRoutes) {
+    if (currentRoute?.childRoutes) {
       const routeParams = this.getRoute(
         input,
         currentRoute.childRoutes,
@@ -397,7 +412,9 @@ export class Router {
       const routingState = getRoutingStateFromPath(
         `${currentRoute.path}/${path}`
       )
-      if (routingState.matchedRoute) return routingState
+      if (routingState.matchedRoute) {
+        return routingState
+      }
     }
     // 2. Received __PATH_PAYLOAD__Flow1/Subflow1, so we can resolve it directly
     return getRoutingStateFromPath(path as string)

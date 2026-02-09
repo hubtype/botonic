@@ -1,6 +1,6 @@
-import React from 'react'
+import type React from 'react'
 
-import { SENDERS } from '../index-types'
+import type { SENDERS } from '../index-types'
 
 export type MessageType =
   | 'audio'

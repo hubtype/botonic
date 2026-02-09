@@ -1,6 +1,5 @@
-import { EventAction, EventConditionalQueueStatus } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
-import React from 'react'
+import { EventAction, type EventConditionalQueueStatus } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import { getArgumentsByLocale } from '../functions'
 import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
@@ -9,11 +8,11 @@ import {
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import {
+import type {
   HtFunctionArguments,
   HtFunctionResult,
 } from './hubtype-fields/function'
-import {
+import type {
   HtQueueStatusConditionalNode,
   HtQueueStatusConditionalResultMapping,
 } from './hubtype-fields/queue-status-conditional'

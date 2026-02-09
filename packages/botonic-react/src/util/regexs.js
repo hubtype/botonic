@@ -1,6 +1,6 @@
 export const deserializeRegex = regexStr => {
   /* eslint-disable no-useless-escape */
-  const fragments = regexStr.match(/\/(.[^\/]+)\/([a-z]{1})?$/i) // https://stackoverflow.com/a/33642463, https://github.com/hubtype/botonic/pull/805#discussion_r437309074
+  const fragments = regexStr.match(/\/(.[^/]+)\/([a-z]{1})?$/i) // https://stackoverflow.com/a/33642463, https://github.com/hubtype/botonic/pull/805#discussion_r437309074
   const deserialized = new RegExp(fragments[1], fragments[2] || '')
   return deserialized
 }
@@ -10,7 +10,9 @@ export const deserializeRegex = regexStr => {
  */
 export const stringifyWithRegexs = object => {
   return JSON.stringify(object, (_, value) => {
-    if (value instanceof RegExp) return value.toString()
+    if (value instanceof RegExp) {
+      return value.toString()
+    }
     return value
   })
 }

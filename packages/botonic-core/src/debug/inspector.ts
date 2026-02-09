@@ -1,4 +1,4 @@
-import { Route, RouteMatcher } from '../models'
+import type { Route, RouteMatcher } from '../models'
 export class RouteInspector {
   routeMatched(
     _route: Route,
@@ -37,13 +37,12 @@ export class FocusRouteInspector extends RouteInspector {
     if (this.focusRoutePaths === null) {
       return true
     }
-    // @ts-ignore
-    return this.focusRoutePaths.includes(route.path)
+    return this.focusRoutePaths.includes(route.path as string)
   }
 }
 
 export class LogRouteInspector extends FocusRouteInspector {
-  routeMatched(
+  override routeMatched(
     route: Route,
     routeKey: string,
     routeValue: RouteMatcher,
@@ -58,8 +57,7 @@ export class LogRouteInspector extends FocusRouteInspector {
     )
   }
 
-  // @ts-ignore
-  routeNotMatched(
+  override routeNotMatched(
     route: Route,
     routeKey: string,
     routeValue: RouteMatcher,

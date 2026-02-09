@@ -1,5 +1,5 @@
-import { HtBaseNode } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtInputGuardrailRule {
   name: string

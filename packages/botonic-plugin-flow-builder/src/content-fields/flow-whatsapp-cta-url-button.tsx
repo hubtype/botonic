@@ -1,18 +1,17 @@
 import { isWhatsapp } from '@botonic/core'
 import {
-  ActionRequest,
+  type ActionRequest,
   Button,
   Text,
   WhatsappCTAUrlButton,
   WhatsappCTAUrlHeaderType,
 } from '@botonic/react'
-import React from 'react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtUrlNode, HtWhatsappCTAUrlButtonNode } from './hubtype-fields'
+import type { HtUrlNode, HtWhatsappCTAUrlButtonNode } from './hubtype-fields'
 
 export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   public text = ''
@@ -32,7 +31,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   ): FlowWhatsappCtaUrlButtonNode {
     const whatsappCtaUrlButton = new FlowWhatsappCtaUrlButtonNode(component.id)
     whatsappCtaUrlButton.code = component.code
-    whatsappCtaUrlButton.text = this.getTextByLocale(
+    whatsappCtaUrlButton.text = FlowWhatsappCtaUrlButtonNode.getTextByLocale(
       locale,
       component.content.text
     )
@@ -41,7 +40,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       component,
       locale
     )
-    whatsappCtaUrlButton.footer = this.getTextByLocale(
+    whatsappCtaUrlButton.footer = FlowWhatsappCtaUrlButtonNode.getTextByLocale(
       locale,
       component.content.footer
     )
@@ -75,40 +74,44 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       .header_type as WhatsappCTAUrlHeaderType
 
     if (component.content.header_type === WhatsappCTAUrlHeaderType.Text) {
-      whatsappCtaUrlButton.header = this.getTextByLocale(
-        locale,
-        component.content.header
-      )
+      whatsappCtaUrlButton.header =
+        FlowWhatsappCtaUrlButtonNode.getTextByLocale(
+          locale,
+          component.content.header
+        )
     }
 
     if (
       component.content.header_type === WhatsappCTAUrlHeaderType.Image &&
       component.content.header_image
     ) {
-      whatsappCtaUrlButton.headerImage = this.getAssetByLocale(
-        locale,
-        component.content.header_image
-      )
+      whatsappCtaUrlButton.headerImage =
+        FlowWhatsappCtaUrlButtonNode.getAssetByLocale(
+          locale,
+          component.content.header_image
+        )
     }
 
     if (
       component.content.header_type === WhatsappCTAUrlHeaderType.Video &&
       component.content.header_video
     ) {
-      whatsappCtaUrlButton.headerVideo = this.getAssetByLocale(
-        locale,
-        component.content.header_video
-      )
+      whatsappCtaUrlButton.headerVideo =
+        FlowWhatsappCtaUrlButtonNode.getAssetByLocale(
+          locale,
+          component.content.header_video
+        )
     }
 
     if (
       component.content.header_type === WhatsappCTAUrlHeaderType.Document &&
       component.content.header_document
     ) {
-      whatsappCtaUrlButton.headerDocument = this.getAssetByLocale(
-        locale,
-        component.content.header_document
-      )
+      whatsappCtaUrlButton.headerDocument =
+        FlowWhatsappCtaUrlButtonNode.getAssetByLocale(
+          locale,
+          component.content.header_document
+        )
     }
   }
 
@@ -117,10 +120,12 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   }
 
   toBotonic(id: string, request: ActionRequest): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, request)
+
     if (!isWhatsapp(request.session)) {
       return (
         <Text>
-          {this.text}
+          {replacedText}
           <Button url={this.url}>{this.displayText}</Button>
         </Text>
       )
@@ -133,7 +138,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerImage={this.headerImage}
           footer={this.footer}
@@ -150,7 +155,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerVideo={this.headerVideo}
           footer={this.footer}
@@ -167,7 +172,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           headerType={this.headerType}
           headerDocument={this.headerDocument}
           footer={this.footer}
@@ -181,7 +186,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
       return (
         <WhatsappCTAUrlButton
           key={id}
-          body={this.text}
+          body={replacedText}
           header={this.header}
           headerType={this.headerType}
           footer={this.footer}
@@ -194,7 +199,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     return (
       <WhatsappCTAUrlButton
         key={id}
-        body={this.text}
+        body={replacedText}
         footer={this.footer}
         displayText={this.displayText}
         url={this.url}

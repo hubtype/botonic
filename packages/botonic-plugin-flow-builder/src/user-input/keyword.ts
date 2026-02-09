@@ -1,9 +1,9 @@
-import { EventAction, EventKeyword, NluType } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventKeyword, NluType } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { REG_EXP_PATTERN } from '../constants'
-import {
+import type {
   HtKeywordNode,
   HtNodeWithContent,
 } from '../content-fields/hubtype-fields'

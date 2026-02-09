@@ -1,6 +1,6 @@
 import { isDev, isWebchat, isWhatsapp } from '@botonic/core'
 import {
-  ActionRequest,
+  type ActionRequest,
   CustomRatingMessage,
   Text,
   WhatsappButtonList,
@@ -10,7 +10,7 @@ import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtRatingNode, RatingType } from './hubtype-fields'
+import { type HtRatingNode, RatingType } from './hubtype-fields'
 
 export class FlowRating extends ContentFieldsBase {
   public text = ''
@@ -22,8 +22,8 @@ export class FlowRating extends ContentFieldsBase {
   static fromHubtypeCMS(cmsText: HtRatingNode, locale: string): FlowRating {
     const newRating = new FlowRating(cmsText.id)
     newRating.code = cmsText.code
-    newRating.text = this.getTextByLocale(locale, cmsText.content.text)
-    newRating.sendButtonText = this.getTextByLocale(
+    newRating.text = FlowRating.getTextByLocale(locale, cmsText.content.text)
+    newRating.sendButtonText = FlowRating.getTextByLocale(
       locale,
       cmsText.content.send_button_text
     )
@@ -31,7 +31,7 @@ export class FlowRating extends ContentFieldsBase {
     newRating.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromRating(button)
     )
-    newRating.openListButtonText = this.getTextByLocale(
+    newRating.openListButtonText = FlowRating.getTextByLocale(
       locale,
       cmsText.content.open_list_button_text
     )
@@ -48,11 +48,12 @@ export class FlowRating extends ContentFieldsBase {
     const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
     const customRatingMessageEnabled =
       flowBuilderPlugin.customRatingMessageEnabled
+    const replacedText = this.replaceVariables(this.text, request)
 
     if (isWhatsapp(request.session)) {
       return (
         <WhatsappButtonList
-          body={this.text}
+          body={replacedText}
           button={this.openListButtonText}
           sections={[
             {
@@ -77,9 +78,9 @@ export class FlowRating extends ContentFieldsBase {
 
       return (
         <CustomRatingMessage
-          alt={this.text}
+          alt={replacedText}
           payloads={payloads}
-          messageText={this.text}
+          messageText={replacedText}
           buttonText={this.sendButtonText}
           ratingType={this.ratingType}
         />
@@ -88,7 +89,7 @@ export class FlowRating extends ContentFieldsBase {
 
     return (
       <Text key={id}>
-        {this.text}
+        {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex)
         )}

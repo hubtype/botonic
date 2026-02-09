@@ -1,6 +1,5 @@
-import React from 'react'
-
-import { RatingIconProps } from '../types'
+/** biome-ignore-all lint/a11y/noSvgWithoutTitle: This is a SVG icon */
+import type { RatingIconProps } from '../types'
 
 export const FaceAngrySvg = ({ color, selected }: RatingIconProps) => {
   return selected ? (

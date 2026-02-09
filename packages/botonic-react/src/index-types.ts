@@ -1,31 +1,31 @@
-import {
+import type {
   BotContext,
   BotRequest as CoreBotRequest,
   Input as CoreInput,
   InputType as CoreInputType,
   Route as CoreRoute,
   Routes as CoreRoutes,
-  ServerConfig,
   Session as CoreSession,
   SessionUser as CoreSessionUser,
+  ServerConfig,
 } from '@botonic/core'
-import React from 'react'
+import type React from 'react'
 
-import {
+import type {
   BlockInputOption,
   ButtonProps,
   ReplyProps,
   WebchatSettingsProps,
 } from './components'
 import { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
-import { CloseWebviewOptions } from './contexts'
-import { UseWebchat } from './webchat/context/use-webchat'
+import type { CloseWebviewOptions } from './contexts'
+import type { UseWebchat } from './webchat/context/use-webchat'
 import {
-  CoverComponentOptions,
-  PersistentMenuOptionsTheme,
+  type CoverComponentOptions,
+  type PersistentMenuOptionsTheme,
   WebchatTheme,
 } from './webchat/theme/types'
-import { WebchatApp } from './webchat-app'
+import type { WebchatApp } from './webchat-app'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/

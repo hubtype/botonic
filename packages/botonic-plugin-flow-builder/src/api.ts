@@ -1,4 +1,4 @@
-import { PluginPreRequest } from '@botonic/core'
+import type { PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
 import {
@@ -8,23 +8,23 @@ import {
   UUID_REGEXP,
 } from './constants'
 import {
-  HtBotActionNode,
-  HtCaptureUserInputNode,
-  HtFallbackNode,
-  HtFlowBuilderData,
-  HtFlowWebview,
-  HtGoToFlow,
-  HtKeywordNode,
-  HtNodeComponent,
-  HtNodeLink,
-  HtNodeWithContent,
+  type HtBotActionNode,
+  type HtCaptureUserInputNode,
+  type HtFallbackNode,
+  type HtFlowBuilderData,
+  type HtFlowWebview,
+  type HtGoToFlow,
+  type HtKeywordNode,
+  type HtNodeComponent,
+  type HtNodeLink,
+  type HtNodeWithContent,
   HtNodeWithContentType,
-  HtPayloadNode,
-  HtRatingButton,
-  HtRatingNode,
-  HtSmartIntentNode,
+  type HtPayloadNode,
+  type HtRatingButton,
+  type HtRatingNode,
+  type HtSmartIntentNode,
 } from './content-fields/hubtype-fields'
-import { FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
+import { type FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
 
 export class FlowBuilderApi {
   url: string
@@ -70,19 +70,25 @@ export class FlowBuilderApi {
 
   getNodeByFlowId(id: string): HtNodeWithContent {
     const subFlow = this.flow.flows.find(subFlow => subFlow.id === id)
-    if (!subFlow) throw Error(`SubFlow with id: '${id}' not found`)
+    if (!subFlow) {
+      throw Error(`SubFlow with id: '${id}' not found`)
+    }
     return this.getNodeById<HtNodeWithContent>(subFlow.start_node_id)
   }
 
   getNodeByCampaignId<T extends HtNodeComponent>(id: string): T {
     const campaign = this.flow.campaigns.find(campaign => campaign.id === id)
-    if (!campaign) throw Error(`Campaign with id: '${id}' not found`)
+    if (!campaign) {
+      throw Error(`Campaign with id: '${id}' not found`)
+    }
     return this.getNodeById<T>(campaign.start_node_id)
   }
 
   getNodeById<T extends HtNodeComponent>(id: string): T {
     const node = this.flow.nodes.find(node => node.id === id)
-    if (!node) console.error(`Node with id: '${id}' not found`)
+    if (!node) {
+      console.error(`Node with id: '${id}' not found`)
+    }
 
     return node as T
   }
@@ -117,13 +123,17 @@ export class FlowBuilderApi {
     const content = this.flow.nodes.find(node =>
       'code' in node ? node.code === contentID : false
     )
-    if (!content) throw Error(`Node with contentID: '${contentID}' not found`)
+    if (!content) {
+      throw Error(`Node with contentID: '${contentID}' not found`)
+    }
     return content
   }
 
   getStartNode(): HtNodeWithContent {
     const startNodeId = this.flow.start_node_id
-    if (!startNodeId) throw new Error('Start node id must be defined')
+    if (!startNodeId) {
+      throw new Error('Start node id must be defined')
+    }
     return this.getNodeById(startNodeId)
   }
 

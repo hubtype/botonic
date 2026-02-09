@@ -1,8 +1,8 @@
 import {
   EventAction,
-  EventConditionalCountry,
+  type EventConditionalCountry,
   EventType,
-  RequestData,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

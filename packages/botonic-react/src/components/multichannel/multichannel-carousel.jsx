@@ -5,7 +5,7 @@ import {
   isWebchat,
   isWhatsapp,
 } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { Button } from '../button/index'
@@ -92,11 +92,21 @@ function parseCarouselElement(element) {
   const buttonsChildren = []
 
   for (const node of element) {
-    if (isNodePic(node)) imageProps = node.props
-    if (isNodeTitle(node)) title = node.props.children
-    if (isNodeSubtitle(node)) subtitle = node.props.children
-    if (isMultichannelButton(node)) buttonsChildren.push(node)
-    if (Array.isArray(node)) buttonsChildren.push(...getButtons(node))
+    if (isNodePic(node)) {
+      imageProps = node.props
+    }
+    if (isNodeTitle(node)) {
+      title = node.props.children
+    }
+    if (isNodeSubtitle(node)) {
+      subtitle = node.props.children
+    }
+    if (isMultichannelButton(node)) {
+      buttonsChildren.push(node)
+    }
+    if (Array.isArray(node)) {
+      buttonsChildren.push(...getButtons(node))
+    }
   }
 
   const buttons = buttonsChildren.map(button => {

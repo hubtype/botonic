@@ -1,10 +1,10 @@
-import { readFileSync, writeFileSync } from 'fs'
-import { join } from 'path'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 import {
+  copyRecursively,
   createDir,
   createTempDir,
-  copyRecursively,
   pathExists,
   readDir,
   readJSON,
@@ -21,7 +21,7 @@ describe('TEST: File System utilities', () => {
   const existingPath = process.cwd()
   const unexistingPath = 'unexistingPath'
 
-  let tempDir
+  let tempDir: string
   beforeEach(() => {
     tempDir = createTempDir('botonic-tmp')
   })

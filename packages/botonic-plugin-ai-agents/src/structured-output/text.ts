@@ -1,4 +1,4 @@
-import { TextMessage } from '@botonic/core'
+import type { TextMessage } from '@botonic/core'
 import { z } from 'zod'
 
 export type { TextMessage }

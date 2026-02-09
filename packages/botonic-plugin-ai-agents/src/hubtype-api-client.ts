@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BotContext } from '@botonic/core'
+import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from './constants'
-import { AgenticInputMessage, Chunk } from './types'
+import type { AgenticInputMessage, Chunk } from './types'
 
 interface HubtypeAssistantMessage {
   role: 'assistant'

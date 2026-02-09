@@ -1,5 +1,5 @@
-import { HtBaseNode, HtNodeLink, HtTextLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode, HtNodeLink, HtTextLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export enum RatingType {
   Stars = 'stars',

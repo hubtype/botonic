@@ -1,5 +1,8 @@
-import { HtNodeWithContentType, HtNodeWithoutContentType } from './node-types'
-import { HtNodeComponent } from './nodes'
+import type {
+  HtNodeWithContentType,
+  HtNodeWithoutContentType,
+} from './node-types'
+import type { HtNodeComponent } from './nodes'
 
 export interface HtFlowBuilderData {
   version: string

@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { ArrowProgressSvg } from '../icons/arrow-progress'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface RedirectFlowDebugEvent {
   action: EventAction.RedirectFlow

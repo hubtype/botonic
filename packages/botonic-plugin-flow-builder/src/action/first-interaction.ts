@@ -1,10 +1,10 @@
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
-import { FlowBotAction, FlowContent } from '../content-fields'
-import BotonicPluginFlowBuilder from '../index'
+import { FlowBotAction, type FlowContent } from '../content-fields'
+import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextData } from '../utils'
 import { getContentsByAiAgent } from './ai-agent'
-import { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
 
@@ -30,7 +30,7 @@ export async function getContentsByFirstInteraction(
       if (contentsByContentID.length > 0) {
         return contentsByContentID
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn(
         `The contentID ${contentID} is not found. Returning the firstInteractionContents`
       )

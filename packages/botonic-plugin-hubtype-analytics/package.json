@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.44.0-alpha.3",
+  "version": "0.45.0-alpha.0",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -9,12 +9,13 @@
     "build:watch": "npm run build -- --watch",
     "test": "../../node_modules/.bin/jest --coverage",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
-    "lint": "npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet 'src/**/*.ts*'"
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/core": "^0.44.0-alpha.3",
+    "@botonic/core": "^0.45.0-alpha.0",
     "axios": "^1.13.2"
   },
   "devDependencies": {
@@ -29,10 +30,6 @@
     "src/**",
     "README.md"
   ],
-  "eslintConfig": {
-    "extends": "../.eslintrc.js",
-    "root": true
-  },
   "author": "",
   "license": "MIT",
   "keywords": [

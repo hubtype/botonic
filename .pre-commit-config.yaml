@@ -13,55 +13,22 @@ repos:
       - id: debug-statements
       - id: mixed-line-ending
 
+  # ESLint hooks for packages NOT yet migrated (remove as each package is migrated)
+  # Biome hook for migrated packages (update 'files' pattern as packages are migrated)
   - repo: local
     hooks:
-      - id: cli
-        name: cli
-        entry: bash scripts/qa/old/lint-package.sh packages/botonic-cli
+      - id: biome-check
+        name: biome-check (Biome)
+        entry: bash scripts/qa/biome-check.sh
         language: system
-        files: ^packages/botonic-cli/
-
-      - id: core
-        name: core
-        entry: scripts/qa/old/lint-package.sh packages/botonic-core
-        language: system
-        files: ^packages/botonic-core/
-
-      - id: react
-        name: react
-        entry: scripts/qa/old/lint-package.sh packages/botonic-react
-        language: system
-        files: ^packages/botonic-react/
+        files: ^packages/(botonic-core|botonic-cli|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases|botonic-plugin-ai-agents|botonic-react|botonic-plugin-flow-builder)/
+        types_or: [javascript, jsx, ts, tsx, json]
 
       - id: docs
-        name: docs
+        name: docs (ESLint)
         entry: scripts/qa/old/lint-package.sh docs/
         language: system
         files: ^docs/
-
-      - id: plugin-flow-builder
-        name: plugin-flow-builder
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
-        language: system
-        files: ^packages/botonic-plugin-flow-builder/
-
-      - id: hubtype-analytics
-        name: hubtype-analytics
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
-        language: system
-        files: ^packages/botonic-plugin-hubtype-analytics/
-
-      - id: plugin-ai-agents
-        name: plugin-ai-agents
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ai-agents
-        language: system
-        files: ^packages/botonic-plugin-ai-agents/
-
-      - id: plugin-knowledge-bases
-        name: plugin-knowledge-bases
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-knowledge-bases
-        language: system
-        files: ^packages/botonic-plugin-knowledge-bases/
 
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0

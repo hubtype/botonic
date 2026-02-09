@@ -1,4 +1,4 @@
-import { CarouselMessage } from '@botonic/core'
+import type { CarouselMessage } from '@botonic/core'
 import { z } from 'zod'
 
 export type { CarouselMessage }

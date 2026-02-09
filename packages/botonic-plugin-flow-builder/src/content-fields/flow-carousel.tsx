@@ -1,22 +1,21 @@
-import { CarouselMessage, isWhatsapp } from '@botonic/core'
+import { type CarouselMessage, isWhatsapp } from '@botonic/core'
 import {
-  ActionRequest,
+  type ActionRequest,
   Button,
   CardType,
   Carousel,
   Text,
   WhatsappCTAUrlButton,
   WhatsappCTAUrlHeaderType,
-  WhatsappInteractiveMediaCard,
+  type WhatsappInteractiveMediaCard,
   WhatsappInteractiveMediaCarousel,
 } from '@botonic/react'
-import React from 'react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowElement } from './flow-element'
-import { HtCarouselNode } from './hubtype-fields'
+import type { HtCarouselNode } from './hubtype-fields'
 
 const DEFAULT_TEXT_MESSAGE = 'These are the options'
 export class FlowCarousel extends ContentFieldsBase {
@@ -33,7 +32,7 @@ export class FlowCarousel extends ContentFieldsBase {
     newCarousel.elements = component.content.elements.map(element =>
       FlowElement.fromHubtypeCMS(element, locale, cmsApi)
     )
-    newCarousel.whatsappText = this.getTextByLocale(
+    newCarousel.whatsappText = FlowCarousel.getTextByLocale(
       locale,
       component.content.whatsapp_text
     )

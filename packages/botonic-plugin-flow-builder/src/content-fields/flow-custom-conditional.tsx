@@ -1,5 +1,5 @@
-import { EventAction, EventConditionalCustom } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventConditionalCustom } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -7,8 +7,8 @@ import {
 } from '../tracking'
 import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtCustomConditionalNode } from './hubtype-fields/custom-conditional'
-import {
+import type { HtCustomConditionalNode } from './hubtype-fields/custom-conditional'
+import type {
   HtFunctionArgument,
   HtFunctionArguments,
   HtFunctionResult,

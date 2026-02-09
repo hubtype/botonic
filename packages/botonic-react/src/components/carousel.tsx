@@ -1,5 +1,5 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import LeftArrow from '../assets/leftArrow.svg'
@@ -9,7 +9,7 @@ import { resolveImage } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
 import { ButtonsDisabler } from './buttons-disabler'
 import { COMPONENT_DISPLAY_NAMES } from './constants'
-import { CarouselProps } from './index-types'
+import type { CarouselProps } from './index-types'
 import { Message } from './message'
 
 const ScrollableCarousel = styled.div`
@@ -66,12 +66,12 @@ const StyledArrow = styled.img`
 
 const serialize = carouselProps => {
   let carouselChildren = carouselProps.children
-  if (!Array.isArray(carouselChildren)) carouselChildren = [carouselChildren]
+  if (!Array.isArray(carouselChildren)) {
+    carouselChildren = [carouselChildren]
+  }
   return {
     type: INPUT.CAROUSEL,
-    elements: carouselChildren.map(
-      e => e?.type?.serialize && e.type.serialize(e.props)
-    ),
+    elements: carouselChildren.map(e => e?.type?.serialize?.(e.props)),
   }
 }
 
@@ -146,12 +146,12 @@ export const Carousel = (props: CarouselProps) => {
 
   useEffect(() => {
     const carousel = carouselRef.current
-    if (carousel && carousel.addEventListener) {
+    if (carousel?.addEventListener) {
       carousel.addEventListener('scroll', setArrowsVisibility, false)
     }
 
     return () => {
-      if (carousel && carousel.removeEventListener) {
+      if (carousel?.removeEventListener) {
         carousel.removeEventListener('scroll', setArrowsVisibility, false)
       }
     }

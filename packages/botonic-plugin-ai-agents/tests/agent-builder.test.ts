@@ -1,6 +1,6 @@
-import { DebugLogger } from '../src/debug-logger'
+import type { DebugLogger } from '../src/debug-logger'
 import { OutputSchema } from '../src/structured-output'
-import { GuardrailRule, Tool } from '../src/types'
+import type { GuardrailRule, Tool } from '../src/types'
 
 // Create a mock disabled logger for tests (no-op implementations)
 const mockLogger: DebugLogger = {
@@ -48,7 +48,7 @@ const mockConstants = {
 jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
-import { ContactInfo } from '@botonic/core'
+import type { ContactInfo } from '@botonic/core'
 
 import { AIAgentBuilder } from '../src/agent-builder'
 
