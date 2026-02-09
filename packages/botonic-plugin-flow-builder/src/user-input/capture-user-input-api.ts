@@ -8,6 +8,7 @@ import {
   HtAiValidationType,
   type HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
+import { getFlowBuilderPlugin } from '../helpers'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -83,10 +84,13 @@ export class CaptureUserInputApi {
           captureUserInputNode.content.ai_validation_instructions,
         user_input: this.request.input.data,
       }
+      const pluginFlowBuilder = getFlowBuilderPlugin(this.request.plugins)
+      const token = pluginFlowBuilder.getAccessToken(this.request.session)
+
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.request.session._access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
 
