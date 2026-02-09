@@ -1,4 +1,4 @@
-import { FlowBuilderJSONVersion } from '../types'
+import type { FlowBuilderJSONVersion } from '../types'
 
 export enum WebviewContentType {
   TEXT = 'webview-text',

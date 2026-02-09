@@ -1,11 +1,15 @@
 import { isWhatsapp } from '@botonic/core'
-import { ActionRequest, Button, Text, WhatsappButtonList } from '@botonic/react'
-import React from 'react'
+import {
+  type ActionRequest,
+  Button,
+  Text,
+  WhatsappButtonList,
+} from '@botonic/react'
 
-import { FlowBuilderApi } from '../../api'
+import type { FlowBuilderApi } from '../../api'
 import { trackOneContent } from '../../tracking'
 import { ContentFieldsBase } from '../content-fields-base'
-import { HtWhatsappButtonListNode } from '../hubtype-fields'
+import type { HtWhatsappButtonListNode } from '../hubtype-fields'
 import { FlowWhatsappButtonListSection } from './flow-whatsapp-button-list-section'
 
 export class FlowWhatsappButtonList extends ContentFieldsBase {
@@ -20,14 +24,15 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
   ): FlowWhatsappButtonList {
     const newWhatsappButtonList = new FlowWhatsappButtonList(component.id)
     newWhatsappButtonList.code = component.code
-    newWhatsappButtonList.text = this.getTextByLocale(
+    newWhatsappButtonList.text = FlowWhatsappButtonList.getTextByLocale(
       locale,
       component.content.text
     )
-    newWhatsappButtonList.listButtonText = this.getTextByLocale(
-      locale,
-      component.content.button_text
-    )
+    newWhatsappButtonList.listButtonText =
+      FlowWhatsappButtonList.getTextByLocale(
+        locale,
+        component.content.button_text
+      )
     newWhatsappButtonList.sections = component.content.sections.map(section =>
       FlowWhatsappButtonListSection.fromHubtypeCMS(section, locale, cmsApi)
     )

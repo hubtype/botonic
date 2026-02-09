@@ -1,12 +1,12 @@
-import {
+import type {
   ActionRequest,
   WhatsappButtonListRowProps,
   WhatsappButtonListSectionProps,
 } from '@botonic/react'
 
-import { FlowBuilderApi } from '../../api'
+import type { FlowBuilderApi } from '../../api'
 import { ContentFieldsBase } from '../content-fields-base'
-import { HtWhatsappButtonListSection } from '../hubtype-fields'
+import type { HtWhatsappButtonListSection } from '../hubtype-fields'
 import { FlowWhatsappButtonListRow } from './flow-whatsapp-button-list-row'
 
 export class FlowWhatsappButtonListSection extends ContentFieldsBase {
@@ -19,7 +19,10 @@ export class FlowWhatsappButtonListSection extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): FlowWhatsappButtonListSection {
     const newButton = new FlowWhatsappButtonListSection(component.id)
-    newButton.title = this.getTextByLocale(locale, component.title)
+    newButton.title = FlowWhatsappButtonListSection.getTextByLocale(
+      locale,
+      component.title
+    )
     newButton.rows = component.rows.map(row =>
       FlowWhatsappButtonListRow.fromHubtypeCMS(row, locale, cmsApi)
     )
@@ -35,7 +38,9 @@ export class FlowWhatsappButtonListSection extends ContentFieldsBase {
     const rows = this.rows.reduce(
       (acc: WhatsappButtonListRowProps[], row, rowIndex) => {
         const botonicRow = row.toBotonic(rowIndex, sectionIndex)
-        if (botonicRow) acc.push(botonicRow)
+        if (botonicRow) {
+          acc.push(botonicRow)
+        }
         return acc
       },
       []

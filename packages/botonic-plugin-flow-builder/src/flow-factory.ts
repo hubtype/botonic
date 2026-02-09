@@ -1,12 +1,12 @@
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from './api'
+import type { FlowBuilderApi } from './api'
 import {
   FlowAiAgent,
   FlowBotAction,
   FlowCarousel,
   FlowChannelConditional,
-  FlowContent,
+  type FlowContent,
   FlowCountryConditional,
   FlowCustomConditional,
   FlowGoToFlow,
@@ -23,8 +23,8 @@ import {
 } from './content-fields'
 import { FlowCaptureUserInput } from './content-fields/flow-capture-user-input'
 import {
-  HtFunctionNode,
-  HtNodeComponent,
+  type HtFunctionNode,
+  type HtNodeComponent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 

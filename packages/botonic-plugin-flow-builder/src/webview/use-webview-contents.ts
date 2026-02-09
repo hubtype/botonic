@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react'
 import { FLOW_BUILDER_API_URL_PROD } from '../constants'
 import { FlowBuilderJSONVersion } from '../types'
 import {
-  MapContentsType,
-  UseWebviewContents,
-  UseWebviewContentsProps,
-  WebviewContentsResponse,
+  type MapContentsType,
+  type UseWebviewContents,
+  type UseWebviewContentsProps,
+  type WebviewContentsResponse,
   WebviewContentType,
-  WebviewImageContent,
-  WebviewTextContent,
+  type WebviewImageContent,
+  type WebviewTextContent,
 } from './types'
 
 export function useWebviewContents<T extends MapContentsType>({

@@ -1,7 +1,10 @@
-import { INPUT, PROVIDER, ProviderType } from '@botonic/core'
+import { INPUT, PROVIDER, type ProviderType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowChannelConditional, FlowText } from '../src/content-fields/index'
+import {
+  FlowChannelConditional,
+  type FlowText,
+} from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { basicFlow } from './helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
@@ -13,19 +16,16 @@ describe('Check the contents returned by the plugin after conditional channel no
     [PROVIDER.WHATSAPP, 'Message only for WhatsApp'],
     [PROVIDER.TELEGRAM, 'Message only for Telegram'],
     [PROVIDER.WEBCHAT, 'Message for other channels'],
-  ])(
-    'The content of the channel %s is displayed',
-    async (provider: PROVIDER, messageExpected: string) => {
-      const { contents } = await createFlowBuilderPluginAndGetContents({
-        flowBuilderOptions: { flow: basicFlow },
-        requestArgs: {
-          input: { data: 'channelConditional', type: INPUT.TEXT },
-          provider: provider as ProviderType,
-        },
-      })
+  ])('The content of the channel %s is displayed', async (provider: PROVIDER, messageExpected: string) => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: basicFlow },
+      requestArgs: {
+        input: { data: 'channelConditional', type: INPUT.TEXT },
+        provider: provider as ProviderType,
+      },
+    })
 
-      expect(contents[0]).toBeInstanceOf(FlowChannelConditional)
-      expect((contents[1] as FlowText).text).toBe(messageExpected)
-    }
-  )
+    expect(contents[0]).toBeInstanceOf(FlowChannelConditional)
+    expect((contents[1] as FlowText).text).toBe(messageExpected)
+  })
 })

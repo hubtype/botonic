@@ -1,5 +1,5 @@
-import { HtBaseNode, HtPayloadLocale, HtQueueLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode, HtPayloadLocale, HtQueueLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtHandoffNode extends HtBaseNode {
   type: HtNodeWithContentType.HANDOFF

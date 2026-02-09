@@ -1,10 +1,10 @@
 import { HandOffBuilder, HelpdeskEvent, isDev, isWebchat } from '@botonic/core'
-import { ActionRequest, WebchatSettings } from '@botonic/react'
+import { type ActionRequest, WebchatSettings } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtHandoffNode, HtQueueLocale } from './hubtype-fields'
+import type { HtHandoffNode, HtQueueLocale } from './hubtype-fields'
 
 export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
@@ -20,8 +20,14 @@ export class FlowHandoff extends ContentFieldsBase {
   ): FlowHandoff {
     const newHandoff = new FlowHandoff(cmsHandoff.id)
     newHandoff.code = cmsHandoff.code
-    newHandoff.queue = this.getQueueByLocale(locale, cmsHandoff.content.queue)
-    newHandoff.onFinishPayload = this.getOnFinishPayload(cmsHandoff, cmsApi)
+    newHandoff.queue = FlowHandoff.getQueueByLocale(
+      locale,
+      cmsHandoff.content.queue
+    )
+    newHandoff.onFinishPayload = FlowHandoff.getOnFinishPayload(
+      cmsHandoff,
+      cmsApi
+    )
     newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
     newHandoff.hasQueuePositionChangedNotificationsEnabled =
       cmsHandoff.content.has_queue_position_changed_notifications_enabled

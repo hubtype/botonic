@@ -1,9 +1,9 @@
-import { ActionRequest, WhatsappButtonListRowProps } from '@botonic/react'
+import type { ActionRequest, WhatsappButtonListRowProps } from '@botonic/react'
 
-import { FlowBuilderApi } from '../../api'
+import type { FlowBuilderApi } from '../../api'
 import { SOURCE_INFO_SEPARATOR } from '../../constants'
 import { ContentFieldsBase } from '../content-fields-base'
-import { HtWhatsappButtonListRow } from '../hubtype-fields'
+import type { HtWhatsappButtonListRow } from '../hubtype-fields'
 
 export class FlowWhatsappButtonListRow extends ContentFieldsBase {
   public title = ''
@@ -16,8 +16,14 @@ export class FlowWhatsappButtonListRow extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): FlowWhatsappButtonListRow {
     const newRow = new FlowWhatsappButtonListRow(component.id)
-    newRow.title = this.getTextByLocale(locale, component.text)
-    newRow.description = this.getTextByLocale(locale, component.description)
+    newRow.title = FlowWhatsappButtonListRow.getTextByLocale(
+      locale,
+      component.text
+    )
+    newRow.description = FlowWhatsappButtonListRow.getTextByLocale(
+      locale,
+      component.description
+    )
     newRow.targetId = cmsApi.getPayload(component.target)
 
     return newRow

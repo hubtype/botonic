@@ -1,5 +1,5 @@
-import { HtBaseNode, HtInputLocale, HtTextLocale } from './common'
-import { HtNodeWithContentType } from './node-types'
+import type { HtBaseNode, HtInputLocale, HtTextLocale } from './common'
+import type { HtNodeWithContentType } from './node-types'
 
 export interface HtKeywordNode extends HtBaseNode {
   type: HtNodeWithContentType.KEYWORD

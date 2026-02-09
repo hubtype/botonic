@@ -1,11 +1,11 @@
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
 import {
   ACCESS_TOKEN_VARIABLE_KEY,
   VARIABLE_PATTERN_GLOBAL,
 } from '../constants'
 import { getValueFromKeyPath } from '../utils'
-import {
+import type {
   HtMediaFileLocale,
   HtNodeLink,
   HtQueueLocale,

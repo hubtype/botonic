@@ -1,6 +1,6 @@
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
-import {
+import type {
   HtFunctionArgument,
   HtFunctionArguments,
   HtFunctionNode,

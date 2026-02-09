@@ -1,13 +1,13 @@
-import { BotonicAction, EventAction, EventBotAction } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { BotonicAction, EventAction, type EventBotAction } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtBotActionNode } from './hubtype-fields'
+import type { HtBotActionNode } from './hubtype-fields'
 
 export class FlowBotAction extends ContentFieldsBase {
   public code: string

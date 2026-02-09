@@ -1,4 +1,4 @@
-import { KnowledgeBasesResponse } from '@botonic/core'
+import type { KnowledgeBasesResponse } from '@botonic/core'
 
 interface MockKnowledgeBaseOptions {
   answer: string

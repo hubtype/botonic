@@ -1,8 +1,8 @@
-import { InferenceResponse, INPUT } from '@botonic/core'
+import { INPUT, type InferenceResponse } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowBuilderAction } from '../src/action/index'
-import { FlowAiAgent, FlowText } from '../src/content-fields/index'
+import type { FlowAiAgent, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
@@ -75,7 +75,6 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
       input: { data: 'hola', type: INPUT.TEXT },
       isFirstInteraction: true,
       plugins: {
-        // @ts-ignore
         flowBuilderPlugin,
       },
     })
@@ -99,7 +98,6 @@ describe('Execute botonicInit in the first interaction with contentID', () => {
       input: { data: 'hola', type: INPUT.TEXT },
       isFirstInteraction: true,
       plugins: {
-        // @ts-ignore
         flowBuilderPlugin,
       },
     })

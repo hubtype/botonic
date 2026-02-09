@@ -1,11 +1,11 @@
-import { EventAction, EventFlow } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventFlow } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
-import { FlowBuilderApi } from './api'
-import { FlowContent } from './content-fields'
+import type { FlowBuilderApi } from './api'
+import type { FlowContent } from './content-fields'
 import {
-  HtNodeWithContent,
+  type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from './helpers'

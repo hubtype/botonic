@@ -1,4 +1,4 @@
-import { EventAction, EventFeedback, storeCaseRating } from '@botonic/core'
+import { EventAction, type EventFeedback, storeCaseRating } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
 
 import {
@@ -6,10 +6,10 @@ import {
   PUSH_FLOW_PAYLOAD,
   SEPARATOR,
 } from '../constants'
-import { FlowContent } from '../content-fields'
-import { HtNodeWithContent } from '../content-fields/hubtype-fields'
+import type { FlowContent } from '../content-fields'
+import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
-import { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './index'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext

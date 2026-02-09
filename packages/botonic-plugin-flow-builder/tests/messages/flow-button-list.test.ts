@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowWhatsappButtonList } from '../../src/index'
+import type { FlowWhatsappButtonList } from '../../src/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'

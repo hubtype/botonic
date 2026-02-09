@@ -1,6 +1,6 @@
-import { ResolvedPlugins } from '@botonic/core'
+import type { ResolvedPlugins } from '@botonic/core'
 
-import BotonicPluginFlowBuilder from './index'
+import type BotonicPluginFlowBuilder from './index'
 
 const FLOW_BUILDER_PLUGIN_NAME = 'BotonicPluginFlowBuilder'
 

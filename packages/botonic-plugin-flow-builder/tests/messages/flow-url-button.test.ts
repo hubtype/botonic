@@ -1,7 +1,7 @@
 import { INPUT, PROVIDER } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import { FlowWhatsappCtaUrlButtonNode } from '../../src/content-fields/index'
+import type { FlowWhatsappCtaUrlButtonNode } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'

@@ -1,13 +1,13 @@
-import { EventAction, EventRedirectFlow } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventRedirectFlow } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import { HtGoToFlow, HtNodeWithContent } from './hubtype-fields'
+import type { HtGoToFlow, HtNodeWithContent } from './hubtype-fields'
 
 export class FlowGoToFlow extends ContentFieldsBase {
   public flowTargetId: string = ''

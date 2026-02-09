@@ -1,13 +1,12 @@
-import { TextMessage, TextWithButtonsMessage } from '@botonic/core'
-import { ActionRequest, Text } from '@botonic/react'
-import React from 'react'
+import type { TextMessage, TextWithButtonsMessage } from '@botonic/core'
+import { type ActionRequest, Text } from '@botonic/react'
 
-import { FlowBuilderApi } from '../api'
+import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
-import { HtButtonStyle, HtTextNode } from './hubtype-fields'
+import { HtButtonStyle, type HtTextNode } from './hubtype-fields'
 
 export class FlowText extends ContentFieldsBase {
   public text = ''
@@ -22,7 +21,7 @@ export class FlowText extends ContentFieldsBase {
     const newText = new FlowText(cmsText.id)
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
-    newText.text = this.getTextByLocale(locale, cmsText.content.text)
+    newText.text = FlowText.getTextByLocale(locale, cmsText.content.text)
     newText.buttons = cmsText.content.buttons.map(button =>
       FlowButton.fromHubtypeCMS(button, locale, cmsApi)
     )

@@ -4,7 +4,7 @@ import { describe, test } from '@jest/globals'
 import {
   FlowCountryConditional,
   FlowKnowledgeBase,
-  FlowText,
+  type FlowText,
 } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import

@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
-import { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
+import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
@@ -22,7 +22,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -47,7 +46,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -71,7 +69,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -94,7 +91,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -115,7 +111,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -136,7 +131,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -159,7 +153,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -180,7 +173,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })
@@ -202,7 +194,6 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const request = createRequest({
         input: { data: 'test', type: INPUT.TEXT },
         plugins: {
-          // @ts-ignore
           flowBuilderPlugin,
         },
       })

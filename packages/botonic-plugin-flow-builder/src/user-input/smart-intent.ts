@@ -1,15 +1,15 @@
-import { EventAction, EventIntentSmart, NluType } from '@botonic/core'
-import { ActionRequest } from '@botonic/react'
+import { EventAction, type EventIntentSmart, NluType } from '@botonic/core'
+import type { ActionRequest } from '@botonic/react'
 import axios from 'axios'
 
-import { FlowBuilderApi } from '../api'
-import { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
+import type { FlowBuilderApi } from '../api'
+import type { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
 import { getFlowBuilderPlugin } from '../helpers'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { SmartIntentResponse } from '../types'
+import type { SmartIntentResponse } from '../types'
 
 export interface SmartIntentsInferenceParams {
   bot_id: string
@@ -32,9 +32,13 @@ export class SmartIntentsApi {
   ) {}
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {
-    if (!this.currentRequest.input.data) return undefined
+    if (!this.currentRequest.input.data) {
+      return undefined
+    }
     const smartIntentNodes = this.cmsApi.getSmartIntentNodes()
-    if (!smartIntentNodes.length) return undefined
+    if (!smartIntentNodes.length) {
+      return undefined
+    }
 
     const params = {
       bot_id: this.currentRequest.session.bot.id,
@@ -89,7 +93,9 @@ export class SmartIntentsApi {
   }
 
   private resolveUseLatest(): boolean {
-    if (this.currentRequest.session.is_test_integration) return false
+    if (this.currentRequest.session.is_test_integration) {
+      return false
+    }
     return this.smartIntentsConfig.useLatest
   }
 

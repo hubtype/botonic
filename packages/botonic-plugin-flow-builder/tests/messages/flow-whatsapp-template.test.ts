@@ -9,7 +9,7 @@ import { describe, expect, test } from '@jest/globals'
 import { FlowWhatsappTemplate } from '../../src/content-fields/flow-whatsapp-template'
 import {
   HtNodeWithContentType,
-  HtWhatsappTemplateNode,
+  type HtWhatsappTemplateNode,
 } from '../../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappTemplateFlow } from '../helpers/flows/whatsapp-template'
@@ -215,7 +215,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const bodyComponent = template.getBodyComponent(
         template.variableValues,
         request
@@ -249,7 +249,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const headerComponent = template.getHeaderComponent(
         template.htWhatsappTemplate,
         template.headerVariables!,
@@ -258,7 +258,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       expect(headerComponent?.type).toBe(WhatsAppTemplateComponentType.HEADER)
-      // @ts-ignore - text property exists for TEXT type headers
+      // @ts-expect-error - text property exists for TEXT type headers
       expect(headerComponent?.parameters[0].text).toBe('ORD-99999')
     })
 
@@ -274,7 +274,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const headerComponent = template.getHeaderComponent(
         template.htWhatsappTemplate,
         template.headerVariables!,
@@ -286,7 +286,7 @@ describe('FlowWhatsappTemplate', () => {
       expect(headerComponent?.parameters[0].type).toBe(
         WhatsAppTemplateParameterType.IMAGE
       )
-      // @ts-ignore
+      // @ts-expect-error
       expect(headerComponent?.parameters[0].image.link).toBe(
         'https://example.com/promo-es.jpg'
       )
@@ -304,7 +304,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const headerComponent = template.getHeaderComponent(
         template.htWhatsappTemplate,
         template.headerVariables!,
@@ -316,7 +316,7 @@ describe('FlowWhatsappTemplate', () => {
       expect(headerComponent?.parameters[0].type).toBe(
         WhatsAppTemplateParameterType.VIDEO
       )
-      // @ts-ignore
+      // @ts-expect-error
       expect(headerComponent?.parameters[0].video.link).toBe(
         'https://example.com/video-es.mp4'
       )
@@ -333,7 +333,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const headerComponent = template.getHeaderComponent(
         template.htWhatsappTemplate,
         {} as any,
@@ -358,7 +358,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const buttons = template.getButtons(
         template.htWhatsappTemplate,
         template.buttons!,
@@ -373,7 +373,7 @@ describe('FlowWhatsappTemplate', () => {
       const urlButton = buttons?.buttons[0]
       expect(urlButton?.sub_type).toBe(WhatsAppTemplateButtonSubType.URL)
       expect(urlButton?.index).toBe(0)
-      // @ts-ignore
+      // @ts-expect-error
       expect(urlButton?.parameters[0].text).toBe('TKT-12345')
 
       // Quick Reply button
@@ -382,7 +382,7 @@ describe('FlowWhatsappTemplate', () => {
         WhatsAppTemplateButtonSubType.QUICK_REPLY
       )
       expect(quickReplyButton?.index).toBe(1)
-      // @ts-ignore
+      // @ts-expect-error
       expect(quickReplyButton?.parameters[0].payload).toBe('agent-handoff-node')
 
       // Voice Call button (maps to default since PHONE_NUMBER is not handled separately)
@@ -461,7 +461,7 @@ describe('FlowWhatsappTemplate', () => {
       })
 
       const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode)
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const buttons = template.getButtons(
         template.htWhatsappTemplate,
         template.buttons!,
@@ -487,7 +487,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      // @ts-ignore - accessing private method for testing
+      // @ts-expect-error - accessing private method for testing
       const buttons = template.getButtons(
         template.htWhatsappTemplate,
         [],

@@ -1,4 +1,4 @@
-import { InferenceResponse } from '@botonic/core'
+import type { InferenceResponse } from '@botonic/core'
 
 export function mockAiAgentResponse({
   messages = [],

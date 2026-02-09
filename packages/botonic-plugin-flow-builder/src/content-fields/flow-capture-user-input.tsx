@@ -1,10 +1,10 @@
-import { ActionRequest } from '@botonic/react'
+import type { ActionRequest } from '@botonic/react'
 
 import { getFlowBuilderPlugin } from '../helpers'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtAiValidationType,
-  HtCaptureUserInputNode,
+  type HtCaptureUserInputNode,
 } from './hubtype-fields/capture-user-input'
 
 export class FlowCaptureUserInput extends ContentFieldsBase {

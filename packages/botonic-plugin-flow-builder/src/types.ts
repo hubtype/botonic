@@ -1,15 +1,15 @@
 import {
   AiAgentArgs,
-  BotContext,
+  type BotContext,
   GuardrailRule,
-  InferenceResponse,
-  KnowledgeBasesResponse,
-  PluginPreRequest,
-  ResolvedPlugins,
+  type InferenceResponse,
+  type KnowledgeBasesResponse,
+  type PluginPreRequest,
+  type ResolvedPlugins,
 } from '@botonic/core'
 
-import { FlowContent } from './content-fields'
-import {
+import type { FlowContent } from './content-fields'
+import type {
   HtFlowBuilderData,
   HtRatingButton,
 } from './content-fields/hubtype-fields'

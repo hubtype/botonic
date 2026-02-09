@@ -1,4 +1,4 @@
-import { InferenceResponse, INPUT, PROVIDER } from '@botonic/core'
+import { INPUT, type InferenceResponse, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../src/constants'

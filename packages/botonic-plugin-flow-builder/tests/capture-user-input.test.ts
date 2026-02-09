@@ -1,6 +1,6 @@
 import { INPUT } from '@botonic/core'
 
-import { FlowText } from '../src/content-fields/index'
+import type { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockCaptureUserInputResponse } from './__mocks__/capture-user-input'
