@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+import childProcess from 'node:child_process'
+import { createReadStream, unlinkSync } from 'node:fs'
+import * as util from 'node:util'
 import axios, {
   AxiosHeaders,
-  AxiosInstance,
-  AxiosPromise,
-  AxiosResponse,
+  type AxiosInstance,
+  type AxiosPromise,
+  type AxiosResponse,
 } from 'axios'
-import childProcess from 'child_process'
-import pc from 'picocolors'
 import FormData from 'form-data'
-import { createReadStream, unlinkSync } from 'fs'
 import ora from 'ora'
+import pc from 'picocolors'
 import { stringify } from 'qs'
-import * as util from 'util'
 
-import {
+import type {
   BotDetail,
   BotListItem,
   Me,
   OAuth,
   PaginatedResponse,
 } from './interfaces.js'
-import { BotConfigJSON } from './util/bot-config.js'
+import type { BotConfigJSON } from './util/bot-config.js'
 import {
   BotCredentialsHandler,
   GlobalCredentialsHandler,
@@ -43,7 +44,7 @@ interface RequestArgs {
 export class BotonicAPIService {
   clientId: string = BOTONIC_CLIENT_ID
   baseUrl: string = BOTONIC_URL
-  loginUrl: string = this.baseUrl + '/o/token/'
+  loginUrl: string = `${this.baseUrl}/o/token/`
   botCredentialsHandler = new BotCredentialsHandler()
   globalCredentialsHandler = new GlobalCredentialsHandler()
   oauth?: OAuth
@@ -143,7 +144,7 @@ export class BotonicAPIService {
     } catch (error: any) {
       spinner.fail()
       console.log(
-        `${String(error.stdout)}` + pc.red(`\n\nBuild error:\n${String(error)}`)
+        `${String(error.stdout)}${pc.red(`\n\nBuild error:\n${String(error)}`)}`
       )
       return false
     }
@@ -157,7 +158,9 @@ export class BotonicAPIService {
 
   logout(): void {
     const pathToCredentials = this.globalCredentialsHandler.pathToCredentials
-    if (pathExists(pathToCredentials)) unlinkSync(pathToCredentials)
+    if (pathExists(pathToCredentials)) {
+      unlinkSync(pathToCredentials)
+    }
   }
 
   private async apiPost<T>({
@@ -283,7 +286,9 @@ export class BotonicAPIService {
       apiVersion: 'v2',
       path: nextUrl.split(`${this.baseUrl}/v2/`)[1],
     })
-    resp.data.results.forEach(bot => bots.push(bot))
+    for (const bot of resp.data.results) {
+      bots.push(bot)
+    }
     nextUrl = resp.data.next
 
     return this.getMoreBots(bots, nextUrl)

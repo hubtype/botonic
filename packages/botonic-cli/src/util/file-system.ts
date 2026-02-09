@@ -7,11 +7,11 @@ import {
   readFileSync,
   rmSync,
   writeFileSync,
-} from 'fs'
-import { homedir } from 'os'
-import { basename } from 'path'
+} from 'node:fs'
+import { homedir } from 'node:os'
+import { basename } from 'node:path'
 
-import { JSONObject } from '../interfaces.js'
+import type { JSONObject } from '../interfaces.js'
 import { isWindows } from './environment-info.js'
 import { execCommand } from './system.js'
 
@@ -25,7 +25,9 @@ export function readDir(path: string): string[] {
 
 export function readJSON(path: string): JSONObject | undefined {
   const fileContent = readFileSync(path, 'utf8')
-  if (!fileContent) return undefined
+  if (!fileContent) {
+    return undefined
+  }
   return JSON.parse(fileContent)
 }
 
@@ -35,7 +37,7 @@ export function writeJSON(path: string, object: any): void {
 
 export function createDir(path: string): void {
   // If directory already exists, it will throw an error.
-  return mkdirSync(path)
+  mkdirSync(path)
 }
 
 export function createTempDir(name: string): string {
@@ -56,6 +58,7 @@ export function removeRecursively(path: string): void {
 }
 
 export function getHomeDirectory(): string {
+  // biome-ignore lint/suspicious/noTemplateCurlyInString: intentional shell variable interpolation
   return isWindows() ? homedir() : execCommand('eval echo ~${SUDO_USER}')
 }
 

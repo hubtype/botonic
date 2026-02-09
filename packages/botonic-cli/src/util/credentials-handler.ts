@@ -1,4 +1,4 @@
-import { join, resolve } from 'path'
+import { join, resolve } from 'node:path'
 
 import {
   BOT_CREDENTIALS_FILENAME,
@@ -6,7 +6,7 @@ import {
   BOTONIC_PROJECT_PATH,
   GLOBAL_CREDENTIALS_FILENAME,
 } from '../constants.js'
-import {
+import type {
   BotCredentials,
   CredentialsHandlerArgs,
   GlobalCredentials,
@@ -35,14 +35,18 @@ export class CredentialsHandler {
   }
 
   createDirIfNotExists(): void {
-    if (!pathExists(this.homeDir)) createDir(this.homeDir)
+    if (!pathExists(this.homeDir)) {
+      createDir(this.homeDir)
+    }
   }
 
   loadJSON(): JSONObject | undefined {
     try {
-      if (!pathExists(this.pathToCredentials)) return undefined
+      if (!pathExists(this.pathToCredentials)) {
+        return undefined
+      }
       return readJSON(this.pathToCredentials)
-    } catch (e) {
+    } catch (_e) {
       console.warn('Credentials could not be loaded')
       return undefined
     }
@@ -51,7 +55,7 @@ export class CredentialsHandler {
   dumpJSON(obj: JSONObject): void {
     try {
       writeJSON(this.pathToCredentials, obj)
-    } catch (e) {
+    } catch (_e) {
       console.warn('Credentials could not be overwritten')
     }
   }
@@ -71,12 +75,14 @@ export class GlobalCredentialsHandler extends CredentialsHandler {
 
   load(): GlobalCredentials | undefined {
     const json = this.loadJSON()
-    if (!json) return undefined
+    if (!json) {
+      return undefined
+    }
     return json as unknown as GlobalCredentials
   }
 
   dump(obj: GlobalCredentials): void {
-    return this.dumpJSON(obj as unknown as JSONObject)
+    this.dumpJSON(obj as unknown as JSONObject)
   }
 }
 
@@ -87,11 +93,13 @@ export class BotCredentialsHandler extends CredentialsHandler {
 
   load(): BotCredentials | undefined {
     const json = this.loadJSON()
-    if (!json) return undefined
+    if (!json) {
+      return undefined
+    }
     return json as unknown as BotCredentials
   }
 
   dump(obj: BotCredentials): void {
-    return this.dumpJSON(obj as unknown as JSONObject)
+    this.dumpJSON(obj as unknown as JSONObject)
   }
 }

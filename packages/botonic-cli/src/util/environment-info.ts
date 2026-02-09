@@ -1,8 +1,8 @@
-import { arch, platform } from 'os'
-import { join } from 'path'
+import { arch, platform } from 'node:os'
+import { join } from 'node:path'
 
 import { BOTONIC_NPM_NAMESPACE } from '../constants.js'
-import { SystemInformation } from '../interfaces.js'
+import type { SystemInformation } from '../interfaces.js'
 import { readJSON } from './file-system.js'
 import { execCommandSafe } from './system.js'
 
@@ -22,7 +22,9 @@ export function getBotonicCLIVersion(): string {
 export function getBotonicDependencies(): any[] | string {
   try {
     const packageJSON = readJSON('package.json')
-    if (!packageJSON) return 'No package.json found.'
+    if (!packageJSON) {
+      return 'No package.json found.'
+    }
     const botonicDependencies = Object.entries(
       packageJSON.dependencies as any
     ).filter(([k, _]) => k.includes(BOTONIC_NPM_NAMESPACE))

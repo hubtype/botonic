@@ -1,20 +1,20 @@
+import { rmSync, statSync } from 'node:fs'
+import path from 'node:path'
 import { confirm, input, password, select } from '@inquirer/prompts'
 import { Args, Command, Flags } from '@oclif/core'
-import { AxiosError } from 'axios'
-import { rmSync, statSync } from 'fs'
+import type { AxiosError } from 'axios'
 import ora from 'ora'
-import path from 'path'
 import pc from 'picocolors'
 import { ZipAFolder } from 'zip-a-folder'
 
 import { BotonicAPIService } from '../botonic-api-service.js'
 import { CLOUD_PROVIDERS } from '../constants.js'
-import {
+import type {
   BotListItem,
   DeployHubtypeFlags,
   LoginErrorData,
 } from '../interfaces.js'
-import { BotConfig, BotConfigJSON } from '../util/bot-config.js'
+import { BotConfig, type BotConfigJSON } from '../util/bot-config.js'
 import {
   copyRecursively,
   createDir,
@@ -68,7 +68,9 @@ export default class Deploy extends Command {
     console.log(`Deploying to ${provider}...`)
     console.log('This can take a while, do not cancel this process.')
 
-    if (provider === CLOUD_PROVIDERS.HUBTYPE) await this.deployHubtype(flags)
+    if (provider === CLOUD_PROVIDERS.HUBTYPE) {
+      await this.deployHubtype(flags)
+    }
   }
 
   async deployHubtype(flags: DeployHubtypeFlags): Promise<void> {
@@ -76,14 +78,18 @@ export default class Deploy extends Command {
     this.botName = flags.botName
     const email = flags.email
     const password = flags.password
-    if (email && password) await this.login(email, password)
-    else if (!this.botonicApiService.oauth) await this.signupFlow()
-    else if (this.botName) {
+    if (email && password) {
+      await this.login(email, password)
+    } else if (!this.botonicApiService.oauth) {
+      await this.signupFlow()
+    } else if (this.botName) {
       await this.deployBotFromFlag(this.botName)
-    } else await this.deployBotFlow()
+    } else {
+      await this.deployBotFlow()
+    }
   }
 
-  async deployBotFromFlag(botName: string): Promise<void | undefined> {
+  async deployBotFromFlag(botName: string): Promise<void> {
     const bots = await this.getAvailableBots()
 
     const bot = bots.filter(b => b.name === botName)[0]
@@ -92,7 +98,7 @@ export default class Deploy extends Command {
       console.log('\nThese are the available options:')
       bots.map(b => console.log(` > ${String(b.name)}`))
 
-      return undefined
+      return
     } else if (botName) {
       const botByBotName = bots.find(bot => bot.name === botName)
       if (botByBotName) {
@@ -107,7 +113,7 @@ export default class Deploy extends Command {
         return this.createNewBot(botName)
       }
 
-      return undefined
+      return
     } else {
       this.botonicApiService.setCurrentBot(bot)
       return await this.deploy()
@@ -124,8 +130,11 @@ export default class Deploy extends Command {
         'You need to login before deploying your bot.\nDo you have a Hubtype account already?',
       choices: choices,
     })
-    if (signupConfirmation === choices[1]) return this.askLogin()
-    else return this.askSignup()
+    if (signupConfirmation === choices[1]) {
+      return this.askLogin()
+    } else {
+      return this.askSignup()
+    }
   }
 
   async askEmailPassword(): Promise<{ email: string; password: string }> {
@@ -249,7 +258,9 @@ export default class Deploy extends Command {
   }
 
   async createNewBot(botName?: string): Promise<void> {
-    if (botName) return this.createNewBotWithName(botName)
+    if (botName) {
+      return this.createNewBotWithName(botName)
+    }
     const newBotName = await input({ message: 'Bot name:' })
 
     return await this.createNewBotWithName(newBotName)
@@ -269,15 +280,21 @@ export default class Deploy extends Command {
   displayProviders(providers: { username: string; provider: string }[]): void {
     console.log('Your bot is published on:')
     providers.forEach(p => {
-      if (p.provider === 'whatsapp')
+      if (p.provider === 'whatsapp') {
         console.log(`💬  [whatsapp] https://wa.me/${p.username}`)
-      if (p.provider === 'facebook')
+      }
+      if (p.provider === 'facebook') {
         console.log(`💬  [facebook] https://m.me/${p.username}`)
-      if (p.provider === 'telegram')
+      }
+      if (p.provider === 'telegram') {
         console.log(`💬  [telegram] https://t.me/${p.username}`)
-      if (p.provider === 'twitter')
+      }
+      if (p.provider === 'twitter') {
         console.log(`💬  [twitter] https://t.me/${p.username}`)
-      if (p.provider === 'generic') console.log(`💬  Your app or website`)
+      }
+      if (p.provider === 'generic') {
+        console.log(`💬  Your app or website`)
+      }
     })
   }
 
@@ -287,8 +304,9 @@ export default class Deploy extends Command {
       spinner: 'bouncingBar',
     }).start()
 
-    if (pathExists(BOTONIC_TEMP_DIRNAME))
+    if (pathExists(BOTONIC_TEMP_DIRNAME)) {
       removeRecursively(BOTONIC_TEMP_DIRNAME)
+    }
     createDir(path.join(process.cwd(), BOTONIC_TEMP_DIRNAME))
     copyRecursively('dist', path.join(BOTONIC_TEMP_DIRNAME, 'dist'))
     const zipRes = await ZipAFolder.zip(
@@ -333,11 +351,13 @@ export default class Deploy extends Command {
           deploy.data.deploy_id
         )
         if (deployStatus.data.is_completed) {
-          if (deployStatus.data.status == 'deploy_status_completed_ok') {
+          if (deployStatus.data.status === 'deploy_status_completed_ok') {
             spinner.succeed()
             console.log(pc.green('\n🚀  Bot deployed!\n'))
             return { hasDeployErrors: false }
-          } else throw deployStatus.data.error
+          } else {
+            throw deployStatus.data.error
+          }
         }
       }
     } catch (err: any) {
@@ -353,7 +373,9 @@ export default class Deploy extends Command {
     try {
       const providersRes = await this.botonicApiService.getProviders()
       const providers = providersRes.data.results
-      if (hasDeployErrors) return false
+      if (hasDeployErrors) {
+        return false
+      }
       if (!providers.length) {
         const botId = this.botonicApiService.botInfo().id
         const accessToken = this.botonicApiService.getOauth().access_token

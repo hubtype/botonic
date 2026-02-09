@@ -18,7 +18,7 @@ export default class Logout extends Command {
   private botonicApiService: BotonicAPIService = new BotonicAPIService()
 
   public async run(): Promise<void> {
-    const { flags } = await this.parse(Logout)
+    const { flags: _flags } = await this.parse(Logout)
 
     this.botonicApiService.logout()
     console.log('You have been log out!')
