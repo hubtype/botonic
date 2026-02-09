@@ -1,8 +1,8 @@
 import {
   EventAction,
-  EventConditionalCustom,
+  type EventConditionalCustom,
   EventType,
-  RequestData,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

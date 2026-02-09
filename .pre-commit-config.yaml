@@ -21,7 +21,7 @@ repos:
         name: biome-check (Biome)
         entry: npx @biomejs/biome check --write
         language: system
-        files: ^packages/botonic-core/
+        files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics)/
         types_or: [javascript, jsx, ts, tsx, json]
 
       - id: cli
@@ -47,12 +47,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
-
-      - id: hubtype-analytics
-        name: hubtype-analytics (ESLint)
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-hubtype-analytics
-        language: system
-        files: ^packages/botonic-plugin-hubtype-analytics/
 
       - id: plugin-ai-agents
         name: plugin-ai-agents (ESLint)

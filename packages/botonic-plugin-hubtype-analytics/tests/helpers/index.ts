@@ -1,9 +1,9 @@
 import {
-  BotContext,
+  type BotContext,
   INPUT,
   PROVIDER,
-  ProviderType,
-  ResolvedPlugins,
+  type ProviderType,
+  type ResolvedPlugins,
 } from '@botonic/core'
 
 import BotonicPluginHubtypeAnalytics from '../../src/index'

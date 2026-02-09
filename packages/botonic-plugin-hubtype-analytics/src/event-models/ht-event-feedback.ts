@@ -1,4 +1,9 @@
-import { EventAction, EventFeedback, EventType, RequestData } from '../types'
+import {
+  type EventAction,
+  type EventFeedback,
+  EventType,
+  type RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventFeedback extends HtEvent {

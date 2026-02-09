@@ -1,8 +1,8 @@
 import {
-  EventAction,
-  EventHandoffOption,
+  type EventAction,
+  type EventHandoffOption,
   EventType,
-  RequestData,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

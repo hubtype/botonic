@@ -1,8 +1,8 @@
 import {
-  EventAction,
-  EventFeedbackKnowledgebase,
+  type EventAction,
+  type EventFeedbackKnowledgebase,
   EventType,
-  RequestData,
+  type RequestData,
 } from '../types'
 import { HtEvent } from './ht-event'
 

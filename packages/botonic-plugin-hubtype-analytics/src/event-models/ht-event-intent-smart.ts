@@ -1,4 +1,9 @@
-import { EventAction, EventIntentSmart, EventType, RequestData } from '../types'
+import {
+  EventAction,
+  type EventIntentSmart,
+  EventType,
+  type RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventIntentSmart extends HtEvent {
