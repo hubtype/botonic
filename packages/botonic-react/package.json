@@ -15,9 +15,9 @@
     "copy-files": "copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/esm/; copyfiles -u 1 src/**/*.svg src/**/*.png src/**/*.scss src/**/*.html lib/cjs/;",
     "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
     "build:watch": "npm run build -- --watch",
-    "prettier": "../../node_modules/.bin/prettier --no-error-on-unmatched-pattern --write '**/*.md' '**/*.css' '.*.js' '*.js{,on}'",
-    "lint": "npm run prettier; npm run lint_core -- --fix",
-    "lint_core": "../../node_modules/.bin/eslint_d --cache --quiet '.*.js' '*.js' 'src/**/*.js*' --fix"
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
   },
   "dependencies": {
     "@botonic/core": "^0.44.0",

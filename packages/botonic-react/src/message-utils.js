@@ -40,7 +40,9 @@ export const readDataURL = file =>
 
 export const isAllowedSize = fileSize => {
   const maxAllowedBytesSize = MAX_ALLOWED_SIZE_MB * 1024 * 1024
-  if (fileSize > maxAllowedBytesSize) return false
+  if (fileSize > maxAllowedBytesSize) {
+    return false
+  }
   return true
 }
 

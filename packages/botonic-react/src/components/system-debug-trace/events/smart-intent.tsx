@@ -1,8 +1,7 @@
 import { EventAction } from '@botonic/core'
-import React from 'react'
 
 import { BrainSvg } from '../icons'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 
 export interface SmartIntentDebugEvent {
   action: EventAction.IntentSmart

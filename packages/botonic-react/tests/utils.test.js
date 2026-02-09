@@ -1,6 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+
+// biome-ignore assist/source/organizeImports: organize imports
 import { isURL, staticAsset } from '../src/util/environment'
 import { toSnakeCaseKeys } from '../src/util/functional'
 import { deserializeRegex, stringifyWithRegexs } from '../src/util/regexs'
@@ -107,7 +109,9 @@ describe('staticAsset function', () => {
 
     const consoleErrorSpy = jest
       .spyOn(console, 'error')
-      .mockImplementation(() => {})
+      .mockImplementation(() => {
+        return
+      })
 
     const path = 'asset.svg'
     const basePath = 'http://localhost/'

@@ -1,11 +1,11 @@
 import { INPUT, isBrowser } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { ROLES, WEBCHAT } from '../constants'
 import { staticAsset } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
-import { DocumentProps } from './index-types'
+import type { DocumentProps } from './index-types'
 import { Message } from './message'
 
 const StyledButton = styled.a`
@@ -40,8 +40,9 @@ export const Document = (props: DocumentProps) => {
     WEBCHAT.CUSTOM_PROPERTIES.documentDownload,
     {}
   )
-  if (typeof documentDownload === 'function')
+  if (typeof documentDownload === 'function') {
     documentDownload = documentDownload(props.from)
+  }
 
   if (isBrowser()) {
     content = (

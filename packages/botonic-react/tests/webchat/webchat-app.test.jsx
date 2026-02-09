@@ -16,7 +16,9 @@ describe('TEST: Webchat App', () => {
   })
 
   // To avoid TypeError: frame.scrollTo is not a function
-  window.HTMLElement.prototype.scrollTo = function () {}
+  window.HTMLElement.prototype.scrollTo = () => {
+    return
+  }
 
   it('TEST: WebchatApp adds <div id="root"> to DOM on initialize', async () => {
     const webchatApp = new WebchatApp({})

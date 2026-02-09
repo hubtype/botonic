@@ -4,7 +4,6 @@
  */
 
 import { act, render } from '@testing-library/react'
-import React from 'react'
 
 import { WEBCHAT } from '../../src/constants'
 import { Webchat } from '../../src/webchat/webchat'

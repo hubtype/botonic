@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { SENDERS } from '../../index-types'
@@ -81,6 +81,7 @@ export const MessageTimestamp = ({
     >
       {timestampsWithImage && BotMessageImage && !isSentByUser && (
         <img
+          alt={isSentByAgent ? 'Agent message image' : 'Bot message image'}
           src={resolveImage(
             isSentByAgent ? AgentMessageImage : BotMessageImage
           )}

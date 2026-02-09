@@ -1,10 +1,9 @@
-import React from 'react'
-
 import { COLORS } from '../../../constants'
-import { IconProps } from '../types'
+import type { IconProps } from '../types'
 
 export const WindowRestoreSvg = ({ color = COLORS.N500 }: IconProps) => {
   return (
+    // biome-ignore lint/a11y/noSvgWithoutTitle: This is a SVG icon
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640' fill={color}>
       <path
         d='M544 160L192 160C192 124.7 220.7 96 256 96L544 96C579.3 96 608 124.7 608 160L608 352C608 387.3 579.3 416 544 416L496 416L496 352L544 352L544 160zM32 288C32 252.7 60.7 224 96 224L384 224C419.3 224 448 252.7 448 288L448 480C448 515.3 419.3 544 384 544L96 544C60.7 544 32 515.3 32 480L32 288zM96 328C96 341.3 106.7 352 120 352L360 352C373.3 352 384 341.3 384 328C384 314.7 373.3 304 360 304L120 304C106.7 304 96 314.7 96 328z'

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 
 import { Button } from '../../components/button/index'
@@ -24,7 +24,9 @@ export const OpenedPersistentMenu = ({ onClick, options, borderRadius }) => {
   try {
     closeLabel = options.filter(opt => opt.closeLabel !== undefined)[0]
       .closeLabel
-  } catch (e) {}
+  } catch {
+    // do nothing
+  }
   return (
     <div ref={ref} role={ROLES.PERSISTENT_MENU}>
       {isComponentVisible && CustomPersistentMenu ? (

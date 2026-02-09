@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useContext } from 'react'
+import { type ForwardedRef, forwardRef, useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { WebchatContext } from '../../webchat/context'

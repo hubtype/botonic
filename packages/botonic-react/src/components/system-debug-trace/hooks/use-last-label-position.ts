@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react'
+import { type RefObject, useEffect } from 'react'
 
 interface UseLastLabelPositionProps {
   wrapperRef: RefObject<HTMLDivElement>
@@ -28,7 +28,9 @@ export function useLastLabelPosition({
 
     const measure = () => {
       const wrapper = wrapperRef.current
-      if (!wrapper) return
+      if (!wrapper) {
+        return
+      }
 
       // Check if visible
       const parent = wrapper.parentElement
@@ -41,7 +43,9 @@ export function useLastLabelPosition({
       const allElements = wrapper.querySelectorAll<HTMLElement>('strong, span')
       const allLabels = Array.from(allElements).filter(el => {
         // Include all <strong> elements (they're DebugLabels)
-        if (el.tagName === 'STRONG') return true
+        if (el.tagName === 'STRONG') {
+          return true
+        }
 
         // For <span>, only include if it's a direct child of a flex container (GuardrailLabel pattern)
         // and has no child elements (just text)
@@ -60,7 +64,9 @@ export function useLastLabelPosition({
         return false
       })
 
-      if (allLabels.length === 0) return
+      if (allLabels.length === 0) {
+        return
+      }
 
       // Get the last label
       const lastLabel = allLabels[allLabels.length - 1]

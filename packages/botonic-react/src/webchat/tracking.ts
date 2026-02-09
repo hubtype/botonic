@@ -1,4 +1,4 @@
-import {
+import type {
   EventCustom,
   EventFeedback,
   EventFeedbackKnowledgebase,
@@ -6,7 +6,7 @@ import {
 import { useContext } from 'react'
 import { v7 as uuidv7 } from 'uuid'
 
-import { ActionRequest } from '../index-types'
+import type { ActionRequest } from '../index-types'
 import { WebchatContext } from './context'
 
 export enum EventAction {

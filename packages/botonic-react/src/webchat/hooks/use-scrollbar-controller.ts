@@ -6,8 +6,8 @@ import { DEVICES, isMobileDevice } from '../devices'
 // TODO: Investigate why when we have some messages, scroll actions are not disabled properly
 
 const debounced = (delay, fn) => {
-  let timerId
-  return function (...args) {
+  let timerId: NodeJS.Timeout | null = null
+  return (...args) => {
     if (timerId) {
       clearTimeout(timerId)
     }
@@ -19,9 +19,12 @@ const debounced = (delay, fn) => {
 }
 
 const stopAtScrollLimit = element => {
-  if (element.scrollTop === 0) element.scrollTop = 1
-  if (element.scrollHeight - element.scrollTop === element.clientHeight)
+  if (element.scrollTop === 0) {
+    element.scrollTop = 1
+  }
+  if (element.scrollHeight - element.scrollTop === element.clientHeight) {
     element.scrollTop -= 1
+  }
 }
 
 export const useScrollbarController = (currentDevice, host) => {
@@ -54,11 +57,11 @@ export const useScrollbarController = (currentDevice, host) => {
   const toggleOnMouseWheelEvents = () => {
     if (scrollableMessagesListRef.current) {
       if (hasScrollbar()) {
-        // @ts-ignore
+        // @ts-expect-error
         scrollableMessagesListRef.current.onmousewheel = {}
         return
       }
-      // @ts-ignore
+      // @ts-expect-error
       scrollableMessagesListRef.current.onmousewheel = e => {
         e.preventDefault()
       }
@@ -105,21 +108,23 @@ export const useScrollbarController = (currentDevice, host) => {
   }
 
   const limitScrollBoundaries = () => {
-    if (currentDevice !== DEVICES.MOBILE.IPHONE) return
+    if (currentDevice !== DEVICES.MOBILE.IPHONE) {
+      return
+    }
     const chatArea = chatAreaRef.current
     const dStopAtScrollLimit = debounced(100, stopAtScrollLimit)
 
     if (chatArea) {
-      // @ts-ignore
+      // @ts-expect-error
       if (window.addEventListener) {
         chatArea.addEventListener(
           'scroll',
           () => dStopAtScrollLimit(chatArea),
           true
         )
-        // @ts-ignore
+        // @ts-expect-error
       } else if (window.attachEvent) {
-        // @ts-ignore
+        // @ts-expect-error
         chatAreaRef.attachEvent('scroll', () => dStopAtScrollLimit(chatArea))
       }
     }
@@ -128,7 +133,9 @@ export const useScrollbarController = (currentDevice, host) => {
   const handleScrollEvents = () => {
     if (webchatContainerRef.current) {
       if (isMobileDevice()) {
-        if (currentDevice !== DEVICES.MOBILE.IPHONE) return
+        if (currentDevice !== DEVICES.MOBILE.IPHONE) {
+          return
+        }
 
         limitScrollBoundaries()
 

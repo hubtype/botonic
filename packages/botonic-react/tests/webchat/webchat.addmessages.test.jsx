@@ -6,7 +6,6 @@
 import 'intersection-observer'
 
 import { act, render, screen } from '@testing-library/react'
-import React from 'react'
 
 import { Audio, Document, Image, Video } from '../../src/components'
 import { ROLES } from '../../src/constants'
@@ -19,8 +18,12 @@ import {
 
 describe('Adding webchat messageComponent', () => {
   // To avoid TypeError: frame.scrollTo is not a function (same for scrollIntoView)
-  window.HTMLElement.prototype.scrollTo = function () {}
-  window.HTMLElement.prototype.scrollIntoView = function () {}
+  window.HTMLElement.prototype.scrollTo = () => {
+    return
+  }
+  window.HTMLElement.prototype.scrollIntoView = () => {
+    return
+  }
 
   it('TEST: When adding an Image message the webchat has StyledWebchat, MessageList, StyledMessage and ImageMessage', async () => {
     const { result } = renderUseWebchatHook()

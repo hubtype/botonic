@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import ThumbsDown from '../../assets/thumbs-down.svg'
 import ThumbsUp from '../../assets/thumbs-up.svg'

@@ -1,13 +1,18 @@
-import { Session } from '@botonic/core'
+import type { Session } from '@botonic/core'
 import { useReducer, useRef } from 'react'
 
-import { Reply } from '../../components'
-import { Webview } from '../../components/index-types'
-import { WebchatMessage } from '../../index-types'
+import type { Reply } from '../../components'
+import type { Webview } from '../../components/index-types'
+import type { WebchatMessage } from '../../index-types'
 import { defaultTheme } from '../theme/default-theme'
-import { WebchatTheme } from '../theme/types'
+import type { WebchatTheme } from '../theme/types'
 import { WebchatAction } from './actions'
-import { ClientInput, DevSettings, ErrorMessage, WebchatState } from './types'
+import type {
+  ClientInput,
+  DevSettings,
+  ErrorMessage,
+  WebchatState,
+} from './types'
 import { webchatReducer } from './webchat-reducer'
 
 function getWebchatInitialState(initialTheme: WebchatTheme): WebchatState {

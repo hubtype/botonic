@@ -4,7 +4,6 @@
 
 // import * as BotonicCore from '@botonic/core'
 import { screen } from '@testing-library/react'
-import React from 'react'
 
 import {
   Button,
@@ -18,6 +17,60 @@ import {
 import { ButtonsDisabler } from '../../src/components/buttons-disabler'
 import { msgToBotonic } from '../../src/msg-to-botonic'
 import { renderWithBotonicProviders } from '../helpers/render-webchat-with-providers'
+
+const COMPONENTS = {
+  TEXT_WITH_BUTTONS: (
+    <Text>
+      Here I display two types of buttons, the first one is a URL button and the
+      second is a payload button:
+      <Button payload='https://botonic.io' autodisable={false}>
+        Visit botonic.io
+      </Button>
+      <Button
+        payload='carousel'
+        autodisable={true}
+        disabledstyle={{ backgroundColor: 'red' }}
+      >
+        Show me a carousel
+      </Button>
+    </Text>
+  ),
+  CAROUSEL: (
+    <Carousel>
+      {[
+        {
+          name: 'ELEMENT1',
+          desc: 'DESC1',
+          url: 'URL1',
+          pic: 'PIC1',
+          props: {
+            payload: 'payload1',
+            children: 'text1',
+          },
+        },
+        {
+          name: 'ELEMENT2',
+          desc: 'DESC2',
+          url: 'URL2',
+          pic: 'PIC2',
+          props: {
+            payload: 'payload2',
+            autodisable: true,
+            disabledstyle: { backgroundColor: 'red' },
+            children: 'text2',
+          },
+        },
+      ].map((e, i) => (
+        <Element key={e.name}>
+          <Pic src={e.pic} />
+          <Title>{e.name}</Title>
+          <Subtitle>{e.desc}</Subtitle>
+          <Button {...e.props} />
+        </Element>
+      ))}
+    </Carousel>
+  ),
+}
 
 describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
   it('Appends the disabling props to a component', () => {
@@ -136,7 +189,9 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
     const sut = ButtonsDisabler.updateChildrenButtons(initialChildren, {
       parentId: '1234',
       disabled: true,
-      setDisabled: () => {},
+      setDisabled: () => {
+        return
+      },
     })
       .filter(e => e.type === Button)
       .map(e => e.props)
@@ -170,7 +225,7 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
       id: '16972707e231427fbeeb707ab79b0b19',
     }
     const sut = msgToBotonic(buttonMessage)
-    const buttons = sut.props.children.props.children[1]
+    const buttons = sut.props.children[1]
     const button1Props = buttons[0].props
     const button2Props = buttons[1].props
 
@@ -256,57 +311,3 @@ describe('TEST: ButtonsDisabler (Disabling buttons in Webchat)', () => {
     )
   })
 })
-
-const COMPONENTS = {
-  TEXT_WITH_BUTTONS: (
-    <Text>
-      Here I display two types of buttons, the first one is a URL button and the
-      second is a payload button:
-      <Button payload='https://botonic.io' autodisable={false}>
-        Visit botonic.io
-      </Button>
-      <Button
-        payload='carousel'
-        autodisable={true}
-        disabledstyle={{ backgroundColor: 'red' }}
-      >
-        Show me a carousel
-      </Button>
-    </Text>
-  ),
-  CAROUSEL: (
-    <Carousel>
-      {[
-        {
-          name: 'ELEMENT1',
-          desc: 'DESC1',
-          url: 'URL1',
-          pic: 'PIC1',
-          props: {
-            payload: 'payload1',
-            children: 'text1',
-          },
-        },
-        {
-          name: 'ELEMENT2',
-          desc: 'DESC2',
-          url: 'URL2',
-          pic: 'PIC2',
-          props: {
-            payload: 'payload2',
-            autodisable: true,
-            disabledstyle: { backgroundColor: 'red' },
-            children: 'text2',
-          },
-        },
-      ].map((e, i) => (
-        <Element key={e.name}>
-          <Pic src={e.pic} />
-          <Title>{e.name}</Title>
-          <Subtitle>{e.desc}</Subtitle>
-          <Button {...e.props} />
-        </Element>
-      ))}
-    </Carousel>
-  ),
-}

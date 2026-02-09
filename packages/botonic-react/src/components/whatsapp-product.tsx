@@ -1,5 +1,4 @@
 import { INPUT } from '@botonic/core'
-import React from 'react'
 
 import { renderComponent } from '../util/react'
 import { Message } from './message'
@@ -28,7 +27,7 @@ export const WhatsappProduct = (props: WhatsappProductProps) => {
 
   const renderNode = () => {
     return (
-      // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
+      // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...props}
         body={props.body}

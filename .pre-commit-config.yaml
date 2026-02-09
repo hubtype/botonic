@@ -19,9 +19,9 @@ repos:
     hooks:
       - id: biome-check
         name: biome-check (Biome)
-        entry: npx @biomejs/biome check --write
+        entry: bash scripts/qa/biome-check.sh
         language: system
-        files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases|botonic-plugin-ai-agents)/
+        files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases|botonic-plugin-ai-agents|botonic-react)/
         types_or: [javascript, jsx, ts, tsx, json]
 
       - id: cli
@@ -29,12 +29,6 @@ repos:
         entry: bash scripts/qa/old/lint-package.sh packages/botonic-cli
         language: system
         files: ^packages/botonic-cli/
-
-      - id: react
-        name: react (ESLint)
-        entry: scripts/qa/old/lint-package.sh packages/botonic-react
-        language: system
-        files: ^packages/botonic-react/
 
       - id: docs
         name: docs (ESLint)

@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../hooks/use-knowledge-base-info'
@@ -11,10 +11,10 @@ import {
   StyledGuardrailItem,
   StyledGuardrailLabel,
 } from '../styles'
-import { DebugEventConfig } from '../types'
+import type { DebugEventConfig } from '../types'
 import { SourcesSection } from './components'
 import { LABELS } from './constants'
-import { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
+import type { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 
 export interface KnowledgeBaseDebugEvent {
   action: EventAction.Knowledgebase

@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: we need to use static elements for the send button */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: we need to use key with click events for the send button */
+import { useContext } from 'react'
 
 import SendButtonIcon from '../../assets/send-button.svg'
 import { ROLES } from '../../constants'

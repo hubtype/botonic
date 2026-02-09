@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   Button,
   Carousel,
@@ -33,12 +31,12 @@ describe('msgsToBotonic carousel', () => {
     expect(msgsToBotonic(msg)).toEqual(
       <Carousel {...msg}>
         {[
-          <Element key={0}>
+          <Element key='element-0'>
             <Pic src='htp://pic' />
             <Title>tit1</Title>
             <Subtitle>sub1</Subtitle>
             {[
-              <Button key='0' payload='payload1'>
+              <Button key='button-0' payload='payload1'>
                 button text
               </Button>,
             ]}
@@ -67,7 +65,7 @@ describe('msgsToBotonic text', () => {
       <Text {...msg}>
         The verbose text
         {[
-          <Reply key='0' payload='payload1'>
+          <Reply key='reply-0' payload='payload1'>
             reply text
           </Reply>,
         ]}
@@ -93,7 +91,7 @@ describe('msgsToBotonic text', () => {
       <Text {...msg}>
         The verbose text
         {[
-          <Button key='0' payload='payload1'>
+          <Button key='button-0' payload='payload1'>
             button text
           </Button>,
         ]}

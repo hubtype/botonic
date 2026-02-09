@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: we need to use static elements for the persistent menu */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: we need to use key with click events for the persistent menu */
+import { useContext } from 'react'
 
 import LogoMenu from '../../assets/menuButton.svg'
 import { ROLES } from '../../constants'

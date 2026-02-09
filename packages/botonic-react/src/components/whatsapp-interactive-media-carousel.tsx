@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { truncateText } from '../util'
 import { Button } from './button'
 import { Carousel } from './carousel'
@@ -55,7 +53,7 @@ export const WhatsappInteractiveMediaCarousel = (
   return (
     <Carousel text={truncateText(props.textMessage, WHATSAPP_MAX_BODY_CHARS)}>
       {props.cards.map((card, index) => (
-        <Element key={index}>
+        <Element key={`card-${index}-${card.text}`}>
           <Pic src={card.imageLink} />
           <Title>
             {truncateText(card.text, WHATSAPP_MAX_CAROUSEL_CARD_TEXT_CHARS)}
@@ -67,7 +65,10 @@ export const WhatsappInteractiveMediaCarousel = (
           )}
           {card.type === CardType.QUICK_REPLY &&
             card.action.buttons.map((button, index) => (
-              <Button key={index} payload={button.payload}>
+              <Button
+                key={`quick-reply-button-${index}-${button.text}`}
+                payload={button.payload}
+              >
                 {truncateText(button.text, WHATSAPP_MAX_BUTTON_CHARS)}
               </Button>
             ))}

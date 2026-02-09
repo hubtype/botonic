@@ -1,5 +1,4 @@
-import React from 'react'
-
+/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: ShareButton is a component that renders a share button */
 import { renderComponent } from '../util/react'
 
 export const ShareButton = props => {

@@ -1,5 +1,4 @@
 import { INPUT } from '@botonic/core'
-import React from 'react'
 
 import { truncateText } from '../util'
 import { renderComponent } from '../util/react'
@@ -127,7 +126,7 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
           : props.url,
     }
     return (
-      // @ts-ignore Property 'message' does not exist on type 'JSX.IntrinsicElements'.
+      // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message {...validatedProps} type={INPUT.WHATSAPP_CTA_URL_BUTTON} />
     )
   }

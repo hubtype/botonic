@@ -1,5 +1,5 @@
 import { COLORS, WEBCHAT } from '../../constants'
-import { WebchatTheme } from './types'
+import type { WebchatTheme } from './types'
 
 export const defaultTheme: WebchatTheme = {
   style: {

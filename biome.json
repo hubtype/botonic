@@ -29,6 +29,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": {
+        "noSvgWithoutTitle": "warn"
+      },
       "complexity": {
         "noExcessiveCognitiveComplexity": "warn"
       },
@@ -56,5 +59,39 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["packages/botonic-react/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useAltText": "off",
+            "noStaticElementInteractions": "off",
+            "useKeyWithClickEvents": "off",
+            "useValidAriaRole": "off",
+            "useButtonType": "off"
+          },
+          "complexity": {
+            "noUselessFragments": "off"
+          },
+          "correctness": {
+            "useExhaustiveDependencies": "off",
+            "useHookAtTopLevel": "off",
+            "noInvalidUseBeforeDeclaration": "off",
+            "useJsxKeyInIterable": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off",
+            "noArrayIndexKey": "off",
+            "noExplicitAny": "off",
+            "useIterableCallbackReturn": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    }
+  ]
 }

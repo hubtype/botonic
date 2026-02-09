@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 // @ts-nocheck
-import { params2queryString, PROVIDER, Session } from '@botonic/core'
+import { PROVIDER, params2queryString, type Session } from '@botonic/core'
 import axios from 'axios'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route } from 'react-router-dom'
 
 import {
-  CloseWebviewOptions,
+  type CloseWebviewOptions,
   WebviewRequestContext,
-  WebviewRequestContextType,
+  type WebviewRequestContextType,
 } from './contexts'
 
 enum WebviewUrlParams {
@@ -113,7 +114,7 @@ class App extends React.Component {
   private async closeWebviewForProvider(
     provider: string,
     session: Session,
-    payload?: string
+    _payload?: string
   ) {
     const { user } = session
 
@@ -136,10 +137,11 @@ class App extends React.Component {
       case PROVIDER.FACEBOOK:
         try {
           window.MessengerExtensions.requestCloseBrowser(
+            // biome-ignore lint/suspicious/noEmptyBlockStatements: success callback is empty
             () => {}, // success callback
             () => window.close() // error callback
           )
-        } catch (error) {
+        } catch (_error) {
           window.close()
         }
         break
@@ -208,7 +210,11 @@ class App extends React.Component {
     return (
       <WebviewRequestContext.Provider value={webviewRequestContext}>
         {this.props.webviews.map((Webview, i) => (
-          <Route key={i} path={`/${Webview.name}`} component={Webview} />
+          <Route
+            key={`route-${i}-${Webview.name}`}
+            path={`/${Webview.name}`}
+            component={Webview}
+          />
         ))}
       </WebviewRequestContext.Provider>
     )

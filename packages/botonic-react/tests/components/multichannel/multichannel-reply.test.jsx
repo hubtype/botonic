@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Reply } from '../../../src/components'
 import { MultichannelReply } from '../../../src/components/multichannel'
 import { whatsappRenderer } from '../../helpers/test-utils'

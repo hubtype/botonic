@@ -12,11 +12,11 @@ export const useWebchatDimensions = () => {
 
   const calculateResizedPercentualWebchatHeight = useCallback(() => {
     const webchatElement = webchatContainerRef.current
-    if (!isWebchatOpen || !webchatElement) return 0
+    if (!isWebchatOpen || !webchatElement) {
+      return 0
+    }
     const webchatHeight = webchatElement.clientHeight || 0
-    const keyboardOffset =
-      (window.visualViewport && window.visualViewport.height) ||
-      window.innerHeight
+    const keyboardOffset = window.visualViewport?.height || window.innerHeight
     let newWebchatPercentualHeight = keyboardOffset / webchatHeight
     newWebchatPercentualHeight =
       Math.round(newWebchatPercentualHeight * 100 * 100) / 100 // Two decimal places
@@ -28,7 +28,9 @@ export const useWebchatDimensions = () => {
     const headerElement = headerRef.current
     const inputPanelElement = inputPanelRef.current
 
-    if (!isWebchatOpen || !webchatElement) return 0
+    if (!isWebchatOpen || !webchatElement) {
+      return 0
+    }
 
     const headerElementHeight = headerElement ? headerElement.clientHeight : 0
     const inputPanelElementHeight = inputPanelElement

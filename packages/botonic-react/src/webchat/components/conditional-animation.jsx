@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { WEBCHAT } from '../../constants'
 import { Scale } from '../../shared/styles'

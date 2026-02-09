@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 
 import {
   StyledDebugDetail,
@@ -9,7 +9,7 @@ import {
   StyledUrlSourceValue,
 } from '../../styles'
 import { LABELS } from '../constants'
-import { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
+import type { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
 
 interface SourcesSectionProps {
   sources: HubtypeSource[]
@@ -26,7 +26,9 @@ export const SourcesSection = ({
   onSeeChunks,
   label = LABELS.SOURCES,
 }: SourcesSectionProps) => {
-  if (sources.length === 0) return null
+  if (sources.length === 0) {
+    return null
+  }
 
   return (
     <StyledDebugDetail>

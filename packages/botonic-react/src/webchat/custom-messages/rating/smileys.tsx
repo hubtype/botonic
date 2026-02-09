@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   FaceAngrySvg,
   FaceFrownSvg,
@@ -7,7 +5,7 @@ import {
   FaceMehSvg,
   FaceSmileSvg,
 } from './icons'
-import { RatingItemProps } from './types'
+import type { RatingItemProps } from './types'
 
 const SMILEY_MAP = {
   1: FaceAngrySvg,

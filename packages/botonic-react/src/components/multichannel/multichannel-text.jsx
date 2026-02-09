@@ -40,11 +40,14 @@ export const MultichannelText = props => {
     const text = children
       .filter(e => e && !e.type)
       .map(e => {
-        if (Array.isArray(e)) return getText(e)
-        else return String(e)
+        if (Array.isArray(e)) {
+          return getText(e)
+        } else {
+          return String(e)
+        }
       })
       .join('')
-    if (text == undefined) {
+    if (text === undefined) {
       return []
     }
     return [text].filter(t => t !== '') // to avoid line breaks when the carousel doesn't have title or subtitle
@@ -61,15 +64,19 @@ export const MultichannelText = props => {
     const urlButtons = []
     const webviewButtons = []
     for (const button of getButtonsAndReplies()) {
-      if (elementHasUrl(button)) urlButtons.push(button)
-      else if (elementHasWebview(button)) webviewButtons.push(button)
-      else if (elementHasPostback(button)) postbackButtons.push(button)
+      if (elementHasUrl(button)) {
+        urlButtons.push(button)
+      } else if (elementHasWebview(button)) {
+        webviewButtons.push(button)
+      } else if (elementHasPostback(button)) {
+        postbackButtons.push(button)
+      }
     }
     return { postbackButtons, urlButtons, webviewButtons }
   }
 
   const getDefaultIndex = () => {
-    if (props.indexMode == undefined) {
+    if (props.indexMode === undefined) {
       return undefined
     }
     if (multichannelContext.currentIndex != null) {
@@ -204,13 +211,14 @@ export const MultichannelText = props => {
       return (
         <>
           {messages.map((message, i) => {
-            if (message.type === INPUT.WHATSAPP_BUTTON_LIST)
+            if (message.type === INPUT.WHATSAPP_BUTTON_LIST) {
               return (
                 <WhatsappButtonList
                   key={`msg-${i}-whatsapp-list`}
                   {...message.props}
                 />
               )
+            }
             return (
               <Text
                 key={`msg-${i}-with-postback-buttons`}
@@ -311,7 +319,7 @@ export const MultichannelText = props => {
     return (
       <>
         {texts?.map((message, i) => (
-          <Text key={i} {...propsWithoutChildren}>
+          <Text key={`msg-${i}-text`} {...propsWithoutChildren}>
             {convertToMarkdownMeta(message)}
           </Text>
         ))}

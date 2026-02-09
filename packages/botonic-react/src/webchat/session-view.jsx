@@ -1,4 +1,3 @@
-import React from 'react'
 import { JSONTree } from 'react-json-tree'
 import styled from 'styled-components'
 
@@ -98,7 +97,6 @@ const KeepSessionContainer = styled.div`
 `
 
 export const SessionView = props => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { webchatState, updateDevSettings } = props.webchatHooks || useWebchat()
   const { latestInput: input, session, lastRoutePath } = webchatState
   const toggleSessionView = () =>

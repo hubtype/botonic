@@ -5,27 +5,26 @@
 import { EventAction, INPUT } from '@botonic/core'
 import { render, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 import TestRenderer from 'react-test-renderer'
 
-import { ROLES } from '../../src/constants'
-import { DebugMessage } from '../../src/components/system-debug-trace/debug-message'
 import { SystemDebugTrace } from '../../src/components/system-debug-trace'
+import { DebugMessage } from '../../src/components/system-debug-trace/debug-message'
 import {
-  getKeywordEventConfig,
-  getSmartIntentEventConfig,
-  getFallbackEventConfig,
-  getHandoffSuccessEventConfig,
-  getKnowledgeBaseEventConfig,
   getAiAgentEventConfig,
   getBotActionEventConfig,
   getConditionalChannelEventConfig,
   getConditionalCountryEventConfig,
   getConditionalCustomEventConfig,
   getConditionalQueueStatusEventConfig,
+  getFallbackEventConfig,
+  getHandoffSuccessEventConfig,
+  getKeywordEventConfig,
+  getKnowledgeBaseEventConfig,
   getRedirectFlowEventConfig,
+  getSmartIntentEventConfig,
   getWebviewActionTriggeredEventConfig,
 } from '../../src/components/system-debug-trace/events'
+import { ROLES } from '../../src/constants'
 import { WebchatContext } from '../../src/webchat/context'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()

@@ -1,5 +1,5 @@
 import { isFacebook, isInstagram, isWhatsapp } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { RequestContext } from '../../contexts'
 import { deepMapWithIndex } from '../../util/react'

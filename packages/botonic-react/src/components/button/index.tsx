@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 
 import { isInWebviewApp, resolveImage } from '../../util/environment'
 import { renderComponent } from '../../util/react'
@@ -7,7 +7,7 @@ import { generateWebviewUrlWithParams } from '../../util/webviews'
 import { WebchatContext } from '../../webchat/context'
 import { ButtonsDisabler } from '../buttons-disabler'
 import { COMPONENT_DISPLAY_NAMES } from '../constants'
-import { ButtonProps } from '../index-types'
+import type { ButtonProps } from '../index-types'
 import { StyledButton, StyledUrlImage } from './styles'
 
 export const Button = (props: ButtonProps) => {
@@ -17,6 +17,7 @@ export const Button = (props: ButtonProps) => {
   const autoDisable =
     webchatState.theme?.button?.autodisable || props.autodisable
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: handleClick is a complex function
   const handleClick = event => {
     event.preventDefault()
 
@@ -122,8 +123,7 @@ export const Button = (props: ButtonProps) => {
     if (props.webview) {
       return (
         <button
-          // @ts-ignore
-          // eslint-disable-next-line react/no-unknown-property
+          // @ts-expect-error
           url={generateWebviewUrlWithParams(props.webview, props.params)}
           {...disabledProps}
         >
@@ -135,8 +135,7 @@ export const Button = (props: ButtonProps) => {
     if (props.path) {
       const payload = `__PATH_PAYLOAD__${props.path}`
       return (
-        // @ts-ignore
-        // eslint-disable-next-line react/no-unknown-property
+        // @ts-expect-error
         <button payload={payload} {...disabledProps}>
           {props.children}
         </button>
@@ -145,8 +144,7 @@ export const Button = (props: ButtonProps) => {
 
     if (props.payload) {
       return (
-        // @ts-ignore
-        // eslint-disable-next-line react/no-unknown-property
+        // @ts-expect-error
         <button payload={props.payload} {...disabledProps}>
           {props.children}
         </button>
@@ -155,8 +153,7 @@ export const Button = (props: ButtonProps) => {
 
     if (props.url) {
       return (
-        // @ts-ignore
-        // eslint-disable-next-line react/no-unknown-property
+        // @ts-expect-error
         <button url={props.url} target={props.target} {...disabledProps}>
           {props.children}
         </button>

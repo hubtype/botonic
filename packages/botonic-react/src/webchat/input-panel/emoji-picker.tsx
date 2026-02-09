@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: we need to use static elements for the emoji picker */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: we need to use key with click events for the emoji picker */
+import { useContext } from 'react'
 
 import LogoEmoji from '../../assets/emojiButton.svg'
 import { ROLES } from '../../constants'

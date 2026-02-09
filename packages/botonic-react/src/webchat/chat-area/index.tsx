@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { BotonicContainerId } from '../constants'
 import { WebchatContext } from '../context'

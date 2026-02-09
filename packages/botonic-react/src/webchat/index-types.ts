@@ -1,4 +1,4 @@
-import { WebchatArgs } from '../index-types'
+import type { WebchatArgs } from '../index-types'
 
 export interface WebchatDevProps extends WebchatArgs {
   initialDevSettings?: {

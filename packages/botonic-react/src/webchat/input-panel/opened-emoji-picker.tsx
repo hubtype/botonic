@@ -1,5 +1,5 @@
 import Picker from 'emoji-picker-react'
-import React, { LegacyRef } from 'react'
+import type { LegacyRef } from 'react'
 
 import { ROLES } from '../../constants'
 import { useComponentVisible } from '../hooks'

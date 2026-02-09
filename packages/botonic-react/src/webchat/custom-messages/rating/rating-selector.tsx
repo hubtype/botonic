@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: we need to use static elements for the rating selector */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: we need to use key with click events for the rating selector */
+import { useState } from 'react'
 
 import { Smileys } from './smileys'
 import { Stars } from './stars'
@@ -26,7 +28,9 @@ export const RatingSelector = ({
   const [hover, setHover] = useState<number>(valueSent ? valueSent : -1)
 
   const onHover = (ratingNumber: number) => {
-    if (!valueSent) setHover(ratingNumber)
+    if (!valueSent) {
+      setHover(ratingNumber)
+    }
   }
 
   return (
@@ -36,7 +40,7 @@ export const RatingSelector = ({
 
         return (
           <div
-            key={i}
+            key={ratingNumber}
             onMouseEnter={() => onHover(ratingNumber)}
             onMouseLeave={() => onHover(ratingValue)}
             onClick={() => onRatingChange(ratingNumber)}
