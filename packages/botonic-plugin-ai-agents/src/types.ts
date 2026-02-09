@@ -1,22 +1,22 @@
 import {
   AgenticOutputMessage,
   AiAgentArgs,
-  BotContext,
+  type BotContext,
   GuardrailRule,
   InferenceResponse,
-  ResolvedPlugins,
+  type ResolvedPlugins,
   RunResult,
 } from '@botonic/core'
-import {
+import type {
   Agent,
   AgentInputItem,
   AgentOutputType,
   RunContext as OpenAIRunContext,
   Tool as OpenAITool,
 } from '@openai/agents'
-import { ZodSchema } from 'zod'
+import type { ZodSchema } from 'zod'
 
-import { OutputSchema } from './structured-output'
+import type { OutputSchema } from './structured-output'
 
 export interface Context<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

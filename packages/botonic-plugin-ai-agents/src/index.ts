@@ -1,13 +1,18 @@
-import { AiAgentArgs, BotContext, Plugin, ResolvedPlugins } from '@botonic/core'
+import type {
+  AiAgentArgs,
+  BotContext,
+  Plugin,
+  ResolvedPlugins,
+} from '@botonic/core'
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
 import { isProd, MAX_MEMORY_LENGTH } from './constants'
-import { createDebugLogger, DebugLogger } from './debug-logger'
+import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { HubtypeApiClient } from './hubtype-api-client'
 import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
-import {
+import type {
   AgenticInputMessage,
   Context,
   CustomTool,
@@ -21,7 +26,8 @@ import {
 export default class BotonicPluginAiAgents<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
-> implements Plugin {
+> implements Plugin
+{
   private readonly authToken?: string
   private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions

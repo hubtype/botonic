@@ -1,4 +1,4 @@
-import { TextWithButtonsMessage } from '@botonic/core'
+import type { TextWithButtonsMessage } from '@botonic/core'
 import z from 'zod'
 
 export type { TextWithButtonsMessage }

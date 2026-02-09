@@ -21,7 +21,7 @@ repos:
         name: biome-check (Biome)
         entry: npx @biomejs/biome check --write
         language: system
-        files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases)/
+        files: ^packages/(botonic-core|botonic-plugin-hubtype-analytics|botonic-plugin-knowledge-bases|botonic-plugin-ai-agents)/
         types_or: [javascript, jsx, ts, tsx, json]
 
       - id: cli
@@ -47,12 +47,6 @@ repos:
         entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-flow-builder
         language: system
         files: ^packages/botonic-plugin-flow-builder/
-
-      - id: plugin-ai-agents
-        name: plugin-ai-agents (ESLint)
-        entry: scripts/qa/old/lint-package.sh packages/botonic-plugin-ai-agents
-        language: system
-        files: ^packages/botonic-plugin-ai-agents/
 
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
