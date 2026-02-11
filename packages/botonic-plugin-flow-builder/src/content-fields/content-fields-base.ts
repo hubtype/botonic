@@ -4,7 +4,6 @@ import {
   ACCESS_TOKEN_VARIABLE_KEY,
   VARIABLE_PATTERN_GLOBAL,
 } from '../constants'
-import { getValueFromKeyPath } from '../utils'
 import type {
   HtMediaFileLocale,
   HtNodeLink,
@@ -53,7 +52,7 @@ export abstract class ContentFieldsBase {
         const keyPath = match.slice(1, -1).replaceAll('\\', '')
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? match
-          : getValueFromKeyPath(request, keyPath)
+          : this.getValueFromKeyPath(request, keyPath)
         // TODO In local if change variable and render multiple times the value is always the last update
         replacedText = replacedText.replace(
           match,
@@ -63,6 +62,35 @@ export abstract class ContentFieldsBase {
     }
 
     return replacedText
+  }
+
+  getValueFromKeyPath(request: ActionRequest, keyPath: string): any {
+    if (keyPath.startsWith('session.user.contact_info.')) {
+      const name = keyPath.split('.').at(-1)
+      return request.session.user.contact_info?.find(
+        contact => contact.name === name
+      )?.value
+    }
+
+    if (keyPath.startsWith('input.') || keyPath.startsWith('session.')) {
+      return keyPath
+        .split('.')
+        .reduce((object, key) => this.resolveObjectKey(object, key), request)
+    }
+
+    return keyPath
+      .split('.')
+      .reduce(
+        (object, key) => this.resolveObjectKey(object, key),
+        request.session.user.extra_data
+      )
+  }
+
+  private resolveObjectKey(object: any, key: string): any {
+    if (object && object[key] !== undefined) {
+      return object[key]
+    }
+    return undefined
   }
 
   private isValidType(botVariable: any): boolean {
