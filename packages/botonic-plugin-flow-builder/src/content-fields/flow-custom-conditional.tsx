@@ -5,7 +5,6 @@ import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { getValueFromKeyPath } from '../utils'
 import { ContentFieldsBase } from './content-fields-base'
 import type { HtCustomConditionalNode } from './hubtype-fields/custom-conditional'
 import type {
@@ -53,7 +52,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
       throw new Error(`Key path not found for node ${this.code}`)
     }
 
-    const botVariable = getValueFromKeyPath(request, keyPath)
+    const botVariable = this.getValueFromKeyPath(request, keyPath)
 
     let conditionalResult =
       this.resultMapping.find(rMap => rMap.result === botVariable) ||

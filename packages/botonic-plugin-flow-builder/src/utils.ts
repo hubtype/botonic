@@ -24,38 +24,6 @@ export function resolveGetAccessToken(
   }
 }
 
-export function getValueFromKeyPath(
-  request: ActionRequest,
-  keyPath: string
-): any {
-  if (keyPath.startsWith('session.user.contact_info.')) {
-    const name = keyPath.split('.').at(-1)
-    return request.session.user.contact_info?.find(
-      contact => contact.name === name
-    )?.value
-  }
-
-  if (keyPath.startsWith('input.') || keyPath.startsWith('session.')) {
-    return keyPath
-      .split('.')
-      .reduce((object, key) => resolveObjectKey(object, key), request)
-  }
-
-  return keyPath
-    .split('.')
-    .reduce(
-      (object, key) => resolveObjectKey(object, key),
-      request.session.user.extra_data
-    )
-}
-
-function resolveObjectKey(object: any, key: string): any {
-  if (object && object[key] !== undefined) {
-    return object[key]
-  }
-  return undefined
-}
-
 export function inputHasTextData(input: Input): boolean {
   return input.data !== undefined && input.type === INPUT.TEXT
 }
