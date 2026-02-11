@@ -1,8 +1,17 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
-import { getValueFromKeyPath } from '../src/utils'
+import { FlowText } from '../src/content-fields/flow-text'
 import { createRequest, getActionRequest } from './helpers/utils'
+
+/**
+ * Helper to test getValueFromKeyPath from ContentFieldsBase.
+ * FlowText extends ContentFieldsBase and exposes the getValueFromKeyPath method.
+ */
+function getValueFromKeyPath(request: any, keyPath: string): any {
+  const contentFieldsInstance = new FlowText('test-id')
+  return contentFieldsInstance.getValueFromKeyPath(request, keyPath)
+}
 
 describe('getValueFromKeyPath', () => {
   describe('when keyPath starts with "input."', () => {
