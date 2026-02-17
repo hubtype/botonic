@@ -1,4 +1,4 @@
-import { Configuration } from '@rspack/cli'
+import type { Configuration } from '@rspack/cli'
 import * as rspack from '@rspack/core'
 import ReactRefreshPlugin from '@rspack/plugin-react-refresh'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -178,7 +178,7 @@ function getPlugins(mode: string, target: string) {
     `Generating bundle for: ${target}\nRspack running on mode '${mode}' with env var ENVIRONMENT set to: ${environment}`
   )
 
-  const plugins = [
+  const plugins: rspack.Plugin[] = [
     new rspack.EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
       HUBTYPE_API_URL: process.env.HUBTYPE_API_URL || HUBTYPE_DEFAULTS.API_URL,
@@ -191,7 +191,6 @@ function getPlugins(mode: string, target: string) {
   ]
 
   if (isDev) {
-    // @ts-ignore
     plugins.push(new ReactRefreshPlugin())
   }
 
@@ -205,7 +204,7 @@ function sourceMap(mode: string) {
     return 'eval-cheap-source-map'
   } else {
     throw new Error(
-      'Invalid mode argument (' + mode + '). See package.json scripts'
+      `Invalid mode argument (${mode}). See package.json scripts`
     )
   }
 }
