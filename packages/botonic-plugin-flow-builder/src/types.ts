@@ -18,6 +18,7 @@ export interface InShadowingConfig {
   allowKeywords: boolean
   allowSmartIntents: boolean
   allowKnowledgeBases: boolean
+  allowAiAgents: boolean
 }
 
 export interface BotonicPluginFlowBuilderOptions<
