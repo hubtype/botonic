@@ -79,6 +79,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       allowKeywords: options.inShadowing?.allowKeywords || false,
       allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
       allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
+      allowAiAgents: options.inShadowing?.allowAiAgents || false,
     }
     this.contentFilters = options.contentFilters || []
     this.customRatingMessageEnabled =
@@ -264,6 +265,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       possibleOptions,
       possibleValues,
     }
+  }
+
+  setInShadowing(inShadowing: InShadowingConfig): void {
+    this.inShadowing = inShadowing
   }
 }
 
