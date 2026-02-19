@@ -67,6 +67,7 @@ describe('Check the contents and logic of a text node', () => {
     })
     expect(firstButton.params).toEqual({
       exitSuccessContentID: 'webview success',
+      t: expect.any(String),
       webviewId: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
     })
   })
