@@ -10,9 +10,12 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.44.x] - 2026-mm-dd
+## [0.45.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3167](https://github.com/hubtype/botonic/pull/3167): Add shadowing config for AI Agents
+- [PR-3171](https://github.com/hubtype/botonic/pull/3171): Add timestamp as a param in webviews so that they have a unique url"
 
 ### Changed
 

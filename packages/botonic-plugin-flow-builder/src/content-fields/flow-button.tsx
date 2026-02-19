@@ -57,6 +57,7 @@ export class FlowButton extends ContentFieldsBase {
   ) {
     const params: Record<string, string> = {
       webviewId: webview.webviewTargetId,
+      t: Date.now().toString(),
     }
     const exitSuccessContentID = FlowButton.getExitSuccessContentID(
       webview,
