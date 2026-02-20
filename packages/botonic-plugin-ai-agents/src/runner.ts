@@ -7,6 +7,7 @@ import {
   InputGuardrailTripwireTriggered,
   Runner,
   RunToolCallItem,
+  RunToolCallOutputItem
 } from '@openai/agents'
 
 import type { DebugLogger } from './debug-logger'
@@ -109,6 +110,20 @@ export class AIAgentRunner<
     result,
     context: Context<TPlugins, TExtraData>
   ): ToolExecution[] {
+
+    
+    for (const item of result.newItems) {
+      if (item instanceof RunToolCallOutputItem) {
+        try{
+          // @ts-ignore
+          console.log("RUN TOOL CALL OUTPUT ITEM", item.rawItem.output?.text)
+        } 
+        catch(error) {
+          console.log("ERROR GETTING TEXT FROM RUN TOOL CALL OUTPUT ITEM", error)
+        }
+        
+      }
+    }
     return (
       result.newItems
         ?.filter(item => item instanceof RunToolCallItem)
@@ -125,6 +140,7 @@ export class AIAgentRunner<
     item: RunToolCallItem,
     context: Context<TPlugins, TExtraData>
   ): ToolExecution {
+    console.log("RUN TOOL CALL ITEM", item)
     if (item.rawItem.type !== 'function_call') {
       return {
         toolName: '',
