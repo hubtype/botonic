@@ -1,11 +1,15 @@
 export interface BaseMessage {
-  type: 'text' | 'textWithButtons' | 'carousel' | 'exit'
+  type: 'text' | 'textWithButtons' | 'botExecutor' | 'carousel' | 'exit'
 }
 
 export interface Button {
   text: string
   payload?: string
   url?: string
+}
+export interface ButtonWithPayload {
+  text: string
+  payload: string
 }
 
 export interface TextMessage extends BaseMessage {
@@ -20,6 +24,14 @@ export interface TextWithButtonsMessage extends BaseMessage {
   content: {
     text: string
     buttons: Button[]
+  }
+}
+
+export interface BotExecutorMessage extends BaseMessage {
+  type: 'botExecutor'
+  content: {
+    text: string
+    buttons: ButtonWithPayload[]
   }
 }
 
@@ -45,6 +57,7 @@ export interface ExitMessage extends BaseMessage {
 export type OutputMessage =
   | TextMessage
   | TextWithButtonsMessage
+  | BotExecutorMessage
   | CarouselMessage
   | ExitMessage
 
