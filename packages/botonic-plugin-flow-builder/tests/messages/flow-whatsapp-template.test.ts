@@ -9,8 +9,10 @@ import { describe, expect, test } from '@jest/globals'
 import { FlowWhatsappTemplate } from '../../src/content-fields/flow-whatsapp-template'
 import {
   HtNodeWithContentType,
-  type HtWhatsappTemplateNode,
-} from '../../src/content-fields/hubtype-fields'
+} from '../../src/content-fields/hubtype-fields/node-types'
+import type {
+   HtWhatsappTemplateNode,
+} from '../../src/content-fields/hubtype-fields/whatsapp-template'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappTemplateFlow } from '../helpers/flows/whatsapp-template'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
@@ -30,26 +32,31 @@ describe('FlowWhatsappTemplate', () => {
         is_meaningful: false,
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
-          template: {
-            id: 'template-id',
-            name: 'test_template',
-            language: 'en',
-            status: 'APPROVED',
-            category: 'MARKETING',
-            components: [
-              {
-                type: WhatsAppTemplateComponentType.BODY,
-                text: 'Hello {{name}}!',
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'test_template',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'MARKETING',
+                components: [
+                  {
+                    type: WhatsAppTemplateComponentType.BODY,
+                    text: 'Hello {{name}}!',
+                  },
+                ],
+                namespace: 'test-namespace',
+                parameter_format: 'NAMED',
               },
-            ],
-            namespace: 'test-namespace',
-            parameter_format: 'NAMED',
+              header_variables: {
+                type: WhatsAppTemplateParameterType.TEXT,
+                text: { '1': 'Header Value' },
+              },
+              variable_values: { name: 'John' },
+              url_variable_values: { '0': 'param-value' },
+            },
           },
-          header_variables: {
-            type: WhatsAppTemplateParameterType.TEXT,
-            text: { '1': 'Header Value' },
-          },
-          variable_values: { name: 'John' },
           buttons: [
             {
               id: 'button-id',
@@ -59,11 +66,13 @@ describe('FlowWhatsappTemplate', () => {
               hidden: [],
             },
           ],
-          url_variable_values: { '0': 'param-value' },
         },
       }
 
-      const flowWhatsappTemplate = FlowWhatsappTemplate.fromHubtypeCMS(mockNode)
+      const flowWhatsappTemplate = FlowWhatsappTemplate.fromHubtypeCMS(
+        mockNode,
+        'en'
+      )
 
       expect(flowWhatsappTemplate.id).toBe('test-node-id')
       expect(flowWhatsappTemplate.code).toBe('TEST_TEMPLATE')
@@ -94,22 +103,29 @@ describe('FlowWhatsappTemplate', () => {
         is_meaningful: false,
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
-          template: {
-            id: 'template-id',
-            name: 'simple_template',
-            language: 'es',
-            status: 'APPROVED',
-            category: 'UTILITY',
-            components: [],
-            namespace: 'test-namespace',
-            parameter_format: 'NAMED',
+          by_locale: {
+            es: {
+              template: {
+                id: 'template-id',
+                name: 'simple_template',
+                language: 'es',
+                status: 'APPROVED',
+                category: 'UTILITY',
+                components: [],
+                namespace: 'test-namespace',
+                parameter_format: 'NAMED',
+              },
+              variable_values: {},
+            },
           },
-          variable_values: {},
           buttons: [],
         },
       }
 
-      const flowWhatsappTemplate = FlowWhatsappTemplate.fromHubtypeCMS(mockNode)
+      const flowWhatsappTemplate = FlowWhatsappTemplate.fromHubtypeCMS(
+        mockNode,
+        'es'
+      )
 
       expect(flowWhatsappTemplate.headerVariables).toBeUndefined()
       expect(flowWhatsappTemplate.urlVariableValues).toBeUndefined()
@@ -404,35 +420,40 @@ describe('FlowWhatsappTemplate', () => {
         is_meaningful: false,
         type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
         content: {
-          template: {
-            id: 'template-id',
-            name: 'test_template',
-            language: 'en',
-            status: 'APPROVED',
-            category: 'MARKETING',
-            components: [
-              {
-                type: WhatsAppTemplateComponentType.BUTTONS,
-                buttons: [
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'test_template',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'MARKETING',
+                components: [
                   {
-                    type: WhatsAppTemplateButtonSubType.URL,
-                    text: 'Visit',
-                    url: 'https://example.com/{{1}}',
-                    index: 0,
-                  },
-                  {
-                    type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
-                    text: 'OK',
-                    id: 'ok-id',
-                    index: 1,
+                    type: WhatsAppTemplateComponentType.BUTTONS,
+                    buttons: [
+                      {
+                        type: WhatsAppTemplateButtonSubType.URL,
+                        text: 'Visit',
+                        url: 'https://example.com/{{1}}',
+                        index: 0,
+                      },
+                      {
+                        type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
+                        text: 'OK',
+                        id: 'ok-id',
+                        index: 1,
+                      },
+                    ],
                   },
                 ],
+                namespace: 'test-namespace',
+                parameter_format: 'POSITIONAL',
               },
-            ],
-            namespace: 'test-namespace',
-            parameter_format: 'POSITIONAL',
+              variable_values: {},
+              url_variable_values: {},
+            },
           },
-          variable_values: {},
           buttons: [
             {
               id: 'url-btn',
@@ -449,7 +470,6 @@ describe('FlowWhatsappTemplate', () => {
               hidden: [],
             },
           ],
-          url_variable_values: {}, // Empty - no URL params
         },
       }
 
@@ -460,7 +480,7 @@ describe('FlowWhatsappTemplate', () => {
         },
       })
 
-      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode)
+      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')
       // @ts-expect-error - accessing private method for testing
       const buttons = template.getButtons(
         template.htWhatsappTemplate,
