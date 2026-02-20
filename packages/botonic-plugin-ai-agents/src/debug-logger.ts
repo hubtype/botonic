@@ -1,4 +1,4 @@
-import type { AiAgentArgs } from '@botonic/core'
+import type { AiAgentArgs, ToolExecution } from '@botonic/core'
 
 import {
   AZURE_OPENAI_API_BASE,
@@ -40,6 +40,7 @@ export interface DebugLogger {
   logRunResult(runResult: RunResult, startTime: number): void
   logGuardrailTriggered(): void
   logRunnerError(startTime: number, error: unknown): void
+  logToolExecution(toolExecution: ToolExecution): void
 }
 
 class EnabledDebugLogger implements DebugLogger {
@@ -153,6 +154,20 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} Runner execution failed after ${elapsedMs}ms`)
     console.log(`${PREFIX} Error:`, error)
   }
+
+  logToolExecution(toolExecution: ToolExecution): void {
+    console.log(`${PREFIX} Tool Execution: ${toolExecution.toolName}`)
+    console.log(
+      `${PREFIX} Tool Arguments: ${JSON.stringify(toolExecution.toolArguments)}`
+    )
+    console.log(`${PREFIX} Tool Results: ${toolExecution.toolResults}`)
+    console.log(
+      `${PREFIX} Knowledgebase Sources IDs: ${JSON.stringify(toolExecution.knowledgebaseSourcesIds)}`
+    )
+    console.log(
+      `${PREFIX} Knowledgebase Chunks IDs: ${JSON.stringify(toolExecution.knowledgebaseChunksIds)}`
+    )
+  }
 }
 
 class DisabledDebugLogger implements DebugLogger {
@@ -163,6 +178,7 @@ class DisabledDebugLogger implements DebugLogger {
   logRunResult(): void {}
   logGuardrailTriggered(): void {}
   logRunnerError(): void {}
+  logToolExecution(): void {}
 }
 
 export function createDebugLogger(enableDebug: boolean): DebugLogger {
