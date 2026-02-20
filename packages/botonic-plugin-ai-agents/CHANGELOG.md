@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.44.x] - 2026-mm-dd
+## [0.45.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Add a new output schema: BotExecutorSchema
 
 ### Changed
 

@@ -16,6 +16,7 @@ All notable changes to Botonic will be documented in this file.
 
 - [PR-3167](https://github.com/hubtype/botonic/pull/3167): Add shadowing config for AI Agents
 - [PR-3171](https://github.com/hubtype/botonic/pull/3171): Add timestamp as a param in webviews so that they have a unique url"
+- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Allow the FlowAiAgent and FlowText to handle messages of type botExecutor
 
 ### Changed
 
