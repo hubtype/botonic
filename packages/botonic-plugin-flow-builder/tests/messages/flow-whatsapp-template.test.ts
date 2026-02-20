@@ -7,12 +7,8 @@ import {
 import { describe, expect, test } from '@jest/globals'
 
 import { FlowWhatsappTemplate } from '../../src/content-fields/flow-whatsapp-template'
-import {
-  HtNodeWithContentType,
-} from '../../src/content-fields/hubtype-fields/node-types'
-import type {
-   HtWhatsappTemplateNode,
-} from '../../src/content-fields/hubtype-fields/whatsapp-template'
+import { HtNodeWithContentType } from '../../src/content-fields/hubtype-fields/node-types'
+import type { HtWhatsappTemplateNode } from '../../src/content-fields/hubtype-fields/whatsapp-template'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappTemplateFlow } from '../helpers/flows/whatsapp-template'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'

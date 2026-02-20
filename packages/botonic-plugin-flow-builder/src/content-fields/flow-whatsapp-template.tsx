@@ -21,10 +21,10 @@ import { ContentFieldsBase } from './content-fields-base'
 import type {
   HtButton,
   HtMediaFileLocale,
-  HtWhatsappTemplateContentByLocale,
   HtWhatsAppTemplate,
   HtWhatsAppTemplateButtonsComponent,
   HtWhatsAppTemplateHeaderComponent,
+  HtWhatsappTemplateContentByLocale,
   HtWhatsappTemplateNode,
 } from './hubtype-fields'
 
@@ -48,8 +48,11 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     const whatsappTemplate = new FlowWhatsappTemplate(component.id)
     whatsappTemplate.code = component.code
     whatsappTemplate.buttons = component.content.buttons
-    const contentByLocale = FlowWhatsappTemplate.getContentByLocale(component, currentLocale)
-    
+    const contentByLocale = FlowWhatsappTemplate.getContentByLocale(
+      component,
+      currentLocale
+    )
+
     whatsappTemplate.htWhatsappTemplate = contentByLocale.template
     whatsappTemplate.headerVariables = contentByLocale.header_variables
     whatsappTemplate.variableValues = contentByLocale.variable_values
@@ -60,10 +63,16 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return whatsappTemplate
   }
 
-  private static getContentByLocale(component: HtWhatsappTemplateNode, currentLocale: string) {
-    const content: HtWhatsappTemplateContentByLocale | undefined = component.content.by_locale[currentLocale]
+  private static getContentByLocale(
+    component: HtWhatsappTemplateNode,
+    currentLocale: string
+  ) {
+    const content: HtWhatsappTemplateContentByLocale | undefined =
+      component.content.by_locale[currentLocale]
     if (!content) {
-      throw new Error(`Whatsapp template content not found for locale: ${currentLocale}`)
+      throw new Error(
+        `Whatsapp template content not found for locale: ${currentLocale}`
+      )
     }
     return content
   }
