@@ -21,6 +21,7 @@ import { ContentFieldsBase } from './content-fields-base'
 import type {
   HtButton,
   HtMediaFileLocale,
+  HtWhatsappTemplateContentByLocale,
   HtWhatsAppTemplate,
   HtWhatsAppTemplateButtonsComponent,
   HtWhatsAppTemplateHeaderComponent,
@@ -41,19 +42,32 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   public urlVariableValues?: Record<string, string>
 
   static fromHubtypeCMS(
-    component: HtWhatsappTemplateNode
+    component: HtWhatsappTemplateNode,
+    currentLocale: string
   ): FlowWhatsappTemplate {
     const whatsappTemplate = new FlowWhatsappTemplate(component.id)
     whatsappTemplate.code = component.code
-    whatsappTemplate.htWhatsappTemplate = component.content.template
-    whatsappTemplate.headerVariables = component.content.header_variables
-    whatsappTemplate.variableValues = component.content.variable_values
+    console.log('fromHubtypeCMS', JSON.stringify(component, null, 2), {currentLocale})
     whatsappTemplate.buttons = component.content.buttons
-    whatsappTemplate.urlVariableValues = component.content.url_variable_values
+    const contentByLocale = FlowWhatsappTemplate.getContentByLocale(component, currentLocale)
+    
+    whatsappTemplate.htWhatsappTemplate = contentByLocale.template
+    whatsappTemplate.headerVariables = contentByLocale.header_variables
+    whatsappTemplate.variableValues = contentByLocale.variable_values
+    whatsappTemplate.urlVariableValues = contentByLocale.url_variable_values
 
     whatsappTemplate.followUp = component.follow_up
 
     return whatsappTemplate
+  }
+
+  private static getContentByLocale(component: HtWhatsappTemplateNode, currentLocale: string) {
+    const content: HtWhatsappTemplateContentByLocale | undefined = component.content.by_locale[currentLocale]
+    console.log('getContentByLocale', {content, currentLocale})
+    if (!content) {
+      throw new Error(`Whatsapp template content not found for locale: ${currentLocale}`)
+    }
+    return content
   }
 
   private getHeaderComponent(
