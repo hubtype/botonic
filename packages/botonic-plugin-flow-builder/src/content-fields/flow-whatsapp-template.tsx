@@ -47,7 +47,6 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   ): FlowWhatsappTemplate {
     const whatsappTemplate = new FlowWhatsappTemplate(component.id)
     whatsappTemplate.code = component.code
-    console.log('fromHubtypeCMS', JSON.stringify(component, null, 2), {currentLocale})
     whatsappTemplate.buttons = component.content.buttons
     const contentByLocale = FlowWhatsappTemplate.getContentByLocale(component, currentLocale)
     
@@ -63,7 +62,6 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
   private static getContentByLocale(component: HtWhatsappTemplateNode, currentLocale: string) {
     const content: HtWhatsappTemplateContentByLocale | undefined = component.content.by_locale[currentLocale]
-    console.log('getContentByLocale', {content, currentLocale})
     if (!content) {
       throw new Error(`Whatsapp template content not found for locale: ${currentLocale}`)
     }
