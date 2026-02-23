@@ -11,6 +11,7 @@ const mockLogger: DebugLogger = {
   logRunResult: jest.fn(),
   logGuardrailTriggered: jest.fn(),
   logRunnerError: jest.fn(),
+  logToolExecution: jest.fn(),
 }
 
 // Store captured Agent config for assertions
