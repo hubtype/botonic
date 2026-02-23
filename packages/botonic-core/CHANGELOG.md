@@ -20,6 +20,24 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.45.0] - 2026-mm-dd
+
+### Added
+
+- Include tool results in HtEventAiAgent
+
+### Changed
+
+### Fixed
+
+## [0.44.0] - 2026-01-29
+
+### Added
+
+### Changed
+
+### Fixed
+
 ## [0.43.0] - 2026-01-13
 
 ### Changed
