@@ -1,4 +1,8 @@
-import type { TextMessage, TextWithButtonsMessage } from '@botonic/core'
+import type {
+  BotExecutorMessage,
+  TextMessage,
+  TextWithButtonsMessage,
+} from '@botonic/core'
 import { type ActionRequest, Text } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
@@ -39,7 +43,7 @@ export class FlowText extends ContentFieldsBase {
 
   static fromAIAgent(
     id: string,
-    textMessage: TextMessage | TextWithButtonsMessage
+    textMessage: TextMessage | TextWithButtonsMessage | BotExecutorMessage
   ): JSX.Element {
     if (textMessage.type === 'text') {
       return <Text key={id}>{textMessage.content.text}</Text>

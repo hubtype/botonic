@@ -1,6 +1,6 @@
 {
   "name": "@botonic/react",
-  "version": "0.45.0-alpha.0",
+  "version": "0.45.0-alpha.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs",
@@ -20,7 +20,7 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.45.0-alpha.0",
+    "@botonic/core": "^0.45.0-alpha.1",
     "axios": "^1.13.2",
     "emoji-picker-react": "^4.12.0",
     "lodash.merge": "^4.6.2",
