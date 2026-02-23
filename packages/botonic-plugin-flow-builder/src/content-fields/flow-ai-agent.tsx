@@ -43,7 +43,11 @@ export class FlowAiAgent extends ContentFieldsBase {
     return (
       <>
         {this.responses.map((response: AgenticOutputMessage) => {
-          if (response.type === 'text' || response.type === 'textWithButtons') {
+          if (
+            response.type === 'text' ||
+            response.type === 'textWithButtons' ||
+            response.type === 'botExecutor'
+          ) {
             return FlowText.fromAIAgent(id, response)
           }
 
