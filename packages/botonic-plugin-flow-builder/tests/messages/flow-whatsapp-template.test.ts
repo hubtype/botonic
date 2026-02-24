@@ -88,6 +88,41 @@ describe('FlowWhatsappTemplate', () => {
       })
     })
 
+    test('should throw an error when content is not found for the requested locale', () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-node-id',
+        code: 'TEST_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'test_template',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'MARKETING',
+                components: [],
+                namespace: 'test-namespace',
+                parameter_format: 'NAMED',
+              },
+              variable_values: {},
+            },
+          },
+          buttons: [],
+        },
+      }
+
+      expect(() => FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'fr')).toThrow(
+        'Whatsapp template content not found for locale: fr'
+      )
+    })
+
     test('should handle node without header_variables', () => {
       const mockNode: HtWhatsappTemplateNode = {
         id: 'test-node-id',
