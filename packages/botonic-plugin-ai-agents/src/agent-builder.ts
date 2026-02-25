@@ -1,4 +1,9 @@
-import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
+import type {
+  CampaignV2,
+  ContactInfo,
+  ResolvedPlugins,
+  VerbosityLevel,
+} from '@botonic/core'
 import {
   Agent,
   type AgentOutputType,
@@ -19,6 +24,7 @@ interface AIAgentBuilderOptions<
 > {
   name: string
   instructions: string
+  verbosity: VerbosityLevel
   tools: Tool<TPlugins, TExtraData>[]
   campaignsContext?: CampaignV2[]
   contactInfo: ContactInfo[]
@@ -33,6 +39,7 @@ export class AIAgentBuilder<
 > {
   private name: string
   private instructions: string
+  private verbosity: VerbosityLevel
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
   private logger: DebugLogger
@@ -44,6 +51,7 @@ export class AIAgentBuilder<
       options.contactInfo,
       options.campaignsContext
     )
+    this.verbosity = options.verbosity
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
     this.logger = options.logger
@@ -54,10 +62,9 @@ export class AIAgentBuilder<
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
-    const modelSettings: ModelSettings = {} as ModelSettings
-    if (OPENAI_PROVIDER === 'openai') {
-      modelSettings.reasoning = { effort: 'none' }
-      modelSettings.text = { verbosity: 'medium' }
+    const modelSettings: ModelSettings = {
+      reasoning: { effort: 'none' },
+      text: { verbosity: this.verbosity },
     }
 
     const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
