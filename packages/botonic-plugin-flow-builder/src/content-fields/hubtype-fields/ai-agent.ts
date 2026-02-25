@@ -1,3 +1,4 @@
+import type { ModelName, VerbosityLevel } from '@botonic/core'
 import type { HtBaseNode } from './common'
 import type { HtNodeWithContentType } from './node-types'
 
@@ -12,6 +13,8 @@ export interface HtAiAgentNode extends HtBaseNode {
   content: {
     name: string
     instructions: string
+    model: ModelName
+    verbosity: VerbosityLevel
     active_tools?: { name: string }[]
     input_guardrail_rules?: HtInputGuardrailRule[]
     sources?: { id: string; name: string }[]
