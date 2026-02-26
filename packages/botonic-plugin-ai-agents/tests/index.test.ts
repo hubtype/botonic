@@ -22,7 +22,7 @@ import BotonicPluginAiAgents from '../src/index'
 let capturedBuilderArgs: any = null
 
 // Mock OpenAiClientConfigurator to avoid actual OpenAI setup
-jest.mock('../src/client-builder', () => ({
+jest.mock('../src/client-configurator', () => ({
   OpenAiClientConfigurator: jest.fn().mockImplementation(() => ({
     setUp: jest.fn(),
   })),
