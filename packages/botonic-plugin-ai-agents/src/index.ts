@@ -7,7 +7,7 @@ import type {
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-import { OpenAiClientConfigurator } from './client-builder'
+import { OpenAiClientConfigurator } from './client-configurator'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
