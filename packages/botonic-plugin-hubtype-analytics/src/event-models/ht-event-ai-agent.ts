@@ -11,6 +11,7 @@ import { HtEvent } from './ht-event'
 interface ToolExecutionEventArgs {
   tool_name: string
   tool_arguments: Record<string, any>
+  tool_results?: string
   knowledgebase_sources_ids?: string[]
   knowledgebase_chunks_ids?: string[]
 }
@@ -67,9 +68,18 @@ export class HtEventAiAgent extends HtEvent {
         toolExecution.knowledgebaseChunksIds
     }
 
+    const MAX_TOOL_RESULTS_LENGTH_IN_KB = 16 * 1024 // 16384 characters
+
+    const truncatedToolResults =
+      toolExecution.toolResults &&
+      toolExecution.toolResults.length > MAX_TOOL_RESULTS_LENGTH_IN_KB
+        ? toolExecution.toolResults.slice(0, MAX_TOOL_RESULTS_LENGTH_IN_KB)
+        : toolExecution.toolResults
+
     return {
       tool_name: toolExecution.toolName,
       tool_arguments: toolExecution.toolArguments,
+      tool_results: truncatedToolResults,
       ...knowledgeBaseArgs,
     }
   }
