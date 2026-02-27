@@ -18,3 +18,6 @@ export const AZURE_OPENAI_API_VERSION =
 export const isProd = process.env.NODE_ENV === 'production'
 
 export const MAX_MEMORY_LENGTH = 25
+
+export const DEFAULT_TIMEOUT_16_SECONDS = 16000
+export const DEFAULT_MAX_RETRIES = 2

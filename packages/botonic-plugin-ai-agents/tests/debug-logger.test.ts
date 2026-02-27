@@ -1,3 +1,4 @@
+import { ModelName, VerbosityLevel } from '@botonic/core'
 import { createDebugLogger, type DebugLogger } from '../src/debug-logger'
 
 describe('DebugLogger', () => {
@@ -72,6 +73,8 @@ describe('DebugLogger', () => {
       const aiAgentArgs = {
         name: 'TestAgent',
         instructions: 'Test instructions',
+        model: ModelName.Gpt41Mini,
+        verbosity: VerbosityLevel.Medium,
         sourceIds: ['source1'],
         inputGuardrailRules: [],
       }
@@ -200,7 +203,16 @@ describe('DebugLogger', () => {
         customToolNames: [],
         memory: {},
       })
-      logger.logAgentDebugInfo({ name: 'Test', instructions: '' }, [], [])
+      logger.logAgentDebugInfo(
+        {
+          name: 'Test',
+          instructions: '',
+          model: ModelName.Gpt41Mini,
+          verbosity: VerbosityLevel.Low,
+        },
+        [],
+        []
+      )
       logger.logModelSettings({
         provider: 'azure',
         model: undefined,

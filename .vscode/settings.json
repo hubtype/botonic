@@ -16,5 +16,11 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   // YAML formatting with single quotes
-  "yaml.format.singleQuote": true
+  "yaml.format.singleQuote": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  // Organize imports on save (Biome analyzer, not formatter)
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit"
+  }
 }

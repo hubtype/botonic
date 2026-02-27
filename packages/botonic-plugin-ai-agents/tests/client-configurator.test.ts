@@ -1,4 +1,9 @@
+import { ModelName } from '@botonic/core'
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
+
+// Default config values matching constants
+const DEFAULT_MAX_RETRIES = 2
+const DEFAULT_TIMEOUT = 16000
 
 // Store captured client configurations
 let capturedOpenAIConfig: any = null
@@ -52,7 +57,7 @@ describe('OpenAI Client Configuration', () => {
     process.env = originalEnv
   })
 
-  describe('setUpOpenAI', () => {
+  describe('OpenAiClientConfigurator.setUp', () => {
     it('should call setOpenAIAPI with chat_completions', async () => {
       process.env.OPENAI_PROVIDER = 'azure'
       process.env.AZURE_OPENAI_API_KEY = 'test-azure-key'
@@ -60,9 +65,15 @@ describe('OpenAI Client Configuration', () => {
 
       // Re-import to get fresh module with new env
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       const { setOpenAIAPI } = await import('@openai/agents')
       expect(setOpenAIAPI).toHaveBeenCalledWith('chat_completions')
@@ -74,9 +85,15 @@ describe('OpenAI Client Configuration', () => {
       process.env.AZURE_OPENAI_API_BASE = 'https://test.openai.azure.com'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       const { setTracingDisabled } = await import('@openai/agents')
       expect(setTracingDisabled).toHaveBeenCalledWith(true)
@@ -90,10 +107,16 @@ describe('OpenAI Client Configuration', () => {
       process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME = 'my-deployment'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
       const { AzureOpenAI } = await import('openai')
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(AzureOpenAI).toHaveBeenCalled()
     })
@@ -103,10 +126,16 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'test-openai-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
       const OpenAI = (await import('openai')).default
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(OpenAI).toHaveBeenCalled()
     })
@@ -118,9 +147,15 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'test-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(capturedOpenAIConfig).toBeDefined()
       expect(capturedOpenAIConfig.timeout).toBe(16000)
@@ -131,9 +166,11 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'test-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI(undefined, 30000)
+      new OpenAiClientConfigurator(2, 30000, ModelName.Gpt41Mini).setUp()
 
       expect(capturedOpenAIConfig).toBeDefined()
       expect(capturedOpenAIConfig.timeout).toBe(30000)
@@ -144,9 +181,15 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'test-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(capturedOpenAIConfig).toBeDefined()
       expect(capturedOpenAIConfig.maxRetries).toBe(2)
@@ -157,9 +200,11 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'test-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI(5)
+      new OpenAiClientConfigurator(5, 16000, ModelName.Gpt41Mini).setUp()
 
       expect(capturedOpenAIConfig).toBeDefined()
       expect(capturedOpenAIConfig.maxRetries).toBe(5)
@@ -170,9 +215,15 @@ describe('OpenAI Client Configuration', () => {
       process.env.OPENAI_API_KEY = 'sk-test-api-key'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(capturedOpenAIConfig).toBeDefined()
       expect(capturedOpenAIConfig.apiKey).toBe('sk-test-api-key')
@@ -188,9 +239,15 @@ describe('OpenAI Client Configuration', () => {
       process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME = 'gpt-4-deployment'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       expect(capturedAzureConfig).toBeDefined()
       expect(capturedAzureConfig.apiKey).toBe('azure-api-key')
@@ -198,7 +255,8 @@ describe('OpenAI Client Configuration', () => {
         'https://myinstance.openai.azure.com'
       )
       expect(capturedAzureConfig.apiVersion).toBe('2025-01-01-preview')
-      expect(capturedAzureConfig.deployment).toBe('gpt-4-deployment')
+      // Deployment name is derived from model (Gpt41Mini -> gpt-41-mini_p1)
+      expect(capturedAzureConfig.deployment).toBe('gpt-41-mini_p1')
     })
   })
 
@@ -209,10 +267,16 @@ describe('OpenAI Client Configuration', () => {
       process.env.AZURE_OPENAI_API_BASE = 'https://test.openai.azure.com'
 
       jest.resetModules()
-      const { setUpOpenAI } = await import('../src/openai')
+      const { OpenAiClientConfigurator } = await import(
+        '../src/client-configurator'
+      )
       const { AzureOpenAI } = await import('openai')
 
-      setUpOpenAI()
+      new OpenAiClientConfigurator(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        ModelName.Gpt41Mini
+      ).setUp()
 
       // Default should be azure
       expect(AzureOpenAI).toHaveBeenCalled()

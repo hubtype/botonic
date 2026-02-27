@@ -1,4 +1,8 @@
-import type { AgenticOutputMessage } from '@botonic/core'
+import {
+  type AgenticOutputMessage,
+  ModelName,
+  VerbosityLevel,
+} from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
@@ -13,6 +17,8 @@ import type {
 export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
+  public model: ModelName = ModelName.Gpt41Mini
+  public verbosity: VerbosityLevel = VerbosityLevel.Medium
   public activeTools?: { name: string }[]
   public inputGuardrailRules: HtInputGuardrailRule[]
   public sources?: { id: string; name: string }[]

@@ -7,10 +7,15 @@ import type {
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-import { isProd, MAX_MEMORY_LENGTH } from './constants'
+import { OpenAiClientConfigurator } from './client-configurator'
+import {
+  DEFAULT_MAX_RETRIES,
+  DEFAULT_TIMEOUT_16_SECONDS,
+  isProd,
+  MAX_MEMORY_LENGTH,
+} from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { HubtypeApiClient } from './hubtype-api-client'
-import { setUpOpenAI } from './openai'
 import { AIAgentRunner } from './runner'
 import type {
   AgenticInputMessage,
@@ -32,11 +37,11 @@ export default class BotonicPluginAiAgents<
   private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions
   private readonly logger: DebugLogger
+  private readonly timeout: number
+  private readonly maxRetries: number
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
-    setUpOpenAI(options?.maxRetries, options?.timeout)
-
     if (options?.messageHistoryApiVersion === 'v1' && options?.memory) {
       throw new Error(
         'Cannot use memory when messageHistoryApiVersion is "v1". ' +
@@ -48,6 +53,8 @@ export default class BotonicPluginAiAgents<
     this.toolDefinitions = options?.customTools || []
     this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
     this.memory = options?.memory ?? {}
+    this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
+    this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
 
     this.logger.logInitialConfig({
@@ -64,34 +71,51 @@ export default class BotonicPluginAiAgents<
   }
 
   async getInference(
-    request: BotContext<TPlugins, TExtraData>,
+    botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentArgs
   ): Promise<InferenceResponse> {
     try {
-      const authToken = isProd ? request.session._access_token : this.authToken
+      const authToken = isProd
+        ? botContext.session._access_token
+        : this.authToken
       if (!authToken) {
         throw new Error('Auth token is required')
       }
 
+      // Create and set up client for OpenAI/Azure OpenAI
+      const openAiClient = new OpenAiClientConfigurator(
+        this.maxRetries,
+        this.timeout,
+        aiAgentArgs.model
+      )
+      openAiClient.setUp()
+
+      // Build tools
       const tools = this.buildTools(
         aiAgentArgs.activeTools?.map(tool => tool.name) || []
       )
+
+      // Build agent
       const agent = new AIAgentBuilder<TPlugins, TExtraData>({
         name: aiAgentArgs.name,
         instructions: aiAgentArgs.instructions,
+        verbosity: aiAgentArgs.verbosity,
         tools: tools,
-        contactInfo: request.session.user.contact_info || [],
+        contactInfo: botContext.session.user.contact_info || [],
         inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
         sourceIds: aiAgentArgs.sourceIds || [],
-        campaignsContext: request.input.context?.campaigns_v2,
+        campaignsContext: botContext.input.context?.campaigns_v2,
         logger: this.logger,
       }).build()
 
+      // Get messages
       const messages = await this.getMessages(
-        request,
+        botContext,
         authToken,
         MAX_MEMORY_LENGTH
       )
+
+      // Build context
       const context: Context<TPlugins, TExtraData> = {
         authToken,
         sourceIds: aiAgentArgs.sourceIds || [],
@@ -101,15 +125,17 @@ export default class BotonicPluginAiAgents<
           chunksIds: [],
           chunkTexts: [],
         },
-        request,
+        request: botContext,
       }
 
+      // Log agent debug info
       this.logger.logAgentDebugInfo(
         aiAgentArgs,
         tools.map(t => t.name),
         messages
       )
 
+      // Run agent
       const runner = new AIAgentRunner<TPlugins, TExtraData>(agent, this.logger)
       return await runner.run(messages, context)
     } catch (error) {

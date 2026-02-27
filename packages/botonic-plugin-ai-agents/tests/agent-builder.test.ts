@@ -1,5 +1,5 @@
 import type { DebugLogger } from '../src/debug-logger'
-import { OutputSchema } from '../src/structured-output'
+import { OutputSchema } from '../src/structured-output/index'
 import type { GuardrailRule, Tool } from '../src/types'
 
 // Create a mock disabled logger for tests (no-op implementations)
@@ -49,7 +49,7 @@ const mockConstants = {
 jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
-import type { ContactInfo } from '@botonic/core'
+import { type ContactInfo, VerbosityLevel } from '@botonic/core'
 
 import { AIAgentBuilder } from '../src/agent-builder'
 
@@ -118,6 +118,7 @@ describe('AIAgentBuilder', () => {
     const aiAgent = new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      verbosity: VerbosityLevel.Medium,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules,
@@ -246,6 +247,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -269,6 +271,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -292,6 +295,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -316,6 +320,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -337,6 +342,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -357,6 +363,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -375,6 +382,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -388,11 +396,12 @@ describe('AIAgentBuilder', () => {
       expect(capturedAgentConfig.model).toBeUndefined()
     })
 
-    it('should NOT set reasoning and text settings for azure provider', () => {
+    it('should set reasoning and text settings for azure provider (same as openai)', () => {
       // Default OPENAI_PROVIDER is 'azure'
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        verbosity: VerbosityLevel.Medium,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -402,9 +411,13 @@ describe('AIAgentBuilder', () => {
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
-      // Azure should NOT have reasoning or text settings
-      expect(capturedAgentConfig.modelSettings.reasoning).toBeUndefined()
-      expect(capturedAgentConfig.modelSettings.text).toBeUndefined()
+      // Azure now receives same reasoning and text settings as OpenAI
+      expect(capturedAgentConfig.modelSettings.reasoning).toEqual({
+        effort: 'none',
+      })
+      expect(capturedAgentConfig.modelSettings.text).toEqual({
+        verbosity: 'medium',
+      })
     })
   })
 })
@@ -450,6 +463,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      verbosity: VerbosityLevel.Medium,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -468,6 +482,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      verbosity: VerbosityLevel.Medium,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -486,6 +501,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      verbosity: VerbosityLevel.Medium,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -502,6 +518,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      verbosity: VerbosityLevel.Medium,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
