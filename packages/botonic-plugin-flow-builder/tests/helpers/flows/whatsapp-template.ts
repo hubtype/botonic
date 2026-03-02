@@ -67,40 +67,44 @@ export const whatsappTemplateFlow = {
       ai_translated_locales: [],
       type: 'whatsapp-template',
       content: {
-        template: {
-          id: 'template-text-header-id',
-          name: 'order_confirmation',
-          language: 'en',
-          status: 'APPROVED',
-          category: 'MARKETING',
-          components: [
-            {
-              type: WhatsAppTemplateComponentType.HEADER,
-              format: WhatsAppTemplateParameterType.TEXT,
-              text: 'Order {{1}}',
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-text-header-id',
+              name: 'order_confirmation',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'MARKETING',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.HEADER,
+                  format: WhatsAppTemplateParameterType.TEXT,
+                  text: 'Order {{1}}',
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Hello {{customer_name}}, your order #{{order_id}} has been confirmed.',
+                },
+                {
+                  type: WhatsAppTemplateComponentType.FOOTER,
+                  text: 'Thank you for your purchase!',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-            {
-              type: WhatsAppTemplateComponentType.BODY,
-              text: 'Hello {{customer_name}}, your order #{{order_id}} has been confirmed.',
+            header_variables: {
+              type: WhatsAppTemplateParameterType.TEXT,
+              text: { '1': '{orderNumber}' },
             },
-            {
-              type: WhatsAppTemplateComponentType.FOOTER,
-              text: 'Thank you for your purchase!',
+            variable_values: {
+              customer_name: '{session.user.extra_data.customerName}',
+              order_id: 'ORD-12345',
             },
-          ],
-          namespace: 'test-namespace',
-          parameter_format: 'NAMED',
-        },
-        header_variables: {
-          type: WhatsAppTemplateParameterType.TEXT,
-          text: { '1': '{orderNumber}' },
-        },
-        variable_values: {
-          customer_name: '{session.user.extra_data.customerName}',
-          order_id: 'ORD-12345',
+            url_variable_values: {},
+          },
         },
         buttons: [],
-        url_variable_values: {},
       },
     },
     // Keyword to trigger WhatsApp template with image header
@@ -139,45 +143,89 @@ export const whatsappTemplateFlow = {
       ai_translated_locales: [],
       type: 'whatsapp-template',
       content: {
-        template: {
-          id: 'template-image-header-id',
-          name: 'promotional_offer',
-          language: 'en',
-          status: 'APPROVED',
-          category: 'MARKETING',
-          components: [
-            {
-              type: WhatsAppTemplateComponentType.HEADER,
-              format: WhatsAppTemplateParameterType.IMAGE,
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-image-header-id',
+              name: 'promotional_offer',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'MARKETING',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.HEADER,
+                  format: WhatsAppTemplateParameterType.IMAGE,
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Check out our special offer: {{discount}}% off!',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-            {
-              type: WhatsAppTemplateComponentType.BODY,
-              text: 'Check out our special offer: {{discount}}% off!',
+            header_variables: {
+              type: WhatsAppTemplateParameterType.IMAGE,
+              media: [
+                {
+                  id: 'media-en-id',
+                  file: 'https://example.com/promo-en.jpg',
+                  locale: 'en',
+                },
+                {
+                  id: 'media-es-id',
+                  file: 'https://example.com/promo-es.jpg',
+                  locale: 'es',
+                },
+              ],
             },
-          ],
-          namespace: 'test-namespace',
-          parameter_format: 'NAMED',
-        },
-        header_variables: {
-          type: WhatsAppTemplateParameterType.IMAGE,
-          media: [
-            {
-              id: 'media-en-id',
-              file: 'https://example.com/promo-en.jpg',
-              locale: 'en',
+            variable_values: {
+              discount: '25',
             },
-            {
-              id: 'media-es-id',
-              file: 'https://example.com/promo-es.jpg',
-              locale: 'es',
+            url_variable_values: {},
+          },
+          es: {
+            template: {
+              id: 'template-image-header-id',
+              name: 'promotional_offer',
+              language: 'es',
+              status: 'APPROVED',
+              category: 'MARKETING',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.HEADER,
+                  format: WhatsAppTemplateParameterType.IMAGE,
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Mira nuestra oferta especial: {{discount}}% de descuento!',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-          ],
-        },
-        variable_values: {
-          discount: '25',
+            header_variables: {
+              type: WhatsAppTemplateParameterType.IMAGE,
+              media: [
+                {
+                  id: 'media-en-id',
+                  file: 'https://example.com/promo-en.jpg',
+                  locale: 'en',
+                },
+                {
+                  id: 'media-es-id',
+                  file: 'https://example.com/promo-es.jpg',
+                  locale: 'es',
+                },
+              ],
+            },
+            variable_values: {
+              discount: '25',
+            },
+            url_variable_values: {},
+          },
         },
         buttons: [],
-        url_variable_values: {},
       },
     },
     // Keyword to trigger WhatsApp template with video header
@@ -216,45 +264,89 @@ export const whatsappTemplateFlow = {
       ai_translated_locales: [],
       type: 'whatsapp-template',
       content: {
-        template: {
-          id: 'template-video-header-id',
-          name: 'video_promo',
-          language: 'en',
-          status: 'APPROVED',
-          category: 'MARKETING',
-          components: [
-            {
-              type: WhatsAppTemplateComponentType.HEADER,
-              format: WhatsAppTemplateParameterType.VIDEO,
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-video-header-id',
+              name: 'video_promo',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'MARKETING',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.HEADER,
+                  format: WhatsAppTemplateParameterType.VIDEO,
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Watch our latest video: {{title}}',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-            {
-              type: WhatsAppTemplateComponentType.BODY,
-              text: 'Watch our latest video: {{title}}',
+            header_variables: {
+              type: WhatsAppTemplateParameterType.VIDEO,
+              media: [
+                {
+                  id: 'video-en-id',
+                  file: 'https://example.com/video-en.mp4',
+                  locale: 'en',
+                },
+                {
+                  id: 'video-es-id',
+                  file: 'https://example.com/video-es.mp4',
+                  locale: 'es',
+                },
+              ],
             },
-          ],
-          namespace: 'test-namespace',
-          parameter_format: 'NAMED',
-        },
-        header_variables: {
-          type: WhatsAppTemplateParameterType.VIDEO,
-          media: [
-            {
-              id: 'video-en-id',
-              file: 'https://example.com/video-en.mp4',
-              locale: 'en',
+            variable_values: {
+              title: 'New Product Launch',
             },
-            {
-              id: 'video-es-id',
-              file: 'https://example.com/video-es.mp4',
-              locale: 'es',
+            url_variable_values: {},
+          },
+          es: {
+            template: {
+              id: 'template-video-header-id',
+              name: 'video_promo',
+              language: 'es',
+              status: 'APPROVED',
+              category: 'MARKETING',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.HEADER,
+                  format: WhatsAppTemplateParameterType.VIDEO,
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Mira nuestro último video: {{title}}',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-          ],
-        },
-        variable_values: {
-          title: 'New Product Launch',
+            header_variables: {
+              type: WhatsAppTemplateParameterType.VIDEO,
+              media: [
+                {
+                  id: 'video-en-id',
+                  file: 'https://example.com/video-en.mp4',
+                  locale: 'en',
+                },
+                {
+                  id: 'video-es-id',
+                  file: 'https://example.com/video-es.mp4',
+                  locale: 'es',
+                },
+              ],
+            },
+            variable_values: {
+              title: 'Lanzamiento de nuevo producto',
+            },
+            url_variable_values: {},
+          },
         },
         buttons: [],
-        url_variable_values: {},
       },
     },
     // Keyword to trigger WhatsApp template with buttons
@@ -293,46 +385,52 @@ export const whatsappTemplateFlow = {
       ai_translated_locales: [],
       type: 'whatsapp-template',
       content: {
-        template: {
-          id: 'template-buttons-id',
-          name: 'support_options',
-          language: 'en',
-          status: 'APPROVED',
-          category: 'UTILITY',
-          components: [
-            {
-              type: WhatsAppTemplateComponentType.BODY,
-              text: 'How can we help you today?',
-            },
-            {
-              type: WhatsAppTemplateComponentType.BUTTONS,
-              buttons: [
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-buttons-id',
+              name: 'support_options',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'UTILITY',
+              components: [
                 {
-                  type: WhatsAppTemplateButtonSubType.URL,
-                  text: 'Visit Website',
-                  url: 'https://example.com/support/{{1}}',
-                  index: 0,
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'How can we help you today?',
                 },
                 {
-                  type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
-                  text: 'Talk to Agent',
-                  id: 'quick-reply-agent',
-                  index: 1,
-                },
-                {
-                  type: WhatsAppTemplateButtonSubType.PHONE_NUMBER,
-                  text: 'Call Support',
-                  phone_number: '+1234567890',
-                  index: 2,
+                  type: WhatsAppTemplateComponentType.BUTTONS,
+                  buttons: [
+                    {
+                      type: WhatsAppTemplateButtonSubType.URL,
+                      text: 'Visit Website',
+                      url: 'https://example.com/support/{{1}}',
+                      index: 0,
+                    },
+                    {
+                      type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
+                      text: 'Talk to Agent',
+                      id: 'quick-reply-agent',
+                      index: 1,
+                    },
+                    {
+                      type: WhatsAppTemplateButtonSubType.PHONE_NUMBER,
+                      text: 'Call Support',
+                      phone_number: '+1234567890',
+                      index: 2,
+                    },
+                  ],
                 },
               ],
+              namespace: 'test-namespace',
+              parameter_format: 'POSITIONAL',
             },
-          ],
-          namespace: 'test-namespace',
-          parameter_format: 'POSITIONAL',
+            variable_values: {},
+            url_variable_values: {
+              '0': '{ticketId}',
+            },
+          },
         },
-        header_variables: undefined,
-        variable_values: {},
         buttons: [
           {
             id: 'url-button-id',
@@ -359,9 +457,6 @@ export const whatsappTemplateFlow = {
             hidden: [],
           },
         ],
-        url_variable_values: {
-          '0': '{ticketId}',
-        },
       },
     },
     // Follow-up text node
@@ -434,28 +529,31 @@ export const whatsappTemplateFlow = {
       ai_translated_locales: [],
       type: 'whatsapp-template',
       content: {
-        template: {
-          id: 'template-no-header-id',
-          name: 'simple_notification',
-          language: 'en',
-          status: 'APPROVED',
-          category: 'UTILITY',
-          components: [
-            {
-              type: WhatsAppTemplateComponentType.BODY,
-              text: 'Your appointment is scheduled for {{date}} at {{time}}.',
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-no-header-id',
+              name: 'simple_notification',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'UTILITY',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Your appointment is scheduled for {{date}} at {{time}}.',
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'NAMED',
             },
-          ],
-          namespace: 'test-namespace',
-          parameter_format: 'NAMED',
-        },
-        header_variables: undefined,
-        variable_values: {
-          date: '2024-01-15',
-          time: '10:00 AM',
+            variable_values: {
+              date: '2024-01-15',
+              time: '10:00 AM',
+            },
+            url_variable_values: {},
+          },
         },
         buttons: [],
-        url_variable_values: {},
       },
     },
     // Fallback node

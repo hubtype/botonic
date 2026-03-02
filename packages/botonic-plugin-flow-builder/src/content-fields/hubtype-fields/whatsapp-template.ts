@@ -69,18 +69,22 @@ export interface HtWhatsAppTemplate {
   namespace: string
   parameter_format: string
 }
+
+export interface HtWhatsappTemplateContentByLocale {
+  template: HtWhatsAppTemplate
+  header_variables?: {
+    type: WhatsAppTemplateParameterType
+    text?: Record<string, string>
+    media?: HtMediaFileLocale[]
+  }
+  variable_values: Record<string, string>
+  url_variable_values?: Record<string, string>
+}
+
 export interface HtWhatsappTemplateNode extends HtBaseNode {
   type: HtNodeWithContentType.WHATSAPP_TEMPLATE
   content: {
-    template: HtWhatsAppTemplate
-    header_variables?: {
-      type: WhatsAppTemplateParameterType
-      text?: Record<string, string>
-      media?: HtMediaFileLocale[]
-    }
-    variable_values: Record<string, string>
-
+    by_locale: Record<string, HtWhatsappTemplateContentByLocale>
     buttons: HtButton[]
-    url_variable_values?: Record<string, string>
   }
 }
