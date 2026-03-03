@@ -20,7 +20,7 @@
     "@botonic/plugin-knowledge-bases": "^0.44.0",
     "@botonic/react": "^0.44.0",
     "@reduxjs/toolkit": "1.9.7",
-    "axios": "^1.12.2",
+    "axios": "^1.13.6",
     "dotenv": "^17.2.0",
     "he": "^1.2.0",
     "react": "^18.3.1",
