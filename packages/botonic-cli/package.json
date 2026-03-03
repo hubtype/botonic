@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.45.0-alpha.1",
+  "version": "0.45.0",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run.js"
@@ -22,7 +22,7 @@
     "@inquirer/prompts": "^7.8.6",
     "@oclif/core": "^4.5.4",
     "@oclif/plugin-help": "^6.2.33",
-    "axios": "^1.13.2",
+    "axios": "^1.13.6",
     "fs-extra": "^11.3.2",
     "ora": "^9.0.0",
     "picocolors": "^1.1.1",

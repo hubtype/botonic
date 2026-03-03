@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.45.0-alpha.1",
+  "version": "0.45.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
@@ -14,9 +14,9 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.45.0-alpha.1",
+    "@botonic/core": "^0.45.0",
     "@openai/agents": "^0.3.9",
-    "axios": "^1.13.2",
+    "axios": "^1.13.6",
     "openai": "^6.0.0",
     "uuid": "^10.0.0",
     "zod": "3.25.76"
