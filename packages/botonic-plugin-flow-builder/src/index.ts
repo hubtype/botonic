@@ -38,7 +38,7 @@ import {
 } from './types'
 import { getNextPayloadByUserInput } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
-import { inputHasTextData, resolveGetAccessToken } from './utils'
+import { inputHasTextOrTranscript, resolveGetAccessToken } from './utils'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 
@@ -109,7 +109,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     })
 
     const checkUserTextInput =
-      inputHasTextData(request.input) && !request.input.payload
+      inputHasTextOrTranscript(request.input) && !request.input.payload
 
     if (checkUserTextInput) {
       const resolvedLocale = this.cmsApi.getResolvedLocale()

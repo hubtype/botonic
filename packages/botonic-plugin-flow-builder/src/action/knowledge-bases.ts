@@ -17,7 +17,7 @@ import {
   trackEvent,
 } from '../tracking'
 import type { KnowledgeBaseFunction } from '../types'
-import { inputHasTextData, isKnowledgeBasesAllowed } from '../utils'
+import { inputHasTextOrTranscript, isKnowledgeBasesAllowed } from '../utils'
 import type { FlowBuilderContext } from './index'
 
 export async function getContentsByKnowledgeBase({
@@ -49,7 +49,7 @@ export async function getContentsByKnowledgeBase({
 
     if (
       flowBuilderPlugin.getKnowledgeBaseResponse &&
-      inputHasTextData(request.input) &&
+      inputHasTextOrTranscript(request.input) &&
       sourceIds.length > 0
     ) {
       const contentsWithKnowledgeResponse =

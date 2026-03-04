@@ -24,8 +24,23 @@ export function resolveGetAccessToken(
   }
 }
 
-export function inputHasTextData(input: Input): boolean {
-  return input.data !== undefined && input.type === INPUT.TEXT
+export function inputHasTextOrTranscript(input: Input): boolean {
+  const isTextInput = input.data !== undefined && input.type === INPUT.TEXT
+  const isTranscriptText = input.transcript !== undefined && input.type === INPUT.AUDIO
+
+  return isTextInput || isTranscriptText
+}
+
+export function getTextOrTranscript(input: Input): string | undefined {
+  if (input.type === INPUT.TEXT && input.data) {
+    return input.data
+  }
+  if (input.type === INPUT.AUDIO && input.transcript) {
+    return input.transcript
+  }
+
+  console.error('No text or transcript found in input', input)
+  return undefined
 }
 
 function isNluAllowed(

@@ -16,6 +16,7 @@ interface KeywordProps {
   cmsApi: FlowBuilderApi
   locale: string
   request: ActionRequest
+  userTextOrTranscript: string
 }
 export class KeywordMatcher {
   public cmsApi: FlowBuilderApi
@@ -25,17 +26,19 @@ export class KeywordMatcher {
   public matchedKeyword?: string
   public keywordNodeId?: string
   public flowId?: string
+  public userTextOrTranscript: string
 
-  constructor({ cmsApi, locale, request }: KeywordProps) {
+  constructor({ cmsApi, locale, request, userTextOrTranscript }: KeywordProps) {
     this.cmsApi = cmsApi
     this.locale = locale
     this.request = request
     this.isRegExp = false
+    this.userTextOrTranscript = userTextOrTranscript
   }
 
-  async getNodeByInput(userInput: string): Promise<HtKeywordNode | undefined> {
+  async getNodeByInput(): Promise<HtKeywordNode | undefined> {
     const keywordNodes = this.cmsApi.getKeywordNodes()
-    const keywordNode = this.getNodeByKeyword(userInput, keywordNodes)
+    const keywordNode = this.getNodeByKeyword(this.userTextOrTranscript, keywordNodes)
     if (!keywordNode || !this.matchedKeyword) {
       return undefined
     }
@@ -120,7 +123,7 @@ export class KeywordMatcher {
       nluKeywordName: this.matchedKeyword as string,
       nluKeywordIsRegex: this.isRegExp,
       nluKeywordMessageId: this.request.input.message_id,
-      userInput: this.request.input.data as string,
+      userInput: this.userTextOrTranscript,
     }
     const { action, ...eventArgs } = event
     await trackEvent(this.request, action, eventArgs)
