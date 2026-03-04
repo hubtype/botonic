@@ -2,6 +2,7 @@ import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
 import { FlowText } from '../src/content-fields/flow-text'
+import { getTextOrTranscript, inputHasTextOrTranscript } from '../src/utils'
 import { createRequest, getActionRequest } from './helpers/utils'
 
 /**
@@ -377,5 +378,84 @@ describe('getValueFromKeyPath', () => {
 
       expect(result).toBe('John Doe')
     })
+  })
+})
+
+describe('inputHasTextOrTranscript', () => {
+  test('returns true when input is TEXT with data', () => {
+    expect(
+      inputHasTextOrTranscript({ data: 'hello', type: INPUT.TEXT } as any)
+    ).toBe(true)
+  })
+
+  test('returns false when input is TEXT without data', () => {
+    expect(inputHasTextOrTranscript({ type: INPUT.TEXT } as any)).toBe(false)
+  })
+
+  test('returns true when input is AUDIO with transcript', () => {
+    expect(
+      inputHasTextOrTranscript({
+        data: 'https://www.fake.com/audio.mp3',
+        type: INPUT.AUDIO,
+        transcript: 'hello via voice',
+      } as any)
+    ).toBe(true)
+  })
+
+  test('returns false when input is AUDIO without transcript', () => {
+    expect(inputHasTextOrTranscript({ 
+      data: 'https://www.fake.com/audio.mp3',
+      type: INPUT.AUDIO,
+    } as any)).toBe(false)
+  })
+
+  test('returns false for non-text non-audio input types', () => {
+    expect(
+      inputHasTextOrTranscript({ type: INPUT.IMAGE, data: 'url' } as any)
+    ).toBe(false)
+  })
+
+  test('returns false when input is AUDIO with empty transcript', () => {
+    expect(
+      inputHasTextOrTranscript({
+        data: 'https://www.fake.com/audio.mp3',
+        type: INPUT.AUDIO,
+        transcript: '',
+      } as any)
+    ).toBe(false)
+  })
+})
+
+describe('getTextOrTranscript', () => {
+  test('returns data when input is TEXT with data', () => {
+    expect(
+      getTextOrTranscript({ data: 'hello text', type: INPUT.TEXT } as any)
+    ).toBe('hello text')
+  })
+
+  test('returns undefined when input is TEXT without data', () => {
+    expect(getTextOrTranscript({ type: INPUT.TEXT } as any)).toBeUndefined()
+  })
+
+  test('returns transcript when input is AUDIO with transcript', () => {
+    expect(
+      getTextOrTranscript({
+        data: 'https://www.fake.com/audio.mp3',
+        type: INPUT.AUDIO,
+        transcript: 'voice transcript',
+      } as any)
+    ).toBe('voice transcript')
+  })
+
+  test('returns undefined when input is AUDIO without transcript', () => {
+    expect(getTextOrTranscript({   
+      data: 'https://www.fake.com/audio.mp3',
+      type: INPUT.AUDIO } as any)).toBeUndefined()
+  })
+
+  test('returns undefined for non-text non-audio input', () => {
+    expect(
+      getTextOrTranscript({ type: INPUT.IMAGE, data: 'url' } as any)
+    ).toBeUndefined()
   })
 })

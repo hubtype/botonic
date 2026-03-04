@@ -25,8 +25,9 @@ export function resolveGetAccessToken(
 }
 
 export function inputHasTextOrTranscript(input: Input): boolean {
-  const isTextInput = input.data !== undefined && input.type === INPUT.TEXT
-  const isTranscriptText = input.transcript !== undefined && input.type === INPUT.AUDIO
+  const isTextInput = Boolean(input.data) && input.type === INPUT.TEXT
+  const isTranscriptText =
+    Boolean(input.transcript) && input.type === INPUT.AUDIO
 
   return isTextInput || isTranscriptText
 }

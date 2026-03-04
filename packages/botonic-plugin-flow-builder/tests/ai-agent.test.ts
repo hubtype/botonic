@@ -126,6 +126,97 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
     })
   })
 
+  test('When AUDIO input transcript matches a keyword, the ai agent does not respond', async () => {
+    const mockResponse: Partial<InferenceResponse> = {
+      messages: [
+        {
+          type: 'text',
+          content: {
+            text: 'Ai agent response',
+          },
+        },
+      ],
+    }
+
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: mockAiAgentResponse(mockResponse),
+      },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          transcript: 'Hello',
+          type: INPUT.AUDIO,
+        },
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('keywords trigger')
+    expect(request.input.nluResolution?.type).toEqual('keyword')
+    expect(request.input.nluResolution?.matchedValue).toEqual('Hello')
+  })
+
+  test('When AUDIO input transcript does not match a keyword, the ai agent responds with the transcript content', async () => {
+    const mockResponse: Partial<InferenceResponse> = {
+      messages: [
+        {
+          type: 'text',
+          content: {
+            text: 'Here is the weather forecast for your location.',
+          },
+        },
+      ],
+    }
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: mockAiAgentResponse(mockResponse),
+      },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          transcript: 'What is the weather like today?',
+          type: INPUT.AUDIO,
+        },
+      },
+    })
+
+    const aiAgentContentResponses = (contents[0] as FlowAiAgent).responses
+    expect(aiAgentContentResponses[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'Here is the weather forecast for your location.',
+      },
+    })
+  })
+
+  test('When AUDIO input has no transcript, ai agent is not triggered and fallback is shown', async () => {
+    const mockResponse: Partial<InferenceResponse> = {
+      messages: [
+        {
+          type: 'text',
+          content: { text: 'Ai agent response' },
+        },
+      ],
+    }
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: mockAiAgentResponse(mockResponse),
+      },
+      requestArgs: {
+        input: {
+          type: INPUT.AUDIO,
+        },
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('Fallback')
+  })
+
   test('When input not match a keyword or smart intent, the ai agent respond with two messages, a text followed by a carousel', async () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
