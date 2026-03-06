@@ -2,7 +2,12 @@
  * Temporal utility for testing system debug trace messages.
  * Can be removed once testing is done.
  *
- * Usage in dev: window.addSystemMessage() or window.addSystemMessage(customMessage)
+ * Three ai_agent variants:
+ * 1. getDefaultSystemMessage()  – only retrieve_knowledge (Query + Knowledge gathered + Executed tools)
+ * 2. getDefault2SystemMessage() – only other tools (e.g. get_current_weather: Tool arguments JSON + Tool results)
+ * 3. getDefault3SystemMessage() – retrieve_knowledge + other tools (both layouts)
+ *
+ * Usage in dev: window.addSystemMessage(getDefaultSystemMessage()) etc.
  */
 import { EventAction, INPUT } from '@botonic/core'
 
@@ -25,8 +30,26 @@ const TOOLS_EXECUTED = [
   },
 ]
 
-/** ai_agent system_debug_trace data: Barcelona weather + retrieve_knowledge (tools_recommender). */
-const ANOTHER_AI_AGENT_DATA = {
+/** (2) Only other tools: e.g. get_current_weather (no retrieve_knowledge). */
+const ONLY_OTHER_TOOLS_DATA = {
+  action: EventAction.AiAgent,
+  flow_node_content_id: 'only other tools',
+  tools_executed: [
+    {
+      tool_name: 'get_current_weather',
+      tool_arguments: { cityName: 'Barcelona' },
+      tool_results:
+        '{"location":{"name":"Barcelona","region":"Catalonia","country":"Spain","lat":41.3833,"lon":2.1833,"tz_id":"Europe/Madrid","localtime_epoch":1772799878,"localtime":"2026-03-06 13:24"},"current":{"temp_c":15.4,"temp_f":59.7,"condition":{"text":"Mist","icon":"//cdn.weatherapi.com/weather/64x64/day/143.png","code":1030},...}',
+    },
+  ],
+  input_guardrails_triggered: [],
+  output_guardrails_triggered: [],
+  exit: false,
+  error: false,
+}
+
+/** (3) retrieve_knowledge + other tools (tools_recommender). */
+const RETRIEVE_AND_OTHER_TOOLS_DATA = {
   action: 'ai_agent',
   format_version: 5,
   user_locale: 'en-GB',
@@ -36,7 +59,7 @@ const ANOTHER_AI_AGENT_DATA = {
   flow_id: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
   flow_name: 'AI Agents',
   flow_node_id: '019cc2bc-1092-7649-a37e-af51f152266f',
-  flow_node_content_id: 'tools_recommender',
+  flow_node_content_id: 'knowledge + other tools',
   flow_node_is_meaningful: true,
   memory_length: 3,
   input_message_id: '019cc31b-a86e-7121-9886-2842f0f9ed2c',
@@ -74,15 +97,15 @@ const ANOTHER_AI_AGENT_DATA = {
 }
 
 /**
- * Default ai_agent system message for testing the system debug trace UI.
- * Structure matches AiAgentDebugEvent (tools_executed with retrieve_knowledge example).
+ * (1) Only retrieve_knowledge – Query, Knowledge gathered, Executed tools (no tool results).
+ * Use in dev: window.addSystemMessage(getDefaultSystemMessage())
  */
 export function getDefaultSystemMessage() {
   return {
     type: INPUT.SYSTEM_DEBUG_TRACE,
     data: {
       action: EventAction.AiAgent,
-      flow_node_content_id: 'ai-agent-node',
+      flow_node_content_id: 'only retrieve_knowledge',
       tools_executed: TOOLS_EXECUTED,
       input_guardrails_triggered: [],
       output_guardrails_triggered: [],
@@ -93,12 +116,23 @@ export function getDefaultSystemMessage() {
 }
 
 /**
- * Second ai_agent system message: Barcelona weather + retrieve_knowledge (tools_recommender).
+ * (2) Only other tools (e.g. get_current_weather) – Tool arguments (JSON) + Tool results.
  * Use in dev: window.addSystemMessage(getDefault2SystemMessage())
  */
 export function getDefault2SystemMessage() {
   return {
     type: INPUT.SYSTEM_DEBUG_TRACE,
-    data: ANOTHER_AI_AGENT_DATA,
+    data: ONLY_OTHER_TOOLS_DATA,
+  }
+}
+
+/**
+ * (3) retrieve_knowledge + other tools – Query, Knowledge gathered, Executed tools + other tools with JSON args/results.
+ * Use in dev: window.addSystemMessage(getDefault3SystemMessage())
+ */
+export function getDefault3SystemMessage() {
+  return {
+    type: INPUT.SYSTEM_DEBUG_TRACE,
+    data: RETRIEVE_AND_OTHER_TOOLS_DATA,
   }
 }

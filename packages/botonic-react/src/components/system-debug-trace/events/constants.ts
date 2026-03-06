@@ -4,7 +4,7 @@ export const LABELS = {
   FAITHFUL_ANSWER: 'Faithful answer',
   QUERY: 'Query',
   SOURCES: 'Sources',
-  KNOWLEDGE_GATHERED: 'Knowledge gathered',
+  KNOWLEDGE_SOURCES: 'Knowledge sources',
   EXECUTED_TOOLS: 'Executed tools',
   TOOL_ARGUMENTS: 'Tool arguments',
   TOOL_RESULTS: 'Tool results',

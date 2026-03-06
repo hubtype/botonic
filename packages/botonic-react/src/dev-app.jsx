@@ -6,6 +6,7 @@ import { onDOMLoaded } from './util/dom'
 import {
   getDefault2SystemMessage,
   getDefaultSystemMessage,
+  getDefault3SystemMessage,
 } from './util/add-system-message-for-testing'
 import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
@@ -84,11 +85,11 @@ export class DevApp extends WebchatApp {
     if (typeof window !== 'undefined') {
       window.addSystemMessage = option => {
         if (option === 1) {
-          this.addSystemMessage(getDefault2SystemMessage())
-        } else if (option === 2) {
           this.addSystemMessage(getDefaultSystemMessage())
-        } else {
-          throw new Error('Invalid option')
+        } else if (option === 2) {
+          this.addSystemMessage(getDefault2SystemMessage())
+        } else if (option === 3) {
+          this.addSystemMessage(getDefault3SystemMessage())
         }
       }
     }

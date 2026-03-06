@@ -36,20 +36,19 @@ export interface AiAgentDebugEvent {
   messageId?: string
 }
 
-export const AiAgent = (props: AiAgentDebugEvent) => {
-  const { previewUtils } = useContext(WebchatContext)
+const RETRIEVE_KNOWLEDGE_TOOL = 'retrieve_knowledge'
 
-  // Collect all sources IDs, chunk IDs and query from all tools
-  const { allSourcesIds, allChunksIds, query } = useMemo(() => {
-    const allSourcesIds: string[] = []
-    const allChunksIds: string[] = []
-    let query: string | undefined
+function partitionTools(tools: ToolExecuted[]) {
+  const retrieveKnowledgeTools: ToolExecuted[] = []
+  const otherTools: ToolExecuted[] = []
+  const allSourcesIds: string[] = []
+  const allChunksIds: string[] = []
+  let query: string | undefined
 
-    props.tools_executed.forEach(tool => {
-      if (tool.tool_results && typeof tool.tool_results === 'string') {
-        query = tool.tool_results
-      } else if (
-        // TODO: if is retrieve_knowledge tool, directly put string query, ow, handle it
+  for (const tool of tools) {
+    if (tool.tool_name === RETRIEVE_KNOWLEDGE_TOOL) {
+      retrieveKnowledgeTools.push(tool)
+      if (
         tool.tool_arguments?.query &&
         typeof tool.tool_arguments.query === 'string'
       ) {
@@ -61,10 +60,33 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       if (tool.knowledgebase_chunks_ids) {
         allChunksIds.push(...tool.knowledgebase_chunks_ids)
       }
-    })
+    } else {
+      otherTools.push(tool)
+    }
+  }
 
-    return { allSourcesIds, allChunksIds, query }
-  }, [props.tools_executed])
+  return {
+    retrieveKnowledgeTools,
+    otherTools,
+    allSourcesIds,
+    allChunksIds,
+    query,
+  }
+}
+
+export const AiAgent = (props: AiAgentDebugEvent) => {
+  const { previewUtils } = useContext(WebchatContext)
+
+  const {
+    retrieveKnowledgeTools,
+    otherTools,
+    allSourcesIds,
+    allChunksIds,
+    query,
+  } = useMemo(
+    () => partitionTools(props.tools_executed),
+    [props.tools_executed]
+  )
 
   const {
     sources: allSources,
@@ -97,13 +119,13 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
         chunks={allChunks}
         getIconForSourceType={getIconForSourceType}
         onSeeChunks={handleSeeChunks}
-        label={LABELS.KNOWLEDGE_GATHERED}
+        label={LABELS.KNOWLEDGE_SOURCES}
       />
 
-      {props.tools_executed.length > 0 && (
+      {otherTools.length > 0 && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.EXECUTED_TOOLS}</StyledDebugLabel>
-          {props.tools_executed.map((tool, index) => (
+          {otherTools.map((tool, index) => (
             <StyledDebugItemWithIcon key={`${tool.tool_name}-${index}`}>
               <ScrewdriverWrenchSvg />
               {tool.tool_name}
@@ -112,10 +134,22 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
         </StyledDebugDetail>
       )}
 
-      {props.tools_executed.length > 0 && (
+      {otherTools.length > 0 &&
+        otherTools.map((tool, index) => (
+          <StyledDebugDetail key={`${tool.tool_name}-${index}`}>
+            <StyledDebugLabel>
+              {tool.tool_name} – {LABELS.TOOL_ARGUMENTS}
+            </StyledDebugLabel>
+            <StyledDebugValue>
+              {JSON.stringify(tool.tool_arguments ?? {}, null, 2)}
+            </StyledDebugValue>
+          </StyledDebugDetail>
+        ))}
+
+      {otherTools.length > 0 && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.TOOL_RESULTS}</StyledDebugLabel>
-          {props.tools_executed.map((tool, index) => (
+          {otherTools.map((tool, index) => (
             <StyledDebugValue key={`${tool.tool_name}-${index}`}>
               {tool.tool_results}
             </StyledDebugValue>
