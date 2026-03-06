@@ -72,38 +72,38 @@ describe('Check the contents returned by the plugin using keywords', () => {
     { keyword: 'reset', transcript: 'reset' },
     { keyword: 'hola', transcript: 'hola que tal?' },
     { keyword: 'HOLA', transcript: 'HOLA' },
-  ])(
-    'The initial content is displayed when the user sends an AUDIO message with transcript matching the %s keyword',
-    async ({ transcript, keyword }) => {
-      const { contents, request, flowBuilderPluginPost } =
-        await createFlowBuilderPluginAndGetContents({
-          flowBuilderOptions: { flow: basicFlow },
-          requestArgs: {
-            input: { 
-              data: 'https://www.fake.com/audio.mp3',
-              transcript,
-              type: INPUT.AUDIO,
-            },
+  ])('The initial content is displayed when the user sends an AUDIO message with transcript matching the %s keyword', async ({
+    transcript,
+    keyword,
+  }) => {
+    const { contents, request, flowBuilderPluginPost } =
+      await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: {
+            data: 'https://www.fake.com/audio.mp3',
+            transcript,
+            type: INPUT.AUDIO,
           },
-        })
-
-      expect((contents[0] as FlowText).text).toBe('Welcome message')
-      expect(request.input.nluResolution?.type).toEqual('keyword')
-      expect(request.input.nluResolution?.matchedValue).toEqual(keyword)
-
-      flowBuilderPluginPost({
-        ...request,
-        response: (contents[0] as FlowText).text,
+        },
       })
-      expect(request.input.nluResolution).toEqual(undefined)
-    }
-  )
+
+    expect((contents[0] as FlowText).text).toBe('Welcome message')
+    expect(request.input.nluResolution?.type).toEqual('keyword')
+    expect(request.input.nluResolution?.matchedValue).toEqual(keyword)
+
+    flowBuilderPluginPost({
+      ...request,
+      response: (contents[0] as FlowText).text,
+    })
+    expect(request.input.nluResolution).toEqual(undefined)
+  })
 
   test('Keywords are not matched when AUDIO input has no transcript', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: basicFlow },
       requestArgs: {
-        input: { 
+        input: {
           data: 'https://www.fake.com/audio.mp3',
           type: INPUT.AUDIO,
         },

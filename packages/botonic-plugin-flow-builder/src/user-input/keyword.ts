@@ -38,7 +38,10 @@ export class KeywordMatcher {
 
   async getNodeByInput(): Promise<HtKeywordNode | undefined> {
     const keywordNodes = this.cmsApi.getKeywordNodes()
-    const keywordNode = this.getNodeByKeyword(this.userTextOrTranscript, keywordNodes)
+    const keywordNode = this.getNodeByKeyword(
+      this.userTextOrTranscript,
+      keywordNodes
+    )
     if (!keywordNode || !this.matchedKeyword) {
       return undefined
     }

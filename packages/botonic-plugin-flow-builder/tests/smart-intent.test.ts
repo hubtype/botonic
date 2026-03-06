@@ -114,7 +114,7 @@ describe('Check the contents returned when smart intent matches an AUDIO message
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: smartIntentsFlow },
       requestArgs: {
-        input: {   
+        input: {
           data: 'https://www.fake.com/audio.mp3',
           type: INPUT.AUDIO,
         },

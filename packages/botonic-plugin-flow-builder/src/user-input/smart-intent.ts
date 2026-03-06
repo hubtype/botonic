@@ -29,7 +29,6 @@ export class SmartIntentsApi {
     public currentRequest: ActionRequest,
     public smartIntentsConfig: SmartIntentsInferenceConfig,
     public userTextOrTranscript: string
-
   ) {}
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {

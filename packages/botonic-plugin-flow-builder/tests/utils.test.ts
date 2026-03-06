@@ -403,10 +403,12 @@ describe('inputHasTextOrTranscript', () => {
   })
 
   test('returns false when input is AUDIO without transcript', () => {
-    expect(inputHasTextOrTranscript({ 
-      data: 'https://www.fake.com/audio.mp3',
-      type: INPUT.AUDIO,
-    } as any)).toBe(false)
+    expect(
+      inputHasTextOrTranscript({
+        data: 'https://www.fake.com/audio.mp3',
+        type: INPUT.AUDIO,
+      } as any)
+    ).toBe(false)
   })
 
   test('returns false for non-text non-audio input types', () => {
@@ -448,9 +450,12 @@ describe('getTextOrTranscript', () => {
   })
 
   test('returns undefined when input is AUDIO without transcript', () => {
-    expect(getTextOrTranscript({   
-      data: 'https://www.fake.com/audio.mp3',
-      type: INPUT.AUDIO } as any)).toBeUndefined()
+    expect(
+      getTextOrTranscript({
+        data: 'https://www.fake.com/audio.mp3',
+        type: INPUT.AUDIO,
+      } as any)
+    ).toBeUndefined()
   })
 
   test('returns undefined for non-text non-audio input', () => {

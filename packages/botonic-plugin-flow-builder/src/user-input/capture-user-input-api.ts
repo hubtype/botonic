@@ -31,7 +31,11 @@ export class CaptureUserInputApi {
   private request: ActionRequest
   private textOrTranscript: string
 
-  constructor(cmsApi: FlowBuilderApi, request: ActionRequest, textOrTranscript: string) {
+  constructor(
+    cmsApi: FlowBuilderApi,
+    request: ActionRequest,
+    textOrTranscript: string
+  ) {
     this.cmsApi = cmsApi
     this.request = request
     this.textOrTranscript = textOrTranscript
@@ -76,7 +80,7 @@ export class CaptureUserInputApi {
   }
 
   async getAiCaptureResponse(
-    captureUserInputNode: HtCaptureUserInputNode,
+    captureUserInputNode: HtCaptureUserInputNode
   ): Promise<AiCaptureResponse> {
     try {
       const url = `${process.env.HUBTYPE_API_URL}/external/v1/capture_user_input/`
