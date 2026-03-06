@@ -49,6 +49,7 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       if (tool.tool_results && typeof tool.tool_results === 'string') {
         query = tool.tool_results
       } else if (
+        // TODO: if is retrieve_knowledge tool, directly put string query, ow, handle it
         tool.tool_arguments?.query &&
         typeof tool.tool_arguments.query === 'string'
       ) {
@@ -107,6 +108,17 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
               <ScrewdriverWrenchSvg />
               {tool.tool_name}
             </StyledDebugItemWithIcon>
+          ))}
+        </StyledDebugDetail>
+      )}
+
+      {props.tools_executed.length > 0 && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.TOOL_RESULTS}</StyledDebugLabel>
+          {props.tools_executed.map((tool, index) => (
+            <StyledDebugValue key={`${tool.tool_name}-${index}`}>
+              {tool.tool_results}
+            </StyledDebugValue>
           ))}
         </StyledDebugDetail>
       )}
