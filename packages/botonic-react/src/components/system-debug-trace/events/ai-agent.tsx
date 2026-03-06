@@ -18,6 +18,7 @@ import type { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 interface ToolExecuted {
   tool_name: string
   tool_arguments: Record<string, unknown>
+  tool_results?: string
   knowledgebase_sources_ids?: string[]
   knowledgebase_chunks_ids?: string[]
 }
@@ -45,7 +46,9 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
     let query: string | undefined
 
     props.tools_executed.forEach(tool => {
-      if (
+      if (tool.tool_results && typeof tool.tool_results === 'string') {
+        query = tool.tool_results
+      } else if (
         tool.tool_arguments?.query &&
         typeof tool.tool_arguments.query === 'string'
       ) {

@@ -49,10 +49,15 @@ describe('Ai agent event', () => {
         {
           tool_name: 'retrieve_knowledge',
           tool_arguments: { query: 'value1' },
+          tool_results: 'result1',
           knowledgebase_sources_ids: ['105c2045-1968-4e37-bb2c-b9a3647b1bda'],
           knowledgebase_chunks_ids: ['106c2045-1968-4e37-bb2c-b9a3647b1bda'],
         },
-        { tool_name: 'tool2', tool_arguments: { arg2: 'value2' } },
+        {
+          tool_name: 'tool2',
+          tool_arguments: { arg2: 'value2' },
+          tool_results: 'result2',
+        },
       ],
       memory_length: 4,
       input_guardrails_triggered: [],

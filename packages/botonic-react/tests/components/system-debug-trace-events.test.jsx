@@ -120,6 +120,7 @@ describe('System Debug Trace - Event Components', () => {
               destination: 'NYC',
               date: '2024-01-01',
             },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],
@@ -443,10 +444,12 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'tool_one',
             tool_arguments: { arg1: 'value1' },
+            tool_results: 'result1',
           },
           {
             tool_name: 'tool_two',
             tool_arguments: { arg2: 'value2' },
+            tool_results: 'result2',
           },
         ],
         input_guardrails_triggered: [],
@@ -485,6 +488,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'search_knowledge',
             tool_arguments: { query: 'test query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1', 'src-2'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
@@ -524,6 +528,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'search_tool',
             tool_arguments: { query: 'What is the return policy?' },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],
@@ -562,14 +567,17 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'tool_without_query',
             tool_arguments: { param: 'value' },
+            tool_results: 'result1',
           },
           {
             tool_name: 'tool_with_query',
             tool_arguments: { query: 'first query' },
+            tool_results: 'result1',
           },
           {
             tool_name: 'another_tool_with_query',
             tool_arguments: { query: 'second query' },
+            tool_results: 'result2',
           },
         ],
         input_guardrails_triggered: [],
@@ -729,6 +737,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'search_tool',
             tool_arguments: { query: 'test query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1', 'src-2'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
@@ -775,12 +784,14 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'tool_1',
             tool_arguments: { query: 'first query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
           {
             tool_name: 'tool_2',
             tool_arguments: {},
+            tool_results: 'result2',
             knowledgebase_sources_ids: ['src-2'],
             knowledgebase_chunks_ids: ['chunk-2', 'chunk-3'],
           },
@@ -822,6 +833,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'some_tool',
             tool_arguments: { param: 'value' },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],
