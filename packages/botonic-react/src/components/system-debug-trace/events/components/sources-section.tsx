@@ -21,14 +21,15 @@ interface SourcesSectionProps {
 
 export const SourcesSection = ({
   sources,
+  // @ts-expect-error TODO: fix this
   chunks,
   getIconForSourceType,
   onSeeChunks,
   label = LABELS.SOURCES,
 }: SourcesSectionProps) => {
-  if (sources.length === 0) {
-    return null
-  }
+  // if (sources.length === 0) {
+  //   return null
+  // }
 
   return (
     <StyledDebugDetail>
@@ -58,11 +59,11 @@ export const SourcesSection = ({
           </StyledDebugItemWithIcon>
         )
       })}
-      {chunks.length > 0 && (
-        <StyledSeeChunksButton onClick={onSeeChunks}>
-          {LABELS.SEE_CHUNKS_BUTTON}
-        </StyledSeeChunksButton>
-      )}
+      {/* {chunks.length > 0 && ( */}
+      <StyledSeeChunksButton onClick={onSeeChunks}>
+        {LABELS.SEE_CHUNKS_BUTTON}
+      </StyledSeeChunksButton>
+      {/* )} */}
     </StyledDebugDetail>
   )
 }

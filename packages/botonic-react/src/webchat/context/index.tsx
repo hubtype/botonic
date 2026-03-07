@@ -76,6 +76,9 @@ export const WebchatContext = createContext<WebchatContextProps>({
   },
   webchatState: {} as WebchatState,
   previewUtils: {
+    onClickOpenToolResults: () => {
+      return
+    },
     trackPreviewEventOpened: () => {
       return
     },

@@ -8,6 +8,7 @@ import type {
   Session as CoreSession,
   SessionUser as CoreSessionUser,
   ServerConfig,
+  ToolExecution,
 } from '@botonic/core'
 import type React from 'react'
 
@@ -26,6 +27,7 @@ import {
   WebchatTheme,
 } from './webchat/theme/types'
 import type { WebchatApp } from './webchat-app'
+import { ToolExecuted } from './components/system-debug-trace/events'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/
@@ -95,6 +97,7 @@ export interface PreviewUtils {
   onClickOpenChunks: (
     chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
   ) => void
+  onClickOpenToolResults: (toolExecution: ToolExecution) => void
   getMessageById: (messageId: string) => Promise<MinimalHubtypeMessage>
   trackPreviewEventOpened: (eventProperties: Record<string, unknown>) => void
 }

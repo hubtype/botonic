@@ -201,6 +201,30 @@ export const StyledSeeChunksButton = styled.button`
     background-color: ${COLORS.N100};
   }
 `
+
+export const StyledSeeToolResultsButton = styled.button`
+ border: 1px solid #c4c6d0;
+  border-radius: 6px;
+  padding: 8px;
+  height: 28px;
+  background-color: transparent;
+  color: #413f48;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  margin-left: 0;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+
+  &:hover {
+    background-color: ${COLORS.N100};
+  }
+  `
 interface StyledGuardrailItemProps {
   $isLastItem?: boolean
 }

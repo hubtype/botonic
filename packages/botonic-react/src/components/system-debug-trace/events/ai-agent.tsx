@@ -1,4 +1,4 @@
-import { EventAction } from '@botonic/core'
+import { EventAction, ToolExecution } from '@botonic/core'
 import { useContext, useMemo } from 'react'
 
 import { WebchatContext } from '../../../webchat/context'
@@ -9,13 +9,14 @@ import {
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledDebugValue,
+  StyledSeeToolResultsButton,
 } from '../styles'
 import type { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
 import type { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
 
-interface ToolExecuted {
+export interface ToolExecuted {
   tool_name: string
   tool_arguments: Record<string, unknown>
   tool_results?: string
@@ -105,6 +106,18 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       previewUtils.onClickOpenChunks(chunksWithSources)
     }
   }
+
+  const handleSeeToolResults = (tool: ToolExecuted) => {
+    const toolExecution: ToolExecution = {
+      toolName: tool.tool_name,
+      toolArguments: tool.tool_arguments ?? {},
+      toolResults: tool.tool_results ?? '',
+    }
+    console.log('CLICKED toolExecution', toolExecution)
+    if (previewUtils?.onClickOpenToolResults) {
+      previewUtils.onClickOpenToolResults(toolExecution)
+    }
+  }
   return (
     <>
       {query && (
@@ -129,30 +142,12 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
             <StyledDebugItemWithIcon key={`${tool.tool_name}-${index}`}>
               <ScrewdriverWrenchSvg />
               {tool.tool_name}
+              <StyledSeeToolResultsButton
+                onClick={() => handleSeeToolResults(tool)}
+              >
+                {LABELS.SEE_TOOL_DETAILS}
+              </StyledSeeToolResultsButton>
             </StyledDebugItemWithIcon>
-          ))}
-        </StyledDebugDetail>
-      )}
-
-      {otherTools.length > 0 &&
-        otherTools.map((tool, index) => (
-          <StyledDebugDetail key={`${tool.tool_name}-${index}`}>
-            <StyledDebugLabel>
-              {tool.tool_name} – {LABELS.TOOL_ARGUMENTS}
-            </StyledDebugLabel>
-            <StyledDebugValue>
-              {JSON.stringify(tool.tool_arguments ?? {}, null, 2)}
-            </StyledDebugValue>
-          </StyledDebugDetail>
-        ))}
-
-      {otherTools.length > 0 && (
-        <StyledDebugDetail>
-          <StyledDebugLabel>{LABELS.TOOL_RESULTS}</StyledDebugLabel>
-          {otherTools.map((tool, index) => (
-            <StyledDebugValue key={`${tool.tool_name}-${index}`}>
-              {tool.tool_results}
-            </StyledDebugValue>
           ))}
         </StyledDebugDetail>
       )}

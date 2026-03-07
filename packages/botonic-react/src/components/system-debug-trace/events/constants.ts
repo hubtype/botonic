@@ -18,6 +18,7 @@ export const LABELS = {
   NOTE: 'Note',
   KNOWLEDGE_BASE_FAIL_REASON: 'Knowledge Base Fail Reason',
   SEE_CHUNKS_BUTTON: 'See chunks',
+  SEE_TOOL_DETAILS: 'Details',
   STATUS: 'Status',
   YES: 'Yes',
   NO: 'No',
