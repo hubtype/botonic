@@ -203,7 +203,7 @@ export const StyledSeeChunksButton = styled.button`
 `
 
 export const StyledSeeToolResultsButton = styled.button`
- border: 1px solid #c4c6d0;
+  border: 1px solid #c4c6d0;
   border-radius: 6px;
   padding: 8px;
   height: 28px;
@@ -214,17 +214,16 @@ export const StyledSeeToolResultsButton = styled.button`
   font-weight: 500;
   line-height: 1.5;
   cursor: pointer;
-  margin-left: 0;
-  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: fit-content;
+  flex-shrink: 0;
 
   &:hover {
     background-color: ${COLORS.N100};
   }
-  `
+`
 interface StyledGuardrailItemProps {
   $isLastItem?: boolean
 }
