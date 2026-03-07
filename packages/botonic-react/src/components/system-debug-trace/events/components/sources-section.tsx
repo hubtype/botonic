@@ -5,11 +5,17 @@ import {
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledFileSourceValue,
-  StyledSeeChunksButton,
+  StyledSeeInfo,
   StyledUrlSourceValue,
 } from '../../styles'
 import { LABELS } from '../constants'
 import type { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
+import styled from 'styled-components'
+
+const StyledSeeChunksButton = styled(StyledSeeInfo)`
+  margin-left: 0;
+  margin-top: 4px;
+`
 
 interface SourcesSectionProps {
   sources: HubtypeSource[]

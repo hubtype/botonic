@@ -9,12 +9,17 @@ import {
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledDebugValue,
-  StyledSeeToolResultsButton,
+  StyledSeeInfo,
 } from '../styles'
 import type { DebugEventConfig } from '../types'
 import { GuardrailList, SourcesSection } from './components'
 import { LABELS } from './constants'
 import type { ChunkIdsGroupedBySourceData } from './knowledge-bases-types'
+import styled from 'styled-components'
+
+const StyledSeeToolDetailsButton = styled(StyledSeeInfo)`
+  flex-shrink: 0;
+`
 
 export interface ToolExecuted {
   tool_name: string
@@ -107,7 +112,7 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
     }
   }
 
-  const handleSeeToolResults = (tool: ToolExecuted) => {
+  const handleSeeToolDetails = (tool: ToolExecuted) => {
     const toolExecution: ToolExecution = {
       toolName: tool.tool_name,
       toolArguments: tool.tool_arguments ?? {},
@@ -142,11 +147,11 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
             <StyledDebugItemWithIcon key={`${tool.tool_name}-${index}`}>
               <ScrewdriverWrenchSvg />
               {tool.tool_name}
-              <StyledSeeToolResultsButton
-                onClick={() => handleSeeToolResults(tool)}
+              <StyledSeeToolDetailsButton
+                onClick={() => handleSeeToolDetails(tool)}
               >
                 {LABELS.SEE_TOOL_DETAILS}
-              </StyledSeeToolResultsButton>
+              </StyledSeeToolDetailsButton>
             </StyledDebugItemWithIcon>
           ))}
         </StyledDebugDetail>
