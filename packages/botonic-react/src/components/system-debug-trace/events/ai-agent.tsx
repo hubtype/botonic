@@ -19,6 +19,7 @@ import styled from 'styled-components'
 
 const StyledSeeToolDetailsButton = styled(StyledSeeInfo)`
   flex-shrink: 0;
+  border: none;
 `
 
 export interface ToolExecuted {
