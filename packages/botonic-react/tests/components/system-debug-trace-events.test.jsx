@@ -526,7 +526,7 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'search_tool',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'What is the return policy?' },
             tool_results: 'result1',
           },
@@ -565,17 +565,17 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'tool_without_query',
+            tool_name: 'other_tool',
             tool_arguments: { param: 'value' },
             tool_results: 'result1',
           },
           {
-            tool_name: 'tool_with_query',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'first query' },
             tool_results: 'result1',
           },
           {
-            tool_name: 'another_tool_with_query',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'second query' },
             tool_results: 'result2',
           },
@@ -603,7 +603,7 @@ describe('System Debug Trace - Event Components', () => {
         )
       })
 
-      // The implementation uses the last query found in tools_executed
+      // The implementation uses the last query found in retrieve_knowledge tools
       expect(container.textContent).toContain('"second query"')
       expect(container.textContent).not.toContain('"first query"')
     })
@@ -735,7 +735,7 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'search_tool',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'test query' },
             tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1', 'src-2'],
@@ -771,7 +771,7 @@ describe('System Debug Trace - Event Components', () => {
         )
       })
 
-      expect(container.textContent).toContain('Knowledge gathered')
+      expect(container.textContent).toContain('Knowledge sources')
       expect(container).toBeTruthy()
     })
 

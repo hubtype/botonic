@@ -13,6 +13,9 @@ export function getToolsForBotConfig(
   return customTools.map(tool => ({
     name: tool.name,
     description: tool.description,
-    schema: zodToJsonSchema(tool.schema, { $refStrategy: 'none' }),
+    // Cast to avoid TS "Type instantiation is excessively deep" with zodToJsonSchema + ZodSchema
+    schema: zodToJsonSchema(tool.schema as never, {
+      $refStrategy: 'none',
+    }) as ToolConfigJSON['schema'],
   }))
 }
