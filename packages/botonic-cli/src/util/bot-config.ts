@@ -23,7 +23,7 @@ type BotonicDependencies = Record<string, { version: string }>
 
 interface ToolConfigJSON {
   name: string
-  schema: any
+  schema?: any
   description: string
 }
 

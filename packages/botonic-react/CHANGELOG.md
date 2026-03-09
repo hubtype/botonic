@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.45.1] - 2026-mm-dd
+
+### Added
+
+- [PR-3180](https://github.com/hubtype/botonic/pull/3180): AI agent debug trace: tool results/arguments, retrieve_knowledge vs other tools, “See details” button, preview utils to be used by flow builder modal
+
 ## [0.44.1] - 2026-02-03
 
 ### Fixed

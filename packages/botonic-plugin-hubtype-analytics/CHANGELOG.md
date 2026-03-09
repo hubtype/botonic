@@ -21,6 +21,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.45.1] - 2026-mm-dd
+
+### Changed
+
+- [PR-3180](https://github.com/hubtype/botonic/pull/3180): AI agent event: tool results and tool arguments in event upload, truncation
+
 ## [0.45.0] - 2026-03-03
 
 ### Added
