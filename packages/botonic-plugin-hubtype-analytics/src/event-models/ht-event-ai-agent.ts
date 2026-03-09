@@ -41,8 +41,8 @@ export class HtEventAiAgent extends HtEvent {
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
     this.flow_node_is_meaningful = event.flowNodeIsMeaningful
-    this.tools_executed = event.toolsExecuted.map(te =>
-      this.getToolExecutionInfo(te)
+    this.tools_executed = event.toolsExecuted.map(tool =>
+      this.getToolExecutionInfo(tool)
     )
     this.memory_length = event.memoryLength
     this.input_message_id = event.inputMessageId

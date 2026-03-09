@@ -3,11 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
-import {
-  getDefault2SystemMessage,
-  getDefaultSystemMessage,
-  getDefault3SystemMessage,
-} from './util/add-system-message-for-testing'
 import { WebchatDev } from './webchat/webchat-dev'
 import { WebchatApp } from './webchat-app'
 
@@ -81,18 +76,6 @@ export class DevApp extends WebchatApp {
     this.onTrackEvent = onTrackEvent || this.onTrackEvent
     this.hostId = hostId || this.hostId
     this.createRootElement(host)
-    // Temporal: expose addSystemMessage for testing system debug trace (e.g. handoff_success)
-    if (typeof window !== 'undefined') {
-      window.addSystemMessage = option => {
-        if (option === 1) {
-          this.addSystemMessage(getDefaultSystemMessage())
-        } else if (option === 2) {
-          this.addSystemMessage(getDefault2SystemMessage())
-        } else if (option === 3) {
-          this.addSystemMessage(getDefault3SystemMessage())
-        }
-      }
-    }
     return (
       <WebchatDev
         {...webchatOptions}

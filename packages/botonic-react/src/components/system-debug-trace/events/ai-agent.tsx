@@ -119,7 +119,6 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       toolArguments: tool.tool_arguments ?? {},
       toolResults: tool.tool_results ?? '',
     }
-    console.log('CLICKED toolExecution', toolExecution)
     if (previewUtils?.onClickOpenToolResults) {
       previewUtils.onClickOpenToolResults(toolExecution)
     }
