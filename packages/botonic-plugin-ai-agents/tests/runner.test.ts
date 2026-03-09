@@ -11,6 +11,7 @@ const mockLogger: DebugLogger = {
   logRunResult: jest.fn(),
   logGuardrailTriggered: jest.fn(),
   logRunnerError: jest.fn(),
+  logToolExecution: jest.fn(),
 }
 
 // Captured runner config for assertions
@@ -19,6 +20,13 @@ const mockRunnerRunImpl: jest.Mock = jest.fn()
 
 jest.mock('@openai/agents', () => {
   class MockRunToolCallItem {
+    rawItem: any
+    constructor(rawItem: any) {
+      this.rawItem = rawItem
+    }
+  }
+
+  class MockRunToolCallOutputItem {
     rawItem: any
     constructor(rawItem: any) {
       this.rawItem = rawItem
@@ -43,6 +51,7 @@ jest.mock('@openai/agents', () => {
   return {
     Runner: MockRunner,
     RunToolCallItem: MockRunToolCallItem,
+    RunToolCallOutputItem: MockRunToolCallOutputItem,
     InputGuardrailTripwireTriggered: MockInputGuardrailTripwireTriggered,
   }
 })

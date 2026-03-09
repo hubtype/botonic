@@ -1,3 +1,4 @@
+// biome-ignore lint/correctness/noUnusedImports: we need to import Runner to mock it
 import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
 
 import { createInputGuardrail } from '../../src/guardrails/input'
