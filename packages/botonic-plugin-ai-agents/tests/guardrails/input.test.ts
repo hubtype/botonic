@@ -1,8 +1,8 @@
 import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
 
 import { createInputGuardrail } from '../../src/guardrails/input'
-import type { GuardrailRule } from '../../src/types'
 import type { LLMConfig } from '../../src/llm-config'
+import type { GuardrailRule } from '../../src/types'
 
 const mockRunnerRun = jest.fn()
 

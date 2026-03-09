@@ -48,10 +48,9 @@ const mockConstants = {
 jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
-import { type ContactInfo } from '@botonic/core'
-
-import type { LLMConfig } from '../src/llm-config'
+import type { ContactInfo } from '@botonic/core'
 import { AIAgentBuilder } from '../src/agent-builder'
+import type { LLMConfig } from '../src/llm-config'
 
 // Mock LLMConfig for tests (builder uses modelName and modelSettings for logging)
 const mockLlmConfig = {

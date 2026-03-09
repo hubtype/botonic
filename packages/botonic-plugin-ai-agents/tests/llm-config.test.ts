@@ -15,10 +15,12 @@ jest.mock('openai', () => ({
     capturedOpenAIConfig = config
     return { type: 'openai' }
   }),
-  AzureOpenAI: jest.fn().mockImplementation((config: Record<string, unknown>) => {
-    capturedAzureConfig = config
-    return { type: 'azure' }
-  }),
+  AzureOpenAI: jest
+    .fn()
+    .mockImplementation((config: Record<string, unknown>) => {
+      capturedAzureConfig = config
+      return { type: 'azure' }
+    }),
 }))
 
 jest.mock('@openai/agents', () => ({
@@ -174,9 +176,7 @@ describe('LLMConfig', () => {
 
       expect(capturedAzureConfig).toBeDefined()
       expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
-      expect(capturedAzureConfig?.baseURL).toBe(
-        'https://test.openai.azure.com'
-      )
+      expect(capturedAzureConfig?.baseURL).toBe('https://test.openai.azure.com')
       expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
     })
   })
