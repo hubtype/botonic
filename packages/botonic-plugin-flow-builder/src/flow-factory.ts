@@ -93,7 +93,7 @@ export class FlowFactory {
         return FlowGoToFlow.fromHubtypeCMS(hubtypeContent, this.cmsApi)
 
       case HtNodeWithContentType.WHATSAPP_TEMPLATE:
-        return FlowWhatsappTemplate.fromHubtypeCMS(hubtypeContent)
+        return FlowWhatsappTemplate.fromHubtypeCMS(hubtypeContent, this.locale)
 
       case HtNodeWithContentType.CAPTURE_USER_INPUT:
         return FlowCaptureUserInput.fromHubtypeCMS(hubtypeContent)

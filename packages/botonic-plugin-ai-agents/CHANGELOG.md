@@ -14,13 +14,18 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Add a new output schema: BotExecutorSchema
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.45.0] - 2026-03-03
+
+### Added
+
+- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Add a new output schema: BotExecutorSchema
+- [PR-3173](https://github.com/hubtype/botonic/pull/3173): Include tool results in HtEventAiAgent
 
 ## [0.44.0] - 2026-01-29
 

@@ -14,15 +14,20 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3167](https://github.com/hubtype/botonic/pull/3167): Add shadowing config for AI Agents
-- [PR-3171](https://github.com/hubtype/botonic/pull/3171): Add timestamp as a param in webviews so that they have a unique url"
-- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Allow the FlowAiAgent and FlowText to handle messages of type botExecutor
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.45.0] - 2026-03-03
+
+### Added
+
+- [PR-3167](https://github.com/hubtype/botonic/pull/3167): Add shadowing config for AI Agents
+- [PR-3171](https://github.com/hubtype/botonic/pull/3171): Add timestamp as a param in webviews so that they have a unique url"
+- [PR-3172](https://github.com/hubtype/botonic/pull/3172): Allow the FlowAiAgent and FlowText to handle messages of type botExecutor
+- [PR-3174](https://github.com/hubtype/botonic/pull/3174): Allow Whatsapp template in any flow and resolve for multiple locales.
 
 ## [0.44.2] - 2026-02-06
 
