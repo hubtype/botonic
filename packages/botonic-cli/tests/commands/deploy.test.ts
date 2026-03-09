@@ -69,6 +69,7 @@ describe('TEST: Deploy pipeline', () => {
           tools: [
             {
               name: 'tool1',
+              schema: {},
               description: 'tool1 description',
             },
           ],
