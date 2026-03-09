@@ -28,7 +28,8 @@
     "react-redux": "^7.2.9",
     "styled-components": "^6.0.0",
     "uuid": "^10.0.0",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.25.1"
   },
   "devDependencies": {
     "@botonic/dx": "^0.45.0",
