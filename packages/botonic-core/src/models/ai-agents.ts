@@ -86,13 +86,6 @@ export interface GuardrailRule {
   name: string
   description: string
 }
-
-export enum ModelName {
-  Gpt41Mini = 'gpt-4.1-mini',
-  Gpt5Mini = 'gpt-5-mini',
-  Gpt52Chat = 'gpt-52-chat',
-}
-
 export enum VerbosityLevel {
   Low = 'low',
   Medium = 'medium',
@@ -102,7 +95,7 @@ export enum VerbosityLevel {
 export interface AiAgentArgs {
   name: string
   instructions: string
-  model: ModelName
+  model: string
   verbosity: VerbosityLevel
   activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]

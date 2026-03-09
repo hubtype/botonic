@@ -7,7 +7,6 @@ import type {
 import { tool } from '@openai/agents'
 
 import { AIAgentBuilder } from './agent-builder'
-import { OpenAiClientConfigurator } from './client-configurator'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -16,6 +15,7 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { HubtypeApiClient } from './hubtype-api-client'
+import { LLMConfig } from './llm-config'
 import { AIAgentRunner } from './runner'
 import type {
   AgenticInputMessage,
@@ -82,13 +82,13 @@ export default class BotonicPluginAiAgents<
         throw new Error('Auth token is required')
       }
 
-      // Create and set up client for OpenAI/Azure OpenAI
-      const openAiClient = new OpenAiClientConfigurator(
+      // Create client for OpenAI/Azure OpenAI
+      const llmConfig = new LLMConfig(
         this.maxRetries,
         this.timeout,
-        aiAgentArgs.model
+        aiAgentArgs.model,
+        aiAgentArgs.verbosity
       )
-      openAiClient.setUp()
 
       // Build tools
       const tools = this.buildTools(
@@ -99,13 +99,13 @@ export default class BotonicPluginAiAgents<
       const agent = new AIAgentBuilder<TPlugins, TExtraData>({
         name: aiAgentArgs.name,
         instructions: aiAgentArgs.instructions,
-        verbosity: aiAgentArgs.verbosity,
         tools: tools,
         contactInfo: botContext.session.user.contact_info || [],
         inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
         sourceIds: aiAgentArgs.sourceIds || [],
         campaignsContext: botContext.input.context?.campaigns_v2,
         logger: this.logger,
+        llmConfig,
       }).build()
 
       // Get messages
@@ -136,7 +136,11 @@ export default class BotonicPluginAiAgents<
       )
 
       // Run agent
-      const runner = new AIAgentRunner<TPlugins, TExtraData>(agent, this.logger)
+      const runner = new AIAgentRunner<TPlugins, TExtraData>(
+        agent,
+        llmConfig,
+        this.logger
+      )
       return await runner.run(messages, context)
     } catch (error) {
       console.error('error plugin returns undefined', error)

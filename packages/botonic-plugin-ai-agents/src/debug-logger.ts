@@ -1,12 +1,6 @@
 import type { AiAgentArgs } from '@botonic/core'
 
-import {
-  AZURE_OPENAI_API_BASE,
-  AZURE_OPENAI_API_DEPLOYMENT_NAME,
-  MAX_MEMORY_LENGTH,
-  OPENAI_MODEL,
-  OPENAI_PROVIDER,
-} from './constants'
+import { MAX_MEMORY_LENGTH, OPENAI_PROVIDER } from './constants'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
@@ -43,25 +37,9 @@ export interface DebugLogger {
 }
 
 class EnabledDebugLogger implements DebugLogger {
-  private getModelInfo(): { model: string; apiBase: string } {
-    const model =
-      OPENAI_PROVIDER === 'azure'
-        ? AZURE_OPENAI_API_DEPLOYMENT_NAME
-        : OPENAI_MODEL
-    const apiBase =
-      OPENAI_PROVIDER === 'azure' && AZURE_OPENAI_API_BASE
-        ? AZURE_OPENAI_API_BASE
-        : 'OpenAI API'
-    return { model, apiBase }
-  }
-
   logInitialConfig(config: DebugLoggerConfig): void {
-    const { model, apiBase } = this.getModelInfo()
-
     console.log(`${PREFIX} === Plugin Initialization ===`)
     console.log(`${PREFIX} Provider: ${OPENAI_PROVIDER}`)
-    console.log(`${PREFIX} Model/Deployment: ${model}`)
-    console.log(`${PREFIX} API Base: ${apiBase}`)
     console.log(
       `${PREFIX} Message History API Version: ${config.messageHistoryApiVersion}`
     )
