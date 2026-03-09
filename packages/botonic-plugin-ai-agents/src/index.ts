@@ -166,4 +166,5 @@ export default class BotonicPluginAiAgents<
   }
 }
 
+export * from './bot-config-tools'
 export * from './types'
