@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.45.1] - 2026-mm-dd
+
+### Added
+
+- [PR-3180](https://github.com/hubtype/botonic/pull/3180): Expose safe method getToolsForBotConfig to be used by bots using plugin
+
 ## [0.45.0] - 2026-03-03
 
 ### Added
