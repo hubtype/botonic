@@ -11,8 +11,8 @@ import {
 import type { DebugEventConfig } from '../../types'
 import { GuardrailList, SourcesSection } from '../components'
 import { LABELS } from '../constants'
-import { parseTools } from './parse-tools'
 import { ExecutedTools } from './executed-tools'
+import { parseTools } from './parse-tools'
 import type { AiAgentDebugEvent, ToolExecuted } from './types'
 
 export const AiAgent = ({

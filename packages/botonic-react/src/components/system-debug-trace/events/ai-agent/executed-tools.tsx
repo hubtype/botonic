@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { ScrewdriverWrenchSvg } from '../../icons'
 import {
   StyledDebugDetail,
@@ -7,7 +8,6 @@ import {
 } from '../../styles'
 import { LABELS } from '../constants'
 import type { ToolExecuted } from './types'
-import styled from 'styled-components'
 
 const StyledSeeToolDetailsButton = styled(StyledSeeInfo)`
   flex-shrink: 0;

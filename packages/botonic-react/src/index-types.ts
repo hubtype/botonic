@@ -27,7 +27,6 @@ import {
   WebchatTheme,
 } from './webchat/theme/types'
 import type { WebchatApp } from './webchat-app'
-import { ToolExecuted } from './components/system-debug-trace/events'
 
 /**
  * See @botonic/core's Response for the description of the Response's semantics*/

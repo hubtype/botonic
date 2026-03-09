@@ -1,5 +1,5 @@
 import type React from 'react'
-
+import styled from 'styled-components'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
@@ -10,7 +10,6 @@ import {
 } from '../../styles'
 import { LABELS } from '../constants'
 import type { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
-import styled from 'styled-components'
 
 const StyledSeeChunksButton = styled(StyledSeeInfo)`
   margin-left: 0;
