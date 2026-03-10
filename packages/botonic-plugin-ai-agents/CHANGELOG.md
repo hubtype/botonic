@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.45.x] - 2026-mm-dd
+## [0.46.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3176](https://github.com/hubtype/botonic/pull/3176): Set AI Agent model and verbosity in each execution.
 
 ### Changed
 
