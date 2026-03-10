@@ -3,6 +3,7 @@ import {
   Agent,
   type AgentOutputType,
   type InputGuardrail,
+  MCPServerStreamableHttp,
   type ModelSettings,
 } from '@openai/agents'
 
@@ -78,6 +79,11 @@ export class AIAgentBuilder<
       hasRetrieveKnowledge,
     })
 
+    const gitMcpServer = new MCPServerStreamableHttp({
+      url: 'https://gitmcp.io/openai/codex',
+      name: 'GitMCP Documentation Server',
+    })
+
     return new Agent<
       Context<TPlugins, TExtraData>,
       AgentOutputType<typeof OutputSchema>
@@ -86,6 +92,7 @@ export class AIAgentBuilder<
       model,
       instructions: this.instructions,
       tools: this.tools,
+      mcpServers: [gitMcpServer],
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
