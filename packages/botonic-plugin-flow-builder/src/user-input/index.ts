@@ -2,7 +2,7 @@ import type { ActionRequest } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import {
-  inputHasTextData,
+  getTextOrTranscript,
   isKeywordsAllowed,
   isSmartIntentsAllowed,
 } from '../utils'
@@ -19,11 +19,13 @@ export async function getNextPayloadByUserInput(
   request: ActionRequest,
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<string | undefined> {
-  if (inputHasTextData(request.input)) {
+  const userTextOrTranscript = getTextOrTranscript(request.input)
+  if (userTextOrTranscript) {
     if (cmsApi.shouldCaptureUserInput()) {
       const captureUserInputApi = new CaptureUserInputApi(
         cmsApi,
-        request as unknown as ActionRequest
+        request,
+        userTextOrTranscript
       )
       return await captureUserInputApi.getNextNodeId()
     }
@@ -33,10 +35,9 @@ export async function getNextPayloadByUserInput(
         cmsApi,
         locale,
         request,
+        userTextOrTranscript,
       })
-      const keywordNode = await keywordMatcher.getNodeByInput(
-        request.input.data!
-      )
+      const keywordNode = await keywordMatcher.getNodeByInput()
       if (keywordNode) {
         return cmsApi.getPayload(keywordNode.target)
       }
@@ -46,7 +47,8 @@ export async function getNextPayloadByUserInput(
       const smartIntentsApi = new SmartIntentsApi(
         cmsApi,
         request,
-        smartIntentsConfig
+        smartIntentsConfig,
+        userTextOrTranscript
       )
       const smartIntentNode = await smartIntentsApi.getNodeByInput()
       if (smartIntentNode) {

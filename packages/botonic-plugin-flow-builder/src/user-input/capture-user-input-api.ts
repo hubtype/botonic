@@ -13,7 +13,7 @@ import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { inputHasTextData } from '../utils'
+import { inputHasTextOrTranscript } from '../utils'
 
 interface AiCaptureResponseSuccess {
   success: true
@@ -29,19 +29,25 @@ type AiCaptureResponse = AiCaptureResponseSuccess | AiCaptureResponseFailure
 export class CaptureUserInputApi {
   private cmsApi: FlowBuilderApi
   private request: ActionRequest
+  private textOrTranscript: string
 
-  constructor(cmsApi: FlowBuilderApi, request: ActionRequest) {
+  constructor(
+    cmsApi: FlowBuilderApi,
+    request: ActionRequest,
+    textOrTranscript: string
+  ) {
     this.cmsApi = cmsApi
     this.request = request
+    this.textOrTranscript = textOrTranscript
   }
 
   async getNextNodeId(): Promise<string | undefined> {
     if (
-      inputHasTextData(this.request.input) &&
+      inputHasTextOrTranscript(this.request.input) &&
       this.cmsApi.shouldCaptureUserInput()
     ) {
       const captureUserInputNode = this.cmsApi.getCaptureUserInputNode()
-      if (!captureUserInputNode) {
+      if (!captureUserInputNode || !this.textOrTranscript) {
         return undefined
       }
       const captureUserInput =
@@ -50,7 +56,7 @@ export class CaptureUserInputApi {
       if (captureUserInput.aiValidationType === HtAiValidationType.NONE) {
         this.cmsApi.setUserExtraDataVariable(
           captureUserInputNode.content.field_name,
-          this.request.input.data as string
+          this.textOrTranscript
         )
         await this.trackUserInputCapture(captureUserInputNode, true)
         return captureUserInput.captureSuccessId
@@ -82,7 +88,7 @@ export class CaptureUserInputApi {
         field_name: captureUserInputNode.content.field_name,
         validation_instructions:
           captureUserInputNode.content.ai_validation_instructions,
-        user_input: this.request.input.data,
+        user_input: this.textOrTranscript,
       }
       const pluginFlowBuilder = getFlowBuilderPlugin(this.request.plugins)
       const token = pluginFlowBuilder.getAccessToken(this.request.session)
