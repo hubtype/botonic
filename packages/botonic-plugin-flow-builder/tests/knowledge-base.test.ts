@@ -178,4 +178,68 @@ describe('Check the contents returned by the plugin when it use a knowledge base
 
     expect((contents[0] as FlowText).text).toBe('fallback 1')
   })
+
+  test('When the user sends an AUDIO message with transcript, the knowledge base responds correctly', async () => {
+    const audioTranscript = 'What is Flow Builder?'
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: knowledgeBaseTestFlow,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          answer:
+            'Flow Builder is a visual tool used to create and manage Conversational Apps.',
+          hasKnowledge: true,
+          isFaithful: true,
+        }),
+      },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          transcript: audioTranscript,
+          type: INPUT.AUDIO,
+        },
+        user: {
+          locale,
+          country,
+          systemLocale,
+        },
+      },
+    })
+
+    expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
+    expect((contents[1] as FlowText).text).toBe(
+      'message Spain before knowledge response'
+    )
+    expect(contents[2]).toBeInstanceOf(FlowKnowledgeBase)
+    expect((contents[2] as FlowKnowledgeBase).text).toBe(
+      'Flow Builder is a visual tool used to create and manage Conversational Apps.'
+    )
+    expect((contents[3] as FlowText).text).toBe('FollowUp Knowledge base')
+  })
+
+  test('When the AUDIO input has no transcript, knowledge base is not triggered and fallback is shown', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: knowledgeBaseTestFlow,
+        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
+          answer: 'some answer',
+          hasKnowledge: true,
+          isFaithful: true,
+        }),
+      },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          type: INPUT.AUDIO,
+        },
+        user: {
+          locale,
+          country,
+          systemLocale,
+        },
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('fallback 1')
+  })
 })

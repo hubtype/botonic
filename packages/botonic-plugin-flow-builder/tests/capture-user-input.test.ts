@@ -33,6 +33,24 @@ describe('capture user input success', () => {
     expect(request.session.user.extra_data.booking_number).toBe(bookingNumber)
     expect((contents[0] as FlowText).text).toBe(`capture success`)
   })
+
+  test('should capture user input when session has capture_user_input_id and input is of type AUDIO with transcript', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: captureUserInputFlow },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          type: INPUT.AUDIO,
+          transcript: `My booking number is ${bookingNumber}`,
+        },
+        captureUserInputId: captureUserInputNodeId,
+      },
+    })
+
+    expect(request.session.capture_user_input?.node_id).toBe(undefined)
+    expect(request.session.user.extra_data.booking_number).toBe(bookingNumber)
+    expect((contents[0] as FlowText).text).toBe(`capture success`)
+  })
 })
 
 describe('capture user input fail', () => {
@@ -86,6 +104,22 @@ describe('capture user input fail', () => {
     })
 
     expect(request.session.capture_user_input?.node_id).toBe(undefined)
+    expect(request.session.user.extra_data.booking_number).toBe(undefined)
+    expect((contents[0] as FlowText).text).toBe(`Fallback`)
+  })
+
+  test('should not capture user input when AUDIO message has no transcript', async () => {
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: captureUserInputFlow },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          type: INPUT.AUDIO,
+        },
+        captureUserInputId: captureUserInputNodeId,
+      },
+    })
+
     expect(request.session.user.extra_data.booking_number).toBe(undefined)
     expect((contents[0] as FlowText).text).toBe(`Fallback`)
   })
