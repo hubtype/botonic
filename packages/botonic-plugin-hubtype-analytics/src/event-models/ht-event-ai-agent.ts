@@ -41,13 +41,26 @@ export class HtEventAiAgent extends HtEvent {
     this.flow_node_id = event.flowNodeId
     this.flow_node_content_id = event.flowNodeContentId
     this.flow_node_is_meaningful = event.flowNodeIsMeaningful
-    this.tools_executed = event.toolsExecuted.map(this.getToolExecutionInfo)
+    this.tools_executed = event.toolsExecuted.map(tool =>
+      this.getToolExecutionInfo(tool)
+    )
     this.memory_length = event.memoryLength
     this.input_message_id = event.inputMessageId
     this.input_guardrails_triggered = event.inputGuardrailsTriggered
     this.output_guardrails_triggered = event.outputGuardrailsTriggered
     this.exit = event.exit
     this.error = event.error
+  }
+
+  private truncateToolResults(toolResults?: string): string | undefined {
+    const MAX_TOOL_RESULTS_LENGTH_IN_KB = 16 * 1024 // 16384 characters
+    if (!toolResults) {
+      return undefined
+    }
+    const stringifiedToolResults = JSON.stringify(toolResults)
+    return stringifiedToolResults.length > MAX_TOOL_RESULTS_LENGTH_IN_KB
+      ? `${stringifiedToolResults.slice(0, MAX_TOOL_RESULTS_LENGTH_IN_KB - 3)}...`
+      : stringifiedToolResults
   }
 
   private getToolExecutionInfo(
@@ -68,13 +81,9 @@ export class HtEventAiAgent extends HtEvent {
         toolExecution.knowledgebaseChunksIds
     }
 
-    const MAX_TOOL_RESULTS_LENGTH_IN_KB = 16 * 1024 // 16384 characters
-
-    const truncatedToolResults =
-      toolExecution.toolResults &&
-      toolExecution.toolResults.length > MAX_TOOL_RESULTS_LENGTH_IN_KB
-        ? toolExecution.toolResults.slice(0, MAX_TOOL_RESULTS_LENGTH_IN_KB)
-        : toolExecution.toolResults
+    const truncatedToolResults = this.truncateToolResults(
+      toolExecution.toolResults ?? ''
+    )
 
     return {
       tool_name: toolExecution.toolName,

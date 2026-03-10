@@ -1,15 +1,20 @@
 import type React from 'react'
-
+import styled from 'styled-components'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
   StyledDebugLabel,
   StyledFileSourceValue,
-  StyledSeeChunksButton,
+  StyledSeeInfo,
   StyledUrlSourceValue,
 } from '../../styles'
 import { LABELS } from '../constants'
 import type { HubtypeChunk, HubtypeSource } from '../knowledge-bases-types'
+
+const StyledSeeChunksButton = styled(StyledSeeInfo)`
+  margin-left: 0;
+  margin-top: 4px;
+`
 
 interface SourcesSectionProps {
   sources: HubtypeSource[]

@@ -178,7 +178,7 @@ export const StyledDebugMetadata = styled.div`
   }
 `
 
-export const StyledSeeChunksButton = styled.button`
+export const StyledSeeInfo = styled.button`
   border: 1px solid #c4c6d0;
   border-radius: 6px;
   padding: 8px;
@@ -190,8 +190,6 @@ export const StyledSeeChunksButton = styled.button`
   font-weight: 500;
   line-height: 1.5;
   cursor: pointer;
-  margin-left: 0;
-  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,6 +199,7 @@ export const StyledSeeChunksButton = styled.button`
     background-color: ${COLORS.N100};
   }
 `
+
 interface StyledGuardrailItemProps {
   $isLastItem?: boolean
 }
@@ -224,7 +223,7 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
 export const StyledDebugContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   position: relative;
   width: 100%;
   min-width: 0;

@@ -8,6 +8,7 @@ import type {
   Session as CoreSession,
   SessionUser as CoreSessionUser,
   ServerConfig,
+  ToolExecution,
 } from '@botonic/core'
 import type React from 'react'
 
@@ -95,6 +96,7 @@ export interface PreviewUtils {
   onClickOpenChunks: (
     chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
   ) => void
+  onClickOpenToolResults: (toolExecution: ToolExecution) => void
   getMessageById: (messageId: string) => Promise<MinimalHubtypeMessage>
   trackPreviewEventOpened: (eventProperties: Record<string, unknown>) => void
 }

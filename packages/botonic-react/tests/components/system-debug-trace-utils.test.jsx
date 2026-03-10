@@ -347,6 +347,7 @@ describe('System Debug Trace - Utility Components', () => {
           {
             tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'test query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },

@@ -120,6 +120,7 @@ describe('System Debug Trace - Event Components', () => {
               destination: 'NYC',
               date: '2024-01-01',
             },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],
@@ -443,10 +444,12 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'tool_one',
             tool_arguments: { arg1: 'value1' },
+            tool_results: 'result1',
           },
           {
             tool_name: 'tool_two',
             tool_arguments: { arg2: 'value2' },
+            tool_results: 'result2',
           },
         ],
         input_guardrails_triggered: [],
@@ -485,6 +488,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'search_knowledge',
             tool_arguments: { query: 'test query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1', 'src-2'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
@@ -522,8 +526,9 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'search_tool',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'What is the return policy?' },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],
@@ -560,16 +565,19 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'tool_without_query',
+            tool_name: 'other_tool',
             tool_arguments: { param: 'value' },
+            tool_results: 'result1',
           },
           {
-            tool_name: 'tool_with_query',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'first query' },
+            tool_results: 'result1',
           },
           {
-            tool_name: 'another_tool_with_query',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'second query' },
+            tool_results: 'result2',
           },
         ],
         input_guardrails_triggered: [],
@@ -595,7 +603,7 @@ describe('System Debug Trace - Event Components', () => {
         )
       })
 
-      // The implementation uses the last query found in tools_executed
+      // The implementation uses the last query found in retrieve_knowledge tools
       expect(container.textContent).toContain('"second query"')
       expect(container.textContent).not.toContain('"first query"')
     })
@@ -727,8 +735,9 @@ describe('System Debug Trace - Event Components', () => {
         user_input: 'test',
         tools_executed: [
           {
-            tool_name: 'search_tool',
+            tool_name: 'retrieve_knowledge',
             tool_arguments: { query: 'test query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1', 'src-2'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
@@ -762,7 +771,7 @@ describe('System Debug Trace - Event Components', () => {
         )
       })
 
-      expect(container.textContent).toContain('Knowledge gathered')
+      expect(container.textContent).toContain('Knowledge sources')
       expect(container).toBeTruthy()
     })
 
@@ -775,12 +784,14 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'tool_1',
             tool_arguments: { query: 'first query' },
+            tool_results: 'result1',
             knowledgebase_sources_ids: ['src-1'],
             knowledgebase_chunks_ids: ['chunk-1'],
           },
           {
             tool_name: 'tool_2',
             tool_arguments: {},
+            tool_results: 'result2',
             knowledgebase_sources_ids: ['src-2'],
             knowledgebase_chunks_ids: ['chunk-2', 'chunk-3'],
           },
@@ -822,6 +833,7 @@ describe('System Debug Trace - Event Components', () => {
           {
             tool_name: 'some_tool',
             tool_arguments: { param: 'value' },
+            tool_results: 'result1',
           },
         ],
         input_guardrails_triggered: [],

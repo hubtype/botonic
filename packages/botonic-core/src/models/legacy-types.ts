@@ -447,6 +447,7 @@ export interface BotConfigJSON {
 
 export interface ToolConfigJSON {
   name: string
+  schema?: any
   description: string
 }
 
