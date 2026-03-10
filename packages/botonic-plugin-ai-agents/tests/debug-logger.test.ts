@@ -16,17 +16,23 @@ describe('DebugLogger', () => {
     it('should return EnabledDebugLogger when enableDebug is true', () => {
       const logger = createDebugLogger(true)
 
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] === Runner Execution Start ==='
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model: gpt-4.1-mini'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model Settings: {"reasoning":{"effort":"none"}}'
       )
     })
 
     it('should return DisabledDebugLogger when enableDebug is false', () => {
       const logger = createDebugLogger(false)
 
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
 
       expect(consoleSpy).not.toHaveBeenCalled()
     })
@@ -218,7 +224,7 @@ describe('DebugLogger', () => {
         model: undefined,
         hasRetrieveKnowledge: false,
       })
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
       logger.logRunResult({} as any, Date.now())
       logger.logGuardrailTriggered()
       logger.logRunnerError(Date.now(), new Error())

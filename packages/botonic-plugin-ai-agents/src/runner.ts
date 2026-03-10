@@ -54,7 +54,10 @@ export class AIAgentRunner<
   ): Promise<RunResult> {
     const startTime = Date.now()
 
-    this.logger.logRunnerStart()
+    this.logger.logRunnerStart(
+      this.llmConfig.modelName,
+      this.llmConfig.modelSettings
+    )
 
     try {
       const modelProvider = this.llmConfig.modelProvider
