@@ -223,7 +223,7 @@ export const StyledGuardrailItem = styled.div<StyledGuardrailItemProps>`
 export const StyledDebugContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   position: relative;
   width: 100%;
   min-width: 0;
