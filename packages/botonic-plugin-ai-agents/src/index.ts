@@ -157,7 +157,7 @@ export default class BotonicPluginAiAgents<
   }
 
   private async getMessages(
-    request: BotContext,
+    botContext: BotContext,
     authToken: string,
     memoryLength: number
   ): Promise<AgenticInputMessage[]> {
@@ -168,11 +168,11 @@ export default class BotonicPluginAiAgents<
     }
 
     if (this.messageHistoryApiVersion === 'v1') {
-      return await hubtypeClient.getMessages(request, memoryLength)
+      return await hubtypeClient.getMessages(botContext, memoryLength)
     }
 
     // Default to V2
-    const result = await hubtypeClient.getMessagesV2(request, {
+    const result = await hubtypeClient.getMessagesV2(botContext, {
       maxMessages: this.memory.maxMessages ?? memoryLength,
       includeToolCalls: this.memory.includeToolCalls ?? true,
       maxFullToolResults: this.memory.maxFullToolResults ?? 1,
