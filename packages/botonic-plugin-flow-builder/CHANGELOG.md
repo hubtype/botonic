@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.45.x] - 2026-mm-dd
+## [0.46.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3178](https://github.com/hubtype/botonic/pull/3178): Audio message with transcript uses AI as text input.
 
 ### Changed
 

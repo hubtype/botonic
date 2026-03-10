@@ -148,6 +148,7 @@ export interface Input {
       access_token: string
     }
   }
+  transcript?: string
   message_id: string
   bot_interaction_id: string
   catalog_id?: string

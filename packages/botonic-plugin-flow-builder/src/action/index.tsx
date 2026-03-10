@@ -15,7 +15,7 @@ import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
-import { inputHasTextData } from '../utils'
+import { inputHasTextOrTranscript } from '../utils'
 import { getContentsByAiAgent } from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
@@ -147,7 +147,7 @@ async function getContents(
     return await getContentsByFallback(context)
   }
 
-  if (inputHasTextData(request.input)) {
+  if (inputHasTextOrTranscript(request.input)) {
     const aiAgentContents = await getContentsByAiAgent(context)
     if (aiAgentContents.length > 0) {
       return aiAgentContents

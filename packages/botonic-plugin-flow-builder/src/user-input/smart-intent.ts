@@ -28,11 +28,11 @@ export class SmartIntentsApi {
     public cmsApi: FlowBuilderApi,
     public currentRequest: ActionRequest,
     public smartIntentsConfig: SmartIntentsInferenceConfig,
-    public flowId?: string
+    public userTextOrTranscript: string
   ) {}
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {
-    if (!this.currentRequest.input.data) {
+    if (!this.userTextOrTranscript) {
       return undefined
     }
     const smartIntentNodes = this.cmsApi.getSmartIntentNodes()
@@ -42,7 +42,7 @@ export class SmartIntentsApi {
 
     const params = {
       bot_id: this.currentRequest.session.bot.id,
-      text: this.currentRequest.input.data,
+      text: this.userTextOrTranscript,
       num_smart_intents_to_use: this.smartIntentsConfig.numSmartIntentsToUse,
       use_latest: this.resolveUseLatest(),
     }
@@ -73,7 +73,7 @@ export class SmartIntentsApi {
           nluIntentSmartTitle: response.data.smart_intent_title,
           nluIntentSmartNumUsed: response.data.smart_intents_used.length,
           nluIntentSmartMessageId: this.currentRequest.input.message_id,
-          userInput: this.currentRequest.input.data,
+          userInput: this.userTextOrTranscript,
           flowThreadId: this.currentRequest.session.flow_thread_id as string,
           flowId,
           flowName,

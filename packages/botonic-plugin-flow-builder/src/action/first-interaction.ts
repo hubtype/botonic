@@ -2,7 +2,7 @@ import type { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
 import { FlowBotAction, type FlowContent } from '../content-fields'
 import type BotonicPluginFlowBuilder from '../index'
-import { inputHasTextData } from '../utils'
+import { inputHasTextOrTranscript } from '../utils'
 import { getContentsByAiAgent } from './ai-agent'
 import type { FlowBuilderContext } from './index'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -44,7 +44,7 @@ export async function getContentsByFirstInteraction(
     return firstInteractionContents
   }
 
-  if (request.input.nluResolution || inputHasTextData(request.input)) {
+  if (request.input.nluResolution || inputHasTextOrTranscript(request.input)) {
     const contentsByUserInput = await getContentsByUserInput(context)
 
     return [...firstInteractionContents, ...contentsByUserInput]

@@ -79,6 +79,52 @@ describe('Check the contents returned by the plugin when match a smart intent', 
   })
 })
 
+describe('Check the contents returned when smart intent matches an AUDIO message with transcript', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => mockSmartIntent('Add a bag'))
+
+  test('When the smart intent inference matches the transcript of an AUDIO message, the intent contents are displayed', async () => {
+    const { contents, request, flowBuilderPluginPost } =
+      await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: smartIntentsFlow },
+        requestArgs: {
+          input: {
+            data: 'https://www.fake.com/audio.mp3',
+            transcript: 'I want to add a bag to my flight booking',
+            type: INPUT.AUDIO,
+          },
+        },
+      })
+
+    expect((contents[0] as FlowText).text).toBe(
+      'Message explaining how to add a bag'
+    )
+    expect(request.input.nluResolution?.type).toEqual('smart-intent')
+    expect(request.input.nluResolution?.matchedValue).toEqual('Add a bag')
+
+    flowBuilderPluginPost({
+      ...request,
+      response: (contents[0] as FlowText).text,
+    })
+    expect(request.input.nluResolution).toEqual(undefined)
+  })
+
+  test('Smart intent is not triggered when AUDIO input has no transcript', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: smartIntentsFlow },
+      requestArgs: {
+        input: {
+          data: 'https://www.fake.com/audio.mp3',
+          type: INPUT.AUDIO,
+        },
+      },
+    })
+
+    expect((contents[0] as FlowText).text).toBe('fallback 1st message')
+  })
+})
+
 describe('Check the contents returned by the plugin when no match a smart intent', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
