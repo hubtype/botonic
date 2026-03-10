@@ -10,11 +10,12 @@ export const OPENAI_PROVIDER: 'openai' | 'azure' =
 // Azure OpenAI Configuration
 export const AZURE_OPENAI_API_KEY = process.env.AZURE_OPENAI_API_KEY // pragma: allowlist secret
 export const AZURE_OPENAI_API_BASE = process.env.AZURE_OPENAI_API_BASE
-export const AZURE_OPENAI_API_DEPLOYMENT_NAME =
-  process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME || 'gpt-41-mini_p1'
 export const AZURE_OPENAI_API_VERSION =
   process.env.AZURE_OPENAI_API_VERSION || '2025-01-01-preview'
 
 export const isProd = process.env.NODE_ENV === 'production'
 
 export const MAX_MEMORY_LENGTH = 25
+
+export const DEFAULT_TIMEOUT_16_SECONDS = 16000
+export const DEFAULT_MAX_RETRIES = 2

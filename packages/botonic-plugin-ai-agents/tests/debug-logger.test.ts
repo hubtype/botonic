@@ -1,3 +1,4 @@
+import { VerbosityLevel } from '@botonic/core'
 import { createDebugLogger, type DebugLogger } from '../src/debug-logger'
 
 describe('DebugLogger', () => {
@@ -15,17 +16,23 @@ describe('DebugLogger', () => {
     it('should return EnabledDebugLogger when enableDebug is true', () => {
       const logger = createDebugLogger(true)
 
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] === Runner Execution Start ==='
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model: gpt-4.1-mini'
+      )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Model Settings: {"reasoning":{"effort":"none"}}'
       )
     })
 
     it('should return DisabledDebugLogger when enableDebug is false', () => {
       const logger = createDebugLogger(false)
 
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
 
       expect(consoleSpy).not.toHaveBeenCalled()
     })
@@ -72,6 +79,8 @@ describe('DebugLogger', () => {
       const aiAgentArgs = {
         name: 'TestAgent',
         instructions: 'Test instructions',
+        model: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
         sourceIds: ['source1'],
         inputGuardrailRules: [],
       }
@@ -200,13 +209,22 @@ describe('DebugLogger', () => {
         customToolNames: [],
         memory: {},
       })
-      logger.logAgentDebugInfo({ name: 'Test', instructions: '' }, [], [])
+      logger.logAgentDebugInfo(
+        {
+          name: 'Test',
+          instructions: '',
+          model: 'gpt-4.1-mini',
+          verbosity: VerbosityLevel.Low,
+        },
+        [],
+        []
+      )
       logger.logModelSettings({
         provider: 'azure',
         model: undefined,
         hasRetrieveKnowledge: false,
       })
-      logger.logRunnerStart()
+      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
       logger.logRunResult({} as any, Date.now())
       logger.logGuardrailTriggered()
       logger.logRunnerError(Date.now(), new Error())

@@ -3,12 +3,12 @@ import {
   Agent,
   type AgentOutputType,
   type InputGuardrail,
-  type ModelSettings,
 } from '@openai/agents'
 
-import { OPENAI_MODEL, OPENAI_PROVIDER } from './constants'
+import { OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
+import type { LLMConfig } from './llm-config'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
 import type { AIAgent, Context, GuardrailRule, Tool } from './types'
@@ -24,6 +24,7 @@ interface AIAgentBuilderOptions<
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
+  llmConfig: LLMConfig
   logger: DebugLogger
 }
 
@@ -35,6 +36,7 @@ export class AIAgentBuilder<
   private instructions: string
   private tools: Tool<TPlugins, TExtraData>[]
   private inputGuardrails: InputGuardrail[]
+  public llmConfig: LLMConfig
   private logger: DebugLogger
 
   constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
@@ -46,35 +48,34 @@ export class AIAgentBuilder<
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.inputGuardrails = []
+    this.llmConfig = options.llmConfig
     this.logger = options.logger
     if (options.inputGuardrailRules.length > 0) {
-      const inputGuardrail = createInputGuardrail(options.inputGuardrailRules)
+      const inputGuardrail = createInputGuardrail(
+        options.inputGuardrailRules,
+        options.llmConfig
+      )
       this.inputGuardrails.push(inputGuardrail)
     }
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
-    const modelSettings: ModelSettings = {} as ModelSettings
-    if (OPENAI_PROVIDER === 'openai') {
-      modelSettings.reasoning = { effort: 'none' }
-      modelSettings.text = { verbosity: 'medium' }
-    }
-
-    const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
-    if (hasRetrieveKnowledge && OPENAI_PROVIDER === 'azure') {
-      modelSettings.toolChoice = retrieveKnowledge.name
-    }
-
     // When using standard OpenAI API, we need to specify the model
     // Azure OpenAI uses deployment name instead
-    const model = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : undefined
+
+    const model = this.llmConfig.modelName
+    const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
 
     this.logger.logModelSettings({
       provider: OPENAI_PROVIDER,
       model,
-      reasoning: modelSettings.reasoning as { effort: string } | undefined,
-      text: modelSettings.text as { verbosity: string } | undefined,
-      toolChoice: modelSettings.toolChoice as string | undefined,
+      reasoning: this.llmConfig.modelSettings.reasoning as
+        | { effort: string }
+        | undefined,
+      text: this.llmConfig.modelSettings.text as
+        | { verbosity: string }
+        | undefined,
+      toolChoice: this.llmConfig.modelSettings.toolChoice as string | undefined,
       hasRetrieveKnowledge,
     })
 
@@ -89,7 +90,6 @@ export class AIAgentBuilder<
       outputType: OutputSchema,
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
-      modelSettings,
     })
   }
 

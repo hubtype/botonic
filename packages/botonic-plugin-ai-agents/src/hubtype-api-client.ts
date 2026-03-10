@@ -131,7 +131,7 @@ export class HubtypeApiClient {
   }
 
   async getMessages(
-    request: BotContext,
+    botContext: BotContext,
     maxMemoryLength: number
   ): Promise<AgenticInputMessage[]> {
     const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
@@ -140,7 +140,7 @@ export class HubtypeApiClient {
       Authorization: `Bearer ${this.authToken}`,
     }
     const params = {
-      last_message_id: request.input.message_id,
+      last_message_id: botContext.input.message_id,
       num_messages: maxMemoryLength,
     }
 
@@ -158,7 +158,7 @@ export class HubtypeApiClient {
   }
 
   async getMessagesV2(
-    request: BotContext,
+    botContext: BotContext,
     options: GetMessagesV2Options = {}
   ): Promise<GetMessagesV2Result> {
     const url = `${HUBTYPE_API_URL}/external/v2/ai/agent/message_history/`
@@ -167,7 +167,7 @@ export class HubtypeApiClient {
       Authorization: `Bearer ${this.authToken}`,
     }
     const params: MessageHistoryV2Params = {
-      last_message_id: request.input.message_id,
+      last_message_id: botContext.input.message_id,
       ...(options.maxMessages !== undefined && {
         max_messages: options.maxMessages,
       }),

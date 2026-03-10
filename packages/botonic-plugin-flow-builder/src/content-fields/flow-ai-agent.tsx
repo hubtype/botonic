@@ -1,4 +1,4 @@
-import type { AgenticOutputMessage } from '@botonic/core'
+import { type AgenticOutputMessage, VerbosityLevel } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
@@ -13,6 +13,8 @@ import type {
 export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
+  public model: string = ''
+  public verbosity: VerbosityLevel = VerbosityLevel.Medium
   public activeTools?: { name: string }[]
   public inputGuardrailRules: HtInputGuardrailRule[]
   public sources?: { id: string; name: string }[]
@@ -24,6 +26,8 @@ export class FlowAiAgent extends ContentFieldsBase {
     newAiAgent.code = component.code
     newAiAgent.name = component.content.name
     newAiAgent.instructions = component.content.instructions
+    newAiAgent.model = component.content.model
+    newAiAgent.verbosity = component.content.verbosity
     newAiAgent.activeTools = component.content.active_tools
     newAiAgent.inputGuardrailRules =
       component.content.input_guardrail_rules || []

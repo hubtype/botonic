@@ -9,8 +9,9 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-
+import { OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
+import type { LLMConfig } from './llm-config'
 import { retrieveKnowledge } from './tools'
 import type {
   AgenticInputMessage,
@@ -35,9 +36,15 @@ export class AIAgentRunner<
 > {
   private agent: AIAgent<TPlugins, TExtraData>
   private logger: DebugLogger
+  private llmConfig: LLMConfig
 
-  constructor(agent: AIAgent<TPlugins, TExtraData>, logger: DebugLogger) {
+  constructor(
+    agent: AIAgent<TPlugins, TExtraData>,
+    openAiClient: LLMConfig,
+    logger: DebugLogger
+  ) {
     this.agent = agent
+    this.llmConfig = openAiClient
     this.logger = logger
   }
 
@@ -47,11 +54,24 @@ export class AIAgentRunner<
   ): Promise<RunResult> {
     const startTime = Date.now()
 
-    this.logger.logRunnerStart()
+    this.logger.logRunnerStart(
+      this.llmConfig.modelName,
+      this.llmConfig.modelSettings
+    )
 
     try {
+      const modelProvider = this.llmConfig.modelProvider
+      const modelSettings = this.llmConfig.modelSettings
+
+      const hasRetrieveKnowledge = this.agent.tools.includes(retrieveKnowledge)
+      if (hasRetrieveKnowledge && OPENAI_PROVIDER === 'azure') {
+        modelSettings.toolChoice = retrieveKnowledge.name
+      }
+
       const runner = new Runner({
-        modelSettings: { temperature: 0 },
+        modelSettings,
+        modelProvider,
+        tracingDisabled: true,
       })
       // Type assertion to bypass strict type checking - the actual return type from runner.run()
       // doesn't perfectly match our interface, but the properties we access are compatible

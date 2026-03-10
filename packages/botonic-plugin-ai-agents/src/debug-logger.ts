@@ -1,12 +1,6 @@
 import type { AiAgentArgs, ToolExecution } from '@botonic/core'
-
-import {
-  AZURE_OPENAI_API_BASE,
-  AZURE_OPENAI_API_DEPLOYMENT_NAME,
-  MAX_MEMORY_LENGTH,
-  OPENAI_MODEL,
-  OPENAI_PROVIDER,
-} from './constants'
+import type { ModelSettings } from '@openai/agents'
+import { MAX_MEMORY_LENGTH, OPENAI_PROVIDER } from './constants'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
@@ -36,7 +30,7 @@ export interface DebugLogger {
     messages: AgenticInputMessage[]
   ): void
   logModelSettings(settings: ModelSettingsInfo): void
-  logRunnerStart(): void
+  logRunnerStart(model: string, modelSettings: ModelSettings): void
   logRunResult(runResult: RunResult, startTime: number): void
   logGuardrailTriggered(): void
   logRunnerError(startTime: number, error: unknown): void
@@ -44,25 +38,9 @@ export interface DebugLogger {
 }
 
 class EnabledDebugLogger implements DebugLogger {
-  private getModelInfo(): { model: string; apiBase: string } {
-    const model =
-      OPENAI_PROVIDER === 'azure'
-        ? AZURE_OPENAI_API_DEPLOYMENT_NAME
-        : OPENAI_MODEL
-    const apiBase =
-      OPENAI_PROVIDER === 'azure' && AZURE_OPENAI_API_BASE
-        ? AZURE_OPENAI_API_BASE
-        : 'OpenAI API'
-    return { model, apiBase }
-  }
-
   logInitialConfig(config: DebugLoggerConfig): void {
-    const { model, apiBase } = this.getModelInfo()
-
     console.log(`${PREFIX} === Plugin Initialization ===`)
     console.log(`${PREFIX} Provider: ${OPENAI_PROVIDER}`)
-    console.log(`${PREFIX} Model/Deployment: ${model}`)
-    console.log(`${PREFIX} API Base: ${apiBase}`)
     console.log(
       `${PREFIX} Message History API Version: ${config.messageHistoryApiVersion}`
     )
@@ -117,8 +95,10 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} === End Model Settings ===`)
   }
 
-  logRunnerStart(): void {
+  logRunnerStart(model: string, modelSettings: ModelSettings): void {
     console.log(`${PREFIX} === Runner Execution Start ===`)
+    console.log(`${PREFIX} Model: ${model}`)
+    console.log(`${PREFIX} Model Settings: ${JSON.stringify(modelSettings)}`)
   }
 
   logRunResult(runResult: RunResult, startTime: number): void {
@@ -174,7 +154,7 @@ class DisabledDebugLogger implements DebugLogger {
   logInitialConfig(): void {}
   logAgentDebugInfo(): void {}
   logModelSettings(): void {}
-  logRunnerStart(): void {}
+  logRunnerStart(_model: string, _modelSettings: ModelSettings): void {}
   logRunResult(): void {}
   logGuardrailTriggered(): void {}
   logRunnerError(): void {}

@@ -1,5 +1,5 @@
 import type { DebugLogger } from '../src/debug-logger'
-import { OutputSchema } from '../src/structured-output'
+import { OutputSchema } from '../src/structured-output/index'
 import type { GuardrailRule, Tool } from '../src/types'
 
 // Create a mock disabled logger for tests (no-op implementations)
@@ -50,8 +50,19 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
-
 import { AIAgentBuilder } from '../src/agent-builder'
+import type { LLMConfig } from '../src/llm-config'
+
+// Mock LLMConfig for tests (builder uses modelName and modelSettings for logging)
+const mockLlmConfig = {
+  modelName: 'gpt-4.1-mini',
+  modelSettings: {
+    reasoning: { effort: 'none' as const },
+    text: { verbosity: 'medium' as const },
+    toolChoice: undefined as string | undefined,
+  },
+  modelProvider: {},
+} as unknown as LLMConfig
 
 describe('AIAgentBuilder', () => {
   const agentName = 'Test Agent'
@@ -118,6 +129,7 @@ describe('AIAgentBuilder', () => {
     const aiAgent = new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      llmConfig: mockLlmConfig,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules,
@@ -246,6 +258,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -269,6 +282,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -292,6 +306,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -316,6 +331,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -337,6 +353,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -345,11 +362,12 @@ describe('AIAgentBuilder', () => {
         logger: mockLogger,
       }).build()
 
-      // When using azure provider with retrieveKnowledge, toolChoice should be set
-      expect(capturedAgentConfig).toBeDefined()
-      expect(capturedAgentConfig.modelSettings).toBeDefined()
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
-        'retrieve_knowledge'
+      // When using azure provider with retrieveKnowledge, logModelSettings is called
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          provider: 'azure',
+          hasRetrieveKnowledge: true,
+        })
       )
     })
 
@@ -357,6 +375,7 @@ describe('AIAgentBuilder', () => {
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -365,16 +384,19 @@ describe('AIAgentBuilder', () => {
         logger: mockLogger,
       }).build()
 
-      expect(capturedAgentConfig).toBeDefined()
-      // When no retrieveKnowledge tool, toolChoice should not be set
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          hasRetrieveKnowledge: false,
+        })
+      )
     })
 
-    it('should NOT set model for azure provider (uses deployment name)', () => {
+    it('should set model (deployment name) for azure provider', () => {
       // Default OPENAI_PROVIDER is 'azure'
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -384,15 +406,16 @@ describe('AIAgentBuilder', () => {
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
-      // Azure uses deployment name, not model
-      expect(capturedAgentConfig.model).toBeUndefined()
+      // Azure uses deployment name as model
+      expect(capturedAgentConfig.model).toBe('gpt-4.1-mini')
     })
 
-    it('should NOT set reasoning and text settings for azure provider', () => {
+    it('should set reasoning and text settings for azure provider (same as openai)', () => {
       // Default OPENAI_PROVIDER is 'azure'
       const aiAgent = new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
         tools: agentCustomTools,
         contactInfo,
         inputGuardrailRules: [],
@@ -401,10 +424,14 @@ describe('AIAgentBuilder', () => {
         logger: mockLogger,
       }).build()
 
-      expect(capturedAgentConfig).toBeDefined()
-      // Azure should NOT have reasoning or text settings
-      expect(capturedAgentConfig.modelSettings.reasoning).toBeUndefined()
-      expect(capturedAgentConfig.modelSettings.text).toBeUndefined()
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          provider: 'azure',
+          model: 'gpt-4.1-mini',
+          reasoning: { effort: 'none' },
+          text: { verbosity: 'medium' },
+        })
+      )
     })
   })
 })
@@ -450,6 +477,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      llmConfig: mockLlmConfig,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -458,16 +486,19 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       logger: mockLogger,
     }).build()
 
-    expect(capturedAgentConfig).toBeDefined()
-    expect(capturedAgentConfig.modelSettings.reasoning).toEqual({
-      effort: 'none',
-    })
+    expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        provider: 'openai',
+        reasoning: { effort: 'none' },
+      })
+    )
   })
 
   it('should set text setting with verbosity: medium for openai provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      llmConfig: mockLlmConfig,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -476,16 +507,18 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       logger: mockLogger,
     }).build()
 
-    expect(capturedAgentConfig).toBeDefined()
-    expect(capturedAgentConfig.modelSettings.text).toEqual({
-      verbosity: 'medium',
-    })
+    expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        text: { verbosity: 'medium' },
+      })
+    )
   })
 
   it('should set model to OPENAI_MODEL for openai provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      llmConfig: mockLlmConfig,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -502,6 +535,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
+      llmConfig: mockLlmConfig,
       tools: agentCustomTools,
       contactInfo,
       inputGuardrailRules: [],
@@ -510,8 +544,11 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       logger: mockLogger,
     }).build()
 
-    expect(capturedAgentConfig).toBeDefined()
-    // OpenAI provider should NOT set toolChoice (only azure does)
-    expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+    expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+      expect.objectContaining({
+        provider: 'openai',
+        hasRetrieveKnowledge: true,
+      })
+    )
   })
 })

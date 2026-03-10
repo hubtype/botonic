@@ -1,16 +1,22 @@
-import { Agent, type RunContext, run, type Usage } from '@openai/agents'
+// biome-ignore lint/correctness/noUnusedImports: we need to import Runner to mock it
+import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
 
 import { createInputGuardrail } from '../../src/guardrails/input'
+import type { LLMConfig } from '../../src/llm-config'
 import type { GuardrailRule } from '../../src/types'
 
-// Mock OpenAI Agent and run function
+const mockRunnerRun = jest.fn()
+
+// Mock OpenAI Agent and Runner
 jest.mock('@openai/agents', () => ({
   Agent: jest.fn().mockImplementation(config => ({
     name: config.name,
     instructions: config.instructions,
     outputType: config.outputType,
   })),
-  run: jest.fn(),
+  Runner: jest.fn().mockImplementation(() => ({
+    run: mockRunnerRun,
+  })),
 }))
 
 describe('createInputGuardrail', () => {
@@ -52,12 +58,17 @@ describe('createInputGuardrail', () => {
     outputType: undefined,
   })
 
+  const mockLlmConfig = {
+    modelSettings: { temperature: 0, text: { verbosity: 'medium' } },
+    modelProvider: {},
+  } as unknown as LLMConfig
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('should create a guardrail with the correct configuration', () => {
-    const guardrail = createInputGuardrail(mockRules)
+    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
 
     expect(guardrail.name).toBe('InputGuardrail')
     expect(Agent).toHaveBeenCalledWith({
@@ -75,9 +86,9 @@ describe('createInputGuardrail', () => {
         is_spam: false,
       },
     }
-    ;(run as jest.Mock).mockResolvedValue(mockAgentOutput)
+    mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules)
+    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
     const result = await guardrail.execute({
       input: [
         {
@@ -93,7 +104,7 @@ describe('createInputGuardrail', () => {
       outputInfo: ['is_offensive'],
       tripwireTriggered: true,
     })
-    expect(run).toHaveBeenCalledWith(
+    expect(mockRunnerRun).toHaveBeenCalledWith(
       expect.any(Object),
       [
         {
@@ -112,9 +123,9 @@ describe('createInputGuardrail', () => {
         is_spam: false,
       },
     }
-    ;(run as jest.Mock).mockResolvedValue(mockAgentOutput)
+    mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules)
+    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
     const result = await guardrail.execute({
       input: [
         {
@@ -136,9 +147,9 @@ describe('createInputGuardrail', () => {
     const mockAgentOutput = {
       finalOutput: undefined,
     }
-    ;(run as jest.Mock).mockResolvedValue(mockAgentOutput)
+    mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules)
+    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
     await expect(
       guardrail.execute({
         input: [

@@ -87,9 +87,17 @@ export interface GuardrailRule {
   name: string
   description: string
 }
+export enum VerbosityLevel {
+  Low = 'low',
+  Medium = 'medium',
+  High = 'high',
+}
+
 export interface AiAgentArgs {
   name: string
   instructions: string
+  model: string
+  verbosity: VerbosityLevel
   activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]
   sourceIds?: string[]

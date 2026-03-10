@@ -3,6 +3,7 @@ import {
   type BotContext,
   INPUT,
   PROVIDER,
+  VerbosityLevel,
 } from '@botonic/core'
 import {
   afterEach,
@@ -19,9 +20,13 @@ import BotonicPluginAiAgents from '../src/index'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
 
-// Mock setUpOpenAI to avoid actual OpenAI setup
-jest.mock('../src/openai', () => ({
-  setUpOpenAI: jest.fn(),
+// Mock LLMConfig to avoid actual OpenAI/Azure setup
+jest.mock('../src/llm-config', () => ({
+  LLMConfig: jest.fn().mockImplementation(() => ({
+    modelName: 'gpt-4.1-mini',
+    modelSettings: {},
+    modelProvider: {},
+  })),
 }))
 
 // Mock AIAgentBuilder to capture the arguments it receives
@@ -123,6 +128,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
   const mockAiAgentArgs: AiAgentArgs = {
     name: 'Test Agent',
     instructions: 'Test instructions',
+    model: 'gpt-4.1-mini',
+    verbosity: VerbosityLevel.Medium,
     activeTools: [],
     sourceIds: [],
     inputGuardrailRules: [],
@@ -243,6 +250,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const customAiAgentArgs: AiAgentArgs = {
       name: 'Custom Agent',
       instructions: 'Custom instructions for the agent',
+      model: 'gpt-4.1-mini',
+      verbosity: VerbosityLevel.Medium,
       activeTools: [],
       sourceIds: ['source-1', 'source-2'],
       inputGuardrailRules: [

@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3178](https://github.com/hubtype/botonic/pull/3178): Audio message with transcript uses AI as text input.
+- [PR-3176](https://github.com/hubtype/botonic/pull/3176): AI Agent node has model and verbosity config.
 
 ### Changed
 
