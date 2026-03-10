@@ -7,7 +7,7 @@ import { Button, customMessage } from '../../../components'
 import { WebchatContext } from '../../context'
 import { RatingSelector } from './rating-selector'
 import { MessageBubble } from './styles'
-import type { RatingType } from './types'
+import { RatingType } from './types'
 
 interface CustomRatingMessageProps {
   payloads: string[]
@@ -17,6 +17,17 @@ interface CustomRatingMessageProps {
   id?: string // This id not exist in local development
   valueSent?: number
 }
+
+const ratingValues = {
+  [RatingType.Stars]: [
+    '⭐'.repeat(1),
+    '⭐'.repeat(2),
+    '⭐'.repeat(3),
+    '⭐'.repeat(4),
+    '⭐'.repeat(5),
+  ],
+  [RatingType.Smileys]: ['😠', '🙁', '😐', '🙂', '😄'],
+} as const
 
 const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
   const { payloads, messageText, buttonText, ratingType, id, valueSent } = props
@@ -48,6 +59,7 @@ const CustomRatingMessage: React.FC<CustomRatingMessageProps> = props => {
     const input = {
       type: INPUT.POSTBACK as InputType,
       payload,
+      referral: ratingValues[ratingType][ratingValue - 1],
     }
     void sendInput(input)
   }
