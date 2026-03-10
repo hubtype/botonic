@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "format": "biome format --write src/ tests/",
+    "lint": "biome lint --write src/ tests/",
+    "lint:check": "biome lint src/ tests/",
+    "test": "jest"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+  "extends": ["./node_modules/@botonic/dx-rs/baseline/biome.json"]
+}
