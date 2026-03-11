@@ -1,11 +1,15 @@
 // biome-ignore lint/correctness/noUnusedImports: we need to import Runner to mock it
 import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
 
-import { createInputGuardrail } from '../../src/guardrails/input'
+import {
+  createInputGuardrail,
+  type GuardrailTrackingContext,
+} from '../../src/guardrails/input'
 import type { LLMConfig } from '../../src/llm-config'
 import type { GuardrailRule } from '../../src/types'
 
 const mockRunnerRun = jest.fn()
+const mockTrackLlmRuns = jest.fn().mockResolvedValue(undefined)
 
 // Mock OpenAI Agent and Runner
 jest.mock('@openai/agents', () => ({
@@ -17,6 +21,18 @@ jest.mock('@openai/agents', () => ({
   Runner: jest.fn().mockImplementation(() => ({
     run: mockRunnerRun,
   })),
+}))
+
+jest.mock('../../src/services/hubtype-api-client', () => ({
+  HubtypeApiClient: jest.fn().mockImplementation(() => ({
+    trackLlmRuns: mockTrackLlmRuns,
+  })),
+}))
+
+jest.mock('../../src/constants', () => ({
+  isProd: false,
+  OPENAI_PROVIDER: 'azure',
+  AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
 }))
 
 describe('createInputGuardrail', () => {
@@ -59,16 +75,28 @@ describe('createInputGuardrail', () => {
   })
 
   const mockLlmConfig = {
+    modelName: 'gpt-4.1-mini',
     modelSettings: { temperature: 0, text: { verbosity: 'medium' } },
     modelProvider: {},
   } as unknown as LLMConfig
 
+  const mockTrackingContext: GuardrailTrackingContext = {
+    botId: 'test-bot-id',
+    isTest: false,
+    authToken: 'test-token',
+  }
+
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.requireMock('../../src/constants').isProd = false
   })
 
   it('should create a guardrail with the correct configuration', () => {
-    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
+    const guardrail = createInputGuardrail(
+      mockRules,
+      mockLlmConfig,
+      mockTrackingContext
+    )
 
     expect(guardrail.name).toBe('InputGuardrail')
     expect(Agent).toHaveBeenCalledWith({
@@ -88,7 +116,11 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
+    const guardrail = createInputGuardrail(
+      mockRules,
+      mockLlmConfig,
+      mockTrackingContext
+    )
     const result = await guardrail.execute({
       input: [
         {
@@ -125,7 +157,11 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
+    const guardrail = createInputGuardrail(
+      mockRules,
+      mockLlmConfig,
+      mockTrackingContext
+    )
     const result = await guardrail.execute({
       input: [
         {
@@ -149,7 +185,11 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(mockRules, mockLlmConfig)
+    const guardrail = createInputGuardrail(
+      mockRules,
+      mockLlmConfig,
+      mockTrackingContext
+    )
     await expect(
       guardrail.execute({
         input: [
@@ -162,5 +202,54 @@ describe('createInputGuardrail', () => {
         agent: mockAgent,
       })
     ).rejects.toThrow('Guardrail agent failed to produce output')
+  })
+
+  it('should call trackLlmRuns after guardrail execution in production', async () => {
+    jest.requireMock('../../src/constants').isProd = true
+    const mockAgentOutput = {
+      finalOutput: { is_offensive: false, is_spam: false },
+      rawResponses: [
+        {
+          usage: { inputTokens: 100, outputTokens: 20 },
+          providerData: { model: 'gpt-4.1-mini-2025-04-14' },
+        },
+      ],
+    }
+    mockRunnerRun.mockResolvedValue(mockAgentOutput)
+
+    const guardrail = createInputGuardrail(
+      mockRules,
+      mockLlmConfig,
+      mockTrackingContext
+    )
+    await guardrail.execute({
+      input: [
+        {
+          role: 'user',
+          content: [{ type: 'input_text', text: 'hello' }],
+        },
+      ],
+      context: mockRunContext,
+      agent: mockAgent,
+    })
+
+    // Allow fire-and-forget promise to resolve
+    await Promise.resolve()
+
+    expect(mockTrackLlmRuns).toHaveBeenCalledWith(
+      'test-bot-id',
+      expect.objectContaining({
+        is_test: false,
+        llm_runs: [
+          expect.objectContaining({
+            deployment_name: 'gpt-4.1-mini',
+            model_name: 'gpt-4.1-mini-2025-04-14',
+            num_prompt_tokens: 100,
+            num_completion_tokens: 20,
+            temperature: 0,
+          }),
+        ],
+      })
+    )
   })
 })
