@@ -12,8 +12,8 @@ import {
 import { v7 as uuidv7 } from 'uuid'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
-import { HubtypeApiClient } from './hubtype-api-client'
 import type { LLMConfig } from './llm-config'
+import { HubtypeApiClient } from './services/hubtype-api-client'
 import { retrieveKnowledge } from './tools'
 import type {
   AgenticInputMessage,

@@ -7,8 +7,8 @@ import {
 import { v7 as uuidv7 } from 'uuid'
 import { z } from 'zod'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
-import { HubtypeApiClient } from '../hubtype-api-client'
 import type { LLMConfig } from '../llm-config'
+import { HubtypeApiClient } from '../services/hubtype-api-client'
 import type { GuardrailRule } from '../types'
 
 export interface GuardrailTrackingContext {
@@ -95,8 +95,7 @@ async function sendGuardrailLlmRunTracking(
   const durationPerCall = Math.round(totalDuration / rawResponses.length)
   const temperature =
     (llmConfig.modelSettings.temperature as number | undefined) ?? 0
-  const apiVersion =
-    OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
+  const apiVersion = OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
 
   const llmRuns = rawResponses.map(response => ({
     deployment_name: llmConfig.modelName,

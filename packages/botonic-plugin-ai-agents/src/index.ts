@@ -14,9 +14,9 @@ import {
   MAX_MEMORY_LENGTH,
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
-import { HubtypeApiClient } from './hubtype-api-client'
 import { LLMConfig } from './llm-config'
 import { AIAgentRunner } from './runner'
+import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
   AgenticInputMessage,
   Context,
