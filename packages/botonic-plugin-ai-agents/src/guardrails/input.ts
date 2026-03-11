@@ -48,14 +48,12 @@ export function createInputGuardrail(
       const result = await runner.run(agent, [lastMessage], { context })
       const endTime = Date.now()
 
-      sendGuardrailLlmRunTracking(
+      void sendGuardrailLlmRunTracking(
         result,
         trackingContext,
         llmConfig,
         startTime,
         endTime
-      ).catch(err =>
-        console.error('Failed to track guardrail LLM runs:', err)
       )
 
       const finalOutput = result.finalOutput as Record<string, boolean>

@@ -10,11 +10,7 @@ import {
   RunToolCallOutputItem,
 } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
-import {
-  AZURE_OPENAI_API_VERSION,
-  isProd,
-  OPENAI_PROVIDER,
-} from './constants'
+import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { HubtypeApiClient } from './hubtype-api-client'
 import type { LLMConfig } from './llm-config'
@@ -93,9 +89,7 @@ export class AIAgentRunner<
 
       const endTime = Date.now()
 
-      this.sendLlmRunTracking(result, context, startTime, endTime).catch(err =>
-        console.error('Failed to track LLM runs:', err)
-      )
+      void this.sendLlmRunTracking(result, context, startTime, endTime)
 
       const { _context, ...restResult } = result.state
       console.log('Runner result:', restResult)

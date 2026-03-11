@@ -289,12 +289,17 @@ export class HubtypeApiClient {
     botId: string,
     payload: AiAgentLlmRunsPayload
   ): Promise<void> {
-    const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/ai_agent_llm_runs/`
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.authToken}`,
+    // Not stop the bot execution if the tracking fails, just log the error
+    try {
+      const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/ai_agent_llm_runs/`
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.authToken}`,
+      }
+      await axios.post(url, payload, { headers })
+    } catch (error) {
+      console.error('Failed to track LLM runs:', error)
     }
-    await axios.post(url, payload, { headers })
   }
 
   private formatMessage(message: HubtypeMessage): AgenticInputMessage {
