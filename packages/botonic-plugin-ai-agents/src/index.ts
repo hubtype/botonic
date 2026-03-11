@@ -106,6 +106,11 @@ export default class BotonicPluginAiAgents<
         campaignsContext: botContext.input.context?.campaigns_v2,
         logger: this.logger,
         llmConfig,
+        guardrailTrackingContext: {
+          botId: botContext.session.bot.id,
+          isTest: botContext.session.is_test_integration,
+          authToken,
+        },
       }).build()
 
       // Get messages

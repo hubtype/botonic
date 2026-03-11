@@ -5,6 +5,23 @@ import axios from 'axios'
 import { HUBTYPE_API_URL } from './constants'
 import type { AgenticInputMessage, Chunk } from './types'
 
+export interface LlmRunData {
+  deployment_name: string
+  model_name: string
+  api_version: string
+  num_prompt_tokens: number
+  num_completion_tokens: number
+  duration_in_milliseconds: number
+  temperature: number
+  error: string | null
+}
+
+export interface AiAgentLlmRunsPayload {
+  inference_id: string
+  is_test: boolean
+  llm_runs: LlmRunData[]
+}
+
 interface HubtypeAssistantMessage {
   role: 'assistant'
   content: string
@@ -266,6 +283,18 @@ export class HubtypeApiClient {
           `Invalid message role: ${(message as HubtypeMessageV2).role}`
         )
     }
+  }
+
+  async trackLlmRuns(
+    botId: string,
+    payload: AiAgentLlmRunsPayload
+  ): Promise<void> {
+    const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/ai_agent_llm_runs/`
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authToken}`,
+    }
+    await axios.post(url, payload, { headers })
   }
 
   private formatMessage(message: HubtypeMessage): AgenticInputMessage {

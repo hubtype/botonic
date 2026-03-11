@@ -9,8 +9,14 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { OPENAI_PROVIDER } from './constants'
+import { v7 as uuidv7 } from 'uuid'
+import {
+  AZURE_OPENAI_API_VERSION,
+  isProd,
+  OPENAI_PROVIDER,
+} from './constants'
 import type { DebugLogger } from './debug-logger'
+import { HubtypeApiClient } from './hubtype-api-client'
 import type { LLMConfig } from './llm-config'
 import { retrieveKnowledge } from './tools'
 import type {
@@ -28,6 +34,12 @@ interface AIAgentRunnerResult {
     messages?: OutputMessage[]
   }
   newItems?: RunToolCallItem[]
+  rawResponses?: Array<{
+    usage: { inputTokens: number; outputTokens: number }
+    providerData?: Record<string, unknown>
+  }>
+  // biome-ignore lint/suspicious/noExplicitAny: state is a complex internal type
+  state?: any
 }
 
 export class AIAgentRunner<
@@ -79,6 +91,15 @@ export class AIAgentRunner<
         context,
       })) as AIAgentRunnerResult
 
+      const endTime = Date.now()
+
+      this.sendLlmRunTracking(result, context, startTime, endTime).catch(err =>
+        console.error('Failed to track LLM runs:', err)
+      )
+
+      const { _context, ...restResult } = result.state
+      console.log('Runner result:', restResult)
+
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
         outputMessages.length === 0 ||
@@ -124,6 +145,49 @@ export class AIAgentRunner<
 
       throw error
     }
+  }
+
+  private async sendLlmRunTracking(
+    result: AIAgentRunnerResult,
+    context: Context<TPlugins, TExtraData>,
+    startTime: number,
+    endTime: number
+  ): Promise<void> {
+    if (!isProd) {
+      return
+    }
+    const rawResponses = result.rawResponses ?? []
+    if (rawResponses.length === 0) {
+      return
+    }
+    const botId = context.request.session.bot.id
+    const isTest = context.request.session.is_test_integration
+    const totalDuration = endTime - startTime
+    const durationPerCall = Math.round(totalDuration / rawResponses.length)
+    const temperature =
+      (this.llmConfig.modelSettings.temperature as number | undefined) ?? 0
+    const apiVersion =
+      OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
+
+    const llmRuns = rawResponses.map(response => ({
+      deployment_name: this.llmConfig.modelName,
+      model_name:
+        (response.providerData?.['model'] as string | undefined) ??
+        this.llmConfig.modelName,
+      api_version: apiVersion,
+      num_prompt_tokens: response.usage.inputTokens,
+      num_completion_tokens: response.usage.outputTokens,
+      duration_in_milliseconds: durationPerCall,
+      temperature,
+      error: null,
+    }))
+
+    const client = new HubtypeApiClient(context.authToken)
+    await client.trackLlmRuns(botId, {
+      inference_id: uuidv7(),
+      is_test: isTest,
+      llm_runs: llmRuns,
+    })
   }
 
   private getToolsExecuted(
