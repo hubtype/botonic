@@ -4,6 +4,7 @@ import {
   Runner,
   type UserMessageItem,
 } from '@openai/agents'
+import { TrackFeature, TrackProductName } from 'src/services/types'
 import { z } from 'zod'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
 import type { LLMConfig } from '../llm-config'
@@ -100,11 +101,12 @@ async function sendGuardrailLlmRunTracking(
   const llmRuns = rawResponses.map(response => ({
     inference_id: trackingContext.inferenceId,
     is_test: trackingContext.isTest,
+    product_name: TrackProductName.AI_AGENT,
     deployment_name: llmConfig.modelName,
     model_name:
       (response.providerData?.['model'] as string | undefined) ??
       llmConfig.modelName,
-    feature: 'ai_agent_guardrail',
+    feature: TrackFeature.AI_AGENT_GUARDRAIL,
     api_version: apiVersion,
     num_prompt_tokens: response.usage.inputTokens,
     num_completion_tokens: response.usage.outputTokens,

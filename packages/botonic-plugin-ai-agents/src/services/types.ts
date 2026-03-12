@@ -1,8 +1,18 @@
 import type { AgenticInputMessage } from '../types'
 
+export enum TrackProductName {
+  AI_AGENT = 'ai_agent',
+}
+
+export enum TrackFeature {
+  AI_AGENT_RUN = 'ai_agent_run',
+  AI_AGENT_GUARDRAIL = 'ai_agent_guardrail',
+}
+
 export interface LlmRunData {
   inference_id: string
   is_test: boolean
+  product_name: string
   deployment_name: string
   model_name: string
   feature: string

@@ -13,6 +13,7 @@ import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import type { LLMConfig } from './llm-config'
 import { HubtypeApiClient } from './services/hubtype-api-client'
+import { TrackFeature, TrackProductName } from './services/types'
 import { retrieveKnowledge } from './tools'
 import type {
   AgenticInputMessage,
@@ -168,11 +169,12 @@ export class AIAgentRunner<
     const llmRuns = rawResponses.map(response => ({
       inference_id: this.inferenceId,
       is_test: isTest,
+      product_name: TrackProductName.AI_AGENT,
       deployment_name: this.llmConfig.modelName,
       model_name:
         (response.providerData?.['model'] as string | undefined) ??
         this.llmConfig.modelName,
-      feature: 'ai_agent_run',
+      feature: TrackFeature.AI_AGENT_RUN,
       api_version: apiVersion,
       num_prompt_tokens: response.usage.inputTokens,
       num_completion_tokens: response.usage.outputTokens,
