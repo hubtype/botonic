@@ -60,7 +60,7 @@ jest.mock('../src/runner', () => ({
 }))
 
 // Mock HubtypeApiClient to avoid actual API calls
-jest.mock('../src/hubtype-api-client', () => ({
+jest.mock('../src/services/hubtype-api-client', () => ({
   HubtypeApiClient: jest.fn().mockImplementation(() => ({
     getMessages: jest.fn().mockResolvedValue([] as never),
     getLocalMessages: jest.fn().mockResolvedValue([] as never),

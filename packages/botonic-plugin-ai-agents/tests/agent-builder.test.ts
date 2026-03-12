@@ -51,7 +51,15 @@ jest.mock('../src/constants', () => mockConstants)
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
 import { AIAgentBuilder } from '../src/agent-builder'
+import type { GuardrailTrackingContext } from '../src/guardrails/input'
 import type { LLMConfig } from '../src/llm-config'
+
+const mockGuardrailTrackingContext: GuardrailTrackingContext = {
+  botId: 'test-bot-id',
+  isTest: false,
+  authToken: 'test-token',
+  inferenceId: 'test-inference-id',
+}
 
 // Mock LLMConfig for tests (builder uses modelName and modelSettings for logging)
 const mockLlmConfig = {
@@ -136,6 +144,7 @@ describe('AIAgentBuilder', () => {
       sourceIds,
       campaignsContext,
       logger: mockLogger,
+      guardrailTrackingContext: mockGuardrailTrackingContext,
     }).build()
     const structuredContactInfo = contactInfo
       .map(
@@ -265,6 +274,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: undefined,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(aiAgent.instructions).not.toContain('<campaign_context')
@@ -289,6 +299,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: campaignWithoutContext,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(aiAgent.instructions).not.toContain('<campaign_context')
@@ -313,6 +324,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: campaignWithEmptyContext,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       // Empty string is falsy, so campaign_context should not be included
@@ -338,6 +350,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: campaignWithContext,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(aiAgent.instructions).toContain('<campaign_context_1>')
@@ -360,6 +373,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: ['source-1'], // Triggers retrieveKnowledge tool
         campaignsContext: undefined,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       // When using azure provider with retrieveKnowledge, logModelSettings is called
@@ -382,6 +396,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [], // Empty - no retrieveKnowledge tool
         campaignsContext: undefined,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
@@ -403,6 +418,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: undefined,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(capturedAgentConfig).toBeDefined()
@@ -422,6 +438,7 @@ describe('AIAgentBuilder', () => {
         sourceIds: [],
         campaignsContext: undefined,
         logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
@@ -484,6 +501,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       sourceIds: [],
       campaignsContext: undefined,
       logger: mockLogger,
+      guardrailTrackingContext: mockGuardrailTrackingContext,
     }).build()
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
@@ -505,6 +523,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       sourceIds: [],
       campaignsContext: undefined,
       logger: mockLogger,
+      guardrailTrackingContext: mockGuardrailTrackingContext,
     }).build()
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
@@ -525,6 +544,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       sourceIds: [],
       campaignsContext: undefined,
       logger: mockLogger,
+      guardrailTrackingContext: mockGuardrailTrackingContext,
     }).build()
 
     expect(capturedAgentConfig).toBeDefined()
@@ -542,6 +562,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       sourceIds: ['source-1'], // This adds retrieveKnowledge tool
       campaignsContext: undefined,
       logger: mockLogger,
+      guardrailTrackingContext: mockGuardrailTrackingContext,
     }).build()
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(

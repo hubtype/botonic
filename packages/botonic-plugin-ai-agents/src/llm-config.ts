@@ -87,7 +87,7 @@ export class LLMConfig {
     if (model.includes('gpt-4')) {
       return {
         temperature: 0,
-        text: { verbosity },
+        text: { verbosity: 'low' },
       }
     }
 

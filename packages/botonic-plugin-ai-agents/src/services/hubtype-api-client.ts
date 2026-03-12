@@ -2,85 +2,19 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import { HUBTYPE_API_URL } from './constants'
-import type { AgenticInputMessage, Chunk } from './types'
-
-interface HubtypeAssistantMessage {
-  role: 'assistant'
-  content: string
-}
-
-interface HubtypeUserMessage {
-  role: 'user'
-  content: string
-}
-
-type HubtypeMessage = HubtypeAssistantMessage | HubtypeUserMessage
-
-// V2 API Types
-interface HubtypeToolCall {
-  id: string
-  type: 'function'
-  function: {
-    name: string
-    arguments: string
-  }
-}
-
-interface HubtypeUserMessageV2 {
-  role: 'user'
-  content: string | null
-}
-
-interface HubtypeAssistantMessageV2 {
-  role: 'assistant'
-  content: string | null
-  tool_calls?: HubtypeToolCall[] | null
-}
-
-interface HubtypeToolMessageV2 {
-  role: 'tool'
-  content: string | null
-  tool_call_id: string
-}
-
-interface HubtypeSystemMessageV2 {
-  role: 'system'
-  content: string | null
-}
-
-type HubtypeMessageV2 =
-  | HubtypeUserMessageV2
-  | HubtypeAssistantMessageV2
-  | HubtypeToolMessageV2
-  | HubtypeSystemMessageV2
-
-interface MessageHistoryResponseV2 {
-  messages: HubtypeMessageV2[]
-  conversation_id: string | null
-  truncated: boolean
-}
-
-export interface GetMessagesV2Options {
-  maxMessages?: number
-  includeToolCalls?: boolean
-  maxFullToolResults?: number
-  debugMode?: boolean
-}
-
-export interface GetMessagesV2Result {
-  messages: AgenticInputMessage[]
-  conversationId: string | null
-  truncated: boolean
-}
-
-interface MessageHistoryV2Params {
-  last_message_id: string
-  max_messages?: number
-  include_tool_calls?: boolean
-  max_full_tool_results?: number
-  debug_mode?: boolean
-}
+import { HUBTYPE_API_URL } from '../constants'
+import type { AgenticInputMessage, Chunk } from '../types'
+import type {
+  GetMessagesV2Options,
+  GetMessagesV2Result,
+  HubtypeAssistantMessageV2,
+  HubtypeMessage,
+  HubtypeMessageV2,
+  HubtypeToolMessageV2,
+  MessageHistoryResponseV2,
+  MessageHistoryV2Params,
+  TrackLlmRunsData,
+} from './types'
 
 export class HubtypeApiClient {
   private readonly authToken: string
@@ -265,6 +199,20 @@ export class HubtypeApiClient {
         throw new Error(
           `Invalid message role: ${(message as HubtypeMessageV2).role}`
         )
+    }
+  }
+
+  async trackLlmRuns(botId: string, data: TrackLlmRunsData): Promise<void> {
+    // Not stop the bot execution if the tracking fails, just log the error
+    try {
+      const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/track_llm_runs/`
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.authToken}`,
+      }
+      await axios.post(url, data, { headers })
+    } catch (error) {
+      console.error('Failed to track LLM runs:', error)
     }
   }
 

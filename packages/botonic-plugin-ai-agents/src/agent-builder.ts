@@ -8,6 +8,7 @@ import {
 import { OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
+import type { GuardrailTrackingContext } from './guardrails/input'
 import type { LLMConfig } from './llm-config'
 import { OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
@@ -26,6 +27,7 @@ interface AIAgentBuilderOptions<
   sourceIds: string[]
   llmConfig: LLMConfig
   logger: DebugLogger
+  guardrailTrackingContext: GuardrailTrackingContext
 }
 
 export class AIAgentBuilder<
@@ -53,7 +55,8 @@ export class AIAgentBuilder<
     if (options.inputGuardrailRules.length > 0) {
       const inputGuardrail = createInputGuardrail(
         options.inputGuardrailRules,
-        options.llmConfig
+        options.llmConfig,
+        options.guardrailTrackingContext
       )
       this.inputGuardrails.push(inputGuardrail)
     }
