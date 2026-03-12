@@ -4,7 +4,6 @@ import {
   Runner,
   type UserMessageItem,
 } from '@openai/agents'
-import { v7 as uuidv7 } from 'uuid'
 import { z } from 'zod'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
 import type { LLMConfig } from '../llm-config'
@@ -15,6 +14,7 @@ export interface GuardrailTrackingContext {
   botId: string
   isTest: boolean
   authToken: string
+  inferenceId: string
 }
 
 export function createInputGuardrail(
@@ -98,10 +98,13 @@ async function sendGuardrailLlmRunTracking(
   const apiVersion = OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
 
   const llmRuns = rawResponses.map(response => ({
+    inference_id: trackingContext.inferenceId,
+    is_test: trackingContext.isTest,
     deployment_name: llmConfig.modelName,
     model_name:
       (response.providerData?.['model'] as string | undefined) ??
       llmConfig.modelName,
+    feature: 'ai_agent_guardrail',
     api_version: apiVersion,
     num_prompt_tokens: response.usage.inputTokens,
     num_completion_tokens: response.usage.outputTokens,
@@ -112,8 +115,6 @@ async function sendGuardrailLlmRunTracking(
 
   const client = new HubtypeApiClient(trackingContext.authToken)
   await client.trackLlmRuns(trackingContext.botId, {
-    inference_id: uuidv7(),
-    is_test: trackingContext.isTest,
     llm_runs: llmRuns,
   })
 }

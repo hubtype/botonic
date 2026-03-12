@@ -175,6 +175,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       expect(runner).toBeInstanceOf(AIAgentRunner)
@@ -193,6 +194,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -212,6 +214,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -232,6 +235,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -248,6 +252,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -268,6 +273,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -294,6 +300,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -326,6 +333,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(true),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, context)
@@ -352,6 +360,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -374,6 +383,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -394,6 +404,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -419,6 +430,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(true),
         llmConfig,
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -440,6 +452,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(true),
         llmConfig,
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -461,6 +474,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(false),
         llmConfig,
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -478,7 +492,7 @@ describe('AIAgentRunner', () => {
       )
 
       const llmConfig = buildMockLlmConfig()
-      const runner = new AIAgentRunner(buildMockAgent(), llmConfig, mockLogger)
+      const runner = new AIAgentRunner(buildMockAgent(), llmConfig, 'test-inference-id', mockLogger)
       await runner.run(sampleMessages, buildMockContext())
 
       expect(capturedRunnerConfig).toMatchObject({
@@ -503,6 +517,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       const result = await runner.run(sampleMessages, buildMockContext())
@@ -526,6 +541,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -541,6 +557,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
 
@@ -572,6 +589,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -582,9 +600,9 @@ describe('AIAgentRunner', () => {
       expect(mockTrackLlmRuns).toHaveBeenCalledWith(
         'test-bot-id',
         expect.objectContaining({
-          is_test: false,
           llm_runs: [
             expect.objectContaining({
+              is_test: false,
               deployment_name: 'gpt-4.1-mini',
               model_name: 'gpt-4.1-mini-2025-04-14',
               num_prompt_tokens: 200,
@@ -619,6 +637,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -660,6 +679,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -683,6 +703,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())
@@ -708,6 +729,7 @@ describe('AIAgentRunner', () => {
       const runner = new AIAgentRunner(
         buildMockAgent(),
         buildMockLlmConfig(),
+        'test-inference-id',
         mockLogger
       )
       await runner.run(sampleMessages, buildMockContext())

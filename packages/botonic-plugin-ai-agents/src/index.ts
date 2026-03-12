@@ -5,7 +5,7 @@ import type {
   ResolvedPlugins,
 } from '@botonic/core'
 import { tool } from '@openai/agents'
-
+import { v7 as uuidv7 } from 'uuid'
 import { AIAgentBuilder } from './agent-builder'
 import {
   DEFAULT_MAX_RETRIES,
@@ -82,6 +82,8 @@ export default class BotonicPluginAiAgents<
         throw new Error('Auth token is required')
       }
 
+      const inferenceId = uuidv7()
+
       // Create client for OpenAI/Azure OpenAI
       const llmConfig = new LLMConfig(
         this.maxRetries,
@@ -110,6 +112,7 @@ export default class BotonicPluginAiAgents<
           botId: botContext.session.bot.id,
           isTest: botContext.session.is_test_integration,
           authToken,
+          inferenceId,
         },
       }).build()
 
@@ -144,6 +147,7 @@ export default class BotonicPluginAiAgents<
       const runner = new AIAgentRunner<TPlugins, TExtraData>(
         agent,
         llmConfig,
+        inferenceId,
         this.logger
       )
       return await runner.run(messages, context)

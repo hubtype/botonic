@@ -5,7 +5,7 @@ import axios from 'axios'
 import { HUBTYPE_API_URL } from '../constants'
 import type { AgenticInputMessage, Chunk } from '../types'
 import type {
-  AiAgentLlmRunsPayload,
+  BotTrackLlmRunsData,
   GetMessagesV2Options,
   GetMessagesV2Result,
   HubtypeAssistantMessageV2,
@@ -202,18 +202,15 @@ export class HubtypeApiClient {
     }
   }
 
-  async trackLlmRuns(
-    botId: string,
-    payload: AiAgentLlmRunsPayload
-  ): Promise<void> {
+  async trackLlmRuns(botId: string, data: BotTrackLlmRunsData): Promise<void> {
     // Not stop the bot execution if the tracking fails, just log the error
     try {
-      const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/ai_agent_llm_runs/`
+      const url = `${HUBTYPE_API_URL}/external/v2/conversational_apps/${botId}/bot_track_llm_runs/`
       const headers = {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.authToken}`,
       }
-      await axios.post(url, payload, { headers })
+      await axios.post(url, data, { headers })
     } catch (error) {
       console.error('Failed to track LLM runs:', error)
     }

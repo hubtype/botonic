@@ -58,6 +58,7 @@ const mockGuardrailTrackingContext: GuardrailTrackingContext = {
   botId: 'test-bot-id',
   isTest: false,
   authToken: 'test-token',
+  inferenceId: 'test-inference-id',
 }
 
 // Mock LLMConfig for tests (builder uses modelName and modelSettings for logging)

@@ -1,8 +1,11 @@
 import type { AgenticInputMessage } from '../types'
 
 export interface LlmRunData {
+  inference_id: string
+  is_test: boolean
   deployment_name: string
   model_name: string
+  feature: string
   api_version: string
   num_prompt_tokens: number
   num_completion_tokens: number
@@ -11,9 +14,7 @@ export interface LlmRunData {
   error: string | null
 }
 
-export interface AiAgentLlmRunsPayload {
-  inference_id: string
-  is_test: boolean
+export interface BotTrackLlmRunsData {
   llm_runs: LlmRunData[]
 }
 

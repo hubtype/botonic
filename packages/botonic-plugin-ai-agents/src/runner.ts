@@ -9,7 +9,6 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { v7 as uuidv7 } from 'uuid'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import type { LLMConfig } from './llm-config'
@@ -43,16 +42,19 @@ export class AIAgentRunner<
   TExtraData = any,
 > {
   private agent: AIAgent<TPlugins, TExtraData>
-  private logger: DebugLogger
   private llmConfig: LLMConfig
+  private inferenceId: string
+  private logger: DebugLogger
 
   constructor(
     agent: AIAgent<TPlugins, TExtraData>,
     openAiClient: LLMConfig,
+    inferenceId: string,
     logger: DebugLogger
   ) {
     this.agent = agent
     this.llmConfig = openAiClient
+    this.inferenceId = inferenceId
     this.logger = logger
   }
 
@@ -164,10 +166,13 @@ export class AIAgentRunner<
       OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
 
     const llmRuns = rawResponses.map(response => ({
+      inference_id: this.inferenceId,
+      is_test: isTest,
       deployment_name: this.llmConfig.modelName,
       model_name:
         (response.providerData?.['model'] as string | undefined) ??
         this.llmConfig.modelName,
+      feature: 'ai_agent_run',
       api_version: apiVersion,
       num_prompt_tokens: response.usage.inputTokens,
       num_completion_tokens: response.usage.outputTokens,
@@ -178,8 +183,6 @@ export class AIAgentRunner<
 
     const client = new HubtypeApiClient(context.authToken)
     await client.trackLlmRuns(botId, {
-      inference_id: uuidv7(),
-      is_test: isTest,
       llm_runs: llmRuns,
     })
   }

@@ -84,6 +84,7 @@ describe('createInputGuardrail', () => {
     botId: 'test-bot-id',
     isTest: false,
     authToken: 'test-token',
+    inferenceId: 'test-inference-id',
   }
 
   beforeEach(() => {
@@ -239,9 +240,9 @@ describe('createInputGuardrail', () => {
     expect(mockTrackLlmRuns).toHaveBeenCalledWith(
       'test-bot-id',
       expect.objectContaining({
-        is_test: false,
         llm_runs: [
           expect.objectContaining({
+            is_test: false,
             deployment_name: 'gpt-4.1-mini',
             model_name: 'gpt-4.1-mini-2025-04-14',
             num_prompt_tokens: 100,
