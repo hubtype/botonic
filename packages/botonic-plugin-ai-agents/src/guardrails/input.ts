@@ -4,11 +4,11 @@ import {
   Runner,
   type UserMessageItem,
 } from '@openai/agents'
-import { TrackFeature, TrackProductName } from 'src/services/types'
 import { z } from 'zod'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
 import type { LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
+import { TrackFeature, TrackProductName } from '../services/types'
 import type { GuardrailRule, ResultRawResponse } from '../types'
 
 export interface GuardrailTrackingContext {
