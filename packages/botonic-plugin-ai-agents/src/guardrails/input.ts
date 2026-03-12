@@ -40,9 +40,12 @@ export function createInputGuardrail(
     name: 'InputGuardrail',
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
+      const modelProvider = llmConfig.modelProvider
+      const modelSettings = llmConfig.modelSettings
+      modelSettings.toolChoice = undefined
       const runner = new Runner({
-        modelSettings: llmConfig.modelSettings,
-        modelProvider: llmConfig.modelProvider,
+        modelSettings,
+        modelProvider,
         tracingDisabled: true,
       })
       const startTime = Date.now()
