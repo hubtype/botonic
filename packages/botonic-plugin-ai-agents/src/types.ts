@@ -91,6 +91,14 @@ export interface PluginAiAgentOptions<
   enableDebug?: boolean
 }
 
+export interface ResultRawResponse {
+  usage: {
+    inputTokens: number
+    outputTokens: number
+  }
+  providerData?: Record<string, unknown>
+}
+
 export type AgenticInputMessage = AgentInputItem
 
 export {

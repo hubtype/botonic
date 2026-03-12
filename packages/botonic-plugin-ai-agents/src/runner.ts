@@ -20,6 +20,7 @@ import type {
   AgenticOutputMessage,
   AIAgent,
   Context,
+  ResultRawResponse,
   RunResult,
 } from './types'
 
@@ -30,10 +31,7 @@ interface AIAgentRunnerResult {
     messages?: OutputMessage[]
   }
   newItems?: RunToolCallItem[]
-  rawResponses?: Array<{
-    usage: { inputTokens: number; outputTokens: number }
-    providerData?: Record<string, unknown>
-  }>
+  rawResponses?: ResultRawResponse[]
   // biome-ignore lint/suspicious/noExplicitAny: state is a complex internal type
   state?: any
 }

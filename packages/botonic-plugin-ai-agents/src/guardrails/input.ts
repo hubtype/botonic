@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
 import type { LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
-import type { GuardrailRule } from '../types'
+import type { GuardrailRule, ResultRawResponse } from '../types'
 
 export interface GuardrailTrackingContext {
   botId: string
@@ -75,10 +75,7 @@ export function createInputGuardrail(
 
 async function sendGuardrailLlmRunTracking(
   result: {
-    rawResponses?: Array<{
-      usage: { inputTokens: number; outputTokens: number }
-      providerData?: Record<string, unknown>
-    }>
+    rawResponses?: ResultRawResponse[]
   },
   trackingContext: GuardrailTrackingContext,
   llmConfig: LLMConfig,
