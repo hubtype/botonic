@@ -149,7 +149,10 @@ function makeRunnerResult(overrides: Record<string, unknown> = {}) {
 }
 
 /** Shortcut for the common case: a successful run returning a single text message */
-function makeTextRunnerResult(text = 'OK', overrides: Record<string, unknown> = {}) {
+function makeTextRunnerResult(
+  text = 'OK',
+  overrides: Record<string, unknown> = {}
+) {
   return makeRunnerResult({
     finalOutput: { messages: [{ type: 'text', content: { text } }] },
     ...overrides,
@@ -213,7 +216,10 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: { messages: outputMessages } })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.messages).toEqual(outputMessages)
       expect(result.exit).toBe(false)
@@ -227,7 +233,10 @@ describe('AIAgentRunner', () => {
     it('should set exit: true when finalOutput has no messages', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeRunnerResult())
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
@@ -242,7 +251,10 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: { messages: outputMessages } })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
@@ -253,7 +265,10 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: undefined })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
@@ -278,7 +293,10 @@ describe('AIAgentRunner', () => {
         makeTextRunnerResult('Done', { newItems: [toolItem] })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.toolsExecuted).toHaveLength(1)
       expect(result.toolsExecuted[0]).toMatchObject({
@@ -300,7 +318,10 @@ describe('AIAgentRunner', () => {
       context.knowledgeUsed.sourceIds = ['src-1', 'src-2']
       context.knowledgeUsed.chunksIds = ['chunk-1']
 
-      const result = await createRunner(buildMockAgent(true)).run(sampleMessages, context)
+      const result = await createRunner(buildMockAgent(true)).run(
+        sampleMessages,
+        context
+      )
 
       expect(result.toolsExecuted[0]).toMatchObject({
         toolName: 'retrieve_knowledge',
@@ -316,7 +337,10 @@ describe('AIAgentRunner', () => {
         makeTextRunnerResult('OK', { newItems: [nonFunctionItem] })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       // Items with empty toolName are filtered out
       expect(result.toolsExecuted).toHaveLength(0)
@@ -328,7 +352,10 @@ describe('AIAgentRunner', () => {
         makeTextRunnerResult('OK', { newItems: [toolItem] })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.toolsExecuted[0].toolArguments).toEqual({})
     })
@@ -338,7 +365,10 @@ describe('AIAgentRunner', () => {
         makeTextRunnerResult('OK', { newItems: undefined })
       )
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.toolsExecuted).toEqual([])
     })
@@ -352,7 +382,10 @@ describe('AIAgentRunner', () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      await createRunner(buildMockAgent(true), llmConfig).run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(true), llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
     })
@@ -362,7 +395,10 @@ describe('AIAgentRunner', () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('openai')
-      await createRunner(buildMockAgent(true), llmConfig).run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(true), llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
@@ -372,7 +408,10 @@ describe('AIAgentRunner', () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      await createRunner(buildMockAgent(false), llmConfig).run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(false), llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
@@ -381,7 +420,10 @@ describe('AIAgentRunner', () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig()
-      await createRunner(buildMockAgent(), llmConfig).run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(), llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(capturedRunnerConfig).toMatchObject({
         modelSettings: llmConfig.modelSettings,
@@ -402,7 +444,10 @@ describe('AIAgentRunner', () => {
       })
       mockRunnerRunImpl.mockRejectedValueOnce(guardrailError)
 
-      const result = await createRunner().run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(result.exit).toBe(true)
       expect(result.error).toBe(false)
@@ -487,8 +532,14 @@ describe('AIAgentRunner', () => {
         'test-bot-id',
         expect.objectContaining({
           llm_runs: expect.arrayContaining([
-            expect.objectContaining({ num_prompt_tokens: 100, num_completion_tokens: 20 }),
-            expect.objectContaining({ num_prompt_tokens: 150, num_completion_tokens: 30 }),
+            expect.objectContaining({
+              num_prompt_tokens: 100,
+              num_completion_tokens: 20,
+            }),
+            expect.objectContaining({
+              num_prompt_tokens: 150,
+              num_completion_tokens: 30,
+            }),
           ]),
         })
       )
