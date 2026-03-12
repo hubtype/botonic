@@ -14,7 +14,7 @@ export interface LlmRunData {
   error: string | null
 }
 
-export interface BotTrackLlmRunsData {
+export interface TrackLlmRunsData {
   llm_runs: LlmRunData[]
 }
 
