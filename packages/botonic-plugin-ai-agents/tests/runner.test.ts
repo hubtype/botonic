@@ -148,6 +148,34 @@ function makeRunnerResult(overrides: Record<string, unknown> = {}) {
   }
 }
 
+/** Shortcut for the common case: a successful run returning a single text message */
+function makeTextRunnerResult(text = 'OK', overrides: Record<string, unknown> = {}) {
+  return makeRunnerResult({
+    finalOutput: { messages: [{ type: 'text', content: { text } }] },
+    ...overrides,
+  })
+}
+
+/** Shortcut for a single rawResponse entry */
+function makeRawResponse(
+  inputTokens: number,
+  outputTokens: number,
+  model?: string
+) {
+  return {
+    usage: { inputTokens, outputTokens },
+    providerData: model ? { model } : {},
+  }
+}
+
+/** Creates an AIAgentRunner with sensible defaults */
+function createRunner(
+  agent = buildMockAgent(),
+  llmConfig = buildMockLlmConfig()
+): AIAgentRunner {
+  return new AIAgentRunner(agent, llmConfig, 'test-inference-id', mockLogger)
+}
+
 const sampleMessages: AgenticInputMessage[] = [
   { role: 'user', content: 'Hello' } as any,
 ]
@@ -172,13 +200,7 @@ describe('AIAgentRunner', () => {
 
   describe('constructor', () => {
     it('should instantiate without errors', () => {
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      expect(runner).toBeInstanceOf(AIAgentRunner)
+      expect(createRunner()).toBeInstanceOf(AIAgentRunner)
     })
   })
 
@@ -191,13 +213,7 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: { messages: outputMessages } })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.messages).toEqual(outputMessages)
       expect(result.exit).toBe(false)
@@ -211,13 +227,7 @@ describe('AIAgentRunner', () => {
     it('should set exit: true when finalOutput has no messages', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeRunnerResult())
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
@@ -232,13 +242,7 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: { messages: outputMessages } })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
@@ -249,34 +253,16 @@ describe('AIAgentRunner', () => {
         makeRunnerResult({ finalOutput: undefined })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.exit).toBe(true)
       expect(result.messages).toEqual([])
     })
 
     it('should call logRunnerStart and logRunResult', async () => {
-      mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-        })
-      )
+      mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner().run(sampleMessages, buildMockContext())
 
       expect(mockLogger.logRunnerStart).toHaveBeenCalledTimes(1)
       expect(mockLogger.logRunResult).toHaveBeenCalledTimes(1)
@@ -289,21 +275,10 @@ describe('AIAgentRunner', () => {
     it('should map function_call items to ToolExecution', async () => {
       const toolItem = makeToolCallItem('my_tool', '{"param":"value"}')
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Done' } }],
-          },
-          newItems: [toolItem],
-        })
+        makeTextRunnerResult('Done', { newItems: [toolItem] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.toolsExecuted).toHaveLength(1)
       expect(result.toolsExecuted[0]).toMatchObject({
@@ -318,25 +293,14 @@ describe('AIAgentRunner', () => {
         '{"query":"test query"}'
       )
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Done' } }],
-          },
-          newItems: [toolItem],
-        })
+        makeTextRunnerResult('Done', { newItems: [toolItem] })
       )
 
       const context = buildMockContext()
       context.knowledgeUsed.sourceIds = ['src-1', 'src-2']
       context.knowledgeUsed.chunksIds = ['chunk-1']
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(true),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, context)
+      const result = await createRunner(buildMockAgent(true)).run(sampleMessages, context)
 
       expect(result.toolsExecuted[0]).toMatchObject({
         toolName: 'retrieve_knowledge',
@@ -349,21 +313,10 @@ describe('AIAgentRunner', () => {
     it('should skip items that are not function_call type', async () => {
       const nonFunctionItem = makeToolCallItem('ignored', '{}', 'computer_call')
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-          newItems: [nonFunctionItem],
-        })
+        makeTextRunnerResult('OK', { newItems: [nonFunctionItem] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       // Items with empty toolName are filtered out
       expect(result.toolsExecuted).toHaveLength(0)
@@ -372,42 +325,20 @@ describe('AIAgentRunner', () => {
     it('should handle malformed JSON tool arguments gracefully', async () => {
       const toolItem = makeToolCallItem('my_tool', 'NOT_VALID_JSON')
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-          newItems: [toolItem],
-        })
+        makeTextRunnerResult('OK', { newItems: [toolItem] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.toolsExecuted[0].toolArguments).toEqual({})
     })
 
     it('should handle undefined newItems gracefully', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-          newItems: undefined,
-        })
+        makeTextRunnerResult('OK', { newItems: undefined })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.toolsExecuted).toEqual([])
     })
@@ -418,82 +349,39 @@ describe('AIAgentRunner', () => {
   describe('run() – provider logic', () => {
     it('should set toolChoice to retrieve_knowledge for azure provider when agent has that tool', async () => {
       mockConstants.OPENAI_PROVIDER = 'azure'
-      mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-        })
-      )
+      mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      const runner = new AIAgentRunner(
-        buildMockAgent(true),
-        llmConfig,
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(true), llmConfig).run(sampleMessages, buildMockContext())
 
       expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
     })
 
     it('should NOT set toolChoice for openai provider even with retrieve_knowledge tool', async () => {
       mockConstants.OPENAI_PROVIDER = 'openai'
-      mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-        })
-      )
+      mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('openai')
-      const runner = new AIAgentRunner(
-        buildMockAgent(true),
-        llmConfig,
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(true), llmConfig).run(sampleMessages, buildMockContext())
 
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should NOT set toolChoice when agent does not have retrieve_knowledge', async () => {
       mockConstants.OPENAI_PROVIDER = 'azure'
-      mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-        })
-      )
+      mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      const runner = new AIAgentRunner(
-        buildMockAgent(false),
-        llmConfig,
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(false), llmConfig).run(sampleMessages, buildMockContext())
 
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should pass modelProvider and modelSettings to Runner', async () => {
-      mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'OK' } }],
-          },
-        })
-      )
+      mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig()
-      const runner = new AIAgentRunner(buildMockAgent(), llmConfig, 'test-inference-id', mockLogger)
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner(buildMockAgent(), llmConfig).run(sampleMessages, buildMockContext())
 
       expect(capturedRunnerConfig).toMatchObject({
         modelSettings: llmConfig.modelSettings,
@@ -514,13 +402,7 @@ describe('AIAgentRunner', () => {
       })
       mockRunnerRunImpl.mockRejectedValueOnce(guardrailError)
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      const result = await runner.run(sampleMessages, buildMockContext())
+      const result = await createRunner().run(sampleMessages, buildMockContext())
 
       expect(result.exit).toBe(true)
       expect(result.error).toBe(false)
@@ -538,13 +420,7 @@ describe('AIAgentRunner', () => {
       })
       mockRunnerRunImpl.mockRejectedValueOnce(guardrailError)
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
+      await createRunner().run(sampleMessages, buildMockContext())
 
       expect(mockLogger.logGuardrailTriggered).toHaveBeenCalledTimes(1)
       expect(mockLogger.logRunResult).toHaveBeenCalledTimes(1)
@@ -554,15 +430,8 @@ describe('AIAgentRunner', () => {
       const unexpectedError = new Error('LLM connection failed')
       mockRunnerRunImpl.mockRejectedValueOnce(unexpectedError)
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-
       await expect(
-        runner.run(sampleMessages, buildMockContext())
+        createRunner().run(sampleMessages, buildMockContext())
       ).rejects.toThrow('LLM connection failed')
       expect(mockLogger.logRunnerError).toHaveBeenCalledTimes(1)
       expect(mockLogger.logRunResult).not.toHaveBeenCalled()
@@ -570,31 +439,18 @@ describe('AIAgentRunner', () => {
   })
 
   describe('run() – LLM run tracking', () => {
-    it('should call trackLlmRuns after a successful run in production', async () => {
+    beforeEach(() => {
       mockConstants.isProd = true
+    })
+
+    it('should call trackLlmRuns after a successful run in production', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Hi' } }],
-          },
-          rawResponses: [
-            {
-              usage: { inputTokens: 200, outputTokens: 50 },
-              providerData: { model: 'gpt-4.1-mini-2025-04-14' },
-            },
-          ],
+        makeTextRunnerResult('Hi', {
+          rawResponses: [makeRawResponse(200, 50, 'gpt-4.1-mini-2025-04-14')],
         })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
-
-      // Allow fire-and-forget promise to resolve
+      await createRunner().run(sampleMessages, buildMockContext())
       await Promise.resolve()
 
       expect(mockTrackLlmRuns).toHaveBeenCalledWith(
@@ -615,47 +471,24 @@ describe('AIAgentRunner', () => {
     })
 
     it('should call trackLlmRuns once per rawResponse in production', async () => {
-      mockConstants.isProd = true
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Hi' } }],
-          },
+        makeTextRunnerResult('Hi', {
           rawResponses: [
-            {
-              usage: { inputTokens: 100, outputTokens: 20 },
-              providerData: { model: 'gpt-4.1-mini-2025-04-14' },
-            },
-            {
-              usage: { inputTokens: 150, outputTokens: 30 },
-              providerData: { model: 'gpt-4.1-mini-2025-04-14' },
-            },
+            makeRawResponse(100, 20, 'gpt-4.1-mini-2025-04-14'),
+            makeRawResponse(150, 30, 'gpt-4.1-mini-2025-04-14'),
           ],
         })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
-
+      await createRunner().run(sampleMessages, buildMockContext())
       await Promise.resolve()
 
       expect(mockTrackLlmRuns).toHaveBeenCalledWith(
         'test-bot-id',
         expect.objectContaining({
           llm_runs: expect.arrayContaining([
-            expect.objectContaining({
-              num_prompt_tokens: 100,
-              num_completion_tokens: 20,
-            }),
-            expect.objectContaining({
-              num_prompt_tokens: 150,
-              num_completion_tokens: 30,
-            }),
+            expect.objectContaining({ num_prompt_tokens: 100, num_completion_tokens: 20 }),
+            expect.objectContaining({ num_prompt_tokens: 150, num_completion_tokens: 30 }),
           ]),
         })
       )
@@ -666,74 +499,32 @@ describe('AIAgentRunner', () => {
     it('should NOT call trackLlmRuns when not in production', async () => {
       mockConstants.isProd = false
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Hi' } }],
-          },
-          rawResponses: [
-            { usage: { inputTokens: 100, outputTokens: 20 }, providerData: {} },
-          ],
-        })
+        makeTextRunnerResult('Hi', { rawResponses: [makeRawResponse(100, 20)] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
-
+      await createRunner().run(sampleMessages, buildMockContext())
       await Promise.resolve()
 
       expect(mockTrackLlmRuns).not.toHaveBeenCalled()
     })
 
     it('should NOT call trackLlmRuns when rawResponses is empty', async () => {
-      mockConstants.isProd = true
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Hi' } }],
-          },
-          rawResponses: [],
-        })
+        makeTextRunnerResult('Hi', { rawResponses: [] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
-
+      await createRunner().run(sampleMessages, buildMockContext())
       await Promise.resolve()
 
       expect(mockTrackLlmRuns).not.toHaveBeenCalled()
     })
 
     it('should use deployment_name as fallback model_name when providerData.model is missing', async () => {
-      mockConstants.isProd = true
       mockRunnerRunImpl.mockResolvedValueOnce(
-        makeRunnerResult({
-          finalOutput: {
-            messages: [{ type: 'text', content: { text: 'Hi' } }],
-          },
-          rawResponses: [
-            { usage: { inputTokens: 100, outputTokens: 20 }, providerData: {} },
-          ],
-        })
+        makeTextRunnerResult('Hi', { rawResponses: [makeRawResponse(100, 20)] })
       )
 
-      const runner = new AIAgentRunner(
-        buildMockAgent(),
-        buildMockLlmConfig(),
-        'test-inference-id',
-        mockLogger
-      )
-      await runner.run(sampleMessages, buildMockContext())
-
+      await createRunner().run(sampleMessages, buildMockContext())
       await Promise.resolve()
 
       expect(mockTrackLlmRuns).toHaveBeenCalledWith(
