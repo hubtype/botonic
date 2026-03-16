@@ -123,7 +123,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = nextPayload
     }
 
-    this.updateRequestBeforeRoutes(request)
+    await this.updateRequestBeforeRoutes(request)
   }
 
   private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
