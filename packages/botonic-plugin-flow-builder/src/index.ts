@@ -163,7 +163,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         const cmsGoToFlow = this.cmsApi.getNodeById<HtGoToFlow>(
           request.input.payload
         )
-        await FlowGoToFlow.resolveGoToFlowAiAgents(
+        await FlowGoToFlow.resolveToAiAgentsFlow(
           request,
           cmsGoToFlow,
           this.cmsApi

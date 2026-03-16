@@ -29,7 +29,7 @@ export class FlowGoToFlow extends ContentFieldsBase {
     return newGoToFlow
   }
 
-  static async resolveGoToFlowAiAgents(
+  static async resolveToAiAgentsFlow(
     botContext: ActionRequest,
     component: HtGoToFlow,
     cmsApi: FlowBuilderApi
