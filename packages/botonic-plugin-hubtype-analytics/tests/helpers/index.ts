@@ -53,9 +53,15 @@ export function createRequest(args?: RequestArgs): BotContext<ResolvedPlugins> {
     getUserCountry: () => args?.country || 'ES',
     getUserLocale: () => args?.language || 'es',
     getSystemLocale: () => args?.language || 'es',
-    setUserCountry: () => {},
-    setUserLocale: () => {},
-    setSystemLocale: () => {},
+    setUserCountry: () => {
+      return
+    },
+    setUserLocale: () => {
+      return
+    },
+    setSystemLocale: () => {
+      return
+    },
     defaultDelay: 0,
     defaultTyping: 0,
     params: {},
