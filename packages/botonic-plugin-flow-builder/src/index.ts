@@ -159,7 +159,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         this.convertWhatsappAiAgentEmptyPayloads(request)
       }
 
-      if (this.cmsApi.isGotToFlow(request.input.payload)) {
+      if (this.cmsApi.isGoToFlow(request.input.payload)) {
         const cmsGoToFlow = this.cmsApi.getNodeById<HtGoToFlow>(
           request.input.payload
         )

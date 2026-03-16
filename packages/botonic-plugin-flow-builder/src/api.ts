@@ -204,7 +204,7 @@ export class FlowBuilderApi {
     return UUID_REGEXP.test(str)
   }
 
-  isGotToFlow(id: string): boolean {
+  isGoToFlow(id: string): boolean {
     const node = this.getNodeById(id)
     return node?.type === HtNodeWithContentType.GO_TO_FLOW
   }
