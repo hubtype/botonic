@@ -107,7 +107,7 @@ describe('LLMConfig', () => {
 
       expect(config.modelSettings).toEqual({
         temperature: 0,
-        text: { verbosity: 'low' },
+        text: { verbosity: 'medium' },
       })
     })
 
