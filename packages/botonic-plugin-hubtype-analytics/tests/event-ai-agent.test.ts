@@ -17,10 +17,15 @@ describe('Ai agent event', () => {
         {
           toolName: 'retrieve_knowledge',
           toolArguments: { query: 'value1' },
+          toolResults: 'result1',
           knowledgebaseSourcesIds: ['105c2045-1968-4e37-bb2c-b9a3647b1bda'],
           knowledgebaseChunksIds: ['106c2045-1968-4e37-bb2c-b9a3647b1bda'],
         },
-        { toolName: 'tool2', toolArguments: { arg2: 'value2' } },
+        {
+          toolName: 'tool2',
+          toolArguments: { arg2: 'value2' },
+          toolResults: 'result2',
+        },
       ],
       memoryLength: 4,
       inputMessageId: 'messageIdTest',

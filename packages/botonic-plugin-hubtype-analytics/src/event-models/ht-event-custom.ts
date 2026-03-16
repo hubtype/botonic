@@ -7,8 +7,8 @@ import {
 import { HtEvent } from './ht-event'
 
 export class HtEventCustom extends HtEvent {
-  custom_fields: Record<string, any>
-  custom_sensitive_fields: Record<string, any>
+  custom_fields: Record<string, unknown>
+  custom_sensitive_fields: Record<string, unknown>
 
   constructor(event: EventCustom, requestData: RequestData) {
     super(event, requestData)
