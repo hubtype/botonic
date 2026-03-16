@@ -10,7 +10,7 @@ import { HtEvent } from './ht-event'
 
 interface ToolExecutionEventArgs {
   tool_name: string
-  tool_arguments: Record<string, any>
+  tool_arguments: Record<string, unknown>
   tool_results?: string
   knowledgebase_sources_ids?: string[]
   knowledgebase_chunks_ids?: string[]
