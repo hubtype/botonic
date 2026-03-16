@@ -57,10 +57,9 @@ export class HtEventAiAgent extends HtEvent {
     if (!toolResults) {
       return undefined
     }
-    const stringifiedToolResults = JSON.stringify(toolResults)
-    return stringifiedToolResults.length > MAX_TOOL_RESULTS_LENGTH_IN_KB
-      ? `${stringifiedToolResults.slice(0, MAX_TOOL_RESULTS_LENGTH_IN_KB - 3)}...`
-      : stringifiedToolResults
+    return toolResults.length > MAX_TOOL_RESULTS_LENGTH_IN_KB
+      ? `${toolResults.slice(0, MAX_TOOL_RESULTS_LENGTH_IN_KB - 3)}...`
+      : toolResults
   }
 
   private getToolExecutionInfo(
