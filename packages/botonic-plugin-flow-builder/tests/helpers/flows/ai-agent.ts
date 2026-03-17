@@ -185,3 +185,30 @@ export const aiAgentTestFlow = {
   webview_contents: [],
   bot_variables: [],
 }
+
+export const GO_TO_AI_AGENTS_NODE_ID = '0196f214-17a3-77d1-9ed9-19c8b728a4c0'
+
+export const aiAgentGoToFlowTestFlow = {
+  ...aiAgentTestFlow,
+  nodes: [
+    ...aiAgentTestFlow.nodes,
+    {
+      id: GO_TO_AI_AGENTS_NODE_ID,
+      code: 'go-to-ai-agents',
+      is_code_ai_generated: false,
+      meta: {
+        x: 520.0,
+        y: -110.0,
+      },
+      follow_up: null,
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'go-to-flow',
+      content: {
+        flow_id: '0a2b5ce4-9cbe-518c-b70c-17544eea0365',
+      },
+    },
+  ],
+}

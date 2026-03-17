@@ -16,10 +16,11 @@ import {
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import type { FlowContent } from './content-fields'
+import { type FlowContent, FlowGoToFlow } from './content-fields'
 import {
   type HtBotActionNode,
   type HtFlowBuilderData,
+  type HtGoToFlow,
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
@@ -122,7 +123,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request.input.payload = nextPayload
     }
 
-    this.updateRequestBeforeRoutes(request)
+    await this.updateRequestBeforeRoutes(request)
   }
 
   private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
@@ -138,7 +139,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
   }
 
-  private updateRequestBeforeRoutes(request: PluginPreRequest): void {
+  private async updateRequestBeforeRoutes(
+    request: PluginPreRequest
+  ): Promise<void> {
     this.cmsApi.removeCaptureUserInputId()
     if (request.input.payload) {
       request.input.payload = this.removeSourceSuffix(request.input.payload)
@@ -154,6 +157,17 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
         // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
         this.convertWhatsappAiAgentEmptyPayloads(request)
+      }
+
+      if (this.cmsApi.isGoToFlow(request.input.payload)) {
+        const cmsGoToFlow = this.cmsApi.getNodeById<HtGoToFlow>(
+          request.input.payload
+        )
+        await FlowGoToFlow.resolveToAiAgentsFlow(
+          request,
+          cmsGoToFlow,
+          this.cmsApi
+        )
       }
     }
   }
