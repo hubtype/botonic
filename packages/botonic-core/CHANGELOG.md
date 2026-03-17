@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.45.x] - 2026-mm-dd
+## [0.46.x] - 2026-mm-dd
 
 ### Added
 
@@ -20,11 +20,11 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.45.1] - 2026-mm-dd
+## [0.46.0] - 2026-03-17
 
 ### Added
 
-- [PR-3180](https://github.com/hubtype/botonic/pull/3180): Bot config tool schema support (ToolConfigJSON)
+- Update types, for ai agents, hubtype-analytics and bot config.
 
 ## [0.45.0] - 2026-03-03
 

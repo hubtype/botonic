@@ -11,7 +11,7 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.45.0] - 2025-mm-dd
+## [0.46.x] - 2026-mm-dd
 
 ### Added
 
@@ -21,7 +21,7 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.45.1] - 2026-mm-dd
+## [0.46.0] - 2026-03-17
 
 ### Changed
 

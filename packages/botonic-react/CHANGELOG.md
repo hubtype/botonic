@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.44.x] - 2026-mm-dd
+## [0.46.x] - 2026-mm-dd
 
 ### Added
 
@@ -20,10 +20,11 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.45.1] - 2026-mm-dd
+## [0.46.0] - 2026-03-17
 
 ### Added
 
+- [PR-3179](https://github.com/hubtype/botonic/pull/3179): Custom Rating component send payload with a text of rating in referral attribute.
 - [PR-3180](https://github.com/hubtype/botonic/pull/3180): AI agent debug trace: tool results/arguments, retrieve_knowledge vs other tools, “See details” button, preview utils to be used by flow builder modal
 
 ## [0.44.1] - 2026-02-03
