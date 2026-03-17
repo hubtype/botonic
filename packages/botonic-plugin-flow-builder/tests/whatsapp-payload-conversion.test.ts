@@ -1,11 +1,16 @@
 import { INPUT, type InferenceResponse, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
+import type { FlowAiAgent } from '../src'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../src/constants'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
-import { aiAgentTestFlow } from './helpers/flows/ai-agent'
+import {
+  aiAgentGoToFlowTestFlow,
+  aiAgentTestFlow,
+  GO_TO_AI_AGENTS_NODE_ID,
+} from './helpers/flows/ai-agent'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
 describe('WhatsApp AI Agent Empty Payload Conversion', () => {
@@ -217,5 +222,46 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     expect(request.input.type).toBe(INPUT.POSTBACK)
     expect(request.input.data).toBe('button_click')
     expect(request.input.referral).toBe('What is the weather like?')
+  })
+
+  test('should resolve WhatsApp go-to-flow payloads to AI Agents using referral text', async () => {
+    const mockResponse: Partial<InferenceResponse> = {
+      messages: [
+        {
+          type: 'text',
+          content: {
+            text: 'AI agent response to go-to-flow referral',
+          },
+        },
+      ],
+    }
+
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentGoToFlowTestFlow,
+        getAiAgentResponse: mockAiAgentResponse(mockResponse),
+      },
+      requestArgs: {
+        input: {
+          type: INPUT.POSTBACK,
+          payload: GO_TO_AI_AGENTS_NODE_ID,
+          referral: 'What is the weather like?',
+        },
+        provider: PROVIDER.WHATSAPP,
+      },
+    })
+
+    const aiAgentContentResponses = (contents[0] as FlowAiAgent).responses
+
+    expect(request.input.payload).toBeUndefined()
+    expect(request.input.type).toBe(INPUT.TEXT)
+    expect(request.input.data).toBe('What is the weather like?')
+    expect(request.input.referral).toBe('What is the weather like?')
+    expect(aiAgentContentResponses[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'AI agent response to go-to-flow referral',
+      },
+    })
   })
 })
