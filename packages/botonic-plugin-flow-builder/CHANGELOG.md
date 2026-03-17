@@ -14,15 +14,19 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3178](https://github.com/hubtype/botonic/pull/3178): Audio message with transcript uses AI as text input.
-- [PR-3176](https://github.com/hubtype/botonic/pull/3176): AI Agent node has model and verbosity config.
-- [PR-3183](https://github.com/hubtype/botonic/pull/3183): Allow button connected to GoToFlow with Ai Agents flow.
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.46.0] - 2026-03-17
+
+### Added
+
+- [PR-3178](https://github.com/hubtype/botonic/pull/3178): Audio message with transcript uses AI as text input.
+- [PR-3176](https://github.com/hubtype/botonic/pull/3176): AI Agent node has model and verbosity config.
+- [PR-3183](https://github.com/hubtype/botonic/pull/3183): Allow button connected to GoToFlow with Ai Agents flow.
 
 ## [0.45.0] - 2026-03-03
 

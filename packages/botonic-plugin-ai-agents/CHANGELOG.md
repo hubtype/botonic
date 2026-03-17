@@ -14,19 +14,19 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3176](https://github.com/hubtype/botonic/pull/3176): Set AI Agent model and verbosity in each execution.
-
 ### Changed
 
 ### Fixed
 
 </details>
 
-## [0.45.1] - 2026-mm-dd
+## [0.46.0] - 2026-03-17
 
 ### Added
 
+- [PR-3176](https://github.com/hubtype/botonic/pull/3176): Set AI Agent model and verbosity in each execution.
 - [PR-3180](https://github.com/hubtype/botonic/pull/3180): Expose safe method getToolsForBotConfig to be used by bots using plugin
+- [PR-3182](https://github.com/hubtype/botonic/pull/3182): Track tokens consumed by AI Agent.
 
 ## [0.45.0] - 2026-03-03
 
