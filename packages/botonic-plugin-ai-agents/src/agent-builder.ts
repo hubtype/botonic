@@ -26,7 +26,7 @@ interface AIAgentBuilderOptions<
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
-  outputMessagesSchemas: z.ZodObject<any>[]
+  outputMessagesSchemas?: z.ZodObject<any>[]
   llmConfig: LLMConfig
   logger: DebugLogger
   guardrailTrackingContext: GuardrailTrackingContext
@@ -52,7 +52,7 @@ export class AIAgentBuilder<
       options.campaignsContext
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
-    this.externalOutputMessagesSchemas = options.outputMessagesSchemas
+    this.externalOutputMessagesSchemas = options.outputMessagesSchemas || []
     this.inputGuardrails = []
     this.llmConfig = options.llmConfig
     this.logger = options.logger
