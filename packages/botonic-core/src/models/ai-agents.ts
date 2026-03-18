@@ -14,6 +14,7 @@ export interface Button {
   text: string
   payload?: string
   url?: string
+  target?: string
 }
 export interface ButtonWithPayload {
   text: string

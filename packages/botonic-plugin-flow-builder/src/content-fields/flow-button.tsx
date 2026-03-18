@@ -92,11 +92,13 @@ export class FlowButton extends ContentFieldsBase {
     text: string
     payload?: string
     url?: string
+    target?: string
   }): FlowButton {
     const newButton = new FlowButton(button.id)
     newButton.text = button.text
     if (button.url) {
       newButton.url = button.url
+      newButton.target = button.target
     } else {
       newButton.payload = button.payload
     }
