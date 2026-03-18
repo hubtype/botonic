@@ -1,7 +1,7 @@
-import { INPUT } from '@botonic/core'
+import { INPUT, type TextWithButtonsMessage } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
-import type { FlowText } from '../../src/content-fields/index'
+import { FlowText } from '../../src/content-fields/flow-text'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { basicFlow } from '../helpers/flows/basic'
 import { webviewFlow } from '../helpers/flows/webview'
@@ -70,5 +70,41 @@ describe('Check the contents and logic of a text node', () => {
       t: expect.any(String),
       webviewId: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
     })
+  })
+})
+
+describe('FlowText.fromAIAgent renders buttons with target attribute', () => {
+  test('URL buttons rendered from AI agent responses include the target prop', () => {
+    const textWithButtons: TextWithButtonsMessage = {
+      type: 'textWithButtons',
+      content: {
+        text: 'Here are some links:',
+        buttons: [
+          {
+            text: 'Open in same tab',
+            url: 'https://www.hubtype.com',
+            target: '_self',
+          },
+          {
+            text: 'Open in new tab',
+            url: 'https://www.google.com',
+            target: '_blank',
+          },
+          { text: 'Payload button' },
+        ],
+      },
+    }
+
+    const rendered = FlowText.fromAIAgent('test-id', textWithButtons)
+    const buttons = rendered.props.children[1]
+
+    expect(buttons[0].props.target).toBe('_self')
+    expect(buttons[0].props.url).toBe('https://www.hubtype.com')
+
+    expect(buttons[1].props.target).toBe('_blank')
+    expect(buttons[1].props.url).toBe('https://www.google.com')
+
+    expect(buttons[2].props.target).toBeUndefined()
+    expect(buttons[2].props.url).toBeUndefined()
   })
 })
