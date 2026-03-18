@@ -205,6 +205,9 @@ export class FlowBuilderApi {
   }
 
   isGoToFlow(id: string): boolean {
+    if (!this.isUUID(id)) {
+      return false
+    }
     const node = this.getNodeById(id)
     return node?.type === HtNodeWithContentType.GO_TO_FLOW
   }
