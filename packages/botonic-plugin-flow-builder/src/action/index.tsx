@@ -10,13 +10,17 @@ import React from 'react'
 
 import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD } from '../constants'
-import { type FlowContent, FlowHandoff } from '../content-fields'
+import { FlowAiAgent, type FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent } from './ai-agent'
+import {
+  getAIAgentResponses,
+  getContentsByAiAgent,
+  trackAiAgentResponse,
+} from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -51,6 +55,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const filteredContents = await filterContents(request, contents)
     await FlowBuilderAction.trackAllContents(request, filteredContents)
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
+    await FlowBuilderAction.resolveAIAgentContent(request, filteredContents)
 
     return { contents: filteredContents }
   }
@@ -80,6 +85,27 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowBotAction
     if (botActionContent) {
       botActionContent.doBotAction(request)
+    }
+  }
+
+  static async resolveAIAgentContent(
+    request: ActionRequest,
+    contents: FlowContent[]
+  ) {
+    const aiAgentContent = contents.find(
+      content => content instanceof FlowAiAgent
+    ) as FlowAiAgent
+    if (aiAgentContent && aiAgentContent?.responses.length === 0) {
+      const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+      const aiAgentResponse = await getAIAgentResponses(
+        request,
+        flowBuilderPlugin,
+        aiAgentContent
+      )
+      if (aiAgentResponse) {
+        await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
+        aiAgentContent.responses = aiAgentResponse.messages
+      }
     }
   }
 

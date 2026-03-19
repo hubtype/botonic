@@ -4,10 +4,10 @@ import {
   type EventAiAgent,
   type InferenceResponse,
 } from '@botonic/core'
-
 import { FlowAiAgent, type FlowContent } from '../content-fields'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { getFlowBuilderPlugin } from '../helpers'
+import type BotonicPluginFlowBuilder from '../index'
 import { trackEvent } from '../tracking'
 import type { GuardrailRule } from '../types'
 import type { FlowBuilderContext } from './index'
@@ -34,6 +34,31 @@ export async function getContentsByAiAgent({
     return []
   }
 
+  const aiAgentResponse = await getAIAgentResponses(
+    request,
+    flowBuilderPlugin,
+    aiAgentContent
+  )
+
+  if (!aiAgentResponse) {
+    return []
+  }
+  await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
+
+  if (aiAgentResponse.exit) {
+    return []
+  }
+
+  aiAgentContent.responses = aiAgentResponse.messages
+
+  return contents
+}
+
+export async function getAIAgentResponses(
+  request: BotContext,
+  flowBuilderPlugin: BotonicPluginFlowBuilder,
+  aiAgentContent: FlowAiAgent
+): Promise<InferenceResponse | undefined> {
   const activeInputGuardrailRules: GuardrailRule[] =
     aiAgentContent.inputGuardrailRules
       ?.filter(rule => rule.is_active)
@@ -55,21 +80,10 @@ export async function getContentsByAiAgent({
     }
   )
 
-  if (!aiAgentResponse) {
-    return []
-  }
-  await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
-
-  if (aiAgentResponse.exit) {
-    return []
-  }
-
-  aiAgentContent.responses = aiAgentResponse.messages
-
-  return contents
+  return aiAgentResponse
 }
 
-async function trackAiAgentResponse(
+export async function trackAiAgentResponse(
   aiAgentResponse: InferenceResponse,
   request: BotContext,
   aiAgentContent: FlowAiAgent
