@@ -1,12 +1,6 @@
-import {
-  EventAction,
-  type EventRedirectFlow,
-  INPUT,
-  PROVIDER,
-} from '@botonic/core'
+import { EventAction, type EventRedirectFlow } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 import type { FlowBuilderApi } from '../api'
-import { AI_AGENTS_FLOW_NAME } from '../constants'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -32,23 +26,6 @@ export class FlowGoToFlow extends ContentFieldsBase {
     newGoToFlow.followUp = cmsApi.getNodeById<HtNodeWithContent>(targetId)
 
     return newGoToFlow
-  }
-
-  static async resolveToAiAgentsFlow(
-    botContext: ActionRequest,
-    component: HtGoToFlow,
-    cmsApi: FlowBuilderApi
-  ): Promise<void> {
-    const goToFlowContent = FlowGoToFlow.fromHubtypeCMS(component, cmsApi)
-    if (goToFlowContent.flowTargetName === AI_AGENTS_FLOW_NAME) {
-      await goToFlowContent.trackFlow(botContext)
-
-      botContext.input.payload = undefined
-      if (botContext.session.user.provider === PROVIDER.WHATSAPP) {
-        botContext.input.type = INPUT.TEXT
-        botContext.input.data = botContext.input.referral
-      }
-    }
   }
 
   async trackFlow(request: ActionRequest): Promise<void> {

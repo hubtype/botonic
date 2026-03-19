@@ -204,14 +204,6 @@ export class FlowBuilderApi {
     return UUID_REGEXP.test(str)
   }
 
-  isGoToFlow(id: string): boolean {
-    if (!this.isUUID(id)) {
-      return false
-    }
-    const node = this.getNodeById(id)
-    return node?.type === HtNodeWithContentType.GO_TO_FLOW
-  }
-
   createPayloadWithParams(botActionNode: HtBotActionNode): string {
     const payloadId = botActionNode.content.payload_id
     const payloadNode = this.getNodeById<HtPayloadNode>(payloadId)
