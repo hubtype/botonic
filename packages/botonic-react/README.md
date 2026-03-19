@@ -47,7 +47,7 @@ And it works on:
 With Botonic you can focus on creating the best conversational experience for your users instead of dealing with different messaging APIs, AI/NLP complexity or managing and scaling infrastructure.
 It also comes with a battery of plugins so you can easily integrate popular services into your project, for instance:
 
-- Analytics ([Google Analytics](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-google-analytics), [Segment](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-segment), [Dashbot](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dashbot))
+- Analytics ([Google Analytics](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-google-analytics), [Dashbot](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dashbot))
 - CMS ([Contentful](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful), Sanity)
 - NLU ([Dialogflow](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-dialogflow), [Watson](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-watson), [Luis](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-luis), [Inbenta](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-inbenta))
 

@@ -9,7 +9,6 @@ jobs:
     env:
       DOCS: docs
       GOOGLE_OPTIMIZE_ID: ${{ secrets.GOOGLE_OPTIMIZE_ID }}
-      SEGMENT_DOCS_API_KEY: ${{ secrets.SEGMENT_DOCS_API_KEY }}
     steps:
       - name: Checking out to current branch
         uses: actions/checkout@v2

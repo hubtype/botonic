@@ -84,7 +84,6 @@
       "plugins/plugin-intent-classification",
       "plugins/plugin-luis",
       "plugins/plugin-ner",
-      "plugins/plugin-segment",
       "plugins/plugin-watson"
     ],
     "How to Create a Plugin": [
