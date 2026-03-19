@@ -1,15 +1,4 @@
-import {
-  type BotContext,
-  EventAction,
-  type EventAiAgent,
-  type InferenceResponse,
-} from '@botonic/core'
 import { FlowAiAgent, type FlowContent } from '../content-fields'
-import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
-import { getFlowBuilderPlugin } from '../helpers'
-import type BotonicPluginFlowBuilder from '../index'
-import { trackEvent } from '../tracking'
-import type { GuardrailRule } from '../types'
 import type { FlowBuilderContext } from './index'
 
 export async function getContentsByAiAgent({
@@ -34,83 +23,18 @@ export async function getContentsByAiAgent({
     return []
   }
 
-  const aiAgentResponse = await getAIAgentResponses(
-    request,
-    flowBuilderPlugin,
-    aiAgentContent
-  )
+  const aiAgentResponse = await aiAgentContent.getAIAgentResponse(request)
 
   if (!aiAgentResponse) {
     return []
   }
-  await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
+  await aiAgentContent.trackAiAgentResponse(request)
 
   if (aiAgentResponse.exit) {
     return []
   }
 
-  aiAgentContent.responses = aiAgentResponse.messages
+  aiAgentContent.messages = aiAgentResponse.messages
 
   return contents
-}
-
-export async function getAIAgentResponses(
-  request: BotContext,
-  flowBuilderPlugin: BotonicPluginFlowBuilder,
-  aiAgentContent: FlowAiAgent
-): Promise<InferenceResponse | undefined> {
-  const activeInputGuardrailRules: GuardrailRule[] =
-    aiAgentContent.inputGuardrailRules
-      ?.filter(rule => rule.is_active)
-      ?.map(rule => ({
-        name: rule.name,
-        description: rule.description,
-      })) || []
-
-  const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
-    request,
-    {
-      name: aiAgentContent.name,
-      instructions: aiAgentContent.instructions,
-      model: aiAgentContent.model,
-      verbosity: aiAgentContent.verbosity,
-      activeTools: aiAgentContent.activeTools,
-      inputGuardrailRules: activeInputGuardrailRules,
-      sourceIds: aiAgentContent.sources?.map(source => source.id),
-    }
-  )
-
-  return aiAgentResponse
-}
-
-export async function trackAiAgentResponse(
-  aiAgentResponse: InferenceResponse,
-  request: BotContext,
-  aiAgentContent: FlowAiAgent
-) {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const flowId = flowBuilderPlugin.cmsApi.getNodeById<HtNodeWithContent>(
-    aiAgentContent.id
-  ).flow_id
-  const flowName = flowBuilderPlugin.getFlowName(flowId)
-
-  const event: EventAiAgent = {
-    action: EventAction.AiAgent,
-    flowThreadId: request.session.flow_thread_id!,
-    flowId: flowId,
-    flowName: flowName,
-    flowNodeId: aiAgentContent.id,
-    flowNodeContentId: aiAgentContent.name,
-    flowNodeIsMeaningful: true,
-    toolsExecuted: aiAgentResponse?.toolsExecuted ?? [],
-    memoryLength: aiAgentResponse?.memoryLength ?? 0,
-    inputMessageId: request.input.message_id!,
-    exit: aiAgentResponse?.exit ?? true,
-    inputGuardrailsTriggered: aiAgentResponse?.inputGuardrailsTriggered ?? [],
-    outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
-    error: aiAgentResponse.error,
-  }
-  const { action, ...eventArgs } = event
-
-  await trackEvent(request, action, eventArgs)
 }

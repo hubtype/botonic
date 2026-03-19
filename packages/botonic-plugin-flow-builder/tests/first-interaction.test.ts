@@ -239,7 +239,7 @@ describe('Check the contents returned by the plugin in first interaction with AI
     expect(aiAgentMock).toHaveBeenCalled()
     expect((contents[0] as FlowText).text).toBe('Welcome')
     expect(contents.length).toBe(2)
-    expect((contents[1] as FlowAiAgent).responses[0]).toEqual({
+    expect((contents[1] as FlowAiAgent).messages[0]).toEqual({
       type: 'text',
       content: {
         text: 'AI agent response in first interaction',
@@ -289,7 +289,7 @@ describe('Check the contents returned by the plugin in first interaction with AI
 
     expect(aiAgentMock).toHaveBeenCalled()
     expect(contents.length).toBe(1)
-    expect((contents[0] as FlowAiAgent).responses[0]).toEqual({
+    expect((contents[0] as FlowAiAgent).messages[0]).toEqual({
       type: 'text',
       content: {
         text: 'AI agent response in first interaction',

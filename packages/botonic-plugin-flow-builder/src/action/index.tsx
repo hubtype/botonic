@@ -16,11 +16,7 @@ import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils'
-import {
-  getAIAgentResponses,
-  getContentsByAiAgent,
-  trackAiAgentResponse,
-} from './ai-agent'
+import { getContentsByAiAgent } from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -53,11 +49,24 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
     const filteredContents = await filterContents(request, contents)
+    await FlowBuilderAction.resolveAIAgentMessages(request, filteredContents)
     await FlowBuilderAction.trackAllContents(request, filteredContents)
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
-    await FlowBuilderAction.resolveAIAgentContent(request, filteredContents)
 
     return { contents: filteredContents }
+  }
+
+  static async resolveAIAgentMessages(
+    botContext: BotContext,
+    contents: FlowContent[]
+  ) {
+    const aiAgentContent = contents.find(
+      content => content instanceof FlowAiAgent
+    ) as FlowAiAgent
+
+    if (aiAgentContent && aiAgentContent?.messages.length === 0) {
+      await aiAgentContent.resolveAIAgentMessages(botContext)
+    }
   }
 
   static async trackAllContents(
@@ -85,27 +94,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     ) as FlowBotAction
     if (botActionContent) {
       botActionContent.doBotAction(request)
-    }
-  }
-
-  static async resolveAIAgentContent(
-    request: ActionRequest,
-    contents: FlowContent[]
-  ) {
-    const aiAgentContent = contents.find(
-      content => content instanceof FlowAiAgent
-    ) as FlowAiAgent
-    if (aiAgentContent && aiAgentContent?.responses.length === 0) {
-      const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-      const aiAgentResponse = await getAIAgentResponses(
-        request,
-        flowBuilderPlugin,
-        aiAgentContent
-      )
-      if (aiAgentResponse) {
-        await trackAiAgentResponse(aiAgentResponse, request, aiAgentContent)
-        aiAgentContent.responses = aiAgentResponse.messages
-      }
     }
   }
 

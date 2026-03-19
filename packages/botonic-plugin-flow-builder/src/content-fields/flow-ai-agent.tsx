@@ -1,7 +1,17 @@
-import { type AgenticOutputMessage, VerbosityLevel } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
-
-import { trackOneContent } from '../tracking'
+import {
+  type AgenticOutputMessage,
+  EventAction,
+  type EventAiAgent,
+  type GuardrailRule,
+  type InferenceResponse,
+  VerbosityLevel,
+} from '@botonic/core'
+import type { ActionRequest as BotContext } from '@botonic/react'
+import { getFlowBuilderPlugin } from '../helpers'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
 import { FlowText } from './flow-text'
@@ -19,7 +29,8 @@ export class FlowAiAgent extends ContentFieldsBase {
   public inputGuardrailRules: HtInputGuardrailRule[]
   public sources?: { id: string; name: string }[]
 
-  public responses: AgenticOutputMessage[] = []
+  public aiAgentResponse?: InferenceResponse
+  public messages: AgenticOutputMessage[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -37,16 +48,82 @@ export class FlowAiAgent extends ContentFieldsBase {
     return newAiAgent
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    // We can call trackFlowContent here but the function no track events for AiAgent contents
-    // Review how we can track here the ai agent event
-    await trackOneContent(request, this)
+  async resolveAIAgentMessages(botContext: BotContext): Promise<void> {
+    const aiAgentResponse = await this.getAIAgentResponse(botContext)
+    if (aiAgentResponse) {
+      this.aiAgentResponse = aiAgentResponse
+      await this.trackAiAgentResponse(botContext)
+      this.messages = aiAgentResponse.messages
+    }
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
+  async getAIAgentResponse(
+    botContext: BotContext
+  ): Promise<InferenceResponse | undefined> {
+    const activeInputGuardrailRules: GuardrailRule[] =
+      this.inputGuardrailRules
+        ?.filter(rule => rule.is_active)
+        ?.map(rule => ({
+          name: rule.name,
+          description: rule.description,
+        })) || []
+
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+
+    const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
+      botContext,
+      {
+        name: this.name,
+        instructions: this.instructions,
+        model: this.model,
+        verbosity: this.verbosity,
+        activeTools: this.activeTools,
+        inputGuardrailRules: activeInputGuardrailRules,
+        sourceIds: this.sources?.map(source => source.id),
+      }
+    )
+
+    return aiAgentResponse
+  }
+
+  async trackFlow(): Promise<void> {
+    return
+  }
+
+  async trackAiAgentResponse(botContext: BotContext) {
+    console.log('trackAiAgentResponse')
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const cmsApi = flowBuilderPlugin.cmsApi
+    const nodeContent = cmsApi.getNodeById<HtAiAgentNode>(this.id)
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
+      getCommonFlowContentEventArgsForContentId(botContext, nodeContent.id)
+
+    const event: EventAiAgent = {
+      action: EventAction.AiAgent,
+      flowThreadId: flowThreadId,
+      flowId: flowId,
+      flowName: flowName,
+      flowNodeId: flowNodeId,
+      flowNodeContentId: flowNodeContentId,
+      flowNodeIsMeaningful: true,
+      toolsExecuted: this.aiAgentResponse?.toolsExecuted ?? [],
+      memoryLength: this.aiAgentResponse?.memoryLength ?? 0,
+      inputMessageId: botContext.input.message_id!,
+      exit: this.aiAgentResponse?.exit ?? true,
+      inputGuardrailsTriggered:
+        this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
+      outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
+      error: this.aiAgentResponse?.error ?? false,
+    }
+    const { action, ...eventArgs } = event
+
+    await trackEvent(botContext, action, eventArgs)
+  }
+
+  toBotonic(id: string, botContext: BotContext): JSX.Element {
     return (
       <>
-        {this.responses.map((response: AgenticOutputMessage) => {
+        {this.messages.map((response: AgenticOutputMessage) => {
           if (
             response.type === 'text' ||
             response.type === 'textWithButtons' ||
@@ -56,7 +133,7 @@ export class FlowAiAgent extends ContentFieldsBase {
           }
 
           if (response.type === 'carousel') {
-            return FlowCarousel.fromAIAgent(id, response, request)
+            return FlowCarousel.fromAIAgent(id, response, botContext)
           }
 
           return <></>
