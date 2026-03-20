@@ -176,9 +176,9 @@ export default class BotonicPluginAiAgents<
       return await hubtypeClient.getLocalMessages(memoryLength)
     }
 
-    if (this.messageHistoryApiVersion === 'v1') {
-      return await hubtypeClient.getMessages(botContext, memoryLength)
-    }
+    // if (this.messageHistoryApiVersion === 'v1') {
+    //   return await hubtypeClient.getMessages(botContext, memoryLength)
+    // }
 
     // Default to V2
     const result = await hubtypeClient.getMessagesV2(botContext, {

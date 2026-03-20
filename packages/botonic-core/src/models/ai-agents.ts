@@ -101,4 +101,5 @@ export interface AiAgentArgs {
   activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]
   sourceIds?: string[]
+  previousFollowUps?: any[]
 }

@@ -15,10 +15,12 @@ import {
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
 import { FlowText } from './flow-text'
+import { HubtypeAssistantContent } from './hubtype-assistant-content'
 import type {
   HtAiAgentNode,
   HtInputGuardrailRule,
 } from './hubtype-fields/ai-agent'
+import type { FlowContent } from './index'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
@@ -58,8 +60,17 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   async getAIAgentResponse(
-    botContext: BotContext
+    botContext: BotContext,
+    previousContents?: FlowContent[]
   ): Promise<InferenceResponse | undefined> {
+    const previousHubtypeContents =
+      previousContents?.map(content => {
+        return {
+          role: 'assistant',
+          content: HubtypeAssistantContent.adapt(content),
+        }
+      }) || []
+
     const activeInputGuardrailRules: GuardrailRule[] =
       this.inputGuardrailRules
         ?.filter(rule => rule.is_active)
@@ -80,6 +91,7 @@ export class FlowAiAgent extends ContentFieldsBase {
         activeTools: this.activeTools,
         inputGuardrailRules: activeInputGuardrailRules,
         sourceIds: this.sources?.map(source => source.id),
+        previousFollowUps: previousHubtypeContents,
       }
     )
 

@@ -64,32 +64,32 @@ export class HubtypeApiClient {
     return filteredMessages.slice(-maxMemoryLength)
   }
 
-  async getMessages(
-    botContext: BotContext,
-    maxMemoryLength: number
-  ): Promise<AgenticInputMessage[]> {
-    const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.authToken}`,
-    }
-    const params = {
-      last_message_id: botContext.input.message_id,
-      num_messages: maxMemoryLength,
-    }
+  // async getMessages(
+  //   botContext: BotContext,
+  //   maxMemoryLength: number
+  // ): Promise<AgenticInputMessage[]> {
+  //   const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
+  //   const headers = {
+  //     'Content-Type': 'application/json',
+  //     Authorization: `Bearer ${this.authToken}`,
+  //   }
+  //   const params = {
+  //     last_message_id: botContext.input.message_id,
+  //     num_messages: maxMemoryLength,
+  //   }
 
-    try {
-      const response = await axios.get<{ messages: HubtypeMessage[] }>(url, {
-        headers,
-        params,
-      })
-      const messages = response.data.messages
-      return messages.map(message => this.formatMessage(message))
-    } catch (error) {
-      console.error(error)
-      throw new Error('Failed to get messages from Hubtype')
-    }
-  }
+  //   try {
+  //     const response = await axios.get<{ messages: HubtypeMessage[] }>(url, {
+  //       headers,
+  //       params,
+  //     })
+  //     const messages = response.data.messages
+  //     return messages.map(message => this.formatMessage(message))
+  //   } catch (error) {
+  //     console.error(error)
+  //     throw new Error('Failed to get messages from Hubtype')
+  //   }
+  // }
 
   async getMessagesV2(
     botContext: BotContext,
