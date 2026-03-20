@@ -28,6 +28,7 @@ export async function getContentsByAiAgent({
   if (!aiAgentResponse) {
     return []
   }
+  aiAgentContent.aiAgentResponse = aiAgentResponse
   await aiAgentContent.trackAiAgentResponse(request)
 
   if (aiAgentResponse.exit) {

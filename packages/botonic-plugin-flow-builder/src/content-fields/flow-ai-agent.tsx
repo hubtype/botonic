@@ -91,12 +91,8 @@ export class FlowAiAgent extends ContentFieldsBase {
   }
 
   async trackAiAgentResponse(botContext: BotContext) {
-    console.log('trackAiAgentResponse')
-    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const cmsApi = flowBuilderPlugin.cmsApi
-    const nodeContent = cmsApi.getNodeById<HtAiAgentNode>(this.id)
-    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(botContext, nodeContent.id)
+    const { flowThreadId, flowId, flowName, flowNodeId } =
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
     const event: EventAiAgent = {
       action: EventAction.AiAgent,
@@ -104,7 +100,7 @@ export class FlowAiAgent extends ContentFieldsBase {
       flowId: flowId,
       flowName: flowName,
       flowNodeId: flowNodeId,
-      flowNodeContentId: flowNodeContentId,
+      flowNodeContentId: this.name,
       flowNodeIsMeaningful: true,
       toolsExecuted: this.aiAgentResponse?.toolsExecuted ?? [],
       memoryLength: this.aiAgentResponse?.memoryLength ?? 0,

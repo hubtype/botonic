@@ -1,8 +1,7 @@
 import { INPUT, type InferenceResponse, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
-
-import type { FlowAiAgent } from '../src'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../src/constants'
+import { FlowAiAgent } from '../src/content-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
@@ -251,13 +250,20 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
       },
     })
 
-    const aiAgentContentResponses = (contents[0] as FlowAiAgent).responses
+    const aiAgentContent = contents.find(
+      content => content instanceof FlowAiAgent
+    ) as FlowAiAgent
 
-    expect(request.input.payload).toBeUndefined()
-    expect(request.input.type).toBe(INPUT.TEXT)
-    expect(request.input.data).toBe('What is the weather like?')
+    if (!aiAgentContent) {
+      throw new Error('AI Agent content not found')
+    }
+
+    const aiAgentContentMessages = (aiAgentContent as FlowAiAgent).messages
+
+    expect(request.input.payload).toBe(GO_TO_AI_AGENTS_NODE_ID)
+    expect(request.input.type).toBe(INPUT.POSTBACK)
     expect(request.input.referral).toBe('What is the weather like?')
-    expect(aiAgentContentResponses[0]).toEqual({
+    expect(aiAgentContentMessages[0]).toEqual({
       type: 'text',
       content: {
         text: 'AI agent response to go-to-flow referral',

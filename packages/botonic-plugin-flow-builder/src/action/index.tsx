@@ -49,8 +49,8 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
     const filteredContents = await filterContents(request, contents)
-    await FlowBuilderAction.resolveAIAgentMessages(request, filteredContents)
     await FlowBuilderAction.trackAllContents(request, filteredContents)
+    await FlowBuilderAction.resolveAIAgentMessages(request, filteredContents)
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
     return { contents: filteredContents }
