@@ -25,6 +25,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3186](https://github.com/hubtype/botonic/pull/3186) Make some AI Agents types generic to allow adding new output message types.
+- [PR-3188](https://github.com/hubtype/botonic/pull/3188) Add `target` attribute in `Button` interface.
 
 ## [0.46.0] - 2026-03-17
 
