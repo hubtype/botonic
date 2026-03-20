@@ -20,6 +20,18 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.46.2] - 2026-03-20
+
+### Added
+
+- [PR-3186](https://github.com/hubtype/botonic/pull/3186) Allow AI Agent to return Flow Builder contents directly.
+
+## [0.46.1] - 2026-03-18
+
+### Fixed
+
+- [PR-3187](https://github.com/hubtype/botonic/pull/3187) Don't fetch non UUID payloads on Go To Flow logic.
+
 ## [0.46.0] - 2026-03-17
 
 ### Added
