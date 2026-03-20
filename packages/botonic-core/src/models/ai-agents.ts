@@ -93,6 +93,16 @@ export enum VerbosityLevel {
   High = 'high',
 }
 
+export interface HubtypeAssistantMessage {
+  role: 'assistant'
+  content: string
+}
+
+export interface HubtypeUserMessage {
+  role: 'user'
+  content: string
+}
+
 export interface AiAgentArgs {
   name: string
   instructions: string
@@ -101,5 +111,5 @@ export interface AiAgentArgs {
   activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]
   sourceIds?: string[]
-  previousFollowUps?: any[]
+  previousHubtypeMessages?: HubtypeAssistantMessage[]
 }

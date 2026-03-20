@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { BotContext } from '@botonic/core'
+import type { BotContext, HubtypeAssistantMessage } from '@botonic/core'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from '../constants'
-import type { AgenticInputMessage, Chunk } from '../types'
+import type { AgenticInputMessage, Chunk, MemoryOptions } from '../types'
 import type {
-  GetMessagesV2Options,
   GetMessagesV2Result,
   HubtypeAssistantMessageV2,
   HubtypeMessage,
@@ -46,7 +45,8 @@ export class HubtypeApiClient {
   }
 
   async getLocalMessages(
-    maxMemoryLength: number
+    maxMemoryLength: number,
+    previousHubtypeMessages: HubtypeAssistantMessage[]
   ): Promise<AgenticInputMessage[]> {
     const localBotonicState =
       typeof globalThis !== 'undefined' && globalThis.localStorage
@@ -61,39 +61,15 @@ export class HubtypeApiClient {
         content: message.data.text,
       }))
       .map(message => this.formatMessage(message))
-    return filteredMessages.slice(-maxMemoryLength)
+    const resultMessages = [...filteredMessages, ...previousHubtypeMessages]
+
+    return resultMessages.slice(-maxMemoryLength)
   }
-
-  // async getMessages(
-  //   botContext: BotContext,
-  //   maxMemoryLength: number
-  // ): Promise<AgenticInputMessage[]> {
-  //   const url = `${HUBTYPE_API_URL}/external/v1/ai/agent/message_history/`
-  //   const headers = {
-  //     'Content-Type': 'application/json',
-  //     Authorization: `Bearer ${this.authToken}`,
-  //   }
-  //   const params = {
-  //     last_message_id: botContext.input.message_id,
-  //     num_messages: maxMemoryLength,
-  //   }
-
-  //   try {
-  //     const response = await axios.get<{ messages: HubtypeMessage[] }>(url, {
-  //       headers,
-  //       params,
-  //     })
-  //     const messages = response.data.messages
-  //     return messages.map(message => this.formatMessage(message))
-  //   } catch (error) {
-  //     console.error(error)
-  //     throw new Error('Failed to get messages from Hubtype')
-  //   }
-  // }
 
   async getMessagesV2(
     botContext: BotContext,
-    options: GetMessagesV2Options = {}
+    options: MemoryOptions,
+    previousHubtypeMessages: HubtypeAssistantMessage[]
   ): Promise<GetMessagesV2Result> {
     const url = `${HUBTYPE_API_URL}/external/v2/ai/agent/message_history/`
     const headers = {
@@ -102,18 +78,10 @@ export class HubtypeApiClient {
     }
     const params: MessageHistoryV2Params = {
       last_message_id: botContext.input.message_id,
-      ...(options.maxMessages !== undefined && {
-        max_messages: options.maxMessages,
-      }),
-      ...(options.includeToolCalls !== undefined && {
-        include_tool_calls: options.includeToolCalls,
-      }),
-      ...(options.maxFullToolResults !== undefined && {
-        max_full_tool_results: options.maxFullToolResults,
-      }),
-      ...(options.debugMode !== undefined && {
-        debug_mode: options.debugMode,
-      }),
+      max_messages: options.maxMessages,
+      include_tool_calls: options.includeToolCalls,
+      max_full_tool_results: options.maxFullToolResults,
+      debug_mode: options.debugMode,
     }
 
     try {
@@ -122,9 +90,10 @@ export class HubtypeApiClient {
         params,
       })
       const { messages, conversation_id, truncated } = response.data
-      const formattedMessages = messages
+      const formattedMessages = [...messages, ...previousHubtypeMessages]
         .map(message => this.formatMessageV2(message))
         .filter((message): message is AgenticInputMessage => message !== null)
+
       return {
         messages: formattedMessages,
         conversationId: conversation_id,

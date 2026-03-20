@@ -1,3 +1,4 @@
+import type { HubtypeAssistantMessage, HubtypeUserMessage } from '@botonic/core'
 import type { AgenticInputMessage } from '../types'
 
 export enum TrackProductName {
@@ -26,16 +27,6 @@ export interface LlmRunData {
 
 export interface TrackLlmRunsData {
   llm_runs: LlmRunData[]
-}
-
-interface HubtypeAssistantMessage {
-  role: 'assistant'
-  content: string
-}
-
-interface HubtypeUserMessage {
-  role: 'user'
-  content: string
 }
 
 export type HubtypeMessage = HubtypeAssistantMessage | HubtypeUserMessage
@@ -82,13 +73,6 @@ export interface MessageHistoryResponseV2 {
   messages: HubtypeMessageV2[]
   conversation_id: string | null
   truncated: boolean
-}
-
-export interface GetMessagesV2Options {
-  maxMessages?: number
-  includeToolCalls?: boolean
-  maxFullToolResults?: number
-  debugMode?: boolean
 }
 
 export interface GetMessagesV2Result {

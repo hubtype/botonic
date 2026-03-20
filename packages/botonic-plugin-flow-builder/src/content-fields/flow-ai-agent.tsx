@@ -3,6 +3,7 @@ import {
   EventAction,
   type EventAiAgent,
   type GuardrailRule,
+  type HubtypeAssistantMessage,
   type InferenceResponse,
   VerbosityLevel,
 } from '@botonic/core'
@@ -50,8 +51,14 @@ export class FlowAiAgent extends ContentFieldsBase {
     return newAiAgent
   }
 
-  async resolveAIAgentMessages(botContext: BotContext): Promise<void> {
-    const aiAgentResponse = await this.getAIAgentResponse(botContext)
+  async resolveAIAgentMessages(
+    botContext: BotContext,
+    previousContents?: FlowContent[]
+  ): Promise<void> {
+    const aiAgentResponse = await this.getAIAgentResponse(
+      botContext,
+      previousContents
+    )
     if (aiAgentResponse) {
       this.aiAgentResponse = aiAgentResponse
       await this.trackAiAgentResponse(botContext)
@@ -63,7 +70,7 @@ export class FlowAiAgent extends ContentFieldsBase {
     botContext: BotContext,
     previousContents?: FlowContent[]
   ): Promise<InferenceResponse | undefined> {
-    const previousHubtypeContents =
+    const previousHubtypeContents: HubtypeAssistantMessage[] =
       previousContents?.map(content => {
         return {
           role: 'assistant',
@@ -91,7 +98,7 @@ export class FlowAiAgent extends ContentFieldsBase {
         activeTools: this.activeTools,
         inputGuardrailRules: activeInputGuardrailRules,
         sourceIds: this.sources?.map(source => source.id),
-        previousFollowUps: previousHubtypeContents,
+        previousHubtypeMessages: previousHubtypeContents,
       }
     )
 

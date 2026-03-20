@@ -10,13 +10,13 @@ import React from 'react'
 
 import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD } from '../constants'
-import { FlowAiAgent, type FlowContent, FlowHandoff } from '../content-fields'
+import { type FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent } from './ai-agent'
+import { getContentsByAiAgent, splitAiAgentAndContentsBefore } from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -60,12 +60,17 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext,
     contents: FlowContent[]
   ) {
-    const aiAgentContent = contents.find(
-      content => content instanceof FlowAiAgent
-    ) as FlowAiAgent
+    const splitContents = splitAiAgentAndContentsBefore(contents)
+    if (!splitContents) {
+      return
+    }
+    const { aiAgentContent, contentsBeforeAiAgent } = splitContents
 
     if (aiAgentContent && aiAgentContent?.messages.length === 0) {
-      await aiAgentContent.resolveAIAgentMessages(botContext)
+      await aiAgentContent.resolveAIAgentMessages(
+        botContext,
+        contentsBeforeAiAgent
+      )
     }
   }
 

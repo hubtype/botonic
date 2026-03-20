@@ -55,6 +55,7 @@ describe('DebugLogger', () => {
           maxMessages: 30,
           includeToolCalls: true,
           maxFullToolResults: 2,
+          debugMode: false,
         },
       })
 
@@ -207,7 +208,12 @@ describe('DebugLogger', () => {
         maxRetries: 2,
         timeout: 16000,
         customToolNames: [],
-        memory: {},
+        memory: {
+          maxMessages: 30,
+          includeToolCalls: true,
+          maxFullToolResults: 2,
+          debugMode: false,
+        },
       })
       logger.logAgentDebugInfo(
         {
