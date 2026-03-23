@@ -24,7 +24,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3186](https://github.com/hubtype/botonic/pull/3186) Make output schemas extendable
+- [PR-3186](https://github.com/hubtype/botonic/pull/3186) Make output schemas extendable.
+- [PR-3188](https://github.com/hubtype/botonic/pull/3188) Add `target` attribute in buttons of `TextWithButtonsSchema`.
 
 ## [0.46.0] - 2026-03-17
 

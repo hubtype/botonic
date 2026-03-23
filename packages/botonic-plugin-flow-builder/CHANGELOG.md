@@ -25,6 +25,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3186](https://github.com/hubtype/botonic/pull/3186) Allow AI Agent to return Flow Builder contents directly.
+- [PR-3188](https://github.com/hubtype/botonic/pull/3188) Allow `target` attribute in buttons coming from AI Agent responses.
 
 ## [0.46.1] - 2026-03-18
 

@@ -57,6 +57,7 @@ export class FlowText extends ContentFieldsBase {
             id: `${id}-button-${buttonIndex}`,
             text: button.text,
             url: button.url,
+            target: button.target,
             payload:
               button.payload ||
               `${EMPTY_PAYLOAD}${SOURCE_INFO_SEPARATOR}${buttonIndex}`,
