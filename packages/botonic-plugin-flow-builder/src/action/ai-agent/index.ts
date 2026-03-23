@@ -1,16 +1,21 @@
 import {
+  type AgenticOutputMessage,
   type BotContext,
   EventAction,
   type EventAiAgent,
   type InferenceResponse,
 } from '@botonic/core'
 
-import { FlowAiAgent, type FlowContent } from '../content-fields'
-import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
-import { getFlowBuilderPlugin } from '../helpers'
-import { trackEvent } from '../tracking'
-import type { GuardrailRule } from '../types'
-import type { FlowBuilderContext } from './index'
+import { FlowAiAgent, type FlowContent } from '../../content-fields'
+import type { HtNodeWithContent } from '../../content-fields/hubtype-fields'
+import { getFlowBuilderPlugin } from '../../helpers'
+import { trackEvent } from '../../tracking'
+import type { GuardrailRule } from '../../types'
+import type { FlowBuilderContext } from '../index'
+import {
+  type FlowBuilderContentMessage,
+  FlowBuilderContentSchema,
+} from './structured-output/flow-builder-content'
 
 export async function getContentsByAiAgent({
   cmsApi,
@@ -52,6 +57,7 @@ export async function getContentsByAiAgent({
       activeTools: aiAgentContent.activeTools,
       inputGuardrailRules: activeInputGuardrailRules,
       sourceIds: aiAgentContent.sources?.map(source => source.id),
+      outputMessagesSchemas: [FlowBuilderContentSchema],
     }
   )
 
@@ -64,13 +70,43 @@ export async function getContentsByAiAgent({
     return []
   }
 
-  aiAgentContent.responses = aiAgentResponse.messages
+  const regularMessages: AgenticOutputMessage[] = []
+  const flowBuilderContentMessages: FlowBuilderContentMessage[] = []
 
-  return contents
+  for (const message of aiAgentResponse.messages) {
+    if (message.type === 'flowBuilderContent') {
+      flowBuilderContentMessages.push(message as FlowBuilderContentMessage)
+    } else {
+      regularMessages.push(message as AgenticOutputMessage)
+    }
+  }
+
+  const result: FlowContent[] = []
+
+  if (regularMessages.length > 0) {
+    aiAgentContent.responses = regularMessages
+    result.push(...contents)
+  }
+
+  for (const fbMessage of flowBuilderContentMessages) {
+    try {
+      const node = cmsApi.getNodeByContentID(fbMessage.contentId)
+      const targetNode = cmsApi.getNodeById<HtNodeWithContent>(node.id)
+      const flowContents = await flowBuilderPlugin.getContentsByNode(targetNode)
+      result.push(...flowContents)
+    } catch (error) {
+      console.warn(
+        `Could not resolve flowBuilderContent with contentId "${fbMessage.contentId}":`,
+        error
+      )
+    }
+  }
+
+  return result
 }
 
 async function trackAiAgentResponse(
-  aiAgentResponse: InferenceResponse,
+  aiAgentResponse: InferenceResponse<FlowBuilderContentMessage>,
   request: BotContext,
   aiAgentContent: FlowAiAgent
 ) {

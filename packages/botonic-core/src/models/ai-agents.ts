@@ -1,11 +1,20 @@
-export interface BaseMessage {
-  type: 'text' | 'textWithButtons' | 'botExecutor' | 'carousel' | 'exit'
+import type { z } from 'zod'
+export interface BaseMessage<
+  T extends string =
+    | 'text'
+    | 'textWithButtons'
+    | 'botExecutor'
+    | 'carousel'
+    | 'exit',
+> {
+  type: T
 }
 
 export interface Button {
   text: string
   payload?: string
   url?: string
+  target?: string
 }
 export interface ButtonWithPayload {
   text: string
@@ -54,14 +63,16 @@ export interface ExitMessage extends BaseMessage {
   type: 'exit'
 }
 
-export type OutputMessage =
+export type OutputMessage<Extra extends BaseMessage<string> = never> =
   | TextMessage
   | TextWithButtonsMessage
   | BotExecutorMessage
   | CarouselMessage
   | ExitMessage
+  | Extra
 
-export type AgenticOutputMessage = Exclude<OutputMessage, ExitMessage>
+export type AgenticOutputMessage<Extra extends BaseMessage<string> = never> =
+  Exclude<OutputMessage<Extra>, ExitMessage>
 
 export interface ToolExecution {
   toolName: string
@@ -71,8 +82,8 @@ export interface ToolExecution {
   knowledgebaseChunksIds?: string[]
 }
 
-export interface RunResult {
-  messages: AgenticOutputMessage[]
+export interface RunResult<Extra extends BaseMessage<string> = never> {
+  messages: AgenticOutputMessage<Extra>[]
   toolsExecuted: ToolExecution[]
   memoryLength: number
   exit: boolean
@@ -81,7 +92,8 @@ export interface RunResult {
   outputGuardrailsTriggered: string[]
 }
 
-export type InferenceResponse = RunResult
+export type InferenceResponse<Extra extends BaseMessage<string> = never> =
+  RunResult<Extra>
 
 export interface GuardrailRule {
   name: string
@@ -101,4 +113,5 @@ export interface AiAgentArgs {
   activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]
   sourceIds?: string[]
+  outputMessagesSchemas?: z.ZodObject<any>[]
 }

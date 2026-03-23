@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import type { DebugLogger } from '../src/debug-logger'
 import { OutputSchema } from '../src/structured-output/index'
 import type { GuardrailRule, Tool } from '../src/types'
@@ -357,6 +358,216 @@ describe('AIAgentBuilder', () => {
       expect(aiAgent.instructions).toContain(
         'This is the campaign context for the agent'
       )
+    })
+  })
+
+  describe('outputMessagesSchemas handling', () => {
+    it('should build with only base schemas when outputMessagesSchemas is not provided', () => {
+      new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      const outputType = capturedAgentConfig.outputType
+
+      const validBaseMessage = {
+        messages: [{ type: 'text', content: { text: 'Hello' } }],
+      }
+      expect(outputType.safeParse(validBaseMessage).success).toBe(true)
+
+      const invalidCustomMessage = {
+        messages: [
+          {
+            type: 'customVideo',
+            content: { videoUrl: 'https://example.com/video.mp4' },
+          },
+        ],
+      }
+      expect(outputType.safeParse(invalidCustomMessage).success).toBe(false)
+    })
+
+    it('should include custom schemas when outputMessagesSchemas is provided', () => {
+      const customVideoSchema = z.object({
+        type: z.enum(['customVideo']),
+        content: z.object({
+          videoUrl: z.string(),
+          thumbnail: z.string().optional(),
+        }),
+      })
+
+      new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        outputMessagesSchemas: [customVideoSchema],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      const outputType = capturedAgentConfig.outputType
+
+      const validCustomMessage = {
+        messages: [
+          {
+            type: 'customVideo',
+            content: { videoUrl: 'https://example.com/video.mp4' },
+          },
+        ],
+      }
+      expect(outputType.safeParse(validCustomMessage).success).toBe(true)
+
+      const validBaseMessage = {
+        messages: [{ type: 'text', content: { text: 'Hello' } }],
+      }
+      expect(outputType.safeParse(validBaseMessage).success).toBe(true)
+    })
+
+    it('should include multiple custom schemas when provided', () => {
+      const customVideoSchema = z.object({
+        type: z.enum(['customVideo']),
+        content: z.object({
+          videoUrl: z.string(),
+        }),
+      })
+      const customImageSchema = z.object({
+        type: z.enum(['customImage']),
+        content: z.object({
+          imageUrl: z.string(),
+          altText: z.string(),
+        }),
+      })
+
+      new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        outputMessagesSchemas: [customVideoSchema, customImageSchema],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      const outputType = capturedAgentConfig.outputType
+
+      const validVideoMessage = {
+        messages: [
+          {
+            type: 'customVideo',
+            content: { videoUrl: 'https://example.com/video.mp4' },
+          },
+        ],
+      }
+      expect(outputType.safeParse(validVideoMessage).success).toBe(true)
+
+      const validImageMessage = {
+        messages: [
+          {
+            type: 'customImage',
+            content: {
+              imageUrl: 'https://example.com/image.png',
+              altText: 'A test image',
+            },
+          },
+        ],
+      }
+      expect(outputType.safeParse(validImageMessage).success).toBe(true)
+    })
+
+    it('should reject invalid custom message when custom schemas are provided', () => {
+      const customVideoSchema = z.object({
+        type: z.enum(['customVideo']),
+        content: z.object({
+          videoUrl: z.string(),
+        }),
+      })
+
+      new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        outputMessagesSchemas: [customVideoSchema],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      const outputType = capturedAgentConfig.outputType
+
+      const invalidMessage = {
+        messages: [
+          {
+            type: 'customVideo',
+            content: { videoUrl: 123 },
+          },
+        ],
+      }
+      expect(outputType.safeParse(invalidMessage).success).toBe(false)
+    })
+
+    it('should produce same schema as OutputSchema when empty array is provided', () => {
+      new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: [],
+        outputMessagesSchemas: [],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(capturedAgentConfig).toBeDefined()
+      const outputType = capturedAgentConfig.outputType
+
+      const testMessages = [
+        { messages: [{ type: 'text', content: { text: 'Hello' } }] },
+        {
+          messages: [
+            {
+              type: 'textWithButtons',
+              content: {
+                text: 'Pick one',
+                buttons: [{ text: 'A' }],
+              },
+            },
+          ],
+        },
+        { messages: [{ type: 'exit' }] },
+      ]
+
+      for (const msg of testMessages) {
+        expect(outputType.safeParse(msg).success).toBe(
+          OutputSchema.safeParse(msg).success
+        )
+      }
     })
   })
 

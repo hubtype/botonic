@@ -4,13 +4,14 @@ import {
   type AgentOutputType,
   type InputGuardrail,
 } from '@openai/agents'
+import type { z } from 'zod'
 
 import { OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { createInputGuardrail } from './guardrails'
 import type { GuardrailTrackingContext } from './guardrails/input'
 import type { LLMConfig } from './llm-config'
-import { OutputSchema } from './structured-output'
+import { getOutputSchema, type OutputSchema } from './structured-output'
 import { mandatoryTools, retrieveKnowledge } from './tools'
 import type { AIAgent, Context, GuardrailRule, Tool } from './types'
 
@@ -25,6 +26,7 @@ interface AIAgentBuilderOptions<
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
+  outputMessagesSchemas?: z.ZodObject<any>[]
   llmConfig: LLMConfig
   logger: DebugLogger
   guardrailTrackingContext: GuardrailTrackingContext
@@ -37,6 +39,7 @@ export class AIAgentBuilder<
   private name: string
   private instructions: string
   private tools: Tool<TPlugins, TExtraData>[]
+  private externalOutputMessagesSchemas: z.ZodObject<any>[]
   private inputGuardrails: InputGuardrail[]
   public llmConfig: LLMConfig
   private logger: DebugLogger
@@ -49,6 +52,7 @@ export class AIAgentBuilder<
       options.campaignsContext
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
+    this.externalOutputMessagesSchemas = options.outputMessagesSchemas || []
     this.inputGuardrails = []
     this.llmConfig = options.llmConfig
     this.logger = options.logger
@@ -90,7 +94,7 @@ export class AIAgentBuilder<
       model,
       instructions: this.instructions,
       tools: this.tools,
-      outputType: OutputSchema,
+      outputType: getOutputSchema(this.externalOutputMessagesSchemas),
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
     })

@@ -12,6 +12,14 @@ export const TextWithButtonsSchema = z
         z.object({
           text: z.string(),
           url: z.string().nullable().optional(),
+          target: z
+            .enum(['_blank', '_self'])
+            .default('_blank')
+            .nullable()
+            .optional()
+            .describe(
+              'The target of the button when it has an url. If not provided, it will default to _blank.'
+            ),
         })
       ),
     }),

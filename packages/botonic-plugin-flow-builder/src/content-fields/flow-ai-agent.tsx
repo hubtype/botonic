@@ -1,6 +1,7 @@
 import { type AgenticOutputMessage, VerbosityLevel } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 
+import type { FlowBuilderContentMessage } from '../action/ai-agent/structured-output/flow-builder-content'
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
@@ -19,7 +20,7 @@ export class FlowAiAgent extends ContentFieldsBase {
   public inputGuardrailRules: HtInputGuardrailRule[]
   public sources?: { id: string; name: string }[]
 
-  public responses: AgenticOutputMessage[] = []
+  public responses: AgenticOutputMessage<FlowBuilderContentMessage>[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -46,21 +47,23 @@ export class FlowAiAgent extends ContentFieldsBase {
   toBotonic(id: string, request: ActionRequest): JSX.Element {
     return (
       <>
-        {this.responses.map((response: AgenticOutputMessage) => {
-          if (
-            response.type === 'text' ||
-            response.type === 'textWithButtons' ||
-            response.type === 'botExecutor'
-          ) {
-            return FlowText.fromAIAgent(id, response)
-          }
+        {this.responses.map(
+          (response: AgenticOutputMessage<FlowBuilderContentMessage>) => {
+            if (
+              response.type === 'text' ||
+              response.type === 'textWithButtons' ||
+              response.type === 'botExecutor'
+            ) {
+              return FlowText.fromAIAgent(id, response)
+            }
 
-          if (response.type === 'carousel') {
-            return FlowCarousel.fromAIAgent(id, response, request)
-          }
+            if (response.type === 'carousel') {
+              return FlowCarousel.fromAIAgent(id, response, request)
+            }
 
-          return <></>
-        })}
+            return <></>
+          }
+        )}
       </>
     )
   }
