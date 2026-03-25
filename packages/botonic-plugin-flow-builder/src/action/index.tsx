@@ -16,7 +16,7 @@ import { ContentFilterExecutor } from '../filters'
 import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent, splitAiAgentAndContentsBefore } from './ai-agent'
+import { getContentsByAiAgent, splitAiAgentContents } from './ai-agent'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -50,24 +50,27 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const contents = await getContents(request, contentID)
     const filteredContents = await filterContents(request, contents)
     await FlowBuilderAction.trackAllContents(request, filteredContents)
-    await FlowBuilderAction.resolveAIAgentMessages(request, filteredContents)
+    await FlowBuilderAction.resolveFlowAIAgentMessages(
+      request,
+      filteredContents
+    )
     await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
     return { contents: filteredContents }
   }
 
-  static async resolveAIAgentMessages(
+  static async resolveFlowAIAgentMessages(
     botContext: BotContext,
     contents: FlowContent[]
   ) {
-    const splitContents = splitAiAgentAndContentsBefore(contents)
+    const splitContents = splitAiAgentContents(contents)
     if (!splitContents) {
       return
     }
     const { aiAgentContent, contentsBeforeAiAgent } = splitContents
 
     if (aiAgentContent && aiAgentContent?.messages.length === 0) {
-      await aiAgentContent.resolveAIAgentMessages(
+      await aiAgentContent.resolveAIAgentResponse(
         botContext,
         contentsBeforeAiAgent
       )

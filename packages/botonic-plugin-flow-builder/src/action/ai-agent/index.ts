@@ -1,5 +1,5 @@
-import { FlowAiAgent, type FlowContent } from '../content-fields'
-import type { FlowBuilderContext } from './index'
+import { FlowAiAgent, type FlowContent } from '../../content-fields'
+import type { FlowBuilderContext } from '../index'
 
 export async function getContentsByAiAgent({
   cmsApi,
@@ -15,40 +15,32 @@ export async function getContentsByAiAgent({
   const contents =
     await flowBuilderPlugin.getContentsByNode(startNodeAiAgentFlow)
 
-  const splitContents = splitAiAgentAndContentsBefore(contents)
+  const splitContents = splitAiAgentContents(contents)
   if (!splitContents) {
     return []
   }
   const { aiAgentContent, contentsBeforeAiAgent } = splitContents
 
-  const aiAgentResponse = await aiAgentContent.getAIAgentResponse(
+  const aiAgentResponse = await aiAgentContent.resolveAIAgentResponse(
     request,
     contentsBeforeAiAgent
   )
 
-  if (!aiAgentResponse) {
+  if (!aiAgentResponse || aiAgentResponse.exit) {
     return []
   }
-  aiAgentContent.aiAgentResponse = aiAgentResponse
-  await aiAgentContent.trackAiAgentResponse(request)
-
-  if (aiAgentResponse.exit) {
-    return []
-  }
-
-  aiAgentContent.messages = aiAgentResponse.messages
 
   return contents
 }
 
-interface SplitAiAgentAndContentsBeforeResult {
+interface AiAgentContentAndContentsBeforeAiAgent {
   aiAgentContent: FlowAiAgent
   contentsBeforeAiAgent: FlowContent[]
 }
 
-export function splitAiAgentAndContentsBefore(
+export function splitAiAgentContents(
   contents: FlowContent[]
-): SplitAiAgentAndContentsBeforeResult | undefined {
+): AiAgentContentAndContentsBeforeAiAgent | undefined {
   const aiAgentIndex = contents.findIndex(
     content => content instanceof FlowAiAgent
   )

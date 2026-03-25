@@ -115,6 +115,7 @@ export default class BotonicPluginAiAgents<
         contactInfo: botContext.session.user.contact_info || [],
         inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
         sourceIds: aiAgentArgs.sourceIds || [],
+        outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
         campaignsContext: botContext.input.context?.campaigns_v2,
         logger: this.logger,
         llmConfig,

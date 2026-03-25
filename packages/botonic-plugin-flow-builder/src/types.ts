@@ -7,7 +7,7 @@ import {
   type PluginPreRequest,
   type ResolvedPlugins,
 } from '@botonic/core'
-
+import type { FlowBuilderContentMessage } from './action/ai-agent/structured-output/flow-builder-content'
 import type { FlowContent } from './content-fields'
 import type {
   HtFlowBuilderData,
@@ -66,7 +66,7 @@ export type AiAgentFunction<
 > = (
   request: BotContext<TPlugins, TExtraData>,
   aiAgentArgs: AiAgentArgs
-) => Promise<InferenceResponse>
+) => Promise<InferenceResponse<FlowBuilderContentMessage>>
 
 export type ContentFilter<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
