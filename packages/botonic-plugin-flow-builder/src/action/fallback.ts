@@ -7,7 +7,7 @@ import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import type { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './context'
 
 export async function getContentsByFallback({
   cmsApi,

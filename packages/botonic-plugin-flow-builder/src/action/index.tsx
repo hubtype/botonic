@@ -8,15 +8,16 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD } from '../constants'
 import { type FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
-import { ContentFilterExecutor } from '../filters'
-import { getFlowBuilderPlugin } from '../helpers'
-import type BotonicPluginFlowBuilder from '../index'
+import { filterContents } from '../filters'
 import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent, splitAiAgentContents } from './ai-agent'
+import {
+  getContentsByAiAgentFromUserInput,
+  splitAiAgentContents,
+} from './ai-agent-from-user-input'
+import { getFlowBuilderActionContext } from './context'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
@@ -34,7 +35,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   static async executeConversationStart(
     request: ActionRequest
   ): Promise<FlowBuilderActionProps> {
-    const context = getContext(request)
+    const context = getFlowBuilderActionContext(request)
     const contents = await getContentsByFirstInteraction(context)
     const filteredContents = await filterContents(request, contents)
     await FlowBuilderAction.trackAllContents(request, filteredContents)
@@ -146,7 +147,7 @@ async function getContents(
   request: ActionRequest,
   contentID?: string
 ): Promise<FlowContent[]> {
-  const context = getContext(request, contentID)
+  const context = getFlowBuilderActionContext(request, contentID)
 
   if (request.session.is_first_interaction) {
     return await getContentsByFirstInteraction(context)
@@ -170,7 +171,7 @@ async function getContents(
   }
 
   if (inputHasTextOrTranscript(request.input)) {
-    const aiAgentContents = await getContentsByAiAgent(context)
+    const aiAgentContents = await getContentsByAiAgentFromUserInput(context)
     if (aiAgentContents.length > 0) {
       return aiAgentContents
     }
@@ -181,47 +182,4 @@ async function getContents(
   }
 
   return await getContentsByFallback(context)
-}
-
-async function filterContents(
-  request: BotContext,
-  contents: FlowContent[]
-): Promise<FlowContent[]> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const contentFilters = flowBuilderPlugin.contentFilters
-  const contentFilterExecutor = new ContentFilterExecutor({
-    filters: contentFilters,
-  })
-
-  const filteredContents: FlowContent[] = []
-  for (const content of contents) {
-    const filteredContent = await contentFilterExecutor.filter(request, content)
-    filteredContents.push(filteredContent)
-  }
-
-  return filteredContents
-}
-
-export interface FlowBuilderContext {
-  cmsApi: FlowBuilderApi
-  flowBuilderPlugin: BotonicPluginFlowBuilder
-  request: ActionRequest
-  resolvedLocale: string
-  contentID?: string
-}
-
-function getContext(
-  request: ActionRequest,
-  contentID?: string
-): FlowBuilderContext {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const cmsApi = flowBuilderPlugin.cmsApi
-  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale()
-  return {
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-    contentID,
-  }
 }

@@ -1,6 +1,7 @@
 import type { BotContext } from '@botonic/core'
 
 import type { FlowContent } from '../content-fields'
+import { getFlowBuilderPlugin } from '../helpers'
 import type { ContentFilter } from '../types'
 
 interface ContentFilterExecutorOptions {
@@ -24,4 +25,23 @@ export class ContentFilterExecutor {
 
     return content
   }
+}
+
+export async function filterContents(
+  request: BotContext,
+  contents: FlowContent[]
+): Promise<FlowContent[]> {
+  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const contentFilters = flowBuilderPlugin.contentFilters
+  const contentFilterExecutor = new ContentFilterExecutor({
+    filters: contentFilters,
+  })
+
+  const filteredContents: FlowContent[] = []
+  for (const content of contents) {
+    const filteredContent = await contentFilterExecutor.filter(request, content)
+    filteredContents.push(filteredContent)
+  }
+
+  return filteredContents
 }

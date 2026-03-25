@@ -8,11 +8,11 @@ import {
   type InferenceResponse,
   VerbosityLevel,
 } from '@botonic/core'
+import { getFlowBuilderPlugin } from '../helpers'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
-} from '../action/ai-agent/structured-output/flow-builder-content'
-import { getFlowBuilderPlugin } from '../helpers'
+} from '../structured-output/flow-builder-content'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,

@@ -1,7 +1,7 @@
-import { FlowAiAgent, type FlowContent } from '../../content-fields'
-import type { FlowBuilderContext } from '../index'
+import { FlowAiAgent, type FlowContent } from '../content-fields'
+import type { FlowBuilderContext } from './context'
 
-export async function getContentsByAiAgent({
+export async function getContentsByAiAgentFromUserInput({
   cmsApi,
   flowBuilderPlugin,
   request,
