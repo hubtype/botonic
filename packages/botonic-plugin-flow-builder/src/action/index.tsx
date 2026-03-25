@@ -1,4 +1,4 @@
-import { type BotContext, INPUT, isDev, isWebchat } from '@botonic/core'
+import { type BotContext, isDev, isWebchat } from '@botonic/core'
 import {
   type ActionRequest,
   Multichannel,
@@ -8,20 +8,13 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import { EMPTY_PAYLOAD } from '../constants'
 import { type FlowContent, FlowHandoff } from '../content-fields'
 import { FlowBotAction } from '../content-fields/flow-bot-action'
 import { filterContents } from '../filters'
-import { inputHasTextOrTranscript } from '../utils'
-import {
-  getContentsByAiAgentFromUserInput,
-  splitAiAgentContents,
-} from './ai-agent-from-user-input'
+import { splitAiAgentContents } from './ai-agent-from-user-input'
 import { getFlowBuilderActionContext } from './context'
-import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
-import { getContentsByKnowledgeBase } from './knowledge-bases'
-import { getContentsByPayload } from './payload'
+import { getContents } from './get-contents'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -33,31 +26,56 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   declare context: React.ContextType<typeof RequestContext>
 
   static async executeConversationStart(
-    request: ActionRequest
+    botContext: BotContext
   ): Promise<FlowBuilderActionProps> {
-    const context = getFlowBuilderActionContext(request)
+    const context = getFlowBuilderActionContext(botContext)
     const contents = await getContentsByFirstInteraction(context)
-    const filteredContents = await filterContents(request, contents)
-    await FlowBuilderAction.trackAllContents(request, filteredContents)
-    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
+
+    const filteredContents = await FlowBuilderAction.processContents(
+      botContext,
+      contents
+    )
 
     return { contents: filteredContents }
   }
 
   static async botonicInit(
-    request: ActionRequest,
+    botContext: BotContext,
     contentID?: string
   ): Promise<FlowBuilderActionProps> {
-    const contents = await getContents(request, contentID)
-    const filteredContents = await filterContents(request, contents)
-    await FlowBuilderAction.trackAllContents(request, filteredContents)
-    await FlowBuilderAction.resolveFlowAIAgentMessages(
-      request,
-      filteredContents
+    const contents = await getContents(botContext, contentID)
+
+    const filteredContents = await FlowBuilderAction.processContents(
+      botContext,
+      contents
     )
-    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
 
     return { contents: filteredContents }
+  }
+
+  static async processContents(
+    botContext: BotContext,
+    contents: FlowContent[]
+  ) {
+    const filteredContents = await filterContents(botContext, contents)
+    await FlowBuilderAction.trackAllContents(botContext, filteredContents)
+    await FlowBuilderAction.resolveFlowAIAgentMessages(
+      botContext,
+      filteredContents
+    )
+    await FlowBuilderAction.doHandoffAndBotActions(botContext, filteredContents)
+
+    return filteredContents
+  }
+
+  static async trackAllContents(
+    botContext: BotContext,
+    contents: FlowContent[]
+  ) {
+    for (const content of contents) {
+      // TODO: This not track contents added by AIAGent with messages of type flowBuilderContent
+      await content.trackFlow(botContext)
+    }
   }
 
   static async resolveFlowAIAgentMessages(
@@ -78,31 +96,22 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     }
   }
 
-  static async trackAllContents(
-    request: ActionRequest,
-    contents: FlowContent[]
-  ) {
-    for (const content of contents) {
-      await content.trackFlow(request)
-    }
-  }
-
   static async doHandoffAndBotActions(
-    request: ActionRequest,
+    botContext: BotContext,
     contents: FlowContent[]
   ) {
     const handoffContent = contents.find(
       content => content instanceof FlowHandoff
     ) as FlowHandoff
     if (handoffContent) {
-      await handoffContent.doHandoff(request)
+      await handoffContent.doHandoff(botContext)
     }
 
     const botActionContent = contents.find(
       content => content instanceof FlowBotAction
     ) as FlowBotAction
     if (botActionContent) {
-      botActionContent.doBotAction(request)
+      botActionContent.doBotAction(botContext)
     }
   }
 
@@ -141,45 +150,4 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
       </Multichannel>
     )
   }
-}
-
-async function getContents(
-  request: ActionRequest,
-  contentID?: string
-): Promise<FlowContent[]> {
-  const context = getFlowBuilderActionContext(request, contentID)
-
-  if (request.session.is_first_interaction) {
-    return await getContentsByFirstInteraction(context)
-  }
-  // TODO: Add needed logic when we can define contents for multi locale queue position message
-  if (request.input.type === INPUT.EVENT_QUEUE_POSITION_CHANGED) {
-    return []
-  }
-
-  if (request.input.payload?.startsWith(EMPTY_PAYLOAD)) {
-    request.input.payload = undefined
-  }
-
-  if (request.input.payload || contentID) {
-    const contentsByPayload = await getContentsByPayload(context)
-    if (contentsByPayload.length > 0) {
-      return contentsByPayload
-    }
-
-    return await getContentsByFallback(context)
-  }
-
-  if (inputHasTextOrTranscript(request.input)) {
-    const aiAgentContents = await getContentsByAiAgentFromUserInput(context)
-    if (aiAgentContents.length > 0) {
-      return aiAgentContents
-    }
-    const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
-    if (knowledgeBaseContents.length > 0) {
-      return knowledgeBaseContents
-    }
-  }
-
-  return await getContentsByFallback(context)
 }
