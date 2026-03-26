@@ -37,7 +37,7 @@ export class FlowWhatsappButtonListRow extends ContentFieldsBase {
     return
   }
 
-  toBotonic(
+  renderRow(
     rowIndex: number,
     sectionIndex: number
   ): WhatsappButtonListRowProps | undefined {

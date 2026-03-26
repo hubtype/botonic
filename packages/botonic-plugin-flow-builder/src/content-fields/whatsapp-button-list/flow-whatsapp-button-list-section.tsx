@@ -36,10 +36,10 @@ export class FlowWhatsappButtonListSection extends ContentFieldsBase {
     return
   }
 
-  toBotonic(sectionIndex: number): WhatsappButtonListSectionProps {
+  renderSection(sectionIndex: number): WhatsappButtonListSectionProps {
     const rows = this.rows.reduce(
       (acc: WhatsappButtonListRowProps[], row, rowIndex) => {
-        const botonicRow = row.toBotonic(rowIndex, sectionIndex)
+        const botonicRow = row.renderRow(rowIndex, sectionIndex)
         if (botonicRow) {
           acc.push(botonicRow)
         }
