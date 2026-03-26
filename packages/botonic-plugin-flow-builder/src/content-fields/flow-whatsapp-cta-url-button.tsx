@@ -1,6 +1,5 @@
-import { isWhatsapp } from '@botonic/core'
+import { type BotContext, isWhatsapp } from '@botonic/core'
 import {
-  type ActionRequest,
   Button,
   Text,
   WhatsappCTAUrlButton,
@@ -115,14 +114,19 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     }
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
-    const replacedText = this.replaceVariables(this.text, request)
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
 
-    if (!isWhatsapp(request.session)) {
+  toBotonic(botContext: BotContext): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, botContext)
+
+    if (!isWhatsapp(botContext.session)) {
       return (
         <Text>
           {replacedText}
@@ -137,7 +141,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     ) {
       return (
         <WhatsappCTAUrlButton
-          key={id}
+          key={this.id}
           body={replacedText}
           headerType={this.headerType}
           headerImage={this.headerImage}
@@ -154,7 +158,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     ) {
       return (
         <WhatsappCTAUrlButton
-          key={id}
+          key={this.id}
           body={replacedText}
           headerType={this.headerType}
           headerVideo={this.headerVideo}
@@ -171,7 +175,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     ) {
       return (
         <WhatsappCTAUrlButton
-          key={id}
+          key={this.id}
           body={replacedText}
           headerType={this.headerType}
           headerDocument={this.headerDocument}
@@ -185,7 +189,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     if (this.headerType === WhatsappCTAUrlHeaderType.Text && this.header) {
       return (
         <WhatsappCTAUrlButton
-          key={id}
+          key={this.id}
           body={replacedText}
           header={this.header}
           headerType={this.headerType}
@@ -198,7 +202,7 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
 
     return (
       <WhatsappCTAUrlButton
-        key={id}
+        key={this.id}
         body={replacedText}
         footer={this.footer}
         displayText={this.displayText}

@@ -1,5 +1,8 @@
-import { EventAction, type EventConditionalCustom } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
+import {
+  type BotContext,
+  EventAction,
+  type EventConditionalCustom,
+} from '@botonic/core'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -22,13 +25,13 @@ export class FlowCustomConditional extends ContentFieldsBase {
 
   static fromHubtypeCMS(
     component: HtCustomConditionalNode,
-    request: ActionRequest
+    botContext: BotContext
   ): FlowCustomConditional {
     const newCustomConditional = new FlowCustomConditional(component.id)
     newCustomConditional.code = component.code
     newCustomConditional.arguments = component.content.arguments
     newCustomConditional.resultMapping = component.content.result_mapping
-    newCustomConditional.setConditionalResult(request)
+    newCustomConditional.setConditionalResult(botContext)
     newCustomConditional.variableFormat = (
       component.content.arguments as HtFunctionArgument[]
     )[0].type
@@ -36,7 +39,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
     return newCustomConditional
   }
 
-  setConditionalResult(request: ActionRequest): void {
+  setConditionalResult(botContext: BotContext): void {
     const functionArgument = this.arguments.find(arg => {
       if ('name' in arg) {
         return arg.name === 'keyPath'
@@ -52,7 +55,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
       throw new Error(`Key path not found for node ${this.code}`)
     }
 
-    const botVariable = this.getValueFromKeyPath(request, keyPath)
+    const botVariable = this.getValueFromKeyPath(botContext, keyPath)
 
     let conditionalResult =
       this.resultMapping.find(rMap => rMap.result === botVariable) ||
@@ -80,9 +83,9 @@ export class FlowCustomConditional extends ContentFieldsBase {
     this.followUp = conditionalResult.target
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
     if (!this.conditionalResult?.result) {
       console.warn(
         `Tracking event for node ${this.code} but no conditional result found`
@@ -100,7 +103,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
       variableFormat: this.variableFormat,
     }
     const { action, ...eventArgs } = eventCustomConditional
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
   }
 
   private isBooleanConditional(resultMapping: HtFunctionResult[]): boolean {
@@ -109,6 +112,11 @@ export class FlowCustomConditional extends ContentFieldsBase {
       resultMapping.some(rMap => rMap.result === false) &&
       resultMapping.some(rMap => rMap.result === 'default')
     )
+  }
+
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
   }
 
   toBotonic() {

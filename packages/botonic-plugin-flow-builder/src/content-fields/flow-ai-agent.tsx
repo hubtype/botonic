@@ -180,12 +180,22 @@ export class FlowAiAgent extends ContentFieldsBase {
           botContext,
           message.contentId
         )
-        this.jsxElements.push(
-          ...flowContents.map(content => content.toBotonic(this.id, botContext))
-        )
+        for (const content of flowContents) {
+          await content.processContent(botContext)
+          this.jsxElements.push(content.toBotonic(botContext))
+        }
       }
     }
+    return
+  }
 
+  async processContent(
+    botContext: BotContext,
+    previousContents?: FlowContent[]
+  ): Promise<void> {
+    if (this.messages.length === 0) {
+      await this.resolveAIAgentResponse(botContext, previousContents)
+    }
     return
   }
 

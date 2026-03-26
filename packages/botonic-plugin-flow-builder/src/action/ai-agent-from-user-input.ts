@@ -1,4 +1,4 @@
-import { FlowAiAgent, type FlowContent } from '../content-fields'
+import { FlowAiAgent, type FlowContent } from '../content-fields/index'
 import type { FlowBuilderContext } from './context'
 
 export async function getContentsByAiAgentFromUserInput({

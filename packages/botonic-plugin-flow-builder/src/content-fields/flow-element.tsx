@@ -1,11 +1,5 @@
-import type { Button } from '@botonic/core'
-import {
-  type ActionRequest,
-  Element,
-  Pic,
-  Subtitle,
-  Title,
-} from '@botonic/react'
+import type { BotContext, Button } from '@botonic/core'
+import { Element, Pic, Subtitle, Title } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import { ContentFieldsBase } from './content-fields-base'
@@ -60,13 +54,18 @@ export class FlowElement extends ContentFieldsBase {
     return newElement
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     if (this.button) {
-      await this.button.trackFlow(request)
+      await this.button.trackFlow(botContext)
     }
   }
 
-  toBotonic(parentId: string): JSX.Element {
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  renderElement(parentId: string): JSX.Element {
     return (
       <Element key={`${parentId}-${this.id}`}>
         <Pic src={this.image} />

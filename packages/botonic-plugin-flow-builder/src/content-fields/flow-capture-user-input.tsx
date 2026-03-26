@@ -1,4 +1,4 @@
-import type { ActionRequest } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
 
 import { getFlowBuilderPlugin } from '../helpers'
 import { ContentFieldsBase } from './content-fields-base'
@@ -30,13 +30,16 @@ export class FlowCaptureUserInput extends ContentFieldsBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
+  async trackFlow(_botContext: BotContext): Promise<void> {
     return
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  toBotonic(_id: string, request: ActionRequest): JSX.Element {
-    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  async processContent(): Promise<void> {
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
     const cmsApi = flowBuilderPlugin.cmsApi
     cmsApi.setCaptureUserInputId(this.id)
 
