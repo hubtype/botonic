@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.46.2] - 2026-03-26
+
+### Fixed
+
+- Set model for guardrail.
+
 ## [0.46.1] - 2026-03-20
 
 ### Added
