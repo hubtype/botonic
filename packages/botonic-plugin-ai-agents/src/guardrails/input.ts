@@ -31,6 +31,7 @@ export function createInputGuardrail(
 
   const agent = new Agent({
     name: 'InputGuardrail',
+    model: llmConfig.modelName,
     instructions:
       'Check if the user triggers some of the following guardrails.',
     outputType,
