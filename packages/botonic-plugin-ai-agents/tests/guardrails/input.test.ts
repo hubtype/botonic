@@ -102,6 +102,7 @@ describe('createInputGuardrail', () => {
     expect(guardrail.name).toBe('InputGuardrail')
     expect(Agent).toHaveBeenCalledWith({
       name: 'InputGuardrail',
+      model: mockLlmConfig.modelName,
       instructions:
         'Check if the user triggers some of the following guardrails.',
       outputType: expect.any(Object),
