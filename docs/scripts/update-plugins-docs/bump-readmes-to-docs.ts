@@ -37,17 +37,17 @@ export const generateHeader = (
   title: string
 ) => {
   const header = `---
-  title: ${title}
-  id: ${id}
-  ---
-  
-  ---
-  
-  For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/${packageName})**.
-  
-  ---
-  
-  `
+title: ${title}
+id: ${id}
+---
+
+---
+
+For more information, refer to **[GitHub](https://github.com/hubtype/botonic/tree/master/packages/${packageName})**.
+
+---
+
+`
   return header
 }
 

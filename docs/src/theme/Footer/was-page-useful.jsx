@@ -29,12 +29,6 @@ export const WasPageUseful = () => {
 
         const sendWasPageUseful = wasUseful => {
           if (isBrowser) return
-          const data = {
-            category: 'Was page useful?',
-            label: `${location}`,
-            value: wasUseful,
-          }
-          window.analytics.track('Was page useful?', data)
         }
 
         return (
