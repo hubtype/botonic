@@ -83,9 +83,6 @@
       "plugins/plugin-nlu": {
         "title": "Plugin NLU"
       },
-      "plugins/plugin-segment": {
-        "title": "Plugin Segment"
-      },
       "project": {
         "title": "Understanding the Project"
       },

@@ -99,7 +99,7 @@ Check out our [human handoff guide](/docs/concepts/humanhandoff).
 
 Botonic comes with a battery of plugins so you can easily integrate popular services into your project, for instance:
 
-- **Analytics** ([Google Analytics](/docs/plugins/plugin-google-analytics), [Segment](/docs/plugins/plugin-segment), [Dashbot](/docs/plugins/plugin-dashbot))
+- **Analytics** ([Google Analytics](/docs/plugins/plugin-google-analytics), [Dashbot](/docs/plugins/plugin-dashbot))
 - **CMS** ([Contentful](/docs/plugins/plugin-contentful), Sanity)
 - **NLU** ([Dialogflow](/docs/plugins/plugin-dialogflow), [Watson](/docs/plugins/plugin-watson), [Luis](/docs/plugins/plugin-luis), [Inbenta](/docs/plugins/plugin-inbenta))
 
