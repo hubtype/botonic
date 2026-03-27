@@ -14,8 +14,8 @@ import {
   type WhatsappTemplateVoiceCallButton,
 } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import type {
   HtButton,

@@ -17,7 +17,10 @@ import {
   trackEvent,
 } from '../tracking'
 import type { KnowledgeBaseFunction } from '../types'
-import { inputHasTextOrTranscript, isKnowledgeBasesAllowed } from '../utils'
+import {
+  inputHasTextOrTranscript,
+  isKnowledgeBasesAllowed,
+} from '../utils/input'
 import type { FlowBuilderContext } from './context'
 
 export async function getContentsByKnowledgeBase({

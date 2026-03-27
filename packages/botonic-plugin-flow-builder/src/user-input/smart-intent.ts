@@ -4,12 +4,12 @@ import axios from 'axios'
 
 import type { FlowBuilderApi } from '../api'
 import type { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
-import { getFlowBuilderPlugin } from '../helpers'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import type { SmartIntentResponse } from '../types'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 
 export interface SmartIntentsInferenceParams {
   bot_id: string

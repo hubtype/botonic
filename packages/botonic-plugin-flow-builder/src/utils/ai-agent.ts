@@ -1,8 +1,9 @@
 import { WhatsappCTAUrlHeaderType } from '@botonic/react'
 
-import type { FlowButton } from './flow-button'
-import { HtButtonStyle } from './hubtype-fields'
+import type { FlowButton } from '../content-fields/flow-button'
+import { HtButtonStyle } from '../content-fields/hubtype-fields'
 import {
+  FlowAiAgent,
   FlowCarousel,
   type FlowContent,
   FlowImage,
@@ -11,7 +12,28 @@ import {
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
   FlowWhatsappTemplate,
-} from './index'
+} from '../content-fields/index'
+
+interface AiAgentContentAndContentsBeforeAiAgent {
+  aiAgentContent: FlowAiAgent
+  contentsBeforeAiAgent: FlowContent[]
+}
+
+export function splitAiAgentContents(
+  contents: FlowContent[]
+): AiAgentContentAndContentsBeforeAiAgent | undefined {
+  const aiAgentIndex = contents.findIndex(
+    content => content instanceof FlowAiAgent
+  )
+  if (aiAgentIndex < 0) {
+    return undefined
+  }
+
+  const aiAgentContent = contents[aiAgentIndex] as FlowAiAgent
+  const contentsBeforeAiAgent = contents.slice(0, aiAgentIndex)
+
+  return { aiAgentContent, contentsBeforeAiAgent }
+}
 
 // biome-ignore lint/complexity/noStaticOnlyClass: namespace-like adapter with private static helpers
 export class HubtypeAssistantContent {

@@ -8,12 +8,12 @@ import {
   HtAiValidationType,
   type HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
-import { getFlowBuilderPlugin } from '../helpers'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { inputHasTextOrTranscript } from '../utils'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
+import { inputHasTextOrTranscript } from '../utils/input'
 
 interface AiCaptureResponseSuccess {
   success: true

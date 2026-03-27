@@ -9,7 +9,7 @@ import React from 'react'
 
 import { FlowAiAgent, type FlowContent } from '../content-fields'
 import { filterContents } from '../filters'
-import { splitAiAgentContents } from './ai-agent-from-user-input'
+import { splitAiAgentContents } from '../utils/ai-agent'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContents } from './get-contents'

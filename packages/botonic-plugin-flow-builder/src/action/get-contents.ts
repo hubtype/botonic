@@ -1,7 +1,7 @@
 import { type BotContext, INPUT } from '@botonic/core'
 import { EMPTY_PAYLOAD } from '../constants'
 import type { FlowContent } from '../content-fields'
-import { inputHasTextOrTranscript } from '../utils'
+import { inputHasTextOrTranscript } from '../utils/input'
 import { getContentsByAiAgentFromUserInput } from './ai-agent-from-user-input'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFallback } from './fallback'

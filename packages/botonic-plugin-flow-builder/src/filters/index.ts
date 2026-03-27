@@ -1,8 +1,8 @@
 import type { BotContext } from '@botonic/core'
 
 import type { FlowContent } from '../content-fields'
-import { getFlowBuilderPlugin } from '../helpers'
 import type { ContentFilter } from '../types'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 
 interface ContentFilterExecutorOptions {
   filters: ContentFilter[]
