@@ -427,9 +427,9 @@ describe('FlowWhatsappTemplate', () => {
       const urlButton = buttons?.buttons[0]
       expect(urlButton?.sub_type).toBe(WhatsAppTemplateButtonSubType.URL)
       expect(urlButton?.index).toBe(0)
-      expect(
-        (urlButton as WhatsappTemplateUrlButton)?.parameters[0].text
-      ).toBe('TKT-12345')
+      expect((urlButton as WhatsappTemplateUrlButton)?.parameters[0].text).toBe(
+        'TKT-12345'
+      )
 
       // Quick Reply button
       const quickReplyButton = buttons?.buttons[1]
