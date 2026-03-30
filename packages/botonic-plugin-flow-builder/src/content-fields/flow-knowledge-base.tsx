@@ -1,4 +1,5 @@
-import { type ActionRequest, Text } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
+import { Text } from '@botonic/react'
 
 import { ContentFieldsBase } from './content-fields-base'
 import type { HtKnowledgeBaseNode } from './hubtype-fields'
@@ -30,19 +31,24 @@ export class FlowKnowledgeBase extends ContentFieldsBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
+  async trackFlow(_botContext: BotContext): Promise<void> {
     // TODO: Review how we can track here the knowledge base event here.
     // We should store event args in an attribute of FlowKnowledgeBase
     // when knowledge base is resolved inside the flow builder action
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
     return (
       <Text
-        key={id}
+        key={this.id}
         feedbackEnabled={this.feedbackEnabled}
         inferenceId={this.inferenceId}
-        botInteractionId={request.input.bot_interaction_id}
+        botInteractionId={botContext.input.bot_interaction_id}
       >
         {this.text}
       </Text>

@@ -1,4 +1,9 @@
-import { BotonicAction, EventAction, type EventBotAction } from '@botonic/core'
+import {
+  type BotContext,
+  BotonicAction,
+  EventAction,
+  type EventBotAction,
+} from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
@@ -25,9 +30,9 @@ export class FlowBotAction extends ContentFieldsBase {
     return newBotAction
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
     const eventBotAction: EventBotAction = {
       action: EventAction.BotAction,
       flowThreadId,
@@ -39,11 +44,17 @@ export class FlowBotAction extends ContentFieldsBase {
       payload: this.payload,
     }
     const { action, ...eventArgs } = eventBotAction
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
   }
 
-  doBotAction(request: ActionRequest): void {
-    request.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
+  doBotAction(botContext: ActionRequest): void {
+    botContext.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
+  }
+
+  async processContent(botContext: BotContext): Promise<void> {
+    this.doBotAction(botContext)
+    await this.trackFlow(botContext)
+    return
   }
 
   toBotonic(): JSX.Element {

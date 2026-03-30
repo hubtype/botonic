@@ -1,6 +1,5 @@
-import { type BotContext, INPUT, isDev, isWebchat } from '@botonic/core'
+import { type BotContext, isDev, isWebchat } from '@botonic/core'
 import {
-  type ActionRequest,
   Multichannel,
   RequestContext,
   WebchatSettings,
@@ -8,19 +7,12 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import type { FlowBuilderApi } from '../api'
-import { EMPTY_PAYLOAD } from '../constants'
-import { type FlowContent, FlowHandoff } from '../content-fields'
-import { FlowBotAction } from '../content-fields/flow-bot-action'
-import { ContentFilterExecutor } from '../filters'
-import { getFlowBuilderPlugin } from '../helpers'
-import type BotonicPluginFlowBuilder from '../index'
-import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent, splitAiAgentContents } from './ai-agent'
-import { getContentsByFallback } from './fallback'
+import { FlowAiAgent, type FlowContent } from '../content-fields'
+import { filterContents } from '../filters'
+import { splitAiAgentContents } from '../utils/ai-agent'
+import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
-import { getContentsByKnowledgeBase } from './knowledge-bases'
-import { getContentsByPayload } from './payload'
+import { getContents } from './get-contents'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
@@ -32,84 +24,60 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   declare context: React.ContextType<typeof RequestContext>
 
   static async executeConversationStart(
-    request: ActionRequest
+    botContext: BotContext
   ): Promise<FlowBuilderActionProps> {
-    const context = getContext(request)
+    const context = getFlowBuilderActionContext(botContext)
     const contents = await getContentsByFirstInteraction(context)
-    const filteredContents = await filterContents(request, contents)
-    await FlowBuilderAction.trackAllContents(request, filteredContents)
-    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
+
+    const filteredContents = await FlowBuilderAction.prepareContentsToRender(
+      botContext,
+      contents
+    )
 
     return { contents: filteredContents }
   }
 
   static async botonicInit(
-    request: ActionRequest,
+    botContext: BotContext,
     contentID?: string
   ): Promise<FlowBuilderActionProps> {
-    const contents = await getContents(request, contentID)
-    const filteredContents = await filterContents(request, contents)
-    await FlowBuilderAction.trackAllContents(request, filteredContents)
-    await FlowBuilderAction.resolveFlowAIAgentMessages(
-      request,
-      filteredContents
-    )
-    await FlowBuilderAction.doHandoffAndBotActions(request, filteredContents)
+    const contents = await getContents(botContext, contentID)
 
-    return { contents: filteredContents }
+    const contentsToRender = await FlowBuilderAction.prepareContentsToRender(
+      botContext,
+      contents
+    )
+
+    return { contents: contentsToRender }
   }
 
-  static async resolveFlowAIAgentMessages(
+  static async prepareContentsToRender(
     botContext: BotContext,
     contents: FlowContent[]
   ) {
-    const splitContents = splitAiAgentContents(contents)
-    if (!splitContents) {
-      return
-    }
-    const { aiAgentContent, contentsBeforeAiAgent } = splitContents
+    const filteredContents = await filterContents(botContext, contents)
 
-    if (aiAgentContent && aiAgentContent?.messages.length === 0) {
-      await aiAgentContent.resolveAIAgentResponse(
-        botContext,
-        contentsBeforeAiAgent
-      )
-    }
-  }
-
-  static async trackAllContents(
-    request: ActionRequest,
-    contents: FlowContent[]
-  ) {
-    for (const content of contents) {
-      await content.trackFlow(request)
-    }
-  }
-
-  static async doHandoffAndBotActions(
-    request: ActionRequest,
-    contents: FlowContent[]
-  ) {
-    const handoffContent = contents.find(
-      content => content instanceof FlowHandoff
-    ) as FlowHandoff
-    if (handoffContent) {
-      await handoffContent.doHandoff(request)
+    for (const content of filteredContents) {
+      if (content instanceof FlowAiAgent) {
+        const splitContents = splitAiAgentContents(filteredContents)
+        if (!splitContents) {
+          continue
+        }
+        const { contentsBeforeAiAgent } = splitContents
+        await content.processContent(botContext, contentsBeforeAiAgent)
+      } else {
+        await content.processContent(botContext)
+      }
     }
 
-    const botActionContent = contents.find(
-      content => content instanceof FlowBotAction
-    ) as FlowBotAction
-    if (botActionContent) {
-      botActionContent.doBotAction(request)
-    }
+    return filteredContents
   }
 
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
-    const request = this.context as ActionRequest
+    const botContext = this.context as BotContext
     const shouldSendWebchatSettings =
-      (isWebchat(request.session) || isDev(request.session)) &&
+      (isWebchat(botContext.session) || isDev(botContext.session)) &&
       !!webchatSettingsParams
 
     return (
@@ -117,7 +85,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(content.id, request))}
+        {contents.map(content => content.toBotonic(botContext))}
       </>
     )
   }
@@ -126,9 +94,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
-    const request = this.context as ActionRequest
+    const botContext = this.context as BotContext
     const shouldSendWebchatSettings =
-      (isWebchat(request.session) || isDev(request.session)) &&
+      (isWebchat(botContext.session) || isDev(botContext.session)) &&
       !!webchatSettingsParams
 
     return (
@@ -136,92 +104,8 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(content.id, request))}
+        {contents.map(content => content.toBotonic(botContext))}
       </Multichannel>
     )
-  }
-}
-
-async function getContents(
-  request: ActionRequest,
-  contentID?: string
-): Promise<FlowContent[]> {
-  const context = getContext(request, contentID)
-
-  if (request.session.is_first_interaction) {
-    return await getContentsByFirstInteraction(context)
-  }
-  // TODO: Add needed logic when we can define contents for multi locale queue position message
-  if (request.input.type === INPUT.EVENT_QUEUE_POSITION_CHANGED) {
-    return []
-  }
-
-  if (request.input.payload?.startsWith(EMPTY_PAYLOAD)) {
-    request.input.payload = undefined
-  }
-
-  if (request.input.payload || contentID) {
-    const contentsByPayload = await getContentsByPayload(context)
-    if (contentsByPayload.length > 0) {
-      return contentsByPayload
-    }
-
-    return await getContentsByFallback(context)
-  }
-
-  if (inputHasTextOrTranscript(request.input)) {
-    const aiAgentContents = await getContentsByAiAgent(context)
-    if (aiAgentContents.length > 0) {
-      return aiAgentContents
-    }
-    const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
-    if (knowledgeBaseContents.length > 0) {
-      return knowledgeBaseContents
-    }
-  }
-
-  return await getContentsByFallback(context)
-}
-
-async function filterContents(
-  request: BotContext,
-  contents: FlowContent[]
-): Promise<FlowContent[]> {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const contentFilters = flowBuilderPlugin.contentFilters
-  const contentFilterExecutor = new ContentFilterExecutor({
-    filters: contentFilters,
-  })
-
-  const filteredContents: FlowContent[] = []
-  for (const content of contents) {
-    const filteredContent = await contentFilterExecutor.filter(request, content)
-    filteredContents.push(filteredContent)
-  }
-
-  return filteredContents
-}
-
-export interface FlowBuilderContext {
-  cmsApi: FlowBuilderApi
-  flowBuilderPlugin: BotonicPluginFlowBuilder
-  request: ActionRequest
-  resolvedLocale: string
-  contentID?: string
-}
-
-function getContext(
-  request: ActionRequest,
-  contentID?: string
-): FlowBuilderContext {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
-  const cmsApi = flowBuilderPlugin.cmsApi
-  const resolvedLocale = flowBuilderPlugin.cmsApi.getResolvedLocale()
-  return {
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-    contentID,
   }
 }

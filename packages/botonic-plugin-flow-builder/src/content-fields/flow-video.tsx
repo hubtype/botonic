@@ -1,4 +1,5 @@
-import { type ActionRequest, Video } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
+import { Video } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
@@ -16,11 +17,16 @@ export class FlowVideo extends ContentFieldsBase {
     return newVideo
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
   }
 
-  toBotonic(id: string): JSX.Element {
-    return <Video key={id} src={this.src} />
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(): JSX.Element {
+    return <Video key={this.id} src={this.src} />
   }
 }

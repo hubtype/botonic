@@ -1,10 +1,5 @@
-import { isWhatsapp } from '@botonic/core'
-import {
-  type ActionRequest,
-  Button,
-  Text,
-  WhatsappButtonList,
-} from '@botonic/react'
+import { type BotContext, isWhatsapp } from '@botonic/core'
+import { Button, Text, WhatsappButtonList } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../../api'
 import { trackOneContent } from '../../tracking'
@@ -41,14 +36,19 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     return newWhatsappButtonList
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
-    const replacedText = this.replaceVariables(this.text, request)
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
 
-    if (!isWhatsapp(request.session)) {
+  toBotonic(botContext: BotContext): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, botContext)
+
+    if (!isWhatsapp(botContext.session)) {
       const rows = this.sections.flatMap(section => section.rows)
       const buttons = rows.map(row => (
         <Button key={row.id} payload={row.targetId}>
@@ -66,13 +66,13 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
 
     return (
       <WhatsappButtonList
-        key={id}
+        key={this.id}
         body={replacedText}
         button={this.listButtonText}
         sections={this.sections.map((section, sectionIndex) =>
-          section.toBotonic(sectionIndex)
+          section.renderSection(sectionIndex)
         )}
-      ></WhatsappButtonList>
+      />
     )
   }
 }

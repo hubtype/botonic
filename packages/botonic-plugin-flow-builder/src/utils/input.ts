@@ -1,28 +1,8 @@
-import { INPUT, type Input, type Session } from '@botonic/core'
+import { INPUT, type Input } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from './helpers'
-import { type InShadowingConfig, ProcessEnvNodeEnvs } from './types'
-
-function getAccessTokenFromSession(session: Session): string {
-  if (!session._access_token) {
-    throw new Error('No access token found in session')
-  }
-  return session._access_token
-}
-
-export function resolveGetAccessToken(
-  getAccessToken: (session: Session) => string
-): (session: Session) => string {
-  switch (process.env.NODE_ENV) {
-    case ProcessEnvNodeEnvs.PRODUCTION:
-      return getAccessTokenFromSession
-    case ProcessEnvNodeEnvs.DEVELOPMENT:
-      return getAccessToken
-    default:
-      throw new Error('No method defined for getting access token')
-  }
-}
+import type { InShadowingConfig } from '../types'
+import { getFlowBuilderPlugin } from './get-flow-builder-plugin'
 
 export function inputHasTextOrTranscript(input: Input): boolean {
   const isTextInput = Boolean(input.data) && input.type === INPUT.TEXT

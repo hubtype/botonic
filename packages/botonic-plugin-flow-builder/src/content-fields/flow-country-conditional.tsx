@@ -1,5 +1,8 @@
-import { EventAction, type EventConditionalCountry } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
+import {
+  type BotContext,
+  EventAction,
+  type EventConditionalCountry,
+} from '@botonic/core'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -15,18 +18,18 @@ export class FlowCountryConditional extends ContentFieldsBase {
 
   static fromHubtypeCMS(
     component: HtCountryConditionalNode,
-    request: ActionRequest
+    botContext: BotContext
   ): FlowCountryConditional {
     const newCountryConditional = new FlowCountryConditional(component.id)
     newCountryConditional.code = component.code
     newCountryConditional.resultMapping = component.content.result_mapping
-    newCountryConditional.setConditionalResult(request)
+    newCountryConditional.setConditionalResult(botContext)
 
     return newCountryConditional
   }
 
-  setConditionalResult(request: ActionRequest): void {
-    const country = request.getUserCountry()
+  setConditionalResult(botContext: BotContext): void {
+    const country = botContext.getUserCountry()
     const conditionalResult =
       this.resultMapping.find(rMap => rMap.result === country) ||
       this.resultMapping.find(rMap => rMap.result === 'default')
@@ -39,9 +42,9 @@ export class FlowCountryConditional extends ContentFieldsBase {
     this.followUp = conditionalResult.target
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
     if (!this.conditionalResult?.result) {
       console.warn(
         `Tracking event for node ${this.code} but no conditional result found`
@@ -58,7 +61,12 @@ export class FlowCountryConditional extends ContentFieldsBase {
       country: (this.conditionalResult?.result as string) ?? '',
     }
     const { action, ...eventArgs } = eventCountryConditional
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
+  }
+
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
   }
 
   toBotonic(): JSX.Element {

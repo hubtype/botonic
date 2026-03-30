@@ -1,5 +1,8 @@
-import { EventAction, type EventWebviewActionTriggered } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
+import {
+  type BotContext,
+  EventAction,
+  type EventWebviewActionTriggered,
+} from '@botonic/core'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -25,9 +28,9 @@ export class FlowWebview extends ContentFieldsBase {
     return newWebview
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
     const eventWebviewActionTriggered: EventWebviewActionTriggered = {
       action: EventAction.WebviewActionTriggered,
@@ -41,6 +44,10 @@ export class FlowWebview extends ContentFieldsBase {
       webviewName: this.webviewName,
     }
     const { action, ...eventArgs } = eventWebviewActionTriggered
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
+  }
+
+  async processContent(): Promise<void> {
+    return
   }
 }

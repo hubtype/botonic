@@ -2,7 +2,10 @@ import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
 import { FlowText } from '../src/content-fields/flow-text'
-import { getTextOrTranscript, inputHasTextOrTranscript } from '../src/utils'
+import {
+  getTextOrTranscript,
+  inputHasTextOrTranscript,
+} from '../src/utils/input'
 import { createRequest, getActionRequest } from './helpers/utils'
 
 /**
