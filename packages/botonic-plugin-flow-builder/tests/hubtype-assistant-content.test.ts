@@ -1,23 +1,28 @@
 import { WhatsappCTAUrlHeaderType } from '@botonic/react'
 import { describe, expect, test } from '@jest/globals'
 
-import { FlowButton } from '../src/content-fields/flow-button'
-import { FlowCarousel } from '../src/content-fields/flow-carousel'
-import { FlowElement } from '../src/content-fields/flow-element'
-import { FlowHandoff } from '../src/content-fields/flow-handoff'
-import { FlowImage } from '../src/content-fields/flow-image'
-import { FlowText } from '../src/content-fields/flow-text'
-import { FlowVideo } from '../src/content-fields/flow-video'
-import { FlowWhatsappCtaUrlButtonNode } from '../src/content-fields/flow-whatsapp-cta-url-button'
-import { FlowWhatsappTemplate } from '../src/content-fields/flow-whatsapp-template'
-import { HubtypeAssistantContent } from '../src/content-fields/hubtype-assistant-content'
 import {
   HtButtonStyle,
   type HtWhatsAppTemplate,
-} from '../src/content-fields/hubtype-fields'
-import { FlowWhatsappButtonList } from '../src/content-fields/whatsapp-button-list/flow-whatsapp-button-list'
-import { FlowWhatsappButtonListRow } from '../src/content-fields/whatsapp-button-list/flow-whatsapp-button-list-row'
-import { FlowWhatsappButtonListSection } from '../src/content-fields/whatsapp-button-list/flow-whatsapp-button-list-section'
+} from '../src/content-fields/hubtype-fields/index'
+import {
+  FlowButton,
+  FlowCarousel,
+  FlowElement,
+  FlowHandoff,
+  FlowImage,
+  FlowText,
+  FlowVideo,
+  FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappTemplate,
+} from '../src/content-fields/index'
+import {
+  FlowWhatsappButtonList,
+  FlowWhatsappButtonListRow,
+  FlowWhatsappButtonListSection,
+} from '../src/content-fields/whatsapp-button-list/index'
+
+import { HubtypeAssistantContent } from '../src/utils/ai-agent'
 
 function flowButton(id: string, text: string, extra?: { payload?: string }) {
   const b = new FlowButton(id)

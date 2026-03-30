@@ -1,4 +1,4 @@
-import type { ActionRequest } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
 
 import {
   ACCESS_TOKEN_VARIABLE_KEY,
@@ -18,7 +18,9 @@ export abstract class ContentFieldsBase {
 
   constructor(public readonly id: string) {}
 
-  abstract trackFlow(request: ActionRequest): Promise<void>
+  abstract trackFlow(botContext: BotContext): Promise<void>
+
+  abstract processContent(botContext: BotContext): Promise<void>
 
   static getTextByLocale(locale: string, text: HtTextLocale[]): string {
     const result = text.find(t => t.locale === locale)
@@ -42,17 +44,17 @@ export abstract class ContentFieldsBase {
     return queues.find(queue => queue.locale === locale)
   }
 
-  replaceVariables(text: string, request: ActionRequest): string {
+  replaceVariables(text: string, botContext: BotContext): string {
     const matches = text.match(VARIABLE_PATTERN_GLOBAL)
 
     let replacedText = text
-    if (matches && request) {
+    if (matches && botContext) {
       matches.forEach(match => {
         // remove \\ ( escape for _ ) added by text node with markdown
         const keyPath = match.slice(1, -1).replaceAll('\\', '')
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? match
-          : this.getValueFromKeyPath(request, keyPath)
+          : this.getValueFromKeyPath(botContext, keyPath)
         // TODO In local if change variable and render multiple times the value is always the last update
         replacedText = replacedText.replace(
           match,
@@ -64,10 +66,10 @@ export abstract class ContentFieldsBase {
     return replacedText
   }
 
-  getValueFromKeyPath(request: ActionRequest, keyPath: string): any {
+  getValueFromKeyPath(botContext: BotContext, keyPath: string): any {
     if (keyPath.startsWith('session.user.contact_info.')) {
       const name = keyPath.split('.').at(-1)
-      return request.session.user.contact_info?.find(
+      return botContext.session.user.contact_info?.find(
         contact => contact.name === name
       )?.value
     }
@@ -75,14 +77,14 @@ export abstract class ContentFieldsBase {
     if (keyPath.startsWith('input.') || keyPath.startsWith('session.')) {
       return keyPath
         .split('.')
-        .reduce((object, key) => this.resolveObjectKey(object, key), request)
+        .reduce((object, key) => this.resolveObjectKey(object, key), botContext)
     }
 
     return keyPath
       .split('.')
       .reduce(
         (object, key) => this.resolveObjectKey(object, key),
-        request.session.user.extra_data
+        botContext.session.user.extra_data
       )
   }
 

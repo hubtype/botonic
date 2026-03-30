@@ -1,6 +1,5 @@
 import { type BotContext, isDev, isWebchat } from '@botonic/core'
 import {
-  type ActionRequest,
   Multichannel,
   RequestContext,
   WebchatSettings,
@@ -8,10 +7,9 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import { type FlowContent, FlowHandoff } from '../content-fields'
-import { FlowBotAction } from '../content-fields/flow-bot-action'
+import { FlowAiAgent, type FlowContent } from '../content-fields'
 import { filterContents } from '../filters'
-import { splitAiAgentContents } from './ai-agent-from-user-input'
+import { splitAiAgentContents } from '../utils/ai-agent'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContents } from './get-contents'
@@ -31,7 +29,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const context = getFlowBuilderActionContext(botContext)
     const contents = await getContentsByFirstInteraction(context)
 
-    const filteredContents = await FlowBuilderAction.processContents(
+    const filteredContents = await FlowBuilderAction.prepareContentsToRender(
       botContext,
       contents
     )
@@ -45,81 +43,41 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   ): Promise<FlowBuilderActionProps> {
     const contents = await getContents(botContext, contentID)
 
-    const filteredContents = await FlowBuilderAction.processContents(
+    const contentsToRender = await FlowBuilderAction.prepareContentsToRender(
       botContext,
       contents
     )
 
-    return { contents: filteredContents }
+    return { contents: contentsToRender }
   }
 
-  static async processContents(
+  static async prepareContentsToRender(
     botContext: BotContext,
     contents: FlowContent[]
   ) {
     const filteredContents = await filterContents(botContext, contents)
-    await FlowBuilderAction.trackAllContents(botContext, filteredContents)
-    await FlowBuilderAction.resolveFlowAIAgentMessages(
-      botContext,
-      filteredContents
-    )
-    await FlowBuilderAction.doHandoffAndBotActions(botContext, filteredContents)
+
+    for (const content of filteredContents) {
+      if (content instanceof FlowAiAgent) {
+        const splitContents = splitAiAgentContents(filteredContents)
+        if (!splitContents) {
+          continue
+        }
+        const { contentsBeforeAiAgent } = splitContents
+        await content.processContent(botContext, contentsBeforeAiAgent)
+      } else {
+        await content.processContent(botContext)
+      }
+    }
 
     return filteredContents
   }
 
-  static async trackAllContents(
-    botContext: BotContext,
-    contents: FlowContent[]
-  ) {
-    for (const content of contents) {
-      // TODO: This not track contents added by AIAGent with messages of type flowBuilderContent
-      await content.trackFlow(botContext)
-    }
-  }
-
-  static async resolveFlowAIAgentMessages(
-    botContext: BotContext,
-    contents: FlowContent[]
-  ) {
-    const splitContents = splitAiAgentContents(contents)
-    if (!splitContents) {
-      return
-    }
-    const { aiAgentContent, contentsBeforeAiAgent } = splitContents
-
-    if (aiAgentContent && aiAgentContent?.messages.length === 0) {
-      await aiAgentContent.resolveAIAgentResponse(
-        botContext,
-        contentsBeforeAiAgent
-      )
-    }
-  }
-
-  static async doHandoffAndBotActions(
-    botContext: BotContext,
-    contents: FlowContent[]
-  ) {
-    const handoffContent = contents.find(
-      content => content instanceof FlowHandoff
-    ) as FlowHandoff
-    if (handoffContent) {
-      await handoffContent.doHandoff(botContext)
-    }
-
-    const botActionContent = contents.find(
-      content => content instanceof FlowBotAction
-    ) as FlowBotAction
-    if (botActionContent) {
-      botActionContent.doBotAction(botContext)
-    }
-  }
-
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
-    const request = this.context as ActionRequest
+    const botContext = this.context as BotContext
     const shouldSendWebchatSettings =
-      (isWebchat(request.session) || isDev(request.session)) &&
+      (isWebchat(botContext.session) || isDev(botContext.session)) &&
       !!webchatSettingsParams
 
     return (
@@ -127,7 +85,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(content.id, request))}
+        {contents.map(content => content.toBotonic(botContext))}
       </>
     )
   }
@@ -136,9 +94,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
     const { contents, webchatSettingsParams } = this.props
-    const request = this.context as ActionRequest
+    const botContext = this.context as BotContext
     const shouldSendWebchatSettings =
-      (isWebchat(request.session) || isDev(request.session)) &&
+      (isWebchat(botContext.session) || isDev(botContext.session)) &&
       !!webchatSettingsParams
 
     return (
@@ -146,7 +104,7 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(content.id, request))}
+        {contents.map(content => content.toBotonic(botContext))}
       </Multichannel>
     )
   }

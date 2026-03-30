@@ -1,5 +1,11 @@
-import { HandOffBuilder, HelpdeskEvent, isDev, isWebchat } from '@botonic/core'
-import { type ActionRequest, WebchatSettings } from '@botonic/react'
+import {
+  type BotContext,
+  HandOffBuilder,
+  HelpdeskEvent,
+  isDev,
+  isWebchat,
+} from '@botonic/core'
+import { WebchatSettings } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
@@ -47,8 +53,8 @@ export class FlowHandoff extends ContentFieldsBase {
     return undefined
   }
 
-  async doHandoff(request: ActionRequest): Promise<void> {
-    const handOffBuilder = new HandOffBuilder(request.session)
+  async doHandoff(botContext: BotContext): Promise<void> {
+    const handOffBuilder = new HandOffBuilder(botContext.session)
     handOffBuilder.withAutoAssignOnWaiting(this.handoffAutoAssign)
 
     if (this.hasQueuePositionChangedNotificationsEnabled) {
@@ -62,12 +68,12 @@ export class FlowHandoff extends ContentFieldsBase {
     }
 
     if (this.queue) {
-      const language = request.getSystemLocale()
+      const language = botContext.getSystemLocale()
 
       handOffBuilder.withQueue(this.queue.id)
 
       const { flowId, flowName, flowNodeId, flowNodeContentId } =
-        getCommonFlowContentEventArgsForContentId(request, this.id)
+        getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
       handOffBuilder.withBotEvent({
         flowId,
@@ -85,13 +91,18 @@ export class FlowHandoff extends ContentFieldsBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async trackFlow(_request: ActionRequest): Promise<void> {
+  async trackFlow(_botContext: BotContext): Promise<void> {
     // TODO: Not apply for this content because backend track handoff success event
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
-    return isDev(request.session) || isWebchat(request.session) ? (
-      <WebchatSettings key={id} enableUserInput={true} />
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.doHandoff(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
+    return isDev(botContext.session) || isWebchat(botContext.session) ? (
+      <WebchatSettings key={this.id} enableUserInput={true} />
     ) : (
       <></>
     )

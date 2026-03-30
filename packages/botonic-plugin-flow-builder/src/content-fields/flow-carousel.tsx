@@ -1,4 +1,8 @@
-import { type CarouselMessage, isWhatsapp } from '@botonic/core'
+import {
+  type BotContext,
+  type CarouselMessage,
+  isWhatsapp,
+} from '@botonic/core'
 import {
   type ActionRequest,
   Button,
@@ -111,10 +115,10 @@ export class FlowCarousel extends ContentFieldsBase {
   static fromAIAgent(
     id: string,
     carouselMessage: CarouselMessage,
-    request: ActionRequest
+    botContext: ActionRequest
   ): JSX.Element {
     if (
-      isWhatsapp(request.session) &&
+      isWhatsapp(botContext.session) &&
       FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
     ) {
       if (
@@ -168,9 +172,10 @@ export class FlowCarousel extends ContentFieldsBase {
     return (
       <Carousel key={id}>
         {carouselMessage.content.elements.map((element, index) =>
-          FlowElement.fromAIAgent(`${id}-element-${index}`, element).toBotonic(
-            id
-          )
+          FlowElement.fromAIAgent(
+            `${id}-element-${index}`,
+            element
+          ).renderElement(id)
         )}
       </Carousel>
     )
@@ -196,10 +201,15 @@ export class FlowCarousel extends ContentFieldsBase {
     }
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
     const carouselMessage = this.toCarouselMessage(this.elements)
     if (
-      isWhatsapp(request.session) &&
+      isWhatsapp(botContext.session) &&
       FlowCarousel.areElementsValidForWhatsapp(carouselMessage)
     ) {
       if (this.elements.length === 1 && this.elements[0].button?.url) {
@@ -209,7 +219,7 @@ export class FlowCarousel extends ContentFieldsBase {
 
         return (
           <WhatsappCTAUrlButton
-            key={id}
+            key={this.id}
             body={element.title}
             headerType={WhatsappCTAUrlHeaderType.Image}
             headerImage={element.image}
@@ -246,8 +256,8 @@ export class FlowCarousel extends ContentFieldsBase {
       )
     }
     return (
-      <Carousel key={id}>
-        {this.elements.map(element => element.toBotonic(id))}
+      <Carousel key={this.id}>
+        {this.elements.map(element => element.renderElement(this.id))}
       </Carousel>
     )
   }

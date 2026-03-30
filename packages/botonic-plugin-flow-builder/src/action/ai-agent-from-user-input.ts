@@ -1,4 +1,5 @@
-import { FlowAiAgent, type FlowContent } from '../content-fields'
+import type { FlowContent } from '../content-fields/index'
+import { splitAiAgentContents } from '../utils/ai-agent'
 import type { FlowBuilderContext } from './context'
 
 export async function getContentsByAiAgentFromUserInput({
@@ -31,25 +32,4 @@ export async function getContentsByAiAgentFromUserInput({
   }
 
   return contents
-}
-
-interface AiAgentContentAndContentsBeforeAiAgent {
-  aiAgentContent: FlowAiAgent
-  contentsBeforeAiAgent: FlowContent[]
-}
-
-export function splitAiAgentContents(
-  contents: FlowContent[]
-): AiAgentContentAndContentsBeforeAiAgent | undefined {
-  const aiAgentIndex = contents.findIndex(
-    content => content instanceof FlowAiAgent
-  )
-  if (aiAgentIndex < 0) {
-    return undefined
-  }
-
-  const aiAgentContent = contents[aiAgentIndex] as FlowAiAgent
-  const contentsBeforeAiAgent = contents.slice(0, aiAgentIndex)
-
-  return { aiAgentContent, contentsBeforeAiAgent }
 }

@@ -1,8 +1,8 @@
 import type { BotContext } from '@botonic/core'
 
 import type { FlowBuilderApi } from '../api'
-import { getFlowBuilderPlugin } from '../helpers'
 import type BotonicPluginFlowBuilder from '../index'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 
 export interface FlowBuilderContext {
   cmsApi: FlowBuilderApi

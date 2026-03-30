@@ -3,6 +3,11 @@ import {
   WhatsAppTemplateButtonSubType,
   WhatsAppTemplateComponentType,
   WhatsAppTemplateParameterType,
+  type WhatsappTemplateHeaderImageParameter,
+  type WhatsappTemplateHeaderTextParameter,
+  type WhatsappTemplateHeaderVideoParameter,
+  type WhatsappTemplateQuickReplyButton,
+  type WhatsappTemplateUrlButton,
 } from '@botonic/react'
 import { describe, expect, test } from '@jest/globals'
 
@@ -305,8 +310,10 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       expect(headerComponent?.type).toBe(WhatsAppTemplateComponentType.HEADER)
-      // @ts-expect-error - text property exists for TEXT type headers
-      expect(headerComponent?.parameters[0].text).toBe('ORD-99999')
+      expect(
+        (headerComponent?.parameters[0] as WhatsappTemplateHeaderTextParameter)
+          .text
+      ).toBe('ORD-99999')
     })
 
     test('should create image header with correct locale', async () => {
@@ -333,10 +340,10 @@ describe('FlowWhatsappTemplate', () => {
       expect(headerComponent?.parameters[0].type).toBe(
         WhatsAppTemplateParameterType.IMAGE
       )
-      // @ts-expect-error
-      expect(headerComponent?.parameters[0].image.link).toBe(
-        'https://example.com/promo-es.jpg'
-      )
+      expect(
+        (headerComponent?.parameters[0] as WhatsappTemplateHeaderImageParameter)
+          .image.link
+      ).toBe('https://example.com/promo-es.jpg')
     })
 
     test('should create video header with correct locale', async () => {
@@ -363,10 +370,10 @@ describe('FlowWhatsappTemplate', () => {
       expect(headerComponent?.parameters[0].type).toBe(
         WhatsAppTemplateParameterType.VIDEO
       )
-      // @ts-expect-error
-      expect(headerComponent?.parameters[0].video.link).toBe(
-        'https://example.com/video-es.mp4'
-      )
+      expect(
+        (headerComponent?.parameters[0] as WhatsappTemplateHeaderVideoParameter)
+          .video.link
+      ).toBe('https://example.com/video-es.mp4')
     })
 
     test('should return undefined header when no header component exists', async () => {
@@ -420,8 +427,9 @@ describe('FlowWhatsappTemplate', () => {
       const urlButton = buttons?.buttons[0]
       expect(urlButton?.sub_type).toBe(WhatsAppTemplateButtonSubType.URL)
       expect(urlButton?.index).toBe(0)
-      // @ts-expect-error
-      expect(urlButton?.parameters[0].text).toBe('TKT-12345')
+      expect((urlButton as WhatsappTemplateUrlButton)?.parameters[0].text).toBe(
+        'TKT-12345'
+      )
 
       // Quick Reply button
       const quickReplyButton = buttons?.buttons[1]
@@ -429,8 +437,10 @@ describe('FlowWhatsappTemplate', () => {
         WhatsAppTemplateButtonSubType.QUICK_REPLY
       )
       expect(quickReplyButton?.index).toBe(1)
-      // @ts-expect-error
-      expect(quickReplyButton?.parameters[0].payload).toBe('agent-handoff-node')
+      expect(
+        (quickReplyButton as WhatsappTemplateQuickReplyButton)?.parameters[0]
+          .payload
+      ).toBe('agent-handoff-node')
 
       // Voice Call button (maps to default since PHONE_NUMBER is not handled separately)
       const voiceCallButton = buttons?.buttons[2]
@@ -563,7 +573,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      const rendered = template.toBotonic('test-id', request)
+      const rendered = template.toBotonic(request)
 
       // For non-WhatsApp, it should render a Text component with template info
       expect(rendered.type.name || rendered.type).toBe('Text')
@@ -584,7 +594,7 @@ describe('FlowWhatsappTemplate', () => {
       )
 
       const template = contents[0] as FlowWhatsappTemplate
-      const rendered = template.toBotonic('test-id', request)
+      const rendered = template.toBotonic(request)
 
       // For WhatsApp, it should render a WhatsappTemplate component
       expect(rendered.type.name || rendered.type).toBe('WhatsappTemplate')

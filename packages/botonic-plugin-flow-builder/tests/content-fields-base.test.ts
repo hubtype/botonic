@@ -35,7 +35,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable 5'
       )
@@ -53,7 +53,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       // Variable should remain as {bagsAdded} since it's not found in extraData
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -72,7 +72,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable three'
       )
@@ -90,7 +90,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable true'
       )
@@ -108,7 +108,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable false'
       )
@@ -126,7 +126,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable 0'
       )
@@ -146,7 +146,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       // Object should NOT be replaced, variable pattern should remain
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -165,7 +165,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       // Array should NOT be replaced, variable pattern should remain
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -184,7 +184,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       // null should NOT be replaced
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -203,7 +203,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
       )
 
       const firstContent = contents[0] as FlowText
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       // undefined should NOT be replaced
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable {bagsAdded}'
@@ -225,7 +225,7 @@ describe('ContentFieldsBase - replaceVariables', () => {
 
       const firstContent = contents[0] as FlowText
       // The replaceVariables method uses getValueFromKeyPath to access nested values
-      const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+      const renderedMessage = firstContent.toBotonic(request)
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable 10'
       )

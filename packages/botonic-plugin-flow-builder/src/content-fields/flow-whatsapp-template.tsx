@@ -1,6 +1,5 @@
-import { isWhatsapp } from '@botonic/core'
+import { type BotContext, isWhatsapp } from '@botonic/core'
 import {
-  type ActionRequest,
   Text,
   WhatsAppTemplateButtonSubType,
   WhatsAppTemplateComponentType,
@@ -15,8 +14,8 @@ import {
   type WhatsappTemplateVoiceCallButton,
 } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import type {
   HtButton,
@@ -81,7 +80,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     whatsappTemplate: HtWhatsAppTemplate,
     headerVariables: HeaderVariables,
     locale: string,
-    request: ActionRequest
+    botContext: BotContext
   ): WhatsappTemplateComponentHeader | undefined {
     const headerComponent = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.HEADER
@@ -91,7 +90,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       headerComponent &&
       headerComponent.format === WhatsAppTemplateParameterType.TEXT
     ) {
-      return this.createHeaderTextComponent(headerVariables, request)
+      return this.createHeaderTextComponent(headerVariables, botContext)
     }
 
     if (
@@ -113,12 +112,12 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
 
   private createHeaderTextComponent(
     headerVariables: HeaderVariables,
-    request: ActionRequest
+    botContext: BotContext
   ): WhatsappTemplateComponentHeader {
     return {
       type: WhatsAppTemplateComponentType.HEADER,
       parameters: Object.values(headerVariables.text || {}).map(value => {
-        const valueVariable = this.replaceVariables(value, request)
+        const valueVariable = this.replaceVariables(value, botContext)
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           text: valueVariable,
@@ -163,15 +162,15 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     }
   }
 
-  // TODO: To use named variables (contact_info_fields) we need to take it from request.session.user.contact_info, this only be able in toBotonic method
+  // TODO: To use named variables (contact_info_fields) we need to take it from botContext.session.user.contact_info, this only be able in toBotonic method
   private getBodyComponent(
     variableValues: Record<string, string>,
-    request: ActionRequest
+    botContext: BotContext
   ): WhatsappTemplateComponentBody {
     return {
       type: WhatsAppTemplateComponentType.BODY,
       parameters: Object.entries(variableValues).map(([key, value]) => {
-        const valueVariable = this.replaceVariables(value, request)
+        const valueVariable = this.replaceVariables(value, botContext)
         return {
           type: WhatsAppTemplateParameterType.TEXT,
           parameter_name: key,
@@ -185,7 +184,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     whatsappTemplate: HtWhatsAppTemplate,
     buttonNodes: HtButton[],
     urlVariableValues: Record<string, string>,
-    request: ActionRequest
+    botContext: BotContext
   ): WhatsappTemplateComponentButtons | undefined {
     const htWhatsappTemplateButtons = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.BUTTONS
@@ -200,7 +199,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
             if (!urlParam) {
               return null
             }
-            return this.createUrlButtonComponent(index, urlParam, request)
+            return this.createUrlButtonComponent(index, urlParam, botContext)
           }
 
           if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
@@ -224,9 +223,9 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   private createUrlButtonComponent(
     index: number,
     urlParam: string,
-    request: ActionRequest
+    botContext: BotContext
   ): WhatsappTemplateUrlButton {
-    const variableUrlParam = this.replaceVariables(urlParam, request)
+    const variableUrlParam = this.replaceVariables(urlParam, botContext)
     return {
       type: WhatsAppTemplateComponentType.BUTTON,
       sub_type: WhatsAppTemplateButtonSubType.URL,
@@ -270,34 +269,39 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     }
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
     const templateName = this.htWhatsappTemplate.name
     const templateLanguage = this.htWhatsappTemplate.language
-    const body = this.getBodyComponent(this.variableValues, request)
-    const pluginFlowBuilder = getFlowBuilderPlugin(request.plugins)
+    const body = this.getBodyComponent(this.variableValues, botContext)
+    const pluginFlowBuilder = getFlowBuilderPlugin(botContext.plugins)
     const resolvedLocale = pluginFlowBuilder.cmsApi.getResolvedLocale()
 
     const header = this.getHeaderComponent(
       this.htWhatsappTemplate,
       this.headerVariables || ({} as HeaderVariables),
       resolvedLocale,
-      request
+      botContext
     )
     const buttons = this.getButtons(
       this.htWhatsappTemplate,
       this.buttons || [],
       this.urlVariableValues || {},
-      request
+      botContext
     )
 
-    if (isWhatsapp(request.session)) {
+    if (isWhatsapp(botContext.session)) {
       return (
         <WhatsappTemplate
-          key={id}
+          key={this.id}
           name={templateName}
           language={templateLanguage}
           header={header}
@@ -308,7 +312,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     }
 
     return (
-      <Text key={id}>
+      <Text key={this.id}>
         {`WhatsApp Template: ${templateName} (${templateLanguage})`}
         {header && `${JSON.stringify(header, null, 2)}`}
         {body && `${JSON.stringify(body, null, 2)}`}

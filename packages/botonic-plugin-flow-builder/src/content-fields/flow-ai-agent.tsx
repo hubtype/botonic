@@ -8,7 +8,6 @@ import {
   type InferenceResponse,
   VerbosityLevel,
 } from '@botonic/core'
-import { getFlowBuilderPlugin } from '../helpers'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
@@ -17,10 +16,11 @@ import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
+import { HubtypeAssistantContent } from '../utils/ai-agent'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
 import { FlowText } from './flow-text'
-import { HubtypeAssistantContent } from './hubtype-assistant-content'
 import type { HtNodeWithContent } from './hubtype-fields'
 import type {
   HtAiAgentNode,
@@ -180,12 +180,22 @@ export class FlowAiAgent extends ContentFieldsBase {
           botContext,
           message.contentId
         )
-        this.jsxElements.push(
-          ...flowContents.map(content => content.toBotonic(this.id, botContext))
-        )
+        for (const content of flowContents) {
+          await content.processContent(botContext)
+          this.jsxElements.push(content.toBotonic(botContext))
+        }
       }
     }
+    return
+  }
 
+  async processContent(
+    botContext: BotContext,
+    previousContents?: FlowContent[]
+  ): Promise<void> {
+    if (this.messages.length === 0) {
+      await this.resolveAIAgentResponse(botContext, previousContents)
+    }
     return
   }
 

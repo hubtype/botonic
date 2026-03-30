@@ -1,5 +1,8 @@
-import { EventAction, type EventConditionalChannel } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
+import {
+  type BotContext,
+  EventAction,
+  type EventConditionalChannel,
+} from '@botonic/core'
 
 import {
   getCommonFlowContentEventArgsForContentId,
@@ -16,18 +19,18 @@ export class FlowChannelConditional extends ContentFieldsBase {
 
   static fromHubtypeCMS(
     component: HtChannelConditionalNode,
-    request: ActionRequest
+    botContext: BotContext
   ): FlowChannelConditional {
     const newChannelConditional = new FlowChannelConditional(component.id)
     newChannelConditional.code = component.code
     newChannelConditional.resultMapping = component.content.result_mapping
-    newChannelConditional.setConditionalResult(request)
+    newChannelConditional.setConditionalResult(botContext)
 
     return newChannelConditional
   }
 
-  setConditionalResult(request: ActionRequest): void {
-    const provider = request.session.user.provider
+  setConditionalResult(botContext: BotContext): void {
+    const provider = botContext.session.user.provider
     const conditionalResult =
       this.resultMapping.find(rMap => rMap.result === provider) ||
       this.resultMapping.find(rMap => rMap.result === 'default')
@@ -41,9 +44,9 @@ export class FlowChannelConditional extends ContentFieldsBase {
     this.followUp = conditionalResult.target
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
     const eventChannelConditional: EventConditionalChannel = {
       action: EventAction.ConditionalChannel,
@@ -56,7 +59,11 @@ export class FlowChannelConditional extends ContentFieldsBase {
       channel: this.channelResult,
     }
     const { action, ...eventArgs } = eventChannelConditional
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
+  }
+
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
   }
 
   toBotonic(): JSX.Element {
