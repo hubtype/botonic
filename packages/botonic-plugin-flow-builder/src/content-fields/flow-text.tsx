@@ -1,9 +1,10 @@
 import type {
+  BotContext,
   BotExecutorMessage,
   TextMessage,
   TextWithButtonsMessage,
 } from '@botonic/core'
-import { type ActionRequest, Text } from '@botonic/react'
+import { Text } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../constants'
@@ -34,10 +35,10 @@ export class FlowText extends ContentFieldsBase {
     return newText
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
     for (const button of this.buttons) {
-      await button.trackFlow(request)
+      await button.trackFlow(botContext)
     }
   }
 
@@ -68,10 +69,15 @@ export class FlowText extends ContentFieldsBase {
     )
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
-    const replacedText = this.replaceVariables(this.text, request)
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
+    const replacedText = this.replaceVariables(this.text, botContext)
     return (
-      <Text key={id}>
+      <Text key={this.id}>
         {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex, this.buttonStyle)

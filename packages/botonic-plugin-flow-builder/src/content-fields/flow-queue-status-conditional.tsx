@@ -1,5 +1,8 @@
-import { EventAction, type EventConditionalQueueStatus } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
+import {
+  type BotContext,
+  EventAction,
+  type EventConditionalQueueStatus,
+} from '@botonic/core'
 
 import { getArgumentsByLocale } from '../functions'
 import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
@@ -99,9 +102,9 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
     return data.open ? QueueStatusResult.OPEN : QueueStatusResult.CLOSED
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(request, this.id)
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
     if (!this.conditionalResult?.result) {
       console.warn(
         `Tracking event for node ${this.code} but no conditional result found`
@@ -121,7 +124,12 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
       isAvailableAgent: this.isAvailableAgent,
     }
     const { action, ...eventArgs } = eventQueueStatusConditional
-    await trackEvent(request, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
+  }
+
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
   }
 
   toBotonic(): JSX.Element {

@@ -1,13 +1,8 @@
-import { isDev, isWebchat, isWhatsapp } from '@botonic/core'
-import {
-  type ActionRequest,
-  CustomRatingMessage,
-  Text,
-  WhatsappButtonList,
-} from '@botonic/react'
+import { type BotContext, isDev, isWebchat, isWhatsapp } from '@botonic/core'
+import { CustomRatingMessage, Text, WhatsappButtonList } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { type HtRatingNode, RatingType } from './hubtype-fields'
@@ -40,17 +35,22 @@ export class FlowRating extends ContentFieldsBase {
     return newRating
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
-    await trackOneContent(request, this)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    await trackOneContent(botContext, this)
   }
 
-  toBotonic(id: string, request: ActionRequest): JSX.Element {
-    const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.trackFlow(botContext)
+    return
+  }
+
+  toBotonic(botContext: BotContext): JSX.Element {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
     const customRatingMessageEnabled =
       flowBuilderPlugin.customRatingMessageEnabled
-    const replacedText = this.replaceVariables(this.text, request)
+    const replacedText = this.replaceVariables(this.text, botContext)
 
-    if (isWhatsapp(request.session)) {
+    if (isWhatsapp(botContext.session)) {
       return (
         <WhatsappButtonList
           body={replacedText}
@@ -68,7 +68,7 @@ export class FlowRating extends ContentFieldsBase {
     }
 
     if (
-      (isWebchat(request.session) || isDev(request.session)) &&
+      (isWebchat(botContext.session) || isDev(botContext.session)) &&
       customRatingMessageEnabled
     ) {
       const payloads = this.buttons
@@ -88,7 +88,7 @@ export class FlowRating extends ContentFieldsBase {
     }
 
     return (
-      <Text key={id}>
+      <Text key={this.id}>
         {replacedText}
         {this.buttons.map((button, buttonIndex) =>
           button.renderButton(buttonIndex)

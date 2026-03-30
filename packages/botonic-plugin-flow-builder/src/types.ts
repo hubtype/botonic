@@ -7,12 +7,12 @@ import {
   type PluginPreRequest,
   type ResolvedPlugins,
 } from '@botonic/core'
-import type { FlowBuilderContentMessage } from './action/ai-agent/structured-output/flow-builder-content'
 import type { FlowContent } from './content-fields'
 import type {
   HtFlowBuilderData,
   HtRatingButton,
 } from './content-fields/hubtype-fields'
+import type { FlowBuilderContentMessage } from './structured-output/flow-builder-content'
 
 export interface InShadowingConfig {
   allowKeywords: boolean

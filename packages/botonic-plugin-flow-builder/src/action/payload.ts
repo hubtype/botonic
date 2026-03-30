@@ -9,7 +9,7 @@ import {
 import type { FlowContent } from '../content-fields'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
-import type { FlowBuilderContext } from './index'
+import type { FlowBuilderContext } from './context'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext

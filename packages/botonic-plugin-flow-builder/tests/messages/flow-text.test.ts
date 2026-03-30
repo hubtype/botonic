@@ -42,7 +42,7 @@ describe('Check the contents and logic of a text node', () => {
     })
 
     const firstContent = contents[0] as FlowText
-    const renderedMessage = firstContent.toBotonic(firstContent.id, request)
+    const renderedMessage = firstContent.toBotonic(request)
     expect(renderedMessage.props.children[0]).toBe(
       'This text message contains buttons and replaces the variable 2'
     )

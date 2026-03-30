@@ -1,6 +1,7 @@
 import type {
   AiAgentArgs,
   BotContext,
+  HubtypeAssistantMessage,
   Plugin,
   ResolvedPlugins,
 } from '@botonic/core'
@@ -52,18 +53,27 @@ export default class BotonicPluginAiAgents<
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
     this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
-    this.memory = options?.memory ?? {}
+    this.memory = this.getMemoryOptions(options?.memory)
     this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
 
     this.logger.logInitialConfig({
       messageHistoryApiVersion: this.messageHistoryApiVersion,
-      maxRetries: options?.maxRetries ?? 2,
-      timeout: options?.timeout ?? 16000,
+      maxRetries: options?.maxRetries ?? DEFAULT_MAX_RETRIES,
+      timeout: options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS,
       customToolNames: this.toolDefinitions.map(t => t.name),
       memory: this.memory,
     })
+  }
+
+  private getMemoryOptions(memory?: Partial<MemoryOptions>): MemoryOptions {
+    return {
+      maxMessages: memory?.maxMessages ?? MAX_MEMORY_LENGTH,
+      includeToolCalls: memory?.includeToolCalls ?? true,
+      maxFullToolResults: memory?.maxFullToolResults ?? 1,
+      debugMode: memory?.debugMode ?? false,
+    }
   }
 
   pre(): void {
@@ -121,7 +131,7 @@ export default class BotonicPluginAiAgents<
       const messages = await this.getMessages(
         botContext,
         authToken,
-        MAX_MEMORY_LENGTH
+        aiAgentArgs.previousHubtypeMessages || []
       )
 
       // Build context
@@ -169,25 +179,22 @@ export default class BotonicPluginAiAgents<
   private async getMessages(
     botContext: BotContext,
     authToken: string,
-    memoryLength: number
+    previousHubtypeMessages: HubtypeAssistantMessage[]
   ): Promise<AgenticInputMessage[]> {
     const hubtypeClient = new HubtypeApiClient(authToken)
-
     if (!isProd) {
-      return await hubtypeClient.getLocalMessages(memoryLength)
-    }
-
-    if (this.messageHistoryApiVersion === 'v1') {
-      return await hubtypeClient.getMessages(botContext, memoryLength)
+      return await hubtypeClient.getLocalMessages(
+        MAX_MEMORY_LENGTH,
+        previousHubtypeMessages
+      )
     }
 
     // Default to V2
-    const result = await hubtypeClient.getMessagesV2(botContext, {
-      maxMessages: this.memory.maxMessages ?? memoryLength,
-      includeToolCalls: this.memory.includeToolCalls ?? true,
-      maxFullToolResults: this.memory.maxFullToolResults ?? 1,
-      debugMode: this.memory.debugMode ?? false,
-    })
+    const result = await hubtypeClient.getMessagesV2(
+      botContext,
+      this.memory,
+      previousHubtypeMessages
+    )
     return result.messages
   }
 

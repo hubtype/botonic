@@ -1,4 +1,5 @@
-import { type ActionRequest, Button, Reply, type Webview } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
+import { Button, Reply, type Webview } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import { SOURCE_INFO_SEPARATOR } from '../constants'
@@ -128,10 +129,14 @@ export class FlowButton extends ContentFieldsBase {
     return FlowWebview.fromHubtypeCMS(targetNode)
   }
 
-  async trackFlow(request: ActionRequest): Promise<void> {
+  async trackFlow(botContext: BotContext): Promise<void> {
     if (this.flowWebview) {
-      await this.flowWebview.trackFlow(request)
+      await this.flowWebview.trackFlow(botContext)
     }
+  }
+
+  async processContent(): Promise<void> {
+    return
   }
 
   renderButton(buttonIndex: number, buttonStyle?: HtButtonStyle): JSX.Element {

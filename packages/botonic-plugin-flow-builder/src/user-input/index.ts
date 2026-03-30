@@ -5,7 +5,7 @@ import {
   getTextOrTranscript,
   isKeywordsAllowed,
   isSmartIntentsAllowed,
-} from '../utils'
+} from '../utils/input'
 import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
 import {

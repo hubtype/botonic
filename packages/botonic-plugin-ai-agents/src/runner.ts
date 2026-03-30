@@ -92,9 +92,6 @@ export class AIAgentRunner<
 
       void this.sendLlmRunTracking(result, context, startTime, endTime)
 
-      const { _context, ...restResult } = result.state
-      console.log('Runner result:', restResult)
-
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
         outputMessages.length === 0 ||

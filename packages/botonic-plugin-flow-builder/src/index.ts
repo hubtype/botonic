@@ -16,11 +16,10 @@ import {
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import { type FlowContent, FlowGoToFlow } from './content-fields'
+import type { FlowContent } from './content-fields'
 import {
   type HtBotActionNode,
   type HtFlowBuilderData,
-  type HtGoToFlow,
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
@@ -39,7 +38,8 @@ import {
 } from './types'
 import { getNextPayloadByUserInput } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
-import { inputHasTextOrTranscript, resolveGetAccessToken } from './utils'
+import { resolveGetAccessToken } from './utils/authentication'
+import { inputHasTextOrTranscript } from './utils/input'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 
@@ -157,17 +157,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
         // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
         // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
         this.convertWhatsappAiAgentEmptyPayloads(request)
-      }
-
-      if (this.cmsApi.isGoToFlow(request.input.payload)) {
-        const cmsGoToFlow = this.cmsApi.getNodeById<HtGoToFlow>(
-          request.input.payload
-        )
-        await FlowGoToFlow.resolveToAiAgentsFlow(
-          request,
-          cmsGoToFlow,
-          this.cmsApi
-        )
       }
     }
   }

@@ -1,6 +1,6 @@
 import type { AiAgentArgs, ToolExecution } from '@botonic/core'
 import type { ModelSettings } from '@openai/agents'
-import { MAX_MEMORY_LENGTH, OPENAI_PROVIDER } from './constants'
+import { OPENAI_PROVIDER } from './constants'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
@@ -50,10 +50,10 @@ class EnabledDebugLogger implements DebugLogger {
       `${PREFIX} Custom Tools Registered: ${config.customToolNames.join(', ') || 'none'}`
     )
     console.log(`${PREFIX} Memory Options:`, {
-      maxMessages: config.memory.maxMessages ?? MAX_MEMORY_LENGTH,
-      includeToolCalls: config.memory.includeToolCalls ?? true,
-      maxFullToolResults: config.memory.maxFullToolResults ?? 1,
-      debugMode: config.memory.debugMode ?? false,
+      maxMessages: config.memory.maxMessages,
+      includeToolCalls: config.memory.includeToolCalls,
+      maxFullToolResults: config.memory.maxFullToolResults,
+      debugMode: config.memory.debugMode,
     })
     console.log(`${PREFIX} === End Plugin Initialization ===`)
   }

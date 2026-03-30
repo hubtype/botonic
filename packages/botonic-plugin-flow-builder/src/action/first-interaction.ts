@@ -2,9 +2,9 @@ import type { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
 import { FlowBotAction, type FlowContent } from '../content-fields'
 import type BotonicPluginFlowBuilder from '../index'
-import { inputHasTextOrTranscript } from '../utils'
-import { getContentsByAiAgent } from './ai-agent'
-import type { FlowBuilderContext } from './index'
+import { inputHasTextOrTranscript } from '../utils/input'
+import { getContentsByAiAgentFromUserInput } from './ai-agent-from-user-input'
+import type { FlowBuilderContext } from './context'
 import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
 
@@ -100,7 +100,7 @@ async function getContentsByUserInput(
   }
 
   if (!flowBuilderPlugin.disableAIAgentInFirstInteraction) {
-    const contentsByAiAgent = await getContentsByAiAgent(context)
+    const contentsByAiAgent = await getContentsByAiAgentFromUserInput(context)
     return contentsByAiAgent
   }
 
