@@ -8,7 +8,7 @@ import {
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
-import { getFlowBuilderPlugin } from './helpers'
+import { getFlowBuilderPlugin } from './utils/get-flow-builder-plugin'
 
 export async function trackEvent(
   request: ActionRequest,

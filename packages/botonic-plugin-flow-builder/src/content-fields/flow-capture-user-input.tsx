@@ -1,6 +1,6 @@
 import type { BotContext } from '@botonic/core'
 
-import { getFlowBuilderPlugin } from '../helpers'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import {
   HtAiValidationType,

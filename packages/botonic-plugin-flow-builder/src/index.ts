@@ -38,7 +38,8 @@ import {
 } from './types'
 import { getNextPayloadByUserInput } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
-import { inputHasTextOrTranscript, resolveGetAccessToken } from './utils'
+import { resolveGetAccessToken } from './utils/authentication'
+import { inputHasTextOrTranscript } from './utils/input'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 

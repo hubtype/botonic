@@ -1,8 +1,8 @@
 import { type BotContext, isDev, isWebchat, isWhatsapp } from '@botonic/core'
 import { CustomRatingMessage, Text, WhatsappButtonList } from '@botonic/react'
 
-import { getFlowBuilderPlugin } from '../helpers'
 import { trackOneContent } from '../tracking'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowButton } from './flow-button'
 import { type HtRatingNode, RatingType } from './hubtype-fields'
