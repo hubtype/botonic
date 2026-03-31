@@ -5,7 +5,7 @@ import type {
   Plugin,
   ResolvedPlugins,
 } from '@botonic/core'
-import { tool } from '@openai/agents'
+import { setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import { AIAgentBuilder } from './agent-builder'
 import {
@@ -24,7 +24,6 @@ import type {
   CustomTool,
   InferenceResponse,
   MemoryOptions,
-  MessageHistoryApiVersion,
   PluginAiAgentOptions,
   Tool,
 } from './types'
@@ -35,31 +34,25 @@ export default class BotonicPluginAiAgents<
 > implements Plugin
 {
   private readonly authToken?: string
-  private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions
   private readonly logger: DebugLogger
   private readonly timeout: number
   private readonly maxRetries: number
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
+  private readonly localStorageKey: string
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
-    if (options?.messageHistoryApiVersion === 'v1' && options?.memory) {
-      throw new Error(
-        'Cannot use memory when messageHistoryApiVersion is "v1". ' +
-          'Either set messageHistoryApiVersion to "v2" or remove memory.'
-      )
-    }
-
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
-    this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
     this.memory = this.getMemoryOptions(options?.memory)
     this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
+    this.localStorageKey = options?.localStorageKey ?? 'botonicState'
+    setTracingDisabled(true)
 
     this.logger.logInitialConfig({
-      messageHistoryApiVersion: this.messageHistoryApiVersion,
+      messageHistoryApiVersion: 'v2',
       maxRetries: options?.maxRetries ?? DEFAULT_MAX_RETRIES,
       timeout: options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS,
       customToolNames: this.toolDefinitions.map(t => t.name),
@@ -185,7 +178,8 @@ export default class BotonicPluginAiAgents<
     if (!isProd) {
       return await hubtypeClient.getLocalMessages(
         MAX_MEMORY_LENGTH,
-        previousHubtypeMessages
+        previousHubtypeMessages,
+        this.localStorageKey
       )
     }
 

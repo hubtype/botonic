@@ -66,8 +66,6 @@ export type AIAgent<
   TExtraData = any,
 > = Agent<Context<TPlugins, TExtraData>, AgentOutputType<typeof OutputSchema>>
 
-export type MessageHistoryApiVersion = 'v1' | 'v2'
-
 export interface MemoryOptions {
   maxMessages: number
   includeToolCalls: boolean
@@ -83,12 +81,11 @@ export interface PluginAiAgentOptions<
   customTools?: CustomTool<TPlugins, TExtraData>[]
   maxRetries?: number
   timeout?: number
-  /** API version for message history endpoint. Defaults to 'v2'. */
-  messageHistoryApiVersion?: MessageHistoryApiVersion
-  /** Options for V2 message history API. Only used when messageHistoryApiVersion is 'v2'. */
   memory?: Partial<MemoryOptions>
   /** Enable debug logging for AI agent configuration and execution details. */
   enableDebug?: boolean
+  /** Key for the local storage to to get messages in local development mode */
+  localStorageKey?: string
 }
 
 export interface ResultRawResponse {

@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.46.x] - 2026-mm-dd
+## [0.47.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,12 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.47.0] - 2026-03-30
+
+### Added
+
+- [PR-3190](https://github.com/hubtype/botonic/pull/3190): Allow as follow up a GoToFlow with Ai Agents flow.
 
 ## [0.46.2] - 2026-03-20
 
