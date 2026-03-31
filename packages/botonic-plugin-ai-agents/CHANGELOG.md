@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.46.x] - 2026-mm-dd
+## [0.47.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,19 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.47.1] - 2026-03-31
+
+- [PR-3196](https://github.com/hubtype/botonic/pull/3196): Disable global sdk tracing.  
+
+### Added
+
+## [0.47.0] - 2026-03-30
+
+- [PR-3190](https://github.com/hubtype/botonic/pull/3190): getInference accept a new parm with previousMessages that backend has not yet received.
+
+### Added
+
 
 ## [0.46.2] - 2026-03-26
 
