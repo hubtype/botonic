@@ -5,7 +5,7 @@ import type {
   Plugin,
   ResolvedPlugins,
 } from '@botonic/core'
-import { tool } from '@openai/agents'
+import { setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import { AIAgentBuilder } from './agent-builder'
 import {
@@ -57,6 +57,7 @@ export default class BotonicPluginAiAgents<
     this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
+    setTracingDisabled(true)
 
     this.logger.logInitialConfig({
       messageHistoryApiVersion: this.messageHistoryApiVersion,
