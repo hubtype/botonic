@@ -24,7 +24,6 @@ import type {
   CustomTool,
   InferenceResponse,
   MemoryOptions,
-  MessageHistoryApiVersion,
   PluginAiAgentOptions,
   Tool,
 } from './types'
@@ -35,7 +34,6 @@ export default class BotonicPluginAiAgents<
 > implements Plugin
 {
   private readonly authToken?: string
-  private readonly messageHistoryApiVersion: MessageHistoryApiVersion
   private readonly memory: MemoryOptions
   private readonly logger: DebugLogger
   private readonly timeout: number
@@ -43,16 +41,8 @@ export default class BotonicPluginAiAgents<
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
-    if (options?.messageHistoryApiVersion === 'v1' && options?.memory) {
-      throw new Error(
-        'Cannot use memory when messageHistoryApiVersion is "v1". ' +
-          'Either set messageHistoryApiVersion to "v2" or remove memory.'
-      )
-    }
-
     this.authToken = options?.authToken
     this.toolDefinitions = options?.customTools || []
-    this.messageHistoryApiVersion = options?.messageHistoryApiVersion ?? 'v2'
     this.memory = this.getMemoryOptions(options?.memory)
     this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
