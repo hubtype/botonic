@@ -84,6 +84,8 @@ export interface PluginAiAgentOptions<
   memory?: Partial<MemoryOptions>
   /** Enable debug logging for AI agent configuration and execution details. */
   enableDebug?: boolean
+  /** Key for the local storage to to get messages in local development mode */
+  localStorageKey?: string
 }
 
 export interface ResultRawResponse {

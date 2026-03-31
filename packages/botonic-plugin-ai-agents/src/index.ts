@@ -39,6 +39,7 @@ export default class BotonicPluginAiAgents<
   private readonly timeout: number
   private readonly maxRetries: number
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
+  private readonly localStorageKey: string
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     this.authToken = options?.authToken
@@ -47,10 +48,11 @@ export default class BotonicPluginAiAgents<
     this.timeout = options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
+    this.localStorageKey = options?.localStorageKey ?? 'botonicState'
     setTracingDisabled(true)
 
     this.logger.logInitialConfig({
-      messageHistoryApiVersion: this.messageHistoryApiVersion,
+      messageHistoryApiVersion: 'v2',
       maxRetries: options?.maxRetries ?? DEFAULT_MAX_RETRIES,
       timeout: options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS,
       customToolNames: this.toolDefinitions.map(t => t.name),
@@ -176,7 +178,8 @@ export default class BotonicPluginAiAgents<
     if (!isProd) {
       return await hubtypeClient.getLocalMessages(
         MAX_MEMORY_LENGTH,
-        previousHubtypeMessages
+        previousHubtypeMessages,
+        this.localStorageKey
       )
     }
 
