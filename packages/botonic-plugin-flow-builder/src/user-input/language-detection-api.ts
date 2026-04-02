@@ -26,12 +26,18 @@ export class LanguageDetectionApi {
       detectedLanguage?.detected_language &&
       detectedLanguage.confidence > 0.7
     ) {
-      this.request.session.user.locale = detectedLanguage.detected_language
-      this.request.session.user.language_detected = true
+      this.updateUserLocale(detectedLanguage.detected_language)
     }
   }
 
-  async detectLanguage(text: string): Promise<LanguageDetectionResponse | null> {
+  private updateUserLocale(locale: string): void {
+    this.request.session.user.locale = locale
+    this.request.session.user.language_detected = true
+  }
+
+  async detectLanguage(
+    text: string
+  ): Promise<LanguageDetectionResponse | null> {
     try {
       if (!process.env.HUBTYPE_API_URL) {
         throw new Error('HUBTYPE_API_URL is not defined')

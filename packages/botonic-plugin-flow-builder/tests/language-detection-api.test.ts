@@ -2,9 +2,9 @@ import { INPUT } from '@botonic/core'
 import { describe, expect, jest, test } from '@jest/globals'
 import axios from 'axios'
 
-import { LanguageDetectionApi } from './language-detection-api'
-import { createFlowBuilderPlugin, createRequest } from '../../tests/helpers/utils'
-import { basicFlow } from '../../tests/helpers/flows/basic'
+import { LanguageDetectionApi } from '../src/user-input/language-detection-api'
+import { basicFlow } from './helpers/flows/basic'
+import { createFlowBuilderPlugin, createRequest } from './helpers/utils'
 
 describe('LanguageDetectionApi', () => {
   test('returns the detection data on success', async () => {

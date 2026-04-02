@@ -70,24 +70,26 @@ export class FlowHandoff extends ContentFieldsBase {
     }
 
     if (this.queue) {
+      // TODO: detect language in backend?
+      // some times before not have a text message because handoff is triggered by a button
       if (inputHasTextOrTranscript(botContext.input)) {
         const textOrTranscript = getTextOrTranscript(botContext.input)
         const languageDetectionApi = new LanguageDetectionApi(botContext)
         await languageDetectionApi.detectAndStoreLanguage(textOrTranscript)
       }
-      
+
       handOffBuilder.withQueue(this.queue.id)
-      
+
       const { flowId, flowName, flowNodeId, flowNodeContentId } =
-      getCommonFlowContentEventArgsForContentId(botContext, this.id)
-      
+        getCommonFlowContentEventArgsForContentId(botContext, this.id)
+
       handOffBuilder.withBotEvent({
         flowId,
         flowName,
         flowNodeId,
         flowNodeContentId,
       })
-      
+
       const language = botContext.getUserLocale()
       handOffBuilder.withExtraData({
         language,
