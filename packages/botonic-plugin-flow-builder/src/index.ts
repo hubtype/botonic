@@ -36,10 +36,10 @@ import {
   type RatingSubmittedInfo,
   type TrackEventFunction,
 } from './types'
-import { getNextPayloadByUserInput } from './user-input'
+import { getNextPayloadByUserInput, LanguageDetectionApi } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils/authentication'
-import { inputHasTextOrTranscript } from './utils/input'
+import { getTextOrTranscript, inputHasTextOrTranscript } from './utils/input'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 
@@ -113,6 +113,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       inputHasTextOrTranscript(request.input) && !request.input.payload
 
     if (checkUserTextInput) {
+      const userTextOrTranscript = getTextOrTranscript(request.input)
+      const languageDetectionApi = new LanguageDetectionApi(request)
+      await languageDetectionApi.detectAndStoreLanguage(userTextOrTranscript)
+
       const resolvedLocale = this.cmsApi.getResolvedLocale()
       const nextPayload = await getNextPayloadByUserInput(
         this.cmsApi,

@@ -1,8 +1,9 @@
 import { INPUT } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, jest, test } from '@jest/globals'
 
 import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
+import { LanguageDetectionApi } from '../src/user-input'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
 import { campaignsFlow } from './helpers/flows/campaigns'
@@ -11,7 +12,12 @@ import { createFlowBuilderPlugin, createRequest } from './helpers/utils'
 describe('FlowBuilderApi - Campaign methods', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
-  beforeEach(() => mockSmartIntent('Other'))
+  beforeEach(() => {
+    mockSmartIntent('Other')
+    jest
+      .spyOn(LanguageDetectionApi.prototype, 'detectLanguage')
+      .mockResolvedValue(null)
+  })
 
   describe('getNodeByCampaignId', () => {
     test('should return the start node for a valid campaign ID', async () => {
@@ -204,6 +210,80 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const flowName = cmsApi.getFlowName('non-existent-id')
 
       expect(flowName).toBe('')
+    })
+  })
+
+  describe('getResolvedLocale', () => {
+    test('uses the detected locale before system_locale when it matches the flow', async () => {
+      const flowBuilderPlugin = createFlowBuilderPlugin({
+        flow: campaignsFlow,
+      })
+      const request = createRequest({
+        input: { data: 'test', type: INPUT.TEXT },
+        user: {
+          locale: 'es',
+          country: 'ES',
+          systemLocale: 'en',
+          languageDetected: true,
+        },
+        plugins: {
+          flowBuilderPlugin,
+        },
+      })
+
+      await flowBuilderPlugin.pre(request)
+      flowBuilderPlugin.cmsApi.flow.locales = ['en', 'es']
+
+      expect(flowBuilderPlugin.cmsApi.getResolvedLocale()).toBe('es')
+      expect(request.session.user.system_locale).toBe('es')
+    })
+
+    test('resolves the detected locale by language part before system_locale', async () => {
+      const flowBuilderPlugin = createFlowBuilderPlugin({
+        flow: campaignsFlow,
+      })
+      const request = createRequest({
+        input: { data: 'test', type: INPUT.TEXT },
+        user: {
+          locale: 'es-MX',
+          country: 'MX',
+          systemLocale: 'en-US',
+          languageDetected: true,
+        },
+        plugins: {
+          flowBuilderPlugin,
+        },
+      })
+
+      await flowBuilderPlugin.pre(request)
+      flowBuilderPlugin.cmsApi.flow.locales = ['en', 'es']
+
+      expect(flowBuilderPlugin.cmsApi.getResolvedLocale()).toBe('es')
+      expect(request.session.user.system_locale).toBe('es')
+    })
+
+    test('falls back to the previous system_locale resolution when detected locale is unsupported', async () => {
+      const flowBuilderPlugin = createFlowBuilderPlugin({
+        flow: campaignsFlow,
+      })
+      const request = createRequest({
+        input: { data: 'test', type: INPUT.TEXT },
+        user: {
+          locale: 'fr',
+          country: 'FR',
+          systemLocale: 'en-US',
+          languageDetected: true,
+        },
+        plugins: {
+          flowBuilderPlugin,
+        },
+      })
+
+      await flowBuilderPlugin.pre(request)
+      flowBuilderPlugin.cmsApi.flow.locales = ['en', 'es']
+
+      expect(flowBuilderPlugin.cmsApi.getResolvedLocale()).toBe('en')
+      expect(request.session.user.system_locale).toBe('en')
     })
   })
 })

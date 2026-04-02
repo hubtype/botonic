@@ -1,9 +1,10 @@
 import { INPUT, type InferenceResponse } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, expect, jest, test } from '@jest/globals'
 
 import { FlowBuilderAction } from '../src/action/index'
 import type { FlowAiAgent, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
+import { LanguageDetectionApi } from '../src/user-input'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
 // eslint-disable-next-line jest/no-mocks-import
@@ -23,7 +24,12 @@ import {
 describe('Check the contents returned by the plugin in first interaction', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
-  beforeEach(() => mockSmartIntent('Other'))
+  beforeEach(() => {
+    mockSmartIntent('Other')
+    jest
+      .spyOn(LanguageDetectionApi.prototype, 'detectLanguage')
+      .mockResolvedValue(null)
+  })
   test('The start contents is displayed because user input no match with any keyword or intent', async () => {
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: basicFlow },
@@ -63,6 +69,105 @@ describe('Check the contents returned by the plugin in first interaction', () =>
     expect((contents[1] as FlowText).text).toBe('Welcome message')
     expect(contents.length).toBe(4)
     expect((contents[3] as FlowText).text).toBe('All types of messages')
+  })
+})
+
+describe('Language detection on first interaction', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => {
+    jest.restoreAllMocks()
+    mockSmartIntent('Other')
+  })
+
+  test('detects the language on the first text interaction', async () => {
+    const detectLanguageSpy = jest
+      .spyOn(LanguageDetectionApi.prototype, 'detectLanguage')
+      .mockResolvedValue({
+        detected_language: 'es',
+        confidence: 0.9,
+      })
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { data: 'Hola', type: INPUT.TEXT },
+      isFirstInteraction: true,
+      plugins: {
+        flowBuilderPlugin,
+      },
+    })
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(detectLanguageSpy).toHaveBeenCalledWith('Hola')
+    expect(request.session.user.locale).toBe('es')
+    expect(request.session.user.language_detected).toBe(true)
+  })
+
+  test('does not store the locale when confidence is too low', async () => {
+    jest.spyOn(LanguageDetectionApi.prototype, 'detectLanguage').mockResolvedValue({
+      detected_language: 'es',
+      confidence: 0.7,
+    })
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { data: 'Hola', type: INPUT.TEXT },
+      isFirstInteraction: true,
+      plugins: {
+        flowBuilderPlugin,
+      },
+    })
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(request.session.user.language_detected).toBeUndefined()
+    expect(request.session.user.locale).toBe('en')
+  })
+
+  test('does not detect the language again when it was already detected', async () => {
+    const detectLanguageSpy = jest.spyOn(
+      LanguageDetectionApi.prototype,
+      'detectLanguage'
+    )
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { data: 'Hola otra vez', type: INPUT.TEXT },
+      isFirstInteraction: false,
+      user: {
+        locale: 'es',
+        country: 'ES',
+        systemLocale: 'es',
+        languageDetected: true,
+      },
+      plugins: {
+        flowBuilderPlugin,
+      },
+    })
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(detectLanguageSpy).not.toHaveBeenCalled()
+    expect(request.session.user.locale).toBe('es')
+    expect(request.session.user.language_detected).toBe(true)
+  })
+
+  test('does not detect the language on postback-only interactions', async () => {
+    const detectLanguageSpy = jest.spyOn(
+      LanguageDetectionApi.prototype,
+      'detectLanguage'
+    )
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
+    const request = createRequest({
+      input: { payload: 'handoff', type: INPUT.POSTBACK },
+      isFirstInteraction: true,
+      plugins: {
+        flowBuilderPlugin,
+      },
+    })
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(detectLanguageSpy).not.toHaveBeenCalled()
+    expect(request.session.user.language_detected).toBeUndefined()
   })
 })
 

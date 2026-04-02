@@ -67,6 +67,7 @@ interface RequestArgs {
     locale: string
     country: string
     systemLocale: string
+    languageDetected?: boolean
   }
   hubtypeCaseId?: string
   captureUserInputId?: string
@@ -89,7 +90,7 @@ export function createRequest({
   captureUserInputId,
   contactInfo = [],
 }: RequestArgs): PluginPreRequest {
-  return {
+  const request = {
     session: {
       is_first_interaction: isFirstInteraction,
       organization: 'orgTest',
@@ -99,6 +100,7 @@ export function createRequest({
         provider,
         id: 'uid1',
         locale: user.locale,
+        language_detected: user.languageDetected,
         country: user.country,
         system_locale: user.systemLocale,
         contact_info: contactInfo,
@@ -124,23 +126,27 @@ export function createRequest({
     },
     lastRoutePath: '',
     plugins,
-    getUserCountry: () => user.country,
-    getUserLocale: () => user.locale,
-    getSystemLocale: () => user.systemLocale,
+    getUserCountry: () => request.session.user.country,
+    getUserLocale: () => request.session.user.locale,
+    getSystemLocale: () => request.session.user.system_locale,
     setUserCountry: (_country: string) => {
-      user.country = _country
+      request.session.user.country = _country
       return
     },
     setUserLocale: (_locale: string) => {
+      request.session.user.locale = _locale
       return
     },
     setSystemLocale: (_locale: string) => {
+      request.session.user.system_locale = _locale
       return
     },
     params: {},
     defaultDelay: 0,
     defaultTyping: 0,
   }
+
+  return request
 }
 
 export async function getContentsAfterPreAndBotonicInit(

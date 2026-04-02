@@ -8,6 +8,7 @@ import {
 } from '../utils/input'
 import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
+import { LanguageDetectionApi } from './language-detection-api'
 import {
   SmartIntentsApi,
   type SmartIntentsInferenceConfig,
@@ -59,3 +60,5 @@ export async function getNextPayloadByUserInput(
 
   return undefined
 }
+
+export { LanguageDetectionApi }

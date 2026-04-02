@@ -310,6 +310,20 @@ export class FlowBuilderApi {
   }
 
   getResolvedLocale(): string {
+    const userLocale = this.request.session.user.locale
+
+    const resolvedUserLocale = this.resolveAsLocale(userLocale)
+    if (resolvedUserLocale) {
+      this.request.setSystemLocale(resolvedUserLocale)
+      return resolvedUserLocale
+    }
+
+    const resolvedUserLanguage = this.resolveAsLanguage(userLocale)
+    if (resolvedUserLanguage) {
+      this.request.setSystemLocale(resolvedUserLanguage)
+      return resolvedUserLanguage
+    }
+
     const systemLocale = this.request.getSystemLocale()
 
     const locale = this.resolveAsLocale(systemLocale)
