@@ -63,12 +63,12 @@ interface RequestArgs {
   isFirstInteraction?: boolean
   extraData?: any
   shadowing?: boolean
-  user?: {
-    locale: string
-    country: string
-    systemLocale: string
+  user?: Partial<{
+    locale?: string
+    country?: string
+    systemLocale?: string
     languageDetected?: boolean
-  }
+  }>
   hubtypeCaseId?: string
   captureUserInputId?: string
   contactInfo?: ContactInfo[]
@@ -79,11 +79,7 @@ export function createRequest({
   plugins = {},
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
-  user = {
-    locale: 'en',
-    country: 'US',
-    systemLocale: 'en',
-  },
+  user,
   extraData = {},
   shadowing = false,
   hubtypeCaseId,
@@ -99,10 +95,10 @@ export function createRequest({
       user: {
         provider,
         id: 'uid1',
-        locale: user.locale,
-        language_detected: user.languageDetected,
-        country: user.country,
-        system_locale: user.systemLocale,
+        locale: user?.locale || 'en',
+        language_detected: user?.languageDetected ?? true,
+        country: user?.country || 'US',
+        system_locale: user?.systemLocale || 'en',
         contact_info: contactInfo,
         extra_data: extraData,
       },

@@ -1,12 +1,11 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, jest, test } from '@jest/globals'
-
+import type { HtHandoffNode } from '../src/content-fields/hubtype-fields'
 import {
   FlowHandoff,
   FlowQueueStatusConditional,
   type FlowText,
 } from '../src/content-fields/index'
-import type { HtHandoffNode } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { LanguageDetectionApi } from '../src/user-input'
 // eslint-disable-next-line jest/no-mocks-import
@@ -125,6 +124,7 @@ describe('Language detection before handoff', () => {
         payload: 'handoff',
         type: INPUT.TEXT,
       },
+      user: { languageDetected: false },
       plugins: {
         flowBuilderPlugin,
       },
@@ -153,10 +153,12 @@ describe('Language detection before handoff', () => {
   })
 
   test('does not add locale to handoff extra data when confidence is too low', async () => {
-    jest.spyOn(LanguageDetectionApi.prototype, 'detectLanguage').mockResolvedValue({
-      detected_language: 'es',
-      confidence: 0.7,
-    })
+    jest
+      .spyOn(LanguageDetectionApi.prototype, 'detectLanguage')
+      .mockResolvedValue({
+        detected_language: 'es',
+        confidence: 0.7,
+      })
     const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
     const request = createRequest({
       input: {
@@ -164,6 +166,7 @@ describe('Language detection before handoff', () => {
         payload: 'handoff',
         type: INPUT.TEXT,
       },
+      user: { languageDetected: false },
       plugins: {
         flowBuilderPlugin,
       },
@@ -183,7 +186,7 @@ describe('Language detection before handoff', () => {
 
     const params = getHandoffParams(request.session._botonic_action)
 
-    expect(request.session.user.language_detected).toBeUndefined()
+    expect(request.session.user.language_detected).toBe(false)
     expect(params.case_extra_data).toEqual({
       language: 'en',
     })
@@ -205,6 +208,7 @@ describe('Language detection before handoff', () => {
         payload: 'handoff',
         type: INPUT.TEXT,
       },
+      user: { languageDetected: false },
       plugins: {
         flowBuilderPlugin,
       },

@@ -90,6 +90,7 @@ describe('Language detection on first interaction', () => {
     const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
     const request = createRequest({
       input: { data: 'Hola', type: INPUT.TEXT },
+      user: { languageDetected: false },
       isFirstInteraction: true,
       plugins: {
         flowBuilderPlugin,
@@ -104,13 +105,16 @@ describe('Language detection on first interaction', () => {
   })
 
   test('does not store the locale when confidence is too low', async () => {
-    jest.spyOn(LanguageDetectionApi.prototype, 'detectLanguage').mockResolvedValue({
-      detected_language: 'es',
-      confidence: 0.7,
-    })
+    jest
+      .spyOn(LanguageDetectionApi.prototype, 'detectLanguage')
+      .mockResolvedValue({
+        detected_language: 'es',
+        confidence: 0.7,
+      })
     const flowBuilderPlugin = createFlowBuilderPlugin({ flow: basicFlow })
     const request = createRequest({
       input: { data: 'Hola', type: INPUT.TEXT },
+      user: { languageDetected: false },
       isFirstInteraction: true,
       plugins: {
         flowBuilderPlugin,
@@ -119,7 +123,7 @@ describe('Language detection on first interaction', () => {
 
     await flowBuilderPlugin.pre(request)
 
-    expect(request.session.user.language_detected).toBeUndefined()
+    expect(request.session.user.language_detected).toBe(false)
     expect(request.session.user.locale).toBe('en')
   })
 
@@ -159,6 +163,7 @@ describe('Language detection on first interaction', () => {
     const request = createRequest({
       input: { payload: 'handoff', type: INPUT.POSTBACK },
       isFirstInteraction: true,
+      user: { languageDetected: false },
       plugins: {
         flowBuilderPlugin,
       },
@@ -167,7 +172,7 @@ describe('Language detection on first interaction', () => {
     await flowBuilderPlugin.pre(request)
 
     expect(detectLanguageSpy).not.toHaveBeenCalled()
-    expect(request.session.user.language_detected).toBeUndefined()
+    expect(request.session.user.language_detected).toBe(false)
   })
 })
 

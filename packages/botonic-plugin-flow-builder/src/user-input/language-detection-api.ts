@@ -21,7 +21,6 @@ export class LanguageDetectionApi {
     }
 
     const detectedLanguage = await this.detectLanguage(text)
-
     if (
       detectedLanguage?.detected_language &&
       detectedLanguage.confidence > 0.7
