@@ -35,7 +35,6 @@ describe('Track redirect flow', () => {
       },
     })
 
-    console.log('contents', contents)
     expect(contents[0]).toBeInstanceOf(FlowText)
     expect(contents[1]).toBeInstanceOf(FlowGoToFlow)
     expect(contents[2]).toBeInstanceOf(FlowText)

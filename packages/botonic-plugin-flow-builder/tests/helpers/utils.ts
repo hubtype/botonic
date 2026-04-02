@@ -63,11 +63,12 @@ interface RequestArgs {
   isFirstInteraction?: boolean
   extraData?: any
   shadowing?: boolean
-  user?: {
-    locale: string
-    country: string
-    systemLocale: string
-  }
+  user?: Partial<{
+    locale?: string
+    country?: string
+    systemLocale?: string
+    languageDetected?: boolean
+  }>
   hubtypeCaseId?: string
   captureUserInputId?: string
   contactInfo?: ContactInfo[]
@@ -78,18 +79,14 @@ export function createRequest({
   plugins = {},
   provider = PROVIDER.WEBCHAT,
   isFirstInteraction = false,
-  user = {
-    locale: 'en',
-    country: 'US',
-    systemLocale: 'en',
-  },
+  user,
   extraData = {},
   shadowing = false,
   hubtypeCaseId,
   captureUserInputId,
   contactInfo = [],
 }: RequestArgs): PluginPreRequest {
-  return {
+  const request = {
     session: {
       is_first_interaction: isFirstInteraction,
       organization: 'orgTest',
@@ -98,9 +95,10 @@ export function createRequest({
       user: {
         provider,
         id: 'uid1',
-        locale: user.locale,
-        country: user.country,
-        system_locale: user.systemLocale,
+        locale: user?.locale || 'en',
+        language_detected: user?.languageDetected ?? true,
+        country: user?.country || 'US',
+        system_locale: user?.systemLocale || 'en',
         contact_info: contactInfo,
         extra_data: extraData,
       },
@@ -124,23 +122,27 @@ export function createRequest({
     },
     lastRoutePath: '',
     plugins,
-    getUserCountry: () => user.country,
-    getUserLocale: () => user.locale,
-    getSystemLocale: () => user.systemLocale,
+    getUserCountry: () => request.session.user.country,
+    getUserLocale: () => request.session.user.locale,
+    getSystemLocale: () => request.session.user.system_locale,
     setUserCountry: (_country: string) => {
-      user.country = _country
+      request.session.user.country = _country
       return
     },
     setUserLocale: (_locale: string) => {
+      request.session.user.locale = _locale
       return
     },
     setSystemLocale: (_locale: string) => {
+      request.session.user.system_locale = _locale
       return
     },
     params: {},
     defaultDelay: 0,
     defaultTyping: 0,
   }
+
+  return request
 }
 
 export async function getContentsAfterPreAndBotonicInit(

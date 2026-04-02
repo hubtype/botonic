@@ -239,6 +239,7 @@ export interface SessionUser<TExtraData = any> {
   imp_id?: string
   provider_id?: string
   locale: string
+  language_detected?: boolean
   country: string
   system_locale: string
 }

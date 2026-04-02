@@ -9,6 +9,8 @@ import { WebchatSettings } from '@botonic/react'
 
 import type { FlowBuilderApi } from '../api'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
+import { LanguageDetectionApi } from '../user-input'
+import { getTextOrTranscript, inputHasTextOrTranscript } from '../utils/input'
 import { ContentFieldsBase } from './content-fields-base'
 import type { HtHandoffNode, HtQueueLocale } from './hubtype-fields'
 
@@ -68,7 +70,13 @@ export class FlowHandoff extends ContentFieldsBase {
     }
 
     if (this.queue) {
-      const language = botContext.getSystemLocale()
+      // TODO: detect language in backend?
+      // some times before not have a text message because handoff is triggered by a button
+      if (inputHasTextOrTranscript(botContext.input)) {
+        const textOrTranscript = getTextOrTranscript(botContext.input)
+        const languageDetectionApi = new LanguageDetectionApi(botContext)
+        await languageDetectionApi.detectAndStoreLanguage(textOrTranscript)
+      }
 
       handOffBuilder.withQueue(this.queue.id)
 
@@ -82,6 +90,7 @@ export class FlowHandoff extends ContentFieldsBase {
         flowNodeContentId,
       })
 
+      const language = botContext.getUserLocale()
       handOffBuilder.withExtraData({
         language,
       })
