@@ -241,6 +241,7 @@ export interface SessionUser<TExtraData = any> {
   locale: string
   country: string
   system_locale: string
+  system_locale_updated?: boolean
 }
 
 export interface HubtypeCaseContactReason {

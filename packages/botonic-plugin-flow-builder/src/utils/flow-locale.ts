@@ -19,7 +19,7 @@ export class FlowLocale {
     }
 
     const defaultLocale = this.resolveAsDefaultLocale()
-    this.botContext.setSystemLocale(defaultLocale)
+    this.setSystemLocale(defaultLocale)
     return defaultLocale
   }
 
@@ -28,13 +28,13 @@ export class FlowLocale {
 
     const resolvedUserLocale = this.resolveAsLocale(userLocale)
     if (resolvedUserLocale) {
-      this.botContext.setSystemLocale(resolvedUserLocale)
+      this.setSystemLocale(resolvedUserLocale)
       return resolvedUserLocale
     }
 
     const resolvedUserLanguage = this.resolveAsLanguage(userLocale)
     if (resolvedUserLanguage) {
-      this.botContext.setSystemLocale(resolvedUserLanguage)
+      this.setSystemLocale(resolvedUserLanguage)
       return resolvedUserLanguage
     }
 
@@ -51,7 +51,7 @@ export class FlowLocale {
 
     const language = this.resolveAsLanguage(systemLocale)
     if (language) {
-      this.botContext.setSystemLocale(language)
+      this.setSystemLocale(language)
       return language
     }
     return undefined
@@ -79,5 +79,10 @@ export class FlowLocale {
   private resolveAsDefaultLocale(): string {
     // console.log(`Resolve locale with default locale: ${this.defaultLocaleCode}`)
     return this.defaultLocaleCode || 'en'
+  }
+
+  private setSystemLocale(locale: string): void {
+    this.botContext.setSystemLocale(locale)
+    this.botContext.session.user.system_locale_updated = true
   }
 }
