@@ -159,7 +159,9 @@ export class AIAgentRunner<
     const temperature =
       (this.llmConfig.modelSettings.temperature as number | undefined) ?? 0
     const apiVersion =
-      OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
+      OPENAI_PROVIDER === 'azure'
+        ? AZURE_OPENAI_API_VERSION
+        : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
 
     const llmRuns = rawResponses.map(response => ({
       inference_id: this.inferenceId,

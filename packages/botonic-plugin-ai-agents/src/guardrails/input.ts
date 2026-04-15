@@ -97,7 +97,10 @@ async function sendGuardrailLlmRunTracking(
   const durationPerCall = Math.round(totalDuration / rawResponses.length)
   const temperature =
     (llmConfig.modelSettings.temperature as number | undefined) ?? 0
-  const apiVersion = OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
+  const apiVersion =
+    OPENAI_PROVIDER === 'azure'
+      ? AZURE_OPENAI_API_VERSION
+      : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
 
   const llmRuns = rawResponses.map(response => ({
     inference_id: trackingContext.inferenceId,
