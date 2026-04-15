@@ -90,7 +90,7 @@ export class AIAgentRunner<
 
       const endTime = Date.now()
 
-      void this.sendLlmRunTracking(result, context, startTime, endTime)
+      await this.sendLlmRunTracking(result, context, startTime, endTime)
 
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =

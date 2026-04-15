@@ -53,7 +53,7 @@ export function createInputGuardrail(
       const result = await runner.run(agent, [lastMessage], { context })
       const endTime = Date.now()
 
-      void sendGuardrailLlmRunTracking(
+      await sendGuardrailLlmRunTracking(
         result,
         trackingContext,
         llmConfig,
