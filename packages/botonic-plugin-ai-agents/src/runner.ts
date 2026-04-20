@@ -9,9 +9,9 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from './constants'
+import { isProd, OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
-import type { LLMConfig } from './llm-config'
+import { getApiVersion, type LLMConfig } from './llm-config'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from './services/types'
 import { retrieveKnowledge } from './tools'
@@ -90,7 +90,7 @@ export class AIAgentRunner<
 
       const endTime = Date.now()
 
-      void this.sendLlmRunTracking(result, context, startTime, endTime)
+      await this.sendLlmRunTracking(result, context, startTime, endTime)
 
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
@@ -158,8 +158,7 @@ export class AIAgentRunner<
     const durationPerCall = Math.round(totalDuration / rawResponses.length)
     const temperature =
       (this.llmConfig.modelSettings.temperature as number | undefined) ?? 0
-    const apiVersion =
-      OPENAI_PROVIDER === 'azure' ? AZURE_OPENAI_API_VERSION : ''
+    const apiVersion = getApiVersion()
 
     const llmRuns = rawResponses.map(response => ({
       inference_id: this.inferenceId,
