@@ -5,8 +5,8 @@ import {
   type UserMessageItem,
 } from '@openai/agents'
 import { z } from 'zod'
-import { AZURE_OPENAI_API_VERSION, isProd, OPENAI_PROVIDER } from '../constants'
-import type { LLMConfig } from '../llm-config'
+import { isProd } from '../constants'
+import { getApiVersion, type LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from '../services/types'
 import type { GuardrailRule, ResultRawResponse } from '../types'
@@ -97,10 +97,7 @@ async function sendGuardrailLlmRunTracking(
   const durationPerCall = Math.round(totalDuration / rawResponses.length)
   const temperature =
     (llmConfig.modelSettings.temperature as number | undefined) ?? 0
-  const apiVersion =
-    OPENAI_PROVIDER === 'azure'
-      ? AZURE_OPENAI_API_VERSION
-      : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+  const apiVersion = getApiVersion()
 
   const llmRuns = rawResponses.map(response => ({
     inference_id: trackingContext.inferenceId,
