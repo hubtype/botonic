@@ -16,6 +16,7 @@ function createMockBotContext(
         system_locale: systemLocale,
       },
     },
+    getUserLocale: () => userLocale,
     getSystemLocale: () => currentSystemLocale,
     setSystemLocale: (locale: string) => {
       currentSystemLocale = locale
@@ -109,7 +110,7 @@ describe('FlowLocale.resolve()', () => {
   })
 
   describe('when system locale matches', () => {
-    test('should return system locale when user locale does not match', () => {
+    test('should return default locale when user locale does not match and is different from system locale', () => {
       const botContext = createMockBotContext('de', 'es')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
@@ -122,39 +123,7 @@ describe('FlowLocale.resolve()', () => {
 
       const result = flowLocale.resolve()
 
-      expect(result).toBe('es')
-    })
-
-    test('should resolve system locale as language when exact match not found', () => {
-      const botContext = createMockBotContext('de', 'fr-FR')
-      const flowLocales = ['en', 'es', 'fr']
-      const defaultLocaleCode = 'en'
-
-      const flowLocale = new FlowLocale(
-        botContext,
-        flowLocales,
-        defaultLocaleCode
-      )
-
-      const result = flowLocale.resolve()
-
-      expect(result).toBe('fr')
-    })
-
-    test('should update system locale when resolved as language', () => {
-      const botContext = createMockBotContext('de', 'es-MX')
-      const flowLocales = ['en', 'es', 'fr']
-      const defaultLocaleCode = 'en'
-
-      const flowLocale = new FlowLocale(
-        botContext,
-        flowLocales,
-        defaultLocaleCode
-      )
-
-      flowLocale.resolve()
-
-      expect(botContext.getSystemLocale()).toBe('es')
+      expect(result).toBe('en')
     })
   })
 
@@ -241,7 +210,7 @@ describe('FlowLocale.resolve()', () => {
 
       const result = flowLocale.resolve()
 
-      expect(result).toBe('es')
+      expect(result).toBe('en')
     })
 
     test('should handle undefined system locale', () => {
@@ -296,25 +265,91 @@ describe('FlowLocale.resolve()', () => {
     })
   })
 
-  describe('priority order', () => {
-    test('should prioritize user locale over system locale', () => {
-      const botContext = createMockBotContext('fr', 'es')
-      const flowLocales = ['en', 'es', 'fr']
+  describe('when locales share language but differ in specificity', () => {
+    test('should prefer system locale with region over generic user locale', () => {
+      const botContext = createMockBotContext('es', 'es-MX')
+      const flowLocales = ['es', 'es-MX']
       const defaultLocaleCode = 'en'
 
-      const flowLocale = new FlowLocale(
+      const result = new FlowLocale(
         botContext,
         flowLocales,
         defaultLocaleCode
-      )
+      ).resolve()
 
-      const result = flowLocale.resolve()
+      expect(result).toBe('es-MX')
+    })
+
+    test('should fall back to generic locale when specific system locale not in flow', () => {
+      const botContext = createMockBotContext('es', 'es-MX')
+      const flowLocales = ['es']
+      const defaultLocaleCode = 'en'
+
+      const result = new FlowLocale(
+        botContext,
+        flowLocales,
+        defaultLocaleCode
+      ).resolve()
+
+      expect(result).toBe('es')
+    })
+
+    test('should prefer user locale with region over generic system locale', () => {
+      const botContext = createMockBotContext('es-ES', 'es')
+      const flowLocales = ['es-ES', 'es']
+      const defaultLocaleCode = 'en'
+
+      const result = new FlowLocale(
+        botContext,
+        flowLocales,
+        defaultLocaleCode
+      ).resolve()
+
+      expect(result).toBe('es-ES')
+    })
+
+    test('should use user locale when both have regions for the same language', () => {
+      const botContext = createMockBotContext('es-MX', 'es-CO')
+      const flowLocales = ['es-MX', 'es-CO']
+      const defaultLocaleCode = 'en'
+
+      const result = new FlowLocale(
+        botContext,
+        flowLocales,
+        defaultLocaleCode
+      ).resolve()
+
+      expect(result).toBe('es-MX')
+    })
+
+    test('should not apply specificity logic when languages differ', () => {
+      const botContext = createMockBotContext('fr', 'es-MX')
+      const flowLocales = ['fr', 'es-MX']
+      const defaultLocaleCode = 'en'
+
+      const result = new FlowLocale(
+        botContext,
+        flowLocales,
+        defaultLocaleCode
+      ).resolve()
 
       expect(result).toBe('fr')
     })
 
-    test('should prioritize system locale over default', () => {
-      const botContext = createMockBotContext('de', 'fr')
+    test('should set system locale to the more specific resolved locale', () => {
+      const botContext = createMockBotContext('es', 'es-MX')
+      const flowLocales = ['es-MX']
+      const defaultLocaleCode = 'en'
+
+      new FlowLocale(botContext, flowLocales, defaultLocaleCode).resolve()
+
+      expect(botContext.getSystemLocale()).toBe('es-MX')
+    })
+  })
+
+  describe('priority order', () => {
+    test('should prioritize user locale over system locale', () => {
+      const botContext = createMockBotContext('fr', 'es')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 

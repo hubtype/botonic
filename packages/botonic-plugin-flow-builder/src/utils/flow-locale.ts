@@ -8,14 +8,27 @@ export class FlowLocale {
   ) {}
 
   resolve(): string {
-    const resolvedUserLocale = this.resolveAsUserLocale()
-    if (resolvedUserLocale) {
-      return resolvedUserLocale
-    }
+    const userLocale = this.botContext.getUserLocale()
+    const systemLocale = this.botContext.getSystemLocale()
 
-    const resolvedSystemLocale = this.resolveAsSystemLocale()
-    if (resolvedSystemLocale) {
-      return resolvedSystemLocale
+    const moreSpecificLocale = this.selectMoreSpecificLocale(
+      userLocale,
+      systemLocale
+    )
+
+    if (moreSpecificLocale) {
+      const resolvedSpecific = this.resolveAsLocale(moreSpecificLocale)
+      if (resolvedSpecific) {
+        this.setSystemLocale(resolvedSpecific)
+        return resolvedSpecific
+      }
+
+      const resolvedSpecificLanguage =
+        this.resolveAsLanguage(moreSpecificLocale)
+      if (resolvedSpecificLanguage) {
+        this.setSystemLocale(resolvedSpecificLanguage)
+        return resolvedSpecificLanguage
+      }
     }
 
     const defaultLocale = this.resolveAsDefaultLocale()
@@ -23,38 +36,29 @@ export class FlowLocale {
     return defaultLocale
   }
 
-  private resolveAsUserLocale(): string | undefined {
-    const userLocale = this.botContext.session.user.locale
-
-    const resolvedUserLocale = this.resolveAsLocale(userLocale)
-    if (resolvedUserLocale) {
-      this.setSystemLocale(resolvedUserLocale)
-      return resolvedUserLocale
+  private selectMoreSpecificLocale(
+    userLocale: string,
+    systemLocale: string
+  ): string | undefined {
+    if (!userLocale || !systemLocale) {
+      return undefined
     }
 
-    const resolvedUserLanguage = this.resolveAsLanguage(userLocale)
-    if (resolvedUserLanguage) {
-      this.setSystemLocale(resolvedUserLanguage)
-      return resolvedUserLanguage
+    const languageUser = userLocale.split('-')[0]
+    const languageSystem = systemLocale.split('-')[0]
+
+    if (languageUser !== languageSystem) {
+      return userLocale
     }
 
-    return undefined
-  }
+    const hasRegionUserLocale = userLocale.includes('-')
+    const hasRegionSystemLocale = systemLocale.includes('-')
 
-  private resolveAsSystemLocale(): string | undefined {
-    const systemLocale = this.botContext.getSystemLocale()
-
-    const locale = this.resolveAsLocale(systemLocale)
-    if (locale) {
-      return locale
+    if (hasRegionUserLocale === hasRegionSystemLocale) {
+      return userLocale
     }
 
-    const language = this.resolveAsLanguage(systemLocale)
-    if (language) {
-      this.setSystemLocale(language)
-      return language
-    }
-    return undefined
+    return hasRegionUserLocale ? userLocale : systemLocale
   }
 
   private resolveAsLocale(locale: string): string | undefined {
@@ -70,14 +74,12 @@ export class FlowLocale {
       language &&
       this.flowLocales.find(flowLocale => flowLocale === language)
     ) {
-      // console.log(`locale: ${locale} has been resolved as ${language}`)
       return language
     }
     return undefined
   }
 
   private resolveAsDefaultLocale(): string {
-    // console.log(`Resolve locale with default locale: ${this.defaultLocaleCode}`)
     return this.defaultLocaleCode || 'en'
   }
 
