@@ -2,89 +2,86 @@ import type { BotContext } from '@botonic/core'
 
 export class FlowLocale {
   constructor(
-    private botContext: BotContext,
-    private flowLocales: string[],
-    private defaultLocaleCode: string
+    private readonly botContext: BotContext,
+    private readonly flowLocales: string[],
+    private readonly defaultLocaleCode: string
   ) {}
 
   resolve(): string {
-    const userLocale = this.botContext.getUserLocale()
-    const systemLocale = this.botContext.getSystemLocale()
+    const priorityLocale = this.getPriorityLocale()
 
-    const moreSpecificLocale = this.selectMoreSpecificLocale(
-      userLocale,
-      systemLocale
-    )
-
-    if (moreSpecificLocale) {
-      const resolvedSpecific = this.resolveAsLocale(moreSpecificLocale)
-      if (resolvedSpecific) {
-        this.setSystemLocale(resolvedSpecific)
-        return resolvedSpecific
+    if (priorityLocale) {
+      const exactMatch = this.matchExactLocale(priorityLocale)
+      if (exactMatch) {
+        return this.applyLocale(exactMatch)
       }
 
-      const resolvedSpecificLanguage =
-        this.resolveAsLanguage(moreSpecificLocale)
-      if (resolvedSpecificLanguage) {
-        this.setSystemLocale(resolvedSpecificLanguage)
-        return resolvedSpecificLanguage
+      const languageMatch = this.matchLanguage(priorityLocale)
+      if (languageMatch) {
+        return this.applyLocale(languageMatch)
       }
     }
 
-    const defaultLocale = this.resolveAsDefaultLocale()
-    this.setSystemLocale(defaultLocale)
-    return defaultLocale
+    return this.applyLocale(this.getDefaultLocale())
   }
 
-  private selectMoreSpecificLocale(
-    userLocale: string,
-    systemLocale: string
-  ): string | undefined {
+  /**
+   * Rules:
+   * - If user and system languages differ, user locale takes priority.
+   * - If both share the same language, the more specific locale wins.
+   * - If both have the same specificity, user locale wins.
+   */
+  private getPriorityLocale(): string | undefined {
+    const userLocale = this.botContext.getUserLocale()
+    const systemLocale = this.botContext.getSystemLocale()
+
     if (!userLocale || !systemLocale) {
       return undefined
     }
 
-    const languageUser = userLocale.split('-')[0]
-    const languageSystem = systemLocale.split('-')[0]
+    const userLanguage = this.getLanguage(userLocale)
+    const systemLanguage = this.getLanguage(systemLocale)
 
-    if (languageUser !== languageSystem) {
+    if (userLanguage !== systemLanguage) {
       return userLocale
     }
+    const userIsSpecific = this.isSpecificLocale(userLocale)
+    const systemIsSpecific = this.isSpecificLocale(systemLocale)
 
-    const hasRegionUserLocale = userLocale.includes('-')
-    const hasRegionSystemLocale = systemLocale.includes('-')
-
-    if (hasRegionUserLocale === hasRegionSystemLocale) {
+    if (userIsSpecific && !systemIsSpecific) {
       return userLocale
     }
-
-    return hasRegionUserLocale ? userLocale : systemLocale
-  }
-
-  private resolveAsLocale(locale: string): string | undefined {
-    if (this.flowLocales.find(flowLocale => flowLocale === locale)) {
-      return locale
+    if (!userIsSpecific && systemIsSpecific) {
+      return systemLocale
     }
-    return undefined
+
+    return userLocale
   }
 
-  private resolveAsLanguage(locale?: string): string | undefined {
-    const language = locale?.split('-')[0]
-    if (
-      language &&
-      this.flowLocales.find(flowLocale => flowLocale === language)
-    ) {
-      return language
-    }
-    return undefined
+  private matchExactLocale(locale: string): string | undefined {
+    return this.flowLocales.includes(locale) ? locale : undefined
   }
 
-  private resolveAsDefaultLocale(): string {
+  private matchLanguage(locale: string): string | undefined {
+    const language = this.getLanguage(locale)
+    return this.flowLocales.includes(language) ? language : undefined
+  }
+
+  private getDefaultLocale(): string {
     return this.defaultLocaleCode || 'en'
   }
 
-  private setSystemLocale(locale: string): void {
+  private applyLocale(locale: string): string {
     this.botContext.setSystemLocale(locale)
     this.botContext.session.user.system_locale_updated = true
+    return locale
+  }
+
+  private getLanguage(locale: string): string {
+    return locale.split('-')[0]
+  }
+
+  private isSpecificLocale(locale: string): boolean {
+    return locale.includes('-')
   }
 }
