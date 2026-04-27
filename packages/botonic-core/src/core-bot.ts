@@ -114,6 +114,8 @@ export class CoreBot {
       setUserLocale: (locale: string) => this.setUserLocale(locale, session),
       setSystemLocale: (locale: string) =>
         this.setSystemLocale(locale, session),
+      settings: request.settings,
+      secrets: request.secrets,
     }
   }
 
@@ -126,6 +128,8 @@ export class CoreBot {
         input: botContext.input,
         session: botContext.session,
         lastRoutePath: botContext.lastRoutePath,
+        settings: botContext.settings,
+        secrets: botContext.secrets,
         response: [],
       }
     }
@@ -145,9 +149,11 @@ export class CoreBot {
 
     return {
       input: botContext.input,
-      response,
       session: botContext.session,
       lastRoutePath: botContext.lastRoutePath,
+      settings: botContext.settings,
+      secrets: botContext.secrets,
+      response,
     }
   }
 
@@ -247,11 +253,13 @@ export class CoreBot {
 
     const followUp = await this.runInput(botContext)
 
-    const response = {
+    const response: BotResponse = {
       input: followUp.input,
       response: previousResponse.response.concat(followUp.response),
       session: botContext.session,
       lastRoutePath: followUp.lastRoutePath,
+      settings: followUp.settings,
+      secrets: followUp.secrets,
     }
 
     // Recursive call to handle multiple bot actions in a row

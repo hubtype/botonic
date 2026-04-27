@@ -5,6 +5,16 @@
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
+  "exports": {
+    ".": {
+      "require": "./lib/cjs/index.js",
+      "import": "./lib/esm/index.js"
+    },
+    "./testing": {
+      "require": "./lib/cjs/testing/index.js",
+      "import": "./lib/esm/testing/index.js"
+    }
+  },
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
     "prepublishOnly": "rm -rf lib && npm i && npm run build",
@@ -29,6 +39,13 @@
     "index.d.ts",
     "README.md"
   ],
+  "typesVersions": {
+    "*": {
+      "testing": [
+        "./lib/cjs/testing/index.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.25.9",
     "axios": "^1.13.6",
