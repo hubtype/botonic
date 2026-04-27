@@ -8,6 +8,7 @@ import {
   type ProviderType,
   type ResolvedPlugins,
 } from '@botonic/core'
+import { createTestPluginPreRequest } from '@botonic/core/testing'
 import type { ActionRequest } from '@botonic/react'
 
 import BotonicPluginFlowBuilder, {
@@ -89,74 +90,32 @@ export function createRequest({
   captureUserInputId,
   contactInfo = [],
 }: RequestArgs): PluginPreRequest {
-  return {
+  return createTestPluginPreRequest({
     session: {
-      is_first_interaction: isFirstInteraction,
+      isFirstInteraction,
       organization: 'orgTest',
-      organization_id: 'orgIdTest',
-      bot: { id: 'bid1' },
+      organizationId: 'orgIdTest',
+      botId: 'bid1',
       user: {
-        provider,
         id: 'uid1',
+        provider,
         locale: user.locale,
         country: user.country,
-        system_locale: user.systemLocale,
-        contact_info: contactInfo,
-        extra_data: extraData,
+        systemLocale: user.systemLocale,
+        contactInfo,
+        extraData,
       },
-      _shadowing: shadowing,
-      _hubtype_case_id: hubtypeCaseId,
-      __retries: 0,
-      _access_token: 'fake_access_token',
-      _hubtype_api: 'https://api.hubtype.com',
-      is_test_integration: false,
-      flow_thread_id: 'testFlowThreadId',
-      capture_user_input: captureUserInputId
-        ? {
-            node_id: captureUserInputId,
-          }
-        : undefined,
+      shadowing,
+      hubtypeCaseId,
+      captureUserInputNodeId: captureUserInputId,
     },
     input: {
       bot_interaction_id: 'testInteractionId',
       message_id: 'testMessageId',
       ...input,
-    },
-    lastRoutePath: '',
-    settings: {
-      HUBTYPE_API_URL: 'https://api.hubtype.com',
-      STATIC_URL: 'https://static.hubtype.com',
-      LITELLM_API_URL: 'https://api.litellm.com',
-      AZURE_OPENAI_API_BASE: 'https://api.openai.com',
-      AZURE_OPENAI_API_VERSION: '2026-02-01',
-      LANGUAGE_DETECTION_ENABLED: 'true',
-      CUSTOM_SHORT_URL_HOST: null,
-      custom: {},
-    },
-    secrets: {
-      HUBTYPE_ACCESS_TOKEN: 'testAccessToken',
-      LITELLM_API_KEY: 'testLiteLLMAPIKey',
-      AZURE_OPENAI_API_KEY: 'testAzureOpenAIAPIKey',
-      custom: {},
-    },
+    } as Input,
     plugins,
-    getUserCountry: () => user.country,
-    getUserLocale: () => user.locale,
-    getSystemLocale: () => user.systemLocale,
-    setUserCountry: (_country: string) => {
-      user.country = _country
-      return
-    },
-    setUserLocale: (_locale: string) => {
-      return
-    },
-    setSystemLocale: (_locale: string) => {
-      return
-    },
-    params: {},
-    defaultDelay: 0,
-    defaultTyping: 0,
-  }
+  })
 }
 
 export async function getContentsAfterPreAndBotonicInit(
