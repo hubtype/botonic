@@ -5,6 +5,7 @@ import {
   PROVIDER,
   VerbosityLevel,
 } from '@botonic/core'
+import { createTestBotContext } from '@botonic/core/testing'
 import {
   afterEach,
   beforeEach,
@@ -74,56 +75,37 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       name: string
       agent_context?: string
     }[]
-  ): BotContext => ({
-    session: {
-      is_first_interaction: false,
-      organization: 'test-org',
-      organization_id: 'org-123',
-      bot: { id: 'bot-123' },
-      user: {
-        id: 'user-123',
-        provider: PROVIDER.WEBCHAT,
-        locale: 'en',
-        country: 'US',
-        system_locale: 'en',
-        contact_info: [
-          {
-            name: 'email',
-            value: 'test@test.com',
-            type: 'string',
-            description: 'User email',
-          },
-        ],
-        extra_data: {},
+  ): BotContext =>
+    createTestBotContext({
+      session: {
+        organization: 'test-org',
+        organizationId: 'org-123',
+        botId: 'bot-123',
+        user: {
+          id: 'user-123',
+          provider: PROVIDER.WEBCHAT,
+          locale: 'en',
+          country: 'US',
+          contactInfo: [
+            {
+              name: 'email',
+              value: 'test@test.com',
+              type: 'string',
+              description: 'User email',
+            },
+          ],
+        },
+        accessToken: 'test-token',
+        flowThreadId: 'flow-123',
       },
-      _access_token: 'test-token',
-      _hubtype_api: 'https://api.hubtype.com',
-      is_test_integration: false,
-      flow_thread_id: 'flow-123',
-      __retries: 0,
-    },
-    input: {
-      type: INPUT.TEXT,
-      data: 'Hello',
-      bot_interaction_id: 'interaction-123',
-      message_id: 'msg-123',
-      context: campaigns_v2 ? { campaigns_v2 } : undefined,
-    },
-    lastRoutePath: '',
-    params: {},
-    defaultDelay: 0,
-    defaultTyping: 0,
-    plugins: {},
-    getUserCountry: () => 'US',
-    getUserLocale: () => 'en',
-    getSystemLocale: () => 'en',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setUserCountry: jest.fn() as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setUserLocale: jest.fn() as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setSystemLocale: jest.fn() as any,
-  })
+      input: {
+        type: INPUT.TEXT,
+        data: 'Hello',
+        botInteractionId: 'interaction-123',
+        messageId: 'msg-123',
+        context: campaigns_v2 ? { campaigns_v2 } : undefined,
+      },
+    })
 
   const mockAiAgentArgs: AiAgentArgs = {
     name: 'Test Agent',

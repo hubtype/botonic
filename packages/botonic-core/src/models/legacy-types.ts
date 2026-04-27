@@ -335,6 +335,26 @@ export interface BotRequest<TExtraData = any> {
   input: Input
   lastRoutePath: RoutePath
   session: Session<TExtraData>
+  settings: BotSettings
+  secrets: BotSecrets
+}
+
+export interface BotSettings {
+  HUBTYPE_API_URL: string
+  STATIC_URL: string
+  LITELLM_API_URL: string
+  AZURE_OPENAI_API_BASE: string
+  AZURE_OPENAI_API_VERSION: string
+  LANGUAGE_DETECTION_ENABLED: string
+  CUSTOM_SHORT_URL_HOST: string | null
+  custom: Record<string, any>
+}
+
+export interface BotSecrets {
+  HUBTYPE_ACCESS_TOKEN: string
+  LITELLM_API_KEY: string
+  AZURE_OPENAI_API_KEY: string
+  custom: Record<string, any>
 }
 
 export interface BotContext<

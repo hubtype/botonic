@@ -20,6 +20,10 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.47.2] - 2026-04-15
+
+- [PR-3199](https://github.com/hubtype/botonic/pull/3199): Fix async calls to track LLM runs.  
+
 ## [0.47.1] - 2026-03-31
 
 - [PR-3196](https://github.com/hubtype/botonic/pull/3196): Disable global sdk tracing.  

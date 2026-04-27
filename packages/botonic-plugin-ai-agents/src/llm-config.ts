@@ -94,3 +94,11 @@ export class LLMConfig {
     throw new Error(`Unsupported model: ${model}`)
   }
 }
+
+export function getApiVersion(): string {
+  // Return NOT_API_VERSION_FOR_OPENAI_PROVIDER if OPENAI_PROVIDER
+  // is not azure to avoid error when tracking in llm_runs endpoint
+  return OPENAI_PROVIDER === 'azure'
+    ? AZURE_OPENAI_API_VERSION
+    : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+}

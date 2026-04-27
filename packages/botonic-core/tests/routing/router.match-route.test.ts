@@ -1,69 +1,51 @@
 import { type BotRequest, INPUT, type Input } from '../../src'
 import { Router } from '../../src/routing'
+import { createTestBotRequest, createTestInput } from '../../src/testing'
 import { testRoute, testSession } from '../helpers/routing'
 
-const textInput: Input = {
-  type: INPUT.TEXT,
-  text: 'hi',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+const textInput: Input = createTestInput({ type: INPUT.TEXT, text: 'hi' })
 
-const textInputComplex: Input = {
+const textInputComplex: Input = createTestInput({
   type: INPUT.TEXT,
   text: 'Cömplêx input &% 🚀',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const textPayloadInput: Input = {
+const textPayloadInput: Input = createTestInput({
   type: INPUT.TEXT,
   text: 'hi',
   payload: 'foo',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const postbackInput: Input = {
+const postbackInput: Input = createTestInput({
   type: INPUT.POSTBACK,
   payload: 'foo',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const audioInput: Input = {
+const audioInput: Input = createTestInput({
   type: INPUT.AUDIO,
   src: 'data:audio/mpeg;base64,iVBORw0KG',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const documentInput: Input = {
+const documentInput: Input = createTestInput({
   type: INPUT.DOCUMENT,
   src: 'data:application/pdf;base64,iVBORw0KG',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const imageInput: Input = {
+const imageInput: Input = createTestInput({
   type: INPUT.IMAGE,
   src: 'data:image/png;base64,iVBORw0KG',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const videoInput: Input = {
+const videoInput: Input = createTestInput({
   type: INPUT.VIDEO,
   src: 'data:video/mp4;base64,iVBORw0KG',
-  bot_interaction_id: 'testInteractionId',
-  message_id: 'testMessageId',
-}
+})
 
-const requestInput: BotRequest = {
+const requestInput: BotRequest = createTestBotRequest({
   input: textInput,
   session: { ...testSession(), organization: 'myOrg' },
   lastRoutePath: 'initial',
-}
+})
 
 describe('TEST: Match route by MATCHER <> INPUT', () => {
   const router = new Router([])
