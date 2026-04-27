@@ -20,6 +20,7 @@
     "noImplicitAny": false,
     "paths": {
       "@botonic/core": ["./packages/botonic-core/src"],
+      "@botonic/core/testing": ["./packages/botonic-core/src/testing"],
       "@botonic/react": ["./packages/botonic-react/src"]
     },
     "preserveSymlinks": false
