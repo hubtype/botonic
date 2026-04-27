@@ -198,9 +198,7 @@ function isFullSettings(
   )
 }
 
-function isFullSecrets(
-  v: Partial<BotSecrets> | BotSecrets
-): v is BotSecrets {
+function isFullSecrets(v: Partial<BotSecrets> | BotSecrets): v is BotSecrets {
   return (
     'HUBTYPE_ACCESS_TOKEN' in v &&
     'LITELLM_API_KEY' in v &&
@@ -260,9 +258,7 @@ export interface TestBotContextOptions<
 
 export function createTestBotContext<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
->(
-  options?: TestBotContextOptions<TPlugins>
-): BotContext<TPlugins> {
+>(options?: TestBotContextOptions<TPlugins>): BotContext<TPlugins> {
   const request = createTestBotRequest(options)
 
   const sessionForLocale =
