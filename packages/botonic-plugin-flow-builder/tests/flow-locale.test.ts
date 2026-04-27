@@ -1,33 +1,70 @@
 import type { BotContext } from '@botonic/core'
+import {
+  createTestBotContext,
+  createTestSession,
+  createTestSettings,
+  TEST_DEFAULTS,
+} from '@botonic/core/testing'
 import { describe, expect, test } from '@jest/globals'
 
 import { FlowLocale } from '../src/utils/flow-locale'
 
-function createMockBotContext(
-  userLocale: string,
-  systemLocale: string
+type FlowLocaleBotContextOptions = {
+  /** When false, `LANGUAGE_DETECTION_ENABLED` is cleared so `!!value` is falsy in FlowLocale. */
+  languageDetectionEnabled?: boolean
+}
+
+/**
+ * Builds a BotContext using @botonic/core/testing factories. Overrides locale getters/setters so
+ * `setSystemLocale` updates state (the stock `createTestBotContext` uses no-op setters).
+ */
+function createFlowLocaleBotContext(
+  userLocale: string | undefined,
+  systemLocale: string | undefined,
+  options?: FlowLocaleBotContextOptions
 ): BotContext {
-  let currentSystemLocale = systemLocale
+  const session = createTestSession({
+    user: {
+      locale:
+        userLocale !== undefined ? userLocale : TEST_DEFAULTS.LOCALE,
+      systemLocale:
+        systemLocale !== undefined ? systemLocale : TEST_DEFAULTS.LOCALE,
+    },
+  })
+
+  const user = session.user
+
+  if (userLocale === undefined) {
+    Object.assign(user, { locale: undefined })
+  }
+  if (systemLocale === undefined) {
+    Object.assign(user, { system_locale: undefined })
+  }
+
+  let currentSystemLocale = user.system_locale as string | undefined
+
+  const base = createTestBotContext({
+    session,
+    ...(options?.languageDetectionEnabled === false
+      ? { settings: createTestSettings({ LANGUAGE_DETECTION_ENABLED: '' }) }
+      : {}),
+  })
 
   return {
-    session: {
-      user: {
-        locale: userLocale,
-        system_locale: systemLocale,
-      },
-    },
-    getUserLocale: () => userLocale,
+    ...base,
+    getUserLocale: () => user.locale as string | undefined,
     getSystemLocale: () => currentSystemLocale,
     setSystemLocale: (locale: string) => {
       currentSystemLocale = locale
+      user.system_locale = locale
     },
-  } as unknown as BotContext
+  } as BotContext
 }
 
 describe('FlowLocale.resolve()', () => {
   describe('when user locale matches exactly', () => {
     test('should return the user locale when it matches a flow locale', () => {
-      const botContext = createMockBotContext('es', 'en')
+      const botContext = createFlowLocaleBotContext('es', 'en')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -43,7 +80,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should set system locale when user locale is resolved', () => {
-      const botContext = createMockBotContext('fr', 'en')
+      const botContext = createFlowLocaleBotContext('fr', 'en')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -61,7 +98,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('when user locale has language-region format', () => {
     test('should resolve to language code when exact locale not found but language is available', () => {
-      const botContext = createMockBotContext('es-ES', 'en')
+      const botContext = createFlowLocaleBotContext('es-ES', 'en')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -77,7 +114,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should set system locale to resolved language', () => {
-      const botContext = createMockBotContext('fr-CA', 'en')
+      const botContext = createFlowLocaleBotContext('fr-CA', 'en')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -93,7 +130,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should prefer exact match over language extraction', () => {
-      const botContext = createMockBotContext('pt-BR', 'en')
+      const botContext = createFlowLocaleBotContext('pt-BR', 'en')
       const flowLocales = ['en', 'pt-BR', 'pt']
       const defaultLocaleCode = 'en'
 
@@ -111,7 +148,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('when system locale matches', () => {
     test('should return default locale when user locale does not match and is different from system locale', () => {
-      const botContext = createMockBotContext('de', 'es')
+      const botContext = createFlowLocaleBotContext('de', 'es')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -129,7 +166,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('when falling back to default locale', () => {
     test('should return default locale when no match found', () => {
-      const botContext = createMockBotContext('de', 'it')
+      const botContext = createFlowLocaleBotContext('de', 'it')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -145,7 +182,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should set system locale to default when falling back', () => {
-      const botContext = createMockBotContext('de', 'it')
+      const botContext = createFlowLocaleBotContext('de', 'it')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'fr'
 
@@ -161,7 +198,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should return "en" when default locale code is empty', () => {
-      const botContext = createMockBotContext('de', 'it')
+      const botContext = createFlowLocaleBotContext('de', 'it')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = ''
 
@@ -179,7 +216,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('edge cases', () => {
     test('should handle empty flow locales array', () => {
-      const botContext = createMockBotContext('es', 'en')
+      const botContext = createFlowLocaleBotContext('es', 'en')
       const flowLocales: string[] = []
       const defaultLocaleCode = 'en'
 
@@ -195,10 +232,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should handle undefined user locale', () => {
-      const botContext = createMockBotContext(
-        undefined as unknown as string,
-        'es'
-      )
+      const botContext = createFlowLocaleBotContext(undefined, 'es')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -214,10 +248,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should handle undefined system locale', () => {
-      const botContext = createMockBotContext(
-        'de',
-        undefined as unknown as string
-      )
+      const botContext = createFlowLocaleBotContext('de', undefined)
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'fr'
 
@@ -233,7 +264,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should handle locale with multiple dashes', () => {
-      const botContext = createMockBotContext('zh-Hans-CN', 'en')
+      const botContext = createFlowLocaleBotContext('zh-Hans-CN', 'en')
       const flowLocales = ['en', 'zh']
       const defaultLocaleCode = 'en'
 
@@ -249,7 +280,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should be case sensitive when matching locales', () => {
-      const botContext = createMockBotContext('ES', 'EN')
+      const botContext = createFlowLocaleBotContext('ES', 'EN')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -267,7 +298,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('when locales share language but differ in specificity', () => {
     test('should prefer system locale with region over generic user locale', () => {
-      const botContext = createMockBotContext('es', 'es-MX')
+      const botContext = createFlowLocaleBotContext('es', 'es-MX')
       const flowLocales = ['es', 'es-MX']
       const defaultLocaleCode = 'en'
 
@@ -281,7 +312,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should fall back to generic locale when specific system locale not in flow', () => {
-      const botContext = createMockBotContext('es', 'es-MX')
+      const botContext = createFlowLocaleBotContext('es', 'es-MX')
       const flowLocales = ['es']
       const defaultLocaleCode = 'en'
 
@@ -295,7 +326,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should prefer user locale with region over generic system locale', () => {
-      const botContext = createMockBotContext('es-ES', 'es')
+      const botContext = createFlowLocaleBotContext('es-ES', 'es')
       const flowLocales = ['es-ES', 'es']
       const defaultLocaleCode = 'en'
 
@@ -309,7 +340,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should use user locale when both have regions for the same language', () => {
-      const botContext = createMockBotContext('es-MX', 'es-CO')
+      const botContext = createFlowLocaleBotContext('es-MX', 'es-CO')
       const flowLocales = ['es-MX', 'es-CO']
       const defaultLocaleCode = 'en'
 
@@ -323,7 +354,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should not apply specificity logic when languages differ', () => {
-      const botContext = createMockBotContext('fr', 'es-MX')
+      const botContext = createFlowLocaleBotContext('fr', 'es-MX')
       const flowLocales = ['fr', 'es-MX']
       const defaultLocaleCode = 'en'
 
@@ -337,7 +368,7 @@ describe('FlowLocale.resolve()', () => {
     })
 
     test('should set system locale to the more specific resolved locale', () => {
-      const botContext = createMockBotContext('es', 'es-MX')
+      const botContext = createFlowLocaleBotContext('es', 'es-MX')
       const flowLocales = ['es-MX']
       const defaultLocaleCode = 'en'
 
@@ -349,7 +380,7 @@ describe('FlowLocale.resolve()', () => {
 
   describe('priority order', () => {
     test('should prioritize user locale over system locale', () => {
-      const botContext = createMockBotContext('fr', 'es')
+      const botContext = createFlowLocaleBotContext('fr', 'es')
       const flowLocales = ['en', 'es', 'fr']
       const defaultLocaleCode = 'en'
 
@@ -362,6 +393,36 @@ describe('FlowLocale.resolve()', () => {
       const result = flowLocale.resolve()
 
       expect(result).toBe('fr')
+    })
+  })
+
+  describe('when LANGUAGE_DETECTION_ENABLED is falsy', () => {
+    test('should resolve using system locale only, ignoring user vs system priority', () => {
+      const botContext = createFlowLocaleBotContext('fr', 'es', {
+        languageDetectionEnabled: false,
+      })
+      const flowLocales = ['en', 'es', 'fr']
+      const defaultLocaleCode = 'en'
+
+      const result = new FlowLocale(
+        botContext,
+        flowLocales,
+        defaultLocaleCode
+      ).resolve()
+
+      expect(result).toBe('es')
+    })
+
+    test('should set system locale from flow match derived from current system locale', () => {
+      const botContext = createFlowLocaleBotContext('es', 'fr', {
+        languageDetectionEnabled: false,
+      })
+      const flowLocales = ['en', 'fr', 'de']
+      const defaultLocaleCode = 'en'
+
+      new FlowLocale(botContext, flowLocales, defaultLocaleCode).resolve()
+
+      expect(botContext.getSystemLocale()).toBe('fr')
     })
   })
 })
