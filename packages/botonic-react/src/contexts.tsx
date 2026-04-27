@@ -1,4 +1,9 @@
-import type { Input as CoreInput, Session as CoreSession } from '@botonic/core'
+import type {
+  BotSecrets,
+  BotSettings,
+  Input as CoreInput,
+  Session as CoreSession,
+} from '@botonic/core'
 import { createContext } from 'react'
 
 import type { ActionRequest } from './index-types'
@@ -17,6 +22,8 @@ export const RequestContext = createContext<ActionRequest>({
   session: {} as CoreSession,
   lastRoutePath: '',
   plugins: {},
+  settings: {} as BotSettings,
+  secrets: {} as BotSecrets,
 })
 
 export interface CloseWebviewOptions {
