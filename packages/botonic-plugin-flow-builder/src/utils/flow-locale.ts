@@ -8,7 +8,9 @@ export class FlowLocale {
   ) {}
 
   resolve(): string {
-    const priorityLocale = this.getPriorityLocale()
+    const priorityLocale = this.isLanguageDetectionEnabled()
+      ? this.getPriorityLocale()
+      : this.botContext.getSystemLocale()
 
     if (priorityLocale) {
       const exactMatch = this.matchExactLocale(priorityLocale)
@@ -23,6 +25,10 @@ export class FlowLocale {
     }
 
     return this.applyLocale(this.getDefaultLocale())
+  }
+
+  private isLanguageDetectionEnabled(): boolean {
+    return !!this.botContext.settings.LANGUAGE_DETECTION_ENABLED
   }
 
   /**
