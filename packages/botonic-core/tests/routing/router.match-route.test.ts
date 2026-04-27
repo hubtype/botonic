@@ -63,6 +63,22 @@ const requestInput: BotRequest = {
   input: textInput,
   session: { ...testSession(), organization: 'myOrg' },
   lastRoutePath: 'initial',
+  settings: {
+    HUBTYPE_API_URL: 'https://api.hubtype.com',
+    STATIC_URL: 'https://static.hubtype.com',
+    LITELLM_API_URL: 'https://api.litellm.com',
+    AZURE_OPENAI_API_BASE: 'https://api.openai.com',
+    AZURE_OPENAI_API_VERSION: '2026-02-01',
+    LANGUAGE_DETECTION_ENABLED: 'true',
+    CUSTOM_SHORT_URL_HOST: null,
+    custom: {},
+  },
+  secrets: {
+    HUBTYPE_ACCESS_TOKEN: 'testAccessToken',
+    LITELLM_API_KEY: 'testLiteLLMAPIKey',
+    AZURE_OPENAI_API_KEY: 'testAzureOpenAIAPIKey',
+    custom: {},
+  },
 }
 
 describe('TEST: Match route by MATCHER <> INPUT', () => {
