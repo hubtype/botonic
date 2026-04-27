@@ -25,8 +25,7 @@ function createFlowLocaleBotContext(
 ): BotContext {
   const session = createTestSession({
     user: {
-      locale:
-        userLocale !== undefined ? userLocale : TEST_DEFAULTS.LOCALE,
+      locale: userLocale !== undefined ? userLocale : TEST_DEFAULTS.LOCALE,
       systemLocale:
         systemLocale !== undefined ? systemLocale : TEST_DEFAULTS.LOCALE,
     },
@@ -46,7 +45,7 @@ function createFlowLocaleBotContext(
   const base = createTestBotContext({
     session,
     ...(options?.languageDetectionEnabled === false
-      ? { settings: createTestSettings({ LANGUAGE_DETECTION_ENABLED: '' }) }
+      ? { settings: createTestSettings({ LANGUAGE_DETECTION_ENABLED: false }) }
       : {}),
   })
 
