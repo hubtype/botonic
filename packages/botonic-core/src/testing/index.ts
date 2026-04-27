@@ -23,7 +23,7 @@ export const TEST_DEFAULTS = {
   LITELLM_API_URL: 'https://api.litellm.com',
   AZURE_OPENAI_API_BASE: 'https://api.openai.com',
   AZURE_OPENAI_API_VERSION: '2026-02-01',
-  LANGUAGE_DETECTION_ENABLED: 'true',
+  LANGUAGE_DETECTION_ENABLED: true,
   HUBTYPE_ACCESS_TOKEN: 'testAccessToken', // pragma: allowlist secret
   LITELLM_API_KEY: 'testLiteLLMAPIKey', // pragma: allowlist secret
   AZURE_OPENAI_API_KEY: 'testAzureOpenAIAPIKey', // pragma: allowlist secret

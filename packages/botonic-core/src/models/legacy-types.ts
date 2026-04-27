@@ -345,7 +345,7 @@ export interface BotSettings {
   LITELLM_API_URL: string
   AZURE_OPENAI_API_BASE: string
   AZURE_OPENAI_API_VERSION: string
-  LANGUAGE_DETECTION_ENABLED: string
+  LANGUAGE_DETECTION_ENABLED: boolean
   CUSTOM_SHORT_URL_HOST: string | null
   custom: Record<string, any>
 }
