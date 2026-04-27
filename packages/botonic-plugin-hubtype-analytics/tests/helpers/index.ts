@@ -1,8 +1,4 @@
-import {
-  type BotContext,
-  type ProviderType,
-  type ResolvedPlugins,
-} from '@botonic/core'
+import type { BotContext, ProviderType, ResolvedPlugins } from '@botonic/core'
 import { createTestBotContext } from '@botonic/core/testing'
 
 import BotonicPluginHubtypeAnalytics from '../../src/index'
