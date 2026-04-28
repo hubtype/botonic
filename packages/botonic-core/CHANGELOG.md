@@ -10,17 +10,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.47.x] - 2026-mm-dd
+## [0.48.x] - 2026-mm-dd
 
 ### Added
-
-- [PR-3200](https://github.com/hubtype/botonic/pull/3200): Add settings and secrets in BotRequest.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.48.0] - 2026-04-28
+
+### Added
+
+- [PR-3200](https://github.com/hubtype/botonic/pull/3200): Add settings and secrets in BotRequest.
 
 ## [0.46.1] - 2026-03-20
 
