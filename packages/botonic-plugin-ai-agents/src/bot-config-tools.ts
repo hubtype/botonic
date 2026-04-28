@@ -1,5 +1,5 @@
 import type { ToolConfigJSON } from '@botonic/core'
-import { zodToJsonSchema } from 'zod-to-json-schema'
+import { z } from 'zod'
 
 import type { CustomTool } from './types'
 
@@ -13,9 +13,8 @@ export function getToolsForBotConfig(
   return customTools.map(tool => ({
     name: tool.name,
     description: tool.description,
-    // Cast to avoid TS "Type instantiation is excessively deep" with zodToJsonSchema + ZodSchema
-    schema: zodToJsonSchema(tool.schema as never, {
-      $refStrategy: 'none',
+    schema: z.toJSONSchema(tool.schema, {
+      target: 'draft-07',
     }) as ToolConfigJSON['schema'],
   }))
 }
