@@ -5,7 +5,7 @@ import { Args, Command, Flags } from '@oclif/core'
 import type { AxiosError } from 'axios'
 import ora from 'ora'
 import pc from 'picocolors'
-import { ZipAFolder } from 'zip-a-folder'
+import { zip } from 'zip-a-folder'
 
 import { BotonicAPIService } from '../botonic-api-service.js'
 import { CLOUD_PROVIDERS } from '../constants.js'
@@ -309,13 +309,7 @@ export default class Deploy extends Command {
     }
     createDir(path.join(process.cwd(), BOTONIC_TEMP_DIRNAME))
     copyRecursively('dist', path.join(BOTONIC_TEMP_DIRNAME, 'dist'))
-    const zipRes = await ZipAFolder.zip(
-      BOTONIC_TEMP_DIRNAME,
-      path.join(BOTONIC_BUNDLE_FILE)
-    )
-    if (zipRes instanceof Error) {
-      throw Error
-    }
+    await zip(BOTONIC_TEMP_DIRNAME, path.join(BOTONIC_BUNDLE_FILE))
     const zipStats = statSync(BOTONIC_BUNDLE_FILE)
     spinner.succeed()
     if (zipStats.size >= 10 * 10 ** 6) {
