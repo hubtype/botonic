@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.47.x] - 2026-mm-dd
+## [0.48.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,12 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.48.0] - 2026-04-28
+
+### Added
+
+- [PR-3198](https://github.com/hubtype/botonic/pull/3198): Update bot language responses with using user.locale when backend detect language feature is enabled.
 
 ## [0.47.0] - 2026-03-30
 
