@@ -100,9 +100,12 @@ function makeToolCallItem(
   ) as any
 }
 
-function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
+function buildMockLlmConfig(
+  provider: 'openai' | 'azure' = 'azure',
+  modelName: string = 'gpt-4.1-mini'
+): LLMConfig {
   return {
-    modelName: 'gpt-4.1-mini',
+    modelName,
     modelSettings: {
       temperature: 0,
       toolChoice: undefined as string | undefined,
@@ -390,11 +393,9 @@ describe('AIAgentRunner', () => {
       expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
     })
 
-    it('should NOT set toolChoice for openai provider even with retrieve_knowledge tool', async () => {
-      mockConstants.OPENAI_PROVIDER = 'openai'
+    it('should NOT set toolChoice for other models than gpt-4', async () => {
+      const llmConfig = buildMockLlmConfig('openai', 'gpt-5-mini')
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
-
-      const llmConfig = buildMockLlmConfig('openai')
       await createRunner(buildMockAgent(true), llmConfig).run(
         sampleMessages,
         buildMockContext()
