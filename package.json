@@ -6,7 +6,7 @@
     "clean": "rimraf packages/**/lib"
   },
   "dependencies": {
-    "axios": "^1.13.6",
+    "axios": "^1.15.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -51,7 +51,7 @@
     "jest-extended": "^4.0.2",
     "jest-junit": "^12.3.0",
     "prettier": "^3.2.5",
-    "ts-jest": "^29.4.4",
+    "ts-jest": "^29.4.9",
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
