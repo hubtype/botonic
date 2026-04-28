@@ -25,6 +25,7 @@ import {
   type HtSmartIntentNode,
 } from './content-fields/hubtype-fields'
 import { type FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
+import { FlowLocale } from './utils/flow-locale'
 
 export class FlowBuilderApi {
   url: string
@@ -310,47 +311,13 @@ export class FlowBuilderApi {
   }
 
   getResolvedLocale(): string {
-    const systemLocale = this.request.getSystemLocale()
+    const flowLocales = this.flow.locales
+    const defaultLocaleCode = this.flow.default_locale_code
 
-    const locale = this.resolveAsLocale(systemLocale)
-    if (locale) {
-      return locale
-    }
-
-    const language = this.resolveAsLanguage(systemLocale)
-    if (language) {
-      this.request.setSystemLocale(language)
-      return language
-    }
-
-    const defaultLocale = this.resolveAsDefaultLocale()
-    this.request.setSystemLocale(defaultLocale)
-    return defaultLocale
-  }
-
-  private resolveAsLocale(locale: string): string | undefined {
-    if (this.flow.locales.find(flowLocale => flowLocale === locale)) {
-      return locale
-    }
-    return undefined
-  }
-
-  private resolveAsLanguage(locale?: string): string | undefined {
-    const language = locale?.split('-')[0]
-    if (
-      language &&
-      this.flow.locales.find(flowLocale => flowLocale === language)
-    ) {
-      console.log(`locale: ${locale} has been resolved as ${language}`)
-      return language
-    }
-    return undefined
-  }
-
-  private resolveAsDefaultLocale(): string {
-    console.log(
-      `Resolve locale with default locale: ${this.flow.default_locale_code}`
-    )
-    return this.flow.default_locale_code || 'en'
+    return new FlowLocale(
+      this.request,
+      flowLocales,
+      defaultLocaleCode
+    ).resolve()
   }
 }

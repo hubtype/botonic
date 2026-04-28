@@ -167,6 +167,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   post(request: PluginPreRequest): void {
     request.input.nluResolution = undefined
+    delete request.session.user.system_locale_updated
   }
 
   async getContentsByContentID(

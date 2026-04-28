@@ -73,12 +73,35 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     return filteredContents
   }
 
-  render(): JSX.Element | JSX.Element[] {
-    const { contents, webchatSettingsParams } = this.props
-    const botContext = this.context as BotContext
+  protected getWebchatSettingsParams(botContext: BotContext): {
+    shouldSendWebchatSettings: boolean
+    webchatSettingsParams?: WebchatSettingsProps
+  } {
+    let { webchatSettingsParams } = this.props
+    if (botContext.session.user.system_locale_updated) {
+      webchatSettingsParams = {
+        ...webchatSettingsParams,
+        user: {
+          ...webchatSettingsParams?.user,
+          system_locale: botContext.session.user.system_locale,
+        },
+      }
+    }
     const shouldSendWebchatSettings =
       (isWebchat(botContext.session) || isDev(botContext.session)) &&
       !!webchatSettingsParams
+
+    return {
+      shouldSendWebchatSettings,
+      webchatSettingsParams,
+    }
+  }
+
+  render(): JSX.Element | JSX.Element[] {
+    const { contents } = this.props
+    const botContext = this.context as BotContext
+    const { shouldSendWebchatSettings, webchatSettingsParams } =
+      this.getWebchatSettingsParams(botContext)
 
     return (
       <>
@@ -93,11 +116,10 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    const { contents, webchatSettingsParams } = this.props
+    const { contents } = this.props
     const botContext = this.context as BotContext
-    const shouldSendWebchatSettings =
-      (isWebchat(botContext.session) || isDev(botContext.session)) &&
-      !!webchatSettingsParams
+    const { shouldSendWebchatSettings, webchatSettingsParams } =
+      this.getWebchatSettingsParams(botContext)
 
     return (
       <Multichannel text={{ buttonsAsText: false }}>

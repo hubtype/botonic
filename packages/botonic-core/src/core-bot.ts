@@ -97,7 +97,7 @@ export class CoreBot {
   }
 
   private getBotContext(request: BotRequest): BotContext {
-    const { input, session, lastRoutePath } = request
+    const { input, session, lastRoutePath, settings, secrets } = request
     return {
       input,
       session,
@@ -114,8 +114,8 @@ export class CoreBot {
       setUserLocale: (locale: string) => this.setUserLocale(locale, session),
       setSystemLocale: (locale: string) =>
         this.setSystemLocale(locale, session),
-      settings: request.settings,
-      secrets: request.secrets,
+      settings,
+      secrets,
     }
   }
 
