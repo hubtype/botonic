@@ -111,10 +111,14 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
   } as unknown as LLMConfig
 }
 
-function buildMockAgent(includeRetrieveKnowledge = false): AIAgent<any, any> {
+function buildMockAgent(
+  includeRetrieveKnowledge = false,
+  modelSettings: Record<string, unknown> = {}
+): AIAgent<any, any> {
   return {
     name: 'TestAgent',
     tools: includeRetrieveKnowledge ? [mockRetrieveKnowledge] : [],
+    modelSettings,
   } as unknown as AIAgent<any, any>
 }
 
@@ -377,17 +381,19 @@ describe('AIAgentRunner', () => {
   // ── run() – provider logic ───────────────────────────────────────────────
 
   describe('run() – provider logic', () => {
-    it('should set toolChoice to retrieve_knowledge for azure provider when agent has that tool', async () => {
+    it('should not mutate llmConfig toolChoice for azure provider when agent has retrieve_knowledge', async () => {
       mockConstants.OPENAI_PROVIDER = 'azure'
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      await createRunner(buildMockAgent(true), llmConfig).run(
+      const agent = buildMockAgent(true, { toolChoice: 'retrieve_knowledge' })
+      await createRunner(agent, llmConfig).run(
         sampleMessages,
         buildMockContext()
       )
 
-      expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
+      expect(agent.modelSettings.toolChoice).toBe('retrieve_knowledge')
+      expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should NOT set toolChoice for openai provider even with retrieve_knowledge tool', async () => {
@@ -416,7 +422,7 @@ describe('AIAgentRunner', () => {
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
-    it('should pass modelProvider and modelSettings to Runner', async () => {
+    it('should create Runner with execution settings only', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig()
@@ -425,11 +431,11 @@ describe('AIAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfig).toMatchObject({
-        modelSettings: llmConfig.modelSettings,
-        modelProvider: llmConfig.modelProvider,
+      expect(capturedRunnerConfig).toEqual({
         tracingDisabled: true,
       })
+      expect(capturedRunnerConfig).not.toHaveProperty('modelSettings')
+      expect(capturedRunnerConfig).not.toHaveProperty('modelProvider')
     })
   })
 

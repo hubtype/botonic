@@ -25,6 +25,8 @@ let capturedBuilderArgs: any = null
 type MockAgentConfig = {
   name: string
   instructions?: string
+  model?: unknown
+  modelSettings?: unknown
   outputType?: unknown
   handoffs?: unknown
   inputGuardrails?: { name: string }[]
@@ -38,6 +40,8 @@ jest.mock('@openai/agents', () => {
     return {
       name: config.name,
       instructions: config.instructions,
+      model: config.model,
+      modelSettings: config.modelSettings,
       handoffs: config.handoffs,
       inputGuardrails: config.inputGuardrails,
     }
@@ -47,6 +51,8 @@ jest.mock('@openai/agents', () => {
       (config: MockAgentConfig): MockAgentInstance => ({
         name: config.name,
         instructions: config.instructions,
+        model: config.model,
+        modelSettings: config.modelSettings,
         outputType: config.outputType,
       })
     ),
@@ -63,10 +69,11 @@ jest.mock('@openai/agents', () => {
 
 // Mock LLMConfig to avoid actual OpenAI/Azure setup
 jest.mock('../src/llm-config', () => ({
-  LLMConfig: jest.fn().mockImplementation(() => ({
-    modelName: 'gpt-4.1-mini',
-    modelSettings: {},
+  LLMConfig: jest.fn().mockImplementation((_maxRetries, _timeout, model) => ({
+    modelName: model,
+    modelSettings: { temperature: 0 },
     modelProvider: {},
+    getModel: jest.fn(async () => ({ id: `resolved-${model}` })),
   })),
 }))
 
@@ -76,11 +83,13 @@ jest.mock('../src/agent-builder', () => ({
   AIAgentBuilder: jest.fn().mockImplementation((args: any) => {
     capturedBuilderArgs = args
     return {
-      build: jest.fn().mockReturnValue({
+      build: jest.fn(async () => ({
         name: args.name,
         instructions: args.instructions,
+        model: { id: `resolved-${args.llmConfig.modelName}` },
+        modelSettings: args.llmConfig.modelSettings,
         tools: args.tools || [],
-      }),
+      })),
     }
   }),
 }))
@@ -351,6 +360,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       throw new Error('Router agent was not created')
     }
     expect(routerConfig.name).toBe('Router Agent')
+    expect(routerConfig.model).toEqual({ id: 'resolved-gpt-4.1-mini' })
+    expect(routerConfig.modelSettings).toEqual({ temperature: 0 })
     expect(routerConfig.inputGuardrails).toHaveLength(1)
     expect(routerConfig.inputGuardrails?.[0].name).toBe('InputGuardrail')
   })

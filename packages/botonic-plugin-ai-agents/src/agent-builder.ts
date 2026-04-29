@@ -3,6 +3,7 @@ import {
   Agent,
   type AgentOutputType,
   type InputGuardrail,
+  type ModelSettings,
 } from '@openai/agents'
 import type { z } from 'zod'
 
@@ -43,6 +44,8 @@ export class AIAgentBuilder<
   private inputGuardrails: InputGuardrail[]
   public llmConfig: LLMConfig
   private logger: DebugLogger
+  private inputGuardrailRules: GuardrailRule[]
+  private guardrailTrackingContext: GuardrailTrackingContext
 
   constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
     this.name = options.name
@@ -56,30 +59,30 @@ export class AIAgentBuilder<
     this.inputGuardrails = []
     this.llmConfig = options.llmConfig
     this.logger = options.logger
-    this.inputGuardrails = createInputGuardrails(
-      options.inputGuardrailRules,
-      options.llmConfig,
-      options.guardrailTrackingContext
-    )
+    this.inputGuardrailRules = options.inputGuardrailRules
+    this.guardrailTrackingContext = options.guardrailTrackingContext
   }
 
-  build(): AIAgent<TPlugins, TExtraData> {
-    // When using standard OpenAI API, we need to specify the model
-    // Azure OpenAI uses deployment name instead
-
+  async build(): Promise<AIAgent<TPlugins, TExtraData>> {
+    // When using standard OpenAI API, we need to specify the model.
+    // Azure OpenAI uses deployment name instead.
     const model = this.llmConfig.modelName
+    const resolvedModel = await this.llmConfig.getModel()
     const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
+    const modelSettings = this.getAgentModelSettings(hasRetrieveKnowledge)
+
+    this.inputGuardrails = await createInputGuardrails(
+      this.inputGuardrailRules,
+      this.llmConfig,
+      this.guardrailTrackingContext
+    )
 
     this.logger.logModelSettings({
       provider: OPENAI_PROVIDER,
       model,
-      reasoning: this.llmConfig.modelSettings.reasoning as
-        | { effort: string }
-        | undefined,
-      text: this.llmConfig.modelSettings.text as
-        | { verbosity: string }
-        | undefined,
-      toolChoice: this.llmConfig.modelSettings.toolChoice as string | undefined,
+      reasoning: modelSettings.reasoning as { effort: string } | undefined,
+      text: modelSettings.text as { verbosity: string } | undefined,
+      toolChoice: modelSettings.toolChoice as string | undefined,
       hasRetrieveKnowledge,
     })
 
@@ -88,13 +91,30 @@ export class AIAgentBuilder<
       AgentOutputType<typeof OutputSchema>
     >({
       name: this.name,
-      model,
+      model: resolvedModel,
+      modelSettings,
       instructions: this.instructions,
       tools: this.tools,
       outputType: getOutputSchema(this.externalOutputMessagesSchemas),
       inputGuardrails: this.inputGuardrails,
       outputGuardrails: [],
     })
+  }
+
+  private getAgentModelSettings(hasRetrieveKnowledge: boolean): ModelSettings {
+    const modelSettings: ModelSettings = { ...this.llmConfig.modelSettings }
+    if (this.llmConfig.modelSettings.reasoning) {
+      modelSettings.reasoning = { ...this.llmConfig.modelSettings.reasoning }
+    }
+    if (this.llmConfig.modelSettings.text) {
+      modelSettings.text = { ...this.llmConfig.modelSettings.text }
+    }
+
+    if (hasRetrieveKnowledge && this.llmConfig.modelName.includes('gpt-4')) {
+      modelSettings.toolChoice = retrieveKnowledge.name
+    }
+
+    return modelSettings
   }
 
   private addExtraInstructions(

@@ -10,19 +10,15 @@ export class AIAgentRouterRunner<
   TExtraData = any,
 > {
   private agent: AIAgent<TPlugins, TExtraData>
-  private llmConfig: LLMConfig
-  private inferenceId: string
   private logger: DebugLogger
 
   constructor(
     agent: AIAgent<TPlugins, TExtraData>,
-    llmConfig: LLMConfig,
-    inferenceId: string,
+    _llmConfig: LLMConfig,
+    _inferenceId: string,
     logger: DebugLogger
   ) {
     this.agent = agent
-    this.llmConfig = llmConfig
-    this.inferenceId = inferenceId
     this.logger = logger
   }
 
@@ -31,12 +27,7 @@ export class AIAgentRouterRunner<
     context: Context<TPlugins, TExtraData>
   ): Promise<RunResult> {
     try {
-      const modelProvider = this.llmConfig.modelProvider
-      const modelSettings = this.llmConfig.modelSettings
-
       const runner = new Runner({
-        modelSettings,
-        modelProvider,
         tracingDisabled: true,
       })
       const result = (await runner.run(this.agent, messages, {

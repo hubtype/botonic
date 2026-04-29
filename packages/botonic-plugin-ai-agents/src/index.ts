@@ -138,7 +138,7 @@ export default class BotonicPluginAiAgents<
     inferenceId: string
   ) {
     // Get LLM config, tools and agent
-    const { llmConfig, tools, agent } = this.getLLMConfigToolsAndAIAgent(
+    const { llmConfig, tools, agent } = await this.getLLMConfigToolsAndAIAgent(
       botContext,
       aiAgentArgs,
       aiAgentArgs.outputMessagesSchemas || [],
@@ -173,6 +173,7 @@ export default class BotonicPluginAiAgents<
       messages
     )
 
+    console.log(' AI Agent Worker: ', agent, llmConfig)
     // Run agent
     const runner = new AIAgentRunner<TPlugins, TExtraData>(
       agent,
@@ -191,28 +192,30 @@ export default class BotonicPluginAiAgents<
   ) {
     const { agents, model, name, instructions } = aiAgentArgs
 
-    const handoffAgents = agents.map(aiAgentData => {
-      const { agent } = this.getLLMConfigToolsAndAIAgent(
-        botContext,
-        aiAgentData,
-        aiAgentArgs.outputMessagesSchemas || [],
-        authToken,
-        inferenceId
-      )
-      return handoff(agent, {
-        toolNameOverride: aiAgentData.name,
-        toolDescriptionOverride: aiAgentData.description,
-        // TODO: Review if is possible use onHandoff action to track the handoff
-        // onHandoff: result => {
-        //   console.log('onHandoff', aiAgentData.name, result)
-        // },
-        // TODO: when onHandoff function is defined, we need to provide inputType
-        // inputType: ????,
-        // isEnabled: (context: RunContext<any>) => {
-        //   return true
-        // },
+    const handoffAgents = await Promise.all(
+      agents.map(async aiAgentData => {
+        const { agent } = await this.getLLMConfigToolsAndAIAgent(
+          botContext,
+          aiAgentData,
+          aiAgentArgs.outputMessagesSchemas || [],
+          authToken,
+          inferenceId
+        )
+        return handoff(agent, {
+          toolNameOverride: aiAgentData.name,
+          toolDescriptionOverride: aiAgentData.description,
+          // TODO: Review if is possible use onHandoff action to track the handoff
+          // onHandoff: result => {
+          //   console.log('onHandoff', aiAgentData.name, result)
+          // },
+          // TODO: when onHandoff function is defined, we need to provide inputType
+          // inputType: ????,
+          // isEnabled: (context: RunContext<any>) => {
+          //   return true
+          // },
+        })
       })
-    })
+    )
 
     const routerLlmConfig = new LLMConfig(
       this.maxRetries,
@@ -226,16 +229,26 @@ export default class BotonicPluginAiAgents<
       authToken,
       inferenceId,
     }
-    const inputGuardrails = createInputGuardrails(
+    const inputGuardrails = await createInputGuardrails(
       aiAgentArgs.inputGuardrailRules || [],
       routerLlmConfig,
       guardrailTrackingContext
     )
+    const routerModelSettings = { ...routerLlmConfig.modelSettings }
+    if (routerLlmConfig.modelSettings.reasoning) {
+      routerModelSettings.reasoning = {
+        ...routerLlmConfig.modelSettings.reasoning,
+      }
+    }
+    if (routerLlmConfig.modelSettings.text) {
+      routerModelSettings.text = { ...routerLlmConfig.modelSettings.text }
+    }
 
     // Agent.create is typed as Agent<UnknownContext>; we run with Context<TPlugins, TExtraData>.
     const agentRouter = Agent.create({
       name,
-      model,
+      model: await routerLlmConfig.getModel(),
+      modelSettings: routerModelSettings,
       instructions: RECOMMENDED_PROMPT_PREFIX + instructions,
       handoffs: handoffAgents,
       inputGuardrails,
@@ -269,10 +282,11 @@ export default class BotonicPluginAiAgents<
       this.logger
     )
 
+    console.log(' AI Agent Router: ', agentRouter, routerLlmConfig)
     return await runner.run(messages, context)
   }
 
-  private getLLMConfigToolsAndAIAgent(
+  private async getLLMConfigToolsAndAIAgent(
     botContext: BotContext,
     aiAgentArgs: AiAgentArgs,
     outputMessagesSchemas: ZodObject<any>[],
@@ -293,7 +307,7 @@ export default class BotonicPluginAiAgents<
     // Build agent
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Worker ? aiAgentArgs.sourceIds : []
-    const agent = new AIAgentBuilder<TPlugins, TExtraData>({
+    const agentBuilder = new AIAgentBuilder<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
       tools: tools,
@@ -310,7 +324,8 @@ export default class BotonicPluginAiAgents<
         authToken,
         inferenceId,
       },
-    }).build()
+    })
+    const agent = await agentBuilder.build()
 
     return { llmConfig, tools, agent }
   }
