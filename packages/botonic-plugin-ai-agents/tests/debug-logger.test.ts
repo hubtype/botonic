@@ -1,4 +1,4 @@
-import { VerbosityLevel } from '@botonic/core'
+import { type AiAgentArgs, AiAgentType, VerbosityLevel } from '@botonic/core'
 import { createDebugLogger, type DebugLogger } from '../src/debug-logger'
 
 describe('DebugLogger', () => {
@@ -77,11 +77,13 @@ describe('DebugLogger', () => {
     })
 
     it('should log agent debug info', () => {
-      const aiAgentArgs = {
+      const aiAgentArgs: AiAgentArgs = {
+        type: AiAgentType.Worker,
         name: 'TestAgent',
         instructions: 'Test instructions',
         model: 'gpt-4.1-mini',
         verbosity: VerbosityLevel.Medium,
+        activeTools: [],
         sourceIds: ['source1'],
         inputGuardrailRules: [],
       }
@@ -217,10 +219,14 @@ describe('DebugLogger', () => {
       })
       logger.logAgentDebugInfo(
         {
+          type: AiAgentType.Worker,
           name: 'Test',
           instructions: '',
           model: 'gpt-4.1-mini',
           verbosity: VerbosityLevel.Low,
+          activeTools: [],
+          sourceIds: [],
+          inputGuardrailRules: [],
         },
         [],
         []

@@ -18,7 +18,19 @@ export interface GuardrailTrackingContext {
   inferenceId: string
 }
 
-export function createInputGuardrail(
+export function createInputGuardrails(
+  rules: GuardrailRule[],
+  llmConfig: LLMConfig,
+  trackingContext: GuardrailTrackingContext
+): InputGuardrail[] {
+  if (rules.length === 0) {
+    return []
+  }
+
+  return [buildInputGuardrail(rules, llmConfig, trackingContext)]
+}
+
+function buildInputGuardrail(
   rules: GuardrailRule[],
   llmConfig: LLMConfig,
   trackingContext: GuardrailTrackingContext

@@ -26,7 +26,7 @@ import type {
 
 // Minimal interface matching the properties we actually use from Runner.run() result
 // This bypasses strict type checking while maintaining type safety for accessed properties
-interface AIAgentRunnerResult {
+export interface AIAgentRunnerResult {
   finalOutput?: {
     messages?: OutputMessage[]
   }
@@ -87,7 +87,6 @@ export class AIAgentRunner<
       const result = (await runner.run(this.agent, messages, {
         context,
       })) as AIAgentRunnerResult
-
       const endTime = Date.now()
 
       await this.sendLlmRunTracking(result, context, startTime, endTime)

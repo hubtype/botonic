@@ -1,5 +1,7 @@
 import {
+  type AIAgentRouterArgs,
   type AiAgentArgs,
+  AiAgentType,
   type BotContext,
   INPUT,
   PROVIDER,
@@ -20,6 +22,44 @@ import BotonicPluginAiAgents from '../src/index'
 // Store the captured AIAgentBuilder arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
+type MockAgentConfig = {
+  name: string
+  instructions?: string
+  outputType?: unknown
+  handoffs?: unknown
+  inputGuardrails?: { name: string }[]
+}
+type MockAgentInstance = MockAgentConfig
+let capturedRouterAgentConfig: MockAgentConfig | null = null
+
+jest.mock('@openai/agents', () => {
+  const create = jest.fn((config: MockAgentConfig): MockAgentInstance => {
+    capturedRouterAgentConfig = config
+    return {
+      name: config.name,
+      instructions: config.instructions,
+      handoffs: config.handoffs,
+      inputGuardrails: config.inputGuardrails,
+    }
+  })
+  const AgentMock = Object.assign(
+    jest.fn(
+      (config: MockAgentConfig): MockAgentInstance => ({
+        name: config.name,
+        instructions: config.instructions,
+        outputType: config.outputType,
+      })
+    ),
+    { create }
+  )
+
+  return {
+    Agent: AgentMock,
+    handoff: jest.fn().mockImplementation(agent => ({ agent })),
+    setTracingDisabled: jest.fn(),
+    tool: jest.fn().mockImplementation(config => config),
+  }
+})
 
 // Mock LLMConfig to avoid actual OpenAI/Azure setup
 jest.mock('../src/llm-config', () => ({
@@ -48,6 +88,20 @@ jest.mock('../src/agent-builder', () => ({
 // Mock AIAgentRunner to avoid actual execution
 jest.mock('../src/runner', () => ({
   AIAgentRunner: jest.fn().mockImplementation(() => ({
+    run: jest.fn().mockResolvedValue({
+      messages: [],
+      toolsExecuted: [],
+      memoryLength: 0,
+      exit: false,
+      error: false,
+      inputGuardrailsTriggered: [],
+      outputGuardrailsTriggered: [],
+    } as never),
+  })),
+}))
+
+jest.mock('../src/runner-router', () => ({
+  AIAgentRouterRunner: jest.fn().mockImplementation(() => ({
     run: jest.fn().mockResolvedValue({
       messages: [],
       toolsExecuted: [],
@@ -108,6 +162,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     })
 
   const mockAiAgentArgs: AiAgentArgs = {
+    type: AiAgentType.Worker,
     name: 'Test Agent',
     instructions: 'Test instructions',
     model: 'gpt-4.1-mini',
@@ -120,6 +175,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedBuilderArgs = null
+    capturedRouterAgentConfig = null
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -230,6 +286,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     const request = createMockRequest()
     const customAiAgentArgs: AiAgentArgs = {
+      type: AiAgentType.Worker,
       name: 'Custom Agent',
       instructions: 'Custom instructions for the agent',
       model: 'gpt-4.1-mini',
@@ -252,6 +309,50 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(capturedBuilderArgs.inputGuardrailRules).toEqual([
       { name: 'is_offensive', description: 'Check for offensive content' },
     ])
+  })
+
+  it('should pass input guardrails to router agents', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    const routerArgs: AIAgentRouterArgs = {
+      type: AiAgentType.Router,
+      name: 'Router Agent',
+      instructions: 'Route the conversation to the right worker',
+      model: 'gpt-4.1-mini',
+      verbosity: VerbosityLevel.Medium,
+      inputGuardrailRules: [
+        {
+          name: 'is_offensive',
+          description: 'Check for offensive content',
+        },
+      ],
+      agents: [
+        {
+          type: AiAgentType.Worker,
+          name: 'Support Worker',
+          description: 'Handles support questions',
+          instructions: 'Answer support questions',
+          model: 'gpt-4.1-mini',
+          verbosity: VerbosityLevel.Medium,
+          activeTools: [],
+          sourceIds: [],
+          inputGuardrailRules: [],
+        },
+      ],
+    }
+
+    await plugin.getInference(request, routerArgs)
+
+    const routerConfig = capturedRouterAgentConfig
+    if (!routerConfig) {
+      throw new Error('Router agent was not created')
+    }
+    expect(routerConfig.name).toBe('Router Agent')
+    expect(routerConfig.inputGuardrails).toHaveLength(1)
+    expect(routerConfig.inputGuardrails?.[0].name).toBe('InputGuardrail')
   })
 
   it('should pass contact_info from session.user', async () => {

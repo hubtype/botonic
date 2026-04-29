@@ -1,4 +1,5 @@
 import { FlowAiAgent } from './flow-ai-agent'
+import { FlowAiAgentRouter } from './flow-ai-agent-router'
 import { FlowBotAction } from './flow-bot-action'
 import { FlowCaptureUserInput } from './flow-capture-user-input'
 import { FlowCarousel } from './flow-carousel'
@@ -24,6 +25,7 @@ export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
 export { FlowElement } from './flow-element'
 export {
+  FlowAiAgentRouter as FlowAiAgentOrchestration,
   FlowAiAgent,
   FlowBotAction,
   FlowCaptureUserInput,
@@ -63,5 +65,6 @@ export type FlowContent =
   | FlowCustomConditional
   | FlowGoToFlow
   | FlowCaptureUserInput
+  | FlowAiAgentRouter
 
 export { DISABLED_MEMORY_LENGTH }

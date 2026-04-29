@@ -1,5 +1,5 @@
 import { WhatsappCTAUrlHeaderType } from '@botonic/react'
-
+import { FlowAiAgentRouter } from '../content-fields/flow-ai-agent-router'
 import type { FlowButton } from '../content-fields/flow-button'
 import { HtButtonStyle } from '../content-fields/hubtype-fields'
 import {
@@ -14,14 +14,29 @@ import {
   FlowWhatsappTemplate,
 } from '../content-fields/index'
 
-interface AiAgentContentAndContentsBeforeAiAgent {
-  aiAgentContent: FlowAiAgent
-  contentsBeforeAiAgent: FlowContent[]
-}
+type AiAgentContentAndContentsBeforeAiAgent =
+  | {
+      aiAgentContent: FlowAiAgent
+      contentsBeforeAiAgent: FlowContent[]
+    }
+  | {
+      aiAgentRouterContent: FlowAiAgentRouter
+      contentsBeforeAiAgentRouter: FlowContent[]
+    }
 
 export function splitAiAgentContents(
   contents: FlowContent[]
 ): AiAgentContentAndContentsBeforeAiAgent | undefined {
+  const aiAgentRouterIndex = contents.findIndex(
+    content => content instanceof FlowAiAgentRouter
+  )
+  if (aiAgentRouterIndex >= 0) {
+    return {
+      aiAgentRouterContent: contents[aiAgentRouterIndex] as FlowAiAgentRouter,
+      contentsBeforeAiAgentRouter: contents.slice(0, aiAgentRouterIndex),
+    }
+  }
+
   const aiAgentIndex = contents.findIndex(
     content => content instanceof FlowAiAgent
   )

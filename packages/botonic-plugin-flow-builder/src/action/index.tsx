@@ -7,7 +7,11 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import { FlowAiAgent, type FlowContent } from '../content-fields'
+import {
+  FlowAiAgent,
+  FlowAiAgentOrchestration,
+  type FlowContent,
+} from '../content-fields'
 import { filterContents } from '../filters'
 import { splitAiAgentContents } from '../utils/ai-agent'
 import { getFlowBuilderActionContext } from './context'
@@ -58,13 +62,28 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     const filteredContents = await filterContents(botContext, contents)
 
     for (const content of filteredContents) {
-      if (content instanceof FlowAiAgent) {
+      if (
+        content instanceof FlowAiAgent ||
+        content instanceof FlowAiAgentOrchestration
+      ) {
         const splitContents = splitAiAgentContents(filteredContents)
         if (!splitContents) {
           continue
         }
-        const { contentsBeforeAiAgent } = splitContents
-        await content.processContent(botContext, contentsBeforeAiAgent)
+
+        if ('aiAgentRouterContent' in splitContents) {
+          const { aiAgentRouterContent, contentsBeforeAiAgentRouter } =
+            splitContents
+          await aiAgentRouterContent.processContent(
+            botContext,
+            contentsBeforeAiAgentRouter
+          )
+        }
+
+        if ('aiAgentContent' in splitContents) {
+          const { aiAgentContent, contentsBeforeAiAgent } = splitContents
+          await aiAgentContent.processContent(botContext, contentsBeforeAiAgent)
+        }
       } else {
         await content.processContent(botContext)
       }

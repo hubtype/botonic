@@ -2,7 +2,7 @@
 import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
 
 import {
-  createInputGuardrail,
+  createInputGuardrails,
   type GuardrailTrackingContext,
 } from '../../src/guardrails/input'
 import type { LLMConfig } from '../../src/llm-config'
@@ -35,7 +35,7 @@ jest.mock('../../src/constants', () => ({
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
 }))
 
-describe('createInputGuardrail', () => {
+describe('createInputGuardrails', () => {
   const mockRules: GuardrailRule[] = [
     {
       name: 'is_offensive',
@@ -93,7 +93,7 @@ describe('createInputGuardrail', () => {
   })
 
   it('should create a guardrail with the correct configuration', () => {
-    const guardrail = createInputGuardrail(
+    const [guardrail] = createInputGuardrails(
       mockRules,
       mockLlmConfig,
       mockTrackingContext
@@ -109,6 +109,17 @@ describe('createInputGuardrail', () => {
     })
   })
 
+  it('should return no guardrails when no rules are configured', () => {
+    const guardrails = createInputGuardrails(
+      [],
+      mockLlmConfig,
+      mockTrackingContext
+    )
+
+    expect(guardrails).toEqual([])
+    expect(Agent).not.toHaveBeenCalled()
+  })
+
   it('should return triggered guardrails when rules are violated', async () => {
     const mockAgentOutput = {
       finalOutput: {
@@ -118,7 +129,7 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(
+    const [guardrail] = createInputGuardrails(
       mockRules,
       mockLlmConfig,
       mockTrackingContext
@@ -159,7 +170,7 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(
+    const [guardrail] = createInputGuardrails(
       mockRules,
       mockLlmConfig,
       mockTrackingContext
@@ -187,7 +198,7 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(
+    const [guardrail] = createInputGuardrails(
       mockRules,
       mockLlmConfig,
       mockTrackingContext
@@ -219,7 +230,7 @@ describe('createInputGuardrail', () => {
     }
     mockRunnerRun.mockResolvedValue(mockAgentOutput)
 
-    const guardrail = createInputGuardrail(
+    const [guardrail] = createInputGuardrails(
       mockRules,
       mockLlmConfig,
       mockTrackingContext

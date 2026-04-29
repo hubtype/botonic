@@ -1,5 +1,6 @@
 import {
   type AgenticOutputMessage,
+  AiAgentType,
   type BotContext,
   EventAction,
   type EventAiAgent,
@@ -101,13 +102,14 @@ export class FlowAiAgent extends ContentFieldsBase {
     const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
       botContext,
       {
+        type: AiAgentType.Worker,
         name: this.name,
         instructions: this.instructions,
         model: this.model,
         verbosity: this.verbosity,
-        activeTools: this.activeTools,
+        activeTools: this.activeTools ?? [],
         inputGuardrailRules: activeInputGuardrailRules,
-        sourceIds: this.sources?.map(source => source.id),
+        sourceIds: this.sources?.map(source => source.id) ?? [],
         outputMessagesSchemas: [FlowBuilderContentSchema],
         previousHubtypeMessages: previousHubtypeContents,
       }

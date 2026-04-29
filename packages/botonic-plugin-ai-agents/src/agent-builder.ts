@@ -8,7 +8,7 @@ import type { z } from 'zod'
 
 import { OPENAI_PROVIDER } from './constants'
 import type { DebugLogger } from './debug-logger'
-import { createInputGuardrail } from './guardrails'
+import { createInputGuardrails } from './guardrails'
 import type { GuardrailTrackingContext } from './guardrails/input'
 import type { LLMConfig } from './llm-config'
 import { getOutputSchema, type OutputSchema } from './structured-output'
@@ -56,14 +56,11 @@ export class AIAgentBuilder<
     this.inputGuardrails = []
     this.llmConfig = options.llmConfig
     this.logger = options.logger
-    if (options.inputGuardrailRules.length > 0) {
-      const inputGuardrail = createInputGuardrail(
-        options.inputGuardrailRules,
-        options.llmConfig,
-        options.guardrailTrackingContext
-      )
-      this.inputGuardrails.push(inputGuardrail)
-    }
+    this.inputGuardrails = createInputGuardrails(
+      options.inputGuardrailRules,
+      options.llmConfig,
+      options.guardrailTrackingContext
+    )
   }
 
   build(): AIAgent<TPlugins, TExtraData> {
