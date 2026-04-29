@@ -28,7 +28,7 @@ export class FlowLocale {
   }
 
   private isLanguageDetectionEnabled(): boolean {
-    return !!this.botContext.settings.LANGUAGE_DETECTION_ENABLED
+    return !!this.botContext.settings?.LANGUAGE_DETECTION_ENABLED
   }
 
   /**
