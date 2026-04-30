@@ -12,7 +12,11 @@ import type { DebugLogger } from './debug-logger'
 import { createInputGuardrails } from './guardrails'
 import type { GuardrailTrackingContext } from './guardrails/input'
 import type { LLMConfig } from './llm-config'
-import { getOutputSchema, type OutputSchema } from './structured-output'
+import {
+  getOutputInstructions,
+  getOutputSchema,
+  type OutputSchema,
+} from './structured-output'
 import {
   createRetrieveKnowledge,
   mandatoryTools,
@@ -116,7 +120,8 @@ export class AIAgentBuilder<
       modelSettings.text = { ...this.llmConfig.modelSettings.text }
     }
 
-    if (hasRetrieveKnowledge && this.llmConfig.modelName.includes('gpt-4')) {
+    if (hasRetrieveKnowledge) {
+      // && this.llmConfig.modelName.includes('gpt-4')) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
     }
 
@@ -132,7 +137,7 @@ export class AIAgentBuilder<
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
     const campaignInstructions = this.getCampaignInstructions(campaignsContext)
-    const outputInstructions = this.getOutputInstructions()
+    const outputInstructions = getOutputInstructions()
     return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
   }
 
@@ -176,21 +181,6 @@ export class AIAgentBuilder<
           `<campaign_context_${index + 1}>\n${campaign.agent_context}\n</campaign_context_${index + 1}>`
       )
       .join('\n')
-  }
-
-  private getOutputInstructions(): string {
-    const example = {
-      messages: [
-        {
-          type: 'text',
-          content: {
-            text: 'Hello, how can I help you today?',
-          },
-        },
-      ],
-    }
-    const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `<output>\n${output}\n</output>`
   }
 
   private addHubtypeTools(

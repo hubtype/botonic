@@ -30,6 +30,7 @@ import { LLMConfig } from './llm-config'
 import { AIAgentRunner } from './runner'
 import { AIAgentRouterRunner } from './runner-router'
 import { HubtypeApiClient } from './services/hubtype-api-client'
+import { getOutputInstructions, getOutputSchema } from './structured-output'
 import type {
   AgenticInputMessage,
   AIAgent,
@@ -172,7 +173,7 @@ export default class BotonicPluginAiAgents<
       messages
     )
 
-    console.log(' AI Agent Worker: ', agent, llmConfig)
+    console.log(' AI Agent Worker: ', agent)
     // Run agent
     const runner = new AIAgentRunner<TPlugins, TExtraData>(
       agent,
@@ -248,8 +249,9 @@ export default class BotonicPluginAiAgents<
       name,
       model: await routerLlmConfig.getModel(),
       modelSettings: routerModelSettings,
-      instructions: RECOMMENDED_PROMPT_PREFIX + instructions,
+      instructions: `${RECOMMENDED_PROMPT_PREFIX}${instructions}\n\n${getOutputInstructions()}`,
       handoffs: handoffAgents,
+      outputType: getOutputSchema(aiAgentArgs.outputMessagesSchemas || []),
       inputGuardrails,
     }) as AIAgent<TPlugins, TExtraData>
 
@@ -280,7 +282,7 @@ export default class BotonicPluginAiAgents<
       this.logger
     )
 
-    console.log(' AI Agent Router: ', agentRouter, routerLlmConfig)
+    console.log(' AI Agent Router: ', agentRouter, messages, context)
     return await runner.run(messages, context)
   }
 

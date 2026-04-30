@@ -100,4 +100,100 @@ describe('AIAgentRouterRunner', () => {
     expect(result.messages).toEqual([{ type: 'text', content: { text: 'Hi' } }])
     expect(result.exit).toBe(false)
   })
+
+  it('should return all direct router messages when there is no exit message', async () => {
+    const messages = [
+      { type: 'text', content: { text: 'Hi' } },
+      { type: 'text', content: { text: 'How can I help?' } },
+    ]
+    mockRunnerRunImpl.mockResolvedValueOnce({
+      finalOutput: { messages },
+      state: { _currentAgent: { name: 'RouterAgent' } },
+    })
+
+    const runner = new AIAgentRouterRunner(
+      mockAgent,
+      mockLlmConfig,
+      'test-inference-id',
+      mockLogger
+    )
+
+    const result = await runner.run(sampleMessages, mockContext)
+
+    expect(result.messages).toEqual(messages)
+    expect(result.exit).toBe(false)
+    expect(result.memoryLength).toBe(sampleMessages.length)
+    expect(result.toolsExecuted).toEqual([])
+    expect(result.error).toBe(false)
+  })
+
+  it('should exit when finalOutput is missing', async () => {
+    mockRunnerRunImpl.mockResolvedValueOnce({
+      state: { _currentAgent: { name: 'RouterAgent' } },
+    })
+
+    const runner = new AIAgentRouterRunner(
+      mockAgent,
+      mockLlmConfig,
+      'test-inference-id',
+      mockLogger
+    )
+
+    const result = await runner.run(sampleMessages, mockContext)
+
+    expect(result.messages).toEqual([])
+    expect(result.exit).toBe(true)
+    expect(result.memoryLength).toBe(sampleMessages.length)
+    expect(result.toolsExecuted).toEqual([])
+    expect(result.error).toBe(false)
+  })
+
+  it('should exit when finalOutput has no messages', async () => {
+    mockRunnerRunImpl.mockResolvedValueOnce({
+      finalOutput: { messages: [] },
+      state: { _currentAgent: { name: 'RouterAgent' } },
+    })
+
+    const runner = new AIAgentRouterRunner(
+      mockAgent,
+      mockLlmConfig,
+      'test-inference-id',
+      mockLogger
+    )
+
+    const result = await runner.run(sampleMessages, mockContext)
+
+    expect(result.messages).toEqual([])
+    expect(result.exit).toBe(true)
+    expect(result.memoryLength).toBe(sampleMessages.length)
+    expect(result.toolsExecuted).toEqual([])
+    expect(result.error).toBe(false)
+  })
+
+  it('should exit and drop messages when an exit message is present', async () => {
+    mockRunnerRunImpl.mockResolvedValueOnce({
+      finalOutput: {
+        messages: [
+          { type: 'text', content: { text: 'Goodbye' } },
+          { type: 'exit' },
+        ],
+      },
+      state: { _currentAgent: { name: 'RouterAgent' } },
+    })
+
+    const runner = new AIAgentRouterRunner(
+      mockAgent,
+      mockLlmConfig,
+      'test-inference-id',
+      mockLogger
+    )
+
+    const result = await runner.run(sampleMessages, mockContext)
+
+    expect(result.messages).toEqual([])
+    expect(result.exit).toBe(true)
+    expect(result.memoryLength).toBe(sampleMessages.length)
+    expect(result.toolsExecuted).toEqual([])
+    expect(result.error).toBe(false)
+  })
 })

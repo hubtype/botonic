@@ -22,12 +22,15 @@ import BotonicPluginAiAgents from '../src/index'
 // Store the captured AIAgentBuilder arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
+type MockOutputType = {
+  safeParse: (value: unknown) => { success: boolean }
+}
 type MockAgentConfig = {
   name: string
   instructions?: string
   model?: unknown
   modelSettings?: unknown
-  outputType?: unknown
+  outputType?: MockOutputType
   handoffs?: unknown
   inputGuardrails?: { name: string }[]
 }
@@ -42,6 +45,7 @@ jest.mock('@openai/agents', () => {
       instructions: config.instructions,
       model: config.model,
       modelSettings: config.modelSettings,
+      outputType: config.outputType,
       handoffs: config.handoffs,
       inputGuardrails: config.inputGuardrails,
     }
@@ -362,6 +366,20 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(routerConfig.name).toBe('Router Agent')
     expect(routerConfig.model).toEqual({ id: 'resolved-gpt-4.1-mini' })
     expect(routerConfig.modelSettings).toEqual({ temperature: 0 })
+    expect(routerConfig.instructions).toContain(
+      'Route the conversation to the right worker'
+    )
+    expect(routerConfig.instructions).toContain('<output>')
+    const outputType = routerConfig.outputType
+    if (!outputType) {
+      throw new Error('Router agent outputType was not created')
+    }
+    expect(outputType.safeParse).toBeDefined()
+    expect(
+      outputType.safeParse({
+        messages: [{ type: 'text', content: { text: 'Hi' } }],
+      }).success
+    ).toBe(true)
     expect(routerConfig.inputGuardrails).toHaveLength(1)
     expect(routerConfig.inputGuardrails?.[0].name).toBe('InputGuardrail')
   })
