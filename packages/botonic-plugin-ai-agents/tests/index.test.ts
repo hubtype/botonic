@@ -366,6 +366,47 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(routerConfig.inputGuardrails?.[0].name).toBe('InputGuardrail')
   })
 
+  it('should pass router worker sourceIds to the handoff agent builder', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    const routerArgs: AIAgentRouterArgs = {
+      type: AiAgentType.Router,
+      name: 'Router Agent',
+      instructions: 'Route the conversation to the right worker',
+      model: 'gpt-4.1-mini',
+      verbosity: VerbosityLevel.Medium,
+      agents: [
+        {
+          type: AiAgentType.Worker,
+          name: 'Knowledge Worker',
+          description: 'Handles knowledge questions',
+          instructions: 'Answer with knowledge sources',
+          model: 'gpt-4.1-mini',
+          verbosity: VerbosityLevel.Medium,
+          activeTools: [],
+          sourceIds: ['source-1', 'source-2'],
+          inputGuardrailRules: [],
+        },
+      ],
+    }
+
+    await plugin.getInference(request, routerArgs)
+
+    expect(capturedBuilderArgs).toBeDefined()
+    expect(capturedBuilderArgs.name).toBe('Knowledge Worker')
+    expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
+    expect(capturedRouterAgentConfig?.handoffs).toEqual([
+      expect.objectContaining({
+        agent: expect.objectContaining({
+          name: 'Knowledge Worker',
+        }),
+      }),
+    ])
+  })
+
   it('should pass contact_info from session.user', async () => {
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',

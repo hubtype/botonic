@@ -13,7 +13,11 @@ import { createInputGuardrails } from './guardrails'
 import type { GuardrailTrackingContext } from './guardrails/input'
 import type { LLMConfig } from './llm-config'
 import { getOutputSchema, type OutputSchema } from './structured-output'
-import { mandatoryTools, retrieveKnowledge } from './tools'
+import {
+  createRetrieveKnowledge,
+  mandatoryTools,
+  RETRIEVE_KNOWLEDGE_TOOL_NAME,
+} from './tools'
 import type { AIAgent, Context, GuardrailRule, Tool } from './types'
 
 interface AIAgentBuilderOptions<
@@ -68,7 +72,9 @@ export class AIAgentBuilder<
     // Azure OpenAI uses deployment name instead.
     const model = this.llmConfig.modelName
     const resolvedModel = await this.llmConfig.getModel()
-    const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
+    const hasRetrieveKnowledge = this.tools.some(
+      tool => tool.name === RETRIEVE_KNOWLEDGE_TOOL_NAME
+    )
     const modelSettings = this.getAgentModelSettings(hasRetrieveKnowledge)
 
     this.inputGuardrails = await createInputGuardrails(
@@ -111,7 +117,7 @@ export class AIAgentBuilder<
     }
 
     if (hasRetrieveKnowledge && this.llmConfig.modelName.includes('gpt-4')) {
-      modelSettings.toolChoice = retrieveKnowledge.name
+      modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
     }
 
     return modelSettings
@@ -193,7 +199,7 @@ export class AIAgentBuilder<
   ): Tool<TPlugins, TExtraData>[] {
     const hubtypeTools: Tool[] = [...mandatoryTools]
     if (sourceIds.length > 0) {
-      hubtypeTools.push(retrieveKnowledge)
+      hubtypeTools.push(createRetrieveKnowledge(sourceIds))
     }
     return [...hubtypeTools, ...tools]
   }

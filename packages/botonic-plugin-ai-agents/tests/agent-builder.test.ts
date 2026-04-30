@@ -34,11 +34,13 @@ jest.mock('@openai/agents', () => ({
 }))
 
 jest.mock('../src/tools', () => ({
-  mandatoryTools: [],
-  retrieveKnowledge: {
+  createRetrieveKnowledge: jest.fn((sourceIds: string[]) => ({
     name: 'retrieve_knowledge',
     description: 'Consult the knowledge base for information before answering.',
-  },
+    sourceIds,
+  })),
+  mandatoryTools: [],
+  RETRIEVE_KNOWLEDGE_TOOL_NAME: 'retrieve_knowledge',
 }))
 
 // Mock constants - can be overridden per test
@@ -170,6 +172,12 @@ describe('AIAgentBuilder', () => {
     expect(aiAgent.name).toBe(agentName)
     expect(aiAgent.instructions).toBe(expectedInstructions)
     expect(aiAgent.tools).toHaveLength(3) // 2 custom tools + 1 retrieveKnowledge tool
+    expect(aiAgent.tools[0]).toEqual(
+      expect.objectContaining({
+        name: 'retrieve_knowledge',
+        sourceIds,
+      })
+    )
   })
 
   describe('Structured Output Schema Validation', () => {
@@ -574,8 +582,7 @@ describe('AIAgentBuilder', () => {
   })
 
   describe('Provider logic (openai vs azure)', () => {
-    it('should configure modelSettings for azure provider with retrieveKnowledge tool', async () => {
-      // Default OPENAI_PROVIDER is 'azure' from constants
+    it('should configure toolChoice for gpt-4 models with retrieveKnowledge tool', async () => {
       await new AIAgentBuilder({
         name: agentName,
         instructions: agentInstructions,
@@ -589,7 +596,6 @@ describe('AIAgentBuilder', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).build()
 
-      // When using azure provider with retrieveKnowledge, logModelSettings is called
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
         expect.objectContaining({
           provider: 'azure',
@@ -600,6 +606,39 @@ describe('AIAgentBuilder', () => {
       expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
         'retrieve_knowledge'
       )
+    })
+
+    it('should NOT set toolChoice for non gpt-4 models even with retrieveKnowledge', async () => {
+      const nonGpt4LlmConfig = {
+        ...mockLlmConfig,
+        modelName: 'gpt-5-mini',
+        modelSettings: {
+          reasoning: { effort: 'none' as const },
+          text: { verbosity: 'medium' as const },
+          toolChoice: undefined as string | undefined,
+        },
+      } as unknown as LLMConfig
+
+      await new AIAgentBuilder({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: nonGpt4LlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: ['source-1'],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).build()
+
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          toolChoice: undefined,
+          hasRetrieveKnowledge: true,
+        })
+      )
+      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should NOT set toolChoice when sourceIds is empty (no retrieveKnowledge)', async () => {
@@ -771,7 +810,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     expect(capturedAgentConfig.model).toBe(resolvedModel)
   })
 
-  it('should NOT set toolChoice for openai provider even with retrieveKnowledge', async () => {
+  it('should set toolChoice for gpt-4 models even with openai provider', async () => {
     await new AIAgentBuilder({
       name: agentName,
       instructions: agentInstructions,
@@ -788,8 +827,12 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
         provider: 'openai',
+        toolChoice: 'retrieve_knowledge',
         hasRetrieveKnowledge: true,
       })
+    )
+    expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+      'retrieve_knowledge'
     )
   })
 })

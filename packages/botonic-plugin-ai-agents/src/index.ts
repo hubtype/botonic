@@ -156,7 +156,6 @@ export default class BotonicPluginAiAgents<
     // Build context
     const context: Context<TPlugins, TExtraData> = {
       authToken,
-      sourceIds: aiAgentArgs.sourceIds || [],
       knowledgeUsed: {
         query: '',
         sourceIds: [],
@@ -264,7 +263,6 @@ export default class BotonicPluginAiAgents<
     // Build context
     const context: Context<TPlugins, TExtraData> = {
       authToken,
-      sourceIds: [],
       knowledgeUsed: {
         query: '',
         sourceIds: [],

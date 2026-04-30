@@ -53,7 +53,6 @@ const mockAgent = {
 
 const mockContext = {
   authToken: 'test-token',
-  sourceIds: [],
   knowledgeUsed: {
     query: '',
     sourceIds: [],

@@ -71,7 +71,7 @@ const mockRetrieveKnowledge = {
 
 jest.mock('../src/tools', () => ({
   mandatoryTools: [],
-  retrieveKnowledge: mockRetrieveKnowledge,
+  RETRIEVE_KNOWLEDGE_TOOL_NAME: 'retrieve_knowledge',
 }))
 
 const mockConstants = {
@@ -125,7 +125,6 @@ function buildMockAgent(
 function buildMockContext(): Context {
   return {
     authToken: 'test-token',
-    sourceIds: [],
     knowledgeUsed: {
       query: '',
       sourceIds: ['src-1'],

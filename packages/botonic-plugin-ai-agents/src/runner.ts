@@ -14,7 +14,7 @@ import type { DebugLogger } from './debug-logger'
 import { getApiVersion, type LLMConfig } from './llm-config'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from './services/types'
-import { retrieveKnowledge } from './tools'
+import { RETRIEVE_KNOWLEDGE_TOOL_NAME } from './tools'
 import type {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -251,7 +251,7 @@ export class AIAgentRunner<
       toolResults,
     }
 
-    if (toolName === retrieveKnowledge.name) {
+    if (toolName === RETRIEVE_KNOWLEDGE_TOOL_NAME) {
       return {
         ...toolExecution,
         knowledgebaseSourcesIds: context.knowledgeUsed.sourceIds,
