@@ -22,30 +22,35 @@ import BotonicPluginAiAgents from '../src/index'
 // Store the captured AIAgentBuilder arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
-type MockOutputType = {
-  safeParse: (value: unknown) => { success: boolean }
+type MockRouterBuilderArgs = {
+  name: string
+  instructions: string
+  model: string
+  handoffs: unknown[]
+  inputGuardrailRules: unknown[]
+  outputMessagesSchemas: unknown[]
+  maxRetries: number
+  timeout: number
+  guardrailTrackingContext: unknown
 }
+let capturedRouterBuilderArgs: MockRouterBuilderArgs | null = null
 type MockAgentConfig = {
   name: string
   instructions?: string
   model?: unknown
   modelSettings?: unknown
-  outputType?: MockOutputType
   handoffs?: unknown
   inputGuardrails?: { name: string }[]
 }
 type MockAgentInstance = MockAgentConfig
-let capturedRouterAgentConfig: MockAgentConfig | null = null
 
 jest.mock('@openai/agents', () => {
   const create = jest.fn((config: MockAgentConfig): MockAgentInstance => {
-    capturedRouterAgentConfig = config
     return {
       name: config.name,
       instructions: config.instructions,
       model: config.model,
       modelSettings: config.modelSettings,
-      outputType: config.outputType,
       handoffs: config.handoffs,
       inputGuardrails: config.inputGuardrails,
     }
@@ -57,7 +62,6 @@ jest.mock('@openai/agents', () => {
         instructions: config.instructions,
         model: config.model,
         modelSettings: config.modelSettings,
-        outputType: config.outputType,
       })
     ),
     { create }
@@ -96,6 +100,30 @@ jest.mock('../src/agent-builder', () => ({
       })),
     }
   }),
+}))
+
+jest.mock('../src/router-agent-builder', () => ({
+  AIAgentRouterBuilder: jest
+    .fn()
+    .mockImplementation((args: unknown) => {
+      const routerBuilderArgs = args as MockRouterBuilderArgs
+      capturedRouterBuilderArgs = routerBuilderArgs
+      return {
+        build: jest.fn(async () => ({
+          llmConfig: {
+            modelName: routerBuilderArgs.model,
+            modelSettings: { temperature: 0 },
+            modelProvider: {},
+          },
+          agent: {
+            name: routerBuilderArgs.name,
+            instructions: routerBuilderArgs.instructions,
+            modelSettings: { temperature: 0 },
+            handoffs: routerBuilderArgs.handoffs,
+          },
+        })),
+      }
+    }),
 }))
 
 // Mock AIAgentRunner to avoid actual execution
@@ -188,7 +216,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedBuilderArgs = null
-    capturedRouterAgentConfig = null
+    capturedRouterBuilderArgs = null
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -324,7 +352,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     ])
   })
 
-  it('should pass input guardrails to router agents', async () => {
+  it('should pass router configuration to AIAgentRouterBuilder', async () => {
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
     })
@@ -359,29 +387,37 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, routerArgs)
 
-    const routerConfig = capturedRouterAgentConfig
-    if (!routerConfig) {
-      throw new Error('Router agent was not created')
+    const routerBuilderArgs = capturedRouterBuilderArgs
+    if (!routerBuilderArgs) {
+      throw new Error('Router builder was not created')
     }
-    expect(routerConfig.name).toBe('Router Agent')
-    expect(routerConfig.model).toEqual({ id: 'resolved-gpt-4.1-mini' })
-    expect(routerConfig.modelSettings).toEqual({ temperature: 0 })
-    expect(routerConfig.instructions).toContain(
+    expect(routerBuilderArgs.name).toBe('Router Agent')
+    expect(routerBuilderArgs.instructions).toBe(
       'Route the conversation to the right worker'
     )
-    expect(routerConfig.instructions).toContain('<output>')
-    const outputType = routerConfig.outputType
-    if (!outputType) {
-      throw new Error('Router agent outputType was not created')
-    }
-    expect(outputType.safeParse).toBeDefined()
-    expect(
-      outputType.safeParse({
-        messages: [{ type: 'text', content: { text: 'Hi' } }],
-      }).success
-    ).toBe(true)
-    expect(routerConfig.inputGuardrails).toHaveLength(1)
-    expect(routerConfig.inputGuardrails?.[0].name).toBe('InputGuardrail')
+    expect(routerBuilderArgs.model).toBe('gpt-4.1-mini')
+    expect(routerBuilderArgs.inputGuardrailRules).toEqual([
+      {
+        name: 'is_offensive',
+        description: 'Check for offensive content',
+      },
+    ])
+    expect(routerBuilderArgs.outputMessagesSchemas).toEqual([])
+    expect(routerBuilderArgs.maxRetries).toBe(2)
+    expect(routerBuilderArgs.timeout).toBe(16000)
+    expect(routerBuilderArgs.guardrailTrackingContext).toEqual({
+      botId: 'bot-123',
+      isTest: false,
+      authToken: 'test-auth-token',
+      inferenceId: expect.any(String),
+    })
+    expect(routerBuilderArgs.handoffs).toEqual([
+      expect.objectContaining({
+        agent: expect.objectContaining({
+          name: 'Support Worker',
+        }),
+      }),
+    ])
   })
 
   it('should pass router worker sourceIds to the handoff agent builder', async () => {
@@ -416,7 +452,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(capturedBuilderArgs).toBeDefined()
     expect(capturedBuilderArgs.name).toBe('Knowledge Worker')
     expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
-    expect(capturedRouterAgentConfig?.handoffs).toEqual([
+    expect(capturedRouterBuilderArgs?.handoffs).toEqual([
       expect.objectContaining({
         agent: expect.objectContaining({
           name: 'Knowledge Worker',

@@ -7,10 +7,8 @@ import {
   type HubtypeAssistantMessage,
   type Plugin,
   type ResolvedPlugins,
-  VerbosityLevel,
 } from '@botonic/core'
-import { Agent, handoff, setTracingDisabled, tool } from '@openai/agents'
-import { RECOMMENDED_PROMPT_PREFIX } from '@openai/agents-core/extensions'
+import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
 
@@ -22,18 +20,13 @@ import {
   MAX_MEMORY_LENGTH,
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
-import {
-  createInputGuardrails,
-  type GuardrailTrackingContext,
-} from './guardrails'
 import { LLMConfig } from './llm-config'
+import { AIAgentRouterBuilder } from './router-agent-builder'
 import { AIAgentRunner } from './runner'
 import { AIAgentRouterRunner } from './runner-router'
 import { HubtypeApiClient } from './services/hubtype-api-client'
-import { getOutputInstructions, getOutputSchema } from './structured-output'
 import type {
   AgenticInputMessage,
-  AIAgent,
   Context,
   CustomTool,
   InferenceResponse,
@@ -217,43 +210,23 @@ export default class BotonicPluginAiAgents<
       })
     )
 
-    const routerLlmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      model,
-      VerbosityLevel.Medium
-    )
-    const guardrailTrackingContext: GuardrailTrackingContext = {
-      botId: botContext.session.bot.id,
-      isTest: botContext.session.is_test_integration,
-      authToken,
-      inferenceId,
-    }
-    const inputGuardrails = await createInputGuardrails(
-      aiAgentArgs.inputGuardrailRules || [],
-      routerLlmConfig,
-      guardrailTrackingContext
-    )
-    const routerModelSettings = { ...routerLlmConfig.modelSettings }
-    if (routerLlmConfig.modelSettings.reasoning) {
-      routerModelSettings.reasoning = {
-        ...routerLlmConfig.modelSettings.reasoning,
-      }
-    }
-    if (routerLlmConfig.modelSettings.text) {
-      routerModelSettings.text = { ...routerLlmConfig.modelSettings.text }
-    }
-
-    // Agent.create is typed as Agent<UnknownContext>; we run with Context<TPlugins, TExtraData>.
-    const agentRouter = Agent.create({
-      name,
-      model: await routerLlmConfig.getModel(),
-      modelSettings: routerModelSettings,
-      instructions: `${RECOMMENDED_PROMPT_PREFIX}${instructions}\n\n${getOutputInstructions()}`,
-      handoffs: handoffAgents,
-      outputType: getOutputSchema(aiAgentArgs.outputMessagesSchemas || []),
-      inputGuardrails,
-    }) as AIAgent<TPlugins, TExtraData>
+    const { llmConfig: routerLlmConfig, agent: agentRouter } =
+      await new AIAgentRouterBuilder<TPlugins, TExtraData>({
+        name,
+        instructions,
+        model,
+        handoffs: handoffAgents,
+        inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+        outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
+        maxRetries: this.maxRetries,
+        timeout: this.timeout,
+        guardrailTrackingContext: {
+          botId: botContext.session.bot.id,
+          isTest: botContext.session.is_test_integration,
+          authToken,
+          inferenceId,
+        },
+      }).build()
 
     // Get messages
     const messages = await this.getMessages(

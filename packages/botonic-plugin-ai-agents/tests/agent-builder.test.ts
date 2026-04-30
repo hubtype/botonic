@@ -608,7 +608,7 @@ describe('AIAgentBuilder', () => {
       )
     })
 
-    it('should NOT set toolChoice for non gpt-4 models even with retrieveKnowledge', async () => {
+    it('should set toolChoice for non gpt-4 models with retrieveKnowledge', async () => {
       const nonGpt4LlmConfig = {
         ...mockLlmConfig,
         modelName: 'gpt-5-mini',
@@ -634,11 +634,13 @@ describe('AIAgentBuilder', () => {
 
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
         expect.objectContaining({
-          toolChoice: undefined,
+          toolChoice: 'retrieve_knowledge',
           hasRetrieveKnowledge: true,
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+        'retrieve_knowledge'
+      )
     })
 
     it('should NOT set toolChoice when sourceIds is empty (no retrieveKnowledge)', async () => {
