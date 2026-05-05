@@ -1,4 +1,4 @@
-import { type ResolvedPlugins, VerbosityLevel } from '@botonic/core'
+import type { ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
   type AgentOutputType,
@@ -10,7 +10,7 @@ import type { z } from 'zod'
 
 import { createInputGuardrails } from './guardrails'
 import type { GuardrailTrackingContext } from './guardrails/input'
-import { LLMConfig } from './llm-config'
+import type { LLMConfig } from './llm-config'
 import {
   getOutputInstructions,
   getOutputSchema,
@@ -24,15 +24,13 @@ interface AIAgentRouterBuilderOptions<
 > {
   name: string
   instructions: string
-  model: string
+  llmConfig: LLMConfig
   handoffs: Handoff<
     Context<TPlugins, TExtraData>,
     AgentOutputType<typeof OutputSchema>
   >[]
   inputGuardrailRules: GuardrailRule[]
   outputMessagesSchemas?: z.ZodObject[]
-  maxRetries: number
-  timeout: number
   guardrailTrackingContext: GuardrailTrackingContext
 }
 
@@ -42,50 +40,37 @@ export class AIAgentRouterBuilder<
 > {
   private name: string
   private instructions: string
-  private model: string
+  private llmConfig: LLMConfig
   private handoffs: Handoff<
     Context<TPlugins, TExtraData>,
     AgentOutputType<typeof OutputSchema>
   >[]
   private inputGuardrailRules: GuardrailRule[]
   private outputMessagesSchemas: z.ZodObject[]
-  private maxRetries: number
-  private timeout: number
   private guardrailTrackingContext: GuardrailTrackingContext
 
   constructor(options: AIAgentRouterBuilderOptions<TPlugins, TExtraData>) {
     this.name = options.name
     this.instructions = options.instructions
-    this.model = options.model
+    this.llmConfig = options.llmConfig
     this.handoffs = options.handoffs
     this.inputGuardrailRules = options.inputGuardrailRules
     this.outputMessagesSchemas = options.outputMessagesSchemas || []
-    this.maxRetries = options.maxRetries
-    this.timeout = options.timeout
     this.guardrailTrackingContext = options.guardrailTrackingContext
   }
 
-  async build(): Promise<{
-    llmConfig: LLMConfig
-    agent: AIAgent<TPlugins, TExtraData>
-  }> {
-    const llmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      this.model,
-      VerbosityLevel.Medium
-    )
+  async build(): Promise<AIAgent<TPlugins, TExtraData>> {
     const inputGuardrails = await createInputGuardrails(
       this.inputGuardrailRules,
-      llmConfig,
+      this.llmConfig,
       this.guardrailTrackingContext
     )
-    const modelSettings = this.getRouterModelSettings(llmConfig)
+    const modelSettings = this.getRouterModelSettings()
 
     // Agent.create is typed as Agent<UnknownContext>; we run with Context<TPlugins, TExtraData>.
     const agent = Agent.create({
       name: this.name,
-      model: await llmConfig.getModel(),
+      model: await this.llmConfig.getModel(),
       modelSettings,
       instructions: `${RECOMMENDED_PROMPT_PREFIX}${this.instructions}\n\n${getOutputInstructions()}`,
       handoffs: this.handoffs,
@@ -93,16 +78,16 @@ export class AIAgentRouterBuilder<
       inputGuardrails,
     }) as AIAgent<TPlugins, TExtraData>
 
-    return { llmConfig, agent }
+    return agent
   }
 
-  private getRouterModelSettings(llmConfig: LLMConfig): ModelSettings {
-    const modelSettings: ModelSettings = { ...llmConfig.modelSettings }
-    if (llmConfig.modelSettings.reasoning) {
-      modelSettings.reasoning = { ...llmConfig.modelSettings.reasoning }
+  private getRouterModelSettings(): ModelSettings {
+    const modelSettings: ModelSettings = { ...this.llmConfig.modelSettings }
+    if (this.llmConfig.modelSettings.reasoning) {
+      modelSettings.reasoning = { ...this.llmConfig.modelSettings.reasoning }
     }
-    if (llmConfig.modelSettings.text) {
-      modelSettings.text = { ...llmConfig.modelSettings.text }
+    if (this.llmConfig.modelSettings.text) {
+      modelSettings.text = { ...this.llmConfig.modelSettings.text }
     }
     return modelSettings
   }

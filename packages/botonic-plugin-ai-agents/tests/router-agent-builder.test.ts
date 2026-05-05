@@ -1,4 +1,3 @@
-import { VerbosityLevel } from '@botonic/core'
 import type { AgentOutputType, Handoff, ModelSettings } from '@openai/agents'
 import { z } from 'zod'
 
@@ -44,10 +43,6 @@ const mockLlmConfig = {
   getModel: jest.fn().mockResolvedValue(mockResolvedModel),
 } as unknown as LLMConfig
 
-jest.mock('../src/llm-config', () => ({
-  LLMConfig: jest.fn(() => mockLlmConfig),
-}))
-
 const mockInputGuardrails = [{ name: 'InputGuardrail' }]
 const mockCreateInputGuardrails = jest
   .fn()
@@ -57,14 +52,13 @@ jest.mock('../src/guardrails', () => ({
   createInputGuardrails: mockCreateInputGuardrails,
 }))
 
-// Import after mocks are set up
-import { LLMConfig as MockedLLMConfig } from '../src/llm-config'
-import { AIAgentRouterBuilder } from '../src/router-agent-builder'
+import { AIAgentRouterBuilder } from '../src/agent-router-builder'
 
 describe('AIAgentRouterBuilder', () => {
-  const handoffs = [
-    { agentName: 'Support Worker' },
-  ] as unknown as Handoff<Context, AgentOutputType<typeof OutputSchema>>[]
+  const handoffs = [{ agentName: 'Support Worker' }] as unknown as Handoff<
+    Context,
+    AgentOutputType<typeof OutputSchema>
+  >[]
   const inputGuardrailRules: GuardrailRule[] = [
     { name: 'is_offensive', description: 'Check for offensive content' },
   ]
@@ -84,30 +78,21 @@ describe('AIAgentRouterBuilder', () => {
     const builder = new AIAgentRouterBuilder({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
-      model: 'gpt-4.1-mini',
+      llmConfig: mockLlmConfig,
       handoffs,
       inputGuardrailRules,
       outputMessagesSchemas: [],
-      maxRetries: 3,
-      timeout: 16000,
       guardrailTrackingContext,
     })
 
-    const result = await builder.build()
+    const agent = await builder.build()
 
-    expect(MockedLLMConfig).toHaveBeenCalledWith(
-      3,
-      16000,
-      'gpt-4.1-mini',
-      VerbosityLevel.Medium
-    )
     expect(mockCreateInputGuardrails).toHaveBeenCalledWith(
       inputGuardrailRules,
       mockLlmConfig,
       guardrailTrackingContext
     )
-    expect(result.llmConfig).toBe(mockLlmConfig)
-    expect(result.agent).toBe(capturedAgentConfig)
+    expect(agent).toBe(capturedAgentConfig)
 
     const agentConfig = capturedAgentConfig
     if (!agentConfig?.outputType) {
@@ -137,12 +122,10 @@ describe('AIAgentRouterBuilder', () => {
     const builder = new AIAgentRouterBuilder({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
-      model: 'gpt-4.1-mini',
+      llmConfig: mockLlmConfig,
       handoffs,
       inputGuardrailRules: [],
       outputMessagesSchemas: [customMessageSchema],
-      maxRetries: 3,
-      timeout: 16000,
       guardrailTrackingContext,
     })
 
@@ -164,12 +147,10 @@ describe('AIAgentRouterBuilder', () => {
     const builder = new AIAgentRouterBuilder({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
-      model: 'gpt-4.1-mini',
+      llmConfig: mockLlmConfig,
       handoffs,
       inputGuardrailRules: [],
       outputMessagesSchemas: [],
-      maxRetries: 3,
-      timeout: 16000,
       guardrailTrackingContext,
     })
 

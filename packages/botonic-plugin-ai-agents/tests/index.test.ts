@@ -18,19 +18,24 @@ import {
 } from '@jest/globals'
 
 import BotonicPluginAiAgents from '../src/index'
+import { LLMConfig as MockedLLMConfig } from '../src/llm-config'
 
 // Store the captured AIAgentBuilder arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
+type MockLlmConfig = {
+  modelName: string
+  modelSettings: { temperature: number }
+  modelProvider: Record<string, never>
+  getModel: () => Promise<{ id: string }>
+}
 type MockRouterBuilderArgs = {
   name: string
   instructions: string
-  model: string
+  llmConfig: MockLlmConfig
   handoffs: unknown[]
   inputGuardrailRules: unknown[]
   outputMessagesSchemas: unknown[]
-  maxRetries: number
-  timeout: number
   guardrailTrackingContext: unknown
 }
 let capturedRouterBuilderArgs: MockRouterBuilderArgs | null = null
@@ -102,28 +107,19 @@ jest.mock('../src/agent-builder', () => ({
   }),
 }))
 
-jest.mock('../src/router-agent-builder', () => ({
-  AIAgentRouterBuilder: jest
-    .fn()
-    .mockImplementation((args: unknown) => {
-      const routerBuilderArgs = args as MockRouterBuilderArgs
-      capturedRouterBuilderArgs = routerBuilderArgs
-      return {
-        build: jest.fn(async () => ({
-          llmConfig: {
-            modelName: routerBuilderArgs.model,
-            modelSettings: { temperature: 0 },
-            modelProvider: {},
-          },
-          agent: {
-            name: routerBuilderArgs.name,
-            instructions: routerBuilderArgs.instructions,
-            modelSettings: { temperature: 0 },
-            handoffs: routerBuilderArgs.handoffs,
-          },
-        })),
-      }
-    }),
+jest.mock('../src/agent-router-builder', () => ({
+  AIAgentRouterBuilder: jest.fn().mockImplementation((args: unknown) => {
+    const routerBuilderArgs = args as MockRouterBuilderArgs
+    capturedRouterBuilderArgs = routerBuilderArgs
+    return {
+      build: jest.fn(async () => ({
+        name: routerBuilderArgs.name,
+        instructions: routerBuilderArgs.instructions,
+        modelSettings: routerBuilderArgs.llmConfig.modelSettings,
+        handoffs: routerBuilderArgs.handoffs,
+      })),
+    }
+  }),
 }))
 
 // Mock AIAgentRunner to avoid actual execution
@@ -363,7 +359,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
       model: 'gpt-4.1-mini',
-      verbosity: VerbosityLevel.Medium,
+      verbosity: VerbosityLevel.High,
       inputGuardrailRules: [
         {
           name: 'is_offensive',
@@ -395,7 +391,16 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(routerBuilderArgs.instructions).toBe(
       'Route the conversation to the right worker'
     )
-    expect(routerBuilderArgs.model).toBe('gpt-4.1-mini')
+    expect(routerBuilderArgs.llmConfig).toMatchObject({
+      modelName: 'gpt-4.1-mini',
+      modelSettings: { temperature: 0 },
+    })
+    expect(MockedLLMConfig).toHaveBeenCalledWith(
+      2,
+      16000,
+      'gpt-4.1-mini',
+      VerbosityLevel.High
+    )
     expect(routerBuilderArgs.inputGuardrailRules).toEqual([
       {
         name: 'is_offensive',
@@ -403,8 +408,6 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       },
     ])
     expect(routerBuilderArgs.outputMessagesSchemas).toEqual([])
-    expect(routerBuilderArgs.maxRetries).toBe(2)
-    expect(routerBuilderArgs.timeout).toBe(16000)
     expect(routerBuilderArgs.guardrailTrackingContext).toEqual({
       botId: 'bot-123',
       isTest: false,

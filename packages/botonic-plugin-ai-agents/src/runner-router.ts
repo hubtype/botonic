@@ -10,15 +10,19 @@ export class AIAgentRouterRunner<
   TExtraData = any,
 > {
   private agent: AIAgent<TPlugins, TExtraData>
+  private llmConfig: LLMConfig
+  private inferenceId: string
   private logger: DebugLogger
 
   constructor(
     agent: AIAgent<TPlugins, TExtraData>,
-    _llmConfig: LLMConfig,
-    _inferenceId: string,
+    llmConfig: LLMConfig,
+    inferenceId: string, // TODO: Use it for tracking
     logger: DebugLogger
   ) {
     this.agent = agent
+    this.llmConfig = llmConfig
+    this.inferenceId = inferenceId
     this.logger = logger
   }
 
@@ -26,6 +30,13 @@ export class AIAgentRouterRunner<
     messages: AgenticInputMessage[],
     context: Context<TPlugins, TExtraData>
   ): Promise<RunResult> {
+    const startTime = Date.now()
+
+    this.logger.logRunnerStart(
+      this.llmConfig.modelName,
+      this.llmConfig.modelSettings
+    )
+
     try {
       const runner = new Runner({
         tracingDisabled: true,
@@ -33,6 +44,10 @@ export class AIAgentRouterRunner<
       const result = (await runner.run(this.agent, messages, {
         context,
       })) as AIAgentRunnerResult
+
+      // const endTime = Date.now()
+
+      // await this.sendLlmRunTracking(result, context, startTime, endTime)
 
       console.log('AIAgentRouterRunner result', result)
       console.log('currentAgent: ', result.state?._currentAgent?.name)
@@ -54,6 +69,8 @@ export class AIAgentRouterRunner<
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
       }
+
+      this.logger.logRunResult(runResult, startTime)
 
       return runResult
     } catch (error) {

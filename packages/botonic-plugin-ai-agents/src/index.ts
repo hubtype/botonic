@@ -13,6 +13,7 @@ import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
 
 import { AIAgentBuilder } from './agent-builder'
+import { AIAgentRouterBuilder } from './agent-router-builder'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -21,7 +22,6 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
-import { AIAgentRouterBuilder } from './router-agent-builder'
 import { AIAgentRunner } from './runner'
 import { AIAgentRouterRunner } from './runner-router'
 import { HubtypeApiClient } from './services/hubtype-api-client'
@@ -131,13 +131,21 @@ export default class BotonicPluginAiAgents<
     authToken: string,
     inferenceId: string
   ) {
+    const llmConfig = new LLMConfig(
+      this.maxRetries,
+      this.timeout,
+      aiAgentArgs.model,
+      aiAgentArgs.verbosity
+    )
+
     // Get LLM config, tools and agent
-    const { llmConfig, tools, agent } = await this.getLLMConfigToolsAndAIAgent(
+    const { tools, agent } = await this.getAIAgentWorkerAndTools(
       botContext,
       aiAgentArgs,
       aiAgentArgs.outputMessagesSchemas || [],
       authToken,
-      inferenceId
+      inferenceId,
+      llmConfig
     )
 
     // Get messages
@@ -166,7 +174,6 @@ export default class BotonicPluginAiAgents<
       messages
     )
 
-    console.log(' AI Agent Worker: ', agent)
     // Run agent
     const runner = new AIAgentRunner<TPlugins, TExtraData>(
       agent,
@@ -183,16 +190,24 @@ export default class BotonicPluginAiAgents<
     authToken: string,
     inferenceId: string
   ) {
-    const { agents, model, name, instructions } = aiAgentArgs
+    const { agents, name, instructions } = aiAgentArgs
+
+    const llmConfig = new LLMConfig(
+      this.maxRetries,
+      this.timeout,
+      aiAgentArgs.model,
+      aiAgentArgs.verbosity
+    )
 
     const handoffAgents = await Promise.all(
       agents.map(async aiAgentData => {
-        const { agent } = await this.getLLMConfigToolsAndAIAgent(
+        const { agent } = await this.getAIAgentWorkerAndTools(
           botContext,
           aiAgentData,
           aiAgentArgs.outputMessagesSchemas || [],
           authToken,
-          inferenceId
+          inferenceId,
+          llmConfig
         )
         return handoff(agent, {
           toolNameOverride: aiAgentData.name,
@@ -210,23 +225,20 @@ export default class BotonicPluginAiAgents<
       })
     )
 
-    const { llmConfig: routerLlmConfig, agent: agentRouter } =
-      await new AIAgentRouterBuilder<TPlugins, TExtraData>({
-        name,
-        instructions,
-        model,
-        handoffs: handoffAgents,
-        inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
-        outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
-        maxRetries: this.maxRetries,
-        timeout: this.timeout,
-        guardrailTrackingContext: {
-          botId: botContext.session.bot.id,
-          isTest: botContext.session.is_test_integration,
-          authToken,
-          inferenceId,
-        },
-      }).build()
+    const agentRouter = await new AIAgentRouterBuilder<TPlugins, TExtraData>({
+      name,
+      instructions,
+      llmConfig,
+      handoffs: handoffAgents,
+      inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+      outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
+      guardrailTrackingContext: {
+        botId: botContext.session.bot.id,
+        isTest: botContext.session.is_test_integration,
+        authToken,
+        inferenceId,
+      },
+    }).build()
 
     // Get messages
     const messages = await this.getMessages(
@@ -250,30 +262,22 @@ export default class BotonicPluginAiAgents<
     // Run agent
     const runner = new AIAgentRouterRunner<TPlugins, TExtraData>(
       agentRouter,
-      routerLlmConfig,
+      llmConfig,
       inferenceId,
       this.logger
     )
 
-    console.log(' AI Agent Router: ', agentRouter, messages, context)
     return await runner.run(messages, context)
   }
 
-  private async getLLMConfigToolsAndAIAgent(
+  private async getAIAgentWorkerAndTools(
     botContext: BotContext,
     aiAgentArgs: AiAgentArgs,
     outputMessagesSchemas: ZodObject<any>[],
     authToken: string,
-    inferenceId: string
+    inferenceId: string,
+    llmConfig: LLMConfig
   ) {
-    // Create client for OpenAI/Azure OpenAI
-    const llmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      aiAgentArgs.model,
-      aiAgentArgs.verbosity
-    )
-
     // Build tools
     const tools = this.buildTools(aiAgentArgs)
 
@@ -300,7 +304,7 @@ export default class BotonicPluginAiAgents<
     })
     const agent = await agentBuilder.build()
 
-    return { llmConfig, tools, agent }
+    return { agent, tools }
   }
 
   private async getMessages(
