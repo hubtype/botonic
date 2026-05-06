@@ -5,7 +5,7 @@ import type { LLMConfig } from './llm-config'
 import type { AIAgentRunnerResult } from './runner'
 import type { AgenticInputMessage, AIAgent, Context, RunResult } from './types'
 
-export class AIAgentRouterRunner<
+export class AIAgentManagerRunner<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = any,
 > {
@@ -49,8 +49,7 @@ export class AIAgentRouterRunner<
 
       // await this.sendLlmRunTracking(result, context, startTime, endTime)
 
-      console.log('AIAgentRouterRunner result', result)
-      console.log('CURRENT_AGENT: ', result.state?._currentAgent?.name)
+      console.log('AIAgentManagerRunner result', result)
       const outputMessages = result.finalOutput?.messages || []
       const hasExit =
         outputMessages.length === 0 ||
@@ -74,7 +73,7 @@ export class AIAgentRouterRunner<
 
       return runResult
     } catch (error) {
-      console.error('AIAgentRouterRunner error', error)
+      console.error('AIAgentManagerRunner error', error)
       if (error instanceof InputGuardrailTripwireTriggered) {
         const runResult: RunResult = {
           messages: [],

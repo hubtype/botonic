@@ -9,7 +9,8 @@ import React from 'react'
 
 import {
   FlowAiAgent,
-  FlowAiAgentOrchestration,
+  FlowAiAgentManager,
+  FlowAiAgentRouter,
   type FlowContent,
 } from '../content-fields'
 import { filterContents } from '../filters'
@@ -64,7 +65,8 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     for (const content of filteredContents) {
       if (
         content instanceof FlowAiAgent ||
-        content instanceof FlowAiAgentOrchestration
+        content instanceof FlowAiAgentRouter ||
+        content instanceof FlowAiAgentManager
       ) {
         const splitContents = splitAiAgentContents(filteredContents)
         if (!splitContents) {
@@ -77,6 +79,15 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
           await aiAgentRouterContent.processContent(
             botContext,
             contentsBeforeAiAgentRouter
+          )
+        }
+
+        if ('aiAgentManagerContent' in splitContents) {
+          const { aiAgentManagerContent, contentsBeforeAiAgentManager } =
+            splitContents
+          await aiAgentManagerContent.processContent(
+            botContext,
+            contentsBeforeAiAgentManager
           )
         }
 

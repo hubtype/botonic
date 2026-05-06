@@ -17,24 +17,21 @@ import { HubtypeAssistantContent } from '../utils/ai-agent'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowAiAgent } from './flow-ai-agent'
+import type { AiAgentWithNameAndDescription } from './flow-ai-agent-router'
 import type {
+  HtAiAgentManagerNode,
   HtAiAgentNode,
-  HtAiAgentRouterNode,
   HtInputGuardrailRule,
   HtNodeWithContent,
 } from './hubtype-fields'
 import { FlowCarousel, type FlowContent, FlowText } from './index'
 
-export interface AiAgentWithNameAndDescription {
-  agent: FlowAiAgent
-  description: string
-  name: string
-}
-
-export class FlowAiAgentRouter extends ContentFieldsBase {
+export class FlowAiAgentManager extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
   public model: string = ''
+  public verbosity: VerbosityLevel = VerbosityLevel.Medium
+  public activeTools?: { name: string }[]
   public agents: AiAgentWithNameAndDescription[] = []
   public inputGuardrailRules: HtInputGuardrailRule[] = []
 
@@ -43,14 +40,16 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
   public jsxElements: JSX.Element[] = []
 
   static fromHubtypeCMS(
-    component: HtAiAgentRouterNode,
+    component: HtAiAgentManagerNode,
     cmsApi: FlowBuilderApi
-  ): FlowAiAgentRouter {
-    const newAiAgentRouter = new FlowAiAgentRouter(component.id)
-    newAiAgentRouter.name = component.code
-    newAiAgentRouter.instructions = component.content.instructions
-    newAiAgentRouter.model = component.content.model
-    newAiAgentRouter.agents = component.content.agent_slots.map(agentSlot => {
+  ): FlowAiAgentManager {
+    const newAiAgentManager = new FlowAiAgentManager(component.id)
+    newAiAgentManager.name = component.code
+    newAiAgentManager.instructions = component.content.instructions
+    newAiAgentManager.model = component.content.model
+    newAiAgentManager.verbosity = component.content.verbosity
+    newAiAgentManager.activeTools = component.content.active_tools
+    newAiAgentManager.agents = component.content.agent_slots.map(agentSlot => {
       const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
       const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
       return {
@@ -59,9 +58,9 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
         name: agentSlot.name || '',
       }
     })
-    newAiAgentRouter.inputGuardrailRules =
+    newAiAgentManager.inputGuardrailRules =
       component.content.input_guardrail_rules || []
-    return newAiAgentRouter
+    return newAiAgentManager
   }
 
   async resolveAIAgentResponse(
@@ -99,11 +98,12 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
     const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
       botContext,
       {
-        type: AiAgentType.Router,
+        type: AiAgentType.Manager,
         name: this.name,
         instructions: this.instructions,
         model: this.model,
         verbosity: VerbosityLevel.Medium,
+        activeTools: this.activeTools ?? [],
         agents: this.agents.map(({ agent, description, name }) => ({
           type: AiAgentType.Worker,
           name,
@@ -125,7 +125,7 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
       }
     )
 
-    console.log('FlowAiAgentRouter aiAgentResponse', {
+    console.log('FlowAiAgentManager aiAgentResponse', {
       aiAgentResponse,
     })
 
@@ -140,9 +140,8 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
     const { flowThreadId, flowId, flowName, flowNodeId } =
       getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
-    // TODO: Create a new endpoint for AIAgentRouter
     const event = {
-      action: 'AIAgentRouter',
+      action: 'AiAgentManager',
       flowThreadId: flowThreadId,
       flowId: flowId,
       flowName: flowName,
@@ -156,15 +155,15 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
       inputGuardrailsTriggered:
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
       outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
+      error: this.aiAgentResponse?.error ?? false,
     }
-
     const { action, ...eventArgs } = event
 
+    // await trackEvent(botContext, action, eventArgs)
     console.log('trackAiAgentResponse', {
       action,
       eventArgs,
     })
-    // await trackEvent(botContext, action, eventArgs)
   }
 
   async getFlowContentsByContentId(

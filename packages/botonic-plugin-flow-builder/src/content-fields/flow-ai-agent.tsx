@@ -89,13 +89,9 @@ export class FlowAiAgent extends ContentFieldsBase {
         }
       }) || []
 
-    const activeInputGuardrailRules: GuardrailRule[] =
+    const activeInputGuardrailRules = this.getActiveInputGuardrailRules(
       this.inputGuardrailRules
-        ?.filter(rule => rule.is_active)
-        ?.map(rule => ({
-          name: rule.name,
-          description: rule.description,
-        })) || []
+    )
 
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
 
@@ -189,6 +185,19 @@ export class FlowAiAgent extends ContentFieldsBase {
       }
     }
     return
+  }
+
+  private getActiveInputGuardrailRules(
+    inputGuardrailRules: HtInputGuardrailRule[]
+  ): GuardrailRule[] {
+    return (
+      inputGuardrailRules
+        ?.filter(rule => rule.is_active)
+        ?.map(rule => ({
+          name: rule.name,
+          description: rule.description,
+        })) || []
+    )
   }
 
   async processContent(
