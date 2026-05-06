@@ -1,11 +1,10 @@
-import type { ResolvedPlugins } from '@botonic/core'
+import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import {
   Agent,
   type AgentOutputType,
   type Handoff,
   type ModelSettings,
 } from '@openai/agents'
-import { RECOMMENDED_PROMPT_PREFIX } from '@openai/agents-core/extensions'
 import type { z } from 'zod'
 
 import { createInputGuardrails } from './guardrails'
@@ -16,30 +15,32 @@ import {
   getOutputSchema,
   type OutputSchema,
 } from './structured-output'
-import type { AIAgent, Context, GuardrailRule } from './types'
+import type { AIAgent, Context, GuardrailRule, Tool } from './types'
 
-interface AIAgentRouterBuilderOptions<
+interface AIAgentManagerBuilderOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = unknown,
 > {
   name: string
   instructions: string
+  tools: Tool<TPlugins, TExtraData>[]
+  campaignsContext?: CampaignV2[]
+  contactInfo: ContactInfo[]
   llmConfig: LLMConfig
-  handoffs: Handoff<
-    Context<TPlugins, TExtraData>,
-    AgentOutputType<typeof OutputSchema>
-  >[]
   inputGuardrailRules: GuardrailRule[]
   outputMessagesSchemas?: z.ZodObject[]
   guardrailTrackingContext: GuardrailTrackingContext
 }
 
-export class AIAgentRouterBuilder<
+export class AIAgentManagerBuilder<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = unknown,
 > {
   private name: string
   private instructions: string
+  private tools: Tool<TPlugins, TExtraData>[]
+  private campaignsContext?: CampaignV2[]
+  private contactInfo: ContactInfo[]
   private llmConfig: LLMConfig
   private handoffs: Handoff<
     Context<TPlugins, TExtraData>,
@@ -49,11 +50,13 @@ export class AIAgentRouterBuilder<
   private outputMessagesSchemas: z.ZodObject[]
   private guardrailTrackingContext: GuardrailTrackingContext
 
-  constructor(options: AIAgentRouterBuilderOptions<TPlugins, TExtraData>) {
+  constructor(options: AIAgentManagerBuilderOptions<TPlugins, TExtraData>) {
     this.name = options.name
     this.instructions = options.instructions
+    this.tools = options.tools
+    this.campaignsContext = options.campaignsContext
+    this.contactInfo = options.contactInfo
     this.llmConfig = options.llmConfig
-    this.handoffs = options.handoffs
     this.inputGuardrailRules = options.inputGuardrailRules
     this.outputMessagesSchemas = options.outputMessagesSchemas || []
     this.guardrailTrackingContext = options.guardrailTrackingContext
@@ -66,19 +69,21 @@ export class AIAgentRouterBuilder<
       this.guardrailTrackingContext
     )
     const modelSettings = this.getAgentModelSettings()
+    const resolvedModel = await this.llmConfig.getModel()
 
-    // Agent.create is typed as Agent<UnknownContext>; we run with Context<TPlugins, TExtraData>.
-    const agent = Agent.create({
+    return new Agent<
+      Context<TPlugins, TExtraData>,
+      AgentOutputType<typeof OutputSchema>
+    >({
       name: this.name,
-      model: await this.llmConfig.getModel(),
+      model: resolvedModel,
       modelSettings,
-      instructions: `${RECOMMENDED_PROMPT_PREFIX}${this.instructions}\n\n${getOutputInstructions()}`,
-      handoffs: this.handoffs,
+      instructions: `${this.instructions}\n\n${getOutputInstructions()}`,
+      tools: this.tools,
       outputType: getOutputSchema(this.outputMessagesSchemas),
       inputGuardrails,
-    }) as AIAgent<TPlugins, TExtraData>
-
-    return agent
+      outputGuardrails: [],
+    })
   }
 
   private getAgentModelSettings(): ModelSettings {

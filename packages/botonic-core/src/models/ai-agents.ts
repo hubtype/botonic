@@ -118,9 +118,13 @@ export interface HubtypeUserMessage {
 export enum AiAgentType {
   Worker = 'worker',
   Router = 'router',
+  Manager = 'manager',
 }
 
-export type AiAgentArgs = AiAgentWorkerArgs | AIAgentRouterArgs
+export type AiAgentArgs =
+  | AiAgentWorkerArgs
+  | AIAgentRouterArgs
+  | AIAgentManagerArgs
 
 export type AiAgentBaseArgs = {
   type: AiAgentType
@@ -146,4 +150,10 @@ interface AIAgentDataWithDescription extends AiAgentWorkerArgs {
 export interface AIAgentRouterArgs extends AiAgentBaseArgs {
   type: AiAgentType.Router
   agents: AIAgentDataWithDescription[]
+}
+
+export interface AIAgentManagerArgs extends AiAgentBaseArgs {
+  type: AiAgentType.Manager
+  agents: AIAgentDataWithDescription[]
+  activeTools: { name: string }[]
 }

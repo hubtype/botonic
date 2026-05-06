@@ -3,7 +3,8 @@ import type { ActionRequest } from '@botonic/react'
 import type { FlowBuilderApi } from './api'
 import {
   FlowAiAgent,
-  FlowAiAgentOrchestration,
+  FlowAiAgentManager,
+  FlowAiAgentRouter,
   FlowBotAction,
   FlowCarousel,
   FlowChannelConditional,
@@ -100,10 +101,10 @@ export class FlowFactory {
         return FlowCaptureUserInput.fromHubtypeCMS(hubtypeContent)
 
       case HtNodeWithContentType.AI_AGENT_ROUTER:
-        return FlowAiAgentOrchestration.fromHubtypeCMS(
-          hubtypeContent,
-          this.cmsApi
-        )
+        return FlowAiAgentRouter.fromHubtypeCMS(hubtypeContent, this.cmsApi)
+
+      case HtNodeWithContentType.AI_AGENT_MANAGER:
+        return FlowAiAgentManager.fromHubtypeCMS(hubtypeContent, this.cmsApi)
 
       default:
         return undefined

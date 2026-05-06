@@ -1,4 +1,5 @@
 import { WhatsappCTAUrlHeaderType } from '@botonic/react'
+import { FlowAiAgentManager } from '../content-fields/flow-ai-agent-manager'
 import { FlowAiAgentRouter } from '../content-fields/flow-ai-agent-router'
 import type { FlowButton } from '../content-fields/flow-button'
 import { HtButtonStyle } from '../content-fields/hubtype-fields'
@@ -23,6 +24,10 @@ type AiAgentContentAndContentsBeforeAiAgent =
       aiAgentRouterContent: FlowAiAgentRouter
       contentsBeforeAiAgentRouter: FlowContent[]
     }
+  | {
+      aiAgentManagerContent: FlowAiAgentManager
+      contentsBeforeAiAgentManager: FlowContent[]
+    }
 
 export function splitAiAgentContents(
   contents: FlowContent[]
@@ -34,6 +39,18 @@ export function splitAiAgentContents(
     return {
       aiAgentRouterContent: contents[aiAgentRouterIndex] as FlowAiAgentRouter,
       contentsBeforeAiAgentRouter: contents.slice(0, aiAgentRouterIndex),
+    }
+  }
+
+  const aiAgentManagerIndex = contents.findIndex(
+    content => content instanceof FlowAiAgentManager
+  )
+  if (aiAgentManagerIndex >= 0) {
+    return {
+      aiAgentManagerContent: contents[
+        aiAgentManagerIndex
+      ] as FlowAiAgentManager,
+      contentsBeforeAiAgentManager: contents.slice(0, aiAgentManagerIndex),
     }
   }
 
