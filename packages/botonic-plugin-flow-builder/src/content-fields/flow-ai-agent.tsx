@@ -194,6 +194,8 @@ export class FlowAiAgent extends ContentFieldsBase {
   ): Promise<void> {
     if (this.messages.length === 0) {
       await this.resolveAIAgentResponse(botContext, previousContents)
+    }
+    if (this.jsxElements.length === 0) {
       await this.filterContent(botContext, this)
       await this.messagesToBotonicJSXElements(botContext)
     }
