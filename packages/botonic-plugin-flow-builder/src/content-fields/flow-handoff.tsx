@@ -96,6 +96,7 @@ export class FlowHandoff extends ContentFieldsBase {
   }
 
   async processContent(botContext: BotContext): Promise<void> {
+    await this.filterContent(botContext, this)
     await this.doHandoff(botContext)
     return
   }
