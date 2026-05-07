@@ -76,7 +76,6 @@ export class FlowAiAgentManager extends ContentFieldsBase {
       this.aiAgentResponse = aiAgentResponse
       await this.trackAiAgentResponse(botContext)
       this.messages = aiAgentResponse.messages
-      await this.messagesToBotonicJSXElements(botContext)
     }
 
     return aiAgentResponse
@@ -225,12 +224,15 @@ export class FlowAiAgentManager extends ContentFieldsBase {
 
   async processContent(
     botContext: BotContext,
-    _previousContents?: FlowContent[]
+    previousContents?: FlowContent[]
   ): Promise<void> {
     if (this.messages.length === 0) {
-      await this.resolveAIAgentResponse(botContext)
+      await this.resolveAIAgentResponse(botContext, previousContents)
     }
-
+    if (this.jsxElements.length === 0) {
+      await this.filterContent(botContext, this)
+      await this.messagesToBotonicJSXElements(botContext)
+    }
     return
   }
 
