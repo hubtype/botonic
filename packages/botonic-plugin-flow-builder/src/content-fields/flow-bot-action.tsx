@@ -52,6 +52,7 @@ export class FlowBotAction extends ContentFieldsBase {
   }
 
   async processContent(botContext: BotContext): Promise<void> {
+    await this.filterContent(botContext, this)
     this.doBotAction(botContext)
     await this.trackFlow(botContext)
     return

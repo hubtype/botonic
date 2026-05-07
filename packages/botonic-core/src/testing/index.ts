@@ -152,7 +152,7 @@ export function createTestInput(options?: TestInputOptions): Input {
   return {
     type: options?.type ?? INPUT.TEXT,
     data: options?.data,
-    text: options?.text,
+    text: options?.text ?? options?.data,
     payload: options?.payload,
     src: options?.src,
     transcript: options?.transcript,

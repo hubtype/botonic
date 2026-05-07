@@ -20,6 +20,18 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.48.2] - 2026-05-07
+
+### Fixed
+
+- [PR-3209](https://github.com/hubtype/botonic/pull/3209): Ensures the order in which filters are applied, tracking is performed, and JSXElements are created for an AIAgent.
+
+## [0.48.2] - 2026-04-29
+
+### Fixed
+
+- [PR-3206](https://github.com/hubtype/botonic/pull/3206): Avoid read undefined settings in local 
+
 ## [0.48.0] - 2026-04-28
 
 ### Added
