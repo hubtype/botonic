@@ -4,6 +4,8 @@ import {
   BotonicAction,
   type BotRequest,
   type BotResponse,
+  type BotSecrets,
+  type BotSettings,
   INPUT,
   type Input,
   type ProcessInputResult,
@@ -97,7 +99,10 @@ export class CoreBot {
   }
 
   private getBotContext(request: BotRequest): BotContext {
-    const { input, session, lastRoutePath, settings, secrets } = request
+    const { input, session, lastRoutePath } = request
+    const settings = this.getSettings(request)
+    const secrets = this.getSecrets(request)
+
     return {
       input,
       session,
@@ -117,6 +122,38 @@ export class CoreBot {
       settings,
       secrets,
     }
+  }
+
+  private getSettings(request: BotRequest): BotSettings {
+    if (!request.settings) {
+      // This only happens in local development
+      return {
+        HUBTYPE_API_URL: '',
+        STATIC_URL: '',
+        LITELLM_API_URL: '',
+        AZURE_OPENAI_API_BASE: '',
+        AZURE_OPENAI_API_VERSION: '',
+        CUSTOM_SHORT_URL_HOST: '',
+        LANGUAGE_DETECTION_ENABLED: false,
+        custom: {},
+      }
+    }
+
+    return request.settings
+  }
+
+  private getSecrets(request: BotRequest): BotSecrets {
+    if (!request.secrets) {
+      // This only happens in local development
+      return {
+        HUBTYPE_ACCESS_TOKEN: '',
+        LITELLM_API_KEY: '',
+        AZURE_OPENAI_API_KEY: '',
+        custom: {},
+      }
+    }
+
+    return request.secrets
   }
 
   private async runInput(botContext: BotContext): Promise<BotResponse> {

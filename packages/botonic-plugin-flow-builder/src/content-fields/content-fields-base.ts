@@ -1,9 +1,10 @@
 import type { BotContext } from '@botonic/core'
-
 import {
   ACCESS_TOKEN_VARIABLE_KEY,
   VARIABLE_PATTERN_GLOBAL,
 } from '../constants'
+import { ContentFilterExecutor } from '../filters'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import type {
   HtMediaFileLocale,
   HtNodeLink,
@@ -11,6 +12,7 @@ import type {
   HtTextLocale,
   HtVideoLocale,
 } from './hubtype-fields'
+import type { FlowContent } from './index'
 
 export abstract class ContentFieldsBase {
   public code: string
@@ -21,6 +23,22 @@ export abstract class ContentFieldsBase {
   abstract trackFlow(botContext: BotContext): Promise<void>
 
   abstract processContent(botContext: BotContext): Promise<void>
+
+  async filterContent(
+    botContext: BotContext,
+    content: FlowContent
+  ): Promise<FlowContent> {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const contentFilters = flowBuilderPlugin.contentFilters
+    const contentFilterExecutor = new ContentFilterExecutor({
+      filters: contentFilters,
+    })
+    const filteredContent = await contentFilterExecutor.filter(
+      botContext,
+      content
+    )
+    return filteredContent
+  }
 
   static getTextByLocale(locale: string, text: HtTextLocale[]): string {
     const result = text.find(t => t.locale === locale)

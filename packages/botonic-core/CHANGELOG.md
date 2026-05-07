@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.48.1] - 2026-04-29
+
+### Fixed
+
+- [PR-3206](https://github.com/hubtype/botonic/pull/3206): Set setting and secrets for local development.
+
 ## [0.48.0] - 2026-04-28
 
 ### Added

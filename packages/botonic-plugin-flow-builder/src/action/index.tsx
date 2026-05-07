@@ -8,7 +8,6 @@ import {
 import React from 'react'
 
 import { FlowAiAgent, type FlowContent } from '../content-fields'
-import { filterContents } from '../filters'
 import { splitAiAgentContents } from '../utils/ai-agent'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
@@ -55,11 +54,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext,
     contents: FlowContent[]
   ) {
-    const filteredContents = await filterContents(botContext, contents)
-
-    for (const content of filteredContents) {
+    for (const content of contents) {
       if (content instanceof FlowAiAgent) {
-        const splitContents = splitAiAgentContents(filteredContents)
+        const splitContents = splitAiAgentContents(contents)
         if (!splitContents) {
           continue
         }
@@ -70,7 +67,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       }
     }
 
-    return filteredContents
+    return contents
   }
 
   protected getWebchatSettingsParams(botContext: BotContext): {

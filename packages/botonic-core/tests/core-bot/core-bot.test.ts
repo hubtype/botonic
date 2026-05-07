@@ -1,5 +1,10 @@
 // @ts-nocheck
+
 import { BotonicAction } from '../../src/models'
+import {
+  createTestBotRequest,
+  createTestSession,
+} from '../../src/testing/index'
 import {
   COUNTRY_GB,
   createSessionWithUser,
@@ -87,28 +92,30 @@ describe('CoreBot', () => {
   it('input processes a chatevent (e.g: sent when enduser is typing', async () => {
     // Arrange
     const coreBot = initCoreBotWithDeveloperConfig()
-    const session = createSessionWithUser()
-
-    // Act
-    const botResponse = await coreBot.input({
+    const session = createTestSession({
+      user: {
+        locale: LOCALE_EN,
+        country: COUNTRY_GB,
+        system_locale: LOCALE_EN,
+      },
+    })
+    const botRequest = createTestBotRequest({
       input: { type: 'chatevent', data: 'typing_on' },
       session,
       lastRoutePath: '',
     })
 
+    // Act
+    const botResponse = await coreBot.input(botRequest)
+
     // Assert
-    expect(botResponse).toEqual({
-      input: { data: 'typing_on', type: 'chatevent' },
-      lastRoutePath: '',
-      response: [],
-      session: {
-        user: {
-          locale: LOCALE_EN,
-          country: COUNTRY_GB,
-          system_locale: LOCALE_EN,
-        },
-      },
-    })
+    expect(botResponse.input.data).toEqual('typing_on')
+    expect(botResponse.input.type).toEqual('chatevent')
+    expect(botResponse.lastRoutePath).toEqual('')
+    expect(botResponse.response).toEqual([])
+    expect(botResponse.session.user.country).toEqual(COUNTRY_GB)
+    expect(botResponse.session.user.locale).toEqual(LOCALE_EN)
+    expect(botResponse.session.user.system_locale).toEqual(LOCALE_EN)
   })
 
   it('processes events if routes are defined as a function', async () => {
@@ -116,30 +123,30 @@ describe('CoreBot', () => {
     const coreBot = initCoreBotWithDeveloperConfig({
       routes: async () => developerRoutes,
     })
-    const session = createSessionWithUser()
-
-    // Act
-    const botResponse = await coreBot.input({
+    const session = createTestSession({
+      user: {
+        locale: LOCALE_EN,
+        country: COUNTRY_GB,
+        system_locale: LOCALE_EN,
+      },
+    })
+    const botRequest = createTestBotRequest({
       input: { type: 'text', data: 'hello' },
       session,
       lastRoutePath: '',
     })
+    // Act
+    const botResponse = await coreBot.input(botRequest)
 
     // Assert
-    expect(botResponse).toEqual({
-      input: { data: 'hello', type: 'text' },
-      lastRoutePath: '',
-      response: [null, 'Hi user!', null],
-      session: {
-        __retries: 0,
-        user: {
-          locale: LOCALE_EN,
-          country: COUNTRY_GB,
-          system_locale: LOCALE_EN,
-        },
-        is_first_interaction: false,
-      },
-    })
+    expect(botResponse.input.data).toEqual('hello')
+    expect(botResponse.input.type).toEqual('text')
+    expect(botResponse.lastRoutePath).toEqual('')
+    expect(botResponse.response).toEqual([null, 'Hi user!', null])
+    expect(botResponse.session.user.country).toEqual(COUNTRY_GB)
+    expect(botResponse.session.user.locale).toEqual(LOCALE_EN)
+    expect(botResponse.session.user.system_locale).toEqual(LOCALE_EN)
+    expect(botResponse.session.is_first_interaction).toEqual(false)
   })
 
   it('input returns a response', async () => {

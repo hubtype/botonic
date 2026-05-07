@@ -128,6 +128,7 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
   }
 
   async processContent(botContext: BotContext): Promise<void> {
+    await this.filterContent(botContext, this)
     await this.trackFlow(botContext)
     return
   }
