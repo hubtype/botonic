@@ -24,7 +24,7 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
-- [PR-3209](https://github.com/hubtype/botonic/pull/3209): 
+- [PR-3209](https://github.com/hubtype/botonic/pull/3209): Ensures the order in which filters are applied, tracking is performed, and JSXElements are created for an AIAgent.
 
 ## [0.48.2] - 2026-04-29
 
