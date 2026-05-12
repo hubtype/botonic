@@ -35,6 +35,7 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
   public model: string = ''
+  public verbosity: VerbosityLevel = VerbosityLevel.Medium
   public agents: AiAgentWithNameAndDescription[] = []
   public inputGuardrailRules: HtInputGuardrailRule[] = []
 
@@ -50,6 +51,7 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
     newAiAgentRouter.name = component.code
     newAiAgentRouter.instructions = component.content.instructions
     newAiAgentRouter.model = component.content.model
+    newAiAgentRouter.verbosity = component.content.verbosity
     newAiAgentRouter.agents = component.content.agent_slots.map(agentSlot => {
       const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
       const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
@@ -102,7 +104,7 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
         name: this.name,
         instructions: this.instructions,
         model: this.model,
-        verbosity: VerbosityLevel.Medium,
+        verbosity: this.verbosity,
         agents: this.agents.map(({ agent, description, name }) => ({
           type: AiAgentType.Worker,
           name,

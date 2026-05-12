@@ -1,3 +1,4 @@
+import type { VerbosityLevel } from '@botonic/core'
 import type { HtInputGuardrailRule } from './ai-agent'
 import type { HtBaseNode, HtNodeLink } from './common'
 import type { HtNodeWithContentType } from './node-types'
@@ -14,6 +15,7 @@ export interface HtAiAgentRouterNode extends HtBaseNode {
   content: {
     instructions: string
     model: string
+    verbosity: VerbosityLevel
     agent_slots: HtAiAgentSlotNode[]
     input_guardrail_rules?: HtInputGuardrailRule[]
   }
