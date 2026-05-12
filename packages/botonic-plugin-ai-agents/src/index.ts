@@ -1,13 +1,21 @@
-import type {
-  AiAgentArgs,
-  BotContext,
-  HubtypeAssistantMessage,
-  Plugin,
-  ResolvedPlugins,
+import {
+  type AIAgentManagerArgs,
+  type AIAgentRouterArgs,
+  type AiAgentArgs,
+  AiAgentType,
+  type AiAgentWorkerArgs,
+  type BotContext,
+  type HubtypeAssistantMessage,
+  type Plugin,
+  type ResolvedPlugins,
 } from '@botonic/core'
-import { setTracingDisabled, tool } from '@openai/agents'
+import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
+import type { ZodObject } from 'zod'
+
 import { AIAgentBuilder } from './agent-builder'
+import { AIAgentManagerBuilder } from './agent-manager-builder'
+import { AIAgentRouterBuilder } from './agent-router-builder'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -17,6 +25,8 @@ import {
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
 import { AIAgentRunner } from './runner'
+import { AIAgentManagerRunner } from './runner-manager'
+import { AIAgentRouterRunner } from './runner-router'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
   AgenticInputMessage,
@@ -77,84 +87,42 @@ export default class BotonicPluginAiAgents<
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentArgs
   ): Promise<InferenceResponse> {
+    const authToken = isProd ? botContext.session._access_token : this.authToken
+    if (!authToken) {
+      throw new Error('Auth token is required')
+    }
+
+    const inferenceId = uuidv7()
+
     try {
-      const authToken = isProd
-        ? botContext.session._access_token
-        : this.authToken
-      if (!authToken) {
-        throw new Error('Auth token is required')
-      }
-
-      const inferenceId = uuidv7()
-
-      // Create client for OpenAI/Azure OpenAI
-      const llmConfig = new LLMConfig(
-        this.maxRetries,
-        this.timeout,
-        aiAgentArgs.model,
-        aiAgentArgs.verbosity
-      )
-
-      // Build tools
-      const tools = this.buildTools(
-        aiAgentArgs.activeTools?.map(tool => tool.name) || []
-      )
-
-      // Build agent
-      const agent = new AIAgentBuilder<TPlugins, TExtraData>({
-        name: aiAgentArgs.name,
-        instructions: aiAgentArgs.instructions,
-        tools: tools,
-        contactInfo: botContext.session.user.contact_info || [],
-        inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
-        sourceIds: aiAgentArgs.sourceIds || [],
-        outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
-        campaignsContext: botContext.input.context?.campaigns_v2,
-        logger: this.logger,
-        llmConfig,
-        guardrailTrackingContext: {
-          botId: botContext.session.bot.id,
-          isTest: botContext.session.is_test_integration,
+      if (aiAgentArgs.type === AiAgentType.Worker) {
+        return await this.executeWorkerAIAgent(
+          botContext,
+          aiAgentArgs,
           authToken,
-          inferenceId,
-        },
-      }).build()
-
-      // Get messages
-      const messages = await this.getMessages(
-        botContext,
-        authToken,
-        aiAgentArgs.previousHubtypeMessages || []
-      )
-
-      // Build context
-      const context: Context<TPlugins, TExtraData> = {
-        authToken,
-        sourceIds: aiAgentArgs.sourceIds || [],
-        knowledgeUsed: {
-          query: '',
-          sourceIds: [],
-          chunksIds: [],
-          chunkTexts: [],
-        },
-        request: botContext,
+          inferenceId
+        )
       }
 
-      // Log agent debug info
-      this.logger.logAgentDebugInfo(
-        aiAgentArgs,
-        tools.map(t => t.name),
-        messages
-      )
+      if (aiAgentArgs.type === AiAgentType.Router) {
+        return await this.executeRouterAIAgent(
+          botContext,
+          aiAgentArgs,
+          authToken,
+          inferenceId
+        )
+      }
 
-      // Run agent
-      const runner = new AIAgentRunner<TPlugins, TExtraData>(
-        agent,
-        llmConfig,
-        inferenceId,
-        this.logger
-      )
-      return await runner.run(messages, context)
+      if (aiAgentArgs.type === AiAgentType.Manager) {
+        return await this.executeManagerAIAgent(
+          botContext,
+          aiAgentArgs,
+          authToken,
+          inferenceId
+        )
+      }
+
+      throw new Error('Invalid agent type')
     } catch (error) {
       console.error('error plugin returns undefined', error)
       return {
@@ -167,6 +135,268 @@ export default class BotonicPluginAiAgents<
         outputGuardrailsTriggered: [],
       }
     }
+  }
+
+  private async executeWorkerAIAgent(
+    botContext: BotContext<TPlugins, TExtraData>,
+    aiAgentArgs: AiAgentWorkerArgs,
+    authToken: string,
+    inferenceId: string
+  ) {
+    const llmConfig = new LLMConfig(
+      this.maxRetries,
+      this.timeout,
+      aiAgentArgs.model,
+      aiAgentArgs.verbosity
+    )
+
+    // Get LLM config, tools and agent
+    const { tools, agent } = await this.getAIAgentWorkerAndTools(
+      botContext,
+      aiAgentArgs,
+      aiAgentArgs.outputMessagesSchemas || [],
+      authToken,
+      inferenceId,
+      llmConfig
+    )
+
+    // Get messages
+    const messages = await this.getMessages(
+      botContext,
+      authToken,
+      aiAgentArgs.previousHubtypeMessages || []
+    )
+
+    // Build context
+    const context: Context<TPlugins, TExtraData> = {
+      authToken,
+      knowledgeUsed: {
+        query: '',
+        sourceIds: [],
+        chunksIds: [],
+        chunkTexts: [],
+      },
+      request: botContext,
+    }
+
+    // Log agent debug info
+    this.logger.logAgentDebugInfo(
+      aiAgentArgs,
+      tools.map(t => t.name),
+      messages
+    )
+
+    // Run agent
+    const runner = new AIAgentRunner<TPlugins, TExtraData>(
+      agent,
+      llmConfig,
+      inferenceId,
+      this.logger
+    )
+    return await runner.run(messages, context)
+  }
+
+  private async executeRouterAIAgent(
+    botContext: BotContext<TPlugins, TExtraData>,
+    aiAgentArgs: AIAgentRouterArgs,
+    authToken: string,
+    inferenceId: string
+  ) {
+    const { agents, name, instructions } = aiAgentArgs
+
+    const llmConfig = new LLMConfig(
+      this.maxRetries,
+      this.timeout,
+      aiAgentArgs.model,
+      aiAgentArgs.verbosity
+    )
+
+    const handoffAgents = await Promise.all(
+      agents.map(async aiAgentData => {
+        const { agent } = await this.getAIAgentWorkerAndTools(
+          botContext,
+          aiAgentData,
+          aiAgentArgs.outputMessagesSchemas || [],
+          authToken,
+          inferenceId,
+          llmConfig
+        )
+        return handoff(agent, {
+          toolNameOverride: aiAgentData.name,
+          toolDescriptionOverride: aiAgentData.description,
+          // TODO: Review if is possible use onHandoff action to track the handoff
+          // onHandoff: result => {
+          //   console.log('onHandoff', aiAgentData.name, result)
+          // },
+          // TODO: when onHandoff function is defined, we need to provide inputType
+          // inputType: ????,
+          // isEnabled: (context: RunContext<any>) => {
+          //   return true
+          // },
+        })
+      })
+    )
+
+    const agentRouter = await new AIAgentRouterBuilder<TPlugins, TExtraData>({
+      name,
+      instructions,
+      llmConfig,
+      handoffs: handoffAgents,
+      inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+      outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
+      guardrailTrackingContext: {
+        botId: botContext.session.bot.id,
+        isTest: botContext.session.is_test_integration,
+        authToken,
+        inferenceId,
+      },
+    }).build()
+
+    // Get messages
+    const messages = await this.getMessages(
+      botContext,
+      authToken,
+      aiAgentArgs.previousHubtypeMessages || []
+    )
+
+    // Build context
+    const context: Context<TPlugins, TExtraData> = {
+      authToken,
+      knowledgeUsed: {
+        query: '',
+        sourceIds: [],
+        chunksIds: [],
+        chunkTexts: [],
+      },
+      request: botContext,
+    }
+
+    // Run agent
+    const runner = new AIAgentRouterRunner<TPlugins, TExtraData>(
+      agentRouter,
+      llmConfig,
+      inferenceId,
+      this.logger
+    )
+
+    return await runner.run(messages, context)
+  }
+
+  private async executeManagerAIAgent(
+    botContext: BotContext<TPlugins, TExtraData>,
+    aiAgentArgs: AIAgentManagerArgs,
+    authToken: string,
+    inferenceId: string
+  ) {
+    const { agents, name, instructions } = aiAgentArgs
+
+    const llmConfig = new LLMConfig(
+      this.maxRetries,
+      this.timeout,
+      aiAgentArgs.model,
+      aiAgentArgs.verbosity
+    )
+
+    const agentsAsTools = await Promise.all(
+      agents.map(async aiAgentData => {
+        const { agent } = await this.getAIAgentWorkerAndTools(
+          botContext,
+          aiAgentData,
+          aiAgentArgs.outputMessagesSchemas || [],
+          authToken,
+          inferenceId,
+          llmConfig
+        )
+        return agent.asTool({
+          toolName: aiAgentData.name,
+          toolDescription: aiAgentData.description,
+        })
+      })
+    )
+
+    const tools = [...agentsAsTools, ...this.buildTools(aiAgentArgs)]
+
+    console.log('Manager tools', tools)
+
+    // TODO: Join tools with agents as tools
+    const agentManager = await new AIAgentManagerBuilder<TPlugins, TExtraData>({
+      name,
+      instructions,
+      tools,
+      contactInfo: botContext.session.user.contact_info || [],
+      inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+      guardrailTrackingContext: {
+        botId: botContext.session.bot.id,
+        isTest: botContext.session.is_test_integration,
+        authToken,
+        inferenceId,
+      },
+      outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
+      llmConfig,
+    }).build()
+
+    const messages = await this.getMessages(
+      botContext,
+      authToken,
+      aiAgentArgs.previousHubtypeMessages || []
+    )
+
+    const context: Context<TPlugins, TExtraData> = {
+      authToken,
+      knowledgeUsed: {
+        query: '',
+        sourceIds: [],
+        chunksIds: [],
+        chunkTexts: [],
+      },
+      request: botContext,
+    }
+
+    const runner = new AIAgentManagerRunner<TPlugins, TExtraData>(
+      agentManager,
+      llmConfig,
+      inferenceId,
+      this.logger
+    )
+
+    return await runner.run(messages, context)
+  }
+
+  private async getAIAgentWorkerAndTools(
+    botContext: BotContext,
+    aiAgentArgs: AiAgentArgs,
+    outputMessagesSchemas: ZodObject<any>[],
+    authToken: string,
+    inferenceId: string,
+    llmConfig: LLMConfig
+  ) {
+    // Build tools
+    const tools = this.buildTools(aiAgentArgs)
+
+    // Build agent
+    const sourceIds =
+      aiAgentArgs.type === AiAgentType.Worker ? aiAgentArgs.sourceIds : []
+    const agentBuilder = new AIAgentBuilder<TPlugins, TExtraData>({
+      name: aiAgentArgs.name,
+      instructions: aiAgentArgs.instructions,
+      tools: tools,
+      contactInfo: botContext.session.user.contact_info || [],
+      inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
+      sourceIds,
+      outputMessagesSchemas: outputMessagesSchemas || [],
+      campaignsContext: botContext.input.context?.campaigns_v2,
+      logger: this.logger,
+      llmConfig,
+      guardrailTrackingContext: {
+        botId: botContext.session.bot.id,
+        isTest: botContext.session.is_test_integration,
+        authToken,
+        inferenceId,
+      },
+    })
+    const agent = await agentBuilder.build()
+
+    return { agent, tools }
   }
 
   private async getMessages(
@@ -192,7 +422,10 @@ export default class BotonicPluginAiAgents<
     return result.messages
   }
 
-  private buildTools(activeToolNames: string[]): Tool<TPlugins, TExtraData>[] {
+  private buildTools(aiAgentArgs: AiAgentArgs): Tool<TPlugins, TExtraData>[] {
+    const activeTools =
+      aiAgentArgs.type === AiAgentType.Router ? [] : aiAgentArgs.activeTools
+    const activeToolNames = activeTools.map(tool => tool.name)
     const availableTools = this.toolDefinitions.filter(tool =>
       activeToolNames.includes(tool.name)
     )

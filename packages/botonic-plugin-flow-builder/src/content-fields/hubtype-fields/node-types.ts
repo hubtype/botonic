@@ -14,6 +14,8 @@ export enum HtNodeWithContentType {
   KNOWLEDGE_BASE = 'knowledge-base',
   BOT_ACTION = 'bot-action',
   AI_AGENT = 'ai-agent',
+  AI_AGENT_ROUTER = 'ai-agent-router',
+  AI_AGENT_MANAGER = 'ai-agent-manager',
   RATING = 'rating',
   WEBVIEW = 'webview',
   GO_TO_FLOW = 'go-to-flow',

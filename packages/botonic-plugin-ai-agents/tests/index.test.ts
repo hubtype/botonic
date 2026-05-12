@@ -1,5 +1,7 @@
 import {
+  type AIAgentRouterArgs,
   type AiAgentArgs,
+  AiAgentType,
   type BotContext,
   INPUT,
   PROVIDER,
@@ -16,17 +18,75 @@ import {
 } from '@jest/globals'
 
 import BotonicPluginAiAgents from '../src/index'
+import { LLMConfig as MockedLLMConfig } from '../src/llm-config'
 
 // Store the captured AIAgentBuilder arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let capturedBuilderArgs: any = null
+type MockLlmConfig = {
+  modelName: string
+  modelSettings: { temperature: number }
+  modelProvider: Record<string, never>
+  getModel: () => Promise<{ id: string }>
+}
+type MockRouterBuilderArgs = {
+  name: string
+  instructions: string
+  llmConfig: MockLlmConfig
+  handoffs: unknown[]
+  inputGuardrailRules: unknown[]
+  outputMessagesSchemas: unknown[]
+  guardrailTrackingContext: unknown
+}
+let capturedRouterBuilderArgs: MockRouterBuilderArgs | null = null
+type MockAgentConfig = {
+  name: string
+  instructions?: string
+  model?: unknown
+  modelSettings?: unknown
+  handoffs?: unknown
+  inputGuardrails?: { name: string }[]
+}
+type MockAgentInstance = MockAgentConfig
+
+jest.mock('@openai/agents', () => {
+  const create = jest.fn((config: MockAgentConfig): MockAgentInstance => {
+    return {
+      name: config.name,
+      instructions: config.instructions,
+      model: config.model,
+      modelSettings: config.modelSettings,
+      handoffs: config.handoffs,
+      inputGuardrails: config.inputGuardrails,
+    }
+  })
+  const AgentMock = Object.assign(
+    jest.fn(
+      (config: MockAgentConfig): MockAgentInstance => ({
+        name: config.name,
+        instructions: config.instructions,
+        model: config.model,
+        modelSettings: config.modelSettings,
+      })
+    ),
+    { create }
+  )
+
+  return {
+    Agent: AgentMock,
+    handoff: jest.fn().mockImplementation(agent => ({ agent })),
+    setTracingDisabled: jest.fn(),
+    tool: jest.fn().mockImplementation(config => config),
+  }
+})
 
 // Mock LLMConfig to avoid actual OpenAI/Azure setup
 jest.mock('../src/llm-config', () => ({
-  LLMConfig: jest.fn().mockImplementation(() => ({
-    modelName: 'gpt-4.1-mini',
-    modelSettings: {},
+  LLMConfig: jest.fn().mockImplementation((_maxRetries, _timeout, model) => ({
+    modelName: model,
+    modelSettings: { temperature: 0 },
     modelProvider: {},
+    getModel: jest.fn(async () => ({ id: `resolved-${model}` })),
   })),
 }))
 
@@ -36,11 +96,28 @@ jest.mock('../src/agent-builder', () => ({
   AIAgentBuilder: jest.fn().mockImplementation((args: any) => {
     capturedBuilderArgs = args
     return {
-      build: jest.fn().mockReturnValue({
+      build: jest.fn(async () => ({
         name: args.name,
         instructions: args.instructions,
+        model: { id: `resolved-${args.llmConfig.modelName}` },
+        modelSettings: args.llmConfig.modelSettings,
         tools: args.tools || [],
-      }),
+      })),
+    }
+  }),
+}))
+
+jest.mock('../src/agent-router-builder', () => ({
+  AIAgentRouterBuilder: jest.fn().mockImplementation((args: unknown) => {
+    const routerBuilderArgs = args as MockRouterBuilderArgs
+    capturedRouterBuilderArgs = routerBuilderArgs
+    return {
+      build: jest.fn(async () => ({
+        name: routerBuilderArgs.name,
+        instructions: routerBuilderArgs.instructions,
+        modelSettings: routerBuilderArgs.llmConfig.modelSettings,
+        handoffs: routerBuilderArgs.handoffs,
+      })),
     }
   }),
 }))
@@ -48,6 +125,20 @@ jest.mock('../src/agent-builder', () => ({
 // Mock AIAgentRunner to avoid actual execution
 jest.mock('../src/runner', () => ({
   AIAgentRunner: jest.fn().mockImplementation(() => ({
+    run: jest.fn().mockResolvedValue({
+      messages: [],
+      toolsExecuted: [],
+      memoryLength: 0,
+      exit: false,
+      error: false,
+      inputGuardrailsTriggered: [],
+      outputGuardrailsTriggered: [],
+    } as never),
+  })),
+}))
+
+jest.mock('../src/runner-router', () => ({
+  AIAgentRouterRunner: jest.fn().mockImplementation(() => ({
     run: jest.fn().mockResolvedValue({
       messages: [],
       toolsExecuted: [],
@@ -108,6 +199,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     })
 
   const mockAiAgentArgs: AiAgentArgs = {
+    type: AiAgentType.Worker,
     name: 'Test Agent',
     instructions: 'Test instructions',
     model: 'gpt-4.1-mini',
@@ -120,6 +212,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedBuilderArgs = null
+    capturedRouterBuilderArgs = null
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -230,6 +323,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     const request = createMockRequest()
     const customAiAgentArgs: AiAgentArgs = {
+      type: AiAgentType.Worker,
       name: 'Custom Agent',
       instructions: 'Custom instructions for the agent',
       model: 'gpt-4.1-mini',
@@ -251,6 +345,122 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
     expect(capturedBuilderArgs.inputGuardrailRules).toEqual([
       { name: 'is_offensive', description: 'Check for offensive content' },
+    ])
+  })
+
+  it('should pass router configuration to AIAgentRouterBuilder', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    const routerArgs: AIAgentRouterArgs = {
+      type: AiAgentType.Router,
+      name: 'Router Agent',
+      instructions: 'Route the conversation to the right worker',
+      model: 'gpt-4.1-mini',
+      verbosity: VerbosityLevel.High,
+      inputGuardrailRules: [
+        {
+          name: 'is_offensive',
+          description: 'Check for offensive content',
+        },
+      ],
+      agents: [
+        {
+          type: AiAgentType.Worker,
+          name: 'Support Worker',
+          description: 'Handles support questions',
+          instructions: 'Answer support questions',
+          model: 'gpt-4.1-mini',
+          verbosity: VerbosityLevel.Medium,
+          activeTools: [],
+          sourceIds: [],
+          inputGuardrailRules: [],
+        },
+      ],
+    }
+
+    await plugin.getInference(request, routerArgs)
+
+    const routerBuilderArgs = capturedRouterBuilderArgs
+    if (!routerBuilderArgs) {
+      throw new Error('Router builder was not created')
+    }
+    expect(routerBuilderArgs.name).toBe('Router Agent')
+    expect(routerBuilderArgs.instructions).toBe(
+      'Route the conversation to the right worker'
+    )
+    expect(routerBuilderArgs.llmConfig).toMatchObject({
+      modelName: 'gpt-4.1-mini',
+      modelSettings: { temperature: 0 },
+    })
+    expect(MockedLLMConfig).toHaveBeenCalledWith(
+      2,
+      16000,
+      'gpt-4.1-mini',
+      VerbosityLevel.High
+    )
+    expect(routerBuilderArgs.inputGuardrailRules).toEqual([
+      {
+        name: 'is_offensive',
+        description: 'Check for offensive content',
+      },
+    ])
+    expect(routerBuilderArgs.outputMessagesSchemas).toEqual([])
+    expect(routerBuilderArgs.guardrailTrackingContext).toEqual({
+      botId: 'bot-123',
+      isTest: false,
+      authToken: 'test-auth-token',
+      inferenceId: expect.any(String),
+    })
+    expect(routerBuilderArgs.handoffs).toEqual([
+      expect.objectContaining({
+        agent: expect.objectContaining({
+          name: 'Support Worker',
+        }),
+      }),
+    ])
+  })
+
+  it('should pass router worker sourceIds to the handoff agent builder', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    const routerArgs: AIAgentRouterArgs = {
+      type: AiAgentType.Router,
+      name: 'Router Agent',
+      instructions: 'Route the conversation to the right worker',
+      model: 'gpt-4.1-mini',
+      verbosity: VerbosityLevel.Medium,
+      agents: [
+        {
+          type: AiAgentType.Worker,
+          name: 'Knowledge Worker',
+          description: 'Handles knowledge questions',
+          instructions: 'Answer with knowledge sources',
+          model: 'gpt-4.1-mini',
+          verbosity: VerbosityLevel.Medium,
+          activeTools: [],
+          sourceIds: ['source-1', 'source-2'],
+          inputGuardrailRules: [],
+        },
+      ],
+    }
+
+    await plugin.getInference(request, routerArgs)
+
+    expect(capturedBuilderArgs).toBeDefined()
+    expect(capturedBuilderArgs.name).toBe('Knowledge Worker')
+    expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
+    expect(capturedRouterBuilderArgs?.handoffs).toEqual([
+      expect.objectContaining({
+        agent: expect.objectContaining({
+          name: 'Knowledge Worker',
+        }),
+      }),
     ])
   })
 

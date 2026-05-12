@@ -1,4 +1,8 @@
-import type { AiAgentArgs, ToolExecution } from '@botonic/core'
+import {
+  type AiAgentArgs,
+  AiAgentType,
+  type ToolExecution,
+} from '@botonic/core'
 import type { ModelSettings } from '@openai/agents'
 import { OPENAI_PROVIDER } from './constants'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
@@ -66,9 +70,11 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} === AI Agent Debug Info ===`)
     console.log(`${PREFIX} Agent Name: ${aiAgentArgs.name}`)
     console.log(`${PREFIX} Active Tools: ${JSON.stringify(toolNames)}`)
-    console.log(
-      `${PREFIX} Source IDs: ${JSON.stringify(aiAgentArgs.sourceIds || [])}`
-    )
+    if (aiAgentArgs.type === AiAgentType.Worker) {
+      console.log(
+        `${PREFIX} Source IDs: ${JSON.stringify(aiAgentArgs.sourceIds || [])}`
+      )
+    }
     console.log(`${PREFIX} Message History Count: ${messages.length}`)
     console.log(
       `${PREFIX} Input Guardrail Rules: ${aiAgentArgs.inputGuardrailRules?.length || 0}`

@@ -9,12 +9,12 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { isProd, OPENAI_PROVIDER } from './constants'
+import { isProd } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { getApiVersion, type LLMConfig } from './llm-config'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from './services/types'
-import { retrieveKnowledge } from './tools'
+import { RETRIEVE_KNOWLEDGE_TOOL_NAME } from './tools'
 import type {
   AgenticInputMessage,
   AgenticOutputMessage,
@@ -26,7 +26,7 @@ import type {
 
 // Minimal interface matching the properties we actually use from Runner.run() result
 // This bypasses strict type checking while maintaining type safety for accessed properties
-interface AIAgentRunnerResult {
+export interface AIAgentRunnerResult {
   finalOutput?: {
     messages?: OutputMessage[]
   }
@@ -47,12 +47,12 @@ export class AIAgentRunner<
 
   constructor(
     agent: AIAgent<TPlugins, TExtraData>,
-    openAiClient: LLMConfig,
+    llmConfig: LLMConfig,
     inferenceId: string,
     logger: DebugLogger
   ) {
     this.agent = agent
-    this.llmConfig = openAiClient
+    this.llmConfig = llmConfig
     this.inferenceId = inferenceId
     this.logger = logger
   }
@@ -69,17 +69,7 @@ export class AIAgentRunner<
     )
 
     try {
-      const modelProvider = this.llmConfig.modelProvider
-      const modelSettings = this.llmConfig.modelSettings
-
-      const hasRetrieveKnowledge = this.agent.tools.includes(retrieveKnowledge)
-      if (hasRetrieveKnowledge && OPENAI_PROVIDER === 'azure') {
-        modelSettings.toolChoice = retrieveKnowledge.name
-      }
-
       const runner = new Runner({
-        modelSettings,
-        modelProvider,
         tracingDisabled: true,
       })
       // Type assertion to bypass strict type checking - the actual return type from runner.run()
@@ -87,7 +77,6 @@ export class AIAgentRunner<
       const result = (await runner.run(this.agent, messages, {
         context,
       })) as AIAgentRunnerResult
-
       const endTime = Date.now()
 
       await this.sendLlmRunTracking(result, context, startTime, endTime)
@@ -166,7 +155,7 @@ export class AIAgentRunner<
       product_name: TrackProductName.AI_AGENT,
       deployment_name: this.llmConfig.modelName,
       model_name:
-        (response.providerData?.['model'] as string | undefined) ??
+        (response.providerData?.model as string | undefined) ??
         this.llmConfig.modelName,
       feature: TrackFeature.AI_AGENT_RUN,
       api_version: apiVersion,
@@ -262,7 +251,7 @@ export class AIAgentRunner<
       toolResults,
     }
 
-    if (toolName === retrieveKnowledge.name) {
+    if (toolName === RETRIEVE_KNOWLEDGE_TOOL_NAME) {
       return {
         ...toolExecution,
         knowledgebaseSourcesIds: context.knowledgeUsed.sourceIds,

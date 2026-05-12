@@ -115,14 +115,45 @@ export interface HubtypeUserMessage {
   content: string
 }
 
-export interface AiAgentArgs {
+export enum AiAgentType {
+  Worker = 'worker',
+  Router = 'router',
+  Manager = 'manager',
+}
+
+export type AiAgentArgs =
+  | AiAgentWorkerArgs
+  | AIAgentRouterArgs
+  | AIAgentManagerArgs
+
+export type AiAgentBaseArgs = {
+  type: AiAgentType
   name: string
   instructions: string
   model: string
   verbosity: VerbosityLevel
-  activeTools?: { name: string }[]
   inputGuardrailRules?: GuardrailRule[]
-  sourceIds?: string[]
   previousHubtypeMessages?: HubtypeAssistantMessage[]
   outputMessagesSchemas?: z.ZodObject<any>[]
+}
+
+export interface AiAgentWorkerArgs extends AiAgentBaseArgs {
+  type: AiAgentType.Worker
+  activeTools: { name: string }[]
+  sourceIds: string[]
+}
+
+interface AIAgentDataWithDescription extends AiAgentWorkerArgs {
+  description: string
+}
+
+export interface AIAgentRouterArgs extends AiAgentBaseArgs {
+  type: AiAgentType.Router
+  agents: AIAgentDataWithDescription[]
+}
+
+export interface AIAgentManagerArgs extends AiAgentBaseArgs {
+  type: AiAgentType.Manager
+  agents: AIAgentDataWithDescription[]
+  activeTools: { name: string }[]
 }

@@ -1,4 +1,6 @@
 import type { HtAiAgentNode } from './ai-agent'
+import type { HtAiAgentManagerNode } from './ai-agent-manager'
+import type { HtAiAgentRouterNode } from './ai-agent-router'
 import type { HtBotActionNode } from './bot-action'
 import type { HtCaptureUserInputNode } from './capture-user-input'
 import type { HtCarouselNode } from './carousel'
@@ -39,6 +41,8 @@ export type HtNodeWithContent =
   | HtKnowledgeBaseNode
   | HtBotActionNode
   | HtAiAgentNode
+  | HtAiAgentRouterNode
+  | HtAiAgentManagerNode
   | HtRatingNode
   | HtWebviewNode
   | HtGoToFlow

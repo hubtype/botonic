@@ -2,60 +2,65 @@ import {
   type AgenticOutputMessage,
   AiAgentType,
   type BotContext,
-  EventAction,
-  type EventAiAgent,
   type GuardrailRule,
   type HubtypeAssistantMessage,
   type InferenceResponse,
   VerbosityLevel,
 } from '@botonic/core'
+import type { FlowBuilderApi } from '../api'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
 } from '../structured-output/flow-builder-content'
-import {
-  getCommonFlowContentEventArgsForContentId,
-  trackEvent,
-} from '../tracking'
+import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { HubtypeAssistantContent } from '../utils/ai-agent'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
-import { FlowCarousel } from './flow-carousel'
-import { FlowText } from './flow-text'
-import type { HtNodeWithContent } from './hubtype-fields'
+import { FlowAiAgent } from './flow-ai-agent'
+import type { AiAgentWithNameAndDescription } from './flow-ai-agent-router'
 import type {
+  HtAiAgentManagerNode,
   HtAiAgentNode,
   HtInputGuardrailRule,
-} from './hubtype-fields/ai-agent'
-import type { FlowContent } from './index'
+  HtNodeWithContent,
+} from './hubtype-fields'
+import { FlowCarousel, type FlowContent, FlowText } from './index'
 
-export class FlowAiAgent extends ContentFieldsBase {
+export class FlowAiAgentManager extends ContentFieldsBase {
   public name: string = ''
   public instructions: string = ''
   public model: string = ''
   public verbosity: VerbosityLevel = VerbosityLevel.Medium
   public activeTools?: { name: string }[]
-  public inputGuardrailRules: HtInputGuardrailRule[]
-  public sources?: { id: string; name: string }[]
+  public agents: AiAgentWithNameAndDescription[] = []
+  public inputGuardrailRules: HtInputGuardrailRule[] = []
 
   public aiAgentResponse?: InferenceResponse<FlowBuilderContentMessage>
   public messages: AgenticOutputMessage<FlowBuilderContentMessage>[] = []
   public jsxElements: JSX.Element[] = []
 
-  static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
-    const newAiAgent = new FlowAiAgent(component.id)
-    newAiAgent.code = component.code
-    newAiAgent.name = component.content.name
-    newAiAgent.instructions = component.content.instructions
-    newAiAgent.model = component.content.model
-    newAiAgent.verbosity = component.content.verbosity
-    newAiAgent.activeTools = component.content.active_tools
-    newAiAgent.inputGuardrailRules =
+  static fromHubtypeCMS(
+    component: HtAiAgentManagerNode,
+    cmsApi: FlowBuilderApi
+  ): FlowAiAgentManager {
+    const newAiAgentManager = new FlowAiAgentManager(component.id)
+    newAiAgentManager.name = component.code
+    newAiAgentManager.instructions = component.content.instructions
+    newAiAgentManager.model = component.content.model
+    newAiAgentManager.verbosity = component.content.verbosity
+    newAiAgentManager.activeTools = component.content.active_tools
+    newAiAgentManager.agents = component.content.agent_slots.map(agentSlot => {
+      const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
+      const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
+      return {
+        agent: aiAgent,
+        description: agentSlot.description || '',
+        name: agentSlot.name || '',
+      }
+    })
+    newAiAgentManager.inputGuardrailRules =
       component.content.input_guardrail_rules || []
-    newAiAgent.sources = component.content.sources
-    newAiAgent.followUp = component.follow_up
-
-    return newAiAgent
+    return newAiAgentManager
   }
 
   async resolveAIAgentResponse(
@@ -88,32 +93,45 @@ export class FlowAiAgent extends ContentFieldsBase {
         }
       }) || []
 
-    const activeInputGuardrailRules = this.getActiveInputGuardrailRules(
-      this.inputGuardrailRules
-    )
-
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-
     const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
       botContext,
       {
-        type: AiAgentType.Worker,
+        type: AiAgentType.Manager,
         name: this.name,
         instructions: this.instructions,
         model: this.model,
-        verbosity: this.verbosity,
+        verbosity: VerbosityLevel.Medium,
         activeTools: this.activeTools ?? [],
-        inputGuardrailRules: activeInputGuardrailRules,
-        sourceIds: this.sources?.map(source => source.id) ?? [],
+        agents: this.agents.map(({ agent, description, name }) => ({
+          type: AiAgentType.Worker,
+          name,
+          description,
+          instructions: agent.instructions,
+          model: agent.model,
+          verbosity: agent.verbosity,
+          activeTools: agent.activeTools ?? [],
+          inputGuardrailRules: this.getActiveInputGuardrailRules(
+            agent.inputGuardrailRules
+          ),
+          sourceIds: agent.sources?.map(s => s.id) ?? [],
+        })),
+        inputGuardrailRules: this.getActiveInputGuardrailRules(
+          this.inputGuardrailRules
+        ),
         outputMessagesSchemas: [FlowBuilderContentSchema],
         previousHubtypeMessages: previousHubtypeContents,
       }
     )
 
+    console.log('FlowAiAgentManager aiAgentResponse', {
+      aiAgentResponse,
+    })
+
     return aiAgentResponse
   }
 
-  async trackFlow(): Promise<void> {
+  async trackFlow(_botContext: BotContext): Promise<void> {
     return
   }
 
@@ -121,8 +139,8 @@ export class FlowAiAgent extends ContentFieldsBase {
     const { flowThreadId, flowId, flowName, flowNodeId } =
       getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
-    const event: EventAiAgent = {
-      action: EventAction.AiAgent,
+    const event = {
+      action: 'AiAgentManager',
       flowThreadId: flowThreadId,
       flowId: flowId,
       flowName: flowName,
@@ -140,7 +158,11 @@ export class FlowAiAgent extends ContentFieldsBase {
     }
     const { action, ...eventArgs } = event
 
-    await trackEvent(botContext, action, eventArgs)
+    // await trackEvent(botContext, action, eventArgs)
+    console.log('trackAiAgentResponse', {
+      action,
+      eventArgs,
+    })
   }
 
   async getFlowContentsByContentId(
@@ -153,6 +175,7 @@ export class FlowAiAgent extends ContentFieldsBase {
     const flowContents = await flowBuilderPlugin.getContentsByNode(
       node as HtNodeWithContent
     )
+
     return flowContents
   }
 
