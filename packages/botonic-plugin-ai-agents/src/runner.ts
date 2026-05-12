@@ -9,7 +9,7 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { isProd, OPENAI_PROVIDER } from './constants'
+import { isProd } from './constants'
 import type { DebugLogger } from './debug-logger'
 import { getApiVersion, type LLMConfig } from './llm-config'
 import { HubtypeApiClient } from './services/hubtype-api-client'
@@ -73,7 +73,7 @@ export class AIAgentRunner<
       const modelSettings = this.llmConfig.modelSettings
 
       const hasRetrieveKnowledge = this.agent.tools.includes(retrieveKnowledge)
-      if (hasRetrieveKnowledge && OPENAI_PROVIDER === 'azure') {
+      if (hasRetrieveKnowledge && this.llmConfig.modelName.includes('gpt-4')) {
         modelSettings.toolChoice = retrieveKnowledge.name
       }
 
