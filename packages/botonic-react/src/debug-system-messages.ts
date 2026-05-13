@@ -158,7 +158,8 @@ export const DEBUG_SYSTEM_MESSAGES = {
       {
         tool_name: 'retrieve_knowledge',
         tool_arguments: { query: 'subscription management' },
-        tool_results: 'Found 3 relevant articles about subscription management.',
+        tool_results:
+          'Found 3 relevant articles about subscription management.',
         knowledgebase_sources_ids: ['src-mock-001'],
         knowledgebase_chunks_ids: ['chunk-mock-001'],
       },
