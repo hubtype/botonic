@@ -1,5 +1,7 @@
+import { INPUT } from '@botonic/core'
 import { createRoot } from 'react-dom/client'
 
+import { DEBUG_FIXTURES } from './debug-fixtures'
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
@@ -102,6 +104,28 @@ export class DevApp extends WebchatApp {
       const reactRoot = createRoot(container)
       reactRoot.render(devAppComponent)
     })
+  }
+
+  /** Pre-built mock payloads for every debug event type. Handy from the console:
+   *  Botonic.addDebugMessage(Botonic.debugFixtures.aiAgent) */
+  get debugFixtures() {
+    return DEBUG_FIXTURES
+  }
+
+  /**
+   * Inject a mock SystemDebugTrace event into the preview webchat.
+   * Accepts any DebugEvent payload (plain object with an `action` field).
+   *
+   * From code:
+   *   import { DEBUG_FIXTURES } from '@botonic/react/src/debug-fixtures'
+   *   app.addDebugMessage(DEBUG_FIXTURES.aiAgent)
+   *
+   * From the browser console:
+   *   Botonic.addDebugMessage(Botonic.debugFixtures.conditionalQueueStatus)
+   *   Botonic.addDebugMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hi', nlu_keyword_is_regex: false, flow_id: 'f1', flow_node_id: 'n1' })
+   */
+  addDebugMessage(eventData) {
+    this.addSystemMessage({ type: INPUT.SYSTEM_DEBUG_TRACE, data: eventData })
   }
 
   async onUserInput({ input, session, lastRoutePath }) {
