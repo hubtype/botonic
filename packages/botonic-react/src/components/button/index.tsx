@@ -44,7 +44,8 @@ export const Button = (props: ButtonProps) => {
             payload: props.payload,
           })
     } else if (props.url) {
-      const target = isInWebviewApp() ? '_self' : props.target
+      const defaultTarget = props.target || '_blank'
+      const target = isInWebviewApp() ? '_self' : defaultTarget
       window.open(props.url, target)
     }
 
