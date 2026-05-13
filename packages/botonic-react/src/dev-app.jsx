@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { createRoot } from 'react-dom/client'
 
-import { DEBUG_FIXTURES } from './debug-fixtures'
+import { DEBUG_SYSTEM_MESSAGES } from './debug-system-messages'
 import { SENDERS } from './index-types'
 import { ReactBot } from './react-bot'
 import { onDOMLoaded } from './util/dom'
@@ -107,9 +107,9 @@ export class DevApp extends WebchatApp {
   }
 
   /** Pre-built mock payloads for every debug event type. Handy from the console:
-   *  Botonic.addDebugSystemMessage(Botonic.debugFixtures.aiAgent) */
-  get debugFixtures() {
-    return DEBUG_FIXTURES
+   *  Botonic.addDebugSystemMessage(Botonic.debugSystemMessages.aiAgent) */
+  get debugSystemMessages() {
+    return DEBUG_SYSTEM_MESSAGES
   }
 
   /**
@@ -117,11 +117,11 @@ export class DevApp extends WebchatApp {
    * Accepts any DebugEvent payload (plain object with an `action` field).
    *
    * From code:
-   *   import { DEBUG_FIXTURES } from '@botonic/react/src/debug-fixtures'
-   *   app.addDebugSystemMessage(DEBUG_FIXTURES.aiAgent)
+   *   import { DEBUG_SYSTEM_MESSAGES } from '@botonic/react/src/debug-system-messages'
+   *   app.addDebugSystemMessage(DEBUG_SYSTEM_MESSAGES.aiAgent)
    *
    * From the browser console:
-   *   Botonic.addDebugSystemMessage(Botonic.debugFixtures.conditionalQueueStatus)
+   *   Botonic.addDebugSystemMessage(Botonic.debugSystemMessages.conditionalQueueStatus)
    *   Botonic.addDebugSystemMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hi', nlu_keyword_is_regex: false, flow_id: 'f1', flow_node_id: 'n1' })
    */
   addDebugSystemMessage(eventData) {

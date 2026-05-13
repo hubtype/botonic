@@ -2,13 +2,13 @@
  * Dev-only mock payloads for every SystemDebugTrace event type.
  *
  * Usage from dev-entry.ts:
- *   import { DEBUG_FIXTURES } from '@botonic/react/src/debug-fixtures'
- *   app.addDebugSystemMessage(DEBUG_FIXTURES.keyword)
+ *   import { DEBUG_SYSTEM_MESSAGES } from '@botonic/react/src/debug-system-messages'
+ *   app.addDebugSystemMessage(DEBUG_SYSTEM_MESSAGES.keyword)
  *
  * Usage from the browser console (window.Botonic is the DevApp instance):
  *   Botonic.addDebugSystemMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hello', ... })
  *   // or use the pre-built fixtures exposed on the DevApp:
- *   Botonic.addDebugSystemMessage(Botonic.debugFixtures.aiAgent)
+ *   Botonic.addDebugSystemMessage(Botonic.debugSystemMessages.aiAgent)
  */
 
 import { EventAction } from '@botonic/core'
@@ -54,7 +54,7 @@ const mockChunksWithSources: ChunkIdsGroupedBySourceData[] = [
   },
 ]
 
-export const DEBUG_FIXTURES = {
+export const DEBUG_SYSTEM_MESSAGES = {
   keyword: {
     action: EventAction.Keyword,
     flow_id: 'flow-mock-001',

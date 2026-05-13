@@ -1,7 +1,7 @@
 export { BotonicInputTester, BotonicOutputTester } from './botonic-tester'
 export * from './components'
 export * from './contexts'
-export { DEBUG_FIXTURES } from './debug-fixtures'
+export { DEBUG_SYSTEM_MESSAGES } from './debug-system-messages'
 export { DevApp } from './dev-app'
 export * from './index-types'
 export { msgsToBotonic, msgToBotonic } from './msg-to-botonic'
