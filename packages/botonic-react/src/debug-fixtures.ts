@@ -3,12 +3,12 @@
  *
  * Usage from dev-entry.ts:
  *   import { DEBUG_FIXTURES } from '@botonic/react/src/debug-fixtures'
- *   app.addDebugMessage(DEBUG_FIXTURES.keyword)
+ *   app.addDebugSystemMessage(DEBUG_FIXTURES.keyword)
  *
  * Usage from the browser console (window.Botonic is the DevApp instance):
- *   Botonic.addDebugMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hello', ... })
+ *   Botonic.addDebugSystemMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hello', ... })
  *   // or use the pre-built fixtures exposed on the DevApp:
- *   Botonic.addDebugMessage(Botonic.debugFixtures.aiAgent)
+ *   Botonic.addDebugSystemMessage(Botonic.debugFixtures.aiAgent)
  */
 
 import { EventAction } from '@botonic/core'

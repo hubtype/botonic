@@ -107,7 +107,7 @@ export class DevApp extends WebchatApp {
   }
 
   /** Pre-built mock payloads for every debug event type. Handy from the console:
-   *  Botonic.addDebugMessage(Botonic.debugFixtures.aiAgent) */
+   *  Botonic.addDebugSystemMessage(Botonic.debugFixtures.aiAgent) */
   get debugFixtures() {
     return DEBUG_FIXTURES
   }
@@ -118,13 +118,13 @@ export class DevApp extends WebchatApp {
    *
    * From code:
    *   import { DEBUG_FIXTURES } from '@botonic/react/src/debug-fixtures'
-   *   app.addDebugMessage(DEBUG_FIXTURES.aiAgent)
+   *   app.addDebugSystemMessage(DEBUG_FIXTURES.aiAgent)
    *
    * From the browser console:
-   *   Botonic.addDebugMessage(Botonic.debugFixtures.conditionalQueueStatus)
-   *   Botonic.addDebugMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hi', nlu_keyword_is_regex: false, flow_id: 'f1', flow_node_id: 'n1' })
+   *   Botonic.addDebugSystemMessage(Botonic.debugFixtures.conditionalQueueStatus)
+   *   Botonic.addDebugSystemMessage({ action: 'nlu_keyword', nlu_keyword_name: 'hi', nlu_keyword_is_regex: false, flow_id: 'f1', flow_node_id: 'n1' })
    */
-  addDebugMessage(eventData) {
+  addDebugSystemMessage(eventData) {
     this.addSystemMessage({ type: INPUT.SYSTEM_DEBUG_TRACE, data: eventData })
   }
 
