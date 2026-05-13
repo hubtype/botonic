@@ -1,5 +1,4 @@
 export * from './ai-agent'
-export * from './ai-agent-manager'
 export * from './ai-agent-router'
 export * from './bot-action'
 export * from './button'

@@ -1,5 +1,4 @@
 import {
-  type AIAgentManagerArgs,
   type AIAgentRouterArgs,
   type AiAgentArgs,
   AiAgentType,
@@ -14,7 +13,6 @@ import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
 
 import { AIAgentBuilder } from './agent-builder'
-import { AIAgentManagerBuilder } from './agent-manager-builder'
 import { AIAgentRouterBuilder } from './agent-router-builder'
 import {
   DEFAULT_MAX_RETRIES,
@@ -25,7 +23,6 @@ import {
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
 import { AIAgentRunner } from './runner'
-import { AIAgentManagerRunner } from './runner-manager'
 import { AIAgentRouterRunner } from './runner-router'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
@@ -106,15 +103,6 @@ export default class BotonicPluginAiAgents<
 
       if (aiAgentArgs.type === AiAgentType.Router) {
         return await this.executeRouterAIAgent(
-          botContext,
-          aiAgentArgs,
-          authToken,
-          inferenceId
-        )
-      }
-
-      if (aiAgentArgs.type === AiAgentType.Manager) {
-        return await this.executeManagerAIAgent(
           botContext,
           aiAgentArgs,
           authToken,
@@ -274,86 +262,6 @@ export default class BotonicPluginAiAgents<
     // Run agent
     const runner = new AIAgentRouterRunner<TPlugins, TExtraData>(
       agentRouter,
-      llmConfig,
-      inferenceId,
-      this.logger
-    )
-
-    return await runner.run(messages, context)
-  }
-
-  private async executeManagerAIAgent(
-    botContext: BotContext<TPlugins, TExtraData>,
-    aiAgentArgs: AIAgentManagerArgs,
-    authToken: string,
-    inferenceId: string
-  ) {
-    const { agents, name, instructions } = aiAgentArgs
-
-    const llmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      aiAgentArgs.model,
-      aiAgentArgs.verbosity
-    )
-
-    const agentsAsTools = await Promise.all(
-      agents.map(async aiAgentData => {
-        const { agent } = await this.getAIAgentWorkerAndTools(
-          botContext,
-          aiAgentData,
-          aiAgentArgs.outputMessagesSchemas || [],
-          authToken,
-          inferenceId,
-          llmConfig
-        )
-        return agent.asTool({
-          toolName: aiAgentData.name,
-          toolDescription: aiAgentData.description,
-        })
-      })
-    )
-
-    const tools = [...agentsAsTools, ...this.buildTools(aiAgentArgs)]
-
-    console.log('Manager tools', tools)
-
-    // TODO: Join tools with agents as tools
-    const agentManager = await new AIAgentManagerBuilder<TPlugins, TExtraData>({
-      name,
-      instructions,
-      tools,
-      contactInfo: botContext.session.user.contact_info || [],
-      inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
-      guardrailTrackingContext: {
-        botId: botContext.session.bot.id,
-        isTest: botContext.session.is_test_integration,
-        authToken,
-        inferenceId,
-      },
-      outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
-      llmConfig,
-    }).build()
-
-    const messages = await this.getMessages(
-      botContext,
-      authToken,
-      aiAgentArgs.previousHubtypeMessages || []
-    )
-
-    const context: Context<TPlugins, TExtraData> = {
-      authToken,
-      knowledgeUsed: {
-        query: '',
-        sourceIds: [],
-        chunksIds: [],
-        chunkTexts: [],
-      },
-      request: botContext,
-    }
-
-    const runner = new AIAgentManagerRunner<TPlugins, TExtraData>(
-      agentManager,
       llmConfig,
       inferenceId,
       this.logger
