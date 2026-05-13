@@ -13,6 +13,7 @@ export interface HtAiAgentSlotNode {
 export interface HtAiAgentRouterNode extends HtBaseNode {
   type: HtNodeWithContentType.AI_AGENT_ROUTER
   content: {
+    name: string
     instructions: string
     model: string
     verbosity: VerbosityLevel

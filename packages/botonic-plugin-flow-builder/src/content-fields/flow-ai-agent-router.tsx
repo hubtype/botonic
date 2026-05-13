@@ -48,22 +48,39 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
     cmsApi: FlowBuilderApi
   ): FlowAiAgentRouter {
     const newAiAgentRouter = new FlowAiAgentRouter(component.id)
-    newAiAgentRouter.name = component.code
+    newAiAgentRouter.code = component.code
+    newAiAgentRouter.name = component.content.name
     newAiAgentRouter.instructions = component.content.instructions
     newAiAgentRouter.model = component.content.model
     newAiAgentRouter.verbosity = component.content.verbosity
-    newAiAgentRouter.agents = component.content.agent_slots.map(agentSlot => {
-      const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
-      const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
-      return {
-        agent: aiAgent,
-        description: agentSlot.description || '',
-        name: agentSlot.name || '',
-      }
-    })
+    newAiAgentRouter.agents = FlowAiAgentRouter.getTransferAgentsFromHubtypeCMS(
+      component,
+      cmsApi
+    )
     newAiAgentRouter.inputGuardrailRules =
       component.content.input_guardrail_rules || []
     return newAiAgentRouter
+  }
+
+  private static getTransferAgentsFromHubtypeCMS(
+    component: HtAiAgentRouterNode,
+    cmsApi: FlowBuilderApi
+  ): AiAgentWithNameAndDescription[] {
+    return component.content.agent_slots.map((agentSlot, index) => {
+      const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
+      const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
+      const aiAgentName =
+        agentSlot.name?.trim().toLowerCase().replace(/ /g, '_') ||
+        `ai_agent_${index}`
+      const agentDescription =
+        agentSlot.description || `Transfer to ${aiAgentName}`
+
+      return {
+        agent: aiAgent,
+        description: agentDescription,
+        name: `transfer_to_${aiAgentName}`,
+      }
+    })
   }
 
   async resolveAIAgentResponse(
