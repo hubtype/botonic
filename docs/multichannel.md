@@ -33,6 +33,12 @@ All multichannel code lives under two packages:
 | WhatsApp CTA URL button | `packages/botonic-react/src/components/whatsapp-cta-url-button.tsx` |
 | WhatsApp button list | `packages/botonic-react/src/components/whatsapp-button-list.tsx` |
 | Flow Builder channel conditional | `packages/botonic-plugin-flow-builder/src/content-fields/flow-channel-conditional.tsx` |
+| Flow Builder carousel | `packages/botonic-plugin-flow-builder/src/content-fields/flow-carousel.tsx` |
+| Flow Builder WhatsApp template | `packages/botonic-plugin-flow-builder/src/content-fields/flow-whatsapp-template.tsx` |
+| Flow Builder CTA URL button | `packages/botonic-plugin-flow-builder/src/content-fields/flow-whatsapp-cta-url-button.tsx` |
+| Flow Builder button list | `packages/botonic-plugin-flow-builder/src/content-fields/whatsapp-button-list/flow-whatsapp-button-list.tsx` |
+| Flow Builder rating | `packages/botonic-plugin-flow-builder/src/content-fields/flow-rating.tsx` |
+| Flow Builder base utilities | `packages/botonic-plugin-flow-builder/src/content-fields/content-fields-base.ts` |
 | Public exports | `packages/botonic-react/src/components/multichannel/index.ts` |
 
 ---
@@ -243,6 +249,129 @@ This is entirely separate from `<Multichannel>` — it does not adapt message sh
 
 ---
 
+## Flow Builder Channel-Specific Content Types
+
+The Flow Builder plugin has its own set of content field classes that render channel-aware output independently of the `<Multichannel>` React wrapper. Each class extends `ContentFieldsBase` (`content-fields-base.ts`) and implements a `toBotonic(botContext)` method that returns JSX.
+
+Channel detection inside flow content types is done via `botContext.session.user.provider` directly, or through the `isWhatsapp(session)` helper from `@botonic/core`.
+
+Variable substitution (`{variableName}` patterns) is available in all text fields and is handled by `replaceVariables()` (`content-fields-base.ts:65-84`), which resolves values from `session.user.contact_info.*`, `input.*`, `session.*`, or `session.user.extra_data`.
+
+---
+
+### `FlowCarousel` (`flow-carousel.tsx`)
+
+Renders a carousel adapted per channel.
+
+**Validation (lines 55-67):** For WhatsApp, all elements must use the same button type (all URL or all payload). Mixed types are invalid.
+
+**WhatsApp rendering (lines 115-257):**
+
+| Condition | Output |
+|---|---|
+| Single element, URL button | `<WhatsappCTAUrlButton>` with element image as header |
+| Single element, payload button | `<Text>` with a `<Button>` child |
+| Multiple elements | `<WhatsappInteractiveMediaCarousel>` |
+
+Card text for WhatsApp is formatted as `*{title}*\n{subtitle}` via `generateWhatsappElementText()` (`flow-carousel.tsx:69-77`).
+
+`createCardsFromElements()` (`flow-carousel.tsx:79-113`) maps each element to a `WhatsappInteractiveMediaCard`:
+- URL button elements → `CardType.CTA_URL` with `{ buttonText, buttonUrl, image }`
+- Payload button elements → `CardType.QUICK_REPLY` with `{ buttons: [{ text, payload }] }`
+
+The `whatsappText` prop (default: `"These are the options"`) is the message shown above the interactive media carousel.
+
+**Other channels (lines 259-263):** Standard `<Carousel>` with `<FlowElement>` children — no transformation.
+
+---
+
+### `FlowWhatsappTemplate` (`flow-whatsapp-template.tsx`)
+
+Renders a pre-approved WhatsApp template message. Only active on WhatsApp; falls back to a plain `<Text>` with a JSON dump on other channels.
+
+**Initialization (lines 43-77):** Resolves the template entry for the current locale from `component.content.by_locale[currentLocale]`. Extracts:
+- `template` — the `HtWhatsAppTemplate` object (name, language, components)
+- `header_variables` — media file list or text parameters for the header
+- `variable_values` — body variable substitutions
+- `url_variable_values` — URL button parameter substitutions
+
+**Header component (lines 79-111, 119-162):**
+
+| Header type | Source | Output |
+|---|---|---|
+| `TEXT` | `header_variables.text` | `WhatsappTemplateComponentHeader` with text parameters |
+| `IMAGE` | `header_variables.media` filtered by locale | `WhatsappTemplateComponentHeader` with image link |
+| `VIDEO` | `header_variables.media` filtered by locale | `WhatsappTemplateComponentHeader` with video link |
+| None | — | `undefined` (no header component) |
+
+**Body component (lines 166-181):** Maps each `variable_values` entry to a `WhatsappTemplateComponentBody` parameter. `replaceVariables()` is applied to each value.
+
+**Button components (lines 183-221):** Iterates the template's button definitions:
+- `URL` type → `WhatsappTemplateUrlButton` with the URL parameter from `url_variable_values[index]`
+- `QUICK_REPLY` type → `WhatsappTemplateQuickReplyButton` with the button target as payload
+- `VOICE_CALL` type → `WhatsappTemplateVoiceCallButton`
+
+**Rendering (lines 282-323):** On WhatsApp, returns `<WhatsappTemplate>` with the resolved header, body, and button components. On other channels, returns a `<Text>` containing the serialized template JSON (fallback for development/testing).
+
+---
+
+### `FlowWhatsappCtaUrlButton` (`flow-whatsapp-cta-url-button.tsx`)
+
+A stand-alone CTA URL button node that renders a WhatsApp interactive URL message with an optional header.
+
+**Header types (lines 62-115):** Resolved from the locale-specific content fields:
+
+| `headerType` | Source field | Rendered as |
+|---|---|---|
+| `TEXT` | locale-specific header text | Text header |
+| `IMAGE` | locale-specific image URL | Image header |
+| `VIDEO` | locale-specific video URL | Video header |
+| `DOCUMENT` | locale-specific document URL | Document header |
+| none | — | No header |
+
+**WhatsApp rendering (lines 139-212):** Returns `<WhatsappCTAUrlButton>` with the resolved header variant, `body` (variable-substituted text), optional `footer`, `displayText`, and `url`.
+
+**Non-WhatsApp fallback (lines 130-136):**
+```jsx
+<Text>
+  {replacedText}
+  <Button url={url}>{displayText}</Button>
+</Text>
+```
+
+---
+
+### `FlowWhatsappButtonList` (`whatsapp-button-list/flow-whatsapp-button-list.tsx`)
+
+An interactive list message for WhatsApp. Rows are grouped into named sections; each row carries a payload that targets the next flow node.
+
+**Row ID format (flow-whatsapp-button-list-row.tsx:55-57):** `{targetId}|source_{sectionIndex}.{rowIndex}` — encodes which section and row was selected.
+
+**WhatsApp rendering (lines 67-76):**
+```jsx
+<WhatsappButtonList
+  body={replacedText}
+  button={listButtonText}
+  sections={sections.map(s => s.renderSection(index))}
+/>
+```
+
+**Non-WhatsApp fallback (lines 51-64):** All sections are flattened; each row becomes a `<Button>` child inside a `<Text>` message.
+
+---
+
+### `FlowRating` (`flow-rating.tsx`)
+
+A rating widget with three distinct renderings by channel.
+
+| Channel | Output |
+|---|---|
+| WhatsApp | `<WhatsappButtonList>` — each rating option is a list row |
+| Webchat/Dev (custom rating enabled) | `<CustomRatingMessage>` with configurable rating type and send button |
+| All other channels | `<Text>` with one `<Button>` per rating option |
+
+---
+
 ## Props Reference
 
 ### `<Multichannel>` props (`index-types.ts:42-53`)
@@ -299,3 +428,9 @@ MultichannelText (WhatsApp)
 | `packages/botonic-react/tests/components/multichannel/multichannel-reply.test.jsx` | Reply rendering per channel |
 | `packages/botonic-react/tests/components/multichannel/multichannel-carousel.test.jsx` | Carousel card explosion |
 | `packages/botonic-react/tests/components/multichannel/multichannel-carousel-multibutton.test.jsx` | Carousel with multiple button types |
+| `packages/botonic-plugin-flow-builder/tests/messages/flow-carousel.test.ts` | FlowCarousel per-channel rendering and validation |
+| `packages/botonic-plugin-flow-builder/tests/messages/flow-whatsapp-template.test.ts` | FlowWhatsappTemplate header/body/button assembly |
+| `packages/botonic-plugin-flow-builder/tests/messages/flow-button-list.test.ts` | FlowWhatsappButtonList row rendering and fallback |
+| `packages/botonic-plugin-flow-builder/tests/messages/flow-whatsapp-cta-url-button.test.ts` | FlowWhatsappCtaUrlButton header variants and fallback |
+| `packages/botonic-plugin-flow-builder/tests/messages/flow-rating.test.ts` | FlowRating per-channel output |
+| `packages/botonic-plugin-flow-builder/tests/conditional-channel.test.ts` | FlowChannelConditional routing and analytics |
