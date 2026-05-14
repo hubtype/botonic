@@ -20,16 +20,16 @@ import {
 import BotonicPluginAiAgents from '../src/index'
 import { LLMConfig as MockedLLMConfig } from '../src/llm-config'
 
-// Store the captured AIAgentBuilder arguments
+// Store the captured WorkerAgent arguments
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-let capturedBuilderArgs: any = null
+let capturedWorkerAgentArgs: any = null
 type MockLlmConfig = {
   modelName: string
   modelSettings: { temperature: number }
   modelProvider: Record<string, never>
   getModel: () => Promise<{ id: string }>
 }
-type MockRouterBuilderArgs = {
+type MockRouterAgentArgs = {
   name: string
   instructions: string
   llmConfig: MockLlmConfig
@@ -38,7 +38,7 @@ type MockRouterBuilderArgs = {
   outputMessagesSchemas: unknown[]
   guardrailTrackingContext: unknown
 }
-let capturedRouterBuilderArgs: MockRouterBuilderArgs | null = null
+let capturedRouterAgentArgs: MockRouterAgentArgs | null = null
 type MockAgentConfig = {
   name: string
   instructions?: string
@@ -90,41 +90,45 @@ jest.mock('../src/llm-config', () => ({
   })),
 }))
 
-// Mock AIAgentBuilder to capture the arguments it receives
-jest.mock('../src/agent-builder', () => ({
+// Mock WorkerAgent to capture the arguments it receives
+jest.mock('../src/agents/worker-agent', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  AIAgentBuilder: jest.fn().mockImplementation((args: any) => {
-    capturedBuilderArgs = args
-    return {
-      build: jest.fn(async () => ({
-        name: args.name,
-        instructions: args.instructions,
-        model: { id: `resolved-${args.llmConfig.modelName}` },
-        modelSettings: args.llmConfig.modelSettings,
-        tools: args.tools || [],
-      })),
-    }
-  }),
+  WorkerAgent: {
+    create: jest.fn(async (args: any) => {
+      capturedWorkerAgentArgs = args
+      return {
+        getAgent: jest.fn(() => ({
+          name: args.name,
+          instructions: args.instructions,
+          model: { id: `resolved-${args.llmConfig.modelName}` },
+          modelSettings: args.llmConfig.modelSettings,
+          tools: args.tools || [],
+        })),
+      }
+    }),
+  },
 }))
 
-jest.mock('../src/agent-router-builder', () => ({
-  AIAgentRouterBuilder: jest.fn().mockImplementation((args: unknown) => {
-    const routerBuilderArgs = args as MockRouterBuilderArgs
-    capturedRouterBuilderArgs = routerBuilderArgs
-    return {
-      build: jest.fn(async () => ({
-        name: routerBuilderArgs.name,
-        instructions: routerBuilderArgs.instructions,
-        modelSettings: routerBuilderArgs.llmConfig.modelSettings,
-        handoffs: routerBuilderArgs.handoffs,
-      })),
-    }
-  }),
+jest.mock('../src/agents/router-agent', () => ({
+  RouterAgent: {
+    create: jest.fn(async (args: unknown) => {
+      const routerAgentArgs = args as MockRouterAgentArgs
+      capturedRouterAgentArgs = routerAgentArgs
+      return {
+        getAgent: jest.fn(() => ({
+          name: routerAgentArgs.name,
+          instructions: routerAgentArgs.instructions,
+          modelSettings: routerAgentArgs.llmConfig.modelSettings,
+          handoffs: routerAgentArgs.handoffs,
+        })),
+      }
+    }),
+  },
 }))
 
-// Mock AIAgentRunner to avoid actual execution
-jest.mock('../src/runner', () => ({
-  AIAgentRunner: jest.fn().mockImplementation(() => ({
+// Mock WorkerAgentRunner to avoid actual execution
+jest.mock('../src/runners/worker-runner', () => ({
+  WorkerRunner: jest.fn().mockImplementation(() => ({
     run: jest.fn().mockResolvedValue({
       messages: [],
       toolsExecuted: [],
@@ -137,8 +141,8 @@ jest.mock('../src/runner', () => ({
   })),
 }))
 
-jest.mock('../src/runner-router', () => ({
-  AIAgentRouterRunner: jest.fn().mockImplementation(() => ({
+jest.mock('../src/runners/router-runner', () => ({
+  RouterRunner: jest.fn().mockImplementation(() => ({
     run: jest.fn().mockResolvedValue({
       messages: [],
       toolsExecuted: [],
@@ -211,8 +215,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    capturedBuilderArgs = null
-    capturedRouterBuilderArgs = null
+    capturedWorkerAgentArgs = null
+    capturedRouterAgentArgs = null
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -221,7 +225,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     jest.restoreAllMocks()
   })
 
-  it('should pass campaigns_v2 to AIAgentBuilder when present in input.context', async () => {
+  it('should pass campaigns_v2 to WorkerAgent when present in input.context', async () => {
     const campaignsContext = [
       {
         id: 'campaign-123',
@@ -237,8 +241,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignsContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignsContext).toEqual(campaignsContext)
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.campaignsContext).toEqual(campaignsContext)
   })
 
   it('should pass undefined campaignsContext when campaigns_v2 is not in input.context', async () => {
@@ -249,8 +253,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(undefined)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignsContext).toBeUndefined()
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.campaignsContext).toBeUndefined()
   })
 
   it('should pass undefined campaignsContext when input.context is undefined', async () => {
@@ -264,8 +268,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignsContext).toBeUndefined()
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.campaignsContext).toBeUndefined()
   })
 
   it('should pass campaigns_v2 without agent_context', async () => {
@@ -284,12 +288,12 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignWithoutAgentContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignsContext).toEqual(
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.campaignsContext).toEqual(
       campaignWithoutAgentContext
     )
     expect(
-      capturedBuilderArgs.campaignsContext[0].agent_context
+      capturedWorkerAgentArgs.campaignsContext[0].agent_context
     ).toBeUndefined()
   })
 
@@ -309,11 +313,11 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignWithEmptyAgentContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.campaignsContext).toEqual(
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.campaignsContext).toEqual(
       campaignWithEmptyAgentContext
     )
-    expect(capturedBuilderArgs.campaignsContext[0].agent_context).toBe('')
+    expect(capturedWorkerAgentArgs.campaignsContext[0].agent_context).toBe('')
   })
 
   it('should pass correct name, instructions and sourceIds from aiAgentArgs', async () => {
@@ -337,18 +341,18 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, customAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.name).toBe('Custom Agent')
-    expect(capturedBuilderArgs.instructions).toBe(
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.name).toBe('Custom Agent')
+    expect(capturedWorkerAgentArgs.instructions).toBe(
       'Custom instructions for the agent'
     )
-    expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
-    expect(capturedBuilderArgs.inputGuardrailRules).toEqual([
+    expect(capturedWorkerAgentArgs.sourceIds).toEqual(['source-1', 'source-2'])
+    expect(capturedWorkerAgentArgs.inputGuardrailRules).toEqual([
       { name: 'is_offensive', description: 'Check for offensive content' },
     ])
   })
 
-  it('should pass router configuration to AIAgentRouterBuilder', async () => {
+  it('should pass router configuration to RouterAgent', async () => {
     const plugin = new BotonicPluginAiAgents({
       authToken: 'test-auth-token',
     })
@@ -383,15 +387,15 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, routerArgs)
 
-    const routerBuilderArgs = capturedRouterBuilderArgs
-    if (!routerBuilderArgs) {
+    const routerAgentArgs = capturedRouterAgentArgs
+    if (!routerAgentArgs) {
       throw new Error('Router builder was not created')
     }
-    expect(routerBuilderArgs.name).toBe('Router Agent')
-    expect(routerBuilderArgs.instructions).toBe(
+    expect(routerAgentArgs.name).toBe('Router Agent')
+    expect(routerAgentArgs.instructions).toBe(
       'Route the conversation to the right worker'
     )
-    expect(routerBuilderArgs.llmConfig).toMatchObject({
+    expect(routerAgentArgs.llmConfig).toMatchObject({
       modelName: 'gpt-4.1-mini',
       modelSettings: { temperature: 0 },
     })
@@ -401,20 +405,20 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       'gpt-4.1-mini',
       VerbosityLevel.High
     )
-    expect(routerBuilderArgs.inputGuardrailRules).toEqual([
+    expect(routerAgentArgs.inputGuardrailRules).toEqual([
       {
         name: 'is_offensive',
         description: 'Check for offensive content',
       },
     ])
-    expect(routerBuilderArgs.outputMessagesSchemas).toEqual([])
-    expect(routerBuilderArgs.guardrailTrackingContext).toEqual({
+    expect(routerAgentArgs.outputMessagesSchemas).toEqual([])
+    expect(routerAgentArgs.guardrailTrackingContext).toEqual({
       botId: 'bot-123',
       isTest: false,
       authToken: 'test-auth-token',
       inferenceId: expect.any(String),
     })
-    expect(routerBuilderArgs.handoffs).toEqual([
+    expect(routerAgentArgs.handoffs).toEqual([
       expect.objectContaining({
         agent: expect.objectContaining({
           name: 'Support Worker',
@@ -452,10 +456,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, routerArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.name).toBe('Knowledge Worker')
-    expect(capturedBuilderArgs.sourceIds).toEqual(['source-1', 'source-2'])
-    expect(capturedRouterBuilderArgs?.handoffs).toEqual([
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.name).toBe('Knowledge Worker')
+    expect(capturedWorkerAgentArgs.sourceIds).toEqual(['source-1', 'source-2'])
+    expect(capturedRouterAgentArgs?.handoffs).toEqual([
       expect.objectContaining({
         agent: expect.objectContaining({
           name: 'Knowledge Worker',
@@ -487,8 +491,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.contactInfo).toEqual([
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.contactInfo).toEqual([
       {
         name: 'email',
         value: 'user@example.com',
@@ -514,7 +518,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedBuilderArgs).toBeDefined()
-    expect(capturedBuilderArgs.contactInfo).toEqual([])
+    expect(capturedWorkerAgentArgs).toBeDefined()
+    expect(capturedWorkerAgentArgs.contactInfo).toEqual([])
   })
 })

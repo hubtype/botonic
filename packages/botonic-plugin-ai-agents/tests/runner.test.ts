@@ -85,7 +85,7 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks
 import { RunToolCallItem } from '@openai/agents'
-import { AIAgentRunner } from '../src/runner'
+import { WorkerRunner } from '../src/runners/worker-runner'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -174,12 +174,12 @@ function makeRawResponse(
   }
 }
 
-/** Creates an AIAgentRunner with sensible defaults */
+/** Creates a WorkerAgentRunner with sensible defaults */
 function createRunner(
   agent = buildMockAgent(),
   llmConfig = buildMockLlmConfig()
-): AIAgentRunner {
-  return new AIAgentRunner(agent, llmConfig, 'test-inference-id', mockLogger)
+): WorkerRunner {
+  return new WorkerRunner(agent, llmConfig, 'test-inference-id', mockLogger)
 }
 
 const sampleMessages: AgenticInputMessage[] = [
@@ -188,7 +188,7 @@ const sampleMessages: AgenticInputMessage[] = [
 
 // ── tests ─────────────────────────────────────────────────────────────────────
 
-describe('AIAgentRunner', () => {
+describe('WorkerAgentRunner', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedRunnerConfig = null
@@ -206,7 +206,7 @@ describe('AIAgentRunner', () => {
 
   describe('constructor', () => {
     it('should instantiate without errors', () => {
-      expect(createRunner()).toBeInstanceOf(AIAgentRunner)
+      expect(createRunner()).toBeInstanceOf(WorkerRunner)
     })
   })
 

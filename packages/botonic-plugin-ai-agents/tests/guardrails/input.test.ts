@@ -123,12 +123,13 @@ describe('createInputGuardrails', () => {
       modelSettings: {
         temperature: 0,
         text: { verbosity: 'medium' },
+        toolChoice: 'none',
       },
       instructions:
         'Check if the user triggers some of the following guardrails.',
       outputType: expect.any(Object),
     })
-    expect(capturedAgentConfig.modelSettings).not.toHaveProperty('toolChoice')
+    expect(capturedAgentConfig.modelSettings.toolChoice).toBe('none')
   })
 
   it('should return no guardrails when no rules are configured', async () => {

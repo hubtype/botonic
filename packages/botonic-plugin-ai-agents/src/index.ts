@@ -11,8 +11,7 @@ import {
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
-import { AIAgentRouterBuilder } from './agent-router-builder'
-import { AIAgentBuilder } from './agent-worker-builder'
+import { RouterAgent, WorkerAgent } from './agents'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -21,8 +20,7 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
-import { AIAgentRouterRunner } from './runner-router'
-import { AIAgentRunner } from './runner-worker'
+import { RouterRunner, WorkerRunner } from './runners'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
   AgenticInputMessage,
@@ -174,7 +172,7 @@ export default class BotonicPluginAiAgents<
     )
 
     // Run agent
-    const runner = new AIAgentRunner<TPlugins, TExtraData>(
+    const runner = new WorkerRunner<TPlugins, TExtraData>(
       agent,
       llmConfig,
       inferenceId,
@@ -224,7 +222,7 @@ export default class BotonicPluginAiAgents<
       })
     )
 
-    const agentRouter = await new AIAgentRouterBuilder<TPlugins, TExtraData>({
+    const router = await RouterAgent.create<TPlugins, TExtraData>({
       name,
       instructions,
       llmConfig,
@@ -237,7 +235,7 @@ export default class BotonicPluginAiAgents<
         authToken,
         inferenceId,
       },
-    }).build()
+    })
 
     // Get messages
     const messages = await this.getMessages(
@@ -259,8 +257,9 @@ export default class BotonicPluginAiAgents<
     }
 
     // Run agent
-    const runner = new AIAgentRouterRunner<TPlugins, TExtraData>(
-      agentRouter,
+    const routerAgent = router.getAgent()
+    const runner = new RouterRunner<TPlugins, TExtraData>(
+      routerAgent,
       llmConfig,
       inferenceId,
       this.logger
@@ -283,7 +282,7 @@ export default class BotonicPluginAiAgents<
     // Build agent
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Worker ? aiAgentArgs.sourceIds : []
-    const agentBuilder = new AIAgentBuilder<TPlugins, TExtraData>({
+    const worker = await WorkerAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
       tools: tools,
@@ -301,9 +300,9 @@ export default class BotonicPluginAiAgents<
         inferenceId,
       },
     })
-    const agent = await agentBuilder.build()
+    const workerAgent = worker.getAgent()
 
-    return { agent, tools }
+    return { agent: workerAgent, tools }
   }
 
   private async getMessages(

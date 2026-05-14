@@ -52,9 +52,9 @@ jest.mock('../src/guardrails', () => ({
   createInputGuardrails: mockCreateInputGuardrails,
 }))
 
-import { AIAgentRouterBuilder } from '../src/agent-router-builder'
+import { RouterAgent } from '../src/agents/router-agent'
 
-describe('AIAgentRouterBuilder', () => {
+describe('RouterAgent', () => {
   const handoffs = [{ agentName: 'Support Worker' }] as unknown as Handoff<
     Context,
     AgentOutputType<typeof OutputSchema>
@@ -75,7 +75,7 @@ describe('AIAgentRouterBuilder', () => {
   })
 
   it('should build a router agent with handoffs, guardrails and structured output', async () => {
-    const builder = new AIAgentRouterBuilder({
+    const routerAgent = await RouterAgent.create({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
       llmConfig: mockLlmConfig,
@@ -85,7 +85,7 @@ describe('AIAgentRouterBuilder', () => {
       guardrailTrackingContext,
     })
 
-    const agent = await builder.build()
+    const agent = routerAgent.getAgent()
 
     expect(mockCreateInputGuardrails).toHaveBeenCalledWith(
       inputGuardrailRules,
@@ -119,7 +119,7 @@ describe('AIAgentRouterBuilder', () => {
       type: z.literal('custom'),
       content: z.object({ value: z.string() }),
     })
-    const builder = new AIAgentRouterBuilder({
+    await RouterAgent.create({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
       llmConfig: mockLlmConfig,
@@ -128,8 +128,6 @@ describe('AIAgentRouterBuilder', () => {
       outputMessagesSchemas: [customMessageSchema],
       guardrailTrackingContext,
     })
-
-    await builder.build()
 
     const outputType = capturedAgentConfig?.outputType
     if (!outputType) {
@@ -144,7 +142,7 @@ describe('AIAgentRouterBuilder', () => {
   })
 
   it('should copy nested router model settings before passing them to the agent', async () => {
-    const builder = new AIAgentRouterBuilder({
+    await RouterAgent.create({
       name: 'Router Agent',
       instructions: 'Route the conversation to the right worker',
       llmConfig: mockLlmConfig,
@@ -153,8 +151,6 @@ describe('AIAgentRouterBuilder', () => {
       outputMessagesSchemas: [],
       guardrailTrackingContext,
     })
-
-    await builder.build()
 
     expect(capturedAgentConfig?.modelSettings).toEqual(mockModelSettings)
     expect(capturedAgentConfig?.modelSettings).not.toBe(mockModelSettings)
