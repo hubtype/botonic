@@ -11,9 +11,8 @@ import {
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
-
-import { AIAgentBuilder } from './agent-builder'
 import { AIAgentRouterBuilder } from './agent-router-builder'
+import { AIAgentBuilder } from './agent-worker-builder'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
