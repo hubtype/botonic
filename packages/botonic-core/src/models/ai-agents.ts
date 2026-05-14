@@ -139,11 +139,11 @@ export interface AiAgentWorkerArgs extends AiAgentBaseArgs {
   sourceIds: string[]
 }
 
-interface AIAgentDataWithDescription extends AiAgentWorkerArgs {
+interface AIAgentRoute extends AiAgentWorkerArgs {
   description: string
 }
 
 export interface AIAgentRouterArgs extends AiAgentBaseArgs {
   type: AiAgentType.Router
-  agents: AIAgentDataWithDescription[]
+  agents: AIAgentRoute[]
 }

@@ -92,7 +92,7 @@ export class AIAgentBuilder<
       model,
       reasoning: modelSettings.reasoning as { effort: string } | undefined,
       text: modelSettings.text as { verbosity: string } | undefined,
-      toolChoice: modelSettings.toolChoice as string | undefined,
+      toolChoice: modelSettings.toolChoice,
       hasRetrieveKnowledge,
     })
 
@@ -121,7 +121,6 @@ export class AIAgentBuilder<
     }
 
     if (hasRetrieveKnowledge) {
-      // && this.llmConfig.modelName.includes('gpt-4')) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
     }
 

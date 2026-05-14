@@ -48,7 +48,7 @@ async function buildInputGuardrail(
   if (llmConfig.modelSettings.text) {
     modelSettings.text = { ...llmConfig.modelSettings.text }
   }
-  delete modelSettings.toolChoice
+  modelSettings.toolChoice = 'none'
 
   const agent = new Agent({
     name: 'InputGuardrail',
