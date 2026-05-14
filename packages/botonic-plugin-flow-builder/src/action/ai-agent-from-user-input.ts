@@ -17,18 +17,33 @@ export async function getContentsByAiAgentFromUserInput({
     await flowBuilderPlugin.getContentsByNode(startNodeAiAgentFlow)
 
   const splitContents = splitAiAgentContents(contents)
+
   if (!splitContents) {
     return []
   }
-  const { aiAgentContent, contentsBeforeAiAgent } = splitContents
 
-  const aiAgentResponse = await aiAgentContent.resolveAIAgentResponse(
-    request,
-    contentsBeforeAiAgent
-  )
+  if ('aiAgentRouterContent' in splitContents) {
+    const { aiAgentRouterContent, contentsBeforeAiAgentRouter } = splitContents
+    const aiAgentResponse = await aiAgentRouterContent.resolveAIAgentResponse(
+      request,
+      contentsBeforeAiAgentRouter
+    )
 
-  if (!aiAgentResponse || aiAgentResponse.exit) {
-    return []
+    if (!aiAgentResponse || aiAgentResponse.exit) {
+      return []
+    }
+  }
+
+  if ('aiAgentContent' in splitContents) {
+    const { aiAgentContent, contentsBeforeAiAgent } = splitContents
+    const aiAgentResponse = await aiAgentContent.resolveAIAgentResponse(
+      request,
+      contentsBeforeAiAgent
+    )
+
+    if (!aiAgentResponse || aiAgentResponse.exit) {
+      return []
+    }
   }
 
   return contents

@@ -71,7 +71,7 @@ const mockRetrieveKnowledge = {
 
 jest.mock('../src/tools', () => ({
   mandatoryTools: [],
-  retrieveKnowledge: mockRetrieveKnowledge,
+  RETRIEVE_KNOWLEDGE_TOOL_NAME: 'retrieve_knowledge',
 }))
 
 const mockConstants = {
@@ -85,7 +85,7 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks
 import { RunToolCallItem } from '@openai/agents'
-import { AIAgentRunner } from '../src/runner'
+import { WorkerRunner } from '../src/runners/worker-runner'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -111,17 +111,20 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
   } as unknown as LLMConfig
 }
 
-function buildMockAgent(includeRetrieveKnowledge = false): AIAgent<any, any> {
+function buildMockAgent(
+  includeRetrieveKnowledge = false,
+  modelSettings: Record<string, unknown> = {}
+): AIAgent<any, any> {
   return {
     name: 'TestAgent',
     tools: includeRetrieveKnowledge ? [mockRetrieveKnowledge] : [],
+    modelSettings,
   } as unknown as AIAgent<any, any>
 }
 
 function buildMockContext(): Context {
   return {
     authToken: 'test-token',
-    sourceIds: [],
     knowledgeUsed: {
       query: '',
       sourceIds: ['src-1'],
@@ -171,12 +174,12 @@ function makeRawResponse(
   }
 }
 
-/** Creates an AIAgentRunner with sensible defaults */
+/** Creates a WorkerAgentRunner with sensible defaults */
 function createRunner(
   agent = buildMockAgent(),
   llmConfig = buildMockLlmConfig()
-): AIAgentRunner {
-  return new AIAgentRunner(agent, llmConfig, 'test-inference-id', mockLogger)
+): WorkerRunner {
+  return new WorkerRunner(agent, llmConfig, 'test-inference-id', mockLogger)
 }
 
 const sampleMessages: AgenticInputMessage[] = [
@@ -185,7 +188,7 @@ const sampleMessages: AgenticInputMessage[] = [
 
 // ── tests ─────────────────────────────────────────────────────────────────────
 
-describe('AIAgentRunner', () => {
+describe('WorkerAgentRunner', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedRunnerConfig = null
@@ -203,7 +206,7 @@ describe('AIAgentRunner', () => {
 
   describe('constructor', () => {
     it('should instantiate without errors', () => {
-      expect(createRunner()).toBeInstanceOf(AIAgentRunner)
+      expect(createRunner()).toBeInstanceOf(WorkerRunner)
     })
   })
 
@@ -377,17 +380,19 @@ describe('AIAgentRunner', () => {
   // ── run() – provider logic ───────────────────────────────────────────────
 
   describe('run() – provider logic', () => {
-    it('should set toolChoice to retrieve_knowledge for azure provider when agent has that tool', async () => {
+    it('should not mutate llmConfig toolChoice for azure provider when agent has retrieve_knowledge', async () => {
       mockConstants.OPENAI_PROVIDER = 'azure'
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig('azure')
-      await createRunner(buildMockAgent(true), llmConfig).run(
+      const agent = buildMockAgent(true, { toolChoice: 'retrieve_knowledge' })
+      await createRunner(agent, llmConfig).run(
         sampleMessages,
         buildMockContext()
       )
 
-      expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
+      expect(agent.modelSettings.toolChoice).toBe('retrieve_knowledge')
+      expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should NOT set toolChoice for openai provider even with retrieve_knowledge tool', async () => {
@@ -416,7 +421,7 @@ describe('AIAgentRunner', () => {
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
     })
 
-    it('should pass modelProvider and modelSettings to Runner', async () => {
+    it('should create Runner with execution settings only', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(makeTextRunnerResult())
 
       const llmConfig = buildMockLlmConfig()
@@ -425,11 +430,11 @@ describe('AIAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfig).toMatchObject({
-        modelSettings: llmConfig.modelSettings,
-        modelProvider: llmConfig.modelProvider,
+      expect(capturedRunnerConfig).toEqual({
         tracingDisabled: true,
       })
+      expect(capturedRunnerConfig).not.toHaveProperty('modelSettings')
+      expect(capturedRunnerConfig).not.toHaveProperty('modelProvider')
     })
   })
 

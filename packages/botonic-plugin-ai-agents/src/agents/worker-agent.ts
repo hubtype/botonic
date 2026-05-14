@@ -1,23 +1,22 @@
 import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
-import {
-  Agent,
-  type AgentOutputType,
-  type InputGuardrail,
-} from '@openai/agents'
+import { Agent, type AgentOutputType, type ModelSettings } from '@openai/agents'
 import type { z } from 'zod'
+import { OPENAI_PROVIDER } from '../constants'
+import type { DebugLogger } from '../debug-logger'
+import type { GuardrailTrackingContext } from '../guardrails/input'
+import type { LLMConfig } from '../llm-config'
+import type { OutputSchema } from '../structured-output'
+import {
+  createRetrieveKnowledge,
+  mandatoryTools,
+  RETRIEVE_KNOWLEDGE_TOOL_NAME,
+} from '../tools'
+import type { AIAgent, Context, GuardrailRule, Tool } from '../types'
+import { BaseAgent } from './base-agent'
 
-import { OPENAI_PROVIDER } from './constants'
-import type { DebugLogger } from './debug-logger'
-import { createInputGuardrail } from './guardrails'
-import type { GuardrailTrackingContext } from './guardrails/input'
-import type { LLMConfig } from './llm-config'
-import { getOutputSchema, type OutputSchema } from './structured-output'
-import { mandatoryTools, retrieveKnowledge } from './tools'
-import type { AIAgent, Context, GuardrailRule, Tool } from './types'
-
-interface AIAgentBuilderOptions<
+interface WorkerAgentOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
-  TExtraData = any,
+  TExtraData = unknown,
 > {
   name: string
   instructions: string
@@ -26,78 +25,91 @@ interface AIAgentBuilderOptions<
   contactInfo: ContactInfo[]
   inputGuardrailRules: GuardrailRule[]
   sourceIds: string[]
-  outputMessagesSchemas?: z.ZodObject<any>[]
+  outputMessagesSchemas?: z.ZodObject[]
   llmConfig: LLMConfig
   logger: DebugLogger
   guardrailTrackingContext: GuardrailTrackingContext
 }
 
-export class AIAgentBuilder<
+export class WorkerAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
-  TExtraData = any,
-> {
-  private name: string
-  private instructions: string
+  TExtraData = unknown,
+> extends BaseAgent {
   private tools: Tool<TPlugins, TExtraData>[]
-  private externalOutputMessagesSchemas: z.ZodObject<any>[]
-  private inputGuardrails: InputGuardrail[]
-  public llmConfig: LLMConfig
   private logger: DebugLogger
+  private agent!: AIAgent<TPlugins, TExtraData>
 
-  constructor(options: AIAgentBuilderOptions<TPlugins, TExtraData>) {
-    this.name = options.name
+  private constructor(options: WorkerAgentOptions<TPlugins, TExtraData>) {
+    super({
+      name: options.name,
+      instructions: options.instructions,
+      llmConfig: options.llmConfig,
+      inputGuardrailRules: options.inputGuardrailRules,
+      outputMessagesSchemas: options.outputMessagesSchemas,
+      guardrailTrackingContext: options.guardrailTrackingContext,
+    })
     this.instructions = this.addExtraInstructions(
       options.instructions,
       options.contactInfo,
       options.campaignsContext
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
-    this.externalOutputMessagesSchemas = options.outputMessagesSchemas || []
-    this.inputGuardrails = []
-    this.llmConfig = options.llmConfig
     this.logger = options.logger
-    if (options.inputGuardrailRules.length > 0) {
-      const inputGuardrail = createInputGuardrail(
-        options.inputGuardrailRules,
-        options.llmConfig,
-        options.guardrailTrackingContext
-      )
-      this.inputGuardrails.push(inputGuardrail)
-    }
   }
 
-  build(): AIAgent<TPlugins, TExtraData> {
-    // When using standard OpenAI API, we need to specify the model
-    // Azure OpenAI uses deployment name instead
+  static async create<
+    TPlugins extends ResolvedPlugins = ResolvedPlugins,
+    TExtraData = unknown,
+  >(
+    options: WorkerAgentOptions<TPlugins, TExtraData>
+  ): Promise<WorkerAgent<TPlugins, TExtraData>> {
+    const workerAgent = new WorkerAgent<TPlugins, TExtraData>(options)
+    const model = workerAgent.llmConfig.modelName
+    const resolvedModel = await workerAgent.getModel()
+    const hasRetrieveKnowledge = workerAgent.tools.some(
+      tool => tool.name === RETRIEVE_KNOWLEDGE_TOOL_NAME
+    )
+    const modelSettings =
+      workerAgent.getWorkerModelSettings(hasRetrieveKnowledge)
+    const inputGuardrails = await workerAgent.getInputGuardrails()
 
-    const model = this.llmConfig.modelName
-    const hasRetrieveKnowledge = this.tools.includes(retrieveKnowledge)
-
-    this.logger.logModelSettings({
+    workerAgent.logger.logModelSettings({
       provider: OPENAI_PROVIDER,
       model,
-      reasoning: this.llmConfig.modelSettings.reasoning as
-        | { effort: string }
-        | undefined,
-      text: this.llmConfig.modelSettings.text as
-        | { verbosity: string }
-        | undefined,
-      toolChoice: this.llmConfig.modelSettings.toolChoice as string | undefined,
+      reasoning: modelSettings.reasoning as { effort: string } | undefined,
+      text: modelSettings.text as { verbosity: string } | undefined,
+      toolChoice: modelSettings.toolChoice,
       hasRetrieveKnowledge,
     })
 
-    return new Agent<
+    const agent = new Agent<
       Context<TPlugins, TExtraData>,
       AgentOutputType<typeof OutputSchema>
     >({
-      name: this.name,
-      model,
-      instructions: this.instructions,
-      tools: this.tools,
-      outputType: getOutputSchema(this.externalOutputMessagesSchemas),
-      inputGuardrails: this.inputGuardrails,
+      name: workerAgent.name,
+      model: resolvedModel,
+      modelSettings,
+      instructions: workerAgent.instructions,
+      tools: workerAgent.tools,
+      outputType: workerAgent.getOutputType(),
+      inputGuardrails,
       outputGuardrails: [],
     })
+
+    workerAgent.agent = agent
+    return workerAgent
+  }
+
+  getAgent(): AIAgent<TPlugins, TExtraData> {
+    return this.agent
+  }
+
+  private getWorkerModelSettings(hasRetrieveKnowledge: boolean): ModelSettings {
+    const modelSettings = this.getAgentModelSettings()
+    if (hasRetrieveKnowledge) {
+      modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
+    }
+    return modelSettings
   }
 
   private addExtraInstructions(
@@ -109,8 +121,9 @@ export class AIAgentBuilder<
     const metadataInstructions = this.getMetadataInstructions()
     const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
     const campaignInstructions = this.getCampaignInstructions(campaignsContext)
-    const outputInstructions = this.getOutputInstructions()
-    return `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}\n\n${outputInstructions}`
+    return this.addOutputInstructions(
+      `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}`
+    )
   }
 
   private getContactInfoInstructions(contactInfo: ContactInfo[]): string {
@@ -155,28 +168,13 @@ export class AIAgentBuilder<
       .join('\n')
   }
 
-  private getOutputInstructions(): string {
-    const example = {
-      messages: [
-        {
-          type: 'text',
-          content: {
-            text: 'Hello, how can I help you today?',
-          },
-        },
-      ],
-    }
-    const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
-    return `<output>\n${output}\n</output>`
-  }
-
   private addHubtypeTools(
     tools: Tool<TPlugins, TExtraData>[],
     sourceIds: string[]
   ): Tool<TPlugins, TExtraData>[] {
     const hubtypeTools: Tool[] = [...mandatoryTools]
     if (sourceIds.length > 0) {
-      hubtypeTools.push(retrieveKnowledge)
+      hubtypeTools.push(createRetrieveKnowledge(sourceIds))
     }
     return [...hubtypeTools, ...tools]
   }

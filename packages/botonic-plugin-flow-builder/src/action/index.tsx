@@ -7,7 +7,11 @@ import {
 } from '@botonic/react'
 import React from 'react'
 
-import { FlowAiAgent, type FlowContent } from '../content-fields'
+import {
+  FlowAiAgent,
+  FlowAiAgentRouter,
+  type FlowContent,
+} from '../content-fields'
 import { splitAiAgentContents } from '../utils/ai-agent'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
@@ -55,19 +59,46 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     contents: FlowContent[]
   ) {
     for (const content of contents) {
-      if (content instanceof FlowAiAgent) {
-        const splitContents = splitAiAgentContents(contents)
-        if (!splitContents) {
-          continue
-        }
-        const { contentsBeforeAiAgent } = splitContents
-        await content.processContent(botContext, contentsBeforeAiAgent)
-      } else {
-        await content.processContent(botContext)
+      if (FlowBuilderAction.isAiAgentContent(content)) {
+        await FlowBuilderAction.processAiAgentContent(botContext, contents)
+        continue
       }
+
+      await content.processContent(botContext)
     }
 
     return contents
+  }
+
+  private static isAiAgentContent(content: FlowContent): boolean {
+    return (
+      content instanceof FlowAiAgent || content instanceof FlowAiAgentRouter
+    )
+  }
+
+  // TODO: Refactor this to be more generic and reusable
+  private static async processAiAgentContent(
+    botContext: BotContext,
+    contents: FlowContent[]
+  ) {
+    const splitContents = splitAiAgentContents(contents)
+    if (!splitContents) {
+      return
+    }
+
+    if ('aiAgentRouterContent' in splitContents) {
+      const { aiAgentRouterContent, contentsBeforeAiAgentRouter } =
+        splitContents
+      await aiAgentRouterContent.processContent(
+        botContext,
+        contentsBeforeAiAgentRouter
+      )
+    }
+
+    if ('aiAgentContent' in splitContents) {
+      const { aiAgentContent, contentsBeforeAiAgent } = splitContents
+      await aiAgentContent.processContent(botContext, contentsBeforeAiAgent)
+    }
   }
 
   protected getWebchatSettingsParams(botContext: BotContext): {

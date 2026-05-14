@@ -8,6 +8,7 @@ const DEFAULT_TIMEOUT = 16000
 
 let capturedOpenAIConfig: Record<string, unknown> | null = null
 let capturedAzureConfig: Record<string, unknown> | null = null
+const mockResolvedModel = { id: 'resolved-model' }
 
 jest.mock('openai', () => ({
   __esModule: true,
@@ -24,7 +25,10 @@ jest.mock('openai', () => ({
 }))
 
 jest.mock('@openai/agents', () => ({
-  OpenAIProvider: jest.fn().mockImplementation(() => ({ type: 'provider' })),
+  OpenAIProvider: jest.fn().mockImplementation(() => ({
+    type: 'provider',
+    getModel: jest.fn().mockResolvedValue(mockResolvedModel),
+  })),
 }))
 
 // var so the variable is hoisted and assignable when the mock factory runs (Jest hoists mocks)
@@ -178,6 +182,22 @@ describe('LLMConfig', () => {
       expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
       expect(capturedAzureConfig?.baseURL).toBe('https://test.openai.azure.com')
       expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
+    })
+  })
+
+  describe('getModel', () => {
+    it('should resolve model from the configured provider and model name', async () => {
+      mockConstants.OPENAI_PROVIDER = 'azure'
+
+      const config = new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        VerbosityLevel.Medium
+      )
+
+      await expect(config.getModel()).resolves.toBe(mockResolvedModel)
+      expect(config.modelProvider.getModel).toHaveBeenCalledWith('gpt-4.1-mini')
     })
   })
 })
