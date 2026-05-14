@@ -2,7 +2,7 @@ import type { AgenticOutputMessage, ResolvedPlugins } from '@botonic/core'
 import { InputGuardrailTripwireTriggered, Runner } from '@openai/agents'
 import type { DebugLogger } from './debug-logger'
 import type { LLMConfig } from './llm-config'
-import type { AIAgentRunnerResult } from './runner'
+import type { AIAgentRunnerResult } from './runner-worker'
 import type { AgenticInputMessage, AIAgent, Context, RunResult } from './types'
 
 export class AIAgentRouterRunner<

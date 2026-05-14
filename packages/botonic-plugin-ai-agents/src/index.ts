@@ -21,8 +21,8 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
-import { AIAgentRunner } from './runner'
 import { AIAgentRouterRunner } from './runner-router'
+import { AIAgentRunner } from './runner-worker'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
   AgenticInputMessage,
