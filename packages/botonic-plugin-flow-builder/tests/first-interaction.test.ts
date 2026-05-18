@@ -1,4 +1,4 @@
-import { INPUT, type InferenceResponse } from '@botonic/core'
+import { INPUT, type InferenceResponse, OutputMessageType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowBuilderAction } from '../src/action/index'
@@ -187,7 +187,7 @@ describe('Check the contents returned by the plugin in first interaction with AI
   const mockResponse: Partial<InferenceResponse> = {
     messages: [
       {
-        type: 'text',
+        type: OutputMessageType.Text,
         content: {
           text: 'AI agent response in first interaction',
         },
