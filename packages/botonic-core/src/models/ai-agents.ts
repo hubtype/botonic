@@ -8,9 +8,7 @@ export enum OutputMessageType {
   Exit = 'exit',
 }
 
-export interface BaseMessage<
-  T extends string = OutputMessageType,
-> {
+export interface BaseMessage<T extends string = OutputMessageType> {
   type: T
 }
 
