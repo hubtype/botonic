@@ -69,9 +69,10 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
     return component.content.agent_slots.map((agentSlot, index) => {
       const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
       const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
-      const aiAgentName =
-        agentSlot.name?.trim().toLowerCase().replace(/ /g, '_') ||
-        `ai_agent_${index}`
+      const aiAgentName = FlowAiAgentRouter.transferAgentSlotBaseName(
+        agentSlot.name,
+        index
+      )
       const agentDescription =
         agentSlot.description || `Transfer to ${aiAgentName}`
 
@@ -81,6 +82,13 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
         name: `transfer_to_${aiAgentName}`,
       }
     })
+  }
+
+  private static transferAgentSlotBaseName(
+    name: string | undefined,
+    index: number
+  ): string {
+    return name?.trim().toLowerCase().replace(/ /g, '_') || `ai_agent_${index}`
   }
 
   async resolveAIAgentResponse(
