@@ -458,7 +458,10 @@ describe('AIAgentRunner', () => {
           rawResponses: [],
         })
 
-      await createRunner(agent, llmConfig).run(sampleMessages, buildMockContext())
+      await createRunner(agent, llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
 
       expect(capturedRunnerConfigs).toHaveLength(2)
       expect(capturedRunnerConfigs[0].modelSettings).toBe(
