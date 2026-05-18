@@ -42,8 +42,10 @@ export function createInputGuardrail(
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
       const modelProvider = llmConfig.modelProvider
-      const modelSettings = llmConfig.modelSettings
-      modelSettings.toolChoice = undefined
+      const modelSettings = {
+        ...llmConfig.modelSettings,
+        toolChoice: undefined,
+      }
       const runner = new Runner({
         modelSettings,
         modelProvider,
