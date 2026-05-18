@@ -5,12 +5,14 @@ import {
   type GuardrailRule,
   type HubtypeAssistantMessage,
   type InferenceResponse,
+  OutputMessageType,
   VerbosityLevel,
 } from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
+  FlowBuilderOutputMessageType,
 } from '../structured-output/flow-builder-content'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { HubtypeAssistantContent } from '../utils/ai-agent'
@@ -210,20 +212,20 @@ export class FlowAiAgentRouter extends ContentFieldsBase {
   async messagesToBotonicJSXElements(botContext: BotContext): Promise<void> {
     for (const message of this.messages) {
       if (
-        message.type === 'text' ||
-        message.type === 'textWithButtons' ||
-        message.type === 'botExecutor'
+        message.type === OutputMessageType.Text ||
+        message.type === OutputMessageType.TextWithButtons ||
+        message.type === OutputMessageType.BotExecutor
       ) {
         this.jsxElements.push(FlowText.fromAIAgent(this.id, message))
       }
 
-      if (message.type === 'carousel') {
+      if (message.type === OutputMessageType.Carousel) {
         this.jsxElements.push(
           FlowCarousel.fromAIAgent(this.id, message, botContext)
         )
       }
 
-      if (message.type === 'flowBuilderContent') {
+      if (message.type === FlowBuilderOutputMessageType.FlowBuilderContent) {
         const flowContents = await this.getFlowContentsByContentId(
           botContext,
           message.contentId
