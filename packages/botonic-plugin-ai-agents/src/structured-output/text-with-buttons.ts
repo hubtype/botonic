@@ -1,11 +1,11 @@
-import type { TextWithButtonsMessage } from '@botonic/core'
-import z from 'zod'
+import { OutputMessageType, type TextWithButtonsMessage } from '@botonic/core'
+import { z } from 'zod'
 
 export type { TextWithButtonsMessage }
 
 export const TextWithButtonsSchema = z
   .object({
-    type: z.enum(['textWithButtons']),
+    type: z.literal(OutputMessageType.TextWithButtons),
     content: z.object({
       text: z.string(),
       buttons: z.array(

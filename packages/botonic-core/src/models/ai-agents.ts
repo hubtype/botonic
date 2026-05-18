@@ -1,11 +1,15 @@
 import type { z } from 'zod'
+
+export enum OutputMessageType {
+  Text = 'text',
+  TextWithButtons = 'textWithButtons',
+  BotExecutor = 'botExecutor',
+  Carousel = 'carousel',
+  Exit = 'exit',
+}
+
 export interface BaseMessage<
-  T extends string =
-    | 'text'
-    | 'textWithButtons'
-    | 'botExecutor'
-    | 'carousel'
-    | 'exit',
+  T extends string = OutputMessageType,
 > {
   type: T
 }
@@ -22,14 +26,14 @@ export interface ButtonWithPayload {
 }
 
 export interface TextMessage extends BaseMessage {
-  type: 'text'
+  type: OutputMessageType.Text
   content: {
     text: string
   }
 }
 
 export interface TextWithButtonsMessage extends BaseMessage {
-  type: 'textWithButtons'
+  type: OutputMessageType.TextWithButtons
   content: {
     text: string
     buttons: Button[]
@@ -37,7 +41,7 @@ export interface TextWithButtonsMessage extends BaseMessage {
 }
 
 export interface BotExecutorMessage extends BaseMessage {
-  type: 'botExecutor'
+  type: OutputMessageType.BotExecutor
   content: {
     text: string
     buttons: ButtonWithPayload[]
@@ -52,7 +56,7 @@ interface CarouselElement {
 }
 
 export interface CarouselMessage extends BaseMessage {
-  type: 'carousel'
+  type: OutputMessageType.Carousel
   content: {
     text?: string
     elements: CarouselElement[]
@@ -60,7 +64,7 @@ export interface CarouselMessage extends BaseMessage {
 }
 
 export interface ExitMessage extends BaseMessage {
-  type: 'exit'
+  type: OutputMessageType.Exit
 }
 
 export type OutputMessage<Extra extends BaseMessage<string> = never> =

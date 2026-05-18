@@ -1,11 +1,11 @@
-import type { BotExecutorMessage } from '@botonic/core'
-import z from 'zod'
+import { type BotExecutorMessage, OutputMessageType } from '@botonic/core'
+import { z } from 'zod'
 
 export type { BotExecutorMessage }
 
 export const BotExecutorSchema = z
   .object({
-    type: z.enum(['botExecutor']),
+    type: z.literal(OutputMessageType.BotExecutor),
     content: z.object({
       text: z.string(),
       buttons: z.array(

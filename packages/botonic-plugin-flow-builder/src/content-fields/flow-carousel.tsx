@@ -2,6 +2,7 @@ import {
   type BotContext,
   type CarouselMessage,
   isWhatsapp,
+  OutputMessageType,
 } from '@botonic/core'
 import {
   type ActionRequest,
@@ -183,7 +184,7 @@ export class FlowCarousel extends ContentFieldsBase {
 
   private toCarouselMessage(elements: FlowElement[]): CarouselMessage {
     return {
-      type: 'carousel',
+      type: OutputMessageType.Carousel,
       content: {
         elements: elements.map(element => {
           return {

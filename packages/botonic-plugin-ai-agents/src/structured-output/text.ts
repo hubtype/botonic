@@ -1,11 +1,11 @@
-import type { TextMessage } from '@botonic/core'
+import { OutputMessageType, type TextMessage } from '@botonic/core'
 import { z } from 'zod'
 
 export type { TextMessage }
 
 export const TextSchema = z
   .object({
-    type: z.enum(['text']),
+    type: z.literal(OutputMessageType.Text),
     content: z.object({
       text: z.string(),
     }),
