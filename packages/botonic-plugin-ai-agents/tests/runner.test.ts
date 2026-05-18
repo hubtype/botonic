@@ -1,6 +1,11 @@
 import type { DebugLogger } from '../src/debug-logger'
 import type { LLMConfig } from '../src/llm-config'
-import type { AgenticInputMessage, AIAgent, Context } from '../src/types'
+import type {
+  AgenticInputMessage,
+  AIAgent,
+  Context,
+  GuardrailRule,
+} from '../src/types'
 
 const mockTrackLlmRuns = jest.fn().mockResolvedValue(undefined)
 
@@ -22,11 +27,42 @@ const mockLogger: DebugLogger = {
   logToolExecution: jest.fn(),
 }
 
+type RunnerConfig = {
+  modelSettings?: LLMConfig['modelSettings']
+  modelProvider?: LLMConfig['modelProvider']
+  tracingDisabled: boolean
+}
+
 // Captured runner config for assertions
 let capturedRunnerConfig: any = null
+let capturedRunnerConfigs: RunnerConfig[] = []
+let capturedAgentConfigs: any[] = []
 const mockRunnerRunImpl: jest.Mock = jest.fn()
 
 jest.mock('@openai/agents', () => {
+  const MockAgent = jest
+    .fn()
+    .mockImplementation(
+      (config: {
+        name: string
+        model?: unknown
+        modelSettings?: LLMConfig['modelSettings']
+        instructions?: string
+        tools?: unknown[]
+        outputType?: unknown
+      }) => {
+        capturedAgentConfigs.push(config)
+        return {
+          name: config.name,
+          instructions: config.instructions,
+          tools: config.tools ?? [],
+          model: config.model,
+          modelSettings: config.modelSettings,
+          outputType: config.outputType,
+        }
+      }
+    )
+
   class MockRunToolCallItem {
     rawItem: any
     constructor(rawItem: any) {
@@ -51,12 +87,14 @@ jest.mock('@openai/agents', () => {
 
   const MockRunner = jest.fn().mockImplementation((config: any) => {
     capturedRunnerConfig = config
+    capturedRunnerConfigs.push(config)
     return {
       run: mockRunnerRunImpl,
     }
   })
 
   return {
+    Agent: MockAgent,
     Runner: MockRunner,
     RunToolCallItem: MockRunToolCallItem,
     RunToolCallOutputItem: MockRunToolCallOutputItem,
@@ -85,6 +123,7 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks
 import { RunToolCallItem } from '@openai/agents'
+import { createInputGuardrails } from '../src/guardrails/input'
 import { WorkerRunner } from '../src/runners/worker-runner'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -105,9 +144,12 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
     modelName: 'gpt-4.1-mini',
     modelSettings: {
       temperature: 0,
+      reasoning: { effort: 'low' },
+      text: { verbosity: 'medium' },
       toolChoice: undefined as string | undefined,
     },
     modelProvider: { provider },
+    getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
   } as unknown as LLMConfig
 }
 
@@ -192,6 +234,8 @@ describe('WorkerAgentRunner', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     capturedRunnerConfig = null
+    capturedRunnerConfigs = []
+    capturedAgentConfigs = []
     mockConstants.OPENAI_PROVIDER = 'azure'
     mockConstants.isProd = false
   })
@@ -393,6 +437,80 @@ describe('WorkerAgentRunner', () => {
 
       expect(agent.modelSettings.toolChoice).toBe('retrieve_knowledge')
       expect(llmConfig.modelSettings.toolChoice).toBeUndefined()
+    })
+
+    it('should keep retrieve_knowledge for the main agent but clear toolChoice for input guardrails', async () => {
+      mockConstants.OPENAI_PROVIDER = 'azure'
+      const llmConfig = buildMockLlmConfig('azure')
+      llmConfig.modelSettings.toolChoice = 'retrieve_knowledge'
+      const guardrailRules: GuardrailRule[] = [
+        {
+          name: 'is_offensive',
+          description: 'Whether the user input is offensive.',
+        },
+      ]
+      const [inputGuardrail] = await createInputGuardrails(
+        guardrailRules,
+        llmConfig,
+        {
+          botId: 'test-bot-id',
+          isTest: false,
+          authToken: 'test-token',
+          inferenceId: 'test-inference-id',
+        }
+      )
+      const agent = {
+        ...buildMockAgent(true),
+        inputGuardrails: [inputGuardrail],
+      } as AIAgent
+
+      // Simulates the OpenAI runner executing the input guardrails before the
+      // main agent output is produced.
+      mockRunnerRunImpl
+        .mockImplementationOnce(async (agentArg, messages, options) => {
+          await agentArg.inputGuardrails[0].execute({
+            input: messages,
+            context: options.context,
+            agent: agentArg,
+          })
+          return makeTextRunnerResult()
+        })
+        .mockResolvedValueOnce({
+          finalOutput: { is_offensive: false },
+          rawResponses: [],
+        })
+
+      await createRunner(agent, llmConfig).run(
+        sampleMessages,
+        buildMockContext()
+      )
+
+      expect(capturedRunnerConfigs).toHaveLength(2)
+      expect(capturedRunnerConfigs).toEqual([
+        { tracingDisabled: true },
+        { tracingDisabled: true },
+      ])
+      expect(capturedAgentConfigs).toHaveLength(1)
+      expect(capturedAgentConfigs[0].modelSettings).not.toBe(
+        llmConfig.modelSettings
+      )
+      expect(capturedAgentConfigs[0].modelSettings).toHaveProperty(
+        'toolChoice',
+        undefined
+      )
+      expect(capturedAgentConfigs[0].modelSettings.reasoning).toEqual(
+        llmConfig.modelSettings.reasoning
+      )
+      expect(capturedAgentConfigs[0].modelSettings.reasoning).not.toBe(
+        llmConfig.modelSettings.reasoning
+      )
+      expect(capturedAgentConfigs[0].modelSettings.text).toEqual(
+        llmConfig.modelSettings.text
+      )
+      expect(capturedAgentConfigs[0].modelSettings.text).not.toBe(
+        llmConfig.modelSettings.text
+      )
+      expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
     })
 
     it('should NOT set toolChoice for openai provider even with retrieve_knowledge tool', async () => {

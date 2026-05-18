@@ -117,19 +117,20 @@ describe('createInputGuardrails', () => {
     )
 
     expect(guardrail.name).toBe('InputGuardrail')
-    expect(Agent).toHaveBeenCalledWith({
-      name: 'InputGuardrail',
-      model: { id: 'guardrail-model' },
-      modelSettings: {
-        temperature: 0,
-        text: { verbosity: 'medium' },
-        toolChoice: 'none',
-      },
-      instructions:
-        'Check if the user triggers some of the following guardrails.',
-      outputType: expect.any(Object),
+    expect(Agent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'InputGuardrail',
+        model: { id: 'guardrail-model' },
+        instructions:
+          'Check if the user triggers some of the following guardrails.',
+        outputType: expect.any(Object),
+      })
+    )
+    expect(capturedAgentConfig.modelSettings).toMatchObject({
+      temperature: 0,
+      text: { verbosity: 'medium' },
+      toolChoice: undefined,
     })
-    expect(capturedAgentConfig.modelSettings.toolChoice).toBe('none')
   })
 
   it('should return no guardrails when no rules are configured', async () => {

@@ -41,14 +41,7 @@ async function buildInputGuardrail(
       rules.map(rule => [rule.name, z.boolean().describe(rule.description)])
     )
   )
-  const modelSettings: ModelSettings = { ...llmConfig.modelSettings }
-  if (llmConfig.modelSettings.reasoning) {
-    modelSettings.reasoning = { ...llmConfig.modelSettings.reasoning }
-  }
-  if (llmConfig.modelSettings.text) {
-    modelSettings.text = { ...llmConfig.modelSettings.text }
-  }
-  modelSettings.toolChoice = 'none'
+  const modelSettings = createInputGuardrailModelSettings(llmConfig)
 
   const agent = new Agent({
     name: 'InputGuardrail',
@@ -92,6 +85,22 @@ async function buildInputGuardrail(
       }
     },
   }
+}
+
+function createInputGuardrailModelSettings(
+  llmConfig: LLMConfig
+): ModelSettings {
+  const modelSettings: ModelSettings = {
+    ...llmConfig.modelSettings,
+    toolChoice: undefined,
+  }
+  if (llmConfig.modelSettings.reasoning) {
+    modelSettings.reasoning = { ...llmConfig.modelSettings.reasoning }
+  }
+  if (llmConfig.modelSettings.text) {
+    modelSettings.text = { ...llmConfig.modelSettings.text }
+  }
+  return modelSettings
 }
 
 async function sendGuardrailLlmRunTracking(
