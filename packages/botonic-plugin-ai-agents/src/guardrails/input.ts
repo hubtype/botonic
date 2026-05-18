@@ -1,6 +1,7 @@
 import {
   Agent,
   type InputGuardrail,
+  type ModelSettings,
   Runner,
   type UserMessageItem,
 } from '@openai/agents'
@@ -42,10 +43,7 @@ export function createInputGuardrail(
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
       const modelProvider = llmConfig.modelProvider
-      const modelSettings = {
-        ...llmConfig.modelSettings,
-        toolChoice: undefined,
-      }
+      const modelSettings = createInputGuardrailModelSettings(llmConfig)
       const runner = new Runner({
         modelSettings,
         modelProvider,
@@ -76,6 +74,15 @@ export function createInputGuardrail(
         tripwireTriggered: triggered,
       }
     },
+  }
+}
+
+function createInputGuardrailModelSettings(
+  llmConfig: LLMConfig
+): ModelSettings {
+  return {
+    ...llmConfig.modelSettings,
+    toolChoice: undefined,
   }
 }
 
