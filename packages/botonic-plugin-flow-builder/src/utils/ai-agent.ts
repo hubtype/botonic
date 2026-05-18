@@ -16,8 +16,8 @@ import {
 
 type AiAgentContentAndContentsBeforeAiAgent =
   | {
-      aiAgentContent: FlowAiAgent
-      contentsBeforeAiAgent: FlowContent[]
+      aiAgentWorkerContent: FlowAiAgent
+      contentsBeforeAiAgentWorker: FlowContent[]
     }
   | {
       aiAgentRouterContent: FlowAiAgentRouter
@@ -44,10 +44,13 @@ export function splitAiAgentContents(
     return undefined
   }
 
-  const aiAgentContent = contents[aiAgentIndex] as FlowAiAgent
-  const contentsBeforeAiAgent = contents.slice(0, aiAgentIndex)
+  const aiAgentWorkerContent = contents[aiAgentIndex] as FlowAiAgent
+  const contentsBeforeAiAgentWorker = contents.slice(0, aiAgentIndex)
 
-  return { aiAgentContent, contentsBeforeAiAgent }
+  return {
+    aiAgentWorkerContent,
+    contentsBeforeAiAgentWorker,
+  }
 }
 
 // biome-ignore lint/complexity/noStaticOnlyClass: namespace-like adapter with private static helpers

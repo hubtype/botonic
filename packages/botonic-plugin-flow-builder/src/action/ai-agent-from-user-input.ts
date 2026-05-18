@@ -34,11 +34,11 @@ export async function getContentsByAiAgentFromUserInput({
     }
   }
 
-  if ('aiAgentContent' in splitContents) {
-    const { aiAgentContent, contentsBeforeAiAgent } = splitContents
-    const aiAgentResponse = await aiAgentContent.resolveAIAgentResponse(
+  if ('aiAgentWorkerContent' in splitContents) {
+    const { aiAgentWorkerContent, contentsBeforeAiAgentWorker } = splitContents
+    const aiAgentResponse = await aiAgentWorkerContent.resolveAIAgentResponse(
       request,
-      contentsBeforeAiAgent
+      contentsBeforeAiAgentWorker
     )
 
     if (!aiAgentResponse || aiAgentResponse.exit) {

@@ -95,9 +95,13 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       )
     }
 
-    if ('aiAgentContent' in splitContents) {
-      const { aiAgentContent, contentsBeforeAiAgent } = splitContents
-      await aiAgentContent.processContent(botContext, contentsBeforeAiAgent)
+    if ('aiAgentWorkerContent' in splitContents) {
+      const { aiAgentWorkerContent, contentsBeforeAiAgentWorker } =
+        splitContents
+      await aiAgentWorkerContent.processContent(
+        botContext,
+        contentsBeforeAiAgentWorker
+      )
     }
   }
 
