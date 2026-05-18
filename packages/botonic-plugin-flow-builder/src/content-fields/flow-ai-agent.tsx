@@ -1,48 +1,26 @@
 import {
-  type AgenticOutputMessage,
   AiAgentType,
   type BotContext,
   EventAction,
   type EventAiAgent,
-  type GuardrailRule,
-  type HubtypeAssistantMessage,
   type InferenceResponse,
-  OutputMessageType,
-  VerbosityLevel,
 } from '@botonic/core'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
-  FlowBuilderOutputMessageType,
 } from '../structured-output/flow-builder-content'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { HubtypeAssistantContent } from '../utils/ai-agent'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
-import { ContentFieldsBase } from './content-fields-base'
-import { FlowCarousel } from './flow-carousel'
-import { FlowText } from './flow-text'
-import type { HtNodeWithContent } from './hubtype-fields'
-import type {
-  HtAiAgentNode,
-  HtInputGuardrailRule,
-} from './hubtype-fields/ai-agent'
+import { FlowAiAgentBase } from './flow-ai-agent-base'
+import type { HtAiAgentNode } from './hubtype-fields/ai-agent'
 import type { FlowContent } from './index'
 
-export class FlowAiAgent extends ContentFieldsBase {
-  public name: string = ''
-  public instructions: string = ''
-  public model: string = ''
-  public verbosity: VerbosityLevel = VerbosityLevel.Medium
+export class FlowAiAgent extends FlowAiAgentBase {
   public activeTools?: { name: string }[]
-  public inputGuardrailRules: HtInputGuardrailRule[]
   public sources?: { id: string; name: string }[]
-
-  public aiAgentResponse?: InferenceResponse<FlowBuilderContentMessage>
-  public messages: AgenticOutputMessage<FlowBuilderContentMessage>[] = []
-  public jsxElements: JSX.Element[] = []
 
   static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
@@ -60,36 +38,10 @@ export class FlowAiAgent extends ContentFieldsBase {
     return newAiAgent
   }
 
-  async resolveAIAgentResponse(
-    botContext: BotContext,
-    previousContents?: FlowContent[]
-  ): Promise<InferenceResponse<FlowBuilderContentMessage> | undefined> {
-    const aiAgentResponse = await this.getAIAgentResponse(
-      botContext,
-      previousContents
-    )
-
-    if (aiAgentResponse) {
-      this.aiAgentResponse = aiAgentResponse
-      await this.trackAiAgentResponse(botContext)
-      this.messages = aiAgentResponse.messages
-    }
-
-    return aiAgentResponse
-  }
-
   async getAIAgentResponse(
     botContext: BotContext,
     previousContents?: FlowContent[]
   ): Promise<InferenceResponse<FlowBuilderContentMessage> | undefined> {
-    const previousHubtypeContents: HubtypeAssistantMessage[] =
-      previousContents?.map(content => {
-        return {
-          role: 'assistant',
-          content: HubtypeAssistantContent.adapt(content),
-        }
-      }) || []
-
     const activeInputGuardrailRules = this.getActiveInputGuardrailRules(
       this.inputGuardrailRules
     )
@@ -108,15 +60,12 @@ export class FlowAiAgent extends ContentFieldsBase {
         inputGuardrailRules: activeInputGuardrailRules,
         sourceIds: this.sources?.map(source => source.id) ?? [],
         outputMessagesSchemas: [FlowBuilderContentSchema],
-        previousHubtypeMessages: previousHubtypeContents,
+        previousHubtypeMessages:
+          this.getPreviousHubtypeContents(previousContents),
       }
     )
 
     return aiAgentResponse
-  }
-
-  async trackFlow(): Promise<void> {
-    return
   }
 
   async trackAiAgentResponse(botContext: BotContext) {
@@ -143,79 +92,5 @@ export class FlowAiAgent extends ContentFieldsBase {
     const { action, ...eventArgs } = event
 
     await trackEvent(botContext, action, eventArgs)
-  }
-
-  async getFlowContentsByContentId(
-    botContext: BotContext,
-    contentId: string
-  ): Promise<FlowContent[]> {
-    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const cmsApi = flowBuilderPlugin.cmsApi
-    const node = cmsApi.getNodeByContentID(contentId)
-    const flowContents = await flowBuilderPlugin.getContentsByNode(
-      node as HtNodeWithContent
-    )
-    return flowContents
-  }
-
-  async messagesToBotonicJSXElements(botContext: BotContext): Promise<void> {
-    for (const message of this.messages) {
-      if (
-        message.type === OutputMessageType.Text ||
-        message.type === OutputMessageType.TextWithButtons ||
-        message.type === OutputMessageType.BotExecutor
-      ) {
-        this.jsxElements.push(FlowText.fromAIAgent(this.id, message))
-      }
-
-      if (message.type === OutputMessageType.Carousel) {
-        this.jsxElements.push(
-          FlowCarousel.fromAIAgent(this.id, message, botContext)
-        )
-      }
-
-      if (message.type === FlowBuilderOutputMessageType.FlowBuilderContent) {
-        const flowContents = await this.getFlowContentsByContentId(
-          botContext,
-          message.contentId
-        )
-        for (const content of flowContents) {
-          await content.processContent(botContext)
-          this.jsxElements.push(content.toBotonic(botContext))
-        }
-      }
-    }
-    return
-  }
-
-  private getActiveInputGuardrailRules(
-    inputGuardrailRules: HtInputGuardrailRule[]
-  ): GuardrailRule[] {
-    return (
-      inputGuardrailRules
-        ?.filter(rule => rule.is_active)
-        ?.map(rule => ({
-          name: rule.name,
-          description: rule.description,
-        })) || []
-    )
-  }
-
-  async processContent(
-    botContext: BotContext,
-    previousContents?: FlowContent[]
-  ): Promise<void> {
-    if (this.messages.length === 0) {
-      await this.resolveAIAgentResponse(botContext, previousContents)
-    }
-    if (this.jsxElements.length === 0) {
-      await this.filterContent(botContext, this)
-      await this.messagesToBotonicJSXElements(botContext)
-    }
-    return
-  }
-
-  toBotonic(): JSX.Element {
-    return <>{this.jsxElements}</>
   }
 }
