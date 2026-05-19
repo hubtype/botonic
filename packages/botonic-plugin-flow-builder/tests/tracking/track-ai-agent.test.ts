@@ -1,4 +1,9 @@
-import { EventAction, INPUT, type InferenceResponse } from '@botonic/core'
+import {
+  EventAction,
+  INPUT,
+  type InferenceResponse,
+  OutputMessageType,
+} from '@botonic/core'
 
 import { ProcessEnvNodeEnvs } from '../../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -20,7 +25,7 @@ describe('Check tracked events when a contents are displayed', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'Ai agent response',
           },

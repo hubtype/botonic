@@ -34,11 +34,13 @@ jest.mock('@openai/agents', () => ({
 }))
 
 jest.mock('../src/tools', () => ({
-  mandatoryTools: [],
-  retrieveKnowledge: {
+  createRetrieveKnowledge: jest.fn((sourceIds: string[]) => ({
     name: 'retrieve_knowledge',
     description: 'Consult the knowledge base for information before answering.',
-  },
+    sourceIds,
+  })),
+  mandatoryTools: [],
+  RETRIEVE_KNOWLEDGE_TOOL_NAME: 'retrieve_knowledge',
 }))
 
 // Mock constants - can be overridden per test
@@ -51,7 +53,7 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
-import { AIAgentBuilder } from '../src/agent-builder'
+import { WorkerAgent } from '../src/agents/worker-agent'
 import type { GuardrailTrackingContext } from '../src/guardrails/input'
 import type { LLMConfig } from '../src/llm-config'
 
@@ -62,7 +64,8 @@ const mockGuardrailTrackingContext: GuardrailTrackingContext = {
   inferenceId: 'test-inference-id',
 }
 
-// Mock LLMConfig for tests (builder uses modelName and modelSettings for logging)
+// Mock LLMConfig for tests (agents uses modelName and modelSettings for logging)
+const resolvedModel = { id: 'resolved-model' }
 const mockLlmConfig = {
   modelName: 'gpt-4.1-mini',
   modelSettings: {
@@ -71,9 +74,10 @@ const mockLlmConfig = {
     toolChoice: undefined as string | undefined,
   },
   modelProvider: {},
+  getModel: jest.fn().mockResolvedValue(resolvedModel),
 } as unknown as LLMConfig
 
-describe('AIAgentBuilder', () => {
+describe('WorkerAgent', () => {
   const agentName = 'Test Agent'
   const agentInstructions = 'Test instructions for the agent'
   const agentCustomTools: Tool[] = [
@@ -134,8 +138,8 @@ describe('AIAgentBuilder', () => {
   afterEach(() => {
     jest.restoreAllMocks()
   })
-  it('should initialize correctly with name, instructions and tools', () => {
-    const aiAgent = new AIAgentBuilder({
+  it('should initialize correctly with name, instructions and tools', async () => {
+    const worker = await WorkerAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -146,7 +150,8 @@ describe('AIAgentBuilder', () => {
       campaignsContext,
       logger: mockLogger,
       guardrailTrackingContext: mockGuardrailTrackingContext,
-    }).build()
+    })
+    const workerAgent = worker.getAgent()
     const structuredContactInfo = contactInfo
       .map(
         info =>
@@ -165,9 +170,15 @@ describe('AIAgentBuilder', () => {
 
     const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>\n\n<campaign_context_1>\nThis is some context coming from campaigns\n</campaign_context_1>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
-    expect(aiAgent.name).toBe(agentName)
-    expect(aiAgent.instructions).toBe(expectedInstructions)
-    expect(aiAgent.tools).toHaveLength(3) // 2 custom tools + 1 retrieveKnowledge tool
+    expect(workerAgent.name).toBe(agentName)
+    expect(workerAgent.instructions).toBe(expectedInstructions)
+    expect(workerAgent.tools).toHaveLength(3) // 2 custom tools + 1 retrieveKnowledge tool
+    expect(workerAgent.tools[0]).toEqual(
+      expect.objectContaining({
+        name: 'retrieve_knowledge',
+        sourceIds,
+      })
+    )
   })
 
   describe('Structured Output Schema Validation', () => {
@@ -264,8 +275,8 @@ describe('AIAgentBuilder', () => {
   })
 
   describe('Campaign context handling', () => {
-    it('should NOT include campaign_context when campaignsContext is undefined', () => {
-      const aiAgent = new AIAgentBuilder({
+    it('should NOT include campaign_context when campaignsContext is undefined', async () => {
+      const worker = await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -276,12 +287,13 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      })
+      const workerAgent = worker.getAgent()
 
-      expect(aiAgent.instructions).not.toContain('<campaign_context')
+      expect(workerAgent.instructions).not.toContain('<campaign_context')
     })
 
-    it('should NOT include campaign_context when agent_context is undefined', () => {
+    it('should NOT include campaign_context when agent_context is undefined', async () => {
       const campaignWithoutContext = [
         {
           id: '1234-5678-9012-3456',
@@ -290,7 +302,7 @@ describe('AIAgentBuilder', () => {
         },
       ]
 
-      const aiAgent = new AIAgentBuilder({
+      const worker = await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -301,12 +313,13 @@ describe('AIAgentBuilder', () => {
         campaignsContext: campaignWithoutContext,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      })
+      const workerAgent = worker.getAgent()
 
-      expect(aiAgent.instructions).not.toContain('<campaign_context')
+      expect(workerAgent.instructions).not.toContain('<campaign_context')
     })
 
-    it('should NOT include campaign_context when agent_context is empty string', () => {
+    it('should NOT include campaign_context when agent_context is empty string', async () => {
       const campaignWithEmptyContext = [
         {
           id: '1234-5678-9012-3456',
@@ -315,7 +328,7 @@ describe('AIAgentBuilder', () => {
         },
       ]
 
-      const aiAgent = new AIAgentBuilder({
+      const worker = await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -326,13 +339,14 @@ describe('AIAgentBuilder', () => {
         campaignsContext: campaignWithEmptyContext,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      })
+      const workerAgent = worker.getAgent()
 
       // Empty string is falsy, so campaign_context should not be included
-      expect(aiAgent.instructions).not.toContain('<campaign_context')
+      expect(workerAgent.instructions).not.toContain('<campaign_context')
     })
 
-    it('should include campaign_context when agent_context has content', () => {
+    it('should include campaign_context when agent_context has content', async () => {
       const campaignWithContext = [
         {
           id: '1234-5678-9012-3456',
@@ -341,7 +355,7 @@ describe('AIAgentBuilder', () => {
         },
       ]
 
-      const aiAgent = new AIAgentBuilder({
+      const worker = await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -352,18 +366,19 @@ describe('AIAgentBuilder', () => {
         campaignsContext: campaignWithContext,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      })
+      const workerAgent = worker.getAgent()
 
-      expect(aiAgent.instructions).toContain('<campaign_context_1>')
-      expect(aiAgent.instructions).toContain(
+      expect(workerAgent.instructions).toContain('<campaign_context_1>')
+      expect(workerAgent.instructions).toContain(
         'This is the campaign context for the agent'
       )
     })
   })
 
   describe('outputMessagesSchemas handling', () => {
-    it('should build with only base schemas when outputMessagesSchemas is not provided', () => {
-      new AIAgentBuilder({
+    it('should build with only base schemas when outputMessagesSchemas is not provided', async () => {
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -374,7 +389,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
       const outputType = capturedAgentConfig.outputType
@@ -395,7 +410,7 @@ describe('AIAgentBuilder', () => {
       expect(outputType.safeParse(invalidCustomMessage).success).toBe(false)
     })
 
-    it('should include custom schemas when outputMessagesSchemas is provided', () => {
+    it('should include custom schemas when outputMessagesSchemas is provided', async () => {
       const customVideoSchema = z.object({
         type: z.enum(['customVideo']),
         content: z.object({
@@ -404,7 +419,7 @@ describe('AIAgentBuilder', () => {
         }),
       })
 
-      new AIAgentBuilder({
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -416,7 +431,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
       const outputType = capturedAgentConfig.outputType
@@ -437,7 +452,7 @@ describe('AIAgentBuilder', () => {
       expect(outputType.safeParse(validBaseMessage).success).toBe(true)
     })
 
-    it('should include multiple custom schemas when provided', () => {
+    it('should include multiple custom schemas when provided', async () => {
       const customVideoSchema = z.object({
         type: z.enum(['customVideo']),
         content: z.object({
@@ -452,7 +467,7 @@ describe('AIAgentBuilder', () => {
         }),
       })
 
-      new AIAgentBuilder({
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -464,7 +479,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
       const outputType = capturedAgentConfig.outputType
@@ -493,7 +508,7 @@ describe('AIAgentBuilder', () => {
       expect(outputType.safeParse(validImageMessage).success).toBe(true)
     })
 
-    it('should reject invalid custom message when custom schemas are provided', () => {
+    it('should reject invalid custom message when custom schemas are provided', async () => {
       const customVideoSchema = z.object({
         type: z.enum(['customVideo']),
         content: z.object({
@@ -501,7 +516,7 @@ describe('AIAgentBuilder', () => {
         }),
       })
 
-      new AIAgentBuilder({
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -513,7 +528,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
       const outputType = capturedAgentConfig.outputType
@@ -529,8 +544,8 @@ describe('AIAgentBuilder', () => {
       expect(outputType.safeParse(invalidMessage).success).toBe(false)
     })
 
-    it('should produce same schema as OutputSchema when empty array is provided', () => {
-      new AIAgentBuilder({
+    it('should produce same schema as OutputSchema when empty array is provided', async () => {
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -542,7 +557,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
       const outputType = capturedAgentConfig.outputType
@@ -572,9 +587,8 @@ describe('AIAgentBuilder', () => {
   })
 
   describe('Provider logic (openai vs azure)', () => {
-    it('should configure modelSettings for azure provider with retrieveKnowledge tool', () => {
-      // Default OPENAI_PROVIDER is 'azure' from constants
-      const aiAgent = new AIAgentBuilder({
+    it('should configure toolChoice for gpt-4 models with retrieveKnowledge tool', async () => {
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -585,19 +599,57 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
-      // When using azure provider with retrieveKnowledge, logModelSettings is called
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
         expect.objectContaining({
           provider: 'azure',
+          toolChoice: 'retrieve_knowledge',
           hasRetrieveKnowledge: true,
         })
       )
+      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+        'retrieve_knowledge'
+      )
     })
 
-    it('should NOT set toolChoice when sourceIds is empty (no retrieveKnowledge)', () => {
-      const aiAgent = new AIAgentBuilder({
+    it('should set toolChoice for non gpt-4 models with retrieveKnowledge', async () => {
+      const nonGpt4LlmConfig = {
+        ...mockLlmConfig,
+        modelName: 'gpt-5-mini',
+        modelSettings: {
+          reasoning: { effort: 'none' as const },
+          text: { verbosity: 'medium' as const },
+          toolChoice: undefined as string | undefined,
+        },
+      } as unknown as LLMConfig
+
+      await WorkerAgent.create({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: nonGpt4LlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: ['source-1'],
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).then(agent => agent.getAgent())
+
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          toolChoice: 'retrieve_knowledge',
+          hasRetrieveKnowledge: true,
+        })
+      )
+      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+        'retrieve_knowledge'
+      )
+    })
+
+    it('should NOT set toolChoice when sourceIds is empty (no retrieveKnowledge)', async () => {
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -608,7 +660,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -617,9 +669,9 @@ describe('AIAgentBuilder', () => {
       )
     })
 
-    it('should set model (deployment name) for azure provider', () => {
+    it('should set resolved model for azure provider', async () => {
       // Default OPENAI_PROVIDER is 'azure'
-      const aiAgent = new AIAgentBuilder({
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -630,16 +682,15 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(capturedAgentConfig).toBeDefined()
-      // Azure uses deployment name as model
-      expect(capturedAgentConfig.model).toBe('gpt-4.1-mini')
+      expect(capturedAgentConfig.model).toBe(resolvedModel)
     })
 
-    it('should set reasoning and text settings for azure provider (same as openai)', () => {
+    it('should set reasoning and text settings for azure provider (same as openai)', async () => {
       // Default OPENAI_PROVIDER is 'azure'
-      const aiAgent = new AIAgentBuilder({
+      await WorkerAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -650,7 +701,7 @@ describe('AIAgentBuilder', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).build()
+      }).then(agent => agent.getAgent())
 
       expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -660,12 +711,16 @@ describe('AIAgentBuilder', () => {
           text: { verbosity: 'medium' },
         })
       )
+      expect(capturedAgentConfig.modelSettings).toMatchObject({
+        reasoning: { effort: 'none' },
+        text: { verbosity: 'medium' },
+      })
     })
   })
 })
 
 // Separate describe block for OpenAI provider tests
-describe('AIAgentBuilder - OpenAI Provider', () => {
+describe('WorkerAgent - OpenAI Provider', () => {
   const agentName = 'Test Agent'
   const agentInstructions = 'Test instructions for the agent'
   const agentCustomTools: Tool[] = []
@@ -701,8 +756,8 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     mockConstants.OPENAI_PROVIDER = 'azure'
   })
 
-  it('should set reasoning setting with effort: none for openai provider', () => {
-    new AIAgentBuilder({
+  it('should set reasoning setting with effort: none for openai provider', async () => {
+    await WorkerAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -713,7 +768,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       campaignsContext: undefined,
       logger: mockLogger,
       guardrailTrackingContext: mockGuardrailTrackingContext,
-    }).build()
+    }).then(agent => agent.getAgent())
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -723,8 +778,8 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     )
   })
 
-  it('should set text setting with verbosity: medium for openai provider', () => {
-    new AIAgentBuilder({
+  it('should set text setting with verbosity: medium for openai provider', async () => {
+    await WorkerAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -735,7 +790,7 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       campaignsContext: undefined,
       logger: mockLogger,
       guardrailTrackingContext: mockGuardrailTrackingContext,
-    }).build()
+    }).then(agent => agent.getAgent())
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -744,8 +799,8 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
     )
   })
 
-  it('should set model to OPENAI_MODEL for openai provider', () => {
-    new AIAgentBuilder({
+  it('should set resolved model for openai provider', async () => {
+    await WorkerAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -756,14 +811,14 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       campaignsContext: undefined,
       logger: mockLogger,
       guardrailTrackingContext: mockGuardrailTrackingContext,
-    }).build()
+    }).then(agent => agent.getAgent())
 
     expect(capturedAgentConfig).toBeDefined()
-    expect(capturedAgentConfig.model).toBe('gpt-4.1-mini')
+    expect(capturedAgentConfig.model).toBe(resolvedModel)
   })
 
-  it('should NOT set toolChoice for openai provider even with retrieveKnowledge', () => {
-    new AIAgentBuilder({
+  it('should set toolChoice for gpt-4 models even with openai provider', async () => {
+    await WorkerAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -774,13 +829,17 @@ describe('AIAgentBuilder - OpenAI Provider', () => {
       campaignsContext: undefined,
       logger: mockLogger,
       guardrailTrackingContext: mockGuardrailTrackingContext,
-    }).build()
+    }).then(agent => agent.getAgent())
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
         provider: 'openai',
+        toolChoice: 'retrieve_knowledge',
         hasRetrieveKnowledge: true,
       })
+    )
+    expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+      'retrieve_knowledge'
     )
   })
 })

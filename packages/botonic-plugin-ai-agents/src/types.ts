@@ -23,7 +23,6 @@ export interface Context<
   TExtraData = any,
 > {
   authToken: string
-  sourceIds: string[]
   knowledgeUsed: {
     query: string
     sourceIds: string[]

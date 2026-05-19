@@ -2,6 +2,7 @@ import {
   EventAction,
   INPUT,
   type InferenceResponse,
+  OutputMessageType,
   PROVIDER,
 } from '@botonic/core'
 import { describe, test } from '@jest/globals'
@@ -67,7 +68,7 @@ describe('Track redirect flow', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response',
           },

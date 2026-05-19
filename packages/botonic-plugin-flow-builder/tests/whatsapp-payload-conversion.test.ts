@@ -1,4 +1,9 @@
-import { INPUT, type InferenceResponse, PROVIDER } from '@botonic/core'
+import {
+  INPUT,
+  type InferenceResponse,
+  OutputMessageType,
+  PROVIDER,
+} from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../src/constants'
 import { FlowAiAgent } from '../src/content-fields'
@@ -23,7 +28,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response to referral',
           },
@@ -57,7 +62,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response',
           },
@@ -91,7 +96,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response',
           },
@@ -125,7 +130,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response',
           },
@@ -159,7 +164,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response to button 2',
           },
@@ -193,7 +198,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response',
           },
@@ -227,7 +232,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
     const mockResponse: Partial<InferenceResponse> = {
       messages: [
         {
-          type: 'text',
+          type: OutputMessageType.Text,
           content: {
             text: 'AI agent response to go-to-flow referral',
           },

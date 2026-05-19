@@ -1,4 +1,8 @@
-import { INPUT, type TextWithButtonsMessage } from '@botonic/core'
+import {
+  INPUT,
+  OutputMessageType,
+  type TextWithButtonsMessage,
+} from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowText } from '../../src/content-fields/flow-text'
@@ -76,7 +80,7 @@ describe('Check the contents and logic of a text node', () => {
 describe('FlowText.fromAIAgent renders buttons with target attribute', () => {
   test('URL buttons rendered from AI agent responses include the target prop', () => {
     const textWithButtons: TextWithButtonsMessage = {
-      type: 'textWithButtons',
+      type: OutputMessageType.TextWithButtons,
       content: {
         text: 'Here are some links:',
         buttons: [

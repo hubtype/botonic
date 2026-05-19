@@ -1,5 +1,6 @@
 import type { VerbosityLevel } from '@botonic/core'
 import {
+  type Model,
   type ModelProvider,
   type ModelSettings,
   OpenAIProvider,
@@ -33,6 +34,10 @@ export class LLMConfig {
     this.modelName = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
+  }
+
+  async getModel(): Promise<Model> {
+    return await this.modelProvider.getModel(this.modelName)
   }
 
   private getModelProvider(): ModelProvider {

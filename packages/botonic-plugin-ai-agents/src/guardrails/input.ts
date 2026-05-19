@@ -19,20 +19,34 @@ export interface GuardrailTrackingContext {
   inferenceId: string
 }
 
-export function createInputGuardrail(
+export async function createInputGuardrails(
   rules: GuardrailRule[],
   llmConfig: LLMConfig,
   trackingContext: GuardrailTrackingContext
-): InputGuardrail {
+): Promise<InputGuardrail[]> {
+  if (rules.length === 0) {
+    return []
+  }
+
+  return [await buildInputGuardrail(rules, llmConfig, trackingContext)]
+}
+
+async function buildInputGuardrail(
+  rules: GuardrailRule[],
+  llmConfig: LLMConfig,
+  trackingContext: GuardrailTrackingContext
+): Promise<InputGuardrail> {
   const outputType = z.object(
     Object.fromEntries(
       rules.map(rule => [rule.name, z.boolean().describe(rule.description)])
     )
   )
+  const modelSettings = createInputGuardrailModelSettings(llmConfig)
 
   const agent = new Agent({
     name: 'InputGuardrail',
-    model: llmConfig.modelName,
+    model: await llmConfig.getModel(),
+    modelSettings,
     instructions:
       'Check if the user triggers some of the following guardrails.',
     outputType,
@@ -42,11 +56,7 @@ export function createInputGuardrail(
     name: 'InputGuardrail',
     execute: async ({ input, context }) => {
       const lastMessage = input[input.length - 1] as UserMessageItem
-      const modelProvider = llmConfig.modelProvider
-      const modelSettings = createInputGuardrailModelSettings(llmConfig)
       const runner = new Runner({
-        modelSettings,
-        modelProvider,
         tracingDisabled: true,
       })
       const startTime = Date.now()
@@ -80,10 +90,17 @@ export function createInputGuardrail(
 function createInputGuardrailModelSettings(
   llmConfig: LLMConfig
 ): ModelSettings {
-  return {
+  const modelSettings: ModelSettings = {
     ...llmConfig.modelSettings,
     toolChoice: undefined,
   }
+  if (llmConfig.modelSettings.reasoning) {
+    modelSettings.reasoning = { ...llmConfig.modelSettings.reasoning }
+  }
+  if (llmConfig.modelSettings.text) {
+    modelSettings.text = { ...llmConfig.modelSettings.text }
+  }
+  return modelSettings
 }
 
 async function sendGuardrailLlmRunTracking(
@@ -114,7 +131,7 @@ async function sendGuardrailLlmRunTracking(
     product_name: TrackProductName.AI_AGENT,
     deployment_name: llmConfig.modelName,
     model_name:
-      (response.providerData?.['model'] as string | undefined) ??
+      (response.providerData?.model as string | undefined) ??
       llmConfig.modelName,
     feature: TrackFeature.AI_AGENT_GUARDRAIL,
     api_version: apiVersion,

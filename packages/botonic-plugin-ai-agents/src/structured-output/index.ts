@@ -32,3 +32,18 @@ export function getOutputSchema(
     ),
   })
 }
+
+export function getOutputInstructions(): string {
+  const example = {
+    messages: [
+      {
+        type: 'text',
+        content: {
+          text: 'Hello, how can I help you today?',
+        },
+      },
+    ],
+  }
+  const output = `Return a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${JSON.stringify(example)}\n</example>`
+  return `<output>\n${output}\n</output>`
+}
