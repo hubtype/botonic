@@ -137,6 +137,12 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
       inputGuardrailsTriggered:
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
       outputGuardrailsTriggered: [],
+      startingAgentName: this.aiAgentResponse?.startingAgentName ?? '',
+      currentAgentName: this.aiAgentResponse?.currentAgentName ?? '',
+      handoffs: this.aiAgentResponse?.handoffs ?? [],
+      isHandoff:
+        (this.aiAgentResponse?.startingAgentName ?? '') !==
+        (this.aiAgentResponse?.currentAgentName ?? ''),
     }
 
     await trackEvent(botContext, action, eventArgs)

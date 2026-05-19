@@ -1,4 +1,4 @@
-import type { ToolExecution } from './ai-agents'
+import type { HandoffAgent, ToolExecution } from './ai-agents'
 
 export const EVENT_FORMAT_VERSION = 5
 
@@ -207,6 +207,10 @@ export interface EventAiAgentRouter extends HtBaseEventAllFlowProps {
   inputGuardrailsTriggered: string[]
   outputGuardrailsTriggered: string[]
   exit: boolean
+  startingAgentName: string
+  currentAgentName: string
+  handoffs: HandoffAgent[]
+  isHandoff: boolean  // derived: startingAgentName !== currentAgentName
 }
 
 export interface EventRedirectFlow extends HtBaseEventAllFlowProps {

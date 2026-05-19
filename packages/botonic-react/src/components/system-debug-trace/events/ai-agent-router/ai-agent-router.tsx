@@ -22,6 +22,10 @@ export const AiAgentRouter = ({
   exit,
   messageId,
   knowledge_base_chunks_with_sources,
+  starting_agent_name,
+  current_agent_name,
+  handoffs,
+  is_handoff,
 }: AiAgentRouterDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
 
@@ -58,6 +62,31 @@ export const AiAgentRouter = ({
 
   return (
     <>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.STARTING_AGENT}</StyledDebugLabel>
+        <StyledDebugValue>{starting_agent_name}</StyledDebugValue>
+      </StyledDebugDetail>
+
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.CURRENT_AGENT}</StyledDebugLabel>
+        <StyledDebugValue>{current_agent_name}</StyledDebugValue>
+      </StyledDebugDetail>
+
+      {is_handoff && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.IS_HANDOFF}</StyledDebugLabel>
+        </StyledDebugDetail>
+      )}
+
+      {handoffs.length > 0 && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.HANDOFFS}</StyledDebugLabel>
+          <StyledDebugValue>
+            {handoffs.map(h => h.name).join(', ')}
+          </StyledDebugValue>
+        </StyledDebugDetail>
+      )}
+
       {query && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.QUERY}</StyledDebugLabel>

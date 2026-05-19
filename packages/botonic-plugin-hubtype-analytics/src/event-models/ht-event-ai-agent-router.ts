@@ -3,6 +3,7 @@ import {
   EventAction,
   type EventAiAgentRouter,
   EventType,
+  type HandoffAgent,
   type RequestData,
   type ToolExecution,
 } from '../types'
@@ -29,6 +30,10 @@ export class HtEventAiAgentRouter extends HtEvent {
   input_guardrails_triggered: string[]
   output_guardrails_triggered: string[]
   exit: boolean
+  starting_agent_name: string
+  current_agent_name: string
+  handoffs: HandoffAgent[]
+  is_handoff: boolean
 
   constructor(event: EventAiAgentRouter, requestData: RequestData) {
     super(event, requestData)
@@ -48,6 +53,10 @@ export class HtEventAiAgentRouter extends HtEvent {
     this.input_guardrails_triggered = event.inputGuardrailsTriggered
     this.output_guardrails_triggered = event.outputGuardrailsTriggered
     this.exit = event.exit
+    this.starting_agent_name = event.startingAgentName
+    this.current_agent_name = event.currentAgentName
+    this.handoffs = event.handoffs
+    this.is_handoff = event.isHandoff
   }
 
   private getToolExecutionInfo(
