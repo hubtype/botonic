@@ -15,6 +15,7 @@ import { EventAction } from '@botonic/core'
 
 import type {
   AiAgentDebugEvent,
+  AiAgentRouterDebugEvent,
   BotActionDebugEvent,
   ConditionalChannelDebugEvent,
   ConditionalCountryDebugEvent,
@@ -197,4 +198,31 @@ export const DEBUG_SYSTEM_MESSAGES = {
     exit: false,
     error: true,
   } satisfies AiAgentDebugEvent,
+
+  aiAgentRouter: {
+    action: EventAction.AiAgentRouter,
+    flow_node_content_id: 'router-mock-001',
+    tools_executed: [
+      {
+        tool_name: 'transfer_to_billing_agent',
+        tool_arguments: { reason: 'User asking about invoice' },
+        tool_results: '{"transferred": true}',
+      },
+    ],
+    memory_length: 3,
+    input_guardrails_triggered: [],
+    output_guardrails_triggered: [],
+    exit: true,
+    knowledge_base_chunks_with_sources: [],
+  } satisfies AiAgentRouterDebugEvent,
+
+  aiAgentRouterWithGuardrails: {
+    action: EventAction.AiAgentRouter,
+    flow_node_content_id: 'router-mock-002',
+    tools_executed: [],
+    memory_length: 0,
+    input_guardrails_triggered: ['content_safety'],
+    output_guardrails_triggered: [],
+    exit: false,
+  } satisfies AiAgentRouterDebugEvent,
 } satisfies Record<string, DebugEvent>

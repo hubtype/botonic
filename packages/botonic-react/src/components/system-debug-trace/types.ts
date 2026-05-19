@@ -2,6 +2,7 @@ import type React from 'react'
 
 import type {
   AiAgentDebugEvent,
+  AiAgentRouterDebugEvent,
   BotActionDebugEvent,
   ConditionalChannelDebugEvent,
   ConditionalCountryDebugEvent,
@@ -24,6 +25,7 @@ export interface IconProps {
 export type DebugEvent =
   | KeywordDebugEvent
   | AiAgentDebugEvent
+  | AiAgentRouterDebugEvent
   | KnowledgeBaseDebugEvent
   | FallbackDebugEvent
   | SmartIntentDebugEvent

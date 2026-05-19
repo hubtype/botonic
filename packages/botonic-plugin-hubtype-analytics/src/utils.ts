@@ -2,6 +2,7 @@
 import {
   HtEvent,
   HtEventAiAgent,
+  HtEventAiAgentRouter,
   HtEventBotAction,
   HtEventConditionalChannel,
   HtEventConditionalCountry,
@@ -72,6 +73,9 @@ export function createHtEvent(
 
     case EventAction.AiAgent:
       return new HtEventAiAgent(htEventProps, requestData)
+
+    case EventAction.AiAgentRouter:
+      return new HtEventAiAgentRouter(htEventProps, requestData)
 
     case EventAction.ConditionalCountry:
       return new HtEventConditionalCountry(htEventProps, requestData)

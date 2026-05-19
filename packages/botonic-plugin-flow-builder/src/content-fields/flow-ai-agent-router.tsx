@@ -1,6 +1,7 @@
 import {
   AiAgentType,
   type BotContext,
+  EventAction,
   type InferenceResponse,
 } from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
@@ -8,7 +9,10 @@ import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
 } from '../structured-output/flow-builder-content'
-import { getCommonFlowContentEventArgsForContentId } from '../tracking'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { FlowAiAgent } from './flow-ai-agent'
 import { FlowAiAgentBase } from './flow-ai-agent-base'
@@ -118,13 +122,12 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
     const { flowThreadId, flowId, flowName, flowNodeId } =
       getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
-    // TODO: Create a new endpoint for AIAgentRouter
-    const event = {
-      action: 'AIAgentRouter',
-      flowThreadId: flowThreadId,
-      flowId: flowId,
-      flowName: flowName,
-      flowNodeId: flowNodeId,
+    const action = EventAction.AiAgentRouter
+    const eventArgs = {
+      flowThreadId,
+      flowId,
+      flowName,
+      flowNodeId,
       flowNodeContentId: this.name,
       flowNodeIsMeaningful: true,
       toolsExecuted: this.aiAgentResponse?.toolsExecuted ?? [],
@@ -133,15 +136,9 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
       exit: this.aiAgentResponse?.exit ?? true,
       inputGuardrailsTriggered:
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
-      outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
+      outputGuardrailsTriggered: [],
     }
 
-    const { action, ...eventArgs } = event
-
-    console.log('trackAiAgentResponse', {
-      action,
-      eventArgs,
-    })
-    // await trackEvent(botContext, action, eventArgs)
+    await trackEvent(botContext, action, eventArgs)
   }
 }
