@@ -199,7 +199,7 @@ export const DEBUG_SYSTEM_MESSAGES = {
     error: true,
   } satisfies AiAgentDebugEvent,
 
-  aiAgentRouter: {
+  aiAgentRouterHandoff: {
     action: EventAction.AiAgentRouter,
     flow_node_content_id: 'router-mock-001',
     tools_executed: [
@@ -220,9 +220,23 @@ export const DEBUG_SYSTEM_MESSAGES = {
     knowledge_base_chunks_with_sources: [],
   } satisfies AiAgentRouterDebugEvent,
 
-  aiAgentRouterWithGuardrails: {
+  aiAgentRouterNoHandoff: {
     action: EventAction.AiAgentRouter,
     flow_node_content_id: 'router-mock-002',
+    tools_executed: [],
+    memory_length: 2,
+    input_guardrails_triggered: [],
+    output_guardrails_triggered: [],
+    exit: false,
+    starting_agent_name: 'main_agent',
+    current_agent_name: 'main_agent',
+    handoffs: [],
+    is_handoff: false,
+  } satisfies AiAgentRouterDebugEvent,
+
+  aiAgentRouterWithGuardrails: {
+    action: EventAction.AiAgentRouter,
+    flow_node_content_id: 'router-mock-003',
     tools_executed: [],
     memory_length: 0,
     input_guardrails_triggered: ['content_safety'],
