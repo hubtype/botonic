@@ -27,6 +27,7 @@ export interface RunnerResult {
   }
   rawResponses?: ResultRawResponse[]
   newItems?: unknown[]
+  lastAgent?: { name?: string }
   // biome-ignore lint/suspicious/noExplicitAny: state is a complex internal type
   state?: any
 }
@@ -70,6 +71,8 @@ export abstract class BaseRunner<
       const result = (await runner.run(this.agent, messages, {
         context,
       })) as RunnerResult
+      console.log('result', result)
+      console.log('context', context)
       const endTime = Date.now()
 
       await this.sendLlmRunTracking(result, context, startTime, endTime)
@@ -82,6 +85,9 @@ export abstract class BaseRunner<
     } catch (error) {
       if (error instanceof InputGuardrailTripwireTriggered) {
         const runResult: RunResult = {
+          startingAgentName: '',
+          currentAgentName: '',
+          handoffs: [],
           messages: [],
           memoryLength: 0,
           toolsExecuted: [],
@@ -110,7 +116,7 @@ export abstract class BaseRunner<
     return []
   }
 
-  private buildRunResult(
+  protected buildRunResult(
     result: RunnerResult,
     context: Context<TPlugins, TExtraData>,
     memoryLength: number
@@ -121,6 +127,9 @@ export abstract class BaseRunner<
       outputMessages.some(message => message.type === 'exit')
 
     return {
+      startingAgentName: '',
+      currentAgentName: '',
+      handoffs: [],
       messages: hasExit
         ? []
         : (outputMessages.filter(
