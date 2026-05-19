@@ -14,7 +14,7 @@ import type {
   RunContext as OpenAIRunContext,
   Tool as OpenAITool,
 } from '@openai/agents'
-import type { ZodSchema } from 'zod'
+import type { ZodType } from 'zod'
 
 import type { OutputSchema } from './structured-output'
 
@@ -44,7 +44,7 @@ export interface CustomTool<
 > {
   name: string
   description: string
-  schema: ZodSchema
+  schema: ZodType
   func: (
     input?: any,
     runContext?: RunContext<TPlugins, TExtraData>
