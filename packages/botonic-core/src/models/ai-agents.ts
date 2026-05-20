@@ -5,6 +5,7 @@ export interface BaseMessage<
     | 'textWithButtons'
     | 'botExecutor'
     | 'carousel'
+    | 'whatsappButtonList'
     | 'exit',
 > {
   type: T
@@ -63,11 +64,31 @@ export interface ExitMessage extends BaseMessage {
   type: 'exit'
 }
 
+export interface WhatsappButtonListRow {
+  text: string
+  description?: string
+}
+
+export interface WhatsappButtonListSection {
+  title: string
+  rows: WhatsappButtonListRow[]
+}
+
+export interface WhatsappButtonListMessage extends BaseMessage {
+  type: 'whatsappButtonList'
+  content: {
+    text: string
+    buttonText: string
+    sections: WhatsappButtonListSection[]
+  }
+}
+
 export type OutputMessage<Extra extends BaseMessage<string> = never> =
   | TextMessage
   | TextWithButtonsMessage
   | BotExecutorMessage
   | CarouselMessage
+  | WhatsappButtonListMessage
   | ExitMessage
   | Extra
 

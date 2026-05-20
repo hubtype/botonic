@@ -27,6 +27,7 @@ import type {
   HtInputGuardrailRule,
 } from './hubtype-fields/ai-agent'
 import type { FlowContent } from './index'
+import { FlowWhatsappButtonList } from './whatsapp-button-list/flow-whatsapp-button-list'
 
 export class FlowAiAgent extends ContentFieldsBase {
   public name: string = ''
@@ -172,6 +173,12 @@ export class FlowAiAgent extends ContentFieldsBase {
       if (message.type === 'carousel') {
         this.jsxElements.push(
           FlowCarousel.fromAIAgent(this.id, message, botContext)
+        )
+      }
+
+      if (message.type === 'whatsappButtonList') {
+        this.jsxElements.push(
+          FlowWhatsappButtonList.fromAIAgent(this.id, message, botContext)
         )
       }
 
