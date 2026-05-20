@@ -84,7 +84,7 @@ export interface ToolExecution {
   knowledgebaseChunksIds?: string[]
 }
 
-export interface HandoffAgent {
+export interface AvailableHandoffAgent {
   name: string
   description: string
 }
@@ -98,8 +98,8 @@ export interface RunResult<Extra extends BaseMessage<string> = never> {
   inputGuardrailsTriggered: string[]
   outputGuardrailsTriggered: string[]
   startingAgentName: string
-  currentAgentName: string
-  handoffs: HandoffAgent[]
+  lastAgentName: string
+  availableHandoffs: AvailableHandoffAgent[]
 }
 
 export type InferenceResponse<Extra extends BaseMessage<string> = never> =

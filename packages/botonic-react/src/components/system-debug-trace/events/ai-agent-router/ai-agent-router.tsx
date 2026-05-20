@@ -9,10 +9,10 @@ import {
   StyledDebugValue,
 } from '../../styles'
 import type { DebugEventConfig } from '../../types'
-import { GuardrailList, SourcesSection } from '../components'
-import { LABELS } from '../constants'
 import { ExecutedTools } from '../ai-agent/executed-tools'
 import { parseTools } from '../ai-agent/parse-tools'
+import { GuardrailList, SourcesSection } from '../components'
+import { LABELS } from '../constants'
 import type { AiAgentRouterDebugEvent, ToolExecuted } from './types'
 
 export const AiAgentRouter = ({
@@ -23,8 +23,8 @@ export const AiAgentRouter = ({
   messageId,
   knowledge_base_chunks_with_sources,
   starting_agent_name,
-  current_agent_name,
-  handoffs,
+  last_agent_name,
+  available_handoffs,
   is_handoff,
 }: AiAgentRouterDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
@@ -69,7 +69,7 @@ export const AiAgentRouter = ({
 
       <StyledDebugDetail>
         <StyledDebugLabel>{LABELS.CURRENT_AGENT}</StyledDebugLabel>
-        <StyledDebugValue>{current_agent_name}</StyledDebugValue>
+        <StyledDebugValue>{last_agent_name}</StyledDebugValue>
       </StyledDebugDetail>
 
       {is_handoff && (
@@ -78,11 +78,11 @@ export const AiAgentRouter = ({
         </StyledDebugDetail>
       )}
 
-      {handoffs.length > 0 && (
+      {available_handoffs.length > 0 && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.HANDOFFS}</StyledDebugLabel>
           <StyledDebugValue>
-            {handoffs.map(h => h.name).join(', ')}
+            {available_handoffs.map(h => h.name).join(', ')}
           </StyledDebugValue>
         </StyledDebugDetail>
       )}

@@ -18,8 +18,8 @@ export interface AiAgentRouterDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   starting_agent_name: string
-  current_agent_name: string
-  handoffs: HandoffAgentDebugEvent[]
+  last_agent_name: string
+  available_handoffs: HandoffAgentDebugEvent[]
   is_handoff: boolean
   knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string

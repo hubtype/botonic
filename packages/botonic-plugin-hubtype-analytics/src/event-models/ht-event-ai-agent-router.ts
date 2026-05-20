@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
+  type AvailableHandoffAgent,
   EventAction,
   type EventAiAgentRouter,
   EventType,
-  type HandoffAgent,
   type RequestData,
   type ToolExecution,
 } from '../types'
@@ -31,8 +31,8 @@ export class HtEventAiAgentRouter extends HtEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   starting_agent_name: string
-  current_agent_name: string
-  handoffs: HandoffAgent[]
+  last_agent_name: string
+  available_handoffs: AvailableHandoffAgent[]
   is_handoff: boolean
 
   constructor(event: EventAiAgentRouter, requestData: RequestData) {
@@ -54,8 +54,8 @@ export class HtEventAiAgentRouter extends HtEvent {
     this.output_guardrails_triggered = event.outputGuardrailsTriggered
     this.exit = event.exit
     this.starting_agent_name = event.startingAgentName
-    this.current_agent_name = event.currentAgentName
-    this.handoffs = event.handoffs
+    this.last_agent_name = event.lastAgentName
+    this.available_handoffs = event.availableHandoffs
     this.is_handoff = event.isHandoff
   }
 

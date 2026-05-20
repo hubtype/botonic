@@ -119,8 +119,8 @@ export default class BotonicPluginAiAgents<
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
         startingAgentName: '',
-        currentAgentName: '',
-        handoffs: [],
+        lastAgentName: '',
+        availableHandoffs: [],
       }
     }
   }

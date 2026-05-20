@@ -86,8 +86,8 @@ export abstract class BaseRunner<
       if (error instanceof InputGuardrailTripwireTriggered) {
         const runResult: RunResult = {
           startingAgentName: '',
-          currentAgentName: '',
-          handoffs: [],
+          lastAgentName: '',
+          availableHandoffs: [],
           messages: [],
           memoryLength: 0,
           toolsExecuted: [],
@@ -128,8 +128,8 @@ export abstract class BaseRunner<
 
     return {
       startingAgentName: '',
-      currentAgentName: '',
-      handoffs: [],
+      lastAgentName: '',
+      availableHandoffs: [],
       messages: hasExit
         ? []
         : (outputMessages.filter(

@@ -1,4 +1,5 @@
 import {
+  AvailableHandoffAgent,
   EventAction,
   EventAiAgent,
   type EventAiAgentRouter,
@@ -22,7 +23,6 @@ import {
   EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,
-  HandoffAgent,
   KnowledgebaseFailReason,
   ToolExecution,
   WebviewEndFailType,
@@ -68,8 +68,8 @@ export interface RequestData {
 export {
   EventAction,
   EventAiAgent,
-  EventAiAgentRouter,
-  HandoffAgent,
+  type EventAiAgentRouter,
+  AvailableHandoffAgent,
   EventBotAction,
   EventCaptureUserInput,
   EventConditionalChannel,

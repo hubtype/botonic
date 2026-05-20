@@ -214,8 +214,13 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: true,
     starting_agent_name: 'main_agent',
-    current_agent_name: 'billing_agent',
-    handoffs: [{ name: 'transfer_to_billing_agent', description: 'Transfer to billing agent' }],
+    last_agent_name: 'billing_agent',
+    available_handoffs: [
+      {
+        name: 'transfer_to_billing_agent',
+        description: 'Transfer to billing agent',
+      },
+    ],
     is_handoff: true,
     knowledge_base_chunks_with_sources: [],
   } satisfies AiAgentRouterDebugEvent,
@@ -229,8 +234,8 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: false,
     starting_agent_name: 'main_agent',
-    current_agent_name: 'main_agent',
-    handoffs: [],
+    last_agent_name: 'main_agent',
+    available_handoffs: [],
     is_handoff: false,
   } satisfies AiAgentRouterDebugEvent,
 
@@ -243,8 +248,8 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: false,
     starting_agent_name: 'main_agent',
-    current_agent_name: 'main_agent',
-    handoffs: [],
+    last_agent_name: 'main_agent',
+    available_handoffs: [],
     is_handoff: false,
   } satisfies AiAgentRouterDebugEvent,
 } satisfies Record<string, DebugEvent>

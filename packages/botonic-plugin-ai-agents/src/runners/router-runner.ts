@@ -16,10 +16,13 @@ export class RouterRunner<
   ): RunResult {
     const base = super.buildRunResult(result, context, memoryLength)
 
-    const handoffs = this.agent.handoffs.map(
+    const availableHandoffs = (this.agent.handoffs ?? []).map(
       (entry: Agent<any, any> | Handoff<any, any>) => {
-        const isHandoff = entry instanceof RunHandoffOutputItem === false && 'agent' in entry
-        const agent = isHandoff ? (entry as Handoff<any, any>).agent : (entry as Agent<any, any>)
+        const isHandoff =
+          entry instanceof RunHandoffOutputItem === false && 'agent' in entry
+        const agent = isHandoff
+          ? (entry as Handoff<any, any>).agent
+          : (entry as Agent<any, any>)
         const description = isHandoff
           ? (entry as Handoff<any, any>).toolDescription
           : agent.handoffDescription
@@ -30,8 +33,8 @@ export class RouterRunner<
     return {
       ...base,
       startingAgentName: this.agent.name ?? '',
-      currentAgentName: result.lastAgent?.name ?? '',
-      handoffs,
+      lastAgentName: result.lastAgent?.name ?? '',
+      availableHandoffs,
     }
   }
 }
