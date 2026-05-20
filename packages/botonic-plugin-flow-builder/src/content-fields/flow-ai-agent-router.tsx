@@ -3,7 +3,6 @@ import {
   type BotContext,
   type InferenceResponse,
 } from '@botonic/core'
-import type { FlowBuilderApi } from '../api'
 import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
@@ -26,17 +25,20 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
 
   static fromHubtypeCMS(
     component: HtAiAgentRouterNode,
-    cmsApi: FlowBuilderApi
+    botContext: BotContext
   ): FlowAiAgentRouter {
     const newAiAgentRouter = new FlowAiAgentRouter(component.id)
     newAiAgentRouter.code = component.code
     newAiAgentRouter.name = component.content.name
-    newAiAgentRouter.instructions = component.content.instructions
+    newAiAgentRouter.instructions = newAiAgentRouter.replaceVariables(
+      component.content.instructions,
+      botContext
+    )
     newAiAgentRouter.model = component.content.model
     newAiAgentRouter.verbosity = component.content.verbosity
     newAiAgentRouter.agents = FlowAiAgentRouter.getTransferAgentsFromHubtypeCMS(
       component,
-      cmsApi
+      botContext
     )
     newAiAgentRouter.inputGuardrailRules =
       component.content.input_guardrail_rules || []
@@ -45,17 +47,22 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
 
   private static getTransferAgentsFromHubtypeCMS(
     component: HtAiAgentRouterNode,
-    cmsApi: FlowBuilderApi
+    botContext: BotContext
   ): AiAgentWithNameAndDescription[] {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const cmsApi = flowBuilderPlugin.cmsApi
+
     return component.content.agent_slots.map((agentSlot, index) => {
       const agentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
-      const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode)
+      const aiAgent = FlowAiAgent.fromHubtypeCMS(agentNode, botContext)
       const aiAgentName = FlowAiAgentRouter.transferAgentSlotBaseName(
         agentSlot.name,
         index
       )
-      const agentDescription =
-        agentSlot.description || `Transfer to ${aiAgentName}`
+      const agentDescription = aiAgent.replaceVariables(
+        agentSlot.description || `Transfer to ${aiAgentName}`,
+        botContext
+      )
 
       return {
         agent: aiAgent,
