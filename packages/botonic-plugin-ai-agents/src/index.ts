@@ -209,15 +209,6 @@ export default class BotonicPluginAiAgents<
         return handoff(agent, {
           toolNameOverride: aiAgentData.name,
           toolDescriptionOverride: aiAgentData.description,
-          // TODO: Review if is possible use onHandoff action to track the handoff
-          // onHandoff: result => {
-          //   console.log('onHandoff', aiAgentData.name, result)
-          // },
-          // TODO: when onHandoff function is defined, we need to provide inputType
-          // inputType: ????,
-          // isEnabled: (context: RunContext<any>) => {
-          //   return true
-          // },
         })
       })
     )
