@@ -22,15 +22,12 @@ export const AiAgentRouter = ({
   exit,
   messageId,
   knowledge_base_chunks_with_sources,
-  starting_agent_name,
-  last_agent_name,
   available_handoffs,
-  is_handoff,
 }: AiAgentRouterDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
 
   const { otherTools, allSourcesIds, allChunksIds, query } = useMemo(
-    () => parseTools(tools_executed),
+    () => parseTools(tools_executed, true),
     [tools_executed]
   )
 
@@ -62,28 +59,12 @@ export const AiAgentRouter = ({
 
   return (
     <>
-      <StyledDebugDetail>
-        <StyledDebugLabel>{LABELS.STARTING_AGENT}</StyledDebugLabel>
-        <StyledDebugValue>{starting_agent_name}</StyledDebugValue>
-      </StyledDebugDetail>
-
-      <StyledDebugDetail>
-        <StyledDebugLabel>{LABELS.CURRENT_AGENT}</StyledDebugLabel>
-        <StyledDebugValue>{last_agent_name}</StyledDebugValue>
-      </StyledDebugDetail>
-
-      {is_handoff && (
-        <StyledDebugDetail>
-          <StyledDebugLabel>{LABELS.IS_HANDOFF}</StyledDebugLabel>
-        </StyledDebugDetail>
-      )}
-
       {available_handoffs.length > 0 && (
         <StyledDebugDetail>
-          <StyledDebugLabel>{LABELS.HANDOFFS}</StyledDebugLabel>
-          <StyledDebugValue>
-            {available_handoffs.map(h => h.name).join(', ')}
-          </StyledDebugValue>
+          <StyledDebugLabel>{LABELS.AVAILABLE_TRANSFERS}</StyledDebugLabel>
+          {available_handoffs.map(h => (
+            <StyledDebugValue key={h.name}>• {h.name}</StyledDebugValue>
+          ))}
         </StyledDebugDetail>
       )}
 
@@ -136,9 +117,16 @@ export const AiAgentRouter = ({
 export const getAiAgentRouterEventConfig = (
   data: AiAgentRouterDebugEvent
 ): DebugEventConfig => {
-  const title = (
+  const title = data.is_handoff ? (
     <>
-      AI Agent Router <span>- {data.flow_node_content_id}</span>
+      AI Agent Router{' '}
+      <span>
+        - Transferred to <strong>{data.last_agent_name}</strong>
+      </span>
+    </>
+  ) : (
+    <>
+      AI Agent Router <span>- No transfer done</span>
     </>
   )
 
@@ -147,6 +135,6 @@ export const getAiAgentRouterEventConfig = (
     title,
     component: AiAgentRouter,
     icon: <SplitSvg />,
-    collapsible: true,
+    collapsible: data.is_handoff,
   }
 }

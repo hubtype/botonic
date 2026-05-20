@@ -220,6 +220,14 @@ export const DEBUG_SYSTEM_MESSAGES = {
         name: 'transfer_to_billing_agent',
         description: 'Transfer to billing agent',
       },
+      {
+        name: 'transfer_to_support_agent',
+        description: 'Transfer to support agent',
+      },
+      {
+        name: 'transfer_to_sales_agent',
+        description: 'Transfer to sales agent',
+      },
     ],
     is_handoff: true,
     knowledge_base_chunks_with_sources: [],

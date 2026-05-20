@@ -2,7 +2,12 @@ import type { ToolExecuted } from './types'
 
 export const RETRIEVE_KNOWLEDGE_TOOL = 'retrieve_knowledge'
 
-export function parseTools(tools: ToolExecuted[]) {
+const TRANSFER_TOOL_PREFIX = 'transfer_to_'
+
+export function parseTools(
+  tools: ToolExecuted[],
+  excludeTransferTools = false
+) {
   const result = {
     retrieveKnowledgeTools: [] as ToolExecuted[],
     otherTools: [] as ToolExecuted[],
@@ -13,7 +18,14 @@ export function parseTools(tools: ToolExecuted[]) {
 
   for (const tool of tools) {
     if (tool.tool_name !== RETRIEVE_KNOWLEDGE_TOOL) {
-      result.otherTools.push(tool)
+      if (
+        !(
+          excludeTransferTools &&
+          tool.tool_name.startsWith(TRANSFER_TOOL_PREFIX)
+        )
+      ) {
+        result.otherTools.push(tool)
+      }
       continue
     }
 

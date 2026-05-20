@@ -10,6 +10,11 @@ import {
   AiAgent,
   getAiAgentEventConfig,
 } from '../../src/components/system-debug-trace/events/ai-agent'
+import { parseTools } from '../../src/components/system-debug-trace/events/ai-agent/parse-tools'
+import {
+  AiAgentRouter,
+  getAiAgentRouterEventConfig,
+} from '../../src/components/system-debug-trace/events/ai-agent-router/ai-agent-router'
 import {
   getHandoffSuccessEventConfig,
   HandoffSuccess,
@@ -385,6 +390,100 @@ describe('System Debug Trace - Event Components', () => {
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
+    })
+  })
+
+  describe('AiAgentRouter Component', () => {
+    const baseRouterProps = {
+      action: EventAction.AiAgentRouter,
+      flow_node_content_id: 'router-001',
+      tools_executed: [],
+      memory_length: 2,
+      input_guardrails_triggered: [],
+      output_guardrails_triggered: [],
+      exit: false,
+      starting_agent_name: 'main_agent',
+      last_agent_name: 'main_agent',
+      available_handoffs: [],
+      is_handoff: false,
+    }
+
+    test('config is not collapsible when no handoff', () => {
+      const config = getAiAgentRouterEventConfig(baseRouterProps)
+      expect(config.collapsible).toBe(false)
+    })
+
+    test('config is collapsible when handoff occurred', () => {
+      const data = {
+        ...baseRouterProps,
+        is_handoff: true,
+        last_agent_name: 'billing_agent',
+      }
+      const config = getAiAgentRouterEventConfig(data)
+      expect(config.collapsible).toBe(true)
+    })
+
+    test('renders available transfers as bullet list', async () => {
+      const props = {
+        ...baseRouterProps,
+        available_handoffs: [
+          { name: 'transfer_to_billing_agent', description: 'Billing' },
+          { name: 'transfer_to_support_agent', description: 'Support' },
+        ],
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgentRouter {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('• transfer_to_billing_agent')
+      expect(container.textContent).toContain('• transfer_to_support_agent')
+    })
+
+    test('does not render available transfers section when empty', async () => {
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgentRouter {...baseRouterProps} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).not.toContain('Available transfers')
+    })
+
+    test('filters out transfer tools from executed tools display', async () => {
+      const props = {
+        ...baseRouterProps,
+        tools_executed: [
+          { tool_name: 'transfer_to_billing_agent', tool_arguments: {} },
+          { tool_name: 'custom_tool', tool_arguments: {} },
+        ],
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgentRouter {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).not.toContain('transfer_to_billing_agent')
+      expect(container.textContent).toContain('custom_tool')
     })
   })
 
@@ -822,6 +921,30 @@ describe('System Debug Trace - Event Components', () => {
       expect(container.textContent).toContain('tool_1')
       expect(container.textContent).toContain('tool_2')
       expect(container.textContent).toContain('Executed tools')
+    })
+
+    test('does not display transfer tools when excludeTransferTools is true', () => {
+      const tools = [
+        { tool_name: 'transfer_to_billing_agent', tool_arguments: {} },
+        { tool_name: 'some_other_tool', tool_arguments: {} },
+        { tool_name: 'transfer_to_support_agent', tool_arguments: {} },
+      ]
+
+      const { otherTools } = parseTools(tools, true)
+
+      expect(otherTools).toHaveLength(1)
+      expect(otherTools[0].tool_name).toBe('some_other_tool')
+    })
+
+    test('keeps transfer tools when excludeTransferTools is false', () => {
+      const tools = [
+        { tool_name: 'transfer_to_billing_agent', tool_arguments: {} },
+        { tool_name: 'some_other_tool', tool_arguments: {} },
+      ]
+
+      const { otherTools } = parseTools(tools, false)
+
+      expect(otherTools).toHaveLength(2)
     })
 
     test('does not display query when no tools have query argument', async () => {
