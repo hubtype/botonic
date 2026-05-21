@@ -7,7 +7,7 @@ import { InputGuardrailTripwireTriggered, Runner } from '@openai/agents'
 
 import { isProd } from '../constants'
 import type { DebugLogger } from '../debug-logger'
-import { getApiVersion, type LLMConfig } from '../llm-config'
+import type { LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from '../services/types'
 import type {
@@ -154,7 +154,7 @@ export abstract class BaseRunner<
     const durationPerCall = Math.round(totalDuration / rawResponses.length)
     const temperature =
       (this.llmConfig.modelSettings.temperature as number | undefined) ?? 0
-    const apiVersion = getApiVersion()
+    const apiVersion = this.llmConfig.getApiVersion()
 
     const llmRuns = rawResponses.map(response => ({
       inference_id: this.inferenceId,

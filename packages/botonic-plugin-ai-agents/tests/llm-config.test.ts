@@ -1,4 +1,3 @@
-import { VerbosityLevel } from '@botonic/core'
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 
 import { LLMConfig } from '../src/llm-config'
@@ -31,28 +30,34 @@ jest.mock('@openai/agents', () => ({
   })),
 }))
 
-// var so the variable is hoisted and assignable when the mock factory runs (Jest hoists mocks)
-// eslint-disable-next-line no-var
-var mockConstants: {
-  OPENAI_PROVIDER: 'openai' | 'azure'
-  OPENAI_MODEL: string
-  OPENAI_API_KEY: string
-  AZURE_OPENAI_API_KEY: string
-  AZURE_OPENAI_API_BASE: string
-  AZURE_OPENAI_API_VERSION: string
-  isProd: boolean
-}
-jest.mock('../src/constants', () => {
-  mockConstants = {
-    OPENAI_PROVIDER: 'azure',
-    OPENAI_MODEL: 'gpt-4.1-mini',
-    OPENAI_API_KEY: 'test-openai-key',
-    AZURE_OPENAI_API_KEY: 'test-azure-key',
-    AZURE_OPENAI_API_BASE: 'https://test.openai.azure.com',
-    AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
-    isProd: false,
-  }
-  return mockConstants
+jest.mock('../src/constants', () => ({
+  AZURE_OPENAI_API_KEY: 'test-azure-key',
+  AZURE_OPENAI_API_BASE: 'https://test.openai.azure.com',
+  AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
+  isProd: false,
+}))
+
+const makeSettings = (overrides = {}) => ({
+  HUBTYPE_API_URL: 'https://api.hubtype.com',
+  STATIC_URL: '',
+  LITELLM_API_URL: '',
+  AZURE_OPENAI_API_BASE: '',
+  AZURE_OPENAI_API_VERSION: '',
+  CUSTOM_SHORT_URL_HOST: null,
+  custom: {},
+  ...overrides,
+})
+
+const makeSecrets = (overrides = {}) => ({
+  HUBTYPE_ACCESS_TOKEN: 'test-token',
+  LITELLM_API_KEY: 'test-litellm-key',
+  AZURE_OPENAI_API_KEY: 'test-azure-key',
+  custom: {},
+  ...overrides,
+})
+
+const litellmSettings = makeSettings({
+  LITELLM_API_URL: 'https://litellm.example.com',
 })
 
 describe('LLMConfig', () => {
@@ -68,134 +73,193 @@ describe('LLMConfig', () => {
     process.env = originalEnv
   })
 
-  describe('modelName', () => {
-    it('should use OPENAI_MODEL when provider is openai', () => {
-      mockConstants.OPENAI_PROVIDER = 'openai'
-
+  describe('provider selection', () => {
+    it('should use litellm when LITELLM_API_URL is set', () => {
       const config = new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
-        VerbosityLevel.Medium
+        litellmSettings,
+        makeSecrets()
       )
-
-      expect(config.modelName).toBe('gpt-4.1-mini')
+      expect(config.getProviderName()).toBe('litellm')
     })
 
-    it('should use passed modelName when provider is azure', () => {
-      mockConstants.OPENAI_PROVIDER = 'azure'
-
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini', // Azure deployment names typically include model family
-        VerbosityLevel.Medium
-      )
-
-      expect(config.modelName).toBe('gpt-4.1-mini')
-    })
-  })
-
-  describe('modelSettings', () => {
-    beforeEach(() => {
-      mockConstants.OPENAI_PROVIDER = 'azure'
-    })
-
-    it('should return gpt-4 style settings for gpt-4 model', () => {
+    it('should use azure when LITELLM_API_URL is not set', () => {
       const config = new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
-        VerbosityLevel.Medium
+        makeSettings(),
+        makeSecrets()
       )
-
-      expect(config.modelSettings).toEqual({
-        temperature: 0,
-        text: { verbosity: 'medium' },
-      })
-    })
-
-    it('should return gpt-5 style settings for gpt-5 model', () => {
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-5-mini',
-        VerbosityLevel.High
-      )
-
-      expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'none' },
-        temperature: 1,
-        text: { verbosity: 'high' },
-      })
-    })
-
-    it('should throw for unsupported model', () => {
-      expect(
-        () =>
-          new LLMConfig(
-            DEFAULT_MAX_RETRIES,
-            DEFAULT_TIMEOUT,
-            'unknown-model',
-            VerbosityLevel.Medium
-          )
-      ).toThrow('Unsupported model: unknown-model')
+      expect(config.getProviderName()).toBe('azure')
     })
   })
 
-  describe('client configuration', () => {
-    it('should create OpenAI client with timeout and maxRetries when provider is openai', () => {
-      mockConstants.OPENAI_PROVIDER = 'openai'
-
+  describe('LiteLLM client tags', () => {
+    it('should set bot_id and org_id when both are provided', () => {
       new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
-        VerbosityLevel.Medium
+        litellmSettings,
+        makeSecrets(),
+        'bot-123',
+        'org-456'
       )
-
-      expect(capturedOpenAIConfig).toBeDefined()
-      expect(capturedOpenAIConfig?.timeout).toBe(16000)
-      expect(capturedOpenAIConfig?.maxRetries).toBe(2)
+      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+        'x-litellm-tags': 'bot_id:bot-123,org_id:org-456',
+      })
     })
 
-    it('should use custom timeout and maxRetries', () => {
-      mockConstants.OPENAI_PROVIDER = 'openai'
-
-      new LLMConfig(5, 30000, 'gpt-4.1-mini', VerbosityLevel.Medium)
-
-      expect(capturedOpenAIConfig?.timeout).toBe(30000)
-      expect(capturedOpenAIConfig?.maxRetries).toBe(5)
-    })
-
-    it('should create Azure client with deployment when provider is azure', () => {
-      mockConstants.OPENAI_PROVIDER = 'azure'
-
+    it('should set only bot_id when only botId is provided', () => {
       new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
-        'gpt-4.1-mini', // deployment name
-        VerbosityLevel.Medium
+        'gpt-4.1-mini',
+        litellmSettings,
+        makeSecrets(),
+        'bot-123'
       )
+      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+        'x-litellm-tags': 'bot_id:bot-123',
+      })
+    })
 
+    it('should set only org_id when only orgId is provided', () => {
+      new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        litellmSettings,
+        makeSecrets(),
+        undefined,
+        'org-456'
+      )
+      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+        'x-litellm-tags': 'org_id:org-456',
+      })
+    })
+
+    it('should not set defaultHeaders when neither botId nor orgId is provided', () => {
+      new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        litellmSettings,
+        makeSecrets()
+      )
+      expect(capturedOpenAIConfig?.defaultHeaders).toBeUndefined()
+    })
+  })
+
+  describe('Azure client', () => {
+    it('should not set defaultHeaders even when botId and orgId are provided', () => {
+      new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        makeSettings(),
+        makeSecrets(),
+        'bot-123',
+        'org-456'
+      )
       expect(capturedAzureConfig).toBeDefined()
+      expect(capturedAzureConfig?.defaultHeaders).toBeUndefined()
+    })
+
+    it('should set deployment and apiVersion', () => {
+      new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        makeSettings(),
+        makeSecrets()
+      )
       expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
       expect(capturedAzureConfig?.baseURL).toBe('https://test.openai.azure.com')
       expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
     })
   })
 
-  describe('getModel', () => {
-    it('should resolve model from the configured provider and model name', async () => {
-      mockConstants.OPENAI_PROVIDER = 'azure'
-
+  describe('modelSettings', () => {
+    it('should return gpt-4 style settings for gpt-4 model', () => {
       const config = new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
-        VerbosityLevel.Medium
+        makeSettings(),
+        makeSecrets()
       )
+      expect(config.modelSettings).toEqual({
+        temperature: 0,
+        text: { verbosity: 'medium' },
+      })
+    })
 
+    it('should use modelSettings from BotSettings for unrecognised model', () => {
+      const customModelSettings = { temperature: 0.7, text: { verbosity: 'high' } }
+      const config = new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'claude-3-sonnet',
+        makeSettings({
+          LITELLM_API_URL: 'https://litellm.example.com',
+          modelSettings: customModelSettings,
+        }),
+        makeSecrets()
+      )
+      expect(config.modelSettings).toEqual(customModelSettings)
+    })
+
+    it('should throw for unsupported model when no modelSettings is provided', () => {
+      expect(
+        () =>
+          new LLMConfig(
+            DEFAULT_MAX_RETRIES,
+            DEFAULT_TIMEOUT,
+            'unknown-model',
+            makeSettings(),
+            makeSecrets()
+          )
+      ).toThrow('Unsupported model: unknown-model')
+    })
+  })
+
+  describe('getApiVersion', () => {
+    it('should return the configured Azure api version', () => {
+      const config = new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        makeSettings({ AZURE_OPENAI_API_VERSION: '2025-01-01-preview' }),
+        makeSecrets()
+      )
+      expect(config.getApiVersion()).toBe('2025-01-01-preview')
+    })
+
+    it('should return NOT_API_VERSION_FOR_LITELLM_PROVIDER for litellm', () => {
+      const config = new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        litellmSettings,
+        makeSecrets()
+      )
+      expect(config.getApiVersion()).toBe('NOT_API_VERSION_FOR_LITELLM_PROVIDER')
+    })
+  })
+
+  describe('getModel', () => {
+    it('should resolve model from the configured provider', async () => {
+      const config = new LLMConfig(
+        DEFAULT_MAX_RETRIES,
+        DEFAULT_TIMEOUT,
+        'gpt-4.1-mini',
+        makeSettings(),
+        makeSecrets()
+      )
       await expect(config.getModel()).resolves.toBe(mockResolvedModel)
       expect(config.modelProvider.getModel).toHaveBeenCalledWith('gpt-4.1-mini')
     })

@@ -132,7 +132,10 @@ export default class BotonicPluginAiAgents<
       this.maxRetries,
       this.timeout,
       aiAgentArgs.model,
-      aiAgentArgs.verbosity
+      botContext.settings,
+      botContext.secrets,
+      botContext.session.bot.id,
+      botContext.session.organization_id
     )
 
     // Get LLM config, tools and agent
@@ -193,7 +196,10 @@ export default class BotonicPluginAiAgents<
       this.maxRetries,
       this.timeout,
       aiAgentArgs.model,
-      aiAgentArgs.verbosity
+      botContext.settings,
+      botContext.secrets,
+      botContext.session.bot.id,
+      botContext.session.organization_id
     )
 
     const handoffAgents = await Promise.all(

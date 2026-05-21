@@ -347,6 +347,7 @@ export interface BotSettings {
   AZURE_OPENAI_API_VERSION: string
   LANGUAGE_DETECTION_ENABLED?: boolean
   CUSTOM_SHORT_URL_HOST: string | null
+  modelSettings?: Record<string, unknown>
   custom: Record<string, any>
 }
 

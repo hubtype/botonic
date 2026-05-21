@@ -4,7 +4,6 @@ import {
   type ToolExecution,
 } from '@botonic/core'
 import type { ModelSettings } from '@openai/agents'
-import { OPENAI_PROVIDER } from './constants'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
@@ -44,7 +43,6 @@ export interface DebugLogger {
 class EnabledDebugLogger implements DebugLogger {
   logInitialConfig(config: DebugLoggerConfig): void {
     console.log(`${PREFIX} === Plugin Initialization ===`)
-    console.log(`${PREFIX} Provider: ${OPENAI_PROVIDER}`)
     console.log(
       `${PREFIX} Message History API Version: ${config.messageHistoryApiVersion}`
     )
