@@ -396,39 +396,39 @@ describe('System Debug Trace - Event Components', () => {
   describe('AiAgentRouter Component', () => {
     const baseRouterProps = {
       action: EventAction.AiAgentRouter,
-      flow_node_content_id: 'router-001',
+      flow_node_content_id: 'customer_support_router',
       tools_executed: [],
       memory_length: 2,
       input_guardrails_triggered: [],
       output_guardrails_triggered: [],
       exit: false,
-      starting_agent_name: 'main_agent',
-      last_agent_name: 'main_agent',
-      available_handoffs: [],
-      is_handoff: false,
+      starting_agent_name: 'customer_support_router',
+      last_agent_name: 'customer_support_router',
+      available_specialists: [],
+      is_transferred_to_specialist: false,
     }
 
-    test('config is not collapsible when no handoff', () => {
+    test('config is always collapsible', () => {
       const config = getAiAgentRouterEventConfig(baseRouterProps)
-      expect(config.collapsible).toBe(false)
+      expect(config.collapsible).toBe(true)
     })
 
-    test('config is collapsible when handoff occurred', () => {
+    test('config is collapsible when transferred', () => {
       const data = {
         ...baseRouterProps,
-        is_handoff: true,
-        last_agent_name: 'billing_agent',
+        is_transferred_to_specialist: true,
+        last_agent_name: 'billing_specialist',
       }
       const config = getAiAgentRouterEventConfig(data)
       expect(config.collapsible).toBe(true)
     })
 
-    test('renders available transfers as bullet list', async () => {
+    test('renders available specialists with headset icon', async () => {
       const props = {
         ...baseRouterProps,
-        available_handoffs: [
-          { name: 'transfer_to_billing_agent', description: 'Billing' },
-          { name: 'transfer_to_support_agent', description: 'Support' },
+        available_specialists: [
+          { name: 'billing_specialist', description: 'Billing' },
+          { name: 'technical_support_specialist', description: 'Support' },
         ],
       }
 
@@ -443,11 +443,12 @@ describe('System Debug Trace - Event Components', () => {
         await waitFor(() => {}, { timeout: 100 })
       })
 
-      expect(container.textContent).toContain('• transfer_to_billing_agent')
-      expect(container.textContent).toContain('• transfer_to_support_agent')
+      expect(container.textContent).toContain('Specialists available')
+      expect(container.textContent).toContain('billing_specialist')
+      expect(container.textContent).toContain('technical_support_specialist')
     })
 
-    test('does not render available transfers section when empty', async () => {
+    test('does not render specialists section when empty', async () => {
       let container
       await act(async () => {
         const result = render(
@@ -459,16 +460,28 @@ describe('System Debug Trace - Event Components', () => {
         await waitFor(() => {}, { timeout: 100 })
       })
 
-      expect(container.textContent).not.toContain('Available transfers')
+      expect(container.textContent).not.toContain('Specialists available')
     })
 
-    test('filters out transfer tools from executed tools display', async () => {
+    test('renders No transfer when not transferred and no guardrails', async () => {
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgentRouter {...baseRouterProps} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('No transfer')
+    })
+
+    test('renders guardrail at bottom when input guardrail triggered', async () => {
       const props = {
         ...baseRouterProps,
-        tools_executed: [
-          { tool_name: 'transfer_to_billing_agent', tool_arguments: {} },
-          { tool_name: 'custom_tool', tool_arguments: {} },
-        ],
+        input_guardrails_triggered: ['is_competence'],
       }
 
       let container
@@ -482,8 +495,31 @@ describe('System Debug Trace - Event Components', () => {
         await waitFor(() => {}, { timeout: 100 })
       })
 
-      expect(container.textContent).not.toContain('transfer_to_billing_agent')
-      expect(container.textContent).toContain('custom_tool')
+      expect(container.textContent).toContain('Guardrail triggered')
+      expect(container.textContent).toContain('is_competence')
+      expect(container.textContent).not.toContain('No transfer')
+    })
+
+    test('renders Transferred to when transferred', async () => {
+      const props = {
+        ...baseRouterProps,
+        is_transferred_to_specialist: true,
+        last_agent_name: 'billing_specialist',
+      }
+
+      let container
+      await act(async () => {
+        const result = render(
+          <WebchatContext.Provider value={mockWebchatContext}>
+            <AiAgentRouter {...props} />
+          </WebchatContext.Provider>
+        )
+        container = result.container
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('Transferred to')
+      expect(container.textContent).toContain('billing_specialist')
     })
   })
 
