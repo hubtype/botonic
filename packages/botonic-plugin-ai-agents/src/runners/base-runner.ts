@@ -71,8 +71,6 @@ export abstract class BaseRunner<
       const result = (await runner.run(this.agent, messages, {
         context,
       })) as RunnerResult
-      console.log('result', result)
-      console.log('context', context)
       const endTime = Date.now()
 
       await this.sendLlmRunTracking(result, context, startTime, endTime)
