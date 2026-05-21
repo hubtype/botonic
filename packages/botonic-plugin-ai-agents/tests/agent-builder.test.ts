@@ -75,6 +75,8 @@ const mockLlmConfig = {
   },
   modelProvider: {},
   getModel: jest.fn().mockResolvedValue(resolvedModel),
+  getProviderName: jest.fn().mockReturnValue('azure'),
+  getApiVersion: jest.fn().mockReturnValue('2025-01-01-preview'),
 } as unknown as LLMConfig
 
 describe('WorkerAgent', () => {
@@ -745,15 +747,12 @@ describe('WorkerAgent - OpenAI Provider', () => {
     jest
       .spyOn(Date.prototype, 'toISOString')
       .mockReturnValue('2024-01-01T00:00:00.000Z')
-
-    // Set provider to 'openai' for these tests
-    mockConstants.OPENAI_PROVIDER = 'openai'
+    ;(mockLlmConfig.getProviderName as jest.Mock).mockReturnValue('litellm')
   })
 
   afterEach(() => {
     jest.restoreAllMocks()
-    // Reset to default azure provider
-    mockConstants.OPENAI_PROVIDER = 'azure'
+    ;(mockLlmConfig.getProviderName as jest.Mock).mockReturnValue('azure')
   })
 
   it('should set reasoning setting with effort: none for openai provider', async () => {
@@ -772,7 +771,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
-        provider: 'openai',
+        provider: 'litellm',
         reasoning: { effort: 'none' },
       })
     )
@@ -833,7 +832,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
 
     expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
       expect.objectContaining({
-        provider: 'openai',
+        provider: 'litellm',
         toolChoice: 'retrieve_knowledge',
         hasRetrieveKnowledge: true,
       })

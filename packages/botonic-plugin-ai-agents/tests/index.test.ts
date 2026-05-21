@@ -403,7 +403,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       2,
       16000,
       'gpt-4.1-mini',
-      VerbosityLevel.High
+      expect.objectContaining({ LITELLM_API_URL: expect.any(String) }),
+      expect.objectContaining({ LITELLM_API_KEY: expect.any(String) }),
+      'bot-123',
+      'org-123'
     )
     expect(routerAgentArgs.inputGuardrailRules).toEqual([
       {

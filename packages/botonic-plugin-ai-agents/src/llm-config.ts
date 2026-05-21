@@ -56,7 +56,7 @@ export class LLMConfig {
 
   getApiVersion(): string {
     return this.getProviderName() === 'azure'
-      ? (this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION)
+      ? this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION
       : 'NOT_API_VERSION_FOR_LITELLM_PROVIDER'
   }
 
@@ -98,7 +98,8 @@ export class LLMConfig {
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
       apiKey: this.secrets.AZURE_OPENAI_API_KEY || AZURE_OPENAI_API_KEY,
-      apiVersion: this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION,
+      apiVersion:
+        this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION,
       deployment: this.modelName,
       baseURL: this.settings.AZURE_OPENAI_API_BASE || AZURE_OPENAI_API_BASE,
       timeout: this.timeout,

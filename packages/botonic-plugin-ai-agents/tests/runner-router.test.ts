@@ -61,6 +61,8 @@ const mockLlmConfig = {
   modelName: 'gpt-4.1-mini',
   modelSettings: { temperature: 0 },
   modelProvider: {},
+  getProviderName: jest.fn().mockReturnValue('azure'),
+  getApiVersion: jest.fn().mockReturnValue('2025-01-01-preview'),
 } as unknown as LLMConfig
 
 const mockAgent = {

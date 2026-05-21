@@ -93,6 +93,8 @@ describe('createInputGuardrails', () => {
     },
     modelProvider: {},
     getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
+    getProviderName: jest.fn().mockReturnValue('azure'),
+    getApiVersion: jest.fn().mockReturnValue('2025-01-01-preview'),
   } as unknown as LLMConfig
 
   const mockTrackingContext: GuardrailTrackingContext = {

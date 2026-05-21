@@ -150,6 +150,8 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
     },
     modelProvider: { provider },
     getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
+    getProviderName: jest.fn().mockReturnValue(provider),
+    getApiVersion: jest.fn().mockReturnValue('2025-01-01-preview'),
   } as unknown as LLMConfig
 }
 
