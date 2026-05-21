@@ -1,9 +1,11 @@
+import { VerbosityLevel } from '@botonic/core'
 import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 
 import { LLMConfig } from '../src/llm-config'
 
 const DEFAULT_MAX_RETRIES = 2
 const DEFAULT_TIMEOUT = 16000
+const DEFAULT_VERBOSITY = VerbosityLevel.Medium
 
 let capturedOpenAIConfig: Record<string, unknown> | null = null
 let capturedAzureConfig: Record<string, unknown> | null = null
@@ -79,6 +81,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets()
       )
@@ -90,6 +93,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings(),
         makeSecrets()
       )
@@ -103,6 +107,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets(),
         'bot-123',
@@ -118,6 +123,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets(),
         'bot-123'
@@ -132,6 +138,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets(),
         undefined,
@@ -147,6 +154,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets()
       )
@@ -160,6 +168,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings(),
         makeSecrets(),
         'bot-123',
@@ -174,6 +183,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings(),
         makeSecrets()
       )
@@ -189,6 +199,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings(),
         makeSecrets()
       )
@@ -196,37 +207,6 @@ describe('LLMConfig', () => {
         temperature: 0,
         text: { verbosity: 'medium' },
       })
-    })
-
-    it('should use modelSettings from BotSettings for unrecognised model', () => {
-      const customModelSettings = {
-        temperature: 0.7,
-        text: { verbosity: 'high' },
-      }
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'claude-3-sonnet',
-        makeSettings({
-          LITELLM_API_URL: 'https://litellm.example.com',
-          modelSettings: customModelSettings,
-        }),
-        makeSecrets()
-      )
-      expect(config.modelSettings).toEqual(customModelSettings)
-    })
-
-    it('should throw for unsupported model when no modelSettings is provided', () => {
-      expect(
-        () =>
-          new LLMConfig(
-            DEFAULT_MAX_RETRIES,
-            DEFAULT_TIMEOUT,
-            'unknown-model',
-            makeSettings(),
-            makeSecrets()
-          )
-      ).toThrow('Unsupported model: unknown-model')
     })
   })
 
@@ -236,6 +216,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings({ AZURE_OPENAI_API_VERSION: '2025-01-01-preview' }),
         makeSecrets()
       )
@@ -247,6 +228,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         litellmSettings,
         makeSecrets()
       )
@@ -262,6 +244,7 @@ describe('LLMConfig', () => {
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
+        DEFAULT_VERBOSITY,
         makeSettings(),
         makeSecrets()
       )

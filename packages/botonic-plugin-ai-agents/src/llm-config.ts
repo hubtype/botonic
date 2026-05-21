@@ -1,4 +1,4 @@
-import type { BotSecrets, BotSettings } from '@botonic/core'
+import type { BotSecrets, BotSettings, VerbosityLevel } from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -30,6 +30,7 @@ export class LLMConfig {
     maxRetries: number,
     timeout: number,
     modelName: string,
+    verbosity: VerbosityLevel,
     settings: BotSettings,
     secrets: BotSecrets,
     botId?: string,
@@ -43,7 +44,7 @@ export class LLMConfig {
     this.botId = botId
     this.orgId = orgId
     this.modelProvider = this.getModelProvider()
-    this.modelSettings = this.getModelSettings(modelName)
+    this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
 
   async getModel(): Promise<Model> {
@@ -76,12 +77,15 @@ export class LLMConfig {
     return this.getAzureClient()
   }
 
-  private buildLiteLLMTags(): Record<string, string> | undefined {
-    const tags = [
-      this.botId ? `bot_id:${this.botId}` : null,
-      this.orgId ? `org_id:${this.orgId}` : null,
-    ].filter(Boolean)
-    return tags.length ? { 'x-litellm-tags': tags.join(',') } : undefined
+  private buildLiteLLMTags(): { 'x-litellm-tags': string } | undefined {
+    const parts: string[] = []
+    if (this.botId) {
+      parts.push(`bot_id:${this.botId}`)
+    }
+    if (this.orgId) {
+      parts.push(`org_id:${this.orgId}`)
+    }
+    return parts.length > 0 ? { 'x-litellm-tags': parts.join(',') } : undefined
   }
 
   private getLiteLLMClient(): OpenAI {
@@ -108,7 +112,10 @@ export class LLMConfig {
     })
   }
 
-  private getModelSettings(model: string): ModelSettings {
+  private getModelSettings(
+    model: string,
+    verbosity: VerbosityLevel
+  ): ModelSettings {
     if (model.includes('gpt-4')) {
       return {
         temperature: 0,
@@ -116,10 +123,10 @@ export class LLMConfig {
       }
     }
 
-    if (this.settings.modelSettings) {
-      return this.settings.modelSettings as ModelSettings
+    return {
+      reasoning: { effort: 'none' },
+      temperature: 1,
+      text: { verbosity },
     }
-
-    throw new Error(`Unsupported model: ${model}`)
   }
 }
