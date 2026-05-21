@@ -4,7 +4,7 @@ import type { ChunkIdsGroupedBySourceData } from '../knowledge-bases-types'
 
 export type { ToolExecuted }
 
-export interface HandoffAgentDebugEvent {
+export interface SpecialistDebugEvent {
   name: string
   description: string
 }
@@ -19,8 +19,8 @@ export interface AiAgentRouterDebugEvent {
   exit: boolean
   starting_agent_name: string
   last_agent_name: string
-  available_handoffs: HandoffAgentDebugEvent[]
-  is_handoff: boolean
+  available_specialists: SpecialistDebugEvent[]
+  is_transferred_to_specialist: boolean
   knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string
 }

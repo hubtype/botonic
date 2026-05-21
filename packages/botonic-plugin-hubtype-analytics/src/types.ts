@@ -1,5 +1,5 @@
 import {
-  AvailableHandoffAgent,
+  AvailableSpecialist,
   EventAction,
   EventAiAgent,
   type EventAiAgentRouter,
@@ -69,7 +69,7 @@ export {
   EventAction,
   EventAiAgent,
   type EventAiAgentRouter,
-  AvailableHandoffAgent,
+  AvailableSpecialist,
   EventBotAction,
   EventCaptureUserInput,
   EventConditionalChannel,

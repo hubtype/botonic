@@ -26,4 +26,7 @@ export const LABELS = {
   CLOSED: 'Closed',
   AGENTS_AVAILABLE: 'Agents available',
   AVAILABLE_TRANSFERS: 'Available transfers',
+  SPECIALISTS_AVAILABLE: 'Specialists available',
+  NO_TRANSFER: 'No transfer',
+  TRANSFERRED_TO: 'Transferred to',
 } as const

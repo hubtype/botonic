@@ -87,7 +87,8 @@ export abstract class BaseRunner<
         const runResult: RunResult = {
           startingAgentName: '',
           lastAgentName: '',
-          availableHandoffs: [],
+          availableSpecialists: [],
+          isTransferredToSpecialist: false,
           messages: [],
           memoryLength: 0,
           toolsExecuted: [],
@@ -129,7 +130,8 @@ export abstract class BaseRunner<
     return {
       startingAgentName: '',
       lastAgentName: '',
-      availableHandoffs: [],
+      availableSpecialists: [],
+      isTransferredToSpecialist: false,
       messages: hasExit
         ? []
         : (outputMessages.filter(

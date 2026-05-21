@@ -1,4 +1,4 @@
-import type { AvailableHandoffAgent, ToolExecution } from './ai-agents'
+import type { AvailableSpecialist, ToolExecution } from './ai-agents'
 
 export const EVENT_FORMAT_VERSION = 5
 
@@ -201,16 +201,16 @@ export interface EventAiAgent extends HtBaseEventAllFlowProps {
 
 export interface EventAiAgentRouter extends HtBaseEventAllFlowProps {
   action: EventAction.AiAgentRouter
-  toolsExecuted: ToolExecution[]
   inputMessageId: string
   memoryLength: number
   inputGuardrailsTriggered: string[]
   outputGuardrailsTriggered: string[]
   exit: boolean
+  error: boolean
   startingAgentName: string
   lastAgentName: string
-  availableHandoffs: AvailableHandoffAgent[]
-  isHandoff: boolean // derived: startingAgentName !== lastAgentName
+  availableSpecialists: AvailableSpecialist[]
+  isTransferredToSpecialist: boolean
 }
 
 export interface EventRedirectFlow extends HtBaseEventAllFlowProps {
