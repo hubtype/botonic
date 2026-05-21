@@ -15,6 +15,7 @@ import { EventAction } from '@botonic/core'
 
 import type {
   AiAgentDebugEvent,
+  AiAgentRouterDebugEvent,
   BotActionDebugEvent,
   ConditionalChannelDebugEvent,
   ConditionalCountryDebugEvent,
@@ -29,7 +30,6 @@ import type {
   WebviewActionTriggeredDebugEvent,
 } from './components/system-debug-trace/events'
 import type { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
-import type { DebugEvent } from './components/system-debug-trace/types'
 
 const mockChunksWithSources: ChunkIdsGroupedBySourceData[] = [
   {
@@ -197,4 +197,80 @@ export const DEBUG_SYSTEM_MESSAGES = {
     exit: false,
     error: true,
   } satisfies AiAgentDebugEvent,
-} satisfies Record<string, DebugEvent>
+
+  aiAgentRouter: {
+    noTransfer: {
+      action: EventAction.AiAgentRouter,
+      flow_node_content_id: 'customer_support_router',
+      tools_executed: [],
+      memory_length: 2,
+      input_guardrails_triggered: [],
+      output_guardrails_triggered: [],
+      exit: false,
+      starting_agent_name: 'customer_support_router',
+      last_agent_name: 'customer_support_router',
+      available_specialists: [
+        {
+          name: 'billing_specialist',
+          description: 'Handles billing and invoice queries',
+        },
+        {
+          name: 'technical_support_specialist',
+          description: 'Handles technical issues',
+        },
+      ],
+      is_transferred_to_specialist: false,
+    } satisfies AiAgentRouterDebugEvent,
+
+    inputGuardrail: {
+      action: EventAction.AiAgentRouter,
+      flow_node_content_id: 'customer_support_router',
+      tools_executed: [],
+      memory_length: 0,
+      input_guardrails_triggered: ['is_competence'],
+      output_guardrails_triggered: [],
+      exit: false,
+      starting_agent_name: 'customer_support_router',
+      last_agent_name: 'customer_support_router',
+      available_specialists: [
+        {
+          name: 'billing_specialist',
+          description: 'Handles billing and invoice queries',
+        },
+        {
+          name: 'technical_support_specialist',
+          description: 'Handles technical issues',
+        },
+      ],
+      is_transferred_to_specialist: false,
+    } satisfies AiAgentRouterDebugEvent,
+
+    transfer: {
+      action: EventAction.AiAgentRouter,
+      flow_node_content_id: 'customer_support_router',
+      tools_executed: [],
+      memory_length: 3,
+      input_guardrails_triggered: [],
+      output_guardrails_triggered: [],
+      exit: true,
+      starting_agent_name: 'customer_support_router',
+      last_agent_name: 'billing_specialist',
+      available_specialists: [
+        {
+          name: 'billing_specialist',
+          description: 'Handles billing and invoice queries',
+        },
+        {
+          name: 'technical_support_specialist',
+          description: 'Handles technical issues',
+        },
+        {
+          name: 'sales_specialist',
+          description: 'Handles sales and pricing queries',
+        },
+      ],
+      is_transferred_to_specialist: true,
+      knowledge_base_chunks_with_sources: [],
+    } satisfies AiAgentRouterDebugEvent,
+  },
+}

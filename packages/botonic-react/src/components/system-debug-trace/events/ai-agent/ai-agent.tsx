@@ -116,7 +116,7 @@ export const getAiAgentEventConfig = (
 ): DebugEventConfig => {
   const title = (
     <>
-      AI Agent triggered <span>- {data.flow_node_content_id}</span>
+      Specialist triggered <span>- {data.flow_node_content_id}</span>
     </>
   )
 

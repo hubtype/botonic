@@ -1,6 +1,8 @@
 import {
   AiAgentType,
   type BotContext,
+  EventAction,
+  type EventAiAgent,
   type InferenceResponse,
 } from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
@@ -8,7 +10,10 @@ import {
   type FlowBuilderContentMessage,
   FlowBuilderContentSchema,
 } from '../structured-output/flow-builder-content'
-import { getCommonFlowContentEventArgsForContentId } from '../tracking'
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { FlowAiAgent } from './flow-ai-agent'
 import { FlowAiAgentBase } from './flow-ai-agent-base'
@@ -118,30 +123,50 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
     const { flowThreadId, flowId, flowName, flowNodeId } =
       getCommonFlowContentEventArgsForContentId(botContext, this.id)
 
-    // TODO: Create a new endpoint for AIAgentRouter
-    const event = {
-      action: 'AIAgentRouter',
-      flowThreadId: flowThreadId,
-      flowId: flowId,
-      flowName: flowName,
-      flowNodeId: flowNodeId,
+    const isTransferredToSpecialist =
+      this.aiAgentResponse?.isTransferredToSpecialist ?? false
+
+    await trackEvent(botContext, EventAction.AiAgentRouter, {
+      flowThreadId,
+      flowId,
+      flowName,
+      flowNodeId,
       flowNodeContentId: this.name,
       flowNodeIsMeaningful: true,
-      toolsExecuted: this.aiAgentResponse?.toolsExecuted ?? [],
       memoryLength: this.aiAgentResponse?.memoryLength ?? 0,
       inputMessageId: botContext.input.message_id!,
       exit: this.aiAgentResponse?.exit ?? true,
+      error: this.aiAgentResponse?.error ?? false,
       inputGuardrailsTriggered:
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
-      outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
-    }
-
-    const { action, ...eventArgs } = event
-
-    console.log('trackAiAgentResponse', {
-      action,
-      eventArgs,
+      outputGuardrailsTriggered:
+        this.aiAgentResponse?.outputGuardrailsTriggered ?? [],
+      startingAgentName: this.aiAgentResponse?.startingAgentName ?? '',
+      lastAgentName: this.aiAgentResponse?.lastAgentName ?? '',
+      availableSpecialists: this.aiAgentResponse?.availableSpecialists ?? [],
+      isTransferredToSpecialist,
     })
-    // await trackEvent(botContext, action, eventArgs)
+
+    if (isTransferredToSpecialist) {
+      const specialistEvent: EventAiAgent = {
+        action: EventAction.AiAgent,
+        flowThreadId,
+        flowId,
+        flowName,
+        flowNodeId,
+        flowNodeContentId: this.aiAgentResponse?.lastAgentName ?? '',
+        flowNodeIsMeaningful: true,
+        toolsExecuted: this.aiAgentResponse?.toolsExecuted ?? [],
+        memoryLength: this.aiAgentResponse?.memoryLength ?? 0,
+        inputMessageId: botContext.input.message_id!,
+        exit: this.aiAgentResponse?.exit ?? true,
+        error: this.aiAgentResponse?.error ?? false,
+        inputGuardrailsTriggered: [],
+        outputGuardrailsTriggered:
+          this.aiAgentResponse?.outputGuardrailsTriggered ?? [],
+      }
+      const { action, ...specialistEventArgs } = specialistEvent
+      await trackEvent(botContext, action, specialistEventArgs)
+    }
   }
 }

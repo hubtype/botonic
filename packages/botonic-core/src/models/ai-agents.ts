@@ -84,6 +84,11 @@ export interface ToolExecution {
   knowledgebaseChunksIds?: string[]
 }
 
+export interface AvailableSpecialist {
+  name: string
+  description: string
+}
+
 export interface RunResult<Extra extends BaseMessage<string> = never> {
   messages: AgenticOutputMessage<Extra>[]
   toolsExecuted: ToolExecution[]
@@ -92,6 +97,10 @@ export interface RunResult<Extra extends BaseMessage<string> = never> {
   error: boolean
   inputGuardrailsTriggered: string[]
   outputGuardrailsTriggered: string[]
+  startingAgentName: string
+  lastAgentName: string
+  availableSpecialists: AvailableSpecialist[]
+  isTransferredToSpecialist: boolean
 }
 
 export type InferenceResponse<Extra extends BaseMessage<string> = never> =

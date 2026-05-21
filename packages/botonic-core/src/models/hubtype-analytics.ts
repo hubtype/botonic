@@ -1,4 +1,4 @@
-import type { ToolExecution } from './ai-agents'
+import type { AvailableSpecialist, ToolExecution } from './ai-agents'
 
 export const EVENT_FORMAT_VERSION = 5
 
@@ -28,6 +28,7 @@ export enum EventAction {
   Custom = 'custom',
   RedirectFlow = 'redirect_flow',
   CaptureUserInput = 'capture_user_input',
+  AiAgentRouter = 'ai_agent_router',
 }
 
 export interface HtBaseEventProps {
@@ -196,6 +197,20 @@ export interface EventAiAgent extends HtBaseEventAllFlowProps {
   outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
+}
+
+export interface EventAiAgentRouter extends HtBaseEventAllFlowProps {
+  action: EventAction.AiAgentRouter
+  inputMessageId: string
+  memoryLength: number
+  inputGuardrailsTriggered: string[]
+  outputGuardrailsTriggered: string[]
+  exit: boolean
+  error: boolean
+  startingAgentName: string
+  lastAgentName: string
+  availableSpecialists: AvailableSpecialist[]
+  isTransferredToSpecialist: boolean
 }
 
 export interface EventRedirectFlow extends HtBaseEventAllFlowProps {
