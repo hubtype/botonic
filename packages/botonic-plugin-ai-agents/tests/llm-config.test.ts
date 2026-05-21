@@ -199,7 +199,10 @@ describe('LLMConfig', () => {
     })
 
     it('should use modelSettings from BotSettings for unrecognised model', () => {
-      const customModelSettings = { temperature: 0.7, text: { verbosity: 'high' } }
+      const customModelSettings = {
+        temperature: 0.7,
+        text: { verbosity: 'high' },
+      }
       const config = new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
@@ -247,7 +250,9 @@ describe('LLMConfig', () => {
         litellmSettings,
         makeSecrets()
       )
-      expect(config.getApiVersion()).toBe('NOT_API_VERSION_FOR_LITELLM_PROVIDER')
+      expect(config.getApiVersion()).toBe(
+        'NOT_API_VERSION_FOR_LITELLM_PROVIDER'
+      )
     })
   })
 

@@ -155,13 +155,21 @@ class EnabledDebugLogger implements DebugLogger {
 }
 
 class DisabledDebugLogger implements DebugLogger {
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logInitialConfig(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logAgentDebugInfo(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logModelSettings(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logRunnerStart(_model: string, _modelSettings: ModelSettings): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logRunResult(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logGuardrailTriggered(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logRunnerError(): void {}
+  // biome-ignore lint/suspicious/noEmptyBlockStatements: intentional no-op implementation
   logToolExecution(): void {}
 }
 
