@@ -1,5 +1,5 @@
 import type { ResolvedPlugins } from '@botonic/core'
-import { type Handoff, RunHandoffOutputItem } from '@openai/agents'
+import { Handoff } from '@openai/agents'
 import type { Agent } from '@openai/agents-core'
 
 import type { Context, RunResult } from '../types'
@@ -18,15 +18,10 @@ export class RouterRunner<
 
     const availableSpecialists = (this.agent.handoffs ?? []).map(
       (entry: Agent<any, any> | Handoff<any, any>) => {
-        const isHandoffOutputItem = entry instanceof RunHandoffOutputItem
-        const hasAgent = 'agent' in entry
-
-        const isHandoff = !isHandoffOutputItem && hasAgent
-        const agent = isHandoff
-          ? (entry as Handoff<any, any>)?.agent
-          : (entry as Agent<any, any>)
+        const isHandoff = entry instanceof Handoff
+        const agent = isHandoff ? entry.agent : (entry as Agent<any, any>)
         const description = isHandoff
-          ? (entry as Handoff<any, any>)?.toolDescription
+          ? entry.toolDescription
           : agent.handoffDescription
         return { name: agent.name, description }
       }
