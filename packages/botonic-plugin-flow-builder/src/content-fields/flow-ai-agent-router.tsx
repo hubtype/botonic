@@ -60,26 +60,31 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
     const cmsApi = flowBuilderPlugin.cmsApi
 
     return component.content.available_specialists.map((agentSlot, index) => {
-      const aiAgentNode = cmsApi.getNodeById<HtAiAgentNode>(agentSlot.target.id)
-      const aiAgent = FlowAiAgent.fromHubtypeCMS(aiAgentNode, botContext)
-      const aiAgentName = FlowAiAgentRouter.transferAgentSlotBaseName(
+      const aiAgentSpecialistNode = cmsApi.getNodeById<HtAiAgentNode>(
+        agentSlot.target.id
+      )
+      const specialist = FlowAiAgent.fromHubtypeCMS(
+        aiAgentSpecialistNode,
+        botContext
+      )
+      const specialistName = FlowAiAgentRouter.specialistAgentBaseName(
         agentSlot.name,
         index
       )
-      const agentDescription = aiAgent.replaceVariables(
-        agentSlot.description || `Transfer to ${aiAgentName}`,
+      const specialistDescription = specialist.replaceVariables(
+        agentSlot.description || `Transfer to ${specialistName}`,
         botContext
       )
 
       return {
-        agent: aiAgent,
-        description: agentDescription,
-        name: `transfer_to_${aiAgentName}`,
+        agent: specialist,
+        description: specialistDescription,
+        name: `transfer_to_${specialistName}`,
       }
     })
   }
 
-  private static transferAgentSlotBaseName(
+  private static specialistAgentBaseName(
     name: string | undefined,
     index: number
   ): string {
