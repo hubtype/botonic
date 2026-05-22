@@ -4,7 +4,7 @@ import { RETRIEVE_KNOWLEDGE_TOOL_NAME } from '../tools'
 import type { Context } from '../types'
 import { BaseRunner, type RunnerResult } from './base-runner'
 
-export class WorkerRunner<
+export class SpecialistRunner<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = unknown,
 > extends BaseRunner<TPlugins, TExtraData> {

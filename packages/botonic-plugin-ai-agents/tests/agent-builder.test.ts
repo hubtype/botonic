@@ -53,7 +53,7 @@ jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
-import { WorkerAgent } from '../src/agents/worker-agent'
+import { SpecialistAgent } from '../src/agents/specialist-agent'
 import type { GuardrailTrackingContext } from '../src/guardrails/input'
 import type { LLMConfig } from '../src/llm-config'
 
@@ -139,7 +139,7 @@ describe('WorkerAgent', () => {
     jest.restoreAllMocks()
   })
   it('should initialize correctly with name, instructions and tools', async () => {
-    const worker = await WorkerAgent.create({
+    const worker = await SpecialistAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -276,7 +276,7 @@ describe('WorkerAgent', () => {
 
   describe('Campaign context handling', () => {
     it('should NOT include campaign_context when campaignsContext is undefined', async () => {
-      const worker = await WorkerAgent.create({
+      const worker = await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -302,7 +302,7 @@ describe('WorkerAgent', () => {
         },
       ]
 
-      const worker = await WorkerAgent.create({
+      const worker = await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -328,7 +328,7 @@ describe('WorkerAgent', () => {
         },
       ]
 
-      const worker = await WorkerAgent.create({
+      const worker = await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -355,7 +355,7 @@ describe('WorkerAgent', () => {
         },
       ]
 
-      const worker = await WorkerAgent.create({
+      const worker = await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -378,7 +378,7 @@ describe('WorkerAgent', () => {
 
   describe('outputMessagesSchemas handling', () => {
     it('should build with only base schemas when outputMessagesSchemas is not provided', async () => {
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -419,7 +419,7 @@ describe('WorkerAgent', () => {
         }),
       })
 
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -467,7 +467,7 @@ describe('WorkerAgent', () => {
         }),
       })
 
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -516,7 +516,7 @@ describe('WorkerAgent', () => {
         }),
       })
 
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -545,7 +545,7 @@ describe('WorkerAgent', () => {
     })
 
     it('should produce same schema as OutputSchema when empty array is provided', async () => {
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -588,7 +588,7 @@ describe('WorkerAgent', () => {
 
   describe('Provider logic (openai vs azure)', () => {
     it('should configure toolChoice for gpt-4 models with retrieveKnowledge tool', async () => {
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -624,7 +624,7 @@ describe('WorkerAgent', () => {
         },
       } as unknown as LLMConfig
 
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: nonGpt4LlmConfig,
@@ -649,7 +649,7 @@ describe('WorkerAgent', () => {
     })
 
     it('should NOT set toolChoice when sourceIds is empty (no retrieveKnowledge)', async () => {
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -671,7 +671,7 @@ describe('WorkerAgent', () => {
 
     it('should set resolved model for azure provider', async () => {
       // Default OPENAI_PROVIDER is 'azure'
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -690,7 +690,7 @@ describe('WorkerAgent', () => {
 
     it('should set reasoning and text settings for azure provider (same as openai)', async () => {
       // Default OPENAI_PROVIDER is 'azure'
-      await WorkerAgent.create({
+      await SpecialistAgent.create({
         name: agentName,
         instructions: agentInstructions,
         llmConfig: mockLlmConfig,
@@ -757,7 +757,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
   })
 
   it('should set reasoning setting with effort: none for openai provider', async () => {
-    await WorkerAgent.create({
+    await SpecialistAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -779,7 +779,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
   })
 
   it('should set text setting with verbosity: medium for openai provider', async () => {
-    await WorkerAgent.create({
+    await SpecialistAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -800,7 +800,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
   })
 
   it('should set resolved model for openai provider', async () => {
-    await WorkerAgent.create({
+    await SpecialistAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,
@@ -818,7 +818,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
   })
 
   it('should set toolChoice for gpt-4 models even with openai provider', async () => {
-    await WorkerAgent.create({
+    await SpecialistAgent.create({
       name: agentName,
       instructions: agentInstructions,
       llmConfig: mockLlmConfig,

@@ -11,7 +11,7 @@ import {
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
-import { RouterAgent, WorkerAgent } from './agents'
+import { RouterAgent, SpecialistAgent } from './agents'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -277,7 +277,7 @@ export default class BotonicPluginAiAgents<
     // Build agent
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
-    const worker = await WorkerAgent.create<TPlugins, TExtraData>({
+    const worker = await SpecialistAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
       tools: tools,
