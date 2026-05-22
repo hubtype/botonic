@@ -1,2 +1,2 @@
 export { RouterAgent } from './router-agent'
-export { WorkerAgent } from './worker-agent'
+export { SpecialistAgent } from './specialist-agent'

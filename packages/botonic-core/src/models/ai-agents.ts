@@ -127,11 +127,11 @@ export interface HubtypeUserMessage {
 }
 
 export enum AiAgentType {
-  Worker = 'worker',
+  Specialist = 'specialist',
   Router = 'router',
 }
 
-export type AiAgentArgs = AiAgentWorkerArgs | AIAgentRouterArgs
+export type AiAgentArgs = AiAgentSpecialistArgs | AIAgentRouterArgs
 
 export type AiAgentBaseArgs = {
   type: AiAgentType
@@ -144,17 +144,17 @@ export type AiAgentBaseArgs = {
   outputMessagesSchemas?: z.ZodObject<any>[]
 }
 
-export interface AiAgentWorkerArgs extends AiAgentBaseArgs {
-  type: AiAgentType.Worker
+export interface AiAgentSpecialistArgs extends AiAgentBaseArgs {
+  type: AiAgentType.Specialist
   activeTools: { name: string }[]
   sourceIds: string[]
 }
 
-interface AIAgentRoute extends AiAgentWorkerArgs {
+interface AIAgentRoute extends AiAgentSpecialistArgs {
   description: string
 }
 
 export interface AIAgentRouterArgs extends AiAgentBaseArgs {
   type: AiAgentType.Router
-  agents: AIAgentRoute[]
+  specialists: AIAgentRoute[]
 }

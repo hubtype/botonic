@@ -1,8 +1,8 @@
 import {
   type AIAgentRouterArgs,
   type AiAgentArgs,
+  type AiAgentSpecialistArgs,
   AiAgentType,
-  type AiAgentWorkerArgs,
   type BotContext,
   type HubtypeAssistantMessage,
   type Plugin,
@@ -11,7 +11,7 @@ import {
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
-import { RouterAgent, WorkerAgent } from './agents'
+import { RouterAgent, SpecialistAgent } from './agents'
 import {
   DEFAULT_MAX_RETRIES,
   DEFAULT_TIMEOUT_16_SECONDS,
@@ -89,7 +89,7 @@ export default class BotonicPluginAiAgents<
     const inferenceId = uuidv7()
 
     try {
-      if (aiAgentArgs.type === AiAgentType.Worker) {
+      if (aiAgentArgs.type === AiAgentType.Specialist) {
         return await this.executeWorkerAIAgent(
           botContext,
           aiAgentArgs,
@@ -128,7 +128,7 @@ export default class BotonicPluginAiAgents<
 
   private async executeWorkerAIAgent(
     botContext: BotContext<TPlugins, TExtraData>,
-    aiAgentArgs: AiAgentWorkerArgs,
+    aiAgentArgs: AiAgentSpecialistArgs,
     authToken: string,
     inferenceId: string
   ) {
@@ -191,7 +191,7 @@ export default class BotonicPluginAiAgents<
     authToken: string,
     inferenceId: string
   ) {
-    const { agents, name, instructions } = aiAgentArgs
+    const { specialists, name, instructions } = aiAgentArgs
 
     const llmConfig = new LLMConfig(
       this.maxRetries,
@@ -200,19 +200,19 @@ export default class BotonicPluginAiAgents<
       aiAgentArgs.verbosity
     )
 
-    const handoffAgents = await Promise.all(
-      agents.map(async aiAgentData => {
+    const specialistsAgents = await Promise.all(
+      specialists.map(async specialistData => {
         const { agent } = await this.getAIAgentWorkerAndTools(
           botContext,
-          aiAgentData,
+          specialistData,
           aiAgentArgs.outputMessagesSchemas || [],
           authToken,
           inferenceId,
           llmConfig
         )
         return handoff(agent, {
-          toolNameOverride: aiAgentData.name,
-          toolDescriptionOverride: aiAgentData.description,
+          toolNameOverride: specialistData.name,
+          toolDescriptionOverride: specialistData.description,
         })
       })
     )
@@ -221,7 +221,7 @@ export default class BotonicPluginAiAgents<
       name,
       instructions,
       llmConfig,
-      handoffs: handoffAgents,
+      handoffs: specialistsAgents,
       inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
       outputMessagesSchemas: aiAgentArgs.outputMessagesSchemas || [],
       guardrailTrackingContext: {
@@ -276,8 +276,8 @@ export default class BotonicPluginAiAgents<
 
     // Build agent
     const sourceIds =
-      aiAgentArgs.type === AiAgentType.Worker ? aiAgentArgs.sourceIds : []
-    const worker = await WorkerAgent.create<TPlugins, TExtraData>({
+      aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
+    const worker = await SpecialistAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
       tools: tools,

@@ -70,7 +70,7 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} === AI Agent Debug Info ===`)
     console.log(`${PREFIX} Agent Name: ${aiAgentArgs.name}`)
     console.log(`${PREFIX} Active Tools: ${JSON.stringify(toolNames)}`)
-    if (aiAgentArgs.type === AiAgentType.Worker) {
+    if (aiAgentArgs.type === AiAgentType.Specialist) {
       console.log(
         `${PREFIX} Source IDs: ${JSON.stringify(aiAgentArgs.sourceIds || [])}`
       )
