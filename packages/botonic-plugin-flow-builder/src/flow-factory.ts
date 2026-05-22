@@ -1,4 +1,4 @@
-import type { ActionRequest } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
 
 import type { FlowBuilderApi } from './api'
 import {
@@ -30,12 +30,12 @@ import {
 } from './content-fields/hubtype-fields'
 
 export class FlowFactory {
-  public currentRequest: ActionRequest
+  public botContext: BotContext
   public cmsApi: FlowBuilderApi
   public locale: string
 
-  constructor(request: ActionRequest, cmsApi: FlowBuilderApi, locale: string) {
-    this.currentRequest = request
+  constructor(botContext: BotContext, cmsApi: FlowBuilderApi, locale: string) {
+    this.botContext = botContext
     this.cmsApi = cmsApi
     this.locale = locale
   }
@@ -78,8 +78,11 @@ export class FlowFactory {
       case HtNodeWithContentType.KNOWLEDGE_BASE:
         return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
 
+      case HtNodeWithContentType.AI_AGENT_ROUTER:
+        return FlowAiAgentRouter.fromHubtypeCMS(hubtypeContent, this.botContext)
+
       case HtNodeWithContentType.AI_AGENT:
-        return FlowAiAgent.fromHubtypeCMS(hubtypeContent)
+        return FlowAiAgent.fromHubtypeCMS(hubtypeContent, this.botContext)
 
       case HtNodeWithContentType.RATING:
         return FlowRating.fromHubtypeCMS(hubtypeContent, this.locale)
@@ -99,9 +102,6 @@ export class FlowFactory {
       case HtNodeWithContentType.CAPTURE_USER_INPUT:
         return FlowCaptureUserInput.fromHubtypeCMS(hubtypeContent)
 
-      case HtNodeWithContentType.AI_AGENT_ROUTER:
-        return FlowAiAgentRouter.fromHubtypeCMS(hubtypeContent, this.cmsApi)
-
       default:
         return undefined
     }
@@ -114,12 +114,12 @@ export class FlowFactory {
       case 'check-country':
         return FlowCountryConditional.fromHubtypeCMS(
           hubtypeContent,
-          this.currentRequest
+          this.botContext
         )
       case 'get-channel-type':
         return FlowChannelConditional.fromHubtypeCMS(
           hubtypeContent,
-          this.currentRequest
+          this.botContext
         )
       case 'check-queue-status':
         return FlowQueueStatusConditional.fromHubtypeCMS(
@@ -129,7 +129,7 @@ export class FlowFactory {
       case 'check-bot-variable':
         return FlowCustomConditional.fromHubtypeCMS(
           hubtypeContent,
-          this.currentRequest
+          this.botContext
         )
       default:
         return undefined

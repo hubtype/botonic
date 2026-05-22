@@ -22,11 +22,17 @@ export class FlowAiAgent extends FlowAiAgentBase {
   public activeTools?: { name: string }[]
   public sources?: { id: string; name: string }[]
 
-  static fromHubtypeCMS(component: HtAiAgentNode): FlowAiAgent {
+  static fromHubtypeCMS(
+    component: HtAiAgentNode,
+    botContext: BotContext
+  ): FlowAiAgent {
     const newAiAgent = new FlowAiAgent(component.id)
     newAiAgent.code = component.code
     newAiAgent.name = component.content.name
-    newAiAgent.instructions = component.content.instructions
+    newAiAgent.instructions = newAiAgent.replaceVariables(
+      component.content.instructions,
+      botContext
+    )
     newAiAgent.model = component.content.model
     newAiAgent.verbosity = component.content.verbosity
     newAiAgent.activeTools = component.content.active_tools
