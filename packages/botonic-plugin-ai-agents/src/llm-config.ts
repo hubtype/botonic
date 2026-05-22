@@ -1,4 +1,4 @@
-import type { BotSecrets, BotSettings, VerbosityLevel } from '@botonic/core'
+import type { BotContext, VerbosityLevel } from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -10,6 +10,8 @@ import {
   AZURE_OPENAI_API_BASE,
   AZURE_OPENAI_API_KEY,
   AZURE_OPENAI_API_VERSION,
+  LITELLM_TAG_KEYS,
+  LLM_PROVIDERS,
   isProd,
 } from './constants'
 
@@ -18,10 +20,7 @@ export type LLMProvider = 'litellm' | 'azure'
 export class LLMConfig {
   private readonly maxRetries: number
   private readonly timeout: number
-  private readonly settings: BotSettings
-  private readonly secrets: BotSecrets
-  private readonly botId?: string
-  private readonly orgId?: string
+  private readonly botContext: BotContext
   public readonly modelName: string
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
@@ -31,18 +30,12 @@ export class LLMConfig {
     timeout: number,
     modelName: string,
     verbosity: VerbosityLevel,
-    settings: BotSettings,
-    secrets: BotSecrets,
-    botId?: string,
-    orgId?: string
+    botContext: BotContext
   ) {
     this.maxRetries = maxRetries
     this.timeout = timeout
-    this.settings = settings
-    this.secrets = secrets
+    this.botContext = botContext
     this.modelName = modelName
-    this.botId = botId
-    this.orgId = orgId
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
@@ -52,13 +45,16 @@ export class LLMConfig {
   }
 
   getProviderName(): LLMProvider {
-    return this.settings.LITELLM_API_URL ? 'litellm' : 'azure'
+    return this.botContext.settings.LITELLM_API_URL
+      ? LLM_PROVIDERS.LITELLM
+      : LLM_PROVIDERS.AZURE
   }
 
-  getApiVersion(): string {
-    return this.getProviderName() === 'azure'
-      ? this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION
-      : 'NOT_API_VERSION_FOR_LITELLM_PROVIDER'
+  getApiVersion(): string | undefined {
+    return this.getProviderName() === LLM_PROVIDERS.AZURE
+      ? this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+          AZURE_OPENAI_API_VERSION
+      : undefined
   }
 
   private getModelProvider(): ModelProvider {
@@ -70,7 +66,7 @@ export class LLMConfig {
   }
 
   private getClient(): OpenAI | AzureOpenAI {
-    if (this.settings.LITELLM_API_URL) {
+    if (this.botContext.settings.LITELLM_API_URL) {
       return this.getLiteLLMClient()
     }
 
@@ -78,20 +74,24 @@ export class LLMConfig {
   }
 
   private buildLiteLLMTags(): { 'x-litellm-tags': string } | undefined {
+    const botId = this.botContext.session.bot.id
+    const orgId = this.botContext.session.organization_id
     const parts: string[] = []
-    if (this.botId) {
-      parts.push(`bot_id:${this.botId}`)
+    if (botId) {
+      parts.push(`${LITELLM_TAG_KEYS.BOT_ID}:${botId}`)
     }
-    if (this.orgId) {
-      parts.push(`org_id:${this.orgId}`)
+    if (orgId) {
+      parts.push(`${LITELLM_TAG_KEYS.ORG_ID}:${orgId}`)
     }
-    return parts.length > 0 ? { 'x-litellm-tags': parts.join(',') } : undefined
+    return parts.length > 0
+      ? { 'x-litellm-tags': parts.join(LITELLM_TAG_KEYS.SEPARATOR) }
+      : undefined
   }
 
   private getLiteLLMClient(): OpenAI {
     return new OpenAI({
-      apiKey: this.secrets.LITELLM_API_KEY,
-      baseURL: this.settings.LITELLM_API_URL,
+      apiKey: this.botContext.secrets.LITELLM_API_KEY,
+      baseURL: this.botContext.settings.LITELLM_API_URL,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -101,11 +101,14 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey: this.secrets.AZURE_OPENAI_API_KEY || AZURE_OPENAI_API_KEY,
+      apiKey:
+        this.botContext.secrets.AZURE_OPENAI_API_KEY || AZURE_OPENAI_API_KEY,
       apiVersion:
-        this.settings.AZURE_OPENAI_API_VERSION || AZURE_OPENAI_API_VERSION,
+        this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+        AZURE_OPENAI_API_VERSION,
       deployment: this.modelName,
-      baseURL: this.settings.AZURE_OPENAI_API_BASE || AZURE_OPENAI_API_BASE,
+      baseURL:
+        this.botContext.settings.AZURE_OPENAI_API_BASE || AZURE_OPENAI_API_BASE,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,

@@ -13,3 +13,14 @@ export const MAX_MEMORY_LENGTH = 25
 
 export const DEFAULT_TIMEOUT_16_SECONDS = 16000
 export const DEFAULT_MAX_RETRIES = 2
+
+export const LLM_PROVIDERS = {
+  LITELLM: 'litellm',
+  AZURE: 'azure',
+} as const
+
+export const LITELLM_TAG_KEYS = {
+  BOT_ID: 'bot_id',
+  ORG_ID: 'org_id',
+  SEPARATOR: ',',
+} as const

@@ -37,6 +37,8 @@ jest.mock('../src/constants', () => ({
   AZURE_OPENAI_API_BASE: 'https://test.openai.azure.com',
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
   isProd: false,
+  LLM_PROVIDERS: { LITELLM: 'litellm', AZURE: 'azure' },
+  LITELLM_TAG_KEYS: { BOT_ID: 'bot_id', ORG_ID: 'org_id', SEPARATOR: ',' },
 }))
 
 const makeSettings = (overrides = {}) => ({
@@ -58,7 +60,22 @@ const makeSecrets = (overrides = {}) => ({
   ...overrides,
 })
 
-const litellmSettings = makeSettings({
+const makeBotContext = (
+  settingsOverrides = {},
+  secretsOverrides = {},
+  botId?: string,
+  orgId?: string
+) =>
+  ({
+    settings: makeSettings(settingsOverrides),
+    secrets: makeSecrets(secretsOverrides),
+    session: {
+      bot: { id: botId },
+      organization_id: orgId,
+    },
+  }) as any
+
+const litellmBotContext = makeBotContext({
   LITELLM_API_URL: 'https://litellm.example.com',
 })
 
@@ -82,8 +99,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets()
+        litellmBotContext
       )
       expect(config.getProviderName()).toBe('litellm')
     })
@@ -94,8 +110,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings(),
-        makeSecrets()
+        makeBotContext()
       )
       expect(config.getProviderName()).toBe('azure')
     })
@@ -108,10 +123,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets(),
-        'bot-123',
-        'org-456'
+        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, 'bot-123', 'org-456')
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:bot-123,org_id:org-456',
@@ -124,9 +136,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets(),
-        'bot-123'
+        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, 'bot-123')
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:bot-123',
@@ -139,10 +149,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets(),
-        undefined,
-        'org-456'
+        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, undefined, 'org-456')
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'org_id:org-456',
@@ -155,8 +162,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets()
+        litellmBotContext
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toBeUndefined()
     })
@@ -169,10 +175,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings(),
-        makeSecrets(),
-        'bot-123',
-        'org-456'
+        makeBotContext({}, {}, 'bot-123', 'org-456')
       )
       expect(capturedAzureConfig).toBeDefined()
       expect(capturedAzureConfig?.defaultHeaders).toBeUndefined()
@@ -184,8 +187,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings(),
-        makeSecrets()
+        makeBotContext()
       )
       expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
       expect(capturedAzureConfig?.baseURL).toBe('https://test.openai.azure.com')
@@ -200,8 +202,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings(),
-        makeSecrets()
+        makeBotContext()
       )
       expect(config.modelSettings).toEqual({
         temperature: 0,
@@ -217,24 +218,20 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings({ AZURE_OPENAI_API_VERSION: '2025-01-01-preview' }),
-        makeSecrets()
+        makeBotContext({ AZURE_OPENAI_API_VERSION: '2025-01-01-preview' })
       )
       expect(config.getApiVersion()).toBe('2025-01-01-preview')
     })
 
-    it('should return NOT_API_VERSION_FOR_LITELLM_PROVIDER for litellm', () => {
+    it('should return undefined for litellm', () => {
       const config = new LLMConfig(
         DEFAULT_MAX_RETRIES,
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        litellmSettings,
-        makeSecrets()
+        litellmBotContext
       )
-      expect(config.getApiVersion()).toBe(
-        'NOT_API_VERSION_FOR_LITELLM_PROVIDER'
-      )
+      expect(config.getApiVersion()).toBeUndefined()
     })
   })
 
@@ -245,8 +242,7 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeSettings(),
-        makeSecrets()
+        makeBotContext()
       )
       await expect(config.getModel()).resolves.toBe(mockResolvedModel)
       expect(config.modelProvider.getModel).toHaveBeenCalledWith('gpt-4.1-mini')

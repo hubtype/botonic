@@ -154,7 +154,6 @@ export abstract class BaseRunner<
     const durationPerCall = Math.round(totalDuration / rawResponses.length)
     const temperature =
       (this.llmConfig.modelSettings.temperature as number | undefined) ?? 0
-    const apiVersion = this.llmConfig.getApiVersion()
 
     const llmRuns = rawResponses.map(response => ({
       inference_id: this.inferenceId,
@@ -165,7 +164,7 @@ export abstract class BaseRunner<
         (response.providerData?.model as string | undefined) ??
         this.llmConfig.modelName,
       feature: TrackFeature.AI_AGENT_RUN,
-      api_version: apiVersion,
+      api_version: this.llmConfig.getApiVersion(),
       num_prompt_tokens: response.usage.inputTokens,
       num_completion_tokens: response.usage.outputTokens,
       duration_in_milliseconds: durationPerCall,
