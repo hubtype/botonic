@@ -203,7 +203,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     })
 
   const mockAiAgentArgs: AiAgentArgs = {
-    type: AiAgentType.Worker,
+    type: AiAgentType.Specialist,
     name: 'Test Agent',
     instructions: 'Test instructions',
     model: 'gpt-4.1-mini',
@@ -327,7 +327,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     const request = createMockRequest()
     const customAiAgentArgs: AiAgentArgs = {
-      type: AiAgentType.Worker,
+      type: AiAgentType.Specialist,
       name: 'Custom Agent',
       instructions: 'Custom instructions for the agent',
       model: 'gpt-4.1-mini',
@@ -370,10 +370,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
           description: 'Check for offensive content',
         },
       ],
-      agents: [
+      specialists: [
         {
-          type: AiAgentType.Worker,
-          name: 'Support Worker',
+          type: AiAgentType.Specialist,
+          name: 'Support Agent',
           description: 'Handles support questions',
           instructions: 'Answer support questions',
           model: 'gpt-4.1-mini',
@@ -421,7 +421,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(routerAgentArgs.handoffs).toEqual([
       expect.objectContaining({
         agent: expect.objectContaining({
-          name: 'Support Worker',
+          name: 'Support Agent',
         }),
       }),
     ])
@@ -439,10 +439,10 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       instructions: 'Route the conversation to the right worker',
       model: 'gpt-4.1-mini',
       verbosity: VerbosityLevel.Medium,
-      agents: [
+      specialists: [
         {
-          type: AiAgentType.Worker,
-          name: 'Knowledge Worker',
+          type: AiAgentType.Specialist,
+          name: 'Knowledge Agent',
           description: 'Handles knowledge questions',
           instructions: 'Answer with knowledge sources',
           model: 'gpt-4.1-mini',
@@ -457,12 +457,12 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     await plugin.getInference(request, routerArgs)
 
     expect(capturedWorkerAgentArgs).toBeDefined()
-    expect(capturedWorkerAgentArgs.name).toBe('Knowledge Worker')
+    expect(capturedWorkerAgentArgs.name).toBe('Knowledge Agent')
     expect(capturedWorkerAgentArgs.sourceIds).toEqual(['source-1', 'source-2'])
     expect(capturedRouterAgentArgs?.handoffs).toEqual([
       expect.objectContaining({
         agent: expect.objectContaining({
-          name: 'Knowledge Worker',
+          name: 'Knowledge Agent',
         }),
       }),
     ])

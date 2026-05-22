@@ -57,7 +57,7 @@ export class FlowAiAgent extends FlowAiAgentBase {
     const aiAgentResponse = await flowBuilderPlugin.getAiAgentResponse?.(
       botContext,
       {
-        type: AiAgentType.Worker,
+        type: AiAgentType.Specialist,
         name: this.name,
         instructions: this.instructions,
         model: this.model,
