@@ -15,7 +15,7 @@ import {
   isProd,
 } from './constants'
 
-export type LLMProvider = 'litellm' | 'azure'
+export type LLMProvider = (typeof LLM_PROVIDERS)[keyof typeof LLM_PROVIDERS]
 
 export class LLMConfig {
   private readonly maxRetries: number
