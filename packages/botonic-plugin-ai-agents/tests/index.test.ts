@@ -405,9 +405,16 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       'gpt-4.1-mini',
       VerbosityLevel.High,
       expect.objectContaining({
-        settings: expect.objectContaining({ LITELLM_API_URL: expect.any(String) }),
-        secrets: expect.objectContaining({ LITELLM_API_KEY: expect.any(String) }),
-        session: expect.objectContaining({ bot: expect.objectContaining({ id: 'bot-123' }), organization_id: 'org-123' }),
+        settings: expect.objectContaining({
+          LITELLM_API_URL: expect.any(String),
+        }),
+        secrets: expect.objectContaining({
+          LITELLM_API_KEY: expect.any(String),
+        }),
+        session: expect.objectContaining({
+          bot: expect.objectContaining({ id: 'bot-123' }),
+          organization_id: 'org-123',
+        }),
       })
     )
     expect(routerAgentArgs.inputGuardrailRules).toEqual([

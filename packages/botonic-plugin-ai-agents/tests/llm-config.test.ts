@@ -123,7 +123,12 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, 'bot-123', 'org-456')
+        makeBotContext(
+          { LITELLM_API_URL: 'https://litellm.example.com' },
+          {},
+          'bot-123',
+          'org-456'
+        )
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:bot-123,org_id:org-456',
@@ -136,7 +141,11 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, 'bot-123')
+        makeBotContext(
+          { LITELLM_API_URL: 'https://litellm.example.com' },
+          {},
+          'bot-123'
+        )
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:bot-123',
@@ -149,7 +158,12 @@ describe('LLMConfig', () => {
         DEFAULT_TIMEOUT,
         'gpt-4.1-mini',
         DEFAULT_VERBOSITY,
-        makeBotContext({ LITELLM_API_URL: 'https://litellm.example.com' }, {}, undefined, 'org-456')
+        makeBotContext(
+          { LITELLM_API_URL: 'https://litellm.example.com' },
+          {},
+          undefined,
+          'org-456'
+        )
       )
       expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
         'x-litellm-tags': 'org_id:org-456',
