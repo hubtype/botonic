@@ -184,3 +184,7 @@ export const ROLES = {
   RAW_MESSAGE: 'raw-message',
   SYSTEM_DEBUG_TRACE_MESSAGE: 'system-debug-trace-message',
 }
+
+export const WEBCHAT_DEFAULT_CONTENTS = {
+  INPUT_PLACEHOLDER: 'Ask me something...',
+}

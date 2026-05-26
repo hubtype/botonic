@@ -89,6 +89,10 @@ export interface MinimalHubtypeMessage {
   text: string
 }
 
+export interface WebchatLocaleContents {
+  inputPlaceholder: string
+}
+
 export interface PreviewUtils {
   getChunkIdsGroupedBySource: (
     chunkIds: string[]
@@ -122,6 +126,7 @@ export interface WebchatArgs {
   onMessage?: (app: WebchatApp, message: WebchatMessage) => void
   onTrackEvent?: TrackEventFunction
   onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  contentsByLocale?: Record<string, WebchatLocaleContents>
   appId?: string
   visibility?: boolean | (() => boolean) | 'dynamic'
   server?: ServerConfig
@@ -149,6 +154,7 @@ export interface WebchatProps {
   server?: ServerConfig
   localWebviews?: React.ComponentType[]
   previewUtils?: PreviewUtils
+  contentsByLocale?: Record<string, WebchatLocaleContents>
 }
 
 export type EventArgs = { [key: string]: any }

@@ -1,4 +1,4 @@
-import { COLORS, WEBCHAT } from '../../constants'
+import { COLORS, WEBCHAT, WEBCHAT_DEFAULT_CONTENTS } from '../../constants'
 import type { WebchatTheme } from './types'
 
 export const defaultTheme: WebchatTheme = {
@@ -81,7 +81,7 @@ export const defaultTheme: WebchatTheme = {
   userInput: {
     attachments: { enable: undefined },
     box: {
-      placeholder: 'Ask me something...',
+      placeholder: WEBCHAT_DEFAULT_CONTENTS.INPUT_PLACEHOLDER,
     },
     emojiPicker: { enable: undefined },
     sendButton: { enable: true },
