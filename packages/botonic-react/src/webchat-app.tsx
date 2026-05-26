@@ -17,6 +17,7 @@ import {
   SENDERS,
   Typing,
   type WebchatArgs,
+  type WebchatLocaleContents,
   type WebchatMessage,
   type WebchatRef,
 } from './index-types'
@@ -55,6 +56,7 @@ export class WebchatApp {
     args?: EventArgs
   ) => Promise<void>
   public onConnectionChange?: (app: WebchatApp, isOnline: boolean) => void
+  public contentsByLocale?: Record<string, WebchatLocaleContents>
   public appId?: string
   public visibility?: boolean | (() => boolean) | 'dynamic'
   public server?: ServerConfig
@@ -86,6 +88,7 @@ export class WebchatApp {
     onMessage,
     onTrackEvent,
     onConnectionChange,
+    contentsByLocale,
     appId,
     visibility,
     server,
@@ -119,6 +122,7 @@ export class WebchatApp {
     this.onMessage = onMessage
     this.onTrackEvent = onTrackEvent
     this.onConnectionChange = onConnectionChange
+    this.contentsByLocale = contentsByLocale
     this.visibility = visibility
     this.server = server
     this.previewUtils = previewUtils
@@ -482,6 +486,7 @@ export class WebchatApp {
       onClose,
       onMessage,
       onConnectionChange,
+      contentsByLocale,
       onTrackEvent,
       appId,
       visibility,
@@ -502,6 +507,7 @@ export class WebchatApp {
     this.onMessage = onMessage || this.onMessage
     this.onTrackEvent = onTrackEvent || this.onTrackEvent
     this.onConnectionChange = onConnectionChange || this.onConnectionChange
+    this.contentsByLocale = contentsByLocale || this.contentsByLocale
     this.visibility = visibility || this.visibility
     this.appId = appId || this.appId
     this.hostId = hostId || this.hostId
@@ -533,6 +539,7 @@ export class WebchatApp {
           args?: EventArgs
         ) => this.onTrackEventWebchat(request, eventName, args)}
         server={server}
+        contentsByLocale={this.contentsByLocale}
       />
     )
   }
