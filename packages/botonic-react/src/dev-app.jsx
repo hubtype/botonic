@@ -27,6 +27,7 @@ export class DevApp extends WebchatApp {
     onClose,
     onMessage,
     onTrackEvent,
+    contentsByLocale,
     webviews,
     ...botOptions
   }) {
@@ -48,6 +49,7 @@ export class DevApp extends WebchatApp {
       onClose,
       onMessage,
       onTrackEvent,
+      contentsByLocale,
     })
     this.webviews = webviews
     this.bot = new ReactBot({
@@ -65,6 +67,7 @@ export class DevApp extends WebchatApp {
       onClose,
       onMessage,
       onTrackEvent,
+      contentsByLocale,
       hostId,
       ...webchatOptions
     } = optionsAtRuntime
@@ -76,6 +79,7 @@ export class DevApp extends WebchatApp {
     this.onClose = onClose || this.onClose
     this.onMessage = onMessage || this.onMessage
     this.onTrackEvent = onTrackEvent || this.onTrackEvent
+    this.contentsByLocale = contentsByLocale || this.contentsByLocale
     this.hostId = hostId || this.hostId
     this.createRootElement(host)
     return (
@@ -87,6 +91,7 @@ export class DevApp extends WebchatApp {
         theme={theme}
         storage={storage}
         storageKey={storageKey}
+        contentsByLocale={this.contentsByLocale}
         onInit={(...args) => this.onInitWebchat(...args)}
         onOpen={(...args) => this.onOpenWebchat(...args)}
         onClose={(...args) => this.onCloseWebchat(...args)}
