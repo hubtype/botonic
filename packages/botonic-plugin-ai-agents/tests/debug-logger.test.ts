@@ -78,7 +78,7 @@ describe('DebugLogger', () => {
 
     it('should log agent debug info', () => {
       const aiAgentArgs: AiAgentArgs = {
-        type: AiAgentType.Worker,
+        type: AiAgentType.Specialist,
         name: 'TestAgent',
         instructions: 'Test instructions',
         model: 'gpt-4.1-mini',
@@ -219,7 +219,7 @@ describe('DebugLogger', () => {
       })
       logger.logAgentDebugInfo(
         {
-          type: AiAgentType.Worker,
+          type: AiAgentType.Specialist,
           name: 'Test',
           instructions: '',
           model: 'gpt-4.1-mini',

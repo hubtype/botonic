@@ -124,7 +124,7 @@ jest.mock('../src/constants', () => mockConstants)
 // Import after mocks
 import { RunToolCallItem } from '@openai/agents'
 import { createInputGuardrails } from '../src/guardrails/input'
-import { WorkerRunner } from '../src/runners/worker-runner'
+import { SpecialistRunner } from '../src/runners/specialist-runner'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -222,8 +222,8 @@ function makeRawResponse(
 function createRunner(
   agent = buildMockAgent(),
   llmConfig = buildMockLlmConfig()
-): WorkerRunner {
-  return new WorkerRunner(agent, llmConfig, 'test-inference-id', mockLogger)
+): SpecialistRunner {
+  return new SpecialistRunner(agent, llmConfig, 'test-inference-id', mockLogger)
 }
 
 const sampleMessages: AgenticInputMessage[] = [
@@ -252,7 +252,7 @@ describe('WorkerAgentRunner', () => {
 
   describe('constructor', () => {
     it('should instantiate without errors', () => {
-      expect(createRunner()).toBeInstanceOf(WorkerRunner)
+      expect(createRunner()).toBeInstanceOf(SpecialistRunner)
     })
   })
 

@@ -1,5 +1,6 @@
 export { HtEvent } from './ht-event'
 export { HtEventAiAgent } from './ht-event-ai-agent'
+export { HtEventAiAgentRouter } from './ht-event-ai-agent-router'
 export { HtEventBotAction } from './ht-event-bot-action'
 export { HtEventConditionalChannel } from './ht-event-conditional-channel'
 export { HtEventConditionalCountry } from './ht-event-conditional-country'

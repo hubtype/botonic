@@ -1,6 +1,8 @@
 import {
+  AvailableSpecialist,
   EventAction,
   EventAiAgent,
+  type EventAiAgentRouter,
   EventBotAction,
   EventCaptureUserInput,
   EventConditionalChannel,
@@ -51,6 +53,7 @@ export type HtEventProps =
   | EventWebviewEnd
   | EventCustom
   | EventAiAgent
+  | EventAiAgentRouter
   | EventRedirectFlow
   | EventCaptureUserInput
 
@@ -65,6 +68,8 @@ export interface RequestData {
 export {
   EventAction,
   EventAiAgent,
+  type EventAiAgentRouter,
+  AvailableSpecialist,
   EventBotAction,
   EventCaptureUserInput,
   EventConditionalChannel,

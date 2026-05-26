@@ -13,7 +13,7 @@ import {
 import type { AIAgent, Context, GuardrailRule, Tool } from '../types'
 import { BaseAgent } from './base-agent'
 
-interface WorkerAgentOptions<
+interface SpecialistAgentOptions<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = unknown,
 > {
@@ -30,7 +30,7 @@ interface WorkerAgentOptions<
   guardrailTrackingContext: GuardrailTrackingContext
 }
 
-export class WorkerAgent<
+export class SpecialistAgent<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,
   TExtraData = unknown,
 > extends BaseAgent {
@@ -38,7 +38,7 @@ export class WorkerAgent<
   private logger: DebugLogger
   private agent!: AIAgent<TPlugins, TExtraData>
 
-  private constructor(options: WorkerAgentOptions<TPlugins, TExtraData>) {
+  private constructor(options: SpecialistAgentOptions<TPlugins, TExtraData>) {
     super({
       name: options.name,
       instructions: options.instructions,
@@ -60,20 +60,20 @@ export class WorkerAgent<
     TPlugins extends ResolvedPlugins = ResolvedPlugins,
     TExtraData = unknown,
   >(
-    options: WorkerAgentOptions<TPlugins, TExtraData>
-  ): Promise<WorkerAgent<TPlugins, TExtraData>> {
-    const workerAgent = new WorkerAgent<TPlugins, TExtraData>(options)
-    const model = workerAgent.llmConfig.modelName
-    const resolvedModel = await workerAgent.getModel()
-    const hasRetrieveKnowledge = workerAgent.tools.some(
+    options: SpecialistAgentOptions<TPlugins, TExtraData>
+  ): Promise<SpecialistAgent<TPlugins, TExtraData>> {
+    const specialistAgent = new SpecialistAgent<TPlugins, TExtraData>(options)
+    const model = specialistAgent.llmConfig.modelName
+    const resolvedModel = await specialistAgent.getModel()
+    const hasRetrieveKnowledge = specialistAgent.tools.some(
       tool => tool.name === RETRIEVE_KNOWLEDGE_TOOL_NAME
     )
     const modelSettings =
-      workerAgent.getWorkerModelSettings(hasRetrieveKnowledge)
-    const inputGuardrails = await workerAgent.getInputGuardrails()
+      specialistAgent.getSpecialistModelSettings(hasRetrieveKnowledge)
+    const inputGuardrails = await specialistAgent.getInputGuardrails()
 
-    workerAgent.logger.logModelSettings({
-      provider: workerAgent.llmConfig.getProviderName(),
+    specialistAgent.logger.logModelSettings({
+      provider: specialistAgent.llmConfig.getProviderName(),
       model,
       reasoning: modelSettings.reasoning as { effort: string } | undefined,
       text: modelSettings.text as { verbosity: string } | undefined,
@@ -85,25 +85,27 @@ export class WorkerAgent<
       Context<TPlugins, TExtraData>,
       AgentOutputType<typeof OutputSchema>
     >({
-      name: workerAgent.name,
+      name: specialistAgent.name,
       model: resolvedModel,
       modelSettings,
-      instructions: workerAgent.instructions,
-      tools: workerAgent.tools,
-      outputType: workerAgent.getOutputType(),
+      instructions: specialistAgent.instructions,
+      tools: specialistAgent.tools,
+      outputType: specialistAgent.getOutputType(),
       inputGuardrails,
       outputGuardrails: [],
     })
 
-    workerAgent.agent = agent
-    return workerAgent
+    specialistAgent.agent = agent
+    return specialistAgent
   }
 
   getAgent(): AIAgent<TPlugins, TExtraData> {
     return this.agent
   }
 
-  private getWorkerModelSettings(hasRetrieveKnowledge: boolean): ModelSettings {
+  private getSpecialistModelSettings(
+    hasRetrieveKnowledge: boolean
+  ): ModelSettings {
     const modelSettings = this.getAgentModelSettings()
     if (hasRetrieveKnowledge) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME

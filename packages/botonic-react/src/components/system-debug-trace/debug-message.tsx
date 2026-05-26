@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { WebchatContext } from '../../webchat/context'
 import {
   getAiAgentEventConfig,
+  getAiAgentRouterEventConfig,
   getBotActionEventConfig,
   getConditionalChannelEventConfig,
   getConditionalCountryEventConfig,
@@ -43,6 +44,8 @@ const getEventConfig = (
       return getHandoffSuccessEventConfig(debugEvent)
     case EventAction.AiAgent:
       return getAiAgentEventConfig(debugEvent)
+    case EventAction.AiAgentRouter:
+      return getAiAgentRouterEventConfig(debugEvent)
     case EventAction.Knowledgebase:
       return getKnowledgeBaseEventConfig(debugEvent)
     case EventAction.Fallback:
