@@ -20,11 +20,13 @@ import {
 export const TEST_DEFAULTS = {
   HUBTYPE_API_URL: 'https://api.hubtype.com',
   STATIC_URL: 'https://static.hubtype.com',
-  LLM_API_BASE: 'https://api.openai.com',
-  LLM_API_VERSION: '2026-02-01',
+  LITELLM_API_URL: 'https://api.litellm.com',
+  AZURE_OPENAI_API_BASE: 'https://api.openai.com',
+  AZURE_OPENAI_API_VERSION: '2026-02-01',
   LANGUAGE_DETECTION_ENABLED: true,
   HUBTYPE_ACCESS_TOKEN: 'testAccessToken', // pragma: allowlist secret
-  LLM_API_KEY: 'testLLMApiKey', // pragma: allowlist secret
+  LITELLM_API_KEY: 'testLiteLLMAPIKey', // pragma: allowlist secret
+  AZURE_OPENAI_API_KEY: 'testAzureOpenAIAPIKey', // pragma: allowlist secret
   ACCESS_TOKEN: 'fake_access_token',
   HUBTYPE_API_HOST: 'https://api.hubtype.com',
   FLOW_THREAD_ID: 'testFlowThreadId',
@@ -50,8 +52,9 @@ export function createTestSettings(
   return {
     HUBTYPE_API_URL: TEST_DEFAULTS.HUBTYPE_API_URL,
     STATIC_URL: TEST_DEFAULTS.STATIC_URL,
-    LLM_API_BASE: TEST_DEFAULTS.LLM_API_BASE,
-    LLM_API_VERSION: TEST_DEFAULTS.LLM_API_VERSION,
+    LITELLM_API_URL: TEST_DEFAULTS.LITELLM_API_URL,
+    AZURE_OPENAI_API_BASE: TEST_DEFAULTS.AZURE_OPENAI_API_BASE,
+    AZURE_OPENAI_API_VERSION: TEST_DEFAULTS.AZURE_OPENAI_API_VERSION,
     LANGUAGE_DETECTION_ENABLED: TEST_DEFAULTS.LANGUAGE_DETECTION_ENABLED,
     CUSTOM_SHORT_URL_HOST: null,
     custom: {},
@@ -62,7 +65,8 @@ export function createTestSettings(
 export function createTestSecrets(overrides?: Partial<BotSecrets>): BotSecrets {
   return {
     HUBTYPE_ACCESS_TOKEN: TEST_DEFAULTS.HUBTYPE_ACCESS_TOKEN,
-    LLM_API_KEY: TEST_DEFAULTS.LLM_API_KEY,
+    LITELLM_API_KEY: TEST_DEFAULTS.LITELLM_API_KEY,
+    AZURE_OPENAI_API_KEY: TEST_DEFAULTS.AZURE_OPENAI_API_KEY,
     custom: {},
     ...overrides,
   }
@@ -185,8 +189,9 @@ function isFullSettings(
   return (
     'HUBTYPE_API_URL' in v &&
     'STATIC_URL' in v &&
-    'LLM_API_BASE' in v &&
-    'LLM_API_VERSION' in v &&
+    'LITELLM_API_URL' in v &&
+    'AZURE_OPENAI_API_BASE' in v &&
+    'AZURE_OPENAI_API_VERSION' in v &&
     'LANGUAGE_DETECTION_ENABLED' in v &&
     'CUSTOM_SHORT_URL_HOST' in v &&
     'custom' in v
@@ -196,7 +201,8 @@ function isFullSettings(
 function isFullSecrets(v: Partial<BotSecrets> | BotSecrets): v is BotSecrets {
   return (
     'HUBTYPE_ACCESS_TOKEN' in v &&
-    'LLM_API_KEY' in v &&
+    'LITELLM_API_KEY' in v &&
+    'AZURE_OPENAI_API_KEY' in v &&
     'custom' in v
   )
 }

@@ -342,8 +342,9 @@ export interface BotRequest<TExtraData = any> {
 export interface BotSettings {
   HUBTYPE_API_URL: string
   STATIC_URL: string
-  LLM_API_BASE: string
-  LLM_API_VERSION: string
+  LITELLM_API_URL: string
+  AZURE_OPENAI_API_BASE: string
+  AZURE_OPENAI_API_VERSION: string
   LANGUAGE_DETECTION_ENABLED?: boolean
   CUSTOM_SHORT_URL_HOST: string | null
   custom: Record<string, any>
@@ -351,7 +352,8 @@ export interface BotSettings {
 
 export interface BotSecrets {
   HUBTYPE_ACCESS_TOKEN: string
-  LLM_API_KEY: string
+  LITELLM_API_KEY: string
+  AZURE_OPENAI_API_KEY: string
   custom: Record<string, any>
 }
 

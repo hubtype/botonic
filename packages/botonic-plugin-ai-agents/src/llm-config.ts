@@ -60,7 +60,7 @@ export class LLMConfig {
 
   private getOpenAIClient(): OpenAI {
     return new OpenAI({
-      apiKey: this.botContext.secrets.LLM_API_KEY || LLM_API_KEY,
+      apiKey: this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -69,11 +69,13 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey: this.botContext.secrets.LLM_API_KEY || LLM_API_KEY,
+      apiKey:
+        this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       apiVersion:
-        this.botContext.settings.LLM_API_VERSION || LLM_API_VERSION,
+        this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_API_VERSION,
       deployment: this.modelName,
-      baseURL: this.botContext.settings.LLM_API_BASE || LLM_API_BASE,
+      baseURL:
+        this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_BASE,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -106,6 +108,8 @@ export class LLMConfig {
     if (LLM_PROVIDER !== 'azure') {
       return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
     }
-    return this.botContext.settings.LLM_API_VERSION || LLM_API_VERSION
+    return (
+      this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_API_VERSION
+    )
   }
 }
