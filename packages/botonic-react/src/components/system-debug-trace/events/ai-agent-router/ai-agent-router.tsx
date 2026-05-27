@@ -1,5 +1,5 @@
 import { EventAction } from '@botonic/core'
-import { AiRouterSvg, HandSvg, HeadSetSvg } from '../../icons'
+import { AiRouterSvg, AiSpecialistSvg, HandSvg } from '../../icons'
 import {
   StyledDebugDetail,
   StyledDebugItemWithIcon,
@@ -25,7 +25,7 @@ export const AiAgentRouter = ({
           <StyledDebugLabel>{LABELS.SPECIALISTS_AVAILABLE}</StyledDebugLabel>
           {available_specialists.map(h => (
             <StyledDebugItemWithIcon key={h.name}>
-              <HeadSetSvg />
+              <AiSpecialistSvg />
               {h.name}
             </StyledDebugItemWithIcon>
           ))}

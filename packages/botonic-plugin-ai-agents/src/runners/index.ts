@@ -1,2 +1,2 @@
 export { RouterRunner } from './router-runner'
-export { SpecialistRunner as WorkerRunner } from './specialist-runner'
+export { SpecialistRunner } from './specialist-runner'
