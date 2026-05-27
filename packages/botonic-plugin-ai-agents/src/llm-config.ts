@@ -1,4 +1,4 @@
-import type { VerbosityLevel } from '@botonic/core'
+import type { BotContext, VerbosityLevel } from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -19,6 +19,7 @@ import {
 export class LLMConfig {
   private readonly maxRetries: number
   private readonly timeout: number
+  private readonly botContext: BotContext
   public readonly modelName: string
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
@@ -27,10 +28,12 @@ export class LLMConfig {
     maxRetries: number,
     timeout: number,
     modelName: string,
-    verbosity: VerbosityLevel
+    verbosity: VerbosityLevel,
+    botContext: BotContext
   ) {
     this.maxRetries = maxRetries
     this.timeout = timeout
+    this.botContext = botContext
     this.modelName = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
@@ -67,10 +70,14 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey: AZURE_OPENAI_API_KEY,
-      apiVersion: AZURE_OPENAI_API_VERSION,
+      apiKey:
+        this.botContext.secrets.AZURE_OPENAI_API_KEY || AZURE_OPENAI_API_KEY,
+      apiVersion:
+        this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+        AZURE_OPENAI_API_VERSION,
       deployment: this.modelName,
-      baseURL: AZURE_OPENAI_API_BASE,
+      baseURL:
+        this.botContext.settings.AZURE_OPENAI_API_BASE || AZURE_OPENAI_API_BASE,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -98,12 +105,14 @@ export class LLMConfig {
 
     throw new Error(`Unsupported model: ${model}`)
   }
-}
 
-export function getApiVersion(): string {
-  // Return NOT_API_VERSION_FOR_OPENAI_PROVIDER if OPENAI_PROVIDER
-  // is not azure to avoid error when tracking in llm_runs endpoint
-  return OPENAI_PROVIDER === 'azure'
-    ? AZURE_OPENAI_API_VERSION
-    : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+  getApiVersion(): string {
+    if (OPENAI_PROVIDER !== 'azure') {
+      return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+    }
+    return (
+      this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+      AZURE_OPENAI_API_VERSION
+    )
+  }
 }

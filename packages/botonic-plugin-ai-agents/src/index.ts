@@ -136,7 +136,8 @@ export default class BotonicPluginAiAgents<
       this.maxRetries,
       this.timeout,
       aiAgentArgs.model,
-      aiAgentArgs.verbosity
+      aiAgentArgs.verbosity,
+      botContext
     )
 
     // Get LLM config, tools and agent
@@ -197,7 +198,8 @@ export default class BotonicPluginAiAgents<
       this.maxRetries,
       this.timeout,
       aiAgentArgs.model,
-      aiAgentArgs.verbosity
+      aiAgentArgs.verbosity,
+      botContext
     )
 
     const specialistsAgents = await Promise.all(
