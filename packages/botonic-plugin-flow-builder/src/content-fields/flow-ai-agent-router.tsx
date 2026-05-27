@@ -165,8 +165,8 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
       outputGuardrailsTriggered:
         this.aiAgentResponse?.outputGuardrailsTriggered ?? [],
-      startingAgentName: this.aiAgentResponse?.startingAgentName ?? '',
-      lastAgentName: this.aiAgentResponse?.lastAgentName ?? '',
+      startingAgentName: this.aiAgentResponse?.startingAgentName ?? this.name,
+      lastAgentName: this.aiAgentResponse?.lastAgentName ?? this.name,
       availableSpecialists: this.aiAgentResponse?.availableSpecialists ?? [],
       isTransferredToSpecialist,
     }
