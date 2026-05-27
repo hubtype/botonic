@@ -11,8 +11,8 @@ import {
   LLM_API_BASE,
   LLM_API_KEY,
   LLM_API_VERSION,
-  LLM_MODEL,
   LLM_PROVIDER,
+  OPENAI_MODEL,
 } from './constants'
 
 export class LLMConfig {
@@ -33,7 +33,7 @@ export class LLMConfig {
     this.maxRetries = maxRetries
     this.timeout = timeout
     this.botContext = botContext
-    this.modelName = LLM_PROVIDER === 'openai' ? LLM_MODEL : modelName
+    this.modelName = LLM_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
