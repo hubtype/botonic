@@ -10,9 +10,9 @@ import {
   isProd,
   LLM_API_BASE,
   LLM_API_KEY,
-  LLM_API_VERSION,
+  LLM_AZURE_API_VERSION,
   LLM_PROVIDER,
-  OPENAI_MODEL,
+  LLM_OPENAI_MODEL,
 } from './constants'
 
 export class LLMConfig {
@@ -33,7 +33,7 @@ export class LLMConfig {
     this.maxRetries = maxRetries
     this.timeout = timeout
     this.botContext = botContext
-    this.modelName = LLM_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
+    this.modelName = LLM_PROVIDER === 'openai' ? LLM_OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
@@ -72,7 +72,7 @@ export class LLMConfig {
       apiKey:
         this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       apiVersion:
-        this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_API_VERSION,
+        this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_AZURE_API_VERSION,
       deployment: this.modelName,
       baseURL:
         this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_BASE,
@@ -109,7 +109,7 @@ export class LLMConfig {
       return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
     }
     return (
-      this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_API_VERSION
+      this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_AZURE_API_VERSION
     )
   }
 }
