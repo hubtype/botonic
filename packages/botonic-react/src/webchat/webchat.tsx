@@ -21,7 +21,13 @@ import {
   Video,
   type WebchatSettingsProps,
 } from '../components'
-import { COLORS, MAX_ALLOWED_SIZE_MB, ROLES, WEBCHAT } from '../constants'
+import {
+  COLORS,
+  MAX_ALLOWED_SIZE_MB,
+  ROLES,
+  WEBCHAT,
+  WEBCHAT_DEFAULT_CONTENTS,
+} from '../constants'
 import type { CloseWebviewOptions } from '../contexts'
 import { SENDERS, type WebchatProps, type WebchatRef } from '../index-types'
 import {
@@ -109,6 +115,7 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     scrollableMessagesListRef,
   } = props.webchatHooks || useWebchat(props.theme)
 
+  const contentsByLocale = props.contentsByLocale
   const firstUpdate = useRef(true)
   const isOnline = () => webchatState.online
   const currentDateString = () => new Date().toISOString()
@@ -485,6 +492,16 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
   */
 
   const updateSessionWithUser = (userToUpdate: any) => {
+    if (contentsByLocale && userToUpdate.system_locale) {
+      const placeholder =
+        contentsByLocale[userToUpdate.system_locale]?.inputPlaceholder ??
+        WEBCHAT_DEFAULT_CONTENTS.INPUT_PLACEHOLDER
+      const themeUpdates = { userInput: { box: { placeholder } } }
+      updateTheme(
+        merge(props.theme, themeUpdates),
+        themeUpdates as WebchatTheme
+      )
+    }
     updateSession(merge(webchatState.session, { user: userToUpdate }))
   }
 

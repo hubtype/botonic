@@ -2,7 +2,7 @@ import { EventAction, type ToolExecution } from '@botonic/core'
 import { useContext, useMemo } from 'react'
 import { WebchatContext } from '../../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../../hooks/use-knowledge-base-info'
-import { WandSvg } from '../../icons'
+import { AiSpecialistSvg } from '../../icons'
 import {
   StyledDebugDetail,
   StyledDebugLabel,
@@ -124,7 +124,7 @@ export const getAiAgentEventConfig = (
     action: EventAction.AiAgent,
     title,
     component: AiAgent,
-    icon: <WandSvg />,
+    icon: <AiSpecialistSvg />,
     collapsible: true,
   }
 }

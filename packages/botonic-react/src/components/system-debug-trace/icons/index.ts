@@ -1,4 +1,5 @@
 export * from './ai-router'
+export * from './ai-specialist'
 export * from './brain'
 export * from './caret-down'
 export * from './caret-up'

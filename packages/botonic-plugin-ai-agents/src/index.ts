@@ -20,7 +20,7 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
-import { RouterRunner, WorkerRunner } from './runners'
+import { RouterRunner, SpecialistRunner } from './runners'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
   AgenticInputMessage,
@@ -90,7 +90,7 @@ export default class BotonicPluginAiAgents<
 
     try {
       if (aiAgentArgs.type === AiAgentType.Specialist) {
-        return await this.executeWorkerAIAgent(
+        return await this.executeSpecialistAIAgent(
           botContext,
           aiAgentArgs,
           authToken,
@@ -126,7 +126,7 @@ export default class BotonicPluginAiAgents<
     }
   }
 
-  private async executeWorkerAIAgent(
+  private async executeSpecialistAIAgent(
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentSpecialistArgs,
     authToken: string,
@@ -141,7 +141,7 @@ export default class BotonicPluginAiAgents<
     )
 
     // Get LLM config, tools and agent
-    const { tools, agent } = await this.getAIAgentWorkerAndTools(
+    const { tools, agent } = await this.getSpecialistAgentAndTools(
       botContext,
       aiAgentArgs,
       aiAgentArgs.outputMessagesSchemas || [],
@@ -177,7 +177,7 @@ export default class BotonicPluginAiAgents<
     )
 
     // Run agent
-    const runner = new WorkerRunner<TPlugins, TExtraData>(
+    const runner = new SpecialistRunner<TPlugins, TExtraData>(
       agent,
       llmConfig,
       inferenceId,
@@ -204,7 +204,7 @@ export default class BotonicPluginAiAgents<
 
     const specialistsAgents = await Promise.all(
       specialists.map(async specialistData => {
-        const { agent } = await this.getAIAgentWorkerAndTools(
+        const { agent } = await this.getSpecialistAgentAndTools(
           botContext,
           specialistData,
           aiAgentArgs.outputMessagesSchemas || [],
@@ -265,7 +265,7 @@ export default class BotonicPluginAiAgents<
     return await runner.run(messages, context)
   }
 
-  private async getAIAgentWorkerAndTools(
+  private async getSpecialistAgentAndTools(
     botContext: BotContext,
     aiAgentArgs: AiAgentArgs,
     outputMessagesSchemas: ZodObject<any>[],
@@ -279,7 +279,8 @@ export default class BotonicPluginAiAgents<
     // Build agent
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
-    const worker = await SpecialistAgent.create<TPlugins, TExtraData>({
+
+    const specialist = await SpecialistAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
       tools: tools,
@@ -297,9 +298,9 @@ export default class BotonicPluginAiAgents<
         inferenceId,
       },
     })
-    const workerAgent = worker.getAgent()
+    const specialistAgent = specialist.getAgent()
 
-    return { agent: workerAgent, tools }
+    return { agent: specialistAgent, tools }
   }
 
   private async getMessages(
