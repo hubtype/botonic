@@ -1,17 +1,14 @@
 export const HUBTYPE_API_URL =
   process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
-// OpenAI Provider Configuration
-export const OPENAI_API_KEY = process.env.OPENAI_API_KEY // pragma: allowlist secret
-export const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-mini'
-export const OPENAI_PROVIDER: 'openai' | 'azure' =
-  (process.env.OPENAI_PROVIDER as 'openai' | 'azure') || 'azure'
-
-// Azure OpenAI Configuration
-export const AZURE_OPENAI_API_KEY = process.env.AZURE_OPENAI_API_KEY // pragma: allowlist secret
-export const AZURE_OPENAI_API_BASE = process.env.AZURE_OPENAI_API_BASE
-export const AZURE_OPENAI_API_VERSION =
-  process.env.AZURE_OPENAI_API_VERSION || '2025-01-01-preview'
+// LLM Configuration (provider-agnostic; set LLM_PROVIDER=azure|openai)
+export const LLM_PROVIDER: 'openai' | 'azure' =
+  (process.env.LLM_PROVIDER as 'openai' | 'azure') || 'azure'
+export const LLM_API_KEY = process.env.LLM_API_KEY // pragma: allowlist secret
+export const LLM_API_BASE = process.env.LLM_API_BASE
+export const LLM_API_VERSION =
+  process.env.LLM_API_VERSION || '2025-01-01-preview'
+export const LLM_MODEL = process.env.LLM_MODEL || 'gpt-4.1-mini'
 
 export const isProd = process.env.NODE_ENV === 'production'
 

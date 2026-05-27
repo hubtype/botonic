@@ -7,13 +7,12 @@ import {
 } from '@openai/agents'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
-  AZURE_OPENAI_API_BASE,
-  AZURE_OPENAI_API_KEY,
-  AZURE_OPENAI_API_VERSION,
   isProd,
-  OPENAI_API_KEY,
-  OPENAI_MODEL,
-  OPENAI_PROVIDER,
+  LLM_API_BASE,
+  LLM_API_KEY,
+  LLM_API_VERSION,
+  LLM_MODEL,
+  LLM_PROVIDER,
 } from './constants'
 
 export class LLMConfig {
@@ -34,7 +33,7 @@ export class LLMConfig {
     this.maxRetries = maxRetries
     this.timeout = timeout
     this.botContext = botContext
-    this.modelName = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
+    this.modelName = LLM_PROVIDER === 'openai' ? LLM_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
@@ -52,7 +51,7 @@ export class LLMConfig {
   }
 
   private getClient(): OpenAI | AzureOpenAI {
-    if (OPENAI_PROVIDER === 'openai') {
+    if (LLM_PROVIDER === 'openai') {
       return this.getOpenAIClient()
     }
 
@@ -61,7 +60,7 @@ export class LLMConfig {
 
   private getOpenAIClient(): OpenAI {
     return new OpenAI({
-      apiKey: OPENAI_API_KEY,
+      apiKey: this.botContext.secrets.LLM_API_KEY || LLM_API_KEY,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -70,14 +69,11 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey:
-        this.botContext.secrets.AZURE_OPENAI_API_KEY || AZURE_OPENAI_API_KEY,
+      apiKey: this.botContext.secrets.LLM_API_KEY || LLM_API_KEY,
       apiVersion:
-        this.botContext.settings.AZURE_OPENAI_API_VERSION ||
-        AZURE_OPENAI_API_VERSION,
+        this.botContext.settings.LLM_API_VERSION || LLM_API_VERSION,
       deployment: this.modelName,
-      baseURL:
-        this.botContext.settings.AZURE_OPENAI_API_BASE || AZURE_OPENAI_API_BASE,
+      baseURL: this.botContext.settings.LLM_API_BASE || LLM_API_BASE,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -107,12 +103,9 @@ export class LLMConfig {
   }
 
   getApiVersion(): string {
-    if (OPENAI_PROVIDER !== 'azure') {
+    if (LLM_PROVIDER !== 'azure') {
       return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
     }
-    return (
-      this.botContext.settings.AZURE_OPENAI_API_VERSION ||
-      AZURE_OPENAI_API_VERSION
-    )
+    return this.botContext.settings.LLM_API_VERSION || LLM_API_VERSION
   }
 }

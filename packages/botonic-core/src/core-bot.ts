@@ -130,9 +130,8 @@ export class CoreBot {
       return {
         HUBTYPE_API_URL: '',
         STATIC_URL: '',
-        LITELLM_API_URL: '',
-        AZURE_OPENAI_API_BASE: '',
-        AZURE_OPENAI_API_VERSION: '',
+        LLM_API_BASE: '',
+        LLM_API_VERSION: '',
         CUSTOM_SHORT_URL_HOST: '',
         LANGUAGE_DETECTION_ENABLED: false,
         custom: {},
@@ -147,8 +146,7 @@ export class CoreBot {
       // This only happens in local development
       return {
         HUBTYPE_ACCESS_TOKEN: '',
-        LITELLM_API_KEY: '',
-        AZURE_OPENAI_API_KEY: '',
+        LLM_API_KEY: '',
         custom: {},
       }
     }
