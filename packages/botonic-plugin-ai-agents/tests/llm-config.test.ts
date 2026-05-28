@@ -36,7 +36,7 @@ jest.mock('@openai/agents', () => ({
 // eslint-disable-next-line no-var
 var mockConstants: {
   LLM_PROVIDERS: { OPENAI: 'openai'; AZURE: 'azure'; LITELLM: 'litellm' }
-  LLM_PROVIDER: 'openai' | 'azure'
+  LLM_PROVIDER: 'openai' | 'azure' | 'litellm'
   LLM_OPENAI_MODEL: string
   LLM_API_KEY: string
   LLM_API_URL: string
@@ -360,9 +360,8 @@ describe('LLMConfig', () => {
       expect(config.getApiVersion()).toBeUndefined()
     })
 
-    it('returns undefined when provider is litellm (via LLM_API_URL constant)', () => {
-      mockConstants.LLM_PROVIDER = 'azure'
-      mockConstants.LLM_API_URL = 'https://litellm.example.com'
+    it('returns undefined when provider is litellm (via LLM_PROVIDER=litellm)', () => {
+      mockConstants.LLM_PROVIDER = 'litellm'
 
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
@@ -373,8 +372,6 @@ describe('LLMConfig', () => {
       })
 
       expect(config.getApiVersion()).toBeUndefined()
-
-      mockConstants.LLM_API_URL = ''
     })
   })
 
@@ -413,9 +410,8 @@ describe('LLMConfig', () => {
       expect(config.getProviderName()).toBe('litellm')
     })
 
-    it('returns litellm when LLM_API_URL constant is set', () => {
-      mockConstants.LLM_PROVIDER = 'azure'
-      mockConstants.LLM_API_URL = 'https://litellm.example.com'
+    it('returns litellm when LLM_PROVIDER=litellm', () => {
+      mockConstants.LLM_PROVIDER = 'litellm'
 
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
@@ -426,13 +422,10 @@ describe('LLMConfig', () => {
       })
 
       expect(config.getProviderName()).toBe('litellm')
-
-      mockConstants.LLM_API_URL = ''
     })
 
-    it('returns azure when neither LITELLM_API_URL nor LLM_API_URL is set', () => {
+    it('returns azure when LITELLM_API_URL is not set and LLM_PROVIDER is azure', () => {
       mockConstants.LLM_PROVIDER = 'azure'
-      mockConstants.LLM_API_URL = ''
 
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
@@ -488,8 +481,9 @@ describe('LLMConfig', () => {
       expect(capturedOpenAIConfig?.apiKey).toBe('fallback-key')
     })
 
-    it('uses LLM_API_URL constant as litellm URL when botContext.settings.LITELLM_API_URL is empty', () => {
-      mockConstants.LLM_API_URL = 'https://litellm-constant.example.com'
+    it('uses LLM_API_URL as litellm URL when LLM_PROVIDER=litellm and no botContext URL', () => {
+      mockConstants.LLM_PROVIDER = 'litellm'
+      mockConstants.LLM_API_URL = 'https://litellm-local.example.com'
 
       new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
@@ -500,8 +494,11 @@ describe('LLMConfig', () => {
       })
 
       expect(capturedOpenAIConfig?.baseURL).toBe(
-        'https://litellm-constant.example.com'
+        'https://litellm-local.example.com'
       )
+
+      mockConstants.LLM_PROVIDER = 'azure'
+      mockConstants.LLM_API_URL = ''
     })
 
     it('sets x-litellm-tags header with both bot_id and org_id', () => {

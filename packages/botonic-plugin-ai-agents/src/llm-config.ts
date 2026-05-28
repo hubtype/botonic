@@ -63,15 +63,19 @@ export class LLMConfig {
   }
 
   getProviderName(): LLMProviderType {
-    if (this.botContext.settings.LITELLM_API_URL || LLM_API_URL) {
+    if (
+      this.botContext.settings.LITELLM_API_URL ||
+      LLM_PROVIDER === LLM_PROVIDERS.LITELLM
+    ) {
       return LLM_PROVIDERS.LITELLM
     }
     return LLM_PROVIDER
   }
 
   private getClient(): OpenAI | AzureOpenAI {
-    const litellmUrl = this.botContext.settings.LITELLM_API_URL || LLM_API_URL
-    if (litellmUrl) {
+    if (this.getProviderName() === LLM_PROVIDERS.LITELLM) {
+      const litellmUrl =
+        this.botContext.settings.LITELLM_API_URL || LLM_API_URL || ''
       return this.getLiteLLMClient(litellmUrl)
     }
     if (LLM_PROVIDER === LLM_PROVIDERS.OPENAI) {
