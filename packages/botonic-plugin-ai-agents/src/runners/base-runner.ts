@@ -86,24 +86,11 @@ export abstract class BaseRunner<
 
       return runResult
     } catch (error) {
-      if (error instanceof InputGuardrailTripwireTriggered) {
-        const runResult: RunResult = {
-          startingAgentName: '',
-          lastAgentName: '',
-          availableSpecialists: [],
-          isTransferredToSpecialist: false,
-          messages: [],
-          memoryLength: 0,
-          toolsExecuted: [],
-          exit: true,
-          error: false,
-          inputGuardrailsTriggered: error.result.output.outputInfo,
-          outputGuardrailsTriggered: [],
-        }
-
-        this.logger.logGuardrailTriggered()
-        this.logger.logRunResult(runResult, startTime)
-
+      const runResult = this.handleInputGuardrailTripwireTriggered(
+        error,
+        startTime
+      )
+      if (runResult) {
         return runResult
       }
 
@@ -286,5 +273,31 @@ export abstract class BaseRunner<
     await client.trackLlmRuns(botId, {
       llm_runs: llmRuns,
     })
+  }
+
+  protected handleInputGuardrailTripwireTriggered(
+    error: unknown,
+    startTime: number
+  ): RunResult | undefined {
+    if (error instanceof InputGuardrailTripwireTriggered) {
+      const runResult: RunResult = {
+        startingAgentName: '',
+        lastAgentName: '',
+        availableSpecialists: [],
+        isTransferredToSpecialist: false,
+        messages: [],
+        memoryLength: 0,
+        toolsExecuted: [],
+        exit: true,
+        error: false,
+        inputGuardrailsTriggered: error.result.output.outputInfo,
+        outputGuardrailsTriggered: [],
+      }
+
+      this.logger.logGuardrailTriggered()
+      this.logger.logRunResult(runResult, startTime)
+
+      return runResult
+    }
   }
 }
