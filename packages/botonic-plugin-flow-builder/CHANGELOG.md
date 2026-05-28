@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.48.x] - 2026-mm-dd
+## [0.49.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,14 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+  
+## [0.49.0] - 2026-05-28
+
+### Added
+
+- [PR-3213](https://github.com/hubtype/botonic/pull/3213): Add new node AI Agent Router and refactor AI Agent node to AI Specialist Agent.
+- [PR-3216](https://github.com/hubtype/botonic/pull/3216): Track AI Agent Router with the response.
+- [PR-3217](https://github.com/hubtype/botonic/pull/3217): Replace variables inside instructions.
 
 ## [0.48.2] - 2026-05-07
 
