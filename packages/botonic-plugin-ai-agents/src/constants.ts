@@ -5,9 +5,16 @@ export const HUBTYPE_API_URL =
 export const LLM_PROVIDERS = {
   AZURE: 'azure',
   OPENAI: 'openai',
+  LITELLM: 'litellm',
 } as const
 
 export type LLMProviderType = (typeof LLM_PROVIDERS)[keyof typeof LLM_PROVIDERS]
+
+export const LITELLM_TAG_KEYS = {
+  BOT_ID: 'bot_id',
+  ORG_ID: 'org_id',
+  SEPARATOR: ',',
+} as const
 
 export const LLM_PROVIDER: LLMProviderType =
   (process.env.LLM_PROVIDER as LLMProviderType) || LLM_PROVIDERS.AZURE

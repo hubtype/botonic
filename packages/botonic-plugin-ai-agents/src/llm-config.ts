@@ -8,12 +8,14 @@ import {
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   isProd,
+  LITELLM_TAG_KEYS,
   LLM_API_KEY,
   LLM_API_URL,
   LLM_AZURE_API_VERSION,
   LLM_OPENAI_MODEL,
   LLM_PROVIDER,
   LLM_PROVIDERS,
+  type LLMProviderType,
 } from './constants'
 
 export interface LLMConfigParams {
@@ -60,12 +62,48 @@ export class LLMConfig {
     })
   }
 
+  getProviderName(): LLMProviderType {
+    if (this.botContext.settings.LITELLM_API_URL || LLM_API_URL) {
+      return LLM_PROVIDERS.LITELLM
+    }
+    return LLM_PROVIDER
+  }
+
   private getClient(): OpenAI | AzureOpenAI {
+    const litellmUrl = this.botContext.settings.LITELLM_API_URL || LLM_API_URL
+    if (litellmUrl) {
+      return this.getLiteLLMClient(litellmUrl)
+    }
     if (LLM_PROVIDER === LLM_PROVIDERS.OPENAI) {
       return this.getOpenAIClient()
     }
-
     return this.getAzureOpenAiClient()
+  }
+
+  private buildLiteLLMTags(): { 'x-litellm-tags': string } | undefined {
+    const botId = this.botContext.session.bot.id
+    const orgId = this.botContext.session.organization_id
+    const parts: string[] = []
+    if (botId) {
+      parts.push(`${LITELLM_TAG_KEYS.BOT_ID}:${botId}`)
+    }
+    if (orgId) {
+      parts.push(`${LITELLM_TAG_KEYS.ORG_ID}:${orgId}`)
+    }
+    return parts.length > 0
+      ? { 'x-litellm-tags': parts.join(LITELLM_TAG_KEYS.SEPARATOR) }
+      : undefined
+  }
+
+  private getLiteLLMClient(litellmUrl: string): OpenAI {
+    return new OpenAI({
+      apiKey: this.botContext.secrets.LITELLM_API_KEY || LLM_API_KEY,
+      baseURL: litellmUrl,
+      timeout: this.timeout,
+      maxRetries: this.maxRetries,
+      dangerouslyAllowBrowser: !isProd,
+      defaultHeaders: this.buildLiteLLMTags(),
+    })
   }
 
   private getOpenAIClient(): OpenAI {
@@ -112,10 +150,18 @@ export class LLMConfig {
       }
     }
 
-    throw new Error(`Unsupported model: ${model}`)
+    // LiteLLM can proxy any model — fall back to reasoning settings
+    return {
+      reasoning: { effort: 'none' },
+      temperature: 1,
+      text: { verbosity },
+    }
   }
 
-  getApiVersion(): string {
+  getApiVersion(): string | undefined {
+    if (this.getProviderName() === LLM_PROVIDERS.LITELLM) {
+      return undefined
+    }
     if (LLM_PROVIDER !== LLM_PROVIDERS.AZURE) {
       return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
     }
