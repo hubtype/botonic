@@ -49,7 +49,7 @@ jest.mock('../src/constants', () => {
     LLM_PROVIDER: 'azure',
     LLM_OPENAI_MODEL: 'gpt-4.1-mini',
     LLM_API_KEY: 'fallback-key',
-    LLM_API_URL: 'https://fallback.openai.azure.com',
+    LLM_API_URL: 'https://fallback.openai.azure.com/',
     LLM_AZURE_API_VERSION: '2025-01-01-preview',
     isProd: false,
   }
@@ -175,7 +175,7 @@ describe('LLMConfig', () => {
         verbosity: VerbosityLevel.Medium,
         botContext: makeBotContext(
           {
-            AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com',
+            AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com/',
             AZURE_OPENAI_API_VERSION: '2026-01-01',
           },
           { AZURE_OPENAI_API_KEY: 'platform-key' }
@@ -184,7 +184,7 @@ describe('LLMConfig', () => {
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
       expect(capturedAzureConfig?.baseURL).toBe(
-        'https://platform.openai.azure.com'
+        'https://platform.openai.azure.com/openai/'
       )
       expect(capturedAzureConfig?.apiVersion).toBe('2026-01-01')
     })
@@ -203,7 +203,7 @@ describe('LLMConfig', () => {
 
       expect(capturedAzureConfig?.apiKey).toBe('fallback-key')
       expect(capturedAzureConfig?.baseURL).toBe(
-        'https://fallback.openai.azure.com'
+        'https://fallback.openai.azure.com/openai/'
       )
       expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
     })
@@ -215,14 +215,14 @@ describe('LLMConfig', () => {
         modelName: 'gpt-4.1-mini',
         verbosity: VerbosityLevel.Medium,
         botContext: makeBotContext(
-          { AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com' },
+          { AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com/' },
           { AZURE_OPENAI_API_KEY: 'platform-key' }
         ),
       })
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
       expect(capturedAzureConfig?.baseURL).toBe(
-        'https://platform.openai.azure.com'
+        'https://platform.openai.azure.com/openai/'
       )
     })
 
