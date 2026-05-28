@@ -8,12 +8,21 @@ import {
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
   isProd,
-  LLM_API_URL,
   LLM_API_KEY,
+  LLM_API_URL,
   LLM_AZURE_API_VERSION,
-  LLM_PROVIDER,
   LLM_OPENAI_MODEL,
+  LLM_PROVIDER,
+  LLM_PROVIDERS,
 } from './constants'
+
+export interface LLMConfigParams {
+  maxRetries: number
+  timeout: number
+  modelName: string
+  verbosity: VerbosityLevel
+  botContext: BotContext
+}
 
 export class LLMConfig {
   private readonly maxRetries: number
@@ -23,17 +32,18 @@ export class LLMConfig {
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
 
-  constructor(
-    maxRetries: number,
-    timeout: number,
-    modelName: string,
-    verbosity: VerbosityLevel,
-    botContext: BotContext
-  ) {
+  constructor({
+    maxRetries,
+    timeout,
+    modelName,
+    verbosity,
+    botContext,
+  }: LLMConfigParams) {
     this.maxRetries = maxRetries
     this.timeout = timeout
     this.botContext = botContext
-    this.modelName = LLM_PROVIDER === 'openai' ? LLM_OPENAI_MODEL : modelName
+    this.modelName =
+      LLM_PROVIDER === LLM_PROVIDERS.OPENAI ? LLM_OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
@@ -51,7 +61,7 @@ export class LLMConfig {
   }
 
   private getClient(): OpenAI | AzureOpenAI {
-    if (LLM_PROVIDER === 'openai') {
+    if (LLM_PROVIDER === LLM_PROVIDERS.OPENAI) {
       return this.getOpenAIClient()
     }
 
@@ -69,10 +79,10 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey:
-        this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
+      apiKey: this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       apiVersion:
-        this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_AZURE_API_VERSION,
+        this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+        LLM_AZURE_API_VERSION,
       deployment: this.modelName,
       baseURL:
         this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL,
@@ -105,7 +115,7 @@ export class LLMConfig {
   }
 
   getApiVersion(): string {
-    if (LLM_PROVIDER !== 'azure') {
+    if (LLM_PROVIDER !== LLM_PROVIDERS.AZURE) {
       return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
     }
     return (

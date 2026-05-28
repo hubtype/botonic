@@ -132,13 +132,13 @@ export default class BotonicPluginAiAgents<
     authToken: string,
     inferenceId: string
   ) {
-    const llmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      aiAgentArgs.model,
-      aiAgentArgs.verbosity,
-      botContext
-    )
+    const llmConfig = new LLMConfig({
+      maxRetries: this.maxRetries,
+      timeout: this.timeout,
+      modelName: aiAgentArgs.model,
+      verbosity: aiAgentArgs.verbosity,
+      botContext,
+    })
 
     // Get LLM config, tools and agent
     const { tools, agent } = await this.getSpecialistAgentAndTools(
@@ -194,13 +194,13 @@ export default class BotonicPluginAiAgents<
   ) {
     const { specialists, name, instructions } = aiAgentArgs
 
-    const llmConfig = new LLMConfig(
-      this.maxRetries,
-      this.timeout,
-      aiAgentArgs.model,
-      aiAgentArgs.verbosity,
-      botContext
-    )
+    const llmConfig = new LLMConfig({
+      maxRetries: this.maxRetries,
+      timeout: this.timeout,
+      modelName: aiAgentArgs.model,
+      verbosity: aiAgentArgs.verbosity,
+      botContext,
+    })
 
     const specialistsAgents = await Promise.all(
       specialists.map(async specialistData => {

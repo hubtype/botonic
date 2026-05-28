@@ -35,6 +35,7 @@ jest.mock('@openai/agents', () => ({
 // var so the variable is hoisted and assignable when the mock factory runs (Jest hoists mocks)
 // eslint-disable-next-line no-var
 var mockConstants: {
+  LLM_PROVIDERS: { OPENAI: 'openai'; AZURE: 'azure' }
   LLM_PROVIDER: 'openai' | 'azure'
   LLM_OPENAI_MODEL: string
   LLM_API_KEY: string
@@ -44,6 +45,7 @@ var mockConstants: {
 }
 jest.mock('../src/constants', () => {
   mockConstants = {
+    LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure' },
     LLM_PROVIDER: 'azure',
     LLM_OPENAI_MODEL: 'gpt-4.1-mini',
     LLM_API_KEY: 'fallback-key',
@@ -81,13 +83,13 @@ describe('LLMConfig', () => {
     it('uses LLM_OPENAI_MODEL when provider is openai', () => {
       mockConstants.LLM_PROVIDER = 'openai'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(config.modelName).toBe('gpt-4.1-mini')
     })
@@ -95,13 +97,13 @@ describe('LLMConfig', () => {
     it('uses passed modelName (deployment) when provider is azure', () => {
       mockConstants.LLM_PROVIDER = 'azure'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(config.modelName).toBe('gpt-4.1-mini')
     })
@@ -113,13 +115,13 @@ describe('LLMConfig', () => {
     })
 
     it('returns gpt-4 style settings for gpt-4 model', () => {
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(config.modelSettings).toEqual({
         temperature: 0,
@@ -128,13 +130,13 @@ describe('LLMConfig', () => {
     })
 
     it('returns gpt-5 style settings for gpt-5 model', () => {
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-5-mini',
-        VerbosityLevel.High,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-5-mini',
+        verbosity: VerbosityLevel.High,
+        botContext: makeBotContext(),
+      })
 
       expect(config.modelSettings).toEqual({
         reasoning: { effort: 'none' },
@@ -146,13 +148,13 @@ describe('LLMConfig', () => {
     it('throws for unsupported model', () => {
       expect(
         () =>
-          new LLMConfig(
-            DEFAULT_MAX_RETRIES,
-            DEFAULT_TIMEOUT,
-            'unknown-model',
-            VerbosityLevel.Medium,
-            makeBotContext()
-          )
+          new LLMConfig({
+            maxRetries: DEFAULT_MAX_RETRIES,
+            timeout: DEFAULT_TIMEOUT,
+            modelName: 'unknown-model',
+            verbosity: VerbosityLevel.Medium,
+            botContext: makeBotContext(),
+          })
       ).toThrow('Unsupported model: unknown-model')
     })
   })
@@ -163,19 +165,19 @@ describe('LLMConfig', () => {
     })
 
     it('uses botContext secrets and settings when provided', () => {
-      new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext(
+      new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(
           {
             AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com',
             AZURE_OPENAI_API_VERSION: '2026-01-01',
           },
           { AZURE_OPENAI_API_KEY: 'platform-key' }
-        )
-      )
+        ),
+      })
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
       expect(capturedAzureConfig?.baseURL).toBe('https://platform.openai.azure.com')
@@ -183,16 +185,16 @@ describe('LLMConfig', () => {
     })
 
     it('falls back to LLM_* constants when botContext settings are empty', () => {
-      new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext(
+      new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(
           { AZURE_OPENAI_API_BASE: '', AZURE_OPENAI_API_VERSION: '' },
           { AZURE_OPENAI_API_KEY: '' }
-        )
-      )
+        ),
+      })
 
       expect(capturedAzureConfig?.apiKey).toBe('fallback-key')
       expect(capturedAzureConfig?.baseURL).toBe('https://fallback.openai.azure.com')
@@ -200,29 +202,29 @@ describe('LLMConfig', () => {
     })
 
     it('botContext takes priority over LLM_* fallbacks', () => {
-      new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext(
+      new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(
           { AZURE_OPENAI_API_BASE: 'https://platform.openai.azure.com' },
           { AZURE_OPENAI_API_KEY: 'platform-key' }
-        )
-      )
+        ),
+      })
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
       expect(capturedAzureConfig?.baseURL).toBe('https://platform.openai.azure.com')
     })
 
     it('sets deployment and timeout', () => {
-      new LLMConfig(
-        5,
-        30000,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      new LLMConfig({
+        maxRetries: 5,
+        timeout: 30000,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
       expect(capturedAzureConfig?.timeout).toBe(30000)
@@ -236,31 +238,37 @@ describe('LLMConfig', () => {
     })
 
     it('uses botContext secret when provided', () => {
-      new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext({}, { AZURE_OPENAI_API_KEY: 'platform-openai-key' })
-      )
+      new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext({}, { AZURE_OPENAI_API_KEY: 'platform-openai-key' }),
+      })
 
       expect(capturedOpenAIConfig?.apiKey).toBe('platform-openai-key')
     })
 
     it('falls back to LLM_API_KEY constant when botContext secret is empty', () => {
-      new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext({}, { AZURE_OPENAI_API_KEY: '' })
-      )
+      new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext({}, { AZURE_OPENAI_API_KEY: '' }),
+      })
 
       expect(capturedOpenAIConfig?.apiKey).toBe('fallback-key')
     })
 
     it('sets timeout and maxRetries', () => {
-      new LLMConfig(5, 30000, 'gpt-4.1-mini', VerbosityLevel.Medium, makeBotContext())
+      new LLMConfig({
+        maxRetries: 5,
+        timeout: 30000,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(capturedOpenAIConfig?.timeout).toBe(30000)
       expect(capturedOpenAIConfig?.maxRetries).toBe(5)
@@ -271,13 +279,13 @@ describe('LLMConfig', () => {
     it('returns version from botContext when provider is azure', () => {
       mockConstants.LLM_PROVIDER = 'azure'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext({ AZURE_OPENAI_API_VERSION: '2026-01-01' })
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext({ AZURE_OPENAI_API_VERSION: '2026-01-01' }),
+      })
 
       expect(config.getApiVersion()).toBe('2026-01-01')
     })
@@ -285,13 +293,13 @@ describe('LLMConfig', () => {
     it('falls back to LLM_AZURE_API_VERSION constant when botContext version is empty', () => {
       mockConstants.LLM_PROVIDER = 'azure'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext({ AZURE_OPENAI_API_VERSION: '' })
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext({ AZURE_OPENAI_API_VERSION: '' }),
+      })
 
       expect(config.getApiVersion()).toBe('2025-01-01-preview')
     })
@@ -299,13 +307,13 @@ describe('LLMConfig', () => {
     it('returns NOT_API_VERSION_FOR_OPENAI_PROVIDER when provider is openai', () => {
       mockConstants.LLM_PROVIDER = 'openai'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       expect(config.getApiVersion()).toBe('NOT_API_VERSION_FOR_OPENAI_PROVIDER')
     })
@@ -315,13 +323,13 @@ describe('LLMConfig', () => {
     it('resolves model from the configured provider', async () => {
       mockConstants.LLM_PROVIDER = 'azure'
 
-      const config = new LLMConfig(
-        DEFAULT_MAX_RETRIES,
-        DEFAULT_TIMEOUT,
-        'gpt-4.1-mini',
-        VerbosityLevel.Medium,
-        makeBotContext()
-      )
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.Medium,
+        botContext: makeBotContext(),
+      })
 
       await expect(config.getModel()).resolves.toBe(mockResolvedModel)
       expect(config.modelProvider.getModel).toHaveBeenCalledWith('gpt-4.1-mini')

@@ -2,8 +2,15 @@ export const HUBTYPE_API_URL =
   process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 
 // LLM Configuration (provider-agnostic; set LLM_PROVIDER=azure|openai)
-export const LLM_PROVIDER: 'openai' | 'azure' =
-  (process.env.LLM_PROVIDER as 'openai' | 'azure') || 'azure'
+export const LLM_PROVIDERS = {
+  AZURE: 'azure',
+  OPENAI: 'openai',
+} as const
+
+export type LLMProviderType = (typeof LLM_PROVIDERS)[keyof typeof LLM_PROVIDERS]
+
+export const LLM_PROVIDER: LLMProviderType =
+  (process.env.LLM_PROVIDER as LLMProviderType) || LLM_PROVIDERS.AZURE
 export const LLM_API_KEY = process.env.LLM_API_KEY // pragma: allowlist secret
 export const LLM_API_URL = process.env.LLM_API_URL
 export const LLM_AZURE_API_VERSION =
