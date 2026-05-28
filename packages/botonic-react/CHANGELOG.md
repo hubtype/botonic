@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.46.x] - 2026-mm-dd
+## [0.49.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,12 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.49.0] - 2026-05-28
+
+### Added
+
+- [PR-3216](https://github.com/hubtype/botonic/pull/3216): Add new event in system debug trace for AI Agent Router.
 
 ## [0.46.0] - 2026-03-17
 

@@ -65,7 +65,7 @@ export class LLMConfig {
       return this.getOpenAIClient()
     }
 
-    return this.getAzureClient()
+    return this.getAzureOpenAiClient()
   }
 
   private getOpenAIClient(): OpenAI {
@@ -77,14 +77,16 @@ export class LLMConfig {
     })
   }
 
-  private getAzureClient(): AzureOpenAI {
+  private getAzureOpenAiClient(): AzureOpenAI {
+    const baseURL = `${this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL}openai/`
+
     return new AzureOpenAI({
       apiKey: this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       apiVersion:
         this.botContext.settings.AZURE_OPENAI_API_VERSION ||
         LLM_AZURE_API_VERSION,
       deployment: this.modelName,
-      baseURL: this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL,
+      baseURL,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,

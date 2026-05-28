@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.47.x] - 2026-mm-dd
+## [0.49.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,19 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+  
+## [0.49.0] - 2026-05-28
+
+### Added
+
+- [PR-3213](https://github.com/hubtype/botonic/pull/3213): Add AI Agent Router that can do handoff to AI Specialist agents.
+- [PR-3225](https://github.com/hubtype/botonic/pull/3225): Rename env vars used for local development, and use Azure OpenAI credentials from botContext in production.
+
+## [0.48.1] - 2026-05-18
+
+## Fixed
+
+- [PR-3215](https://github.com/hubtype/botonic/pull/3215): Set toolChoice as undefined only for guardrail.
 
 ## [0.47.2] - 2026-04-15
 
