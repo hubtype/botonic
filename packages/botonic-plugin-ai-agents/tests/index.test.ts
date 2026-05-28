@@ -82,11 +82,11 @@ jest.mock('@openai/agents', () => {
 
 // Mock LLMConfig to avoid actual OpenAI/Azure setup
 jest.mock('../src/llm-config', () => ({
-  LLMConfig: jest.fn().mockImplementation((_maxRetries, _timeout, model) => ({
-    modelName: model,
+  LLMConfig: jest.fn().mockImplementation((args: any) => ({
+    modelName: args.modelName,
     modelSettings: { temperature: 0 },
     modelProvider: {},
-    getModel: jest.fn(async () => ({ id: `resolved-${model}` })),
+    getModel: jest.fn(async () => ({ id: `resolved-${args.modelName}` })),
   })),
 }))
 
@@ -407,10 +407,12 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
       modelSettings: { temperature: 0 },
     })
     expect(MockedLLMConfig).toHaveBeenCalledWith(
-      2,
-      16000,
-      'gpt-4.1-mini',
-      VerbosityLevel.High
+      expect.objectContaining({
+        maxRetries: 2,
+        timeout: 16000,
+        modelName: 'gpt-4.1-mini',
+        verbosity: VerbosityLevel.High,
+      })
     )
     expect(routerAgentArgs.inputGuardrailRules).toEqual([
       {
