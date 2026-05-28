@@ -1,4 +1,4 @@
-import type { VerbosityLevel } from '@botonic/core'
+import type { BotContext, VerbosityLevel } from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -7,31 +7,43 @@ import {
 } from '@openai/agents'
 import OpenAI, { AzureOpenAI } from 'openai'
 import {
-  AZURE_OPENAI_API_BASE,
-  AZURE_OPENAI_API_KEY,
-  AZURE_OPENAI_API_VERSION,
   isProd,
-  OPENAI_API_KEY,
-  OPENAI_MODEL,
-  OPENAI_PROVIDER,
+  LLM_API_KEY,
+  LLM_API_URL,
+  LLM_AZURE_API_VERSION,
+  LLM_OPENAI_MODEL,
+  LLM_PROVIDER,
+  LLM_PROVIDERS,
 } from './constants'
+
+export interface LLMConfigParams {
+  maxRetries: number
+  timeout: number
+  modelName: string
+  verbosity: VerbosityLevel
+  botContext: BotContext
+}
 
 export class LLMConfig {
   private readonly maxRetries: number
   private readonly timeout: number
+  private readonly botContext: BotContext
   public readonly modelName: string
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
 
-  constructor(
-    maxRetries: number,
-    timeout: number,
-    modelName: string,
-    verbosity: VerbosityLevel
-  ) {
+  constructor({
+    maxRetries,
+    timeout,
+    modelName,
+    verbosity,
+    botContext,
+  }: LLMConfigParams) {
     this.maxRetries = maxRetries
     this.timeout = timeout
-    this.modelName = OPENAI_PROVIDER === 'openai' ? OPENAI_MODEL : modelName
+    this.botContext = botContext
+    this.modelName =
+      LLM_PROVIDER === LLM_PROVIDERS.OPENAI ? LLM_OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
   }
@@ -49,7 +61,7 @@ export class LLMConfig {
   }
 
   private getClient(): OpenAI | AzureOpenAI {
-    if (OPENAI_PROVIDER === 'openai') {
+    if (LLM_PROVIDER === LLM_PROVIDERS.OPENAI) {
       return this.getOpenAIClient()
     }
 
@@ -58,7 +70,7 @@ export class LLMConfig {
 
   private getOpenAIClient(): OpenAI {
     return new OpenAI({
-      apiKey: OPENAI_API_KEY,
+      apiKey: this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -67,10 +79,12 @@ export class LLMConfig {
 
   private getAzureClient(): AzureOpenAI {
     return new AzureOpenAI({
-      apiKey: AZURE_OPENAI_API_KEY,
-      apiVersion: AZURE_OPENAI_API_VERSION,
+      apiKey: this.botContext.secrets.AZURE_OPENAI_API_KEY || LLM_API_KEY,
+      apiVersion:
+        this.botContext.settings.AZURE_OPENAI_API_VERSION ||
+        LLM_AZURE_API_VERSION,
       deployment: this.modelName,
-      baseURL: AZURE_OPENAI_API_BASE,
+      baseURL: this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
@@ -98,12 +112,13 @@ export class LLMConfig {
 
     throw new Error(`Unsupported model: ${model}`)
   }
-}
 
-export function getApiVersion(): string {
-  // Return NOT_API_VERSION_FOR_OPENAI_PROVIDER if OPENAI_PROVIDER
-  // is not azure to avoid error when tracking in llm_runs endpoint
-  return OPENAI_PROVIDER === 'azure'
-    ? AZURE_OPENAI_API_VERSION
-    : 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+  getApiVersion(): string {
+    if (LLM_PROVIDER !== LLM_PROVIDERS.AZURE) {
+      return 'NOT_API_VERSION_FOR_OPENAI_PROVIDER'
+    }
+    return (
+      this.botContext.settings.AZURE_OPENAI_API_VERSION || LLM_AZURE_API_VERSION
+    )
+  }
 }

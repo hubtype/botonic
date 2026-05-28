@@ -1,7 +1,7 @@
 import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
 import { Agent, type AgentOutputType, type ModelSettings } from '@openai/agents'
 import type { z } from 'zod'
-import { OPENAI_PROVIDER } from '../constants'
+import { LLM_PROVIDER } from '../constants'
 import type { DebugLogger } from '../debug-logger'
 import type { GuardrailTrackingContext } from '../guardrails/input'
 import type { LLMConfig } from '../llm-config'
@@ -74,7 +74,7 @@ export class SpecialistAgent<
     const inputGuardrails = await specialistAgent.getInputGuardrails()
 
     specialistAgent.logger.logModelSettings({
-      provider: OPENAI_PROVIDER,
+      provider: LLM_PROVIDER,
       model,
       reasoning: modelSettings.reasoning as { effort: string } | undefined,
       text: modelSettings.text as { verbosity: string } | undefined,

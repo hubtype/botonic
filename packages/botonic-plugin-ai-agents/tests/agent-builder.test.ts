@@ -45,8 +45,9 @@ jest.mock('../src/tools', () => ({
 
 // Mock constants - can be overridden per test
 const mockConstants = {
-  OPENAI_PROVIDER: 'azure' as 'openai' | 'azure',
-  OPENAI_MODEL: 'gpt-4.1-mini',
+  LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure' },
+  LLM_PROVIDER: 'azure' as 'openai' | 'azure',
+  LLM_OPENAI_MODEL: 'gpt-4.1-mini',
 }
 
 jest.mock('../src/constants', () => mockConstants)
@@ -747,13 +748,13 @@ describe('WorkerAgent - OpenAI Provider', () => {
       .mockReturnValue('2024-01-01T00:00:00.000Z')
 
     // Set provider to 'openai' for these tests
-    mockConstants.OPENAI_PROVIDER = 'openai'
+    mockConstants.LLM_PROVIDER = 'openai'
   })
 
   afterEach(() => {
     jest.restoreAllMocks()
     // Reset to default azure provider
-    mockConstants.OPENAI_PROVIDER = 'azure'
+    mockConstants.LLM_PROVIDER = 'azure'
   })
 
   it('should set reasoning setting with effort: none for openai provider', async () => {
