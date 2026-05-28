@@ -57,7 +57,10 @@ jest.mock('../src/constants', () => {
 })
 
 function makeBotContext(
-  settings: Partial<{ AZURE_OPENAI_API_BASE: string; AZURE_OPENAI_API_VERSION: string }> = {},
+  settings: Partial<{
+    AZURE_OPENAI_API_BASE: string
+    AZURE_OPENAI_API_VERSION: string
+  }> = {},
   secrets: Partial<{ AZURE_OPENAI_API_KEY: string }> = {}
 ) {
   return createTestBotContext({
@@ -180,7 +183,9 @@ describe('LLMConfig', () => {
       })
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig?.baseURL).toBe('https://platform.openai.azure.com')
+      expect(capturedAzureConfig?.baseURL).toBe(
+        'https://platform.openai.azure.com'
+      )
       expect(capturedAzureConfig?.apiVersion).toBe('2026-01-01')
     })
 
@@ -197,7 +202,9 @@ describe('LLMConfig', () => {
       })
 
       expect(capturedAzureConfig?.apiKey).toBe('fallback-key')
-      expect(capturedAzureConfig?.baseURL).toBe('https://fallback.openai.azure.com')
+      expect(capturedAzureConfig?.baseURL).toBe(
+        'https://fallback.openai.azure.com'
+      )
       expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
     })
 
@@ -214,7 +221,9 @@ describe('LLMConfig', () => {
       })
 
       expect(capturedAzureConfig?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig?.baseURL).toBe('https://platform.openai.azure.com')
+      expect(capturedAzureConfig?.baseURL).toBe(
+        'https://platform.openai.azure.com'
+      )
     })
 
     it('sets deployment and timeout', () => {
@@ -243,7 +252,10 @@ describe('LLMConfig', () => {
         timeout: DEFAULT_TIMEOUT,
         modelName: 'gpt-4.1-mini',
         verbosity: VerbosityLevel.Medium,
-        botContext: makeBotContext({}, { AZURE_OPENAI_API_KEY: 'platform-openai-key' }),
+        botContext: makeBotContext(
+          {},
+          { AZURE_OPENAI_API_KEY: 'platform-openai-key' }
+        ),
       })
 
       expect(capturedOpenAIConfig?.apiKey).toBe('platform-openai-key')

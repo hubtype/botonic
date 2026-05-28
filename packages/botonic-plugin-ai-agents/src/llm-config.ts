@@ -84,8 +84,7 @@ export class LLMConfig {
         this.botContext.settings.AZURE_OPENAI_API_VERSION ||
         LLM_AZURE_API_VERSION,
       deployment: this.modelName,
-      baseURL:
-        this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL,
+      baseURL: this.botContext.settings.AZURE_OPENAI_API_BASE || LLM_API_URL,
       timeout: this.timeout,
       maxRetries: this.maxRetries,
       dangerouslyAllowBrowser: !isProd,
