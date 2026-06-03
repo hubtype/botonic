@@ -9,7 +9,7 @@ import {
   RunToolCallItem,
   RunToolCallOutputItem,
 } from '@openai/agents'
-import { isProd } from '../constants'
+import { isProd, LLM_PROVIDERS } from '../constants'
 import type { DebugLogger } from '../debug-logger'
 import type { LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
@@ -238,6 +238,9 @@ export abstract class BaseRunner<
     endTime: number
   ): Promise<void> {
     if (!isProd) {
+      return
+    }
+    if (this.llmConfig.getProviderName() === LLM_PROVIDERS.LITELLM) {
       return
     }
     const rawResponses = result.rawResponses ?? []

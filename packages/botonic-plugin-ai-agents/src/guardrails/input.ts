@@ -6,7 +6,7 @@ import {
   type UserMessageItem,
 } from '@openai/agents'
 import { z } from 'zod'
-import { isProd } from '../constants'
+import { isProd, LLM_PROVIDERS } from '../constants'
 import type { LLMConfig } from '../llm-config'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from '../services/types'
@@ -113,6 +113,9 @@ async function sendGuardrailLlmRunTracking(
   endTime: number
 ): Promise<void> {
   if (!isProd) {
+    return
+  }
+  if (llmConfig.getProviderName() === LLM_PROVIDERS.LITELLM) {
     return
   }
   const rawResponses = result.rawResponses ?? []
