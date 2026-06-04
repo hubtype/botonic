@@ -17,7 +17,7 @@ export interface LlmRunData {
   deployment_name: string
   model_name: string
   feature: string
-  api_version: string
+  api_version?: string
   num_prompt_tokens: number
   num_completion_tokens: number
   duration_in_milliseconds: number

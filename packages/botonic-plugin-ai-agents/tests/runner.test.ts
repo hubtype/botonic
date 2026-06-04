@@ -117,6 +117,7 @@ const mockConstants = {
   OPENAI_MODEL: 'gpt-4.1-mini',
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
   isProd: false,
+  LLM_PROVIDERS: { AZURE: 'azure', OPENAI: 'openai', LITELLM: 'litellm' },
 }
 
 jest.mock('../src/constants', () => mockConstants)
@@ -151,6 +152,7 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
     modelProvider: { provider },
     getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
     getApiVersion: jest.fn().mockReturnValue('test-api-version'),
+    getProviderName: jest.fn().mockReturnValue(provider),
   } as unknown as LLMConfig
 }
 
