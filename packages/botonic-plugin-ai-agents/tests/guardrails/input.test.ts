@@ -43,6 +43,7 @@ jest.mock('../../src/constants', () => ({
   isProd: false,
   OPENAI_PROVIDER: 'azure',
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
+  LLM_PROVIDERS: { AZURE: 'azure', OPENAI: 'openai', LITELLM: 'litellm' },
 }))
 
 describe('createInputGuardrails', () => {
@@ -94,6 +95,7 @@ describe('createInputGuardrails', () => {
     modelProvider: {},
     getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
     getApiVersion: jest.fn().mockReturnValue('test-api-version'),
+    getProviderName: jest.fn().mockReturnValue('azure'),
   } as unknown as LLMConfig
 
   const mockTrackingContext: GuardrailTrackingContext = {

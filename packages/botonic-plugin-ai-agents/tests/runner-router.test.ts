@@ -15,7 +15,7 @@ jest.mock('../src/services/hubtype-api-client', () => ({
 
 jest.mock('../src/constants', () => ({
   LLM_PROVIDER: 'azure',
-  LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure' },
+  LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure', LITELLM: 'litellm' },
   LLM_OPENAI_MODEL: 'gpt-4.1-mini',
   LLM_AZURE_API_VERSION: '2025-01-01-preview',
   get isProd() {
@@ -63,6 +63,7 @@ const mockLlmConfig = {
   modelSettings: { temperature: 0 },
   modelProvider: {},
   getApiVersion: jest.fn().mockReturnValue('test-api-version'),
+  getProviderName: jest.fn().mockReturnValue('azure'),
 } as unknown as LLMConfig
 
 const mockAgent = {
