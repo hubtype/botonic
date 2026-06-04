@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3228](https://github.com/hubtype/botonic/pull/3228): Add LiteLLM provider support, allowing AI agents to route LLM calls through a LiteLLM proxy.
+
 ### Changed
 
 ### Fixed
