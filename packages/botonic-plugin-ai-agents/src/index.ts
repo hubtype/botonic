@@ -204,14 +204,21 @@ export default class BotonicPluginAiAgents<
 
     const specialistsAgents = await Promise.all(
       specialists.map(async specialistData => {
+        // If the forceToolNameOverride is set, we force this override for all specialists
+        const forceToolNameOverride = aiAgentArgs.forceToolNameOverride
+        const aiAgentSpecialistArgs = {
+          ...specialistData,
+          forceToolNameOverride,
+        }
         const { agent } = await this.getSpecialistAgentAndTools(
           botContext,
-          specialistData,
+          aiAgentSpecialistArgs,
           aiAgentArgs.outputMessagesSchemas || [],
           authToken,
           inferenceId,
           llmConfig
         )
+
         return handoff(agent, {
           toolNameOverride: specialistData.name,
           toolDescriptionOverride: specialistData.description,
@@ -297,6 +304,7 @@ export default class BotonicPluginAiAgents<
         authToken,
         inferenceId,
       },
+      forceToolNameOverride: aiAgentArgs.forceToolNameOverride,
     })
     const specialistAgent = specialist.getAgent()
 

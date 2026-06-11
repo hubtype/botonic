@@ -29,6 +29,7 @@ interface SpecialistAgentOptions<
   llmConfig: LLMConfig
   logger: DebugLogger
   guardrailTrackingContext: GuardrailTrackingContext
+  forceToolNameOverride?: string
 }
 
 export class SpecialistAgent<
@@ -38,6 +39,7 @@ export class SpecialistAgent<
   private tools: Tool<TPlugins, TExtraData>[]
   private logger: DebugLogger
   private agent!: AIAgent<TPlugins, TExtraData>
+  private forceToolNameOverride?: string
 
   private constructor(options: SpecialistAgentOptions<TPlugins, TExtraData>) {
     super({
@@ -55,6 +57,7 @@ export class SpecialistAgent<
     )
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.logger = options.logger
+    this.forceToolNameOverride = options.forceToolNameOverride
   }
 
   static async create<
@@ -108,8 +111,11 @@ export class SpecialistAgent<
     hasRetrieveKnowledge: boolean
   ): ModelSettings {
     const modelSettings = this.getAgentModelSettings()
-    if (hasRetrieveKnowledge) {
+    if (hasRetrieveKnowledge && !this.forceToolNameOverride) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
+    }
+    if (this.forceToolNameOverride) {
+      modelSettings.toolChoice = this.forceToolNameOverride
     }
     return modelSettings
   }

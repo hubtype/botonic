@@ -142,6 +142,7 @@ export type AiAgentBaseArgs = {
   inputGuardrailRules?: GuardrailRule[]
   previousHubtypeMessages?: HubtypeAssistantMessage[]
   outputMessagesSchemas?: z.ZodObject<any>[]
+  forceToolNameOverride?: string
 }
 
 export interface AiAgentSpecialistArgs extends AiAgentBaseArgs {
