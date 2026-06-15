@@ -134,7 +134,7 @@ export class CaptureUserInputApi {
       flowNodeContentId,
       flowNodeIsMeaningful: false,
       fieldName: captureUserInputNode.content.field_name,
-      userInput: this.request.input.data as string,
+      userInput: this.textOrTranscript,
       captureSuccess,
       messageId: this.request.input.message_id,
     }

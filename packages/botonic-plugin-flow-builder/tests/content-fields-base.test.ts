@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
-import type { FlowText } from '../src/content-fields/flow-text'
+import { FlowText } from '../src/content-fields/flow-text'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
@@ -130,6 +130,38 @@ describe('ContentFieldsBase - replaceVariables', () => {
       expect(renderedMessage.props.children[0]).toBe(
         'This text message contains buttons and replaces the variable 0'
       )
+    })
+
+    test('should replace multiple variables in the same text', () => {
+      const request = createRequest({
+        input: { data: 'test', type: INPUT.TEXT },
+        extraData: {
+          email: 'ada@example.com',
+          name: 'Ada',
+        },
+      })
+      const flowText = new FlowText('test')
+
+      expect(
+        flowText.replaceVariables(
+          'Hola {name} tu email sigue siendo {email}',
+          request
+        )
+      ).toBe('Hola Ada tu email sigue siendo ada@example.com')
+    })
+
+    test('should not match nested opening braces as variables', () => {
+      const request = createRequest({
+        input: { data: 'test', type: INPUT.TEXT },
+        extraData: {
+          name: 'Ada',
+        },
+      })
+      const flowText = new FlowText('test')
+
+      expect(
+        flowText.replaceVariables('{{|{{|{{|{{| Hola {name}', request)
+      ).toBe('{{|{{|{{|{{| Hola Ada')
     })
   })
 

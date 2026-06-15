@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.49.x] - 2026-mm-dd
+## [0.50.x] - 2026-mm-dd
 
 ### Added
 
@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
   
+## [0.50.1] - 2026-06-15
+
+### Fixed
+
+- [PR-3234](https://github.com/hubtype/botonic/pull/3234): Update variable pattern and improve variable replacement logic.
+
 ## [0.49.0] - 2026-05-28
 
 ### Added
