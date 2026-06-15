@@ -63,25 +63,19 @@ export abstract class ContentFieldsBase {
   }
 
   replaceVariables(text: string, botContext: BotContext): string {
-    const matches = text.match(VARIABLE_PATTERN_GLOBAL)
-
-    let replacedText = text
-    if (matches && botContext) {
-      matches.forEach(match => {
+    if (botContext) {
+      return text.replace(VARIABLE_PATTERN_GLOBAL, match => {
         // remove \\ ( escape for _ ) added by text node with markdown
         const keyPath = match.slice(1, -1).replaceAll('\\', '')
         const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
           ? match
           : this.getValueFromKeyPath(botContext, keyPath)
-        // TODO In local if change variable and render multiple times the value is always the last update
-        replacedText = replacedText.replace(
-          match,
-          this.isValidType(botVariable) ? botVariable : match
-        )
+
+        return this.isValidType(botVariable) ? String(botVariable) : match
       })
     }
 
-    return replacedText
+    return text
   }
 
   getValueFromKeyPath(botContext: BotContext, keyPath: string): any {
