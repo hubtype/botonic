@@ -63,19 +63,19 @@ export abstract class ContentFieldsBase {
   }
 
   replaceVariables(text: string, botContext: BotContext): string {
-    if (botContext) {
-      return text.replace(VARIABLE_PATTERN_GLOBAL, match => {
-        // remove \\ ( escape for _ ) added by text node with markdown
-        const keyPath = match.slice(1, -1).replaceAll('\\', '')
-        const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
-          ? match
-          : this.getValueFromKeyPath(botContext, keyPath)
-
-        return this.isValidType(botVariable) ? String(botVariable) : match
-      })
+    if (!botContext) {
+      return text
     }
 
-    return text
+    return text.replace(VARIABLE_PATTERN_GLOBAL, match => {
+      // remove \\ ( escape for _ ) added by text node with markdown
+      const keyPath = match.slice(1, -1).replaceAll('\\', '')
+      const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
+        ? match
+        : this.getValueFromKeyPath(botContext, keyPath)
+
+      return this.isValidType(botVariable) ? String(botVariable) : match
+    })
   }
 
   getValueFromKeyPath(botContext: BotContext, keyPath: string): any {
