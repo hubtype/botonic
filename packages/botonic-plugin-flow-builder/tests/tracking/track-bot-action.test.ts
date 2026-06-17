@@ -44,7 +44,7 @@ describe('Track bot action', () => {
         flowNodeId: '019ab4fb-96a1-75fb-83ff-84e9d82eed4b',
         flowNodeIsMeaningful: false,
         flowThreadId: expect.anything(),
-        payload: 'WELCOME_PAYLOAD|{}',
+        payload: 'WELCOME_PAYLOAD|{"contentID":"BOT_ACTION"}',
       }
     )
   })

@@ -280,7 +280,10 @@ export * from './action'
 export { AGENT_RATING_PAYLOAD, EMPTY_PAYLOAD } from './constants'
 export * from './content-fields'
 export { HtBotActionNode } from './content-fields/hubtype-fields'
-export { trackFlowContent } from './tracking'
+export {
+  getCommonFlowContentEventArgsForContentId,
+  trackFlowContent,
+} from './tracking'
 export {
   BotonicPluginFlowBuilderOptions,
   ContentFilter,

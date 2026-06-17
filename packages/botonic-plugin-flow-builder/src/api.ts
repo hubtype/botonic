@@ -24,7 +24,11 @@ import {
   type HtRatingNode,
   type HtSmartIntentNode,
 } from './content-fields/hubtype-fields'
-import { type FlowBuilderApiOptions, ProcessEnvNodeEnvs } from './types'
+import {
+  type FlowBuilderApiOptions,
+  type PayloadParamsBase,
+  ProcessEnvNodeEnvs,
+} from './types'
 import { FlowLocale } from './utils/flow-locale'
 
 export class FlowBuilderApi {
@@ -212,13 +216,20 @@ export class FlowBuilderApi {
       botActionNode.content.payload_params || '{}'
     )
 
+    const contentID = botActionNode.code
+
     const followUpContentID = this.getFollowUpContentID(
       botActionNode.follow_up?.id
     )
 
+    const payloadParams: PayloadParamsBase = {
+      contentID,
+      followUpContentID,
+    }
+
     const payloadJson = JSON.stringify({
       ...customParams,
-      followUpContentID,
+      ...payloadParams,
     })
     return `${payloadNode.content.payload}${SEPARATOR}${payloadJson}`
   }

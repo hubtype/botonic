@@ -106,6 +106,7 @@ export interface SmartIntentResponse {
 }
 
 export interface PayloadParamsBase {
+  contentID: string
   followUpContentID?: string
 }
 

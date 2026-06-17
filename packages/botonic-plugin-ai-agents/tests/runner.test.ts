@@ -85,6 +85,13 @@ jest.mock('@openai/agents', () => {
     }
   }
 
+  class MockRunContext {
+    context: unknown
+    constructor(context: unknown) {
+      this.context = context
+    }
+  }
+
   const MockRunner = jest.fn().mockImplementation((config: any) => {
     capturedRunnerConfig = config
     capturedRunnerConfigs.push(config)
@@ -96,6 +103,7 @@ jest.mock('@openai/agents', () => {
   return {
     Agent: MockAgent,
     Runner: MockRunner,
+    RunContext: MockRunContext,
     RunToolCallItem: MockRunToolCallItem,
     RunToolCallOutputItem: MockRunToolCallOutputItem,
     InputGuardrailTripwireTriggered: MockInputGuardrailTripwireTriggered,
@@ -164,6 +172,7 @@ function buildMockAgent(
     name: 'TestAgent',
     tools: includeRetrieveKnowledge ? [mockRetrieveKnowledge] : [],
     modelSettings,
+    getSystemPrompt: jest.fn().mockResolvedValue('test system prompt'),
   } as unknown as AIAgent<any, any>
 }
 
