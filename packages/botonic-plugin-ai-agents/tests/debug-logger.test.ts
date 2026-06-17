@@ -16,7 +16,11 @@ describe('DebugLogger', () => {
     it('should return EnabledDebugLogger when enableDebug is true', () => {
       const logger = createDebugLogger(true)
 
-      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
+      logger.logRunnerStart(
+        'gpt-4.1-mini',
+        { reasoning: { effort: 'none' } },
+        'test prompt'
+      )
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] === Runner Execution Start ==='
@@ -27,12 +31,19 @@ describe('DebugLogger', () => {
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] Model Settings: {"reasoning":{"effort":"none"}}'
       )
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Prompt: test prompt'
+      )
     })
 
     it('should return DisabledDebugLogger when enableDebug is false', () => {
       const logger = createDebugLogger(false)
 
-      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
+      logger.logRunnerStart(
+        'gpt-4.1-mini',
+        { reasoning: { effort: 'none' } },
+        'test prompt'
+      )
 
       expect(consoleSpy).not.toHaveBeenCalled()
     })
@@ -88,7 +99,8 @@ describe('DebugLogger', () => {
         inputGuardrailRules: [],
       }
 
-      logger.logAgentDebugInfo(aiAgentArgs, ['tool1'], [])
+      const messages = [{ role: 'user', content: 'Hello' }]
+      logger.logAgentDebugInfo(aiAgentArgs, ['tool1'], messages as any)
 
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] === AI Agent Debug Info ==='
@@ -99,7 +111,9 @@ describe('DebugLogger', () => {
       expect(consoleSpy).toHaveBeenCalledWith(
         '[BotonicPluginAiAgents] Active Tools: ["tool1"]'
       )
-      expect(consoleSpy).toHaveBeenCalledWith('Test instructions')
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[BotonicPluginAiAgents] Messages: [\n  {\n    "role": "user",\n    "content": "Hello"\n  }\n]'
+      )
     })
 
     it('should log runner result with execution time', () => {
@@ -236,7 +250,11 @@ describe('DebugLogger', () => {
         model: undefined,
         hasRetrieveKnowledge: false,
       })
-      logger.logRunnerStart('gpt-4.1-mini', { reasoning: { effort: 'none' } })
+      logger.logRunnerStart(
+        'gpt-4.1-mini',
+        { reasoning: { effort: 'none' } },
+        'test prompt'
+      )
       logger.logRunResult({} as any, Date.now())
       logger.logGuardrailTriggered()
       logger.logRunnerError(Date.now(), new Error())

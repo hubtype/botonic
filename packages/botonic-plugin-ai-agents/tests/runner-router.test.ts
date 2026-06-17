@@ -32,6 +32,13 @@ jest.mock('@openai/agents', () => {
     }
   }
 
+  class MockRunContext {
+    context: unknown
+    constructor(context: unknown) {
+      this.context = context
+    }
+  }
+
   const MockRunner = jest.fn().mockImplementation((config: any) => {
     capturedRunnerConfig = config
     return {
@@ -41,6 +48,7 @@ jest.mock('@openai/agents', () => {
 
   return {
     Runner: MockRunner,
+    RunContext: MockRunContext,
     InputGuardrailTripwireTriggered: MockInputGuardrailTripwireTriggered,
   }
 })
@@ -70,6 +78,7 @@ const mockAgent = {
   name: 'RouterAgent',
   tools: [],
   modelSettings: { temperature: 0 },
+  getSystemPrompt: jest.fn().mockResolvedValue('test system prompt'),
 } as unknown as AIAgent<any, any>
 
 const mockContext = {
