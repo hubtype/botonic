@@ -34,7 +34,11 @@ export interface DebugLogger {
     messages: AgenticInputMessage[]
   ): void
   logModelSettings(settings: ModelSettingsInfo): void
-  logRunnerStart(model: string, modelSettings: ModelSettings): void
+  logRunnerStart(
+    model: string,
+    modelSettings: ModelSettings,
+    prompt: string
+  ): void
   logRunResult(runResult: RunResult, startTime: number): void
   logGuardrailTriggered(): void
   logRunnerError(startTime: number, error: unknown): void
@@ -76,11 +80,10 @@ class EnabledDebugLogger implements DebugLogger {
       )
     }
     console.log(`${PREFIX} Message History Count: ${messages.length}`)
+    console.log(`${PREFIX} Messages: ${JSON.stringify(messages, null, 2)}`)
     console.log(
       `${PREFIX} Input Guardrail Rules: ${aiAgentArgs.inputGuardrailRules?.length || 0}`
     )
-    console.log(`${PREFIX} Instructions:`)
-    console.log(aiAgentArgs.instructions)
     console.log(`${PREFIX} === End Debug Info ===`)
   }
 
@@ -101,10 +104,15 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(`${PREFIX} === End Model Settings ===`)
   }
 
-  logRunnerStart(model: string, modelSettings: ModelSettings): void {
+  logRunnerStart(
+    model: string,
+    modelSettings: ModelSettings,
+    prompt: string
+  ): void {
     console.log(`${PREFIX} === Runner Execution Start ===`)
     console.log(`${PREFIX} Model: ${model}`)
     console.log(`${PREFIX} Model Settings: ${JSON.stringify(modelSettings)}`)
+    console.log(`${PREFIX} Prompt: ${prompt}`)
   }
 
   logRunResult(runResult: RunResult, startTime: number): void {
@@ -157,14 +165,34 @@ class EnabledDebugLogger implements DebugLogger {
 }
 
 class DisabledDebugLogger implements DebugLogger {
-  logInitialConfig(): void {}
-  logAgentDebugInfo(): void {}
-  logModelSettings(): void {}
-  logRunnerStart(_model: string, _modelSettings: ModelSettings): void {}
-  logRunResult(): void {}
-  logGuardrailTriggered(): void {}
-  logRunnerError(): void {}
-  logToolExecution(): void {}
+  logInitialConfig(): void {
+    return
+  }
+  logAgentDebugInfo(): void {
+    return
+  }
+  logModelSettings(): void {
+    return
+  }
+  logRunnerStart(
+    _model: string,
+    _modelSettings: ModelSettings,
+    _prompt: string
+  ): void {
+    return
+  }
+  logRunResult(): void {
+    return
+  }
+  logGuardrailTriggered(): void {
+    return
+  }
+  logRunnerError(): void {
+    return
+  }
+  logToolExecution(): void {
+    return
+  }
 }
 
 export function createDebugLogger(enableDebug: boolean): DebugLogger {

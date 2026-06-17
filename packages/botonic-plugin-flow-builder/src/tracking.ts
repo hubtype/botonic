@@ -1,4 +1,4 @@
-import { EventAction, type EventFlow } from '@botonic/core'
+import { type BotContext, EventAction, type EventFlow } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
@@ -107,12 +107,12 @@ function getCommonFlowContentEventArgs(
 }
 
 export function getCommonFlowContentEventArgsForContentId(
-  request: ActionRequest,
+  botContext: BotContext,
   id: string
 ): CommonFlowContentEventArgs {
-  const flowBuilderPlugin = getFlowBuilderPlugin(request.plugins)
+  const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
   const cmsApi = flowBuilderPlugin.cmsApi
   const nodeContent = cmsApi.getNodeById<HtNodeWithContent>(id)
 
-  return getCommonFlowContentEventArgs(request, nodeContent)
+  return getCommonFlowContentEventArgs(botContext, nodeContent)
 }

@@ -5,6 +5,7 @@ import type {
 } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
+  RunContext,
   Runner,
   RunToolCallItem,
   RunToolCallOutputItem,
@@ -64,9 +65,12 @@ export abstract class BaseRunner<
   ): Promise<RunResult> {
     const startTime = Date.now()
 
+    const runContext = new RunContext(context)
+    const prompt = (await this.agent.getSystemPrompt(runContext)) ?? ''
     this.logger.logRunnerStart(
       this.llmConfig.modelName,
-      this.llmConfig.modelSettings
+      this.llmConfig.modelSettings,
+      prompt
     )
 
     try {
