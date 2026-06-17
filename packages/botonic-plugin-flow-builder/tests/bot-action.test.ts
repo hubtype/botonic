@@ -16,7 +16,8 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
   const ratingMessageUuid = '578b30eb-d230-4162-8a36-6c7fa18ff0db'
   const botActionUuid = '85dbeb56-81c9-419d-a235-4ebf491b4fc9'
   const ratingPayload = 'rating'
-  const payloadParams = '{"value":1,"followUpContentID":"SORRY"}'
+  const payloadParams =
+    '{"value":1,"contentID":"Rating#1","followUpContentID":"SORRY"}'
   const ratingPayloadWithParams = `${ratingPayload}|${payloadParams}`
 
   test('The button has a payload equal to botActionUuid', async () => {
@@ -62,7 +63,9 @@ describe('The user clicks on a button that is connected to a BotActionNode', () 
       ratingPayloadWithParams
     )
     expect(payloadParams).toEqual(
-      JSON.parse('{"value":1,"followUpContentID":"SORRY"}')
+      JSON.parse(
+        '{"value":1, "contentID":"Rating#1", "followUpContentID":"SORRY"}'
+      )
     )
   })
 })
