@@ -5,6 +5,7 @@ import { FlowCaptureUserInput } from './flow-capture-user-input'
 import { FlowCarousel } from './flow-carousel'
 import { FlowChannelConditional } from './flow-channel-conditional'
 import { FlowCountryConditional } from './flow-country-conditional'
+import { FlowCustomConditionalV2 } from './flow-custom-condition-v2'
 import { FlowCustomConditional } from './flow-custom-conditional'
 import { FlowGoToFlow } from './flow-go-to-flow'
 import { FlowHandoff } from './flow-handoff'
@@ -44,6 +45,7 @@ export {
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
   FlowWhatsappTemplate,
+  FlowCustomConditionalV2,
 }
 
 export type FlowContent =
@@ -66,5 +68,6 @@ export type FlowContent =
   | FlowGoToFlow
   | FlowCaptureUserInput
   | FlowAiAgentRouter
+  | FlowCustomConditionalV2
 
 export { DISABLED_MEMORY_LENGTH }

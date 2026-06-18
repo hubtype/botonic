@@ -19,6 +19,7 @@ export enum HtNodeWithContentType {
   WEBVIEW = 'webview',
   GO_TO_FLOW = 'go-to-flow',
   CAPTURE_USER_INPUT = 'capture-user-input',
+  CUSTOM_CONDITION = 'custom-condition',
 }
 
 export enum HtNodeWithoutContentType {
