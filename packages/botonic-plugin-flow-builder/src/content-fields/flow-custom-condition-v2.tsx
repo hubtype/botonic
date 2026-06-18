@@ -68,11 +68,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
           (variable, condition) =>
             evaluateStringCondition(variable as string, condition)
         )
-        return resolveWithDefaultTarget(
-          match,
-          this.defaultTarget,
-          this.code
-        )
+        return resolveWithDefaultTarget(match, this.defaultTarget, this.code)
       }
       case VariableFormat.Number: {
         const match = findLastMatchingCondition(
@@ -82,11 +78,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
           (variable, condition) =>
             evaluateNumberCondition(variable as number, condition)
         )
-        return resolveWithDefaultTarget(
-          match,
-          this.defaultTarget,
-          this.code
-        )
+        return resolveWithDefaultTarget(match, this.defaultTarget, this.code)
       }
       case VariableFormat.Boolean: {
         const match = findLastMatchingCondition(
