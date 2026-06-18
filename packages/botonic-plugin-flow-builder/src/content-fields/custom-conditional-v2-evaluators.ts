@@ -44,7 +44,8 @@ export const STRING_CONDITION_EVALUATORS: Record<
     variable.startsWith(value),
   [StringConditionOperator.NotStartsWith]: (variable, value) =>
     !variable.startsWith(value),
-  [StringConditionOperator.EndsWith]: (variable, value) => variable.endsWith(value),
+  [StringConditionOperator.EndsWith]: (variable, value) =>
+    variable.endsWith(value),
   [StringConditionOperator.NotEndsWith]: (variable, value) =>
     !variable.endsWith(value),
 }
@@ -54,7 +55,8 @@ export const NUMBER_CONDITION_EVALUATORS: Record<
   NumberEvaluator
 > = {
   [NumberConditionOperator.EqualsTo]: (variable, value) => variable === value,
-  [NumberConditionOperator.NotEqualsTo]: (variable, value) => variable !== value,
+  [NumberConditionOperator.NotEqualsTo]: (variable, value) =>
+    variable !== value,
   [NumberConditionOperator.GreaterThan]: (variable, value) => variable > value,
   [NumberConditionOperator.LessThan]: (variable, value) => variable < value,
   [NumberConditionOperator.GreaterThanOrEqualTo]: (variable, value) =>
