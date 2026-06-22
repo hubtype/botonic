@@ -3,6 +3,7 @@ import type { HtAiAgentRouterNode } from './ai-agent-router'
 import type { HtBotActionNode } from './bot-action'
 import type { HtCaptureUserInputNode } from './capture-user-input'
 import type { HtCarouselNode } from './carousel'
+import type { HtCustomConditionalV2Node } from './custom-conditional-v2'
 // import { HtChannelConditionalNode } from './channel-conditional'
 // import { HtCountryConditionalNode } from './country-conditional'
 // import { HtCustomConditionalNode } from './custom-conditional'
@@ -46,6 +47,7 @@ export type HtNodeWithContent =
   | HtGoToFlow
   | HtWhatsappTemplateNode
   | HtCaptureUserInputNode
+  | HtCustomConditionalV2Node
 // | HtChannelConditionalNode
 // | HtCountryConditionalNode
 // | HtCustomConditionalNode

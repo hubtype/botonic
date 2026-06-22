@@ -10,6 +10,7 @@ import {
   type FlowContent,
   FlowCountryConditional,
   FlowCustomConditional,
+  FlowCustomConditionalV2,
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
@@ -101,6 +102,12 @@ export class FlowFactory {
 
       case HtNodeWithContentType.CAPTURE_USER_INPUT:
         return FlowCaptureUserInput.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.CUSTOM_CONDITION:
+        return FlowCustomConditionalV2.fromHubtypeCMS(
+          hubtypeContent,
+          this.botContext
+        )
 
       default:
         return undefined
