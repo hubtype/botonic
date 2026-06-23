@@ -15,6 +15,7 @@ export class HtEventConditionalCustom extends HtEvent {
   flow_node_is_meaningful: boolean
   conditional_variable: string
   variable_format: string
+  operator: string
 
   constructor(event: EventConditionalCustom, requestData: RequestData) {
     super(event, requestData)
@@ -28,5 +29,6 @@ export class HtEventConditionalCustom extends HtEvent {
     this.conditional_variable = event.conditionalVariable
     this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.variable_format = event.variableFormat
+    this.operator = event.operator
   }
 }

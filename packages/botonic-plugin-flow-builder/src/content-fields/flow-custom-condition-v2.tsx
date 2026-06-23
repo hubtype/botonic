@@ -34,6 +34,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
   public conditions: HtCondition[]
   public defaultTarget: HtNodeLink
   public customResult = ''
+  public operator = ''
 
   static fromHubtypeCMS(
     component: HtCustomConditionalV2Node,
@@ -55,6 +56,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
     const resolved = this.evaluateConditions(botVariable)
 
     this.customResult = resolved.customResult
+    this.operator = resolved.operator
     this.followUp = resolved.target
   }
 
@@ -116,6 +118,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
       flowNodeIsMeaningful: false,
       conditionalVariable: this.customResult,
       variableFormat: this.variableFormat,
+      operator: this.operator,
     }
     const { action, ...eventArgs } = eventCustomConditional
     await trackEvent(botContext, action, eventArgs)

@@ -130,6 +130,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe(expectedResult)
+      expect(customConditional.operator).toBe(operator)
       expect(customConditional.followUp).toEqual(expectedTarget)
     })
 
@@ -153,6 +154,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
+      expect(customConditional.operator).toBe('default')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -236,6 +238,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe(expectedResult)
+      expect(customConditional.operator).toBe(operator)
       expect(customConditional.followUp).toEqual(expectedTarget)
     })
 
@@ -278,7 +281,8 @@ describe('FlowCustomConditionalV2', () => {
         createBotContext({ bagsAdded })
       )
 
-      expect(customConditional.customResult).toBe('0')
+      expect(customConditional.customResult).toBe(`min: ${min} - max: ${max}`)
+      expect(customConditional.operator).toBe(operator)
       expect(customConditional.followUp).toEqual(betweenTarget)
     })
 
@@ -302,6 +306,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
+      expect(customConditional.operator).toBe('default')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -331,6 +336,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('true')
+      expect(customConditional.operator).toBe(BooleanConditionOperator.IsTruthy)
       expect(customConditional.followUp).toEqual(loggedInTarget)
     })
 
@@ -353,6 +359,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('false')
+      expect(customConditional.operator).toBe('false')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
