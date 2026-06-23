@@ -236,14 +236,17 @@ describe('SystemDebugTrace Component', () => {
         action: EventAction.ConditionalCustom,
         conditional_variable: 'user.age',
         variable_format: 'number',
+        operator: 'equalsTo',
       }
 
       const { container } = render(
         <DebugMessage debugEvent={debugEvent} messageId='msg-8' />
       )
 
-      expect(container.textContent).toContain('Custom condition checked')
-      expect(container.textContent).toContain('user.age')
+      const header = container.querySelector('.collapsible > div:first-child')
+      expect(header?.textContent).toContain('Custom condition resolved with:')
+      expect(container.querySelector('.collapsible')).toBeTruthy()
+      expect(container.querySelector('[style*="display: none"]')).toBeTruthy()
     })
 
     test('renders conditional queue status event', () => {
@@ -455,20 +458,24 @@ describe('SystemDebugTrace Component', () => {
       expect(config.title).toBeTruthy()
     })
 
-    test('getConditionalCustomEventConfig returns non-collapsible config', () => {
+    test('getConditionalCustomEventConfig returns collapsible config', () => {
       const data = {
         action: EventAction.ConditionalCustom,
         conditional_variable: 'user.age',
         variable_format: 'number',
+        operator: 'equalsTo',
       }
 
       const config = getConditionalCustomEventConfig(data)
 
       expect(config.action).toBe(EventAction.ConditionalCustom)
-      expect(config.component).toBeNull()
-      expect(config.collapsible).toBe(false)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
+      expect(config.title.props.children).toBe(
+        'Custom condition resolved with:'
+      )
     })
 
     test('getConditionalQueueStatusEventConfig returns non-collapsible config', () => {
