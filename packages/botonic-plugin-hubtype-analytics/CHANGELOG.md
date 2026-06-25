@@ -11,9 +11,11 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.49.x] - 2026-mm-dd
+## [0.51.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3237](https://github.com/hubtype/botonic/pull/3237): Update custom conditional event.
 
 ### Changed
 

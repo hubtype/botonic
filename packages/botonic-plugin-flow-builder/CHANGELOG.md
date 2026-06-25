@@ -10,9 +10,12 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.50.x] - 2026-mm-dd
+## [0.51.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3226](https://github.com/hubtype/botonic/pull/3236): Update custom conditional with new operator attribute.
+- [PR-3237](https://github.com/hubtype/botonic/pull/3237): Update operator for custom conditional event.
 
 ### Changed
 
