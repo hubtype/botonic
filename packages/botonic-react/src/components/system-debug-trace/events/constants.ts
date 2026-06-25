@@ -27,7 +27,7 @@ export const LABELS = {
   AGENTS_AVAILABLE: 'Agents available',
   OPERATOR: 'Operator',
   TARGET: 'Target',
-  VARIABLE_FORMAT: 'Variable format',
+  TYPE: 'Type',
   AVAILABLE_TRANSFERS: 'Available transfers',
   SPECIALISTS_AVAILABLE: 'Specialists available',
   NO_TRANSFER: 'No transfer',

@@ -19,6 +19,10 @@ export interface ConditionalCustomDebugEvent {
 export const ConditionalCustom = (props: ConditionalCustomDebugEvent) => {
   return (
     <>
+      <StyledDebugDetail>
+        <StyledDebugLabel>{LABELS.TYPE}</StyledDebugLabel>
+        <StyledDebugValue>{props.variable_format}</StyledDebugValue>
+      </StyledDebugDetail>
       {props.operator ? (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.OPERATOR}</StyledDebugLabel>
@@ -28,10 +32,6 @@ export const ConditionalCustom = (props: ConditionalCustomDebugEvent) => {
       <StyledDebugDetail>
         <StyledDebugLabel>{LABELS.TARGET}</StyledDebugLabel>
         <StyledDebugValue>{props.conditional_variable}</StyledDebugValue>
-      </StyledDebugDetail>
-      <StyledDebugDetail>
-        <StyledDebugLabel>{LABELS.VARIABLE_FORMAT}</StyledDebugLabel>
-        <StyledDebugValue>{props.variable_format}</StyledDebugValue>
       </StyledDebugDetail>
     </>
   )
