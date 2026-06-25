@@ -6,8 +6,17 @@ import {
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
-} from '../tracking'
-import { ContentFieldsBase } from './content-fields-base'
+} from '../../tracking'
+import { ContentFieldsBase } from '../content-fields-base'
+import {
+  type HtBooleanCondition,
+  type HtCondition,
+  type HtCustomConditionalV2Node,
+  type HtNodeLink,
+  type HtNumberCondition,
+  type HtStringCondition,
+  VariableFormat,
+} from '../hubtype-fields'
 import {
   evaluateBooleanCondition,
   evaluateNumberCondition,
@@ -18,15 +27,6 @@ import {
   findLastMatchingCondition,
   resolveWithDefaultTarget,
 } from './custom-conditional-v2-resolver'
-import {
-  type HtBooleanCondition,
-  type HtCondition,
-  type HtCustomConditionalV2Node,
-  type HtNodeLink,
-  type HtNumberCondition,
-  type HtStringCondition,
-  VariableFormat,
-} from './hubtype-fields'
 
 export class FlowCustomConditionalV2 extends ContentFieldsBase {
   public variableFormat: VariableFormat
@@ -34,6 +34,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
   public conditions: HtCondition[]
   public defaultTarget: HtNodeLink
   public customResult = ''
+  public resolvedOperator = ''
 
   static fromHubtypeCMS(
     component: HtCustomConditionalV2Node,
@@ -55,6 +56,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
     const resolved = this.evaluateConditions(botVariable)
 
     this.customResult = resolved.customResult
+    this.resolvedOperator = resolved.operator
     this.followUp = resolved.target
   }
 
@@ -116,6 +118,7 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
       flowNodeIsMeaningful: false,
       conditionalVariable: this.customResult,
       variableFormat: this.variableFormat,
+      operator: this.resolvedOperator,
     }
     const { action, ...eventArgs } = eventCustomConditional
     await trackEvent(botContext, action, eventArgs)

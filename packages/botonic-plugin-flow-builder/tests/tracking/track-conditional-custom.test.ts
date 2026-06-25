@@ -50,6 +50,7 @@ describe('Track conditional custom', () => {
         flowThreadId: 'testFlowThreadId',
         flowNodeIsMeaningful: false,
         variableFormat: 'string',
+        operator: '',
       }
     )
     expect(trackEventMock).toHaveBeenNthCalledWith(

@@ -126,6 +126,7 @@ export const DEBUG_SYSTEM_MESSAGES = {
     action: EventAction.ConditionalCustom,
     conditional_variable: 'user_plan',
     variable_format: 'string',
+    operator: 'is_equal',
   } satisfies ConditionalCustomDebugEvent,
 
   conditionalQueueStatus: {

@@ -3,12 +3,14 @@ import {
   type HtNodeLink,
   type HtNumberCondition,
   type HtStringCondition,
+  NumberConditionOperator,
   VariableFormat,
-} from './hubtype-fields'
+} from '../hubtype-fields'
 
 export type ConditionMatch = {
   customResult: string
   target: HtNodeLink
+  operator: string
 }
 
 export function getConditionCustomResult(
@@ -19,13 +21,24 @@ export function getConditionCustomResult(
     case VariableFormat.String:
       return String((condition as HtStringCondition).value)
     case VariableFormat.Number:
-      return String((condition as HtNumberCondition).value)
+      return getNumberConditionCustomResult(condition as HtNumberCondition)
     case VariableFormat.Boolean:
       // Only reached after evaluateBooleanCondition succeeds; today that is isTruthy → 'true'
       return 'true'
     default:
       throw new Error(`Invalid variable format ${variableFormat}`)
   }
+}
+
+function getNumberConditionCustomResult(condition: HtNumberCondition): string {
+  const numberCondition = condition as HtNumberCondition
+  if (
+    numberCondition.operator === NumberConditionOperator.Between ||
+    numberCondition.operator === NumberConditionOperator.NotBetween
+  ) {
+    return `min: ${numberCondition.min} - max: ${numberCondition.max}`
+  }
+  return String(numberCondition.value)
 }
 
 export function findLastMatchingCondition<T extends HtCondition>(
@@ -48,6 +61,7 @@ export function findLastMatchingCondition<T extends HtCondition>(
     lastMatch = {
       customResult: getConditionCustomResult(condition, variableFormat),
       target: condition.target,
+      operator: condition.operator,
     }
   }
 
@@ -73,5 +87,6 @@ export function resolveWithDefaultTarget(
   return {
     customResult: defaultCustomResult,
     target: defaultTarget,
+    operator: '',
   }
 }

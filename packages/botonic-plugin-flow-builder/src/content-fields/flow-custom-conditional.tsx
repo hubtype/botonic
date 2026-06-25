@@ -101,6 +101,7 @@ export class FlowCustomConditional extends ContentFieldsBase {
       flowNodeIsMeaningful: false,
       conditionalVariable: this.customResult.toString(),
       variableFormat: this.variableFormat,
+      operator: '',
     }
     const { action, ...eventArgs } = eventCustomConditional
     await trackEvent(botContext, action, eventArgs)

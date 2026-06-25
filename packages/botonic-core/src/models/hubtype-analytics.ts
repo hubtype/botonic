@@ -104,6 +104,7 @@ export interface EventConditionalCustom extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalCustom
   conditionalVariable: string
   variableFormat: string
+  operator: string
 }
 
 export interface EventConditionalChannel extends HtBaseEventAllFlowProps {
