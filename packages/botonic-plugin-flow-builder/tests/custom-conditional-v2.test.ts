@@ -154,7 +154,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
-      expect(customConditional.operator).toBe('default')
+      expect(customConditional.operator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -306,7 +306,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
-      expect(customConditional.operator).toBe('default')
+      expect(customConditional.operator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -359,7 +359,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('false')
-      expect(customConditional.operator).toBe('false')
+      expect(customConditional.operator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })

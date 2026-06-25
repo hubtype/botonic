@@ -14,6 +14,7 @@ describe('Create conditional custom event', () => {
       flowNodeIsMeaningful: false,
       conditionalVariable: 'customVariable',
       variableFormat: 'string',
+      operator: 'equalsTo',
     })
 
     expect(htEvent).toEqual({
@@ -31,6 +32,7 @@ describe('Create conditional custom event', () => {
       flow_node_is_meaningful: false,
       conditional_variable: 'customVariable',
       variable_format: 'string',
+      operator: 'equalsTo',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
     })

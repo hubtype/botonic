@@ -244,7 +244,7 @@ describe('SystemDebugTrace Component', () => {
       )
 
       const header = container.querySelector('.collapsible > div:first-child')
-      expect(header?.textContent).toContain('Custom condition resolved with:')
+      expect(header?.textContent).toContain('Custom condition')
       expect(container.querySelector('.collapsible')).toBeTruthy()
       expect(container.querySelector('[style*="display: none"]')).toBeTruthy()
     })
@@ -472,10 +472,7 @@ describe('SystemDebugTrace Component', () => {
       expect(config.component).toBeTruthy()
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
-      expect(config.title).toBeTruthy()
-      expect(config.title.props.children).toBe(
-        'Custom condition resolved with:'
-      )
+      expect(config.title).toBe('Custom condition')
     })
 
     test('getConditionalQueueStatusEventConfig returns non-collapsible config', () => {
