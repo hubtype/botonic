@@ -1,7 +1,7 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 
-import { FlowCustomConditionalV2 } from '../src/content-fields/flow-custom-condition-v2'
+import { FlowCustomConditionalV2 } from '../src/content-fields/custom-conditional/flow-custom-condition-v2'
 import {
   BooleanConditionOperator,
   type HtCustomConditionalV2Node,
@@ -130,7 +130,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe(expectedResult)
-      expect(customConditional.operator).toBe(operator)
+      expect(customConditional.resolvedOperator).toBe(operator)
       expect(customConditional.followUp).toEqual(expectedTarget)
     })
 
@@ -154,7 +154,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
-      expect(customConditional.operator).toBe('')
+      expect(customConditional.resolvedOperator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -238,7 +238,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe(expectedResult)
-      expect(customConditional.operator).toBe(operator)
+      expect(customConditional.resolvedOperator).toBe(operator)
       expect(customConditional.followUp).toEqual(expectedTarget)
     })
 
@@ -282,7 +282,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe(`min: ${min} - max: ${max}`)
-      expect(customConditional.operator).toBe(operator)
+      expect(customConditional.resolvedOperator).toBe(operator)
       expect(customConditional.followUp).toEqual(betweenTarget)
     })
 
@@ -306,7 +306,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('default')
-      expect(customConditional.operator).toBe('')
+      expect(customConditional.resolvedOperator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })
@@ -336,7 +336,9 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('true')
-      expect(customConditional.operator).toBe(BooleanConditionOperator.IsTruthy)
+      expect(customConditional.resolvedOperator).toBe(
+        BooleanConditionOperator.IsTruthy
+      )
       expect(customConditional.followUp).toEqual(loggedInTarget)
     })
 
@@ -359,7 +361,7 @@ describe('FlowCustomConditionalV2', () => {
       )
 
       expect(customConditional.customResult).toBe('false')
-      expect(customConditional.operator).toBe('')
+      expect(customConditional.resolvedOperator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
   })

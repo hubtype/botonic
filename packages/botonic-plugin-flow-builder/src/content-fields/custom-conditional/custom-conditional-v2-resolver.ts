@@ -5,7 +5,7 @@ import {
   type HtStringCondition,
   NumberConditionOperator,
   VariableFormat,
-} from './hubtype-fields'
+} from '../hubtype-fields'
 
 export type ConditionMatch = {
   customResult: string
@@ -20,22 +20,25 @@ export function getConditionCustomResult(
   switch (variableFormat) {
     case VariableFormat.String:
       return String((condition as HtStringCondition).value)
-    case VariableFormat.Number: {
-      const numberCondition = condition as HtNumberCondition
-      if (
-        numberCondition.operator === NumberConditionOperator.Between ||
-        numberCondition.operator === NumberConditionOperator.NotBetween
-      ) {
-        return `min: ${numberCondition.min} - max: ${numberCondition.max}`
-      }
-      return String(numberCondition.value)
-    }
+    case VariableFormat.Number:
+      return getNumberConditionCustomResult(condition as HtNumberCondition)
     case VariableFormat.Boolean:
       // Only reached after evaluateBooleanCondition succeeds; today that is isTruthy → 'true'
       return 'true'
     default:
       throw new Error(`Invalid variable format ${variableFormat}`)
   }
+}
+
+function getNumberConditionCustomResult(condition: HtNumberCondition): string {
+  const numberCondition = condition as HtNumberCondition
+  if (
+    numberCondition.operator === NumberConditionOperator.Between ||
+    numberCondition.operator === NumberConditionOperator.NotBetween
+  ) {
+    return `min: ${numberCondition.min} - max: ${numberCondition.max}`
+  }
+  return String(numberCondition.value)
 }
 
 export function findLastMatchingCondition<T extends HtCondition>(

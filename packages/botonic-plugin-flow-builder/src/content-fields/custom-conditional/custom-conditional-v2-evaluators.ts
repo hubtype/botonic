@@ -5,7 +5,7 @@ import {
   type HtStringCondition,
   NumberConditionOperator,
   StringConditionOperator,
-} from './hubtype-fields'
+} from '../hubtype-fields'
 
 type StringEvaluator = (variable: string, value: string) => boolean
 
