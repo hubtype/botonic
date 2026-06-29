@@ -32,7 +32,7 @@ interface WebviewConfigJSON {
 }
 
 interface VariableConfigJSON {
-  keyPath: string
+  key_path: string
   type?: 'string' | 'number' | 'boolean'
 }
 
