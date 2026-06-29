@@ -4,9 +4,7 @@ import { BotConfig } from '../../src/util/bot-config.js'
 describe('BotConfig.loadBotConfig', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    jest
-      .spyOn(BotConfig as any, 'deleteBotConfig')
-      .mockResolvedValue(undefined)
+    jest.spyOn(BotConfig as any, 'deleteBotConfig').mockResolvedValue(undefined)
   })
 
   it('returns variables: [] when bot config has no variables field', async () => {
@@ -37,7 +35,10 @@ describe('BotConfig.loadBotConfig', () => {
   it('returns declared variables intact when present', async () => {
     const variables = [
       { keyPath: 'session.user.locale', type: 'string' as const },
-      { keyPath: 'session.user.extra_data.isPremium', type: 'boolean' as const },
+      {
+        keyPath: 'session.user.extra_data.isPremium',
+        type: 'boolean' as const,
+      },
       { keyPath: 'session.user.extra_data.score' },
     ]
     jest.spyOn(BotConfig as any, 'getBotConfig').mockResolvedValue({
