@@ -31,13 +31,20 @@ interface WebviewConfigJSON {
   name: string
 }
 
+interface VariableConfigJSON {
+  keyPath: string
+  type?: 'string' | 'number' | 'boolean'
+}
+
 export interface BotConfigJSON {
   build_info: BuildInfo
   packages: BotonicDependencies
   tools: ToolConfigJSON[]
   payloads: string[]
   webviews: WebviewConfigJSON[]
+  variables: VariableConfigJSON[]
 }
+
 export class BotConfig {
   static async get(appDirectory: string): Promise<BotConfigJSON> {
     const spinner = ora({
@@ -67,6 +74,7 @@ export class BotConfig {
       tools: configLoaded.tools,
       payloads: configLoaded.payloads,
       webviews: configLoaded.webviews,
+      variables: configLoaded.variables,
     }
   }
 
@@ -79,18 +87,20 @@ export class BotConfig {
         tools: botConfig?.tools || [],
         payloads: botConfig?.payloads || [],
         webviews: botConfig?.webviews || [],
+        variables: botConfig?.variables || [],
       }
     } catch (_error) {
       console.log(
-        `\nError loading dist/bot-config.js. 
+        `\nError loading dist/bot-config.js.
         This file is not required but is used to share config with flow builder frontend.
-        To create this file update your build process to include the bot-config.js file in dest folder. 
+        To create this file update your build process to include the bot-config.js file in dest folder.
         You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
       )
       return {
         tools: [],
         payloads: [],
         webviews: [],
+        variables: [],
       }
     }
   }
