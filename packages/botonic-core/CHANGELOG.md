@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.49.x] - 2026-mm-dd
+## [0.51.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,12 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.51.0] - 2025-06-29
+
+### Added
+
+- [PR-3237](https://github.com/hubtype/botonic/pull/3237): Update event types for hubtype analytics.
 
 ## [0.49.0] - 2026-05-28
 

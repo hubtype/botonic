@@ -10,17 +10,17 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.46.x] - 2025-mm-dd
+## [0.51.x] - 2025-mm-dd
+
+### Added
+
+</details>
+
+## [0.46.x] - 2025-03-20
 
 ### Added
 
 - [PR-3180](https://github.com/hubtype/botonic/pull/3180): Bot config tool schema handling for deploy / update flow builder template to use it.
-
-### Changed
-
-### Fixed
-
-</details>
 
 ## [0.42.0] - 2025-11-25
 
