@@ -398,7 +398,8 @@ export default class Deploy extends Command {
         return
       }
 
-      const botConfigJson = await BotConfig.get(process.cwd())
+      const botConfig = new BotConfig()
+      const botConfigJson = await botConfig.get(process.cwd())
 
       await this.createBundle()
       const { hasDeployErrors } = await this.deployBundle(botConfigJson)
