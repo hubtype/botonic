@@ -464,6 +464,7 @@ export interface BotConfigJSON {
   tools: ToolConfigJSON[]
   payloads: string[]
   webviews: WebviewConfigJSON[]
+  variables?: VariableConfigJSON[]
 }
 
 export interface ToolConfigJSON {
@@ -474,4 +475,9 @@ export interface ToolConfigJSON {
 
 export interface WebviewConfigJSON {
   name: string
+}
+
+export interface VariableConfigJSON {
+  keyPath: string
+  type?: 'string' | 'number' | 'boolean'
 }
