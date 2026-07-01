@@ -12,9 +12,5 @@ export const botConfig: BotConfigJSON = {
   tools: aiAgentTools,
   payloads: [],
   webviews: [],
-  variables: [
-    { keyPath: 'session.user.locale', type: 'string' },
-    { keyPath: 'session.user.country', type: 'string' },
-    { keyPath: 'session.user.system_locale', type: 'string' },
-  ],
+  variables: [],
 }
