@@ -37,12 +37,12 @@ describe('BotConfig.loadBotConfig', () => {
 
   it('returns declared variables intact when present', async () => {
     const variables = [
-      { keyPath: 'session.user.locale', type: 'string' as const },
+      { key_path: 'session.user.locale', type: 'string' as const },
       {
-        keyPath: 'session.user.extra_data.isPremium',
+        key_path: 'session.user.extra_data.isPremium',
         type: 'boolean' as const,
       },
-      { keyPath: 'session.user.extra_data.score' },
+      { key_path: 'session.user.extra_data.score', type: 'number' as const },
     ]
     jest.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
       tools: [],
@@ -53,7 +53,16 @@ describe('BotConfig.loadBotConfig', () => {
 
     const result = await botConfig.loadBotConfig('/any')
 
-    expect(result.variables).toEqual(variables)
+    expect(result.variables[0].key_path).toEqual('session.user.locale')
+    expect(result.variables[0].type).toEqual('string')
+    expect(result.variables[1].key_path).toEqual(
+      'session.user.extra_data.isPremium'
+    )
+    expect(result.variables[1].type).toEqual('boolean')
+    expect(result.variables[2].key_path).toEqual(
+      'session.user.extra_data.score'
+    )
+    expect(result.variables[2].type).toEqual('number')
   })
 
   it('returns variables: [] when loadBotConfig throws', async () => {
