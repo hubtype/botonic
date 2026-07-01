@@ -458,26 +458,3 @@ export enum BotonicAction {
   DeleteUser = 'delete_user',
   DiscardCase = 'discard_case',
 }
-
-// This types are used in the bot-config.ts file to load the bot config when deploy a bot.
-export interface BotConfigJSON {
-  tools: ToolConfigJSON[]
-  payloads: string[]
-  webviews: WebviewConfigJSON[]
-  variables?: VariableConfigJSON[]
-}
-
-export interface ToolConfigJSON {
-  name: string
-  schema?: any
-  description: string
-}
-
-export interface WebviewConfigJSON {
-  name: string
-}
-
-export interface VariableConfigJSON {
-  key_path: string
-  type?: 'string' | 'number' | 'boolean'
-}
