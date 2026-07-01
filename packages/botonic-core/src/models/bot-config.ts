@@ -26,5 +26,5 @@ export enum VariableType {
 
 export interface VariableConfigJSON {
   key_path: string
-  type?: VariableType
+  type: VariableType
 }

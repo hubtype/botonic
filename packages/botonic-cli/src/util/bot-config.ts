@@ -33,7 +33,7 @@ interface WebviewConfigJSON {
 
 interface VariableConfigJSON {
   key_path: string
-  type?: 'string' | 'number' | 'boolean'
+  type: 'string' | 'number' | 'boolean'
 }
 
 export interface BotConfigJSON {
