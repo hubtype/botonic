@@ -116,7 +116,6 @@ export enum VerbosityLevel {
   High = 'high',
 }
 
-// export type ReasoningEffort = 'none' | 'low' | 'medium' | 'high'
 export enum ReasoningEffort {
   None = 'none',
   Low = 'low',
