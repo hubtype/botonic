@@ -14,7 +14,7 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.51.0",
+    "@botonic/core": "^0.51.1",
     "@openai/agents": "^0.10.1",
     "axios": "^1.15.2",
     "openai": "^6.36.0",
