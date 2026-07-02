@@ -116,6 +116,14 @@ export enum VerbosityLevel {
   High = 'high',
 }
 
+// export type ReasoningEffort = 'none' | 'low' | 'medium' | 'high'
+export enum ReasoningEffort {
+  None = 'none',
+  Low = 'low',
+  Medium = 'medium',
+  High = 'high',
+}
+
 export interface HubtypeAssistantMessage {
   role: 'assistant'
   content: string
@@ -139,6 +147,7 @@ export type AiAgentBaseArgs = {
   instructions: string
   model: string
   verbosity: VerbosityLevel
+  reasoningEffort?: ReasoningEffort
   inputGuardrailRules?: GuardrailRule[]
   previousHubtypeMessages?: HubtypeAssistantMessage[]
   outputMessagesSchemas?: z.ZodObject<any>[]
