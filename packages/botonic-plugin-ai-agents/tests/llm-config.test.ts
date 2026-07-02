@@ -150,7 +150,7 @@ describe('LLMConfig', () => {
       })
 
       expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'none' },
+        reasoning: { effort: 'medium' },
         temperature: 1,
         text: { verbosity: 'high' },
       })

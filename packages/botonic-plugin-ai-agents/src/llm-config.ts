@@ -1,4 +1,4 @@
-import type { BotContext, VerbosityLevel } from '@botonic/core'
+import { type BotContext, ReasoningEffort, VerbosityLevel } from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -24,6 +24,7 @@ export interface LLMConfigParams {
   modelName: string
   verbosity: VerbosityLevel
   botContext: BotContext
+  reasoningEffort?: ReasoningEffort
 }
 
 export class LLMConfig {
@@ -33,6 +34,7 @@ export class LLMConfig {
   public readonly modelName: string
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
+  public readonly reasoningEffort?: ReasoningEffort
 
   constructor({
     maxRetries,
@@ -40,6 +42,7 @@ export class LLMConfig {
     modelName,
     verbosity,
     botContext,
+    reasoningEffort,
   }: LLMConfigParams) {
     this.maxRetries = maxRetries
     this.timeout = timeout
@@ -48,6 +51,7 @@ export class LLMConfig {
       LLM_PROVIDER === LLM_PROVIDERS.OPENAI ? LLM_OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
     this.modelSettings = this.getModelSettings(modelName, verbosity)
+    this.reasoningEffort = reasoningEffort
   }
 
   async getModel(): Promise<Model> {
@@ -141,7 +145,7 @@ export class LLMConfig {
   ): ModelSettings {
     if (model.includes('gpt-5')) {
       return {
-        reasoning: { effort: 'none' },
+        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.Medium },
         temperature: 1,
         text: { verbosity },
       }
@@ -150,13 +154,13 @@ export class LLMConfig {
     if (model.includes('gpt-4')) {
       return {
         temperature: 0,
-        text: { verbosity: 'medium' },
+        text: { verbosity: VerbosityLevel.Medium },
       }
     }
 
     // LiteLLM can proxy any model — fall back to reasoning settings
     return {
-      reasoning: { effort: 'none' },
+      reasoning: { effort: ReasoningEffort.None },
       temperature: 1,
       text: { verbosity },
     }

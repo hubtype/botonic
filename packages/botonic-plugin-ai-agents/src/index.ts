@@ -6,6 +6,7 @@ import {
   type BotContext,
   type HubtypeAssistantMessage,
   type Plugin,
+  type ReasoningEffort,
   type ResolvedPlugins,
 } from '@botonic/core'
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
@@ -86,6 +87,8 @@ export default class BotonicPluginAiAgents<
       throw new Error('Auth token is required')
     }
 
+    const reasoningEffort = aiAgentArgs.reasoningEffort
+
     const inferenceId = uuidv7()
 
     try {
@@ -94,7 +97,8 @@ export default class BotonicPluginAiAgents<
           botContext,
           aiAgentArgs,
           authToken,
-          inferenceId
+          inferenceId,
+          reasoningEffort
         )
       }
 
@@ -103,7 +107,8 @@ export default class BotonicPluginAiAgents<
           botContext,
           aiAgentArgs,
           authToken,
-          inferenceId
+          inferenceId,
+          reasoningEffort
         )
       }
 
@@ -130,7 +135,8 @@ export default class BotonicPluginAiAgents<
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentSpecialistArgs,
     authToken: string,
-    inferenceId: string
+    inferenceId: string,
+    reasoningEffort?: ReasoningEffort
   ) {
     const llmConfig = new LLMConfig({
       maxRetries: this.maxRetries,
@@ -138,6 +144,7 @@ export default class BotonicPluginAiAgents<
       modelName: aiAgentArgs.model,
       verbosity: aiAgentArgs.verbosity,
       botContext,
+      reasoningEffort,
     })
 
     // Get LLM config, tools and agent
@@ -190,7 +197,8 @@ export default class BotonicPluginAiAgents<
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AIAgentRouterArgs,
     authToken: string,
-    inferenceId: string
+    inferenceId: string,
+    reasoningEffort?: ReasoningEffort
   ) {
     const { specialists, name, instructions } = aiAgentArgs
 
@@ -200,6 +208,7 @@ export default class BotonicPluginAiAgents<
       modelName: aiAgentArgs.model,
       verbosity: aiAgentArgs.verbosity,
       botContext,
+      reasoningEffort,
     })
 
     const specialistsAgents = await Promise.all(
