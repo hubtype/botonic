@@ -79,6 +79,7 @@ describe('TEST: Deploy pipeline', () => {
               name: 'webview1',
             },
           ],
+          variables: [],
         }
         const { hasDeployErrors } =
           await deployCommand.deployBundle(botConfigJson)

@@ -17,6 +17,7 @@ export interface HtFlowBuilderData {
   flows: HtFlows[]
   webviews: HtFlowWebview[]
   campaigns: HtCampaign[]
+  bot_variable_definitions: HtBotVariableDefinition[]
 }
 
 export interface HtFlows {
@@ -35,6 +36,12 @@ export interface HtCampaign {
   id: string
   name: string
   start_node_id: string
+}
+
+export interface HtBotVariableDefinition {
+  key_path: string
+  is_from_bot_config: boolean
+  type?: string
 }
 
 export interface HtNodeLink {

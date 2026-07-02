@@ -51,7 +51,8 @@
     "axios": "^1.15.2",
     "pako": "^2.1.0",
     "process": "^0.11.10",
-    "pusher-js": "^5.1.1"
+    "pusher-js": "^5.1.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/pako": "^1.0.2",
