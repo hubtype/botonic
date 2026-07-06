@@ -12,6 +12,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.51.4] - 2026-07-06
+
+### Added
+
+- [PR-3244](https://github.com/hubtype/botonic/pull/3244): Allow to disableForceRetrieveKnowledge and change reasoningEffort in attribute AiAgentArgs from getInference function.
+
 ## [0.50.0] - 2026-06-04
 
 ### Added

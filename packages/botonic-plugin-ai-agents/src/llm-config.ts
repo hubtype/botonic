@@ -34,7 +34,6 @@ export class LLMConfig {
   public readonly modelName: string
   public readonly modelSettings: ModelSettings
   public readonly modelProvider: ModelProvider
-  public readonly reasoningEffort?: ReasoningEffort
 
   constructor({
     maxRetries,
@@ -50,8 +49,12 @@ export class LLMConfig {
     this.modelName =
       LLM_PROVIDER === LLM_PROVIDERS.OPENAI ? LLM_OPENAI_MODEL : modelName
     this.modelProvider = this.getModelProvider()
-    this.modelSettings = this.getModelSettings(modelName, verbosity)
-    this.reasoningEffort = reasoningEffort
+    this.modelSettings = this.getModelSettings(
+      modelName,
+      verbosity,
+      reasoningEffort
+    )
+    console.log('new LLMConfig reasoningEffort', reasoningEffort)
   }
 
   async getModel(): Promise<Model> {
@@ -141,12 +144,13 @@ export class LLMConfig {
 
   private getModelSettings(
     model: string,
-    verbosity: VerbosityLevel
+    verbosity: VerbosityLevel,
+    reasoningEffort?: ReasoningEffort
   ): ModelSettings {
     // By default, we use low reasoning effort for chat models because they not accept the reasoning effort set as none.
     if (model.includes('chat')) {
       return {
-        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.Low },
+        reasoning: { effort: reasoningEffort ?? ReasoningEffort.Low },
         temperature: 1,
         text: { verbosity },
       }
@@ -154,7 +158,7 @@ export class LLMConfig {
 
     if (model.includes('gpt-5')) {
       return {
-        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.None },
+        reasoning: { effort: reasoningEffort ?? ReasoningEffort.None },
         temperature: 1,
         text: { verbosity },
       }

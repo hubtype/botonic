@@ -3,10 +3,10 @@
 ## env variables
 
 - It is necessary to add the following variables to an `.env` file:
-  - `AZURE_OPENAI_API_KEY`
-  - `AZURE_OPENAI_API_BASE`
-  - `AZURE_OPENAI_API_DEPLOYMENT_NAME`
-  - `AZURE_OPENAI_API_VERSION`
+  - `LLM_PROVIDER`
+  - `LLM_API_KEY`
+  - `LLM_API_URL`
+  - `LLM_AZURE_API_VERSION`
 - Add these env variables to build using rspack, for target NODE and DEV.
 
 ```ts
@@ -22,17 +22,17 @@ config()
       WEBCHAT_PUSHER_KEY:
         process.env.WEBCHAT_PUSHER_KEY || HUBTYPE_DEFAULTS.WEBCHAT_PUSHER_KEY,
       ENVIRONMENT: process.env.ENVIRONMENT,
-      AZURE_OPENAI_API_KEY: isNodeOrDev
-        ? process.env.AZURE_OPENAI_API_KEY
+      LLM_PROVIDER: isNodeOrDev
+        ? process.env.LLM_PROVIDER
         : undefined,
-      AZURE_OPENAI_API_DEPLOYMENT_NAME: isNodeOrDev
-        ? process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME
+      LLM_API_KEY: isNodeOrDev
+        ? process.env.LLM_API_KEY
         : undefined,
-      AZURE_OPENAI_API_VERSION: isNodeOrDev
-        ? process.env.AZURE_OPENAI_API_VERSION
+      LLM_API_URL: isNodeOrDev
+        ? process.env.LLM_API_URL
         : undefined,
-      AZURE_OPENAI_API_BASE: isNodeOrDev
-        ? process.env.AZURE_OPENAI_API_BASE
+      LLM_AZURE_API_VERSION: isNodeOrDev
+        ? process.env.LLM_AZURE_API_VERSION
         : undefined,
     }),
     new rspack.ProgressPlugin(),
