@@ -670,6 +670,34 @@ describe('WorkerAgent', () => {
       )
     })
 
+    it('should NOT set toolChoice to retrieve_knowledge when disableForceRetrieveKnowledge is true', async () => {
+      await SpecialistAgent.create({
+        name: agentName,
+        instructions: agentInstructions,
+        llmConfig: mockLlmConfig,
+        tools: agentCustomTools,
+        contactInfo,
+        inputGuardrailRules: [],
+        sourceIds: ['source-1'],
+        disableForceRetrieveKnowledge: true,
+        campaignsContext: undefined,
+        logger: mockLogger,
+        guardrailTrackingContext: mockGuardrailTrackingContext,
+      }).then(agent => agent.getAgent())
+
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.objectContaining({
+          hasRetrieveKnowledge: true,
+        })
+      )
+      expect(mockLogger.logModelSettings).toHaveBeenCalledWith(
+        expect.not.objectContaining({
+          toolChoice: 'retrieve_knowledge',
+        })
+      )
+      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+    })
+
     it('should set resolved model for azure provider', async () => {
       // Default OPENAI_PROVIDER is 'azure'
       await SpecialistAgent.create({

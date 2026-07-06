@@ -150,7 +150,23 @@ describe('LLMConfig', () => {
       })
 
       expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'medium' },
+        reasoning: { effort: 'none' },
+        temperature: 1,
+        text: { verbosity: 'high' },
+      })
+    })
+
+    it('returns gpt-chat style settings for gpt-chat model', () => {
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'gpt-chat-latest',
+        verbosity: VerbosityLevel.High,
+        botContext: makeBotContext(),
+      })
+
+      expect(config.modelSettings).toEqual({
+        reasoning: { effort: 'low' },
         temperature: 1,
         text: { verbosity: 'high' },
       })
