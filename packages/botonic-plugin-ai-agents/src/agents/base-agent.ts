@@ -44,12 +44,15 @@ export abstract class BaseAgent {
 
   protected getAgentModelSettings(): ModelSettings {
     const modelSettings: ModelSettings = { ...this.llmConfig.modelSettings }
+
     if (this.llmConfig.modelSettings.reasoning) {
       modelSettings.reasoning = { ...this.llmConfig.modelSettings.reasoning }
     }
+
     if (this.llmConfig.modelSettings.text) {
       modelSettings.text = { ...this.llmConfig.modelSettings.text }
     }
+
     return modelSettings
   }
 
