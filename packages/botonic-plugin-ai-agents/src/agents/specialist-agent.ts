@@ -114,11 +114,12 @@ export class SpecialistAgent<
     hasRetrieveKnowledge: boolean
   ): ModelSettings {
     const modelSettings = this.getAgentModelSettings()
-    if (
+    const forceRetrieveKnowledge =
       hasRetrieveKnowledge &&
       !this.forceToolNameOverride &&
       !this.disableForceRetrieveKnowledge
-    ) {
+
+    if (forceRetrieveKnowledge) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
     }
 

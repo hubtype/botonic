@@ -6,7 +6,6 @@ import {
   type BotContext,
   type HubtypeAssistantMessage,
   type Plugin,
-  type ReasoningEffort,
   type ResolvedPlugins,
 } from '@botonic/core'
 import { handoff, setTracingDisabled, tool } from '@openai/agents'
@@ -87,8 +86,6 @@ export default class BotonicPluginAiAgents<
       throw new Error('Auth token is required')
     }
 
-    const reasoningEffort = aiAgentArgs.reasoningEffort
-
     const inferenceId = uuidv7()
 
     try {
@@ -97,8 +94,7 @@ export default class BotonicPluginAiAgents<
           botContext,
           aiAgentArgs,
           authToken,
-          inferenceId,
-          reasoningEffort
+          inferenceId
         )
       }
 
@@ -107,8 +103,7 @@ export default class BotonicPluginAiAgents<
           botContext,
           aiAgentArgs,
           authToken,
-          inferenceId,
-          reasoningEffort
+          inferenceId
         )
       }
 
@@ -135,8 +130,7 @@ export default class BotonicPluginAiAgents<
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AiAgentSpecialistArgs,
     authToken: string,
-    inferenceId: string,
-    reasoningEffort?: ReasoningEffort
+    inferenceId: string
   ) {
     const llmConfig = new LLMConfig({
       maxRetries: this.maxRetries,
@@ -144,7 +138,7 @@ export default class BotonicPluginAiAgents<
       modelName: aiAgentArgs.model,
       verbosity: aiAgentArgs.verbosity,
       botContext,
-      reasoningEffort,
+      reasoningEffort: aiAgentArgs.reasoningEffort,
     })
 
     // Get LLM config, tools and agent
@@ -197,8 +191,7 @@ export default class BotonicPluginAiAgents<
     botContext: BotContext<TPlugins, TExtraData>,
     aiAgentArgs: AIAgentRouterArgs,
     authToken: string,
-    inferenceId: string,
-    reasoningEffort?: ReasoningEffort
+    inferenceId: string
   ) {
     const { specialists, name, instructions } = aiAgentArgs
 
@@ -208,17 +201,25 @@ export default class BotonicPluginAiAgents<
       modelName: aiAgentArgs.model,
       verbosity: aiAgentArgs.verbosity,
       botContext,
-      reasoningEffort,
+      reasoningEffort: aiAgentArgs.reasoningEffort,
     })
 
     const specialistsAgents = await Promise.all(
       specialists.map(async specialistData => {
         // If the forceToolNameOverride is set, we force this override for all specialists
         const forceToolNameOverride = aiAgentArgs.forceToolNameOverride
-        const aiAgentSpecialistArgs = {
+        const reasoningEffort = aiAgentArgs.reasoningEffort
+        const disableForceRetrieveKnowledge =
+          aiAgentArgs.disableForceRetrieveKnowledge
+
+        // Create AiAgentArgs for the specialist, with values from AIAgentRouterArgs
+        const aiAgentSpecialistArgs: AiAgentArgs = {
           ...specialistData,
           forceToolNameOverride,
+          reasoningEffort,
+          disableForceRetrieveKnowledge,
         }
+
         const { agent } = await this.getSpecialistAgentAndTools(
           botContext,
           aiAgentSpecialistArgs,
@@ -289,6 +290,10 @@ export default class BotonicPluginAiAgents<
     inferenceId: string,
     llmConfig: LLMConfig
   ) {
+    console.log(
+      'getSpecialistAgentAndTools llmConfig.reasoning',
+      llmConfig.modelSettings.reasoning
+    )
     // Build tools
     const tools = this.buildTools(aiAgentArgs)
 
@@ -314,6 +319,7 @@ export default class BotonicPluginAiAgents<
         inferenceId,
       },
       forceToolNameOverride: aiAgentArgs.forceToolNameOverride,
+      disableForceRetrieveKnowledge: aiAgentArgs.disableForceRetrieveKnowledge,
     })
     const specialistAgent = specialist.getAgent()
 
