@@ -143,9 +143,18 @@ export class LLMConfig {
     model: string,
     verbosity: VerbosityLevel
   ): ModelSettings {
+    // By default, we use low reasoning effort for chat models because they not accept the reasoning effort set as none.
+    if (model.includes('chat')) {
+      return {
+        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.Low },
+        temperature: 1,
+        text: { verbosity },
+      }
+    }
+
     if (model.includes('gpt-5')) {
       return {
-        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.Medium },
+        reasoning: { effort: this.reasoningEffort ?? ReasoningEffort.None },
         temperature: 1,
         text: { verbosity },
       }

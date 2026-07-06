@@ -147,6 +147,7 @@ export type AiAgentBaseArgs = {
   model: string
   verbosity: VerbosityLevel
   reasoningEffort?: ReasoningEffort
+  disableForceRetrieveKnowledge?: boolean // If true, the agent will not force the retrieve knowledge tool to be used.
   inputGuardrailRules?: GuardrailRule[]
   previousHubtypeMessages?: HubtypeAssistantMessage[]
   outputMessagesSchemas?: z.ZodObject<any>[]

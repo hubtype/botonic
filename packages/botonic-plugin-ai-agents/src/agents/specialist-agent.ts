@@ -30,6 +30,7 @@ interface SpecialistAgentOptions<
   logger: DebugLogger
   guardrailTrackingContext: GuardrailTrackingContext
   forceToolNameOverride?: string
+  disableForceRetrieveKnowledge?: boolean
 }
 
 export class SpecialistAgent<
@@ -40,6 +41,7 @@ export class SpecialistAgent<
   private logger: DebugLogger
   private agent!: AIAgent<TPlugins, TExtraData>
   private forceToolNameOverride?: string
+  private disableForceRetrieveKnowledge?: boolean
 
   private constructor(options: SpecialistAgentOptions<TPlugins, TExtraData>) {
     super({
@@ -58,6 +60,7 @@ export class SpecialistAgent<
     this.tools = this.addHubtypeTools(options.tools, options.sourceIds)
     this.logger = options.logger
     this.forceToolNameOverride = options.forceToolNameOverride
+    this.disableForceRetrieveKnowledge = options.disableForceRetrieveKnowledge
   }
 
   static async create<
@@ -111,12 +114,18 @@ export class SpecialistAgent<
     hasRetrieveKnowledge: boolean
   ): ModelSettings {
     const modelSettings = this.getAgentModelSettings()
-    if (hasRetrieveKnowledge && !this.forceToolNameOverride) {
+    if (
+      hasRetrieveKnowledge &&
+      !this.forceToolNameOverride &&
+      !this.disableForceRetrieveKnowledge
+    ) {
       modelSettings.toolChoice = RETRIEVE_KNOWLEDGE_TOOL_NAME
     }
+
     if (this.forceToolNameOverride) {
       modelSettings.toolChoice = this.forceToolNameOverride
     }
+
     return modelSettings
   }
 
