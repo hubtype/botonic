@@ -70,9 +70,6 @@ export abstract class ContentFieldsBase {
     return text.replace(VARIABLE_PATTERN_GLOBAL, match => {
       // remove \\ ( escape for _ ) added by text node with markdown
       const keyPath = match.slice(1, -1).replaceAll('\\', '')
-      if (keyPath.startsWith('secrets.')) {
-        return '****'
-      }
 
       const botVariable = keyPath.endsWith(ACCESS_TOKEN_VARIABLE_KEY)
         ? match
