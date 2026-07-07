@@ -86,12 +86,32 @@ describe('TEST: useWebchat', () => {
     expect(result.current.webchatState.typing).toEqual(true)
   })
 
-  it('updateWebview: assign webview to webchatState.webview', () => {
+  it('updateWebview: assign webview to webchatState.webview and webviewParams', () => {
+    const { result } = renderUseWebchatHook()
+    expect(result.current.webchatState.webviewParams).toEqual({})
+    act(() => {
+      result.current.updateWebview('webview', { foo: 'bar' })
+    })
+    expect(result.current.webchatState.webview).toEqual('webview')
+    expect(result.current.webchatState.webviewParams).toEqual({ foo: 'bar' })
+  })
+
+  it('updateWebview: defaults webviewParams to {} when params are omitted', () => {
     const { result } = renderUseWebchatHook()
     act(() => {
       result.current.updateWebview('webview')
     })
-    expect(result.current.webchatState.webview).toEqual('webview')
+    expect(result.current.webchatState.webviewParams).toEqual({})
+  })
+
+  it('removeWebview: clears webview and resets webviewParams to {}', () => {
+    const { result } = renderUseWebchatHook()
+    act(() => {
+      result.current.updateWebview('webview', { foo: 'bar' })
+      result.current.removeWebview()
+    })
+    expect(result.current.webchatState.webview).toBeUndefined()
+    expect(result.current.webchatState.webviewParams).toEqual({})
   })
 
   it('updateSession: assign initialSession to webchatState.session', () => {

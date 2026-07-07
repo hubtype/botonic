@@ -20,6 +20,7 @@ import {
   Text,
   Video,
   type WebchatSettingsProps,
+  type Webview,
 } from '../components'
 import {
   COLORS,
@@ -313,7 +314,10 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
     updateTheme(merge(props.theme, theme, webchatState.themeUpdates))
   }, [props.theme, webchatState.themeUpdates])
 
-  const openWebview = (webviewComponent, params) => {
+  const openWebview = (
+    webviewComponent: Webview,
+    params?: Record<string, string>
+  ) => {
     updateWebview(webviewComponent, params)
   }
 
