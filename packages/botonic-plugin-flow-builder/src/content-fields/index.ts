@@ -20,7 +20,11 @@ import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
 import { FlowWhatsappTemplate } from './flow-whatsapp-template'
-import { FlowWhatsappButtonList } from './whatsapp-button-list/flow-whatsapp-button-list'
+import {
+  FlowWhatsappButtonList,
+  FlowWhatsappButtonListRow,
+  FlowWhatsappButtonListSection,
+} from './whatsapp-button-list'
 
 export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
@@ -43,6 +47,8 @@ export {
   FlowText,
   FlowVideo,
   FlowWhatsappButtonList,
+  FlowWhatsappButtonListRow,
+  FlowWhatsappButtonListSection,
   FlowWhatsappCtaUrlButtonNode,
   FlowWhatsappTemplate,
   FlowCustomConditionalV2,
