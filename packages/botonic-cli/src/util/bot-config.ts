@@ -31,29 +31,36 @@ interface WebviewConfigJSON {
   name: string
 }
 
+interface VariableConfigJSON {
+  key_path: string
+  type: 'string' | 'number' | 'boolean'
+}
+
 export interface BotConfigJSON {
   build_info: BuildInfo
   packages: BotonicDependencies
   tools: ToolConfigJSON[]
   payloads: string[]
   webviews: WebviewConfigJSON[]
+  variables: VariableConfigJSON[]
 }
+
 export class BotConfig {
-  static async get(appDirectory: string): Promise<BotConfigJSON> {
+  async get(appDirectory: string): Promise<BotConfigJSON> {
     const spinner = ora({
       text: 'Getting bot config...',
       spinner: 'bouncingBar',
     }).start()
-    const packages = await BotConfig.getBotonicDependencies(appDirectory)
+    const packages = await this.getBotonicDependencies(appDirectory)
     const [nodeVersion, npmVersion, botonicCli] = await Promise.all(
       ['node -v', 'npm -v', 'botonic -v'].map(command =>
-        BotConfig.getOutputByCommand(command)
+        this.getOutputByCommand(command)
       )
     )
     const botonicCliVersion =
       botonicCli.match(botonicCliVersionRegex)?.[1] || ''
 
-    const configLoaded = await BotConfig.loadBotConfig(appDirectory)
+    const configLoaded = await this.loadBotConfig(appDirectory)
 
     spinner.succeed()
 
@@ -67,35 +74,38 @@ export class BotConfig {
       tools: configLoaded.tools,
       payloads: configLoaded.payloads,
       webviews: configLoaded.webviews,
+      variables: configLoaded.variables,
     }
   }
 
-  static async loadBotConfig(appDirectory: string) {
+  async loadBotConfig(appDirectory: string) {
     try {
-      const botConfig = await BotConfig.getBotConfig(appDirectory)
-      await BotConfig.deleteBotConfig(appDirectory)
+      const botConfig = await this.getBotConfig(appDirectory)
+      await this.deleteBotConfig(appDirectory)
 
       return {
         tools: botConfig?.tools || [],
         payloads: botConfig?.payloads || [],
         webviews: botConfig?.webviews || [],
+        variables: botConfig?.variables || [],
       }
     } catch (_error) {
       console.log(
-        `\nError loading dist/bot-config.js. 
+        `\nError loading dist/bot-config.js.
         This file is not required but is used to share config with flow builder frontend.
-        To create this file update your build process to include the bot-config.js file in dest folder. 
+        To create this file update your build process to include the bot-config.js file in dest folder.
         You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
       )
       return {
         tools: [],
         payloads: [],
         webviews: [],
+        variables: [],
       }
     }
   }
 
-  private static async getBotConfig(appDirectory: string) {
+  private async getBotConfig(appDirectory: string) {
     const configPath = path.join(appDirectory, 'dist', 'bot-config.js')
     const module = await import(path.resolve(configPath))
     const botConfig = module.default
@@ -103,11 +113,11 @@ export class BotConfig {
     return botConfig
   }
 
-  private static async deleteBotConfig(appDirectory: string) {
+  private async deleteBotConfig(appDirectory: string) {
     await fs.rm(path.join(appDirectory, 'dist', 'bot-config.js'))
   }
 
-  private static async getBotonicDependencies(
+  private async getBotonicDependencies(
     appDirectory: string
   ): Promise<BotonicDependencies> {
     const packages = {}
@@ -125,7 +135,7 @@ export class BotConfig {
 
       await Promise.all(
         botonicDependencies.map(botonicDependency => {
-          return BotConfig.setDependenciesVersion(
+          return this.setDependenciesVersion(
             botonicDependency,
             packages,
             botonicDependency === BOTONIC_CORE_PACKAGE
@@ -140,13 +150,13 @@ export class BotConfig {
     return packages
   }
 
-  private static async setDependenciesVersion(
+  private async setDependenciesVersion(
     dependency: string,
     packages: Record<string, any>,
     depth: number = NPM_DEPTH_0
   ): Promise<BotonicDependencies> {
     try {
-      const output = await BotConfig.getOutputByCommand(
+      const output = await this.getOutputByCommand(
         `npm ls ${dependency} --depth=${depth}`
       )
       const match = output.match(versionRegex)
@@ -158,7 +168,7 @@ export class BotConfig {
     return packages
   }
 
-  private static async getOutputByCommand(command: string): Promise<string> {
+  private async getOutputByCommand(command: string): Promise<string> {
     const exec = util.promisify(childProcess.exec)
     const { stdout } = await exec(command)
     return stdout.trim()

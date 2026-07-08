@@ -16,7 +16,13 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.46.x] - 2025-03-20
+## [0.51.0] - 2025-mm-dd
+
+### Added
+
+- [PR-3239](https://github.com/hubtype/botonic/pull/3239): Allow upload variables in bot config in each bot deploy.
+
+## [0.46.0] - 2025-03-20
 
 ### Added
 

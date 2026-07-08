@@ -12,4 +12,5 @@ export const botConfig: BotConfigJSON = {
   tools: aiAgentTools,
   payloads: [],
   webviews: [],
+  variables: [],
 }
