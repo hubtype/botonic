@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.51.2] - 2026-07-08
+
+### Added
+
+- Export `FlowWhatsappButtonListSection` and `FlowWhatsappButtonListRow`
+
 ## [0.51.0] - 2026-06-29
 
 ### Added
