@@ -28,7 +28,7 @@ export class FlowWebview extends ContentFieldsBase {
     newWebview.webviewTargetId = component.content.webview_target_id
     newWebview.webviewName = component.content.webview_name
     newWebview.webviewComponentName = component.content.webview_component_name
-    newWebview.webviewParams = component.content.webview_params
+    newWebview.webviewParams = component.content.webview_params ?? {}
     newWebview.exits = component.content.exits
     newWebview.followUp = component.follow_up
 
