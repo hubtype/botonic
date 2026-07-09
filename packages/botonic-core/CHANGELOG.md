@@ -20,6 +20,10 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.51.2] - 2026-mm-dd
+
+- [PR-3239](https://github.com/hubtype/botonic/pull/3239): Create getSessionVariables function to create bot-config variables with user.extra_data variables.
+
 ## [0.51.0] - 2025-06-29
 
 ### Added

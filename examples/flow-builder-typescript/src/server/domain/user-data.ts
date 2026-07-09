@@ -1,4 +1,4 @@
-import { BotSession } from '../types'
+import type { BotSession } from '../types'
 
 export const empty = (object: Record<string, any>): boolean =>
   Object.keys(object).length === 0
