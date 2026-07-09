@@ -46,14 +46,20 @@ export class FlowFactory {
   ): Promise<FlowContent | undefined> {
     switch (hubtypeContent.type) {
       case HtNodeWithContentType.TEXT:
-        return FlowText.fromHubtypeCMS(hubtypeContent, this.locale, this.cmsApi)
+        return FlowText.fromHubtypeCMS(
+          hubtypeContent,
+          this.locale,
+          this.cmsApi,
+          this.botContext
+        )
       case HtNodeWithContentType.IMAGE:
         return FlowImage.fromHubtypeCMS(hubtypeContent, this.locale)
       case HtNodeWithContentType.CAROUSEL:
         return FlowCarousel.fromHubtypeCMS(
           hubtypeContent,
           this.locale,
-          this.cmsApi
+          this.cmsApi,
+          this.botContext
         )
       case HtNodeWithContentType.VIDEO:
         return FlowVideo.fromHubtypeCMS(hubtypeContent, this.locale)
@@ -67,7 +73,8 @@ export class FlowFactory {
         return FlowWhatsappCtaUrlButtonNode.fromHubtypeCMS(
           hubtypeContent,
           this.locale,
-          this.cmsApi
+          this.cmsApi,
+          this.botContext
         )
       case HtNodeWithContentType.HANDOFF:
         return FlowHandoff.fromHubtypeCMS(

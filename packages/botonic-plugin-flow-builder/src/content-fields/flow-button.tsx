@@ -8,7 +8,6 @@ import { FlowWebview } from './flow-webview'
 import {
   type HtButton,
   HtButtonStyle,
-  type HtNodeWithContent,
   HtNodeWithContentType,
   type HtUrlNode,
 } from './hubtype-fields'
@@ -26,7 +25,8 @@ export class FlowButton extends ContentFieldsBase {
   static fromHubtypeCMS(
     cmsButton: HtButton,
     locale: string,
-    cmsApi: FlowBuilderApi
+    cmsApi: FlowBuilderApi,
+    botContext: BotContext
   ): FlowButton {
     const urlId = FlowButton.getUrlId(cmsButton, locale)
 
@@ -36,9 +36,8 @@ export class FlowButton extends ContentFieldsBase {
       const webview = FlowButton.getTargetWebview(cmsApi, cmsButton.target.id)
       if (webview) {
         newButton.flowWebview = webview
-        const params = FlowButton.getWebviewParams(webview, cmsApi)
         newButton.webview = { name: webview.webviewComponentName }
-        newButton.params = params
+        newButton.params = webview.getParams(botContext, cmsApi)
       } else {
         newButton.payload = cmsApi.getPayload(cmsButton.target)
       }
@@ -50,43 +49,6 @@ export class FlowButton extends ContentFieldsBase {
     }
 
     return newButton
-  }
-
-  private static getWebviewParams(
-    webview: FlowWebview,
-    cmsApi: FlowBuilderApi
-  ) {
-    const params: Record<string, string> = {
-      webviewId: webview.webviewTargetId,
-      t: Date.now().toString(),
-      ...webview.webviewParams,
-    }
-    const exitSuccessContentID = FlowButton.getExitSuccessContentID(
-      webview,
-      cmsApi
-    )
-
-    if (exitSuccessContentID) {
-      params.exitSuccessContentID = exitSuccessContentID
-    }
-
-    return params
-  }
-
-  private static getExitSuccessContentID(
-    webview: FlowWebview,
-    cmsApi: FlowBuilderApi
-  ) {
-    const webviewSuccessExit = webview.exits?.find(
-      exit => exit.name === 'Success'
-    )
-    const exitSuccessId = webviewSuccessExit?.target?.id
-    if (!exitSuccessId) {
-      return undefined
-    }
-    const exitNode = cmsApi.getNodeById<HtNodeWithContent>(exitSuccessId)
-
-    return exitNode.code
   }
 
   static fromAIAgent(button: {

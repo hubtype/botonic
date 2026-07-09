@@ -4,12 +4,17 @@ import {
   type EventWebviewActionTriggered,
 } from '@botonic/core'
 
+import type { FlowBuilderApi } from '../api'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import type { HtWebviewExits, HtWebviewNode } from './hubtype-fields'
+import type {
+  HtNodeWithContent,
+  HtWebviewExits,
+  HtWebviewNode,
+} from './hubtype-fields'
 
 export class FlowWebview extends ContentFieldsBase {
   public webviewTargetId: string = ''
@@ -28,6 +33,45 @@ export class FlowWebview extends ContentFieldsBase {
     newWebview.followUp = component.follow_up
 
     return newWebview
+  }
+
+  getParams(
+    botContext: BotContext,
+    cmsApi: FlowBuilderApi
+  ): Record<string, string> {
+    const params: Record<string, string> = {
+      webviewId: this.webviewTargetId,
+      t: Date.now().toString(),
+      ...this.getResolvedWebviewParams(botContext),
+    }
+    const exitSuccessContentID = this.getExitSuccessContentID(cmsApi)
+
+    if (exitSuccessContentID) {
+      params.exitSuccessContentID = exitSuccessContentID
+    }
+    return params
+  }
+
+  private getResolvedWebviewParams(
+    botContext: BotContext
+  ): Record<string, string> {
+    return Object.fromEntries(
+      Object.entries(this.webviewParams).map(([key, value]) => [
+        key,
+        this.replaceVariables(value, botContext),
+      ])
+    )
+  }
+
+  private getExitSuccessContentID(cmsApi: FlowBuilderApi): string | undefined {
+    const webviewSuccessExit = this.exits?.find(exit => exit.name === 'Success')
+    const exitSuccessId = webviewSuccessExit?.target?.id
+    if (!exitSuccessId) {
+      return undefined
+    }
+    const exitNode = cmsApi.getNodeById<HtNodeWithContent>(exitSuccessId)
+
+    return exitNode.code
   }
 
   async trackFlow(botContext: BotContext): Promise<void> {
