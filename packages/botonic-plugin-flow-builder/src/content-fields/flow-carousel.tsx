@@ -30,12 +30,13 @@ export class FlowCarousel extends ContentFieldsBase {
   static fromHubtypeCMS(
     component: HtCarouselNode,
     locale: string,
-    cmsApi: FlowBuilderApi
+    cmsApi: FlowBuilderApi,
+    botContext: BotContext
   ): FlowCarousel {
     const newCarousel = new FlowCarousel(component.id)
     newCarousel.code = component.code
     newCarousel.elements = component.content.elements.map(element =>
-      FlowElement.fromHubtypeCMS(element, locale, cmsApi)
+      FlowElement.fromHubtypeCMS(element, locale, cmsApi, botContext)
     )
     newCarousel.whatsappText = FlowCarousel.getTextByLocale(
       locale,

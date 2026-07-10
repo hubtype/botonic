@@ -57,6 +57,7 @@ describe('Check the contents and logic of a text node', () => {
       flowBuilderOptions: { flow: webviewFlow },
       requestArgs: {
         input: { data: 'hola', type: INPUT.TEXT },
+        extraData: { customerName: 'Alice' },
         isFirstInteraction: true,
       },
     })
@@ -70,7 +71,10 @@ describe('Check the contents and logic of a text node', () => {
       name: 'FlowBuilderWebview',
     })
     expect(firstButton.params).toEqual({
+      customerName: 'Alice',
       exitSuccessContentID: 'webview success',
+      missingValue: '{missing}',
+      mixedValue: 'prefix-Alice',
       t: expect.any(String),
       webviewId: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
     })

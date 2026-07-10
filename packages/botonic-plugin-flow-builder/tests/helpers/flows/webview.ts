@@ -148,6 +148,11 @@ export const webviewFlow = {
         webview_target_id: '0198f614-fafb-71b8-9f4a-e26e9795c8e3',
         webview_name: 'Sdr webview',
         webview_component_name: 'FlowBuilderWebview',
+        webview_params: {
+          customerName: '{customerName}',
+          mixedValue: 'prefix-{customerName}',
+          missingValue: '{missing}',
+        },
         exits: [
           {
             id: '0198f786-6bcc-726d-880f-6aab57bcfe62',

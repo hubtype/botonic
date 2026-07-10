@@ -21,14 +21,15 @@ export class FlowText extends ContentFieldsBase {
   static fromHubtypeCMS(
     cmsText: HtTextNode,
     locale: string,
-    cmsApi: FlowBuilderApi
+    cmsApi: FlowBuilderApi,
+    botContext: BotContext
   ): FlowText {
     const newText = new FlowText(cmsText.id)
     newText.code = cmsText.code
     newText.buttonStyle = cmsText.content.buttons_style || HtButtonStyle.BUTTON
     newText.text = FlowText.getTextByLocale(locale, cmsText.content.text)
     newText.buttons = cmsText.content.buttons.map(button =>
-      FlowButton.fromHubtypeCMS(button, locale, cmsApi)
+      FlowButton.fromHubtypeCMS(button, locale, cmsApi, botContext)
     )
     newText.followUp = cmsText.follow_up
 

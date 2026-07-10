@@ -62,7 +62,7 @@ export type WhatsappCTAUrlButtonUrlProps = WhatsappCTAUrlButtonCommonProps & {
 export type WhatsappCTAUrlButtonWebviewProps =
   WhatsappCTAUrlButtonCommonProps & {
     webview: any
-    params?: any
+    params?: Record<string, string>
   }
 
 export type WhatsappCTAUrlButtonProps =

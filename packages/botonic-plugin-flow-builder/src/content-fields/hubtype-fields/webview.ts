@@ -13,6 +13,7 @@ export interface HtWebviewNode extends HtBaseNode {
     webview_target_id: string
     webview_name: string
     webview_component_name: string
+    webview_params: Record<string, string>
     exits: HtWebviewExits[]
   }
 }
