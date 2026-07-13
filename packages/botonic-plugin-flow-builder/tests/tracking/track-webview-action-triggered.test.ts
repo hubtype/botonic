@@ -52,6 +52,8 @@ describe('Track webview action triggered', () => {
         webviewParams: {
           bookingId: '12345',
           source: 'confirmation',
+          t: expect.any(String),
+          webviewId: '0199102d-90b9-771d-a927-7329bd348a5e',
         },
       }
     )
@@ -99,6 +101,8 @@ describe('Track webview action triggered', () => {
         webviewParams: {
           bookingId: '12345',
           source: 'confirmation',
+          t: expect.any(String),
+          webviewId: '0199102d-90b9-771d-a927-7329bd348a5e',
         },
       }
     )
