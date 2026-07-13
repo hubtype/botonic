@@ -187,6 +187,7 @@ export interface EventWebviewActionTriggered extends HtBaseEventAllFlowProps {
   action: EventAction.WebviewActionTriggered
   webviewTargetId: string
   webviewName: string
+  webviewParams?: Record<string, string>
 }
 
 export interface EventAiAgent extends HtBaseEventAllFlowProps {

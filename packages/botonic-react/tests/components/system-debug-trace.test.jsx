@@ -521,8 +521,8 @@ describe('SystemDebugTrace Component', () => {
       const config = getWebviewActionTriggeredEventConfig(data)
 
       expect(config.action).toBe(EventAction.WebviewActionTriggered)
-      expect(config.component).toBeNull()
-      expect(config.collapsible).toBe(false)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
     })
