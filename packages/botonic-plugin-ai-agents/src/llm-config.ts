@@ -54,7 +54,6 @@ export class LLMConfig {
       verbosity,
       reasoningEffort
     )
-    console.log('new LLMConfig reasoningEffort', reasoningEffort)
   }
 
   async getModel(): Promise<Model> {
