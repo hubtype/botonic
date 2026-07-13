@@ -37,7 +37,7 @@ export class FlowButton extends ContentFieldsBase {
       if (webview) {
         newButton.flowWebview = webview
         newButton.webview = { name: webview.webviewComponentName }
-        newButton.params = webview.getParams(botContext, cmsApi)
+        newButton.params = webview.getParams(botContext)
       } else {
         newButton.payload = cmsApi.getPayload(cmsButton.target)
       }

@@ -9,6 +9,7 @@ import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import type {
   HtNodeWithContent,
@@ -35,10 +36,10 @@ export class FlowWebview extends ContentFieldsBase {
     return newWebview
   }
 
-  getParams(
-    botContext: BotContext,
-    cmsApi: FlowBuilderApi
-  ): Record<string, string> {
+  getParams(botContext: BotContext): Record<string, string> {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const cmsApi = flowBuilderPlugin.cmsApi
+
     const params: Record<string, string> = {
       webviewId: this.webviewTargetId,
       t: Date.now().toString(),
@@ -88,7 +89,7 @@ export class FlowWebview extends ContentFieldsBase {
       flowNodeIsMeaningful: false,
       webviewTargetId: this.webviewTargetId,
       webviewName: this.webviewName,
-      webviewParams: this.webviewParams,
+      webviewParams: this.getParams(botContext),
     }
     const { action, ...eventArgs } = eventWebviewActionTriggered
     await trackEvent(botContext, action, eventArgs)
