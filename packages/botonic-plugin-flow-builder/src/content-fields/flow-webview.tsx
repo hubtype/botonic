@@ -88,6 +88,7 @@ export class FlowWebview extends ContentFieldsBase {
       flowNodeIsMeaningful: false,
       webviewTargetId: this.webviewTargetId,
       webviewName: this.webviewName,
+      webviewParams: this.webviewParams,
     }
     const { action, ...eventArgs } = eventWebviewActionTriggered
     await trackEvent(botContext, action, eventArgs)

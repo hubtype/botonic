@@ -1,3 +1,4 @@
+import { describe, expect, test } from '@jest/globals'
 import {
   createHtEvent,
   EventAction,
@@ -19,6 +20,10 @@ describe('Create webview events', () => {
       flowNodeIsMeaningful: false,
       webviewTargetId: 'webviewTargetIdTest',
       webviewName: 'ADD_A_BAG',
+      webviewParams: {
+        param1: 'value1',
+        param2: 'value2',
+      },
     })
 
     expect(htEvent).toEqual({
@@ -38,6 +43,10 @@ describe('Create webview events', () => {
       webview_name: 'ADD_A_BAG',
       bot_interaction_id: 'testInteractionId',
       type: EventType.BotEvent,
+      webview_params: {
+        param1: 'value1',
+        param2: 'value2',
+      },
     })
   })
 
