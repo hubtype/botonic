@@ -1,5 +1,5 @@
 import { EventAction, INPUT } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { beforeEach, describe, expect, test } from '@jest/globals'
 
 import { FlowCarousel, FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'
@@ -49,6 +49,10 @@ describe('Track webview action triggered', () => {
         flowThreadId: expect.anything(),
         webviewName: 'TestWebview',
         webviewTargetId: '0199102d-90b9-771d-a927-7329bd348a5e',
+        webviewParams: {
+          bookingId: '12345',
+          source: 'confirmation',
+        },
       }
     )
   })
@@ -92,6 +96,10 @@ describe('Track webview action triggered', () => {
         flowThreadId: expect.anything(),
         webviewName: 'TestWebview',
         webviewTargetId: '0199102d-90b9-771d-a927-7329bd348a5e',
+        webviewParams: {
+          bookingId: '12345',
+          source: 'confirmation',
+        },
       }
     )
   })

@@ -163,6 +163,10 @@ export const openWebviewFlow = {
         webview_target_id: '0199102d-90b9-771d-a927-7329bd348a5e',
         webview_name: 'TestWebview',
         webview_component_name: 'Testwebview',
+        webview_params: {
+          bookingId: '12345',
+          source: 'confirmation',
+        },
         exits: [
           {
             id: '019ab584-d30d-777f-bfb2-2f6d845ee89f',
