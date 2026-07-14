@@ -17,6 +17,7 @@ import {
   LLM_PROVIDERS,
   type LLMProviderType,
 } from './constants'
+import { setTraceProcessor } from './trace-processor'
 
 export interface LLMConfigParams {
   maxRetries: number
@@ -63,6 +64,7 @@ export class LLMConfig {
 
   private getModelProvider(): ModelProvider {
     const client = this.getClient()
+    setTraceProcessor(client)
     return new OpenAIProvider({
       openAIClient: client,
       useResponses: false,

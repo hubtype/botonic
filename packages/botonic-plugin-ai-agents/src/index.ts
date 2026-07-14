@@ -8,7 +8,7 @@ import {
   type Plugin,
   type ResolvedPlugins,
 } from '@botonic/core'
-import { handoff, setTracingDisabled, tool } from '@openai/agents'
+import { handoff, tool } from '@openai/agents'
 import { v7 as uuidv7 } from 'uuid'
 import type { ZodObject } from 'zod'
 import { RouterAgent, SpecialistAgent } from './agents'
@@ -53,7 +53,7 @@ export default class BotonicPluginAiAgents<
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
     this.localStorageKey = options?.localStorageKey ?? 'botonicState'
-    setTracingDisabled(true)
+    // setTracingDisabled(true)
 
     this.logger.logInitialConfig({
       messageHistoryApiVersion: 'v2',

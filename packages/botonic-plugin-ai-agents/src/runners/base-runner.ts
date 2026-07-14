@@ -75,7 +75,7 @@ export abstract class BaseRunner<
 
     try {
       const runner = new Runner({
-        tracingDisabled: true,
+        tracingDisabled: false,
       })
       const result = (await runner.run(this.agent, messages, {
         context,

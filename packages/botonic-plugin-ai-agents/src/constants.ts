@@ -30,3 +30,7 @@ export const MAX_MEMORY_LENGTH = 25
 
 export const DEFAULT_TIMEOUT_16_SECONDS = 16000
 export const DEFAULT_MAX_RETRIES = 2
+
+export const LANGSMITH_ENDPOINT = process.env.LANGSMITH_ENDPOINT
+export const LANGSMITH_API_KEY = process.env.LANGSMITH_API_KEY
+export const LANGSMITH_WORKSPACE_ID = process.env.LANGSMITH_WORKSPACE_ID
