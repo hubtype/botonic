@@ -12,6 +12,25 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.52.1] - 2026-07-14
+
+### Added
+
+- [PR-3250](https://github.com/hubtype/botonic/pull/3250): No use reasoning_effort for gpt-5.6-luna.
+
+
+## [0.51.6] - 2026-07-14
+
+### Added
+
+- [PR-3250](https://github.com/hubtype/botonic/pull/3250): No use reasoning_effort for gpt-5.6-luna.
+
+## [0.51.5] - 2026-07-06
+
+### Added
+
+- [PR-3239](https://github.com/hubtype/botonic/pull/3239): bump @botonic/core to v0.51.3
+
 ## [0.51.4] - 2026-07-06
 
 ### Added
