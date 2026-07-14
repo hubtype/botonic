@@ -21,6 +21,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.52.0] - 2026-07-14
+
+### Added
+
+- [PR-3247](https://github.com/hubtype/botonic/pull/3247): Allow webview params in webview triggered event.
+
 ## [0.51.0] - 2026-06-29
 
 ### Added

@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.51.x] - 2026-mm-dd
+## [0.52.x] - 2026-mm-dd
 
 ### Added
 
@@ -19,6 +19,13 @@ All notable changes to Botonic will be documented in this file.
 ### Fixed
 
 </details>
+
+## [0.52.0] - 2026-07-14
+
+### Added
+
+- [PR-3245](https://github.com/hubtype/botonic/pull/3245): Resolve webview params from node and add it when generate a webview url.
+- [PR-3247](https://github.com/hubtype/botonic/pull/3247): Add webview params in webview triggered event.
 
 ## [0.51.2] - 2026-07-08
 

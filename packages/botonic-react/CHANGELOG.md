@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.52.0] - 2026-07-14
+
+### Added
+
+- [PR-3245](https://github.com/hubtype/botonic/pull/3245): Refactor webview params to accept only an object of type `Record<string, string>`
+
 ## [0.51.0] - 2026-06-29
 
 ### Added
