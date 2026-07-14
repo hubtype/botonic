@@ -156,6 +156,13 @@ export class LLMConfig {
       }
     }
 
+    if (model.includes('luna')) {
+      return {
+        temperature: 1,
+        text: { verbosity },
+      }
+    }
+
     if (model.includes('gpt-5')) {
       return {
         reasoning: { effort: reasoningEffort ?? ReasoningEffort.None },
