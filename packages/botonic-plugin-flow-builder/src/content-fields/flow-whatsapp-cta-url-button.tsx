@@ -26,7 +26,8 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
   static fromHubtypeCMS(
     component: HtWhatsappCTAUrlButtonNode,
     locale: string,
-    cmsApi: FlowBuilderApi
+    cmsApi: FlowBuilderApi,
+    botContext: BotContext
   ): FlowWhatsappCtaUrlButtonNode {
     const whatsappCtaUrlButton = new FlowWhatsappCtaUrlButtonNode(component.id)
     whatsappCtaUrlButton.code = component.code
@@ -46,7 +47,8 @@ export class FlowWhatsappCtaUrlButtonNode extends ContentFieldsBase {
     const button = FlowButton.fromHubtypeCMS(
       component.content.button,
       locale,
-      cmsApi
+      cmsApi,
+      botContext
     )
     whatsappCtaUrlButton.displayText = button.text
     const urlId = FlowButton.getUrlId(component.content.button, locale)

@@ -233,4 +233,27 @@ describe('TEST: Webchat Component', () => {
       screen
     )
   })
+
+  function TestWebview() {
+    return <div role='test-webview'>Test Webview Content</div>
+  }
+
+  it('TEST: renders a local webview when webview state is a descriptor with matching name', async () => {
+    const { result } = renderUseWebchatHook()
+    act(() => {
+      result.current.webchatState.session.user = { provider: PROVIDER.DEV }
+      result.current.toggleWebchat(true)
+      result.current.updateWebview({ name: 'TestWebview' }, { foo: 'bar' })
+    })
+    await act(async () => {
+      render(
+        <Webchat webchatHooks={result.current} localWebviews={[TestWebview]} />
+      )
+    })
+    expect(screen.queryByRole('test-webview')).toBeTruthy()
+    expectToHaveRoles(
+      [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
+      screen
+    )
+  })
 })

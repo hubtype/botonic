@@ -26,7 +26,7 @@ export interface WebchatState {
   typing: boolean
   // In local development webview can be a React.ComponentType or a Webview object
   webview?: Webview | string | React.ComponentType
-  webviewParams: undefined
+  webviewParams: Record<string, string>
   session: Partial<CoreSession>
   lastRoutePath?: string
   handoff: boolean
@@ -67,7 +67,10 @@ export interface WebchatContextProps {
   addMessage: (message: WebchatMessage) => void
   getThemeProperty: (property: string, defaultValue?: any) => any
   closeWebview: (options?: CloseWebviewOptions) => Promise<void>
-  openWebview: (webviewComponent: Webview, params?: any) => void
+  openWebview: (
+    webviewComponent: Webview,
+    params?: Record<string, string>
+  ) => void
   resetUnreadMessages: () => void
   resolveCase: () => void
   sendAttachment: (attachment: File) => Promise<void>

@@ -23,7 +23,7 @@ function getWebchatInitialState(initialTheme: WebchatTheme): WebchatState {
     latestInput: {},
     typing: false,
     webview: undefined,
-    webviewParams: undefined,
+    webviewParams: {},
     session: { user: undefined },
     lastRoutePath: undefined,
     handoff: false,
@@ -74,7 +74,7 @@ export interface UseWebchat {
   updateSession: (session: Partial<Session>) => void
   updateTheme: (theme: WebchatTheme, themeUpdates?: WebchatTheme) => void
   updateTyping: (typing: boolean) => void
-  updateWebview: (webview: Webview, params: Record<string, string>) => void
+  updateWebview: (webview: Webview, params?: Record<string, string>) => void
   removeReplies: () => void
   removeWebview: () => void
   webchatState: WebchatState
@@ -135,10 +135,10 @@ export function useWebchat(theme?: WebchatTheme): UseWebchat {
   const updateTyping = (typing: boolean) =>
     webchatDispatch({ type: WebchatAction.UPDATE_TYPING, payload: typing })
 
-  const updateWebview = (webview: Webview, params: Record<string, string>) =>
+  const updateWebview = (webview: Webview, params?: Record<string, string>) =>
     webchatDispatch({
       type: WebchatAction.UPDATE_WEBVIEW,
-      payload: { webview, webviewParams: params },
+      payload: { webview, webviewParams: params ?? {} },
     })
 
   const removeWebview = () =>

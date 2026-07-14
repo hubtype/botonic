@@ -16,7 +16,8 @@ export class FlowElement extends ContentFieldsBase {
   static fromHubtypeCMS(
     component: HtCarouselElement,
     locale: string,
-    cmsApi: FlowBuilderApi
+    cmsApi: FlowBuilderApi,
+    botContext: BotContext
   ): FlowElement {
     const newElement = new FlowElement(component.id)
     newElement.title = FlowElement.getTextByLocale(locale, component.title)
@@ -28,7 +29,8 @@ export class FlowElement extends ContentFieldsBase {
     newElement.button = FlowButton.fromHubtypeCMS(
       component.button,
       locale,
-      cmsApi
+      cmsApi,
+      botContext
     )
     return newElement
   }

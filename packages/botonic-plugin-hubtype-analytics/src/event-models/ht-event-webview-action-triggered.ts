@@ -15,6 +15,7 @@ export class HtEventWebviewActionTriggered extends HtEvent {
   flow_node_is_meaningful: boolean
   webview_name: string
   webview_target_id: string
+  webview_params?: Record<string, string>
 
   constructor(event: EventWebviewActionTriggered, requestData: RequestData) {
     super(event, requestData)
@@ -28,5 +29,6 @@ export class HtEventWebviewActionTriggered extends HtEvent {
     this.flow_node_is_meaningful = event.flowNodeIsMeaningful
     this.webview_name = event.webviewName
     this.webview_target_id = event.webviewTargetId
+    this.webview_params = event.webviewParams
   }
 }

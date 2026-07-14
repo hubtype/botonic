@@ -43,7 +43,7 @@ export interface Webview {
 }
 
 export interface ButtonProps {
-  params?: any
+  params?: Record<string, string>
   path?: string
   payload?: string
   target?: string

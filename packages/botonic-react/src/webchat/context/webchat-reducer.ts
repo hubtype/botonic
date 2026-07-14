@@ -11,7 +11,7 @@ export function webchatReducer(
     case WebchatAction.UPDATE_WEBVIEW:
       return { ...state, ...action.payload }
     case WebchatAction.REMOVE_WEBVIEW:
-      return { ...state, webview: undefined, webviewParams: undefined }
+      return { ...state, webview: undefined, webviewParams: {} }
     case WebchatAction.UPDATE_SESSION:
       return { ...state, session: { ...action.payload } }
     case WebchatAction.UPDATE_TYPING:
