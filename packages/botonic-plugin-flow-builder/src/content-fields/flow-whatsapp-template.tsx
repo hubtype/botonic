@@ -9,6 +9,9 @@ import {
   type WhatsappTemplateComponentBody,
   type WhatsappTemplateComponentButtons,
   type WhatsappTemplateComponentHeader,
+  type WhatsappTemplateFlowAction,
+  type WhatsappTemplateFlowButton,
+  type WhatsappTemplatePhoneNumberButton,
   type WhatsappTemplateQuickReplyButton,
   type WhatsappTemplateUrlButton,
   type WhatsappTemplateVoiceCallButton,
@@ -17,14 +20,16 @@ import {
 import { trackOneContent } from '../tracking'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
-import type {
-  HtButton,
-  HtMediaFileLocale,
-  HtWhatsAppTemplate,
-  HtWhatsAppTemplateButtonsComponent,
-  HtWhatsAppTemplateHeaderComponent,
-  HtWhatsappTemplateContentByLocale,
-  HtWhatsappTemplateNode,
+import {
+  type HtButton,
+  type HtFlowButtonActionValue,
+  type HtMediaFileLocale,
+  type HtWhatsAppTemplate,
+  type HtWhatsAppTemplateButtonsComponent,
+  HtWhatsAppTemplateFlowActionType,
+  type HtWhatsAppTemplateHeaderComponent,
+  type HtWhatsappTemplateContentByLocale,
+  type HtWhatsappTemplateNode,
 } from './hubtype-fields'
 
 interface HeaderVariables {
@@ -39,6 +44,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
   public headerVariables?: HeaderVariables
   public buttons?: HtButton[]
   public urlVariableValues?: Record<string, string>
+  public flowButtonActionValues?: Record<string, HtFlowButtonActionValue>
 
   static fromHubtypeCMS(
     component: HtWhatsappTemplateNode,
@@ -52,10 +58,18 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       currentLocale
     )
 
+    if (!contentByLocale.template) {
+      throw new Error(
+        `Whatsapp template not configured for locale: ${currentLocale}`
+      )
+    }
+
     whatsappTemplate.htWhatsappTemplate = contentByLocale.template
     whatsappTemplate.headerVariables = contentByLocale.header_variables
-    whatsappTemplate.variableValues = contentByLocale.variable_values
+    whatsappTemplate.variableValues = contentByLocale.variable_values || {}
     whatsappTemplate.urlVariableValues = contentByLocale.url_variable_values
+    whatsappTemplate.flowButtonActionValues =
+      contentByLocale.flow_button_action_values
 
     whatsappTemplate.followUp = component.follow_up
 
@@ -184,40 +198,86 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     whatsappTemplate: HtWhatsAppTemplate,
     buttonNodes: HtButton[],
     urlVariableValues: Record<string, string>,
+    flowButtonActionValues: Record<string, HtFlowButtonActionValue>,
     botContext: BotContext
   ): WhatsappTemplateComponentButtons | undefined {
     const htWhatsappTemplateButtons = whatsappTemplate.components.find(
       component => component.type === WhatsAppTemplateComponentType.BUTTONS
     ) as HtWhatsAppTemplateButtonsComponent | undefined
 
-    if (htWhatsappTemplateButtons) {
-      const buttons = htWhatsappTemplateButtons.buttons
-        .map((button, index) => {
-          if (button.type === WhatsAppTemplateButtonSubType.URL) {
-            const urlParam: string | undefined =
-              urlVariableValues?.[String(index)]
-            if (!urlParam) {
-              return null
-            }
-            return this.createUrlButtonComponent(index, urlParam, botContext)
-          }
-
-          if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
-            const payload = buttonNodes[index].target?.id || ''
-            return this.createQuickReplyButtonComponent(index, payload)
-          }
-
-          return this.createVoiceCallButtonComponent(index)
-        })
-        .filter(button => button !== null)
-
-      return {
-        type: WhatsAppTemplateComponentType.BUTTONS,
-        buttons: buttons as WhatsappTemplateButton[],
-      }
+    if (!htWhatsappTemplateButtons) {
+      return undefined
     }
 
-    return undefined
+    const buttons = htWhatsappTemplateButtons.buttons
+      .map((button, index) =>
+        this.mapTemplateButton(
+          button,
+          index,
+          whatsappTemplate.name,
+          buttonNodes,
+          urlVariableValues,
+          flowButtonActionValues,
+          botContext
+        )
+      )
+      .filter(button => button !== null)
+
+    return {
+      type: WhatsAppTemplateComponentType.BUTTONS,
+      buttons: buttons as WhatsappTemplateButton[],
+    }
+  }
+
+  private mapTemplateButton(
+    button: HtWhatsAppTemplateButtonsComponent['buttons'][number],
+    index: number,
+    templateName: string,
+    buttonNodes: HtButton[],
+    urlVariableValues: Record<string, string>,
+    flowButtonActionValues: Record<string, HtFlowButtonActionValue>,
+    botContext: BotContext
+  ): WhatsappTemplateButton | null {
+    if (button.type === WhatsAppTemplateButtonSubType.URL) {
+      const urlParam: string | undefined = urlVariableValues?.[String(index)]
+      if (!urlParam) {
+        return null
+      }
+      return this.createUrlButtonComponent(index, urlParam, botContext)
+    }
+
+    if (button.type === WhatsAppTemplateButtonSubType.QUICK_REPLY) {
+      const payload = buttonNodes[index].target?.id || ''
+      return this.createQuickReplyButtonComponent(index, payload)
+    }
+
+    if (button.type === WhatsAppTemplateButtonSubType.PHONE_NUMBER) {
+      return this.createPhoneNumberButtonComponent(index)
+    }
+
+    if (button.type === WhatsAppTemplateButtonSubType.VOICE_CALL) {
+      return this.createVoiceCallButtonComponent(index)
+    }
+
+    if (button.type === WhatsAppTemplateButtonSubType.FLOW) {
+      const actionValue = flowButtonActionValues?.[String(index)]
+      if (!actionValue) {
+        throw new Error(
+          `WhatsApp template '${templateName}' FLOW button at index ${index} requires flow_button_action_values`
+        )
+      }
+      return this.createFlowButtonComponent(
+        index,
+        button,
+        actionValue,
+        botContext,
+        templateName
+      )
+    }
+
+    throw new Error(
+      `WhatsApp template '${templateName}' has unsupported button at index ${index}`
+    )
   }
 
   private createUrlButtonComponent(
@@ -269,6 +329,82 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     }
   }
 
+  private createPhoneNumberButtonComponent(
+    index: number
+  ): WhatsappTemplatePhoneNumberButton {
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.PHONE_NUMBER,
+      index: index,
+      parameters: [],
+    }
+  }
+
+  private resolveFlowActionData(
+    flowActionData: Record<string, string> | undefined,
+    botContext: BotContext
+  ): Record<string, string> | undefined {
+    if (!flowActionData) {
+      return undefined
+    }
+
+    const resolvedData = Object.fromEntries(
+      Object.entries(flowActionData).map(([key, value]) => [
+        key,
+        this.replaceVariables(value, botContext),
+      ])
+    )
+
+    return Object.keys(resolvedData).length > 0 ? resolvedData : undefined
+  }
+
+  private createFlowButtonComponent(
+    index: number,
+    templateButton: Extract<
+      HtWhatsAppTemplateButtonsComponent['buttons'][number],
+      { type: WhatsAppTemplateButtonSubType.FLOW }
+    >,
+    actionValue: HtFlowButtonActionValue,
+    botContext: BotContext,
+    templateName: string
+  ): WhatsappTemplateFlowButton {
+    const flowToken = this.replaceVariables(actionValue.flow_token, botContext)
+    if (!flowToken.trim()) {
+      throw new Error(
+        `WhatsApp template '${templateName}' FLOW button at index ${index} requires a non-empty flow_token`
+      )
+    }
+
+    const action: WhatsappTemplateFlowAction = {
+      flow_token: flowToken,
+    }
+
+    if (
+      templateButton.flow_action !==
+      HtWhatsAppTemplateFlowActionType.DATA_EXCHANGE
+    ) {
+      const flowActionData = this.resolveFlowActionData(
+        actionValue.flow_action_data,
+        botContext
+      )
+      if (flowActionData) {
+        action.flow_action_data = flowActionData
+      }
+    }
+
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.FLOW,
+      index: String(index),
+      parameters: [
+        {
+          type: WhatsAppTemplateParameterType.ACTION,
+          action,
+        },
+      ],
+    }
+  }
+
   async trackFlow(botContext: BotContext): Promise<void> {
     await trackOneContent(botContext, this)
   }
@@ -296,6 +432,7 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       this.htWhatsappTemplate,
       this.buttons || [],
       this.urlVariableValues || {},
+      this.flowButtonActionValues || {},
       botContext
     )
 

@@ -2,6 +2,12 @@ import { INPUT } from '@botonic/core'
 
 import { renderComponent } from '../../util/react'
 import { Message } from '../message'
+import type {
+  WhatsappTemplateComponentBody,
+  WhatsappTemplateComponentButtons,
+  WhatsappTemplateComponentFooter,
+  WhatsappTemplateComponentHeader,
+} from './types'
 
 const serialize = (message: string) => {
   return { text: message }
@@ -11,10 +17,10 @@ export interface WhatsappTemplateProps {
   name: string
   language: string
   namespace?: string
-  header?: Record<string, any>
-  body?: Record<string, any>
-  footer?: Record<string, any>
-  buttons?: Record<string, any>
+  header?: WhatsappTemplateComponentHeader
+  body?: WhatsappTemplateComponentBody
+  footer?: WhatsappTemplateComponentFooter
+  buttons?: WhatsappTemplateComponentButtons
 }
 
 export const WhatsappTemplate = (props: WhatsappTemplateProps) => {

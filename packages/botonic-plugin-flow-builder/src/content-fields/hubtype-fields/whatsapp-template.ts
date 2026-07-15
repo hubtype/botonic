@@ -8,6 +8,11 @@ import type { HtButton } from './button'
 import type { HtBaseNode, HtMediaFileLocale } from './common'
 import type { HtNodeWithContentType } from './node-types'
 
+export enum HtWhatsAppTemplateFlowActionType {
+  NAVIGATE = 'navigate',
+  DATA_EXCHANGE = 'data_exchange',
+}
+
 type HtWhatsAppTemplateButton =
   | {
       type: WhatsAppTemplateButtonSubType.URL
@@ -27,6 +32,24 @@ type HtWhatsAppTemplateButton =
       phone_number: string
       index: number
     }
+  | {
+      type: WhatsAppTemplateButtonSubType.VOICE_CALL
+      text: string
+      index: number
+    }
+  | {
+      type: WhatsAppTemplateButtonSubType.FLOW
+      text: string
+      flow_id: string
+      flow_action?: HtWhatsAppTemplateFlowActionType
+      navigate_screen?: string
+      index: number
+    }
+
+export interface HtFlowButtonActionValue {
+  flow_token: string
+  flow_action_data?: Record<string, string>
+}
 
 export interface HtWhatsAppTemplateHeaderComponent {
   type: WhatsAppTemplateComponentType.HEADER
@@ -71,14 +94,15 @@ export interface HtWhatsAppTemplate {
 }
 
 export interface HtWhatsappTemplateContentByLocale {
-  template: HtWhatsAppTemplate
+  template?: HtWhatsAppTemplate
   header_variables?: {
     type: WhatsAppTemplateParameterType
     text?: Record<string, string>
     media?: HtMediaFileLocale[]
   }
-  variable_values: Record<string, string>
+  variable_values?: Record<string, string>
   url_variable_values?: Record<string, string>
+  flow_button_action_values?: Record<string, HtFlowButtonActionValue>
 }
 
 export interface HtWhatsappTemplateNode extends HtBaseNode {

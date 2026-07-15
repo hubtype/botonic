@@ -161,6 +161,65 @@ describe('WhatsappTemplate Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('renders WhatsappTemplate with FLOW button', () => {
+    const props = {
+      name: 'booking_flow',
+      language: 'en',
+      buttons: {
+        type: WhatsAppTemplateComponentType.BUTTONS,
+        buttons: [
+          {
+            type: WhatsAppTemplateComponentType.BUTTON,
+            sub_type: WhatsAppTemplateButtonSubType.FLOW,
+            index: '0',
+            parameters: [
+              {
+                type: WhatsAppTemplateParameterType.ACTION,
+                action: {
+                  flow_token: 'static-booking-token',
+                  flow_action_data: {
+                    ticket_id: 'TKT-001',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const tree = renderToJSON(<WhatsappTemplate {...props} />)
+    expect(tree).toMatchSnapshot()
+  })
+
+  test('renders WhatsappTemplate with FLOW button without flow_action_data', () => {
+    const props = {
+      name: 'data_exchange_flow',
+      language: 'en',
+      buttons: {
+        type: WhatsAppTemplateComponentType.BUTTONS,
+        buttons: [
+          {
+            type: WhatsAppTemplateComponentType.BUTTON,
+            sub_type: WhatsAppTemplateButtonSubType.FLOW,
+            index: '0',
+            parameters: [
+              {
+                type: WhatsAppTemplateParameterType.ACTION,
+                action: {
+                  flow_token: 'static-data-token',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const tree = renderToJSON(<WhatsappTemplate {...props} />)
+    expect(tree).toMatchSnapshot()
+  })
+
   test('renders WhatsappTemplate with all components (header, body, buttons)', () => {
     const props = {
       name: 'support_ticket',
@@ -230,6 +289,7 @@ describe('WhatsApp Template Types', () => {
     expect(WhatsAppTemplateButtonSubType.QUICK_REPLY).toBe('QUICK_REPLY')
     expect(WhatsAppTemplateButtonSubType.PHONE_NUMBER).toBe('PHONE_NUMBER')
     expect(WhatsAppTemplateButtonSubType.VOICE_CALL).toBe('VOICE_CALL')
+    expect(WhatsAppTemplateButtonSubType.FLOW).toBe('FLOW')
   })
 
   test('WhatsAppTemplateParameterType has correct values', () => {
@@ -238,6 +298,7 @@ describe('WhatsApp Template Types', () => {
     expect(WhatsAppTemplateParameterType.IMAGE).toBe('IMAGE')
     expect(WhatsAppTemplateParameterType.VIDEO).toBe('VIDEO')
     expect(WhatsAppTemplateParameterType.DOCUMENT).toBe('DOCUMENT')
+    expect(WhatsAppTemplateParameterType.ACTION).toBe('ACTION')
   })
 
   test('WhatsAppTemplateComponentType has correct values', () => {

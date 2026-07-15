@@ -18,6 +18,7 @@ const WhatsAppTemplateButtonSubType = {
   URL: 'URL',
   QUICK_REPLY: 'QUICK_REPLY',
   PHONE_NUMBER: 'PHONE_NUMBER',
+  FLOW: 'FLOW',
 } as const
 
 export const whatsappTemplateFlow = {
@@ -494,6 +495,134 @@ export const whatsappTemplateFlow = {
         payload: [],
         has_auto_assign: false,
         has_queue_position_changed_notifications_enabled: false,
+      },
+    },
+    {
+      id: 'keyword-whatsapp-template-flow-button',
+      code: '',
+      is_code_ai_generated: false,
+      meta: { x: 0, y: 500 },
+      follow_up: null,
+      target: {
+        id: 'whatsapp-template-flow-button-node',
+        type: 'whatsapp-template',
+      },
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [{ values: ['templateFlowButton'], locale: 'en' }],
+      },
+    },
+    {
+      id: 'whatsapp-template-flow-button-node',
+      code: 'WHATSAPP_TEMPLATE_FLOW_BUTTON',
+      is_code_ai_generated: false,
+      meta: { x: 300, y: 500 },
+      follow_up: null,
+      target: null,
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'whatsapp-template',
+      content: {
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-flow-button-id',
+              name: 'booking_flow_template',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'UTILITY',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Book your appointment',
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BUTTONS,
+                  buttons: [
+                    {
+                      type: WhatsAppTemplateButtonSubType.URL,
+                      text: 'Visit Website',
+                      url: 'https://example.com/booking/{{1}}',
+                      index: 0,
+                    },
+                    {
+                      type: WhatsAppTemplateButtonSubType.QUICK_REPLY,
+                      text: 'Talk to Agent',
+                      id: 'quick-reply-agent',
+                      index: 1,
+                    },
+                    {
+                      type: WhatsAppTemplateButtonSubType.PHONE_NUMBER,
+                      text: 'Call Support',
+                      phone_number: '+1234567890',
+                      index: 2,
+                    },
+                    {
+                      type: WhatsAppTemplateButtonSubType.FLOW,
+                      text: 'Open Flow',
+                      flow_id: 'meta-flow-id-123',
+                      flow_action: 'navigate',
+                      navigate_screen: 'BOOKING_SCREEN',
+                      index: 3,
+                    },
+                  ],
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'POSITIONAL',
+            },
+            variable_values: {},
+            url_variable_values: {
+              '0': '{ticketId}',
+            },
+            flow_button_action_values: {
+              '3': {
+                flow_token: 'static-booking-token',
+                flow_action_data: {
+                  ticket_id: '{ticketId}',
+                },
+              },
+            },
+          },
+        },
+        buttons: [
+          {
+            id: 'url-button-id',
+            text: [{ message: 'Visit Website', locale: 'en' }],
+            url: [],
+            target: null,
+            hidden: [],
+          },
+          {
+            id: 'quick-reply-button-id',
+            text: [{ message: 'Talk to Agent', locale: 'en' }],
+            url: [],
+            target: {
+              id: 'agent-handoff-node',
+              type: 'handoff',
+            },
+            hidden: [],
+          },
+          {
+            id: 'phone-button-id',
+            text: [{ message: 'Call Support', locale: 'en' }],
+            url: [],
+            target: null,
+            hidden: [],
+          },
+          {
+            id: 'flow-button-id',
+            text: [{ message: 'Open Flow', locale: 'en' }],
+            url: [],
+            target: null,
+            hidden: [],
+          },
+        ],
       },
     },
     // Keyword to trigger WhatsApp template without header

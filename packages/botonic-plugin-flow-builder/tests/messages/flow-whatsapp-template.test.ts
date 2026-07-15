@@ -3,9 +3,11 @@ import {
   WhatsAppTemplateButtonSubType,
   WhatsAppTemplateComponentType,
   WhatsAppTemplateParameterType,
+  type WhatsappTemplateFlowButton,
   type WhatsappTemplateHeaderImageParameter,
   type WhatsappTemplateHeaderTextParameter,
   type WhatsappTemplateHeaderVideoParameter,
+  type WhatsappTemplatePhoneNumberButton,
   type WhatsappTemplateQuickReplyButton,
   type WhatsappTemplateUrlButton,
 } from '@botonic/react'
@@ -14,6 +16,7 @@ import { describe, expect, test } from '@jest/globals'
 import { FlowWhatsappTemplate } from '../../src/content-fields/flow-whatsapp-template'
 import { HtNodeWithContentType } from '../../src/content-fields/hubtype-fields/node-types'
 import type { HtWhatsappTemplateNode } from '../../src/content-fields/hubtype-fields/whatsapp-template'
+import { HtWhatsAppTemplateFlowActionType } from '../../src/content-fields/hubtype-fields/whatsapp-template'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappTemplateFlow } from '../helpers/flows/whatsapp-template'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
@@ -165,6 +168,31 @@ describe('FlowWhatsappTemplate', () => {
 
       expect(flowWhatsappTemplate.headerVariables).toBeUndefined()
       expect(flowWhatsappTemplate.urlVariableValues).toBeUndefined()
+    })
+
+    test('should throw when template is not configured for locale', () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-node-id',
+        code: 'TEST_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              variable_values: {},
+            },
+          },
+          buttons: [],
+        },
+      }
+
+      expect(() => FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')).toThrow(
+        'Whatsapp template not configured for locale: en'
+      )
     })
   })
 
@@ -417,6 +445,7 @@ describe('FlowWhatsappTemplate', () => {
         template.htWhatsappTemplate,
         template.buttons!,
         template.urlVariableValues!,
+        template.flowButtonActionValues || {},
         request
       )
 
@@ -442,12 +471,355 @@ describe('FlowWhatsappTemplate', () => {
           .payload
       ).toBe('agent-handoff-node')
 
-      // Voice Call button (maps to default since PHONE_NUMBER is not handled separately)
-      const voiceCallButton = buttons?.buttons[2]
-      expect(voiceCallButton?.sub_type).toBe(
-        WhatsAppTemplateButtonSubType.VOICE_CALL
+      // Phone Number button
+      const phoneNumberButton = buttons?.buttons[2]
+      expect(phoneNumberButton?.sub_type).toBe(
+        WhatsAppTemplateButtonSubType.PHONE_NUMBER
       )
-      expect(voiceCallButton?.index).toBe(2)
+      expect(phoneNumberButton?.index).toBe(2)
+      expect(
+        (phoneNumberButton as WhatsappTemplatePhoneNumberButton)?.parameters
+      ).toEqual([])
+    })
+
+    test('should create FLOW button with flow_token and flow_action_data variable replacement', async () => {
+      const { contents, request } = await createFlowBuilderPluginAndGetContents(
+        {
+          flowBuilderOptions: { flow: whatsappTemplateFlow },
+          requestArgs: {
+            input: { data: 'templateFlowButton', type: INPUT.TEXT },
+            extraData: { ticketId: 'TKT-FLOW-99' },
+          },
+        }
+      )
+
+      const template = contents[0] as FlowWhatsappTemplate
+      expect(template.flowButtonActionValues).toEqual({
+        '3': {
+          flow_token: 'static-booking-token',
+          flow_action_data: {
+            ticket_id: '{ticketId}',
+          },
+        },
+      })
+
+      // @ts-expect-error - accessing private method for testing
+      const buttons = template.getButtons(
+        template.htWhatsappTemplate,
+        template.buttons!,
+        template.urlVariableValues || {},
+        template.flowButtonActionValues || {},
+        request
+      )
+
+      expect(buttons?.buttons).toHaveLength(4)
+
+      const flowButton = buttons?.buttons[3] as WhatsappTemplateFlowButton
+      expect(flowButton.sub_type).toBe(WhatsAppTemplateButtonSubType.FLOW)
+      expect(flowButton.index).toBe('3')
+      expect(flowButton.parameters[0].type).toBe(
+        WhatsAppTemplateParameterType.ACTION
+      )
+      expect(flowButton.parameters[0].action).toEqual({
+        flow_token: 'static-booking-token',
+        flow_action_data: {
+          ticket_id: 'TKT-FLOW-99',
+        },
+      })
+    })
+
+    test('should create FLOW button without flow_action_data when optional', async () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-flow-node-id',
+        code: 'TEST_FLOW_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'navigate_only_template',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'UTILITY',
+                components: [
+                  {
+                    type: WhatsAppTemplateComponentType.BUTTONS,
+                    buttons: [
+                      {
+                        type: WhatsAppTemplateButtonSubType.FLOW,
+                        text: 'Open Flow',
+                        flow_id: 'meta-flow-id',
+                        flow_action: HtWhatsAppTemplateFlowActionType.NAVIGATE,
+                        index: 0,
+                      },
+                    ],
+                  },
+                ],
+                namespace: 'test-namespace',
+                parameter_format: 'POSITIONAL',
+              },
+              variable_values: {},
+              flow_button_action_values: {
+                '0': {
+                  flow_token: 'token-only',
+                },
+              },
+            },
+          },
+          buttons: [],
+        },
+      }
+
+      const { request } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: whatsappTemplateFlow },
+        requestArgs: {
+          input: { data: 'templateNoHeader', type: INPUT.TEXT },
+        },
+      })
+
+      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')
+      // @ts-expect-error - accessing private method for testing
+      const buttons = template.getButtons(
+        template.htWhatsappTemplate,
+        template.buttons || [],
+        {},
+        template.flowButtonActionValues || {},
+        request
+      )
+
+      const flowButton = buttons?.buttons[0] as WhatsappTemplateFlowButton
+      expect(flowButton.index).toBe('0')
+      expect(flowButton.parameters[0].action).toEqual({
+        flow_token: 'token-only',
+      })
+    })
+
+    test('should omit flow_action_data for data_exchange template buttons', async () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-flow-node-id',
+        code: 'TEST_FLOW_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'data_exchange_template',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'UTILITY',
+                components: [
+                  {
+                    type: WhatsAppTemplateComponentType.BUTTONS,
+                    buttons: [
+                      {
+                        type: WhatsAppTemplateButtonSubType.FLOW,
+                        text: 'Open Flow',
+                        flow_id: 'meta-flow-id',
+                        flow_action:
+                          HtWhatsAppTemplateFlowActionType.DATA_EXCHANGE,
+                        index: 0,
+                      },
+                    ],
+                  },
+                ],
+                namespace: 'test-namespace',
+                parameter_format: 'POSITIONAL',
+              },
+              variable_values: {},
+              flow_button_action_values: {
+                '0': {
+                  flow_token: 'static-data-token',
+                  flow_action_data: {
+                    customer_id: 'should-be-omitted',
+                  },
+                },
+              },
+            },
+          },
+          buttons: [
+            {
+              id: 'flow-btn',
+              text: [{ message: 'Open Flow', locale: 'en' }],
+              url: [],
+              target: undefined,
+              hidden: [],
+            },
+          ],
+        },
+      }
+
+      const { request } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: whatsappTemplateFlow },
+        requestArgs: {
+          input: { data: 'templateNoHeader', type: INPUT.TEXT },
+        },
+      })
+
+      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')
+      // @ts-expect-error - accessing private method for testing
+      const buttons = template.getButtons(
+        template.htWhatsappTemplate,
+        template.buttons!,
+        {},
+        template.flowButtonActionValues || {},
+        request
+      )
+
+      const flowButton = buttons?.buttons[0] as WhatsappTemplateFlowButton
+      expect(flowButton.parameters[0].action).toEqual({
+        flow_token: 'static-data-token',
+      })
+    })
+
+    test('should throw when FLOW button is missing flow_button_action_values', async () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-flow-node-id',
+        code: 'TEST_FLOW_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'missing_flow_values',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'UTILITY',
+                components: [
+                  {
+                    type: WhatsAppTemplateComponentType.BUTTONS,
+                    buttons: [
+                      {
+                        type: WhatsAppTemplateButtonSubType.FLOW,
+                        text: 'Open Flow',
+                        flow_id: 'meta-flow-id',
+                        flow_action:
+                          HtWhatsAppTemplateFlowActionType.DATA_EXCHANGE,
+                        index: 0,
+                      },
+                    ],
+                  },
+                ],
+                namespace: 'test-namespace',
+                parameter_format: 'POSITIONAL',
+              },
+              variable_values: {},
+            },
+          },
+          buttons: [],
+        },
+      }
+
+      const { request } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: whatsappTemplateFlow },
+        requestArgs: {
+          input: { data: 'templateNoHeader', type: INPUT.TEXT },
+        },
+      })
+
+      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')
+
+      expect(() =>
+        // @ts-expect-error - accessing private method for testing
+        template.getButtons(
+          template.htWhatsappTemplate,
+          template.buttons || [],
+          {},
+          {},
+          request
+        )
+      ).toThrow(
+        "WhatsApp template 'missing_flow_values' FLOW button at index 0 requires flow_button_action_values"
+      )
+    })
+
+    test('should throw when FLOW button has empty flow_token', async () => {
+      const mockNode: HtWhatsappTemplateNode = {
+        id: 'test-flow-node-id',
+        code: 'TEST_FLOW_TEMPLATE',
+        meta: { x: 0, y: 0 },
+        follow_up: undefined,
+        target: undefined,
+        flow_id: 'test-flow',
+        is_meaningful: false,
+        type: HtNodeWithContentType.WHATSAPP_TEMPLATE,
+        content: {
+          by_locale: {
+            en: {
+              template: {
+                id: 'template-id',
+                name: 'empty_flow_token',
+                language: 'en',
+                status: 'APPROVED',
+                category: 'UTILITY',
+                components: [
+                  {
+                    type: WhatsAppTemplateComponentType.BUTTONS,
+                    buttons: [
+                      {
+                        type: WhatsAppTemplateButtonSubType.FLOW,
+                        text: 'Open Flow',
+                        flow_id: 'meta-flow-id',
+                        flow_action:
+                          HtWhatsAppTemplateFlowActionType.DATA_EXCHANGE,
+                        index: 0,
+                      },
+                    ],
+                  },
+                ],
+                namespace: 'test-namespace',
+                parameter_format: 'POSITIONAL',
+              },
+              variable_values: {},
+              flow_button_action_values: {
+                '0': {
+                  flow_token: '   ',
+                },
+              },
+            },
+          },
+          buttons: [],
+        },
+      }
+
+      const { request } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: whatsappTemplateFlow },
+        requestArgs: {
+          input: { data: 'templateNoHeader', type: INPUT.TEXT },
+        },
+      })
+
+      const template = FlowWhatsappTemplate.fromHubtypeCMS(mockNode, 'en')
+
+      expect(() =>
+        // @ts-expect-error - accessing private method for testing
+        template.getButtons(
+          template.htWhatsappTemplate,
+          template.buttons || [],
+          {},
+          template.flowButtonActionValues || {},
+          request
+        )
+      ).toThrow(
+        "WhatsApp template 'empty_flow_token' FLOW button at index 0 requires a non-empty flow_token"
+      )
     })
 
     test('should filter out URL buttons without urlParam', async () => {
@@ -527,6 +899,7 @@ describe('FlowWhatsappTemplate', () => {
         template.htWhatsappTemplate,
         template.buttons!,
         template.urlVariableValues || {},
+        template.flowButtonActionValues || {},
         request
       )
 
@@ -552,6 +925,7 @@ describe('FlowWhatsappTemplate', () => {
       const buttons = template.getButtons(
         template.htWhatsappTemplate,
         [],
+        {},
         {},
         request
       )
