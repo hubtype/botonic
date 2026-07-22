@@ -3,15 +3,29 @@ import { type VariableConfigJSON, VariableType } from '../models/index'
 
 const SESSION_USER_EXTRA_DATA_PREFIX = 'session.user.extra_data'
 
-const BASE_SESSION_VARIABLES: VariableConfigJSON[] = [
+export const BASE_SESSION_VARIABLES: VariableConfigJSON[] = [
   { key_path: 'input.data', type: VariableType.String },
   { key_path: 'input.type', type: VariableType.String },
+  {
+    key_path: 'session.is_first_interaction',
+    type: VariableType.Boolean,
+  },
+  {
+    key_path: 'session.is_test_integration',
+    type: VariableType.Boolean,
+  },
+  { key_path: 'session._shadowing', type: VariableType.Boolean },
   { key_path: 'session.user.locale', type: VariableType.String },
   {
     key_path: 'session.user.country',
     type: VariableType.String,
   },
   { key_path: 'session.user.system_locale', type: VariableType.String },
+  { key_path: 'session.user.username', type: VariableType.String },
+  {
+    key_path: 'session.user.unformatted_phone_number',
+    type: VariableType.String,
+  },
 ]
 
 export function getSessionVariables(
