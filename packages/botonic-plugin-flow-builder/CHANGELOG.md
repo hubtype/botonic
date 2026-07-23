@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3251](https://github.com/hubtype/botonic/pull/3251): Add support to whatsapp template with flow action buttons.
+
 ### Changed
 
 ### Fixed

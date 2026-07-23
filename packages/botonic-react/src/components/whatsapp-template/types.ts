@@ -3,6 +3,7 @@ export enum WhatsAppTemplateButtonSubType {
   QUICK_REPLY = 'QUICK_REPLY',
   PHONE_NUMBER = 'PHONE_NUMBER',
   VOICE_CALL = 'VOICE_CALL',
+  FLOW = 'FLOW',
 }
 
 export enum WhatsAppTemplateParameterType {
@@ -11,6 +12,7 @@ export enum WhatsAppTemplateParameterType {
   IMAGE = 'IMAGE',
   VIDEO = 'VIDEO',
   DOCUMENT = 'DOCUMENT',
+  ACTION = 'ACTION',
 }
 
 export enum WhatsAppTemplateComponentType {
@@ -102,7 +104,33 @@ export interface WhatsappTemplateVoiceCallButton {
   parameters: []
 }
 
+export interface WhatsappTemplatePhoneNumberButton {
+  type: WhatsAppTemplateComponentType.BUTTON
+  sub_type: WhatsAppTemplateButtonSubType.PHONE_NUMBER
+  index: number
+  parameters: []
+}
+
+export interface WhatsappTemplateFlowAction {
+  flow_token: string
+  flow_action_data?: Record<string, string>
+}
+
+export interface WhatsappTemplateFlowActionParameter {
+  type: WhatsAppTemplateParameterType.ACTION
+  action: WhatsappTemplateFlowAction
+}
+
+export interface WhatsappTemplateFlowButton {
+  type: WhatsAppTemplateComponentType.BUTTON
+  sub_type: WhatsAppTemplateButtonSubType.FLOW
+  index: string
+  parameters: WhatsappTemplateFlowActionParameter[]
+}
+
 export type WhatsappTemplateButton =
   | WhatsappTemplateQuickReplyButton
   | WhatsappTemplateUrlButton
   | WhatsappTemplateVoiceCallButton
+  | WhatsappTemplatePhoneNumberButton
+  | WhatsappTemplateFlowButton
