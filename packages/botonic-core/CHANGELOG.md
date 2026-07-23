@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.51.x] - 2026-mm-dd
+## [0.53.x] - 2026-mm-dd
 
 ### Added
 
@@ -20,7 +20,11 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
-## [0.51.2] - 2026-mm-dd
+## [0.52.1] - 2026-07-23
+
+- [PR-3252](https://github.com/hubtype/botonic/pull/3252): Add more variables in BotConfig used in every deploy.
+
+## [0.51.2] - 2026-07-05
 
 - [PR-3239](https://github.com/hubtype/botonic/pull/3239): Create getSessionVariables function to create bot-config variables with user.extra_data variables.
 
