@@ -4,7 +4,10 @@ import { beforeEach, describe, expect, test } from '@jest/globals'
 import type { FlowText } from '../src/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
-import { mockSmartIntent, smartIntentInferenceSpy } from './__mocks__/smart-intent'
+import {
+  mockSmartIntent,
+  smartIntentInferenceSpy,
+} from './__mocks__/smart-intent'
 import { smartIntentsFlow } from './helpers/flows/smart-intents'
 import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
 
