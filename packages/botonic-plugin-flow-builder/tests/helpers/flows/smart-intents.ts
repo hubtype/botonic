@@ -461,6 +461,7 @@ export const smartIntentsFlow = {
       content: {
         title: 'Select a seat',
         description: 'The user wants to select a seat',
+        is_active: false,
       },
     },
   ],

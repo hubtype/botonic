@@ -16,6 +16,7 @@ export interface SmartIntentsInferenceParams {
   text: string
   num_smart_intents_to_use?: number
   use_latest: boolean
+  disabled_smart_intent_titles: string[]
 }
 
 export interface SmartIntentsInferenceConfig {
@@ -41,7 +42,7 @@ export class SmartIntentsApi {
     }
 
     const disabledSmartIntentTitles = smartIntentNodes
-      .filter(smartIntentNode => !smartIntentNode.content.is_active)
+      .filter(smartIntentNode => smartIntentNode.content.is_active === false)
       .map(smartIntentNode => smartIntentNode.content.title)
 
     const params = {
