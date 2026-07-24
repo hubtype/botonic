@@ -40,11 +40,16 @@ export class SmartIntentsApi {
       return undefined
     }
 
+    const disabledSmartIntentTitles = smartIntentNodes
+      .filter(smartIntentNode => !smartIntentNode.content.is_active)
+      .map(smartIntentNode => smartIntentNode.content.title)
+
     const params = {
       bot_id: this.currentRequest.session.bot.id,
       text: this.userTextOrTranscript,
       num_smart_intents_to_use: this.smartIntentsConfig.numSmartIntentsToUse,
       use_latest: this.resolveUseLatest(),
+      disabled_smart_intent_titles: disabledSmartIntentTitles,
     }
 
     try {

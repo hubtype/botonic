@@ -4,6 +4,7 @@ import type { HtNodeWithContentType } from './node-types'
 interface SmartIntent {
   title: string
   description: string
+  is_active: boolean
 }
 
 export interface HtSmartIntentNode extends HtBaseNode {
