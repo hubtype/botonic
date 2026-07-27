@@ -10,17 +10,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.53.x] - 2026-mm-dd
+## [0.54.0] - 2026-mm-dd
 
 ### Added
-
-- [PR-3255](https://github.com/hubtype/botonic/pull/3255): Pass deactivate smart intents in inference endpoint.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.54.0] - 2026-07-27
+
+### Added
+
+- [PR-3255](https://github.com/hubtype/botonic/pull/3255): Pass deactivate smart intents in inference endpoint.
 
 ## [0.53.0] - 2026-07-23
 
