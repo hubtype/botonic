@@ -17,7 +17,6 @@
     "@botonic/plugin-ai-agents": "^0.54.0",
     "@botonic/plugin-flow-builder": "^0.54.0",
     "@botonic/plugin-hubtype-analytics": "^0.54.0",
-    "@botonic/plugin-knowledge-bases": "^0.54.0",
     "@botonic/react": "^0.54.0",
     "@reduxjs/toolkit": "1.9.7",
     "axios": "^1.18.1",
