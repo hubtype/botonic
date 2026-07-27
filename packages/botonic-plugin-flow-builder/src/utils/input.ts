@@ -40,7 +40,3 @@ export function isKeywordsAllowed(request: ActionRequest): boolean {
 export function isSmartIntentsAllowed(request: ActionRequest): boolean {
   return isNluAllowed(request, 'allowSmartIntents')
 }
-
-export function isKnowledgeBasesAllowed(request: ActionRequest): boolean {
-  return isNluAllowed(request, 'allowKnowledgeBases')
-}

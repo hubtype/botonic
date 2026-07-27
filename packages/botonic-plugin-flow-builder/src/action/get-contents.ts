@@ -6,7 +6,6 @@ import { getContentsByAiAgentFromUserInput } from './ai-agent-from-user-input'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFallback } from './fallback'
 import { getContentsByFirstInteraction } from './first-interaction'
-import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
 
 export async function getContents(
@@ -40,10 +39,6 @@ export async function getContents(
     const aiAgentContents = await getContentsByAiAgentFromUserInput(context)
     if (aiAgentContents.length > 0) {
       return aiAgentContents
-    }
-    const knowledgeBaseContents = await getContentsByKnowledgeBase(context)
-    if (knowledgeBaseContents.length > 0) {
-      return knowledgeBaseContents
     }
   }
 

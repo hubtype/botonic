@@ -13,7 +13,6 @@ import type { HtGoToFlow } from './go-to-flow'
 import type { HtHandoffNode } from './handoff'
 import type { HtImageNode } from './image'
 import type { HtKeywordNode } from './keyword'
-import type { HtKnowledgeBaseNode } from './knowledge-base'
 import type { HtPayloadNode } from './payload'
 // import { HtQueueStatusConditionalNode } from './queue-status-conditional'
 import type { HtRatingNode } from './rating'
@@ -38,7 +37,6 @@ export type HtNodeWithContent =
   | HtWhatsappButtonListNode
   | HtWhatsappCTAUrlButtonNode
   | HtSmartIntentNode
-  | HtKnowledgeBaseNode
   | HtBotActionNode
   | HtAiAgentNode
   | HtAiAgentRouterNode

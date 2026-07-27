@@ -15,6 +15,5 @@ export const PUSH_FLOW_PAYLOAD = 'push-flow'
 
 /* ********** FLOW NAMES ********** */
 export const MAIN_FLOW_NAME = 'Main'
-export const KNOWLEDGE_BASE_FLOW_NAME = 'Knowledge base'
 export const AI_AGENTS_FLOW_NAME = 'AI Agents'
 export const FALLBACK_FLOW_NAME = 'Fallback'

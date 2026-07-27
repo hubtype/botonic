@@ -1,12 +1,7 @@
 import type { PluginPreRequest } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  AI_AGENTS_FLOW_NAME,
-  KNOWLEDGE_BASE_FLOW_NAME,
-  SEPARATOR,
-  UUID_REGEXP,
-} from './constants'
+import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   type HtBotActionNode,
   type HtCaptureUserInputNode,
@@ -162,21 +157,6 @@ export class FlowBuilderApi {
       : this.getNodeById(fallbackSecondMessage.id)
   }
 
-  getKnowledgeBaseConfig():
-    | { followup?: HtNodeLink; isActive: boolean }
-    | undefined {
-    const fallbackNode = this.flow.nodes.find(
-      node => node.type === HtNodeWithContentType.FALLBACK
-    ) as HtFallbackNode | undefined
-
-    return fallbackNode
-      ? {
-          followup: fallbackNode.content.knowledge_base_followup,
-          isActive: fallbackNode.content.is_knowledge_base_active || false,
-        }
-      : undefined
-  }
-
   getSmartIntentNodes(): HtSmartIntentNode[] {
     return this.flow.nodes.filter(
       node => node.type === HtNodeWithContentType.SMART_INTENT
@@ -254,16 +234,6 @@ export class FlowBuilderApi {
     return campaign ? campaign.name : ''
   }
 
-  getStartNodeKnowledgeBaseFlow(): HtNodeWithContent | undefined {
-    const knowledgeBaseFlow = this.flow.flows.find(
-      flow => flow.name === KNOWLEDGE_BASE_FLOW_NAME
-    )
-    if (!knowledgeBaseFlow) {
-      return undefined
-    }
-    return this.getNodeById<HtNodeWithContent>(knowledgeBaseFlow.start_node_id)
-  }
-
   getStartNodeAiAgentFlow(): HtNodeWithContent | undefined {
     const aiAgentFlow = this.flow.flows.find(
       flow => flow.name === AI_AGENTS_FLOW_NAME
@@ -274,10 +244,6 @@ export class FlowBuilderApi {
     }
 
     return this.getNodeById<HtNodeWithContent>(aiAgentFlow.start_node_id)
-  }
-
-  isKnowledgeBaseEnabled(): boolean {
-    return this.flow.is_knowledge_base_active || false
   }
 
   isAiAgentEnabled(): boolean {

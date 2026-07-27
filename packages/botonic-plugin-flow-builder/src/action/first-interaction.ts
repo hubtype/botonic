@@ -5,7 +5,6 @@ import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils/input'
 import { getContentsByAiAgentFromUserInput } from './ai-agent-from-user-input'
 import type { FlowBuilderContext } from './context'
-import { getContentsByKnowledgeBase } from './knowledge-bases'
 import { getContentsByPayload } from './payload'
 
 export async function getContentsByFirstInteraction(
@@ -38,7 +37,7 @@ export async function getContentsByFirstInteraction(
   }
 
   /* If the first interaction has a FlowBotAction, it should be the last content
-   * and avoid to render the match with keywords,intents or knowledge base
+   * and avoid to render the match with keywords or intents
    */
   if (firstInteractionContents.at(-1) instanceof FlowBotAction) {
     return firstInteractionContents
@@ -86,17 +85,6 @@ async function getContentsByUserInput(
     if (contentsByKeywordsOrIntents.length > 0) {
       return contentsByKeywordsOrIntents
     }
-  }
-
-  const contentsByKnowledgeBase = await getContentsByKnowledgeBase({
-    cmsApi,
-    flowBuilderPlugin,
-    request,
-    resolvedLocale,
-  })
-
-  if (contentsByKnowledgeBase.length > 0) {
-    return contentsByKnowledgeBase
   }
 
   if (!flowBuilderPlugin.disableAIAgentInFirstInteraction) {

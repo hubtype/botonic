@@ -10,10 +10,6 @@ import { FlowCustomConditional } from './flow-custom-conditional'
 import { FlowGoToFlow } from './flow-go-to-flow'
 import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
-import {
-  DISABLED_MEMORY_LENGTH,
-  FlowKnowledgeBase,
-} from './flow-knowledge-base'
 import { FlowQueueStatusConditional } from './flow-queue-status-conditional'
 import { FlowRating } from './flow-rating'
 import { FlowText } from './flow-text'
@@ -41,7 +37,6 @@ export {
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
-  FlowKnowledgeBase,
   FlowQueueStatusConditional,
   FlowRating,
   FlowText,
@@ -63,7 +58,6 @@ export type FlowContent =
   | FlowWhatsappCtaUrlButtonNode
   | FlowWhatsappTemplate
   | FlowHandoff
-  | FlowKnowledgeBase
   | FlowBotAction
   | FlowAiAgent
   | FlowRating
@@ -75,5 +69,3 @@ export type FlowContent =
   | FlowCaptureUserInput
   | FlowAiAgentRouter
   | FlowCustomConditionalV2
-
-export { DISABLED_MEMORY_LENGTH }
