@@ -2,15 +2,17 @@ import { jest } from '@jest/globals'
 
 import { SmartIntentsApi } from '../../src/user-input/smart-intent'
 
+export let smartIntentInferenceSpy: jest.SpiedFunction<
+  (inferenceParams: unknown) => Promise<unknown>
+>
+
 export function mockSmartIntent(intentName?: string) {
-  // Spy on the private function getInference
-  const getInferenceSpy = jest.spyOn(
+  smartIntentInferenceSpy = jest.spyOn(
     SmartIntentsApi.prototype as any,
     'getInference'
   )
 
-  // Change the implementation of getInference
-  getInferenceSpy.mockImplementation(async () => {
+  smartIntentInferenceSpy.mockImplementation(async () => {
     return intentName
       ? {
           data: {
