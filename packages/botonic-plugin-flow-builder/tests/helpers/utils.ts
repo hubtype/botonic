@@ -20,14 +20,12 @@ import type {
   AiAgentFunction,
   ContentFilter,
   InShadowingConfig,
-  KnowledgeBaseFunction,
   TrackEventFunction,
 } from '../../src/types'
 
 interface FlowBuilderOptions {
   flow: any
   trackEvent?: TrackEventFunction<ResolvedPlugins>
-  getKnowledgeBaseResponse?: KnowledgeBaseFunction<ResolvedPlugins>
   getAiAgentResponse?: AiAgentFunction<ResolvedPlugins>
   inShadowing?: Partial<InShadowingConfig>
   contentFilters?: ContentFilter[]
@@ -37,7 +35,6 @@ interface FlowBuilderOptions {
 export function createFlowBuilderPlugin({
   flow,
   trackEvent,
-  getKnowledgeBaseResponse,
   getAiAgentResponse,
   inShadowing,
   contentFilters,
@@ -47,7 +44,6 @@ export function createFlowBuilderPlugin({
     flow,
     getAccessToken: () => 'fake_token',
     trackEvent,
-    getKnowledgeBaseResponse,
     getAiAgentResponse,
     inShadowing,
     contentFilters,
