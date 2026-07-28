@@ -14,7 +14,6 @@ import {
   getFallbackEventConfig,
   getHandoffSuccessEventConfig,
   getKeywordEventConfig,
-  getKnowledgeBaseEventConfig,
   getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
   getWebviewActionTriggeredEventConfig,
@@ -46,8 +45,6 @@ const getEventConfig = (
       return getAiAgentEventConfig(debugEvent)
     case EventAction.AiAgentRouter:
       return getAiAgentRouterEventConfig(debugEvent)
-    case EventAction.Knowledgebase:
-      return getKnowledgeBaseEventConfig(debugEvent)
     case EventAction.Fallback:
       return getFallbackEventConfig(debugEvent)
     case EventAction.BotAction:

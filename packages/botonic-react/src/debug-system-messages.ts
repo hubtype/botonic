@@ -24,7 +24,6 @@ import type {
   FallbackDebugEvent,
   HandoffSuccessDebugEvent,
   KeywordDebugEvent,
-  KnowledgeBaseDebugEvent,
   RedirectFlowDebugEvent,
   SmartIntentDebugEvent,
   WebviewActionTriggeredDebugEvent,
@@ -87,30 +86,6 @@ export const DEBUG_SYSTEM_MESSAGES = {
     action: EventAction.BotAction,
     payload: 'custom-action-result',
   } satisfies BotActionDebugEvent,
-
-  knowledgeBase: {
-    action: EventAction.Knowledgebase,
-    flow_id: 'flow-mock-001',
-    flow_node_id: 'node-mock-004',
-    knowledgebase_inference_id: 'inf-mock-001',
-    knowledgebase_fail_reason: '',
-    knowledgebase_sources_ids: ['src-mock-001'],
-    knowledgebase_chunks_ids: ['chunk-mock-001'],
-    user_input: 'How do I reset my password?',
-    knowledge_base_chunks_with_sources: mockChunksWithSources,
-  } satisfies KnowledgeBaseDebugEvent,
-
-  knowledgeBaseFailed: {
-    action: EventAction.Knowledgebase,
-    flow_id: 'flow-mock-001',
-    flow_node_id: 'node-mock-004',
-    knowledgebase_inference_id: 'inf-mock-002',
-    knowledgebase_fail_reason: 'no_relevant_content',
-    knowledgebase_sources_ids: [],
-    knowledgebase_chunks_ids: [],
-    user_input: 'What is the meaning of life?',
-    knowledge_base_chunks_with_sources: [],
-  } satisfies KnowledgeBaseDebugEvent,
 
   conditionalChannel: {
     action: EventAction.ConditionalChannel,

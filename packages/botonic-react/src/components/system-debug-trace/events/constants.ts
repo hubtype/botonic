@@ -1,6 +1,5 @@
 export const LABELS = {
   GUARDRAIL_TRIGGERED: 'Guardrail triggered',
-  KNOWLEDGE_FOUND: 'Knowledge found',
   FAITHFUL_ANSWER: 'Faithful answer',
   QUERY: 'Query',
   SOURCES: 'Sources',
@@ -16,7 +15,6 @@ export const LABELS = {
   QUEUE: 'Queue',
   AUTO_ASSIGN: 'Auto-assign',
   NOTE: 'Note',
-  KNOWLEDGE_BASE_FAIL_REASON: 'Knowledge Base Fail Reason',
   SEE_CHUNKS_BUTTON: 'See chunks',
   SEE_TOOL_DETAILS: 'Details',
   STATUS: 'Status',

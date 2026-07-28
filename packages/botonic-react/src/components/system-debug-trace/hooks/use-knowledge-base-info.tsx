@@ -1,5 +1,4 @@
-import { KnowledgebaseFailReason } from '@botonic/core'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import type { ChunkIdsGroupedBySourceData } from '../../../index-types'
 import { WebchatContext } from '../../../webchat/context'
@@ -14,7 +13,6 @@ interface UseKnowledgeBaseInfoParams {
   chunkIds: string[]
   messageId?: string
   existingChunksWithSources?: ChunkIdsGroupedBySourceData[]
-  failReason?: string
 }
 
 export const useKnowledgeBaseInfo = ({
@@ -22,7 +20,6 @@ export const useKnowledgeBaseInfo = ({
   chunkIds,
   messageId,
   existingChunksWithSources,
-  failReason,
 }: UseKnowledgeBaseInfoParams) => {
   const { updateMessage, webchatState, previewUtils } =
     useContext(WebchatContext)
@@ -108,27 +105,6 @@ export const useKnowledgeBaseInfo = ({
     }
   }
 
-  const { hasKnowledge, isFaithful } = useMemo(() => {
-    const typedFailReason = failReason as unknown as KnowledgebaseFailReason
-
-    if (typedFailReason === KnowledgebaseFailReason.NoKnowledge) {
-      return {
-        hasKnowledge: false,
-        isFaithful: false,
-      }
-    }
-    if (typedFailReason === KnowledgebaseFailReason.Hallucination) {
-      return {
-        hasKnowledge: true,
-        isFaithful: false,
-      }
-    }
-    return {
-      hasKnowledge: true,
-      isFaithful: true,
-    }
-  }, [failReason])
-
   useEffect(() => {
     // If we already have cached data (even if empty), don't fetch again
     if (hasCachedData) {
@@ -168,7 +144,5 @@ export const useKnowledgeBaseInfo = ({
     chunksWithSources,
     isLoading,
     getIconForSourceType,
-    hasKnowledge,
-    isFaithful,
   }
 }

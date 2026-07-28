@@ -12,18 +12,15 @@ import {
   EventCustom,
   EventFallback,
   EventFeedback,
-  EventFeedbackKnowledgebase,
   EventFlow,
   EventHandoff,
   EventHandoffOption,
   EventIntentSmart,
   EventKeyword,
-  EventKnowledgeBase,
   type EventRedirectFlow,
   EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,
-  KnowledgebaseFailReason,
   ToolExecution,
   WebviewEndFailType,
 } from '@botonic/core'
@@ -35,7 +32,6 @@ export enum EventType {
 
 export type HtEventProps =
   | EventFeedback
-  | EventFeedbackKnowledgebase
   | EventFlow
   | EventBotAction
   | EventConditionalChannel
@@ -46,7 +42,6 @@ export type HtEventProps =
   | EventHandoffOption
   | EventKeyword
   | EventIntentSmart
-  | EventKnowledgeBase
   | EventWebviewActionTriggered
   | EventFallback
   | EventWebviewStep
@@ -79,17 +74,14 @@ export {
   EventCustom,
   EventFallback,
   EventFeedback,
-  EventFeedbackKnowledgebase,
   EventFlow,
   EventHandoff,
   EventHandoffOption,
   EventIntentSmart,
   EventKeyword,
-  EventKnowledgeBase,
   EventWebviewActionTriggered,
   EventWebviewEnd,
   EventWebviewStep,
-  KnowledgebaseFailReason,
   ToolExecution,
   WebviewEndFailType,
 }

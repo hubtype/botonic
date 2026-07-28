@@ -373,26 +373,6 @@ describe('SystemDebugTrace Component', () => {
       expect(config.title).toBeTruthy()
     })
 
-    test('getKnowledgeBaseEventConfig returns collapsible config', () => {
-      const data = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-1',
-        knowledgebase_fail_reason: '',
-        knowledgebase_sources_ids: [],
-        knowledgebase_chunks_ids: [],
-        user_input: 'test query',
-      }
-
-      const config = getKnowledgeBaseEventConfig(data)
-
-      expect(config.action).toBe(EventAction.Knowledgebase)
-      expect(config.component).toBeTruthy()
-      expect(config.collapsible).toBe(true)
-      expect(config.icon).toBeTruthy()
-    })
-
     test('getAiAgentEventConfig returns collapsible config', () => {
       const data = {
         action: EventAction.AiAgent,
