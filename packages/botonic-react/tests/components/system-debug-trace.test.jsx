@@ -19,7 +19,6 @@ import {
   getFallbackEventConfig,
   getHandoffSuccessEventConfig,
   getKeywordEventConfig,
-  getKnowledgeBaseEventConfig,
   getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
   getWebviewActionTriggeredEventConfig,
