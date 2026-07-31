@@ -290,10 +290,6 @@ export default class BotonicPluginAiAgents<
     inferenceId: string,
     llmConfig: LLMConfig
   ) {
-    console.log(
-      'getSpecialistAgentAndTools llmConfig.reasoning',
-      llmConfig.modelSettings.reasoning
-    )
     // Build tools
     const tools = this.buildTools(aiAgentArgs)
 
