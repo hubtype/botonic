@@ -1,3 +1,11 @@
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals'
 import { z } from 'zod'
 import type { DebugLogger } from '../src/debug-logger'
 import { OutputSchema } from '../src/structured-output/index'
@@ -20,7 +28,7 @@ let capturedAgentConfig: any = null
 
 // Mock OpenAI Agent class
 jest.mock('@openai/agents', () => ({
-  Agent: jest.fn().mockImplementation(config => {
+  Agent: jest.fn((config: Record<string, unknown>) => {
     capturedAgentConfig = config
     return {
       name: config.name,
@@ -65,6 +73,9 @@ const mockGuardrailTrackingContext: GuardrailTrackingContext = {
   inferenceId: 'test-inference-id',
 }
 
+const toCompactContactJson = (contactInfo: ContactInfo[]) =>
+  JSON.stringify(contactInfo.map(({ name, value }) => ({ name, value })))
+
 // Mock LLMConfig for tests (agents uses modelName and modelSettings for logging)
 const resolvedModel = { id: 'resolved-model' }
 const mockLlmConfig = {
@@ -75,7 +86,7 @@ const mockLlmConfig = {
     toolChoice: undefined as string | undefined,
   },
   modelProvider: {},
-  getModel: jest.fn().mockResolvedValue(resolvedModel),
+  getModel: jest.fn(async () => resolvedModel),
 } as unknown as LLMConfig
 
 describe('WorkerAgent', () => {
@@ -153,23 +164,7 @@ describe('WorkerAgent', () => {
       guardrailTrackingContext: mockGuardrailTrackingContext,
     })
     const workerAgent = worker.getAgent()
-    const structuredContactInfo = contactInfo
-      .map(
-        info =>
-          ` <contact_info>
-              <name>${info.name}</name>
-              <value>${info.value}</value>
-              <type>${info.type}</type>
-              ${
-                info.description
-                  ? `<description>${info.description}</description>`
-                  : ''
-              }
-            </contact_info>`
-      )
-      .join('\n')
-
-    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>\n\n<campaign_context_1>\nThis is some context coming from campaigns\n</campaign_context_1>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
+    const expectedInstructions = `<instructions>\n${agentInstructions}\n</instructions>\n\n<metadata>\nCurrent Date: 2024-01-01T00:00:00.000Z\n</metadata>\n\n<contact_info_fields>${toCompactContactJson(contactInfo)}</contact_info_fields>\n\n<campaign_context_1>\nThis is some context coming from campaigns\n</campaign_context_1>\n\n<output>\nReturn a JSON that follows the output schema provided. Never return multiple output schemas concatenated by a line break.\n<example>\n${'{"messages":[{"type":"text","content":{"text":"Hello, how can I help you today?"}}]}'}\n</example>\n</output>`
 
     expect(workerAgent.name).toBe(agentName)
     expect(workerAgent.instructions).toBe(expectedInstructions)
@@ -272,6 +267,82 @@ describe('WorkerAgent', () => {
 
       const result = OutputSchema.safeParse(invalidOutput)
       expect(result.success).toBe(false)
+    })
+  })
+
+  describe('Contact info prompt format', () => {
+    const extractContactInfoFields = (instructions: string) =>
+      instructions.match(
+        /<contact_info_fields>([\s\S]*?)<\/contact_info_fields>/
+      )?.[1]
+
+    const createAgent = async (contactInfoOverride: ContactInfo[]) =>
+      (
+        await SpecialistAgent.create({
+          name: agentName,
+          instructions: agentInstructions,
+          llmConfig: mockLlmConfig,
+          tools: [],
+          contactInfo: contactInfoOverride,
+          inputGuardrailRules: [],
+          sourceIds: [],
+          campaignsContext: undefined,
+          logger: mockLogger,
+          guardrailTrackingContext: mockGuardrailTrackingContext,
+        })
+      ).getAgent()
+
+    it('should serialize contact info as compact JSON inside contact_info_fields', async () => {
+      const workerAgent = await createAgent(contactInfo)
+      const contactJson = toCompactContactJson(contactInfo)
+      const contactInfoFields = extractContactInfoFields(
+        workerAgent.instructions as string
+      )
+
+      expect(contactInfoFields).toBe(contactJson)
+      expect(contactInfoFields).not.toContain('<name>')
+      expect(contactInfoFields).not.toMatch(/\n\s+/)
+    })
+
+    it('should include only name and value when description is present', async () => {
+      const contactsWithDescription: ContactInfo[] = [
+        {
+          name: 'email',
+          value: 'user@example.com',
+          type: 'string',
+          description: 'Primary email address',
+        },
+      ]
+      const workerAgent = await createAgent(contactsWithDescription)
+      const contactInfoFields = extractContactInfoFields(
+        workerAgent.instructions as string
+      )
+
+      expect(contactInfoFields).toBe(
+        toCompactContactJson(contactsWithDescription)
+      )
+      expect(contactInfoFields).not.toContain('Primary email address')
+      expect(contactInfoFields).not.toContain('"type"')
+      expect(contactInfoFields).not.toContain('"description"')
+    })
+
+    it('should serialize contacts without description the same way', async () => {
+      const contactsWithoutDescription: ContactInfo[] = [
+        {
+          name: 'phone',
+          value: '+34123456789',
+          type: 'string',
+        },
+      ]
+      const workerAgent = await createAgent(contactsWithoutDescription)
+      const contactInfoFields = extractContactInfoFields(
+        workerAgent.instructions as string
+      )
+
+      expect(contactInfoFields).toBe(
+        toCompactContactJson(contactsWithoutDescription)
+      )
+      expect(contactInfoFields).not.toContain('"description"')
     })
   })
 
