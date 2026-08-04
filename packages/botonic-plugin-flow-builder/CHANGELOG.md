@@ -16,6 +16,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- [PR-3257](https://github.com/hubtype/botonic/pull/3257): Remove knowledge base node.
+
 ### Fixed
 
 </details>

@@ -1,4 +1,8 @@
-import { type BotContext, ReasoningEffort, VerbosityLevel } from '@botonic/core'
+import {
+  type BotContext,
+  type ReasoningEffort,
+  VerbosityLevel,
+} from '@botonic/core'
 import {
   type Model,
   type ModelProvider,
@@ -54,7 +58,6 @@ export class LLMConfig {
       verbosity,
       reasoningEffort
     )
-    console.log('new LLMConfig reasoningEffort', reasoningEffort)
   }
 
   async getModel(): Promise<Model> {
@@ -147,30 +150,6 @@ export class LLMConfig {
     verbosity: VerbosityLevel,
     reasoningEffort?: ReasoningEffort
   ): ModelSettings {
-    // By default, we use low reasoning effort for chat models because they not accept the reasoning effort set as none.
-    if (model.includes('chat')) {
-      return {
-        reasoning: { effort: reasoningEffort ?? ReasoningEffort.Low },
-        temperature: 1,
-        text: { verbosity },
-      }
-    }
-
-    if (model.includes('luna')) {
-      return {
-        temperature: 1,
-        text: { verbosity },
-      }
-    }
-
-    if (model.includes('gpt-5')) {
-      return {
-        reasoning: { effort: reasoningEffort ?? ReasoningEffort.None },
-        temperature: 1,
-        text: { verbosity },
-      }
-    }
-
     if (model.includes('gpt-4')) {
       return {
         temperature: 0,
@@ -178,9 +157,15 @@ export class LLMConfig {
       }
     }
 
-    // LiteLLM can proxy any model — fall back to reasoning settings
+    if (reasoningEffort) {
+      return {
+        reasoning: { effort: reasoningEffort },
+        temperature: 1,
+        text: { verbosity },
+      }
+    }
+
     return {
-      reasoning: { effort: ReasoningEffort.None },
       temperature: 1,
       text: { verbosity },
     }
