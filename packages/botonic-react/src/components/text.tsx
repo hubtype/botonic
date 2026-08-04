@@ -34,8 +34,6 @@ const serialize = (textProps: TextProps) => {
 export const Text = (props: TextProps) => {
   const defaultTextProps = {
     markdown: props.markdown === undefined ? true : props.markdown,
-    feedbackEnabled: props.feedbackEnabled,
-    inferenceId: props.inferenceId,
     botInteractionId: props.botInteractionId,
   }
 

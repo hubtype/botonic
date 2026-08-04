@@ -19,10 +19,6 @@ import {
   getHandoffSuccessEventConfig,
   HandoffSuccess,
 } from '../../src/components/system-debug-trace/events/handoff-success'
-import {
-  getKnowledgeBaseEventConfig,
-  KnowledgeBase,
-} from '../../src/components/system-debug-trace/events/knowledge-base'
 import { WebchatContext } from '../../src/webchat/context'
 
 const renderToJSON = sut => TestRenderer.create(sut).toJSON()
@@ -274,125 +270,6 @@ describe('System Debug Trace - Event Components', () => {
     })
   })
 
-  describe('KnowledgeBase Component', () => {
-    test('renders without sources', async () => {
-      const props = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-1',
-        knowledgebase_fail_reason: '',
-        knowledgebase_sources_ids: [],
-        knowledgebase_chunks_ids: [],
-        user_input: 'What is your return policy?',
-      }
-
-      let container
-      await act(async () => {
-        const result = render(
-          <WebchatContext.Provider value={mockWebchatContext}>
-            <KnowledgeBase {...props} />
-          </WebchatContext.Provider>
-        )
-        container = result.container
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(
-          () => {
-            return
-          },
-          { timeout: 100 }
-        )
-      })
-
-      expect(container).toBeTruthy()
-    })
-
-    test('renders with fail reason', async () => {
-      const props = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-2',
-        knowledgebase_fail_reason: 'NOT_FAITHFUL',
-        knowledgebase_sources_ids: [],
-        knowledgebase_chunks_ids: [],
-        user_input: 'test query',
-      }
-
-      let container
-      await act(async () => {
-        const result = render(
-          <WebchatContext.Provider value={mockWebchatContext}>
-            <KnowledgeBase {...props} />
-          </WebchatContext.Provider>
-        )
-        container = result.container
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(
-          () => {
-            return
-          },
-          { timeout: 100 }
-        )
-      })
-
-      expect(container).toBeTruthy()
-    })
-
-    test('renders with sources and chunks', async () => {
-      const props = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-3',
-        knowledgebase_fail_reason: '',
-        knowledgebase_sources_ids: ['source-1', 'source-2'],
-        knowledgebase_chunks_ids: ['chunk-1', 'chunk-2', 'chunk-3'],
-        user_input: 'test query',
-      }
-
-      let container
-      await act(async () => {
-        const result = render(
-          <WebchatContext.Provider value={mockWebchatContext}>
-            <KnowledgeBase {...props} />
-          </WebchatContext.Provider>
-        )
-        container = result.container
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        await waitFor(
-          () => {
-            return
-          },
-          { timeout: 100 }
-        )
-      })
-
-      expect(container).toBeTruthy()
-    })
-
-    test('config has correct properties', () => {
-      const data = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-1',
-        knowledgebase_fail_reason: '',
-        knowledgebase_sources_ids: [],
-        knowledgebase_chunks_ids: [],
-        user_input: 'test',
-      }
-
-      const config = getKnowledgeBaseEventConfig(data)
-
-      expect(config.action).toBe(EventAction.Knowledgebase)
-      expect(config.component).toBe(KnowledgeBase)
-      expect(config.collapsible).toBe(true)
-      expect(config.icon).toBeTruthy()
-      expect(config.title).toBeTruthy()
-    })
-  })
-
   describe('AiAgentRouter Component', () => {
     const baseRouterProps = {
       action: EventAction.AiAgentRouter,
@@ -534,22 +411,6 @@ describe('System Debug Trace - Event Components', () => {
       const config = getHandoffSuccessEventConfig(data)
       expect(config.title).toBeTruthy()
       expect(config.action).toBe(EventAction.HandoffSuccess)
-    })
-
-    test('KnowledgeBase title is correct', () => {
-      const data = {
-        action: EventAction.Knowledgebase,
-        flow_id: 'flow1',
-        flow_node_id: 'node1',
-        knowledgebase_inference_id: 'inf-1',
-        knowledgebase_fail_reason: '',
-        knowledgebase_sources_ids: [],
-        knowledgebase_chunks_ids: [],
-        user_input: 'test',
-      }
-
-      const config = getKnowledgeBaseEventConfig(data)
-      expect(config.title).toBeTruthy()
     })
 
     test('AiAgent title is correct', () => {

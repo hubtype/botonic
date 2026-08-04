@@ -7,7 +7,6 @@ export enum EventAction {
   FeedbackCase = 'feedback_case',
   FeedbackMessage = 'feedback_message',
   FeedbackConversation = 'feedback_conversation',
-  FeedbackKnowledgebase = 'feedback_knowledgebase',
   FeedbackWebview = 'feedback_webview',
   FlowNode = 'flow_node',
   ConditionalCountry = 'conditional_country',
@@ -21,7 +20,6 @@ export enum EventAction {
   HandoffFail = 'handoff_fail',
   Keyword = 'nlu_keyword',
   IntentSmart = 'nlu_intent_smart',
-  Knowledgebase = 'knowledgebase',
   Fallback = 'fallback',
   WebviewStep = 'webview_step',
   WebviewEnd = 'webview_end',
@@ -50,19 +48,6 @@ export interface EventFeedback extends HtBaseEventProps {
     | EventAction.FeedbackConversation
     | EventAction.FeedbackMessage
     | EventAction.FeedbackWebview
-  feedbackTargetId: string
-  feedbackGroupId: string
-  possibleOptions: string[]
-  possibleValues?: number[]
-  option: string
-  value?: number
-  comment?: string
-}
-
-export interface EventFeedbackKnowledgebase extends HtBaseEventProps {
-  action: EventAction.FeedbackKnowledgebase
-  knowledgebaseInferenceId: string
-  feedbackBotInteractionId: string
   feedbackTargetId: string
   feedbackGroupId: string
   possibleOptions: string[]
@@ -161,25 +146,6 @@ export interface EventIntentSmart extends HtBaseEventProps {
   nluIntentSmartTitle: string
   nluIntentSmartNumUsed: number
   nluIntentSmartMessageId: string
-  userInput: string
-}
-
-export enum KnowledgebaseFailReason {
-  NoKnowledge = 'no_knowledge',
-  Hallucination = 'hallucination',
-}
-export interface EventKnowledgeBase extends HtBaseEventProps {
-  action: EventAction.Knowledgebase
-  flowThreadId: string
-  flowId: string
-  flowName: string
-  flowNodeId: string
-  flowNodeContentId: string
-  knowledgebaseInferenceId: string
-  knowledgebaseFailReason?: KnowledgebaseFailReason
-  knowledgebaseSourcesIds: string[]
-  knowledgebaseChunksIds: string[]
-  knowledgebaseMessageId: string
   userInput: string
 }
 

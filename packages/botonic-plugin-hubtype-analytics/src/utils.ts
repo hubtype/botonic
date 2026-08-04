@@ -11,13 +11,11 @@ import {
   HtEventCustom,
   HtEventFallback,
   HtEventFeedback,
-  HtEventFeedbackKnowledgebase,
   HtEventFlow,
   HtEventHandoff,
   HtEventHandoffOption,
   HtEventIntentSmart,
   HtEventKeyword,
-  HtEventKnowledgeBase,
   HtEventRedirectFlow,
   HtEventWebviewActionTriggered,
   HtEventWebviewEnd,
@@ -37,9 +35,6 @@ export function createHtEvent(
     case EventAction.FeedbackWebview:
       return new HtEventFeedback(htEventProps, requestData)
 
-    case EventAction.FeedbackKnowledgebase:
-      return new HtEventFeedbackKnowledgebase(htEventProps, requestData)
-
     case EventAction.FlowNode:
       return new HtEventFlow(htEventProps, requestData)
 
@@ -55,9 +50,6 @@ export function createHtEvent(
 
     case EventAction.IntentSmart:
       return new HtEventIntentSmart(htEventProps, requestData)
-
-    case EventAction.Knowledgebase:
-      return new HtEventKnowledgeBase(htEventProps, requestData)
 
     case EventAction.Fallback:
       return new HtEventFallback(htEventProps, requestData)

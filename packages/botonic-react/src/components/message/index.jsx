@@ -38,8 +38,6 @@ export const Message = props => {
     style,
     imagestyle = props.imagestyle || props.imageStyle,
     isUnread = true,
-    feedbackEnabled,
-    inferenceId,
     botInteractionId,
     markdown,
     ...otherProps
@@ -126,8 +124,6 @@ export const Message = props => {
         customTypeName: decomposedChildren.customTypeName,
         ack: ack,
         isUnread: isUnread === 1 || isUnread === true,
-        feedbackEnabled,
-        inferenceId,
         botInteractionId,
       }
       addMessage(message)
@@ -276,14 +272,11 @@ export const Message = props => {
             {Boolean(blob) && hasBlobTick() && getBlobTick(5)}
           </BlobContainer>
         </MessageContainer>
-        {timestampsEnabled || feedbackEnabled ? (
+        {timestampsEnabled ? (
           <MessageFooter
             enabletimestamps={timestampsEnabled}
             messageJSON={messageJSON}
             sentBy={sentBy}
-            feedbackEnabled={feedbackEnabled}
-            inferenceId={inferenceId}
-            botInteractionId={botInteractionId}
           />
         ) : null}
       </ConditionalWrapper>

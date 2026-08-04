@@ -11,7 +11,6 @@ import type {
   FallbackDebugEvent,
   HandoffSuccessDebugEvent,
   KeywordDebugEvent,
-  KnowledgeBaseDebugEvent,
   RedirectFlowDebugEvent,
   SmartIntentDebugEvent,
   WebviewActionTriggeredDebugEvent,
@@ -26,7 +25,6 @@ export type DebugEvent =
   | KeywordDebugEvent
   | AiAgentDebugEvent
   | AiAgentRouterDebugEvent
-  | KnowledgeBaseDebugEvent
   | FallbackDebugEvent
   | SmartIntentDebugEvent
   | HandoffSuccessDebugEvent
