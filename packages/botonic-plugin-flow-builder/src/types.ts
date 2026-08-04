@@ -3,7 +3,6 @@ import {
   type BotContext,
   GuardrailRule,
   type InferenceResponse,
-  type KnowledgeBasesResponse,
   type PluginPreRequest,
   type ResolvedPlugins,
 } from '@botonic/core'
@@ -17,7 +16,6 @@ import type { FlowBuilderContentMessage } from './structured-output/flow-builder
 export interface InShadowingConfig {
   allowKeywords: boolean
   allowSmartIntents: boolean
-  allowKnowledgeBases: boolean
   allowAiAgents: boolean
 }
 
@@ -31,7 +29,6 @@ export interface BotonicPluginFlowBuilderOptions<
   customFunctions?: Record<any, any>
   getAccessToken: () => string
   trackEvent?: TrackEventFunction<TPlugins, TExtraData>
-  getKnowledgeBaseResponse?: KnowledgeBaseFunction<TPlugins, TExtraData>
   getAiAgentResponse?: AiAgentFunction<TPlugins, TExtraData>
   smartIntentsConfig?: { numSmartIntentsToUse: number }
   inShadowing?: Partial<InShadowingConfig>
@@ -48,17 +45,6 @@ export type TrackEventFunction<
   eventAction: string,
   args?: Record<string, any>
 ) => Promise<void>
-
-export type KnowledgeBaseFunction<
-  TPlugins extends ResolvedPlugins = ResolvedPlugins,
-  TExtraData = any,
-> = (
-  request: BotContext<TPlugins, TExtraData>,
-  sources: string[],
-  instructions: string,
-  messageId: string,
-  memoryLength: number
-) => Promise<KnowledgeBasesResponse>
 
 export type AiAgentFunction<
   TPlugins extends ResolvedPlugins = ResolvedPlugins,

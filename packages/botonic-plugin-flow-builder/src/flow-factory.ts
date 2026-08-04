@@ -14,7 +14,6 @@ import {
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
-  FlowKnowledgeBase,
   FlowQueueStatusConditional,
   FlowRating,
   FlowText,
@@ -82,9 +81,6 @@ export class FlowFactory {
           this.locale,
           this.cmsApi
         )
-
-      case HtNodeWithContentType.KNOWLEDGE_BASE:
-        return FlowKnowledgeBase.fromHubtypeCMS(hubtypeContent)
 
       case HtNodeWithContentType.AI_AGENT_ROUTER:
         return FlowAiAgentRouter.fromHubtypeCMS(hubtypeContent, this.botContext)

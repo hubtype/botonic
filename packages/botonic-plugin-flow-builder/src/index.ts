@@ -31,7 +31,6 @@ import {
   type ContentFilter,
   FlowBuilderJSONVersion,
   type InShadowingConfig,
-  type KnowledgeBaseFunction,
   type PayloadParamsBase,
   type RatingSubmittedInfo,
   type TrackEventFunction,
@@ -50,7 +49,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   private currentRequest: PluginPreRequest
   public getAccessToken: (session: Session) => string
   public trackEvent?: TrackEventFunction
-  public getKnowledgeBaseResponse?: KnowledgeBaseFunction
   public getAiAgentResponse?: AiAgentFunction
   public smartIntentsConfig: SmartIntentsInferenceConfig
   public inShadowing: InShadowingConfig
@@ -68,7 +66,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.flow = options.flow
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
     this.trackEvent = options.trackEvent
-    this.getKnowledgeBaseResponse = options.getKnowledgeBaseResponse
     this.getAiAgentResponse = options.getAiAgentResponse
     this.smartIntentsConfig = {
       ...options?.smartIntentsConfig,
@@ -79,7 +76,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.inShadowing = {
       allowKeywords: options.inShadowing?.allowKeywords || false,
       allowSmartIntents: options.inShadowing?.allowSmartIntents || false,
-      allowKnowledgeBases: options.inShadowing?.allowKnowledgeBases || false,
       allowAiAgents: options.inShadowing?.allowAiAgents || false,
     }
     this.contentFilters = options.contentFilters || []

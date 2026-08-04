@@ -7,12 +7,9 @@ import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
 // eslint-disable-next-line jest/no-mocks-import
-import { mockKnowledgeBaseResponse } from './__mocks__/knowledge-base'
-// eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
 import { aiAgentTestFlow } from './helpers/flows/ai-agent'
 import { basicFlow } from './helpers/flows/basic'
-import { knowledgeBaseTestFlow } from './helpers/flows/knowledge-base'
 import {
   createFlowBuilderPlugin,
   createFlowBuilderPluginAndGetContents,
@@ -136,48 +133,6 @@ describe('Check the contents returned by the plugin in first interaction with sm
     expect((contents[3] as FlowText).text).toBe(
       'Message explaining how to add a bag'
     )
-  })
-})
-
-describe('Check the contents returned by the plugin in first interaction with knowledge base', () => {
-  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
-
-  beforeEach(() => mockSmartIntent('Other'))
-  test('The start contents are displayed followed by more contents obtained from knowledge base', async () => {
-    const userInput = 'What is Flow Builder?'
-    const locale = 'es'
-    const country = 'ES'
-    const systemLocale = 'es-ES'
-    const answer =
-      'Flow Builder is a visual tool used to create and manage Conversational Apps. It allows users to design conversational flows by dragging and dropping elements, connecting them, and adding content to create conversational experiences. The tool is designed to enable non-technical users to create and manage Conversational Apps autonomously.'
-
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: {
-        flow: knowledgeBaseTestFlow,
-        getKnowledgeBaseResponse: mockKnowledgeBaseResponse({
-          answer,
-          hasKnowledge: true,
-          isFaithful: true,
-        }),
-      },
-      requestArgs: {
-        input: {
-          data: userInput,
-          type: INPUT.TEXT,
-        },
-        user: {
-          locale,
-          country,
-          systemLocale,
-        },
-        isFirstInteraction: true,
-      },
-    })
-
-    expect((contents[0] as FlowText).text).toBe('Welcome')
-    expect(contents.length).toBe(5)
-    expect((contents[3] as FlowText).text).toBe(answer)
-    expect((contents[4] as FlowText).text).toBe('FollowUp Knowledge base')
   })
 })
 
