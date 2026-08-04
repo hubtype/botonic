@@ -16,6 +16,7 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
+- [PR-3260](https://github.com/hubtype/botonic/pull/3260): Serialize contact info fields as a JSON inside SpecialistAgent.
 - [PR-3259](https://github.com/hubtype/botonic/pull/3259): Simplify reasoning effort in LLMConfig.
 
 ### Fixed
@@ -27,7 +28,6 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3250](https://github.com/hubtype/botonic/pull/3250): No use reasoning_effort for gpt-5.6-luna.
-
 
 ## [0.51.6] - 2026-07-14
 

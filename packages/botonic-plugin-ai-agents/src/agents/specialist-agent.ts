@@ -135,32 +135,25 @@ export class SpecialistAgent<
     contactInfo: ContactInfo[],
     campaignsContext?: CampaignV2[]
   ): string {
-    const instructions = `<instructions>\n${initialInstructions.trim()}\n</instructions>`
-    const metadataInstructions = this.getMetadataInstructions()
-    const contactInfoInstructions = this.getContactInfoInstructions(contactInfo)
-    const campaignInstructions = this.getCampaignInstructions(campaignsContext)
-    return this.addOutputInstructions(
-      `${instructions}\n\n${metadataInstructions}\n\n${contactInfoInstructions}\n\n${campaignInstructions}`
-    )
+    const sections = [
+      `<instructions>\n${initialInstructions.trim()}\n</instructions>`,
+      this.getMetadataInstructions(),
+      this.getContactInfoInstructions(contactInfo),
+      this.getCampaignInstructions(campaignsContext),
+    ].filter(section => section.length > 0)
+
+    return this.addOutputInstructions(sections.join('\n\n'))
   }
 
   private getContactInfoInstructions(contactInfo: ContactInfo[]): string {
-    const structuredContactInfo = contactInfo
-      .map(
-        info =>
-          ` <contact_info>
-              <name>${info.name}</name>
-              <value>${info.value}</value>
-              <type>${info.type}</type>
-              ${
-                info.description
-                  ? `<description>${info.description}</description>`
-                  : ''
-              }
-            </contact_info>`
-      )
-      .join('\n')
-    return `<contact_info_fields>\n${structuredContactInfo}</contact_info_fields>`
+    return `<contact_info_fields>${JSON.stringify(
+      contactInfo.map(info => ({
+        name: info.name,
+        value: info.value,
+      })),
+      null,
+      0
+    )}</contact_info_fields>`
   }
 
   private getMetadataInstructions(): string {
