@@ -1,6 +1,13 @@
-import { VerbosityLevel } from '@botonic/core'
+import { ReasoningEffort, VerbosityLevel } from '@botonic/core'
 import { createTestBotContext } from '@botonic/core/testing'
-import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals'
 
 import { LLMConfig } from '../src/llm-config'
 
@@ -13,22 +20,20 @@ const mockResolvedModel = { id: 'resolved-model' }
 
 jest.mock('openai', () => ({
   __esModule: true,
-  default: jest.fn().mockImplementation((config: Record<string, unknown>) => {
+  default: jest.fn((config: Record<string, unknown>) => {
     capturedOpenAIConfig = config
     return { type: 'openai' }
   }),
-  AzureOpenAI: jest
-    .fn()
-    .mockImplementation((config: Record<string, unknown>) => {
-      capturedAzureConfig = config
-      return { type: 'azure' }
-    }),
+  AzureOpenAI: jest.fn((config: Record<string, unknown>) => {
+    capturedAzureConfig = config
+    return { type: 'azure' }
+  }),
 }))
 
 jest.mock('@openai/agents', () => ({
-  OpenAIProvider: jest.fn().mockImplementation(() => ({
+  OpenAIProvider: jest.fn(() => ({
     type: 'provider',
-    getModel: jest.fn().mockResolvedValue(mockResolvedModel),
+    getModel: jest.fn(async () => mockResolvedModel),
   })),
 }))
 
@@ -125,54 +130,38 @@ describe('LLMConfig', () => {
       mockConstants.LLM_PROVIDER = 'azure'
     })
 
-    it('returns gpt-4 style settings for gpt-4 model', () => {
+    it('gpt-4 models: temperature 0 and hardcoded Medium verbosity (ignores passed verbosity)', () => {
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
         timeout: DEFAULT_TIMEOUT,
         modelName: 'gpt-4.1-mini',
-        verbosity: VerbosityLevel.Medium,
+        verbosity: VerbosityLevel.High,
         botContext: makeBotContext(),
       })
 
       expect(config.modelSettings).toEqual({
         temperature: 0,
-        text: { verbosity: 'medium' },
+        text: { verbosity: VerbosityLevel.Medium },
       })
     })
 
-    it('returns gpt-5 style settings for gpt-5 model', () => {
+    it('gpt-4 models: ignores reasoningEffort', () => {
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
         timeout: DEFAULT_TIMEOUT,
-        modelName: 'gpt-5-mini',
+        modelName: 'gpt-4.1-mini',
         verbosity: VerbosityLevel.High,
         botContext: makeBotContext(),
+        reasoningEffort: ReasoningEffort.High,
       })
 
       expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'none' },
-        temperature: 1,
-        text: { verbosity: 'high' },
+        temperature: 0,
+        text: { verbosity: VerbosityLevel.Medium },
       })
     })
 
-    it('returns gpt-chat style settings for gpt-chat model', () => {
-      const config = new LLMConfig({
-        maxRetries: DEFAULT_MAX_RETRIES,
-        timeout: DEFAULT_TIMEOUT,
-        modelName: 'gpt-chat-latest',
-        verbosity: VerbosityLevel.High,
-        botContext: makeBotContext(),
-      })
-
-      expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'low' },
-        temperature: 1,
-        text: { verbosity: 'high' },
-      })
-    })
-
-    it('returns reasoning settings for unknown model (LiteLLM fallback)', () => {
+    it('non-gpt-4 models without reasoningEffort: plain settings with passed verbosity', () => {
       const config = new LLMConfig({
         maxRetries: DEFAULT_MAX_RETRIES,
         timeout: DEFAULT_TIMEOUT,
@@ -182,9 +171,25 @@ describe('LLMConfig', () => {
       })
 
       expect(config.modelSettings).toEqual({
-        reasoning: { effort: 'none' },
         temperature: 1,
         text: { verbosity: 'high' },
+      })
+    })
+
+    it('non-gpt-4 models with reasoningEffort: reasoning settings with passed verbosity', () => {
+      const config = new LLMConfig({
+        maxRetries: DEFAULT_MAX_RETRIES,
+        timeout: DEFAULT_TIMEOUT,
+        modelName: 'claude-3-5-sonnet',
+        verbosity: VerbosityLevel.Low,
+        botContext: makeBotContext(),
+        reasoningEffort: ReasoningEffort.Low,
+      })
+
+      expect(config.modelSettings).toEqual({
+        reasoning: { effort: 'low' },
+        temperature: 1,
+        text: { verbosity: 'low' },
       })
     })
   })
