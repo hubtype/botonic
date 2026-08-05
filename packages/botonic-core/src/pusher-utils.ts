@@ -11,6 +11,5 @@ export function decompressData(compressedData: string): string {
   const charData = strData.split('').map(x => x.charCodeAt(0)) // Convert binary string to character-number array
   const binData = new Uint8Array(charData) // Turn number array into byte-array
   const data = inflate(binData)
-  // @ts-expect-error
-  return String.fromCharCode.apply(null, new Uint8Array(data)) // Convert gunzipped byteArray back to ascii string
+  return new TextDecoder('utf-8').decode(data)
 }
