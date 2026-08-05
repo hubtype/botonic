@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-/* eslint-disable @typescript-eslint/naming-convention */
+// biome-ignore assist/source/organizeImports: <explanation>
 import { EventAction } from '@botonic/core'
 import { act, render, waitFor } from '@testing-library/react'
 import TestRenderer from 'react-test-renderer'
@@ -10,6 +10,7 @@ import {
   AiAgent,
   getAiAgentEventConfig,
 } from '../../src/components/system-debug-trace/events/ai-agent'
+import { clearRehydrationCacheForTests } from '../../src/components/system-debug-trace/events/ai-agent/rehydrate-ai-agent-event'
 import { parseTools } from '../../src/components/system-debug-trace/events/ai-agent/parse-tools'
 import {
   AiAgentRouter,
@@ -27,6 +28,7 @@ const mockWebchatContext = {
   previewUtils: {
     onClickOpenChunks: jest.fn(),
     getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
+    getMessageById: jest.fn().mockResolvedValue({}),
   },
   getKnowledgeBaseSources: jest.fn(),
   getKnowledgeBaseChunks: jest.fn(),
@@ -76,6 +78,10 @@ describe('System Debug Trace - Event Components', () => {
   })
 
   describe('AiAgent Component', () => {
+    beforeEach(() => {
+      clearRehydrationCacheForTests()
+    })
+
     test('renders without tools and displays no tools executed label', async () => {
       const props = {
         action: EventAction.AiAgent,
@@ -267,6 +273,177 @@ describe('System Debug Trace - Event Components', () => {
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
+    })
+
+    test('rehydrates truncated event via getMessageById', async () => {
+      const getMessageById = jest.fn().mockResolvedValue({
+        event_data: {
+          tools_executed: [
+            {
+              tool_name: 'search_flights',
+              tool_arguments: { destination: 'NYC' },
+              tool_results: 'result1',
+            },
+          ],
+        },
+      })
+
+      const context = {
+        ...mockWebchatContext,
+        previewUtils: {
+          ...mockWebchatContext.previewUtils,
+          getMessageById,
+        },
+      }
+
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+        truncated: true,
+        hubtype_message_id: 'msg-1',
+      }
+
+      let container
+      const result = render(
+        <WebchatContext.Provider value={context}>
+          <AiAgent {...props} />
+        </WebchatContext.Provider>
+      )
+      container = result.container
+
+      await waitFor(() => {
+        expect(container.textContent).toContain('search_flights')
+      })
+
+      expect(getMessageById).toHaveBeenCalledWith('msg-1', {
+        includeDebugEvents: true,
+      })
+    })
+
+    test('does not fetch when event is not truncated', async () => {
+      const getMessageById = jest.fn()
+
+      const context = {
+        ...mockWebchatContext,
+        previewUtils: {
+          ...mockWebchatContext.previewUtils,
+          getMessageById,
+        },
+      }
+
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+      }
+
+      await act(async () => {
+        render(
+          <WebchatContext.Provider value={context}>
+            <AiAgent {...props} />
+          </WebchatContext.Provider>
+        )
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(getMessageById).not.toHaveBeenCalled()
+    })
+
+    test('does not show no tools executed while rehydrating', async () => {
+      let resolvePromise
+      const getMessageById = jest.fn(
+        () =>
+          new Promise(resolve => {
+            resolvePromise = resolve
+          })
+      )
+
+      const context = {
+        ...mockWebchatContext,
+        previewUtils: {
+          ...mockWebchatContext.previewUtils,
+          getMessageById,
+        },
+      }
+
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+        truncated: true,
+        hubtype_message_id: 'msg-1',
+      }
+
+      const { container } = render(
+        <WebchatContext.Provider value={context}>
+          <AiAgent {...props} />
+        </WebchatContext.Provider>
+      )
+
+      expect(container.textContent).not.toContain('No tools executed')
+
+      await act(async () => {
+        resolvePromise({
+          event_data: {
+            tools_executed: [],
+            truncated: false,
+          },
+        })
+        await waitFor(() => {}, { timeout: 100 })
+      })
+
+      expect(container.textContent).toContain('No tools executed')
+    })
+
+    test('does not show no tools executed when rehydration returns no event_data', async () => {
+      const getMessageById = jest.fn().mockResolvedValue({})
+
+      const context = {
+        ...mockWebchatContext,
+        previewUtils: {
+          ...mockWebchatContext.previewUtils,
+          getMessageById,
+        },
+      }
+
+      const props = {
+        action: EventAction.AiAgent,
+        flow_node_content_id: 'content-1',
+        tools_executed: [],
+        input_guardrails_triggered: [],
+        output_guardrails_triggered: [],
+        exit: false,
+        error: false,
+        truncated: true,
+        hubtype_message_id: 'msg-1',
+      }
+
+      let container
+      const result = render(
+        <WebchatContext.Provider value={context}>
+          <AiAgent {...props} />
+        </WebchatContext.Provider>
+      )
+      container = result.container
+
+      await waitFor(() => {
+        expect(getMessageById).toHaveBeenCalled()
+      })
+
+      expect(container.textContent).not.toContain('No tools executed')
     })
   })
 

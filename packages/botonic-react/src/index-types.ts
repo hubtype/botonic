@@ -87,10 +87,15 @@ export interface MinimalHubtypeMessage {
   type: string
   action: string
   text: string
+  event_data?: Record<string, unknown> | null
 }
 
 export interface WebchatLocaleContents {
   inputPlaceholder: string
+}
+
+export interface GetMessageByIdOptions {
+  includeDebugEvents?: boolean
 }
 
 export interface PreviewUtils {
@@ -101,7 +106,10 @@ export interface PreviewUtils {
     chunkIdsGroupedBySource: ChunkIdsGroupedBySourceData[]
   ) => void
   onClickOpenToolResults: (toolExecution: ToolExecution) => void
-  getMessageById: (messageId: string) => Promise<MinimalHubtypeMessage>
+  getMessageById: (
+    messageId: string,
+    options?: GetMessageByIdOptions
+  ) => Promise<MinimalHubtypeMessage>
   trackPreviewEventOpened: (eventProperties: Record<string, unknown>) => void
 }
 
