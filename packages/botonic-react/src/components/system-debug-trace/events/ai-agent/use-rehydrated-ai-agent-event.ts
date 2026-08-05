@@ -39,7 +39,12 @@ export const useRehydratedAiAgentEvent = (
     return { resolvedEvent: props, isRehydrating: false }
   }
 
-  if (!cachedEvent && !fetchStartedRef.current && hubtypeMessageId && previewUtils) {
+  if (
+    !cachedEvent &&
+    !fetchStartedRef.current &&
+    hubtypeMessageId &&
+    previewUtils
+  ) {
     fetchStartedRef.current = true
 
     getOrStartRehydration(props, previewUtils, hubtypeMessageId)
