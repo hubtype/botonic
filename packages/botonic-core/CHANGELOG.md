@@ -18,6 +18,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
+- Fix stack overflow when decompressing large Pusher payloads (`decompressData`).
+
 </details>
 
 ## [0.52.1] - 2026-07-23
