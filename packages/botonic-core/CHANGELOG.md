@@ -10,7 +10,7 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.54.1] - 2026-mm-dd
+## [0.55.0] - 2026-mm-dd
 
 ### Added
 
@@ -18,10 +18,13 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 
-- [PR-3262](https://github.com/hubtype/botonic/pull/3262): Replace deprecated string conversion with TextDecoder to decompress data from pusher. 
-
-
 </details>
+
+## [0.54.1] - 2026-08-06
+
+### Fixed
+
+- [PR-3262](https://github.com/hubtype/botonic/pull/3262): Replace deprecated string conversion with TextDecoder to decompress data from pusher. 
 
 ## [0.52.1] - 2026-07-23
 
