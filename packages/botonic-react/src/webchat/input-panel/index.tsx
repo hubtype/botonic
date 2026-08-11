@@ -1,7 +1,5 @@
-import { INPUT } from '@botonic/core'
 import type React from 'react'
 import { useContext } from 'react'
-import { v7 as uuidv7 } from 'uuid'
 
 import { WEBCHAT } from '../../constants'
 import { getFullMimeWhitelist } from '../../message-utils'
@@ -14,6 +12,7 @@ import { PersistentMenu } from './persistent-menu'
 import { SendButton } from './send-button'
 import { UserInputContainer } from './styles'
 import { Textarea } from './textarea'
+import { useTypingChatEventSender } from './use-typing-chat-event-sender'
 
 interface InputPanelProps {
   handleAttachment: (event: any) => void
@@ -63,21 +62,11 @@ export const InputPanel = ({
     textareaRef.current.value = ''
   }
 
-  const sendChatEvent = async chatEvent => {
-    const chatEventInput = {
-      id: uuidv7(),
-      type: INPUT.CHAT_EVENT,
-      data: chatEvent,
-    }
-    if (onUserInput) {
-      onUserInput({
-        user: webchatState.session.user,
-        input: chatEventInput,
-        session: webchatState.session,
-        lastRoutePath: webchatState.lastRoutePath,
-      })
-    }
-  }
+  const sendChatEvent = useTypingChatEventSender({
+    onUserInput,
+    session: webchatState.session,
+    lastRoutePath: webchatState.lastRoutePath,
+  })
 
   return (
     <UserInputContainer
