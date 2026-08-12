@@ -20,4 +20,6 @@ export interface AiAgentDebugEvent {
   error: boolean
   knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string
+  truncated?: boolean
+  hubtype_message_id?: string
 }

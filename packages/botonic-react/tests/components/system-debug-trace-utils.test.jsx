@@ -356,6 +356,8 @@ describe('System Debug Trace - Utility Components', () => {
         output_guardrails_triggered: [],
         exit: false,
         error: false,
+        truncated: true,
+        hubtype_message_id: 'msg-1',
         knowledge_base_chunks_with_sources: [
           {
             source: {
@@ -383,6 +385,8 @@ describe('System Debug Trace - Utility Components', () => {
       expect(event).toHaveProperty('output_guardrails_triggered')
       expect(event).toHaveProperty('exit')
       expect(event).toHaveProperty('error')
+      expect(event).toHaveProperty('truncated')
+      expect(event).toHaveProperty('hubtype_message_id')
       expect(event).toHaveProperty('knowledge_base_chunks_with_sources')
       expect(Array.isArray(event.tools_executed)).toBe(true)
       expect(event.tools_executed[0]).toHaveProperty('tool_name')

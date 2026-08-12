@@ -1,0 +1,22 @@
+// Only used for verifying tests (& IDE type-checking). noEmit for faster checks.
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/**/*.js",
+    "tests/**/*.jsx"
+  ],
+  "exclude": ["lib"],
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "declaration": false,
+    "declarationDir": null,
+    "noEmit": true,
+    "types": ["jest", "@types/jest", "@types/node"]
+  }
+}
