@@ -33,12 +33,11 @@ export const Textarea = ({
   const placeholder = webchatState.theme.userInput?.box?.placeholder
   const userInputBoxStyle = webchatState.theme.userInput?.box?.style
 
-  const onKeyDown = event => {
+  const onKeyDown = async event => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      // Stop typing immediately; do not wait for sendTextAreaText to finish.
-      void stopTyping()
-      void sendTextAreaText()
+      // Run in parallel: stop typing must not wait for sendTextAreaText to finish.
+      await Promise.all([stopTyping(), sendTextAreaText()])
     }
   }
 
@@ -49,12 +48,12 @@ export const Textarea = ({
           textareaRef.current = ref
         }}
         onFocus={() => setIsInputFocused(true)}
-        onBlur={() => {
+        onBlur={async () => {
           setIsInputFocused(false)
-          void stopTyping()
+          await stopTyping()
         }}
-        onChange={event => {
-          void onTextChange(event.target.value)
+        onChange={async event => {
+          await onTextChange(event.target.value)
         }}
         name='text'
         maxRows={4}

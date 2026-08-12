@@ -74,6 +74,10 @@ export class TypingNetworkSender {
     return this.userStoppedTyping()
   }
 
+  private sendTypingOffBestEffort(context: ChatEventContext) {
+    return this.sendToServer(Typing.Off, context).catch(() => {})
+  }
+
   dispose() {
     this.disposed = true
     this.cancelPendingOff()
@@ -85,7 +89,7 @@ export class TypingNetworkSender {
     // Unmount should not leave the server thinking the user is still typing.
     const context = this.activeContext
     this.resetTypingState()
-    void this.sendToServer(Typing.Off, context)
+    this.sendTypingOffBestEffort(context)
   }
 
   private async userStartedTyping(): Promise<TypingOnSendResult> {
@@ -109,7 +113,7 @@ export class TypingNetworkSender {
         if (this.disposed) {
           // typing_on resolved after unmount: immediately balance with typing_off.
           if (delivered) {
-            void this.sendToServer(Typing.Off, context)
+            this.sendTypingOffBestEffort(context)
           }
 
           return false
@@ -142,7 +146,7 @@ export class TypingNetworkSender {
     this.pendingOffTimer = setTimeout(() => {
       this.pendingOffTimer = null
       this.resetTypingState()
-      void this.sendToServer(Typing.Off, context)
+      this.sendTypingOffBestEffort(context)
     }, TYPING_OFF_DEBOUNCE_MS)
 
     return Promise.resolve(true)

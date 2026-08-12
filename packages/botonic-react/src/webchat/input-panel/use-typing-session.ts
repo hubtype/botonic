@@ -101,7 +101,7 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
       }
 
       idleTimer.current = setTimeout(() => {
-        void stopTyping()
+        stopTyping().catch(() => {})
       }, TYPING_IDLE_MS)
     },
     [startTyping, stopTyping]
@@ -116,7 +116,7 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
         clearTimeout(idleTimer.current)
       }
 
-      void stopTypingRef.current()
+      stopTypingRef.current().catch(() => {})
     }
   }, [])
 
