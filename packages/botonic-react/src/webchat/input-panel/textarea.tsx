@@ -1,19 +1,21 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import type React from 'react'
 import { useContext } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
 
-import { Typing } from '../../index-types'
 import { WebchatContext } from '../../webchat/context'
 import { useDeviceAdapter } from '../hooks'
 import { TextAreaContainer } from './styles'
+import type { TypingChatEvent } from './typing-network-sender'
+import { useTypingSession } from './use-typing-session'
 
 interface TextareaProps {
   host: HTMLElement
   textareaRef: React.MutableRefObject<HTMLTextAreaElement | undefined>
-  sendChatEvent: (event: string) => Promise<void>
+  sendChatEvent: (event: TypingChatEvent) => Promise<boolean>
   sendTextAreaText: () => Promise<void>
 }
+
+export { TYPING_IDLE_MS } from './use-typing-session'
 
 export const Textarea = ({
   host,
@@ -22,68 +24,21 @@ export const Textarea = ({
   sendTextAreaText,
 }: TextareaProps) => {
   const { webchatState, setIsInputFocused } = useContext(WebchatContext)
+  // UI layer: decides when the user is typing. Network dedup lives in sendChatEvent.
+  const { stopTyping, onTextChange } = useTypingSession(sendChatEvent)
 
   useDeviceAdapter(host, webchatState.isWebchatOpen)
 
-  let isTyping = false
-  let typingTimeout: NodeJS.Timeout | null = null
-
   const persistentMenuOptions = webchatState.theme.userInput?.persistentMenu
-
   const placeholder = webchatState.theme.userInput?.box?.placeholder
-
   const userInputBoxStyle = webchatState.theme.userInput?.box?.style
 
-  const onKeyDown = event => {
-    if (event.keyCode === 13 && event.shiftKey === false) {
+  const onKeyDown = async event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      sendTextAreaText()
-      stopTyping()
+      // Run in parallel: stop typing must not wait for sendTextAreaText to finish.
+      await Promise.all([stopTyping(), sendTextAreaText()])
     }
-  }
-
-  const onKeyUp = () => {
-    if (!textareaRef.current) {
-      return
-    }
-
-    if (textareaRef.current.value === '') {
-      stopTyping()
-      return
-    }
-    if (!isTyping) {
-      startTyping()
-    }
-    clearTimeoutWithReset(true)
-  }
-
-  const clearTimeoutWithReset = (reset: boolean) => {
-    const waitTime = 20 * 1000
-    if (typingTimeout) {
-      clearTimeout(typingTimeout)
-    }
-    if (reset) {
-      typingTimeout = setTimeout(stopTyping, waitTime)
-    }
-  }
-
-  const startTyping = () => {
-    isTyping = true
-    sendChatEvent(Typing.On)
-  }
-
-  const stopTyping = () => {
-    clearTimeoutWithReset(false)
-    isTyping = false
-    sendChatEvent(Typing.Off)
-  }
-
-  const handleFocus = () => {
-    setIsInputFocused(true)
-  }
-
-  const handleBlur = () => {
-    setIsInputFocused(false)
   }
 
   return (
@@ -92,16 +47,21 @@ export const Textarea = ({
         ref={(ref: HTMLTextAreaElement) => {
           textareaRef.current = ref
         }}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={async () => {
+          setIsInputFocused(false)
+          await stopTyping()
+        }}
+        onChange={async event => {
+          await onTextChange(event.target.value)
+        }}
         name='text'
         maxRows={4}
         wrap='soft'
         maxLength={1000}
         placeholder={placeholder}
         autoFocus={false}
-        onKeyDown={e => onKeyDown(e)}
-        onKeyUp={onKeyUp}
+        onKeyDown={onKeyDown}
         style={{
           display: 'flex',
           fontSize: 16,
