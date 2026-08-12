@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- Rehydrate truncated AI agent debug events via `getMessageById`.
+
 ### Changed
 
 - [PR-3258](https://github.com/hubtype/botonic/pull/3258): Remove system debug trace for knowledge base event. 

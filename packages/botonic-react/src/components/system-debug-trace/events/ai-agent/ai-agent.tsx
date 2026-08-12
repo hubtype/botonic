@@ -1,5 +1,6 @@
 import { EventAction, type ToolExecution } from '@botonic/core'
 import { useContext, useMemo } from 'react'
+
 import { WebchatContext } from '../../../../webchat/context'
 import { useKnowledgeBaseInfo } from '../../hooks/use-knowledge-base-info'
 import { AiSpecialistSvg } from '../../icons'
@@ -14,17 +15,25 @@ import { LABELS } from '../constants'
 import { ExecutedTools } from './executed-tools'
 import { parseTools } from './parse-tools'
 import type { AiAgentDebugEvent, ToolExecuted } from './types'
+import { useRehydratedAiAgentEvent } from './use-rehydrated-ai-agent-event'
 
-export const AiAgent = ({
-  tools_executed,
-  input_guardrails_triggered,
-  output_guardrails_triggered,
-  exit,
-  error,
-  messageId,
-  knowledge_base_chunks_with_sources,
-}: AiAgentDebugEvent) => {
+export const AiAgent = (props: AiAgentDebugEvent) => {
   const { previewUtils } = useContext(WebchatContext)
+  const { resolvedEvent, isRehydrating } = useRehydratedAiAgentEvent(
+    props,
+    previewUtils
+  )
+
+  const {
+    tools_executed,
+    input_guardrails_triggered,
+    output_guardrails_triggered,
+    exit,
+    error,
+    messageId,
+    knowledge_base_chunks_with_sources,
+    truncated,
+  } = resolvedEvent
 
   const { otherTools, allSourcesIds, allChunksIds, query } = useMemo(
     () => parseTools(tools_executed),
@@ -57,6 +66,9 @@ export const AiAgent = ({
     previewUtils?.onClickOpenToolResults?.(toolExecution)
   }
 
+  const showNoToolsExecuted =
+    !isRehydrating && !tools_executed.length && !truncated
+
   return (
     <>
       {query && (
@@ -79,7 +91,7 @@ export const AiAgent = ({
         onSeeToolDetails={handleSeeToolDetails}
       />
 
-      {!tools_executed.length && (
+      {showNoToolsExecuted && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.NO_TOOLS_EXECUTED}</StyledDebugLabel>
         </StyledDebugDetail>

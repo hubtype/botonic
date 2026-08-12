@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with FLOW button 1`] = `
+<message
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"FLOW","index":"0","parameters":[{"type":"ACTION","action":{"flow_token":"static-booking-token","flow_action_data":{"ticket_id":"TKT-001"}}}]}]}"
+  language="en"
+  name="booking_flow"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with FLOW button without flow_action_data 1`] = `
+<message
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"FLOW","index":"0","parameters":[{"type":"ACTION","action":{"flow_token":"static-data-token"}}]}]}"
+  language="en"
+  name="data_exchange_flow"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with URL button 1`] = `
+<message
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"URL","index":0,"parameters":[{"type":"TEXT","text":"order-123"}]}]}"
+  language="en"
+  name="order_details"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with all components (header, body, buttons) 1`] = `
+<message
+  body="{"type":"BODY","parameters":[{"type":"TEXT","parameter_name":"issue_description","text":"Unable to login to account"},{"type":"TEXT","parameter_name":"priority","text":"High"}]}"
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"URL","index":0,"parameters":[{"type":"TEXT","text":"TKT-001"}]},{"type":"BUTTON","sub_type":"QUICK_REPLY","index":1,"parameters":[{"type":"PAYLOAD","payload":"talk_to_agent"}]}]}"
+  header="{"type":"HEADER","parameters":[{"type":"TEXT","text":"Ticket #TKT-001"}]}"
+  language="en"
+  name="support_ticket"
+  namespace="business_namespace"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with body parameters 1`] = `
+<message
+  body="{"type":"BODY","parameters":[{"type":"TEXT","parameter_name":"customer_name","text":"John Doe"},{"type":"TEXT","parameter_name":"tracking_number","text":"TRK-123456789"}]}"
+  language="en"
+  name="shipping_update"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with image header 1`] = `
+<message
+  header="{"type":"HEADER","parameters":[{"type":"IMAGE","image":{"link":"https://example.com/promo-image.jpg"}}]}"
+  language="es"
+  name="promotional_offer"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with minimal props 1`] = `
+<message
+  language="en"
+  name="order_confirmation"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with namespace 1`] = `
+<message
+  language="en"
+  name="order_confirmation"
+  namespace="my_business_namespace"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with quick reply buttons 1`] = `
+<message
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"QUICK_REPLY","index":0,"parameters":[{"type":"PAYLOAD","payload":"feedback_positive"}]},{"type":"BUTTON","sub_type":"QUICK_REPLY","index":1,"parameters":[{"type":"PAYLOAD","payload":"feedback_negative"}]}]}"
+  language="en"
+  name="customer_feedback"
+  type="whatsapptemplate"
+/>
+`;
+
+exports[`WhatsappTemplate Component renders WhatsappTemplate with text header 1`] = `
+<message
+  header="{"type":"HEADER","parameters":[{"type":"TEXT","text":"Order #12345"}]}"
+  language="en"
+  name="order_confirmation"
+  type="whatsapptemplate"
+/>
+`;

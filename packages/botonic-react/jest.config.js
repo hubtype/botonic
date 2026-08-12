@@ -3,7 +3,7 @@
 module.exports = {
   roots: ['<rootDir>', 'src/', 'tests/'],
   preset: '../../node_modules/@babel/preset-typescript',
-  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx)$',
+  testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|jsx|ts|tsx)$',
   testPathIgnorePatterns: [
     'lib',
     '.*.d.ts',
