@@ -21,6 +21,7 @@ All notable changes to Botonic will be documented in this file.
 - [PR-3258](https://github.com/hubtype/botonic/pull/3258): Remove system debug trace for knowledge base event. 
 
 ### Fixed
+- [PR-3264](https://github.com/hubtype/botonic/pull/3264): Avoid sending too much typing on/off events
 
 </details>
 
