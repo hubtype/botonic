@@ -14,25 +14,26 @@ type SendTypingEvent = (event: TypingChatEvent) => Promise<boolean>
  */
 export function useTypingSession(sendChatEvent: SendTypingEvent) {
   const isTyping = useRef(false)
-  const typingEpoch = useRef(0)
+  /** Increments whenever the user starts or stops typing. */
+  const startOrStopTypingCount = useRef(0)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const startTypingPromise = useRef<Promise<boolean> | null>(null)
+  const pendingTypingOn = useRef<Promise<boolean> | null>(null)
 
   const stopTyping = useCallback(async () => {
-    const stopEpoch = ++typingEpoch.current
+    const countWhenStopWasRequested = ++startOrStopTypingCount.current
 
     if (idleTimer.current) {
       clearTimeout(idleTimer.current)
       idleTimer.current = null
     }
 
-    if (startTypingPromise.current) {
-      await startTypingPromise.current
+    if (pendingTypingOn.current) {
+      await pendingTypingOn.current
     }
 
     await Promise.resolve()
 
-    if (stopEpoch !== typingEpoch.current) {
+    if (countWhenStopWasRequested !== startOrStopTypingCount.current) {
       return
     }
 
@@ -49,11 +50,11 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
       return true
     }
 
-    if (startTypingPromise.current) {
-      return startTypingPromise.current
+    if (pendingTypingOn.current) {
+      return pendingTypingOn.current
     }
 
-    startTypingPromise.current = (async () => {
+    pendingTypingOn.current = (async () => {
       try {
         const accepted = await sendChatEvent(Typing.On)
 
@@ -63,11 +64,11 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
 
         return accepted
       } finally {
-        startTypingPromise.current = null
+        pendingTypingOn.current = null
       }
     })()
 
-    return startTypingPromise.current
+    return pendingTypingOn.current
   }, [sendChatEvent])
 
   const onTextChange = useCallback(
@@ -77,10 +78,10 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
         return
       }
 
-      const epoch = ++typingEpoch.current
+      const countWhenUserTyped = ++startOrStopTypingCount.current
       await startTyping()
 
-      if (epoch !== typingEpoch.current) {
+      if (countWhenUserTyped !== startOrStopTypingCount.current) {
         return
       }
 

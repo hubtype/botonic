@@ -49,10 +49,10 @@ export function buildChatEventPayload(
  */
 export class TypingNetworkSender {
   private disposed = false
-  private serverKnowsUserIsTyping = false
+  private isTypingOnServer = false
   private activeContext: ChatEventContext | null = null
   private pendingOffTimer: ReturnType<typeof setTimeout> | null = null
-  private pendingStart: Promise<TypingOnSendResult> | null = null
+  private pendingTypingOn: Promise<TypingOnSendResult> | null = null
 
   constructor(
     private readonly getContext: () => ChatEventContext,
@@ -77,7 +77,7 @@ export class TypingNetworkSender {
     this.disposed = true
     this.cancelPendingOff()
 
-    if (!this.serverKnowsUserIsTyping || !this.activeContext) {
+    if (!this.isTypingOnServer || !this.activeContext) {
       return
     }
 
@@ -87,17 +87,17 @@ export class TypingNetworkSender {
   }
 
   private async userStartedTyping(): Promise<TypingOnSendResult> {
-    if (this.pendingStart) {
-      return this.pendingStart
+    if (this.pendingTypingOn) {
+      return this.pendingTypingOn
     }
 
     this.cancelPendingOff()
 
-    if (this.serverKnowsUserIsTyping) {
+    if (this.isTypingOnServer) {
       return true
     }
 
-    this.pendingStart = (async () => {
+    this.pendingTypingOn = (async () => {
       const context = this.getContext()
 
       try {
@@ -112,21 +112,21 @@ export class TypingNetworkSender {
         }
 
         if (delivered) {
-          this.serverKnowsUserIsTyping = true
+          this.isTypingOnServer = true
           this.activeContext = context
         }
 
         return delivered
       } finally {
-        this.pendingStart = null
+        this.pendingTypingOn = null
       }
     })()
 
-    return this.pendingStart
+    return this.pendingTypingOn
   }
 
   private userStoppedTyping(): Promise<TypingOffSendResult> {
-    if (!this.serverKnowsUserIsTyping || !this.activeContext) {
+    if (!this.isTypingOnServer || !this.activeContext) {
       return Promise.resolve(false)
     }
 
@@ -144,7 +144,7 @@ export class TypingNetworkSender {
   }
 
   private resetTypingState() {
-    this.serverKnowsUserIsTyping = false
+    this.isTypingOnServer = false
     this.activeContext = null
   }
 
