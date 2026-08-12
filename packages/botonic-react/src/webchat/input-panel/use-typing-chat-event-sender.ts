@@ -14,11 +14,18 @@ interface UseTypingChatEventSenderArgs {
   lastRoutePath?: string
 }
 
+/**
+ * React bridge from Textarea to TypingNetworkSender.
+ *
+ * Keeps one sender instance per input panel and forwards typing events
+ * to onUserInput with the current session context.
+ */
 export function useTypingChatEventSender({
   onUserInput,
   session,
   lastRoutePath,
 }: UseTypingChatEventSenderArgs) {
+  // Always read the latest handler/session without recreating the sender.
   const contextRef = useRef({ onUserInput, session, lastRoutePath })
   const typingSenderRef = useRef<TypingNetworkSender | null>(null)
 
@@ -41,6 +48,7 @@ export function useTypingChatEventSender({
           await handler(buildChatEventPayload(chatEvent, context))
           return true
         } catch {
+          // Let the UI retry on the next keystroke.
           return false
         }
       }

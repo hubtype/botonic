@@ -24,6 +24,7 @@ export const Textarea = ({
   sendTextAreaText,
 }: TextareaProps) => {
   const { webchatState, setIsInputFocused } = useContext(WebchatContext)
+  // UI layer: decides when the user is typing. Network dedup lives in sendChatEvent.
   const { stopTyping, onTextChange } = useTypingSession(sendChatEvent)
 
   useDeviceAdapter(host, webchatState.isWebchatOpen)
@@ -35,6 +36,7 @@ export const Textarea = ({
   const onKeyDown = event => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
+      // Stop typing immediately; do not wait for sendTextAreaText to finish.
       void stopTyping()
       void sendTextAreaText()
     }

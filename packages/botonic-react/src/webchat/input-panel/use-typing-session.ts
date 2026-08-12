@@ -9,14 +9,17 @@ export const TYPING_IDLE_MS = 20 * 1000
 type SendTypingEvent = (event: TypingChatEvent) => Promise<boolean>
 
 /**
- * Tracks whether the end user is typing in the input and emits
- * typing_on / typing_off through sendChatEvent.
+ * UI-layer typing session for the textarea.
+ *
+ * Decides *when* the user is typing and requests typing_on / typing_off.
+ * Deduplication and network debouncing live in TypingNetworkSender instead.
  */
 export function useTypingSession(sendChatEvent: SendTypingEvent) {
   const isTyping = useRef(false)
-  /** Increments whenever the user starts or stops typing. */
+  // Bumps on each start/stop so stale async stopTyping() calls can be ignored.
   const startOrStopTypingCount = useRef(0)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Shares one in-flight typing_on while delivery is still pending.
   const pendingTypingOn = useRef<Promise<boolean> | null>(null)
 
   const stopTyping = useCallback(async () => {
@@ -27,10 +30,12 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
       idleTimer.current = null
     }
 
+    // Wait for typing_on to settle before deciding whether to send typing_off.
     if (pendingTypingOn.current) {
       await pendingTypingOn.current
     }
 
+    // Let same-turn input events (e.g. Enter then type next message) bump the counter first.
     await Promise.resolve()
 
     if (countWhenStopWasRequested !== startOrStopTypingCount.current) {
@@ -58,6 +63,7 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
       try {
         const accepted = await sendChatEvent(Typing.On)
 
+        // Only mark active after the network layer confirms delivery.
         if (accepted) {
           isTyping.current = true
         }
@@ -89,6 +95,7 @@ export function useTypingSession(sendChatEvent: SendTypingEvent) {
         return
       }
 
+      // Reset the idle timer on every keystroke.
       if (idleTimer.current) {
         clearTimeout(idleTimer.current)
       }

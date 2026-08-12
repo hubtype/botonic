@@ -62,6 +62,7 @@ export const InputPanel = ({
     textareaRef.current.value = ''
   }
 
+  // Network layer: deduplicates typing_on/off before they reach onUserInput.
   const sendChatEvent = useTypingChatEventSender({
     onUserInput,
     session: webchatState.session,

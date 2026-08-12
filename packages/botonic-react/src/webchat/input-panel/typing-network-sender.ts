@@ -42,14 +42,15 @@ export function buildChatEventPayload(
 }
 
 /**
- * Sends typing_on / typing_off to the server without duplicates:
- * - at most one typing_on while the user is typing
- * - typing_off debounced to avoid bursts of stop signals
- * - typing_off always uses the same session context as its typing_on
+ * Network-layer sender for typing_on / typing_off.
+ *
+ * Guarantees at most one typing_on per session, debounced typing_off,
+ * and matching session context between on/off pairs.
  */
 export class TypingNetworkSender {
   private disposed = false
   private isTypingOnServer = false
+  // Snapshot of session/route captured when typing_on was delivered.
   private activeContext: ChatEventContext | null = null
   private pendingOffTimer: ReturnType<typeof setTimeout> | null = null
   private pendingTypingOn: Promise<TypingOnSendResult> | null = null
@@ -81,6 +82,7 @@ export class TypingNetworkSender {
       return
     }
 
+    // Unmount should not leave the server thinking the user is still typing.
     const context = this.activeContext
     this.resetTypingState()
     void this.sendToServer(Typing.Off, context)
@@ -91,6 +93,7 @@ export class TypingNetworkSender {
       return this.pendingTypingOn
     }
 
+    // User resumed typing before the debounced typing_off was sent.
     this.cancelPendingOff()
 
     if (this.isTypingOnServer) {
@@ -104,6 +107,7 @@ export class TypingNetworkSender {
         const delivered = await this.sendToServer(Typing.On, context)
 
         if (this.disposed) {
+          // typing_on resolved after unmount: immediately balance with typing_off.
           if (delivered) {
             void this.sendToServer(Typing.Off, context)
           }
@@ -134,6 +138,7 @@ export class TypingNetworkSender {
 
     const context = this.activeContext
 
+    // Coalesce blur + clear + send into a single typing_off.
     this.pendingOffTimer = setTimeout(() => {
       this.pendingOffTimer = null
       this.resetTypingState()
