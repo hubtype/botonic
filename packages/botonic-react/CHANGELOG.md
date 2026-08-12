@@ -14,7 +14,7 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- Rehydrate truncated AI agent debug events via `getMessageById`.
+- [PR-3261](https://github.com/hubtype/botonic/pull/3261): Rehydrate truncated AI agent debug events via `getMessageById`.
 
 ### Changed
 
