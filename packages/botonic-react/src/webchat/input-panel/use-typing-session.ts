@@ -4,7 +4,7 @@ import { Typing } from '../../index-types'
 import type { TypingChatEvent } from './typing-network-sender'
 
 /** Local UI inactivity before the textarea stops emitting typing events. */
-export const TYPING_IDLE_MS = 20 * 1000
+export const TYPING_IDLE_MS = 10 * 1000
 
 type SendTypingEvent = (event: TypingChatEvent) => Promise<boolean>
 
