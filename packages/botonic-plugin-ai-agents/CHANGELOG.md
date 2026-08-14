@@ -10,18 +10,22 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.54.x] - 2026-mm-dd
+## [0.55.x] - 2026-mm-dd
 
 ### Added
 
 ### Changed
 
-- [PR-3260](https://github.com/hubtype/botonic/pull/3260): Serialize contact info fields as a JSON inside SpecialistAgent.
-- [PR-3259](https://github.com/hubtype/botonic/pull/3259): Simplify reasoning effort in LLMConfig.
-
 ### Fixed
 
 </details>
+
+## [0.55.x] - 2026-08-14
+
+### Changed
+
+- [PR-3260](https://github.com/hubtype/botonic/pull/3260): Serialize contact info fields as a JSON inside SpecialistAgent.
+- [PR-3259](https://github.com/hubtype/botonic/pull/3259): Simplify reasoning effort in LLMConfig.
 
 ## [0.52.1] - 2026-07-14
 
