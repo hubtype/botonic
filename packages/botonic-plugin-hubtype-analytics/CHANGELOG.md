@@ -17,11 +17,15 @@ All notable changes to Botonic will be documented in this file.
 
 ### Changed
 
-- [PR-3258](https://github.com/hubtype/botonic/pull/3258): Remove knowledge base event. 
-
 ### Fixed
 
 </details>
+
+## [0.55.0] - 2026-08-14
+
+### Changed
+
+- [PR-3258](https://github.com/hubtype/botonic/pull/3258): Remove knowledge base event. 
 
 ## [0.52.0] - 2026-07-14
 
