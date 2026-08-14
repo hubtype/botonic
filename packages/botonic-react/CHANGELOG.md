@@ -14,6 +14,16 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+### Changed
+
+### Fixed
+
+</details>
+
+## [0.55.0] - 2026-08-14
+
+### Added
+
 - [PR-3261](https://github.com/hubtype/botonic/pull/3261): Rehydrate truncated AI agent debug events via `getMessageById`.
 
 ### Changed
@@ -22,8 +32,6 @@ All notable changes to Botonic will be documented in this file.
 
 ### Fixed
 - [PR-3264](https://github.com/hubtype/botonic/pull/3264): Avoid sending too much typing on/off events
-
-</details>
 
 ## [0.53.0] - 2026-07-23
 
