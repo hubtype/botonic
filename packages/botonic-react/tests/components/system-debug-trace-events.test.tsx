@@ -264,6 +264,53 @@ describe('System Debug Trace - Event Components', () => {
       })
     })
 
+    test('fetches chunks via getChunkIdsGroupedBySource after rehydration', async () => {
+      const getChunkIdsGroupedBySource = jest.fn().mockResolvedValue([])
+      const getMessageById = jest.fn().mockResolvedValue({
+        event_data: {
+          tools_executed: [
+            {
+              tool_name: 'retrieve_knowledge',
+              tool_arguments: { query: 'return policy' },
+              tool_results: 'result1',
+              knowledgebase_sources_ids: ['src-1'],
+              knowledgebase_chunks_ids: ['chunk-1', 'chunk-2'],
+            },
+          ],
+        },
+      })
+
+      const context = withWebchatContext({
+        previewUtils: { getMessageById, getChunkIdsGroupedBySource },
+      })
+
+      const props = defaultAiAgentProps({
+        truncated: true,
+        hubtype_message_id: 'msg-1',
+      })
+
+      const { container } = render(
+        <WebchatContext.Provider value={context}>
+          <AiAgent {...props} />
+        </WebchatContext.Provider>
+      )
+
+      await waitFor(() => {
+        expect(getMessageById).toHaveBeenCalledWith('msg-1', {
+          includeDebugEvents: true,
+        })
+      })
+
+      await waitFor(() => {
+        expect(getChunkIdsGroupedBySource).toHaveBeenCalledWith([
+          'chunk-1',
+          'chunk-2',
+        ])
+      })
+
+      expect(container).toBeTruthy()
+    })
+
     test('does not fetch when event is not truncated', async () => {
       const getMessageById = jest.fn()
       const context = withWebchatContext({
