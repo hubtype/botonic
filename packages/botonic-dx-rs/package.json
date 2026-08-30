@@ -1,0 +1,32 @@
+{
+  "name": "@botonic/dx-rs",
+  "version": "0.45.0-alpha.0",
+  "description": "Developer experience baseline for the upcoming Botonic RS toolchain",
+  "scripts": {
+    "build": "echo Skipping build..."
+  },
+  "author": "",
+  "license": "MIT",
+  "keywords": [
+    "bot-framework",
+    "javascript",
+    "typescript",
+    "rspack",
+    "biome"
+  ],
+  "dependencies": {
+    "@biomejs/biome": "^2.3.13",
+    "@rspack/core": "^1.7.3",
+    "jest": "^30.2.0"
+  },
+  "engines": {
+    "node": ">=22.19.0",
+    "npm": ">=10.0.0"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "baseline/*",
+    "sample-config/*"
+  ]
+}
