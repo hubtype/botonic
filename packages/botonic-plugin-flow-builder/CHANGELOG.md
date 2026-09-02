@@ -4,6 +4,10 @@ All notable changes to Botonic will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Do not invoke the AI agent twice on first interaction when the start node already goes to an AI Agent flow.
+
 <details>
   <summary>
     Changes that have landed in master-lts but are not yet released.
