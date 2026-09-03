@@ -38,6 +38,11 @@ type HtWhatsAppTemplateButton =
       index: number
     }
   | {
+      type: WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO
+      text?: string
+      index: number
+    }
+  | {
       type: WhatsAppTemplateButtonSubType.FLOW
       text: string
       flow_id: string

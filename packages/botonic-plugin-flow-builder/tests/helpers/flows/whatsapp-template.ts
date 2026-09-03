@@ -18,7 +18,9 @@ const WhatsAppTemplateButtonSubType = {
   URL: 'URL',
   QUICK_REPLY: 'QUICK_REPLY',
   PHONE_NUMBER: 'PHONE_NUMBER',
+  VOICE_CALL: 'VOICE_CALL',
   FLOW: 'FLOW',
+  REQUEST_CONTACT_INFO: 'REQUEST_CONTACT_INFO',
 } as const
 
 export const whatsappTemplateFlow = {
@@ -679,6 +681,70 @@ export const whatsappTemplateFlow = {
               date: '2024-01-15',
               time: '10:00 AM',
             },
+            url_variable_values: {},
+          },
+        },
+        buttons: [],
+      },
+    },
+    {
+      id: 'keyword-whatsapp-template-request-contact-info',
+      code: '',
+      is_code_ai_generated: false,
+      meta: { x: 0, y: 700 },
+      follow_up: null,
+      target: {
+        id: 'whatsapp-template-request-contact-info-node',
+        type: 'whatsapp-template',
+      },
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'keyword',
+      content: {
+        title: [],
+        keywords: [{ values: ['templateRequestContactInfo'], locale: 'en' }],
+      },
+    },
+    {
+      id: 'whatsapp-template-request-contact-info-node',
+      code: 'WHATSAPP_TEMPLATE_REQUEST_CONTACT_INFO',
+      is_code_ai_generated: false,
+      meta: { x: 300, y: 700 },
+      follow_up: null,
+      target: null,
+      flow_id: 'main-flow',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'whatsapp-template',
+      content: {
+        by_locale: {
+          en: {
+            template: {
+              id: 'template-request-contact-info-id',
+              name: 'request_phone_number',
+              language: 'en',
+              status: 'APPROVED',
+              category: 'UTILITY',
+              components: [
+                {
+                  type: WhatsAppTemplateComponentType.BODY,
+                  text: 'Please share your phone number so we can finish your request.',
+                },
+                {
+                  type: WhatsAppTemplateComponentType.BUTTONS,
+                  buttons: [
+                    {
+                      type: WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO,
+                      index: 0,
+                    },
+                  ],
+                },
+              ],
+              namespace: 'test-namespace',
+              parameter_format: 'POSITIONAL',
+            },
+            variable_values: {},
             url_variable_values: {},
           },
         },
