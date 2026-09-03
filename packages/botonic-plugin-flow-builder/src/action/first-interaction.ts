@@ -62,6 +62,7 @@ function startContentsAlreadyHandleUserInput(contents: FlowContent[]): boolean {
     return true
   }
 
+  // To avoid duplicated ai agent response, we check if there is an ai agent or ai agent router in the first interaction contents.
   return contents.some(
     content =>
       content instanceof FlowAiAgent || content instanceof FlowAiAgentRouter
