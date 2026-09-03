@@ -18,6 +18,15 @@ exports[`WhatsappTemplate Component renders WhatsappTemplate with FLOW button wi
 />
 `;
 
+exports[`WhatsappTemplate Component renders WhatsappTemplate with REQUEST_CONTACT_INFO button 1`] = `
+<message
+  buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"REQUEST_CONTACT_INFO","index":0,"parameters":[]}]}"
+  language="en"
+  name="request_phone_number"
+  type="whatsapptemplate"
+/>
+`;
+
 exports[`WhatsappTemplate Component renders WhatsappTemplate with URL button 1`] = `
 <message
   buttons="{"type":"BUTTONS","buttons":[{"type":"BUTTON","sub_type":"URL","index":0,"parameters":[{"type":"TEXT","text":"order-123"}]}]}"

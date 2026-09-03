@@ -220,6 +220,27 @@ describe('WhatsappTemplate Component', () => {
     expect(tree).toMatchSnapshot()
   })
 
+  test('renders WhatsappTemplate with REQUEST_CONTACT_INFO button', () => {
+    const props = {
+      name: 'request_phone_number',
+      language: 'en',
+      buttons: {
+        type: WhatsAppTemplateComponentType.BUTTONS,
+        buttons: [
+          {
+            type: WhatsAppTemplateComponentType.BUTTON,
+            sub_type: WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO,
+            index: 0,
+            parameters: [],
+          },
+        ],
+      },
+    }
+
+    const tree = renderToJSON(<WhatsappTemplate {...props} />)
+    expect(tree).toMatchSnapshot()
+  })
+
   test('renders WhatsappTemplate with all components (header, body, buttons)', () => {
     const props = {
       name: 'support_ticket',
@@ -290,6 +311,9 @@ describe('WhatsApp Template Types', () => {
     expect(WhatsAppTemplateButtonSubType.PHONE_NUMBER).toBe('PHONE_NUMBER')
     expect(WhatsAppTemplateButtonSubType.VOICE_CALL).toBe('VOICE_CALL')
     expect(WhatsAppTemplateButtonSubType.FLOW).toBe('FLOW')
+    expect(WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO).toBe(
+      'REQUEST_CONTACT_INFO'
+    )
   })
 
   test('WhatsAppTemplateParameterType has correct values', () => {

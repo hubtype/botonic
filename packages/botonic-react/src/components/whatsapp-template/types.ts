@@ -4,6 +4,7 @@ export enum WhatsAppTemplateButtonSubType {
   PHONE_NUMBER = 'PHONE_NUMBER',
   VOICE_CALL = 'VOICE_CALL',
   FLOW = 'FLOW',
+  REQUEST_CONTACT_INFO = 'REQUEST_CONTACT_INFO',
 }
 
 export enum WhatsAppTemplateParameterType {
@@ -111,6 +112,13 @@ export interface WhatsappTemplatePhoneNumberButton {
   parameters: []
 }
 
+export interface WhatsappTemplateRequestContactInfoButton {
+  type: WhatsAppTemplateComponentType.BUTTON
+  sub_type: WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO
+  index: number
+  parameters: []
+}
+
 export interface WhatsappTemplateFlowAction {
   flow_token: string
   flow_action_data?: Record<string, string>
@@ -133,4 +141,5 @@ export type WhatsappTemplateButton =
   | WhatsappTemplateUrlButton
   | WhatsappTemplateVoiceCallButton
   | WhatsappTemplatePhoneNumberButton
+  | WhatsappTemplateRequestContactInfoButton
   | WhatsappTemplateFlowButton

@@ -9,6 +9,7 @@ import {
   type WhatsappTemplateHeaderVideoParameter,
   type WhatsappTemplatePhoneNumberButton,
   type WhatsappTemplateQuickReplyButton,
+  type WhatsappTemplateRequestContactInfoButton,
   type WhatsappTemplateUrlButton,
 } from '@botonic/react'
 import { describe, expect, test } from '@jest/globals'
@@ -479,6 +480,42 @@ describe('FlowWhatsappTemplate', () => {
       expect(phoneNumberButton?.index).toBe(2)
       expect(
         (phoneNumberButton as WhatsappTemplatePhoneNumberButton)?.parameters
+      ).toEqual([])
+    })
+
+    test('should create REQUEST_CONTACT_INFO button with empty parameters', async () => {
+      const { contents, request } = await createFlowBuilderPluginAndGetContents(
+        {
+          flowBuilderOptions: { flow: whatsappTemplateFlow },
+          requestArgs: {
+            input: { data: 'templateRequestContactInfo', type: INPUT.TEXT },
+          },
+        }
+      )
+
+      const template = contents[0] as FlowWhatsappTemplate
+      expect(template.htWhatsappTemplate.name).toBe('request_phone_number')
+
+      // @ts-expect-error - accessing private method for testing
+      const buttons = template.getButtons(
+        template.htWhatsappTemplate,
+        template.buttons || [],
+        template.urlVariableValues || {},
+        template.flowButtonActionValues || {},
+        request
+      )
+
+      expect(buttons?.type).toBe(WhatsAppTemplateComponentType.BUTTONS)
+      expect(buttons?.buttons).toHaveLength(1)
+
+      const requestContactInfoButton = buttons?.buttons[0]
+      expect(requestContactInfoButton?.sub_type).toBe(
+        WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO
+      )
+      expect(requestContactInfoButton?.index).toBe(0)
+      expect(
+        (requestContactInfoButton as WhatsappTemplateRequestContactInfoButton)
+          .parameters
       ).toEqual([])
     })
 
