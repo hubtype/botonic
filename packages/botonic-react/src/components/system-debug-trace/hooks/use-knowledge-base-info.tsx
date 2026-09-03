@@ -136,7 +136,7 @@ export const useKnowledgeBaseInfo = ({
     }
 
     fetchData()
-  }, [])
+  }, [chunkIds])
 
   return {
     sources,
