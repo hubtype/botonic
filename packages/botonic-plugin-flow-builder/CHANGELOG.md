@@ -4,6 +4,10 @@ All notable changes to Botonic will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
+
 ### Fixed
 
 - Do not invoke the AI agent twice on first interaction when the start node already goes to an AI Agent flow.
