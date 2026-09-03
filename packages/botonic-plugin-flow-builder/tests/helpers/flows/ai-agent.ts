@@ -212,3 +212,13 @@ export const aiAgentGoToFlowTestFlow = {
     },
   ],
 }
+
+export const aiAgentMainStartGoToFlowTestFlow = {
+  ...aiAgentGoToFlowTestFlow,
+  start_node_id: GO_TO_AI_AGENTS_NODE_ID,
+  flows: aiAgentGoToFlowTestFlow.flows.map(flow =>
+    flow.name === 'Main'
+      ? { ...flow, start_node_id: GO_TO_AI_AGENTS_NODE_ID }
+      : flow
+  ),
+}

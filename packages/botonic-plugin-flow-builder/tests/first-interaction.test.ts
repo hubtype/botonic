@@ -2,13 +2,16 @@ import { INPUT, type InferenceResponse, OutputMessageType } from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import { FlowBuilderAction } from '../src/action/index'
-import type { FlowAiAgent, FlowText } from '../src/content-fields/index'
+import { FlowAiAgent, type FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockAiAgentResponse } from './__mocks__/ai-agent'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
-import { aiAgentTestFlow } from './helpers/flows/ai-agent'
+import {
+  aiAgentMainStartGoToFlowTestFlow,
+  aiAgentTestFlow,
+} from './helpers/flows/ai-agent'
 import { basicFlow } from './helpers/flows/basic'
 import {
   createFlowBuilderPlugin,
@@ -222,6 +225,37 @@ describe('Check the contents returned by the plugin in first interaction with AI
     expect(aiAgentMock).toHaveBeenCalled()
     expect((contents[0] as FlowText).text).toBe('Welcome')
     expect(contents.length).toBe(2)
+  })
+
+  test('When Main start is a go-to-flow to AI Agents, the AI agent responds once on first interaction', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentMainStartGoToFlowTestFlow,
+        getAiAgentResponse: aiAgentMock,
+      },
+      requestArgs: {
+        input: {
+          data: 'hola',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    const aiAgentContents = contents.filter(
+      content => content instanceof FlowAiAgent
+    )
+
+    expect(aiAgentMock).toHaveBeenCalledTimes(1)
+    expect(aiAgentContents).toHaveLength(1)
+    expect((aiAgentContents[0] as FlowAiAgent).messages[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'AI agent response in first interaction',
+      },
+    })
   })
 
   test('When disableAIAgentInFirstInteraction is true but it is not first interaction, the AI agent still responds', async () => {

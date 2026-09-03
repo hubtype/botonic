@@ -1,6 +1,11 @@
 import type { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
-import { FlowBotAction, type FlowContent } from '../content-fields'
+import {
+  FlowAiAgent,
+  FlowAiAgentRouter,
+  FlowBotAction,
+  type FlowContent,
+} from '../content-fields'
 import type BotonicPluginFlowBuilder from '../index'
 import { inputHasTextOrTranscript } from '../utils/input'
 import { getContentsByAiAgentFromUserInput } from './ai-agent-from-user-input'
@@ -36,10 +41,10 @@ export async function getContentsByFirstInteraction(
     }
   }
 
-  /* If the first interaction has a FlowBotAction, it should be the last content
-   * and avoid to render the match with keywords or intents
-   */
-  if (firstInteractionContents.at(-1) instanceof FlowBotAction) {
+  // Bot actions and AI agents already consume the user input. Matching
+  // keywords/intents/KB/AI-agent-from-user-input on top would duplicate replies
+  // (e.g. Main start → Go to flow → AI Agents).
+  if (startContentsAlreadyHandleUserInput(firstInteractionContents)) {
     return firstInteractionContents
   }
 
@@ -50,6 +55,18 @@ export async function getContentsByFirstInteraction(
   }
 
   return firstInteractionContents
+}
+
+function startContentsAlreadyHandleUserInput(contents: FlowContent[]): boolean {
+  if (contents.at(-1) instanceof FlowBotAction) {
+    return true
+  }
+
+  // To avoid duplicated ai agent response, we check if there is an ai agent or ai agent router in the first interaction contents.
+  return contents.some(
+    content =>
+      content instanceof FlowAiAgent || content instanceof FlowAiAgentRouter
+  )
 }
 
 async function getContentsByUserInput(
