@@ -24,6 +24,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.55.2] - 2026-09-03
+
+### Fixed
+
+- [PR-3267](https://github.com/hubtype/botonic/pull/3267): Fix first interaction duplicated ai agent response.
+
 ## [0.55.0] - 2026-08-14
 
 ### Changed
