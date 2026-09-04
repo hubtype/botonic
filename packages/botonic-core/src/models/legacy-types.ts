@@ -72,6 +72,7 @@ export enum INPUT {
   CHAT_EVENT = 'chatevent',
   WHATSAPP_BUTTON_LIST = 'whatsapp-button-list',
   WHATSAPP_CTA_URL_BUTTON = 'whatsapp-cta-url-button',
+  WHATSAPP_REQUEST_CONTACT_INFO = 'whatsapp-request-contact-info',
   WHATSAPP_CATALOG = 'whatsapp-catalog',
   WHATSAPP_PRODUCT = 'whatsapp-product',
   WHATSAPP_PRODUCT_LIST = 'whatsapp-product-list',
@@ -113,6 +114,7 @@ export type InputType =
   | INPUT.WHATSAPP_TEMPLATE
   | INPUT.WHATSAPP_BUTTON_LIST
   | INPUT.WHATSAPP_CTA_URL_BUTTON
+  | INPUT.WHATSAPP_REQUEST_CONTACT_INFO
   | INPUT.WHATSAPP_CATALOG
   | INPUT.WHATSAPP_PRODUCT
   | INPUT.WHATSAPP_PRODUCT_LIST
@@ -158,6 +160,7 @@ export interface Input {
     matchedValue: string
     payload?: string
   }
+  origin?: string
 }
 
 export interface CaseEventQueuePositionChangedInput {

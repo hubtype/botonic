@@ -37,6 +37,10 @@ export {
   WhatsappCTAUrlHeaderType,
 } from './whatsapp-cta-url-button'
 export {
+  WhatsappRequestContactInfo,
+  WhatsappRequestContactInfoProps,
+} from './whatsapp-request-contact-info'
+export {
   CardType,
   WhatsappInteractiveMediaCard,
   WhatsappInteractiveMediaCarousel,
