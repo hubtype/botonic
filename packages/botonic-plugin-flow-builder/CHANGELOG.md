@@ -7,6 +7,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
+- [PR-3272](https://github.com/hubtype/botonic/pull/3272): Add support for reading `whatsapp-request-contact-info` nodes from Flow Builder.
 
 ### Fixed
 
