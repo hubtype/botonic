@@ -5,10 +5,7 @@ import TestRenderer from 'react-test-renderer'
 import type { FlowWhatsappRequestContactInfoNode } from '../../src/content-fields/flow-whatsapp-request-contact-info'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappRequestContactInfoFlow } from '../helpers/flows/whatsapp-request-contact-info'
-import {
-  createFlowBuilderPluginAndGetContents,
-  createRequest,
-} from '../helpers/utils'
+import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
 const renderToJSON = (sut: JSX.Element) => TestRenderer.create(sut).toJSON()
 
