@@ -15,6 +15,7 @@ import { FlowRating } from './flow-rating'
 import { FlowText } from './flow-text'
 import { FlowVideo } from './flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
+import { FlowWhatsappRequestContactInfoNode } from './flow-whatsapp-request-contact-info'
 import { FlowWhatsappTemplate } from './flow-whatsapp-template'
 import {
   FlowWhatsappButtonList,
@@ -45,6 +46,7 @@ export {
   FlowWhatsappButtonListRow,
   FlowWhatsappButtonListSection,
   FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappRequestContactInfoNode,
   FlowWhatsappTemplate,
   FlowCustomConditionalV2,
 }
@@ -56,6 +58,7 @@ export type FlowContent =
   | FlowVideo
   | FlowWhatsappButtonList
   | FlowWhatsappCtaUrlButtonNode
+  | FlowWhatsappRequestContactInfoNode
   | FlowWhatsappTemplate
   | FlowHandoff
   | FlowBotAction
