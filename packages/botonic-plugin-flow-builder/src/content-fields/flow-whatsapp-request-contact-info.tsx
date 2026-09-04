@@ -43,8 +43,6 @@ export class FlowWhatsappRequestContactInfoNode extends ContentFieldsBase {
       return <Text>{replacedText}</Text>
     }
 
-    return (
-      <WhatsappRequestContactInfo key={this.id} body={replacedText} />
-    )
+    return <WhatsappRequestContactInfo key={this.id} body={replacedText} />
   }
 }
