@@ -1,8 +1,8 @@
 import { INPUT } from '@botonic/core'
 
 import { renderComponent } from '../util/react'
-import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 import { WHATSAPP_MAX_BODY_CHARS } from './multichannel/whatsapp/constants'
+import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
 import { Text } from './text'
 
 export interface WhatsappRequestContactInfoProps {

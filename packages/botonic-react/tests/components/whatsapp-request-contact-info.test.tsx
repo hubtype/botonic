@@ -13,9 +13,9 @@ test('renders WhatsappRequestContactInfo component', () => {
 })
 
 test('throws when body is empty', () => {
-  expect(() =>
-    renderToJSON(<WhatsappRequestContactInfo body='' />)
-  ).toThrow('WhatsappRequestContactInfo: body is required')
+  expect(() => renderToJSON(<WhatsappRequestContactInfo body='' />)).toThrow(
+    'WhatsappRequestContactInfo: body is required'
+  )
 })
 
 test('throws when body exceeds 1024 characters', () => {
