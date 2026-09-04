@@ -22,40 +22,40 @@ export { Video } from './video'
 export {
   normalizeWebchatSettings,
   WebchatSettings,
-  WebchatSettingsProps,
+  type WebchatSettingsProps,
 } from './webchat-settings'
 export {
   WhatsappButtonList,
-  WhatsappButtonListProps,
-  WhatsappButtonListRowProps,
-  WhatsappButtonListSectionProps,
+  type WhatsappButtonListProps,
+  type WhatsappButtonListRowProps,
+  type WhatsappButtonListSectionProps,
 } from './whatsapp-button-list'
-export { WhatsappCatalog, WhatsappCatalogProps } from './whatsapp-catalog'
+export { WhatsappCatalog, type WhatsappCatalogProps } from './whatsapp-catalog'
 export {
   WhatsappCTAUrlButton,
-  WhatsappCTAUrlButtonProps,
+  type WhatsappCTAUrlButtonProps,
   WhatsappCTAUrlHeaderType,
 } from './whatsapp-cta-url-button'
 export {
   CardType,
-  WhatsappInteractiveMediaCard,
+  type WhatsappInteractiveMediaCard,
   WhatsappInteractiveMediaCarousel,
-  WhatsappInteractiveMediaCarouselProps,
+  type WhatsappInteractiveMediaCarouselProps,
 } from './whatsapp-interactive-media-carousel'
 export {
   WhatsappMediaCarousel,
-  WhatsappMediaCarouselProps,
+  type WhatsappMediaCarouselProps,
 } from './whatsapp-media-carousel'
 export { WhatsappProduct } from './whatsapp-product'
 export {
   WhatsappProductCarousel,
-  WhatsappProductCarouselProps,
+  type WhatsappProductCarouselProps,
 } from './whatsapp-product-carousel'
 export {
-  ProductItem,
+  type ProductItem,
   WhatsappProductList,
-  WhatsappProductListProps,
-  WhatsappProductListSection,
+  type WhatsappProductListProps,
+  type WhatsappProductListSection,
 } from './whatsapp-product-list'
 export { WhatsappTemplate } from './whatsapp-template/index'
 export * from './whatsapp-template/types'

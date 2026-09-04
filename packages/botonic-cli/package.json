@@ -7,16 +7,16 @@
     "botonic": "./bin/run.js"
   },
   "scripts": {
-    "prepublishOnly": "npm i && npm run build",
-    "build": "shx rm -rf lib && tsc -b",
+    "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
     "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "oclif manifest && oclif readme",
+    "prepack": "npm run build && oclif manifest",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/",
     "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
     "test_ci": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.6",
@@ -48,7 +48,6 @@
   "bugs": "https://github.com/hubtype/botonic/issues",
   "files": [
     "./bin",
-    "./lib",
     "./lib",
     "./oclif.manifest.json"
   ],

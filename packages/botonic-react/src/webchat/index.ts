@@ -1,5 +1,5 @@
 // @ts-nocheck
-export { ClientSession, WebchatContext } from './context'
+export { type ClientSession, WebchatContext } from './context'
 export * from './custom-messages'
 export { Webchat } from './webchat'
 export { WebchatDev } from './webchat-dev'

@@ -1,14 +1,14 @@
 {
   "name": "@botonic/plugin-ai-agents",
   "version": "0.55.0",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use AI Agents to generate your contents",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "build:watch": "npm run build -- --watch",
+    "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
+    "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env",
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepublishOnly": "rm -rf lib && npm i && npm run build",
+    "prepublishOnly": "npm run build",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/"
@@ -45,5 +45,6 @@
     "typescript",
     "javascript"
   ],
-  "author": ""
+  "author": "",
+  "types": "./lib/esm/index.d.ts"
 }
