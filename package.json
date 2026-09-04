@@ -3,7 +3,9 @@
   "name": "botonic",
   "version": "0.54.0",
   "scripts": {
-    "clean": "rimraf packages/**/lib"
+    "clean": "rimraf packages/**/lib",
+    "build": "npm run build -w @botonic/core && npm run build -w @botonic/react && npm run build -w @botonic/plugin-ai-agents && npm run build -w @botonic/plugin-flow-builder && npm run build -w @botonic/plugin-hubtype-analytics && npm run build -w @botonic/cli",
+    "test:packages": "node scripts/build/verify-packages.mjs"
   },
   "dependencies": {
     "axios": "^1.18.1",
@@ -20,6 +22,8 @@
     "@babel/runtime": "^7.26.0",
     "@biomejs/biome": "^2.3.13",
     "@jest/test-sequencer": "^30.2.0",
+    "@rsbuild/plugin-react": "2.1.0",
+    "@rslib/core": "1.0.0",
     "@swc/core": "^1.15.1",
     "@swc/jest": "^0.2.39",
     "@types/jest": "^29.5.14",

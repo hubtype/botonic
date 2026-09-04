@@ -3,26 +3,26 @@
   "version": "0.55.1",
   "license": "MIT",
   "description": "Build Chatbots using React",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
-      "import": "./lib/esm/index.js"
+      "types": "./lib/esm/index.d.ts",
+      "default": "./lib/esm/index.js"
     },
     "./testing": {
-      "require": "./lib/cjs/testing/index.js",
-      "import": "./lib/esm/testing/index.js"
+      "types": "./lib/esm/testing/index.d.ts",
+      "default": "./lib/esm/testing/index.js"
     }
   },
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepublishOnly": "rm -rf lib && npm i && npm run build",
+    "prepublishOnly": "npm run build",
     "lint": "biome check --write src/",
     "lint:check": "biome check src/",
     "format": "biome format --write src/",
-    "build": "../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "build:watch": "npm run build -- --watch",
+    "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
+    "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
   "repository": {
@@ -42,7 +42,7 @@
   "typesVersions": {
     "*": {
       "testing": [
-        "./lib/cjs/testing/index.d.ts"
+        "./lib/esm/testing/index.d.ts"
       ]
     }
   },
@@ -70,5 +70,6 @@
     "conversational-ui",
     "javascript"
   ],
-  "sideEffects": false
+  "sideEffects": false,
+  "types": "./lib/esm/index.d.ts"
 }

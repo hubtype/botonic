@@ -275,16 +275,16 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 export * from './action'
 export { AGENT_RATING_PAYLOAD, EMPTY_PAYLOAD } from './constants'
 export * from './content-fields'
-export { HtBotActionNode } from './content-fields/hubtype-fields'
+export type { HtBotActionNode } from './content-fields/hubtype-fields'
 export {
   getCommonFlowContentEventArgsForContentId,
   trackFlowContent,
 } from './tracking'
 export {
-  BotonicPluginFlowBuilderOptions,
-  ContentFilter,
+  type BotonicPluginFlowBuilderOptions,
+  type ContentFilter,
   FlowBuilderJSONVersion,
-  PayloadParamsBase,
-  RatingSubmittedInfo,
+  type PayloadParamsBase,
+  type RatingSubmittedInfo,
 } from './types'
 export * from './webview'
