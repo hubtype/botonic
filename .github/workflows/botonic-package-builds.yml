@@ -1,0 +1,26 @@
+name: Botonic published package compatibility
+
+on:
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'scripts/build/**'
+      - 'examples/blank-typescript/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - '.github/workflows/botonic-package-builds.yml'
+  workflow_dispatch:
+
+jobs:
+  published-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:packages

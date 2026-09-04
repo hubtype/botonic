@@ -3,6 +3,11 @@ name: Botonic plugin hubtype analytics tests
 on:
   push:
     paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - 'scripts/build/**'
+      - '.github/workflows/botonic-common-workflow.yml'
       - 'packages/botonic-plugin-hubtype-analytics/**'
       - '.github/workflows/botonic-plugin-hubtype-analytics-tests.yml'
   workflow_dispatch:

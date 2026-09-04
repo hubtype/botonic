@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { jest } from '@jest/globals'
 import axios from 'axios'
 
@@ -11,6 +15,7 @@ import {
 
 describe('TEST: BotonicApiService', () => {
   let service: BotonicAPIService
+  let credentialsDirectory: string
 
   const mockOAuth: OAuth = {
     access_token: 'test-access-token',
@@ -48,6 +53,13 @@ describe('TEST: BotonicApiService', () => {
   }
 
   beforeEach(() => {
+    credentialsDirectory = mkdtempSync(join(tmpdir(), 'botonic-api-test-'))
+    jest
+      .spyOn(GlobalCredentialsHandler.prototype, 'initialize')
+      .mockImplementation(function (this: GlobalCredentialsHandler) {
+        this.homeDir = credentialsDirectory
+        this.pathToCredentials = join(credentialsDirectory, 'credentials.json')
+      })
     // Mock the credential handlers
     jest
       .spyOn(GlobalCredentialsHandler.prototype, 'load')
@@ -71,6 +83,7 @@ describe('TEST: BotonicApiService', () => {
 
   afterEach(() => {
     jest.restoreAllMocks()
+    rmSync(credentialsDirectory, { recursive: true, force: true })
   })
 
   describe('Constructor', () => {
