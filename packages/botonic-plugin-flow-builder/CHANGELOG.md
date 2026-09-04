@@ -4,14 +4,6 @@ All notable changes to Botonic will be documented in this file.
 
 ## [Unreleased]
 
-### Added
-
-- [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
-- [PR-3272](https://github.com/hubtype/botonic/pull/3272): Add support for reading `whatsapp-request-contact-info` nodes from Flow Builder.
-
-### Fixed
-
-- Do not invoke the AI agent twice on first interaction when the start node already goes to an AI Agent flow.
 
 <details>
   <summary>
@@ -19,9 +11,13 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.55.0] - 2026-mm-dd
+## [0.56.0] - 2026-mm-dd
 
 ### Added
+
+- [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
+- [PR-3272](https://github.com/hubtype/botonic/pull/3272): Add support for reading `whatsapp-request-contact-info` nodes from Flow Builder.
+- [PR-3273](https://github.com/hubtype/botonic/pull/3273):Add AI agent support for `requestContactInfo` messages: render from structured output, include CMS nodes in conversation history, and fall back to `Text` on non-WhatsApp channels.
 
 ### Changed
 

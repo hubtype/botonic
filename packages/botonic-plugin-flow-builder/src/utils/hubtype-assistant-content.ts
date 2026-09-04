@@ -6,6 +6,7 @@ import { FlowImage } from '../content-fields/flow-image'
 import { FlowText } from '../content-fields/flow-text'
 import { FlowVideo } from '../content-fields/flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from '../content-fields/flow-whatsapp-cta-url-button'
+import { FlowWhatsappRequestContactInfoNode } from '../content-fields/flow-whatsapp-request-contact-info'
 import { FlowWhatsappTemplate } from '../content-fields/flow-whatsapp-template'
 import { HtButtonStyle } from '../content-fields/hubtype-fields'
 import { FlowWhatsappButtonList } from '../content-fields/whatsapp-button-list/flow-whatsapp-button-list'
@@ -33,6 +34,9 @@ export class HubtypeAssistantContent {
     }
     if (content instanceof FlowWhatsappTemplate) {
       return HubtypeAssistantContent.formatWhatsappTemplateContent(content)
+    }
+    if (content instanceof FlowWhatsappRequestContactInfoNode) {
+      return HubtypeAssistantContent.formatRequestContactInfoContent(content)
     }
     return ''
   }
@@ -204,5 +208,15 @@ export class HubtypeAssistantContent {
   ): string {
     const { name, language } = template.htWhatsappTemplate
     return `WhatsApp Template: ${name} (${language})`
+  }
+
+  private static formatRequestContactInfoContent(
+    requestContactInfo: FlowWhatsappRequestContactInfoNode
+  ): string {
+    const body = requestContactInfo.text?.trim() ?? ''
+    if (!body) {
+      return '[WhatsApp Request Contact Info]'
+    }
+    return requestContactInfo.text
   }
 }
