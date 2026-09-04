@@ -23,6 +23,7 @@ import type { HtVideoNode } from './video'
 import type { HtWebviewNode } from './webview'
 import type { HtWhatsappButtonListNode } from './whatsapp-button-list'
 import type { HtWhatsappCTAUrlButtonNode } from './whatsapp-cta-url-button'
+import type { HtWhatsappRequestContactInfoNode } from './whatsapp-request-contact-info'
 import type { HtWhatsappTemplateNode } from './whatsapp-template'
 
 export type HtNodeWithContent =
@@ -36,6 +37,7 @@ export type HtNodeWithContent =
   | HtFallbackNode
   | HtWhatsappButtonListNode
   | HtWhatsappCTAUrlButtonNode
+  | HtWhatsappRequestContactInfoNode
   | HtSmartIntentNode
   | HtBotActionNode
   | HtAiAgentNode

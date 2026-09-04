@@ -20,6 +20,7 @@ import {
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappRequestContactInfoNode,
   FlowWhatsappTemplate,
 } from './content-fields'
 import { FlowCaptureUserInput } from './content-fields/flow-capture-user-input'
@@ -74,6 +75,11 @@ export class FlowFactory {
           this.locale,
           this.cmsApi,
           this.botContext
+        )
+      case HtNodeWithContentType.WHATSAPP_REQUEST_CONTACT_INFO:
+        return FlowWhatsappRequestContactInfoNode.fromHubtypeCMS(
+          hubtypeContent,
+          this.locale
         )
       case HtNodeWithContentType.HANDOFF:
         return FlowHandoff.fromHubtypeCMS(
