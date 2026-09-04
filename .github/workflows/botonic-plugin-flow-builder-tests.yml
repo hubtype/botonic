@@ -3,6 +3,11 @@ name: Botonic plugin flow builder tests
 on:
   push:
     paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - 'scripts/build/**'
+      - '.github/workflows/botonic-common-workflow.yml'
       - 'packages/botonic-plugin-flow-builder/**'
       - '.github/workflows/botonic-plugin-flow-builder-tests.yml'
   workflow_dispatch:
