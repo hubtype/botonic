@@ -42,9 +42,7 @@ describe('Check the contents of a whatsapp request contact info node', () => {
 
     const requestContactInfoContent =
       contents[0] as FlowWhatsappRequestContactInfoNode
-    const rendered = renderToJSON(
-      requestContactInfoContent.toBotonic(request)
-    )
+    const rendered = renderToJSON(requestContactInfoContent.toBotonic(request))
 
     expect(rendered).toMatchInlineSnapshot(`
 <message
