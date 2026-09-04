@@ -1,4 +1,8 @@
-import { type BotContext, isWhatsapp } from '@botonic/core'
+import {
+  type BotContext,
+  isWhatsapp,
+  type RequestContactInfoMessage,
+} from '@botonic/core'
 import { Text, WhatsappRequestContactInfo } from '@botonic/react'
 
 import { trackOneContent } from '../tracking'
@@ -24,6 +28,18 @@ export class FlowWhatsappRequestContactInfoNode extends ContentFieldsBase {
     requestContactInfo.followUp = component.follow_up
 
     return requestContactInfo
+  }
+
+  static fromAIAgent(
+    id: string,
+    message: RequestContactInfoMessage,
+    botContext: BotContext
+  ): JSX.Element {
+    if (!isWhatsapp(botContext.session)) {
+      return <Text key={id}>{message.content.text}</Text>
+    }
+
+    return <WhatsappRequestContactInfo key={id} body={message.content.text} />
   }
 
   async trackFlow(botContext: BotContext): Promise<void> {

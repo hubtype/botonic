@@ -16,6 +16,7 @@ import { HubtypeAssistantContent } from '../utils/hubtype-assistant-content'
 import { ContentFieldsBase } from './content-fields-base'
 import { FlowCarousel } from './flow-carousel'
 import { FlowText } from './flow-text'
+import { FlowWhatsappRequestContactInfoNode } from './flow-whatsapp-request-contact-info'
 import type { HtInputGuardrailRule, HtNodeWithContent } from './hubtype-fields'
 import type { FlowContent } from './index'
 
@@ -86,6 +87,16 @@ export abstract class FlowAiAgentBase extends ContentFieldsBase {
       if (message.type === OutputMessageType.Carousel) {
         this.jsxElements.push(
           FlowCarousel.fromAIAgent(this.id, message, botContext)
+        )
+      }
+
+      if (message.type === OutputMessageType.RequestContactInfo) {
+        this.jsxElements.push(
+          FlowWhatsappRequestContactInfoNode.fromAIAgent(
+            this.id,
+            message,
+            botContext
+          )
         )
       }
 

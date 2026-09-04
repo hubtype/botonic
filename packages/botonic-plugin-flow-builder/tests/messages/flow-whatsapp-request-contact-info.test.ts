@@ -1,11 +1,15 @@
-import { INPUT, PROVIDER } from '@botonic/core'
+import type { RequestContactInfoMessage } from '@botonic/core'
+import { INPUT, OutputMessageType, PROVIDER } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
 import TestRenderer from 'react-test-renderer'
 
-import type { FlowWhatsappRequestContactInfoNode } from '../../src/content-fields/flow-whatsapp-request-contact-info'
+import { FlowWhatsappRequestContactInfoNode } from '../../src/content-fields/flow-whatsapp-request-contact-info'
 import { ProcessEnvNodeEnvs } from '../../src/types'
 import { whatsappRequestContactInfoFlow } from '../helpers/flows/whatsapp-request-contact-info'
-import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
+import {
+  createFlowBuilderPluginAndGetContents,
+  createRequest,
+} from '../helpers/utils'
 
 const renderToJSON = (sut: JSX.Element) => TestRenderer.create(sut).toJSON()
 
@@ -61,6 +65,44 @@ describe('Check the contents of a whatsapp request contact info node', () => {
     const requestContactInfoContent =
       contents[0] as FlowWhatsappRequestContactInfoNode
     const rendered = requestContactInfoContent.toBotonic(request)
+
+    expect(rendered.props.children).toBe('Please share your phone number')
+  })
+})
+
+describe('FlowWhatsappRequestContactInfoNode.fromAIAgent', () => {
+  const message: RequestContactInfoMessage = {
+    type: OutputMessageType.RequestContactInfo,
+    content: { text: 'Please share your phone number' },
+  }
+
+  test('renders WhatsappRequestContactInfo on WhatsApp', () => {
+    const request = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+      provider: PROVIDER.WHATSAPP,
+    })
+    const rendered = renderToJSON(
+      FlowWhatsappRequestContactInfoNode.fromAIAgent('id', message, request)
+    )
+
+    expect(rendered).toMatchInlineSnapshot(`
+<message
+  body="Please share your phone number"
+  type="whatsapp-request-contact-info"
+/>
+`)
+  })
+
+  test('renders text fallback on webchat', () => {
+    const request = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+      provider: PROVIDER.WEBCHAT,
+    })
+    const rendered = FlowWhatsappRequestContactInfoNode.fromAIAgent(
+      'id',
+      message,
+      request
+    )
 
     expect(rendered.props.children).toBe('Please share your phone number')
   })
