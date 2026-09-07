@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3269](https://github.com/hubtype/botonic/pull/3269): Add `INPUT.WHATSAPP_REQUEST_CONTACT_INFO` message type and `origin` field on `Input` for contact request inbounds.
+
 ### Changed
 
 ### Fixed
