@@ -13,6 +13,7 @@ import {
   type WhatsappTemplateFlowButton,
   type WhatsappTemplatePhoneNumberButton,
   type WhatsappTemplateQuickReplyButton,
+  type WhatsappTemplateRequestContactInfoButton,
   type WhatsappTemplateUrlButton,
   type WhatsappTemplateVoiceCallButton,
 } from '@botonic/react'
@@ -259,6 +260,10 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
       return this.createVoiceCallButtonComponent(index)
     }
 
+    if (button.type === WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO) {
+      return this.createRequestContactInfoButtonComponent(index)
+    }
+
     if (button.type === WhatsAppTemplateButtonSubType.FLOW) {
       const actionValue = flowButtonActionValues?.[String(index)]
       if (!actionValue) {
@@ -335,6 +340,17 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     return {
       type: WhatsAppTemplateComponentType.BUTTON,
       sub_type: WhatsAppTemplateButtonSubType.PHONE_NUMBER,
+      index: index,
+      parameters: [],
+    }
+  }
+
+  private createRequestContactInfoButtonComponent(
+    index: number
+  ): WhatsappTemplateRequestContactInfoButton {
+    return {
+      type: WhatsAppTemplateComponentType.BUTTON,
+      sub_type: WhatsAppTemplateButtonSubType.REQUEST_CONTACT_INFO,
       index: index,
       parameters: [],
     }
