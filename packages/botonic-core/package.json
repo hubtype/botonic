@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.56.0-alpha.0",
+  "version": "0.57.0-rslib-esm.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/esm/index.js",
@@ -17,7 +17,7 @@
   },
   "scripts": {
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/",
     "lint:check": "biome check src/",
     "format": "biome format --write src/",

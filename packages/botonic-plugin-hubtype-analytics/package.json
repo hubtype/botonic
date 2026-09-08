@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.56.0-alpha.0",
+  "version": "0.57.0-rslib-esm.0",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
@@ -8,14 +8,14 @@
     "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
     "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env",
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/core": "^0.56.0-alpha.0",
+    "@botonic/core": "^0.57.0-rslib-esm.0",
     "axios": "^1.18.1"
   },
   "devDependencies": {

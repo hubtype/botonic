@@ -1,7 +1,7 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.56.0-alpha.0",
-  "main": "./lib/cjs/index.js",
+  "version": "0.57.0-rslib-esm.0",
+  "main": "./lib/esm/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
   "scripts": {
@@ -9,13 +9,13 @@
     "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env",
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "^0.56.0-alpha.0",
+    "@botonic/react": "^0.57.0-rslib-esm.0",
     "axios": "^1.18.1",
     "uuid": "^10.0.0"
   },
