@@ -12,6 +12,9 @@ on:
       - '.github/workflows/botonic-package-builds.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   published-packages:
     runs-on: ubuntu-latest
