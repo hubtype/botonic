@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from 'axios'
-import Pusher, { type AuthOptions, type Channel } from 'pusher-js'
+import Pusher, { type AuthOptions, type Channel, type Runtime } from 'pusher-js'
 import type Channels from 'pusher-js/types/src/core/channels/channels'
 
 import type { Input, SessionUser } from './models'
@@ -50,7 +50,9 @@ export class HubtypeService {
   public lastMessageUpdateDate?: string
   public onEvent: (event: any) => void
   public unsentInputs: () => UnsentInput[]
-  public pusher: Pusher | null
+  // Pusher 5's CJS default is a namespace under NodeNext. Its named Runtime
+  // interface exposes the same constructor without that interop ambiguity.
+  public pusher: InstanceType<Parameters<Runtime['setup']>[0]> | null
   public channel: Channel
   public server?: ServerConfig
   public PUSHER_CONNECT_TIMEOUT_MS = 10000
