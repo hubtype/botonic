@@ -28,6 +28,9 @@ If you want to add an extra workflow follow the steps:
    - `UNIT_TEST_COMMAND`: Command to execute unit tests (usually) using npm. This has a default value of `npm run test`, but if the package does not contain any test whatsoever, use the input by adding `''` as the parameter. Also useful when needing a different test command.
    - `BUILD_COMMAND`: Command to execute the build action of the package inside CI, the main idea is that some packages have different build command. By default the command is set as `npm run build`.
 
+Package workflows explicitly install npm 11.10.0 to match local development;
+`setup-node` alone otherwise uses Node's bundled npm.
+
 Tests run with `contents: read` and no secrets. Reports are uploaded as artifacts.
 `botonic-test-reports.yml` publishes JUnit and coverage in a separate privileged
 workflow after branch runs; it does not run for pull requests or execute their
