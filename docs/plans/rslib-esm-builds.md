@@ -112,7 +112,7 @@ then runs all contract, types, resource, CLI, UMD and watch checks described abo
 It logs the retained fixture path. Run with registry/cache access: the CLI suites
 also install temporary example bots. No manually edited build artifacts are reused.
 
-Final clean sequence passed on 2026-09-08 with Node 22.22.0, npm 11.10.0 and
+Local clean sequence passed on 2026-09-08 with Node 22.22.0, npm 11.10.0 and
 Rslib 1.0.0. Fresh `npm ci` and all six builds completed successfully, followed by:
 
 | Package | Suites passed | Tests passed | Skipped |
@@ -136,6 +136,12 @@ browser bundle-size recommendations; dependency deprecation warnings also remain
 All six package lint commands exited successfully (existing warning-level findings
 remain). Workflow YAML parsing, reusable input names and report-trigger names were
 checked locally. GitHub-hosted runs are separate evidence, not implied by local success.
+The first hosted run failed before build: Node's bundled npm 10 rejected missing
+optional peer dependencies in the existing lockfile, whereas local npm 11.10.0
+completed the clean sequence. The package workflows now explicitly install npm
+11.10.0 to match the user's local toolchain. Pre-commit also identified formatting
+in the six build tsconfigs, now corrected without changing their values. Hosted
+rerun results are pending. No npm 10 lockfile regeneration was performed.
 The initial sandboxed CLI suite failed to reach the registry (`ENOTFOUND`); the final
 clean sequence with registry access passed. Previous migration results are historical
 and are not used as evidence for this revision.
