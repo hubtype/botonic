@@ -5,30 +5,30 @@ on:
     inputs:
       NODE_VERSION:
         type: string
-        description: 'Node version of the package'
-        default: '22'
+        description: "Node version of the package"
+        default: "22"
         required: false
       PACKAGE_NAME:
         type: string
-        description: 'Package name'
+        description: "Package name"
         required: true
       PACKAGE:
         type: string
-        description: 'Relative path inside botonic/packages repo'
+        description: "Relative path inside botonic/packages repo"
         required: true
       UNIT_TEST_COMMAND:
         type: string
-        description: 'Command to execute unit tests with npm'
+        description: "Command to execute unit tests with npm"
         default: npm run test
         required: false
       BUILD_COMMAND:
         type: string
-        description: 'Command to execute the build of the package'
+        description: "Command to execute the build of the package"
         default: npm run build
         required: false
       LINT_COMMAND:
         type: string
-        description: 'Command to execute linting with Biome'
+        description: "Command to execute linting with Biome"
         default: npm run lint:check
         required: false
 
@@ -46,8 +46,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
 
       - name: Match local npm version
         run: npm install --global npm@11.10.0
@@ -56,11 +56,11 @@ jobs:
         run: npm ci
 
       - name: Build
-        if: ${{ inputs.BUILD_COMMAND != '' }}
+        if: ${{ inputs.BUILD_COMMAND != "" }}
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.BUILD_COMMAND }})
 
       - name: Run tests
-        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() }}
+        if: ${{ inputs.UNIT_TEST_COMMAND != "" && always() }}
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
 
       - name: Verify lint
