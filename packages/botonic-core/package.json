@@ -3,16 +3,16 @@
   "version": "0.57.0-rslib-esm.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
-  "main": "./lib/esm/index.js",
-  "module": "./lib/esm/index.js",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
   "exports": {
     ".": {
-      "types": "./lib/esm/index.d.ts",
-      "default": "./lib/esm/index.js"
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
     },
     "./testing": {
-      "types": "./lib/esm/testing/index.d.ts",
-      "default": "./lib/esm/testing/index.js"
+      "types": "./lib/testing/index.d.ts",
+      "default": "./lib/testing/index.js"
     }
   },
   "scripts": {
@@ -21,8 +21,8 @@
     "lint": "biome check --write src/",
     "lint:check": "biome check src/",
     "format": "biome format --write src/",
-    "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
-    "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env",
+    "build": "rslib build --no-env",
+    "build:watch": "rslib build --watch --no-env",
     "cloc": "../../scripts/qa/cloc-package.sh ."
   },
   "repository": {
@@ -42,7 +42,7 @@
   "typesVersions": {
     "*": {
       "testing": [
-        "./lib/esm/testing/index.d.ts"
+        "./lib/testing/index.d.ts"
       ]
     }
   },
@@ -71,5 +71,5 @@
     "javascript"
   ],
   "sideEffects": false,
-  "types": "./lib/esm/index.d.ts"
+  "types": "./lib/index.d.ts"
 }

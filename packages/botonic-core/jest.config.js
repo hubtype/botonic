@@ -11,7 +11,7 @@ module.exports = {
   ],
   transform: {
     '\\.js$': 'babel-jest',
-    '\\.(ts|tsx)$': 'ts-jest',
+    '\\.(ts|tsx)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.tests.json' }],
   },
   collectCoverageFrom: ['src/**/*.{js,ts,jsx,tsx}', '!/node_modules/'],
   transformIgnorePatterns: [

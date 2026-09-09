@@ -28,7 +28,8 @@ export function packageConfig({ react = false, cli = false } = {}) {
     ],
     output: {
       target: react ? 'web' : 'node',
-      distPath: { root: cli ? 'lib/src' : 'lib/esm' },
+      distPath: { root: 'lib' },
+      cleanDistPath: true,
       minify: false,
       sourceMap: { js: 'source-map' },
       autoExternal: true,

@@ -12,6 +12,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { setTimeout } from 'node:timers/promises'
+import { seedOldBuild } from './cleanup-contract.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const fixture = mkdtempSync(join(tmpdir(), 'botonic-watch-'))
@@ -25,14 +26,13 @@ cpSync(join(root, 'packages/botonic-react'), pkg, {
   filter: path =>
     !['node_modules', 'lib', 'coverage'].includes(path.split('/').at(-1)),
 })
-for (const file of ['tsconfig.base.json', 'tsconfig.cjs.base.json']) {
-  cpSync(join(root, file), join(fixture, file))
-}
+cpSync(join(root, 'tsconfig.base.json'), join(fixture, 'tsconfig.base.json'))
 symlinkSync(join(root, 'node_modules'), join(fixture, 'node_modules'), 'dir')
 const source = join(pkg, 'src/watch-contract.ts')
 const asset = join(pkg, 'src/assets/watch-contract.svg')
 writeFileSync(source, "export const watchContract: 'before' = 'before'\n")
 writeFileSync(asset, '<svg><!-- before --></svg>')
+const assertClean = seedOldBuild(pkg)
 const child = spawn(
   process.execPath,
   [
@@ -61,7 +61,7 @@ async function updated(marker) {
           'watch-contract.d.ts',
           'assets/watch-contract.svg',
         ].every(file =>
-          readFileSync(join(pkg, 'lib/esm', file), 'utf8').includes(marker)
+          readFileSync(join(pkg, 'lib', file), 'utf8').includes(marker)
         )
       )
         return
@@ -72,9 +72,11 @@ async function updated(marker) {
 }
 try {
   await updated('before')
+  assertClean()
   writeFileSync(source, "export const watchContract: 'after' = 'after'\n")
   writeFileSync(asset, '<svg><!-- after --></svg>')
   await updated('after')
+  assertClean()
   console.log(
     'Watch smoke passed: JavaScript, declarations and resource updated (not HMR).'
   )
