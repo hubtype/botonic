@@ -21,7 +21,7 @@ If you want to add an extra workflow follow the steps:
 
 2. Manage the inputs by following the names and types:
 
-   - `NODE_VERSION`: In which version of node will the workflow run? (By default it is set to 14, if any package need it higher or lower, can be changed).
+   - `NODE_VERSION`: In which version of node will the workflow run? (By default it is set to 22, if any package need it higher or lower, can be changed).
    - `PACKAGE_NAME`: The name of the Botonic package, this is just visual, does not affect the functionallity of the workflow. **This input is always necessary.**
    - `PACKAGE`: Path to the package inside Botonic root (the relative path of the package). **This input is always necessary.**
      From this point, each command is **OPTIONAL**
@@ -70,7 +70,7 @@ If you want to add an extra workflow follow the steps:
        uses: ./.github/workflows/botonic-common-workflow.yml
        secrets: inherit
        with:
-         NODE_VERSION: '16' #or 12 if you want a below version
+         NODE_VERSION: '22.19.0' #minimum supported Node version
          PACKAGE_NAME: <package name> tests
          PACKAGE: <package-name> #Relative to the Packages folder not the root folder.
          #The following inputs are not mandatory, but may be necessary depending on your needs
@@ -107,7 +107,7 @@ jobs:
     uses: ./.github/workflows/botonic-common-workflow.yml
     secrets: inherit
     with:
-      NODE_VERSION: '16' #or 12 if you want a below version
+      NODE_VERSION: '22.19.0' #minimum supported Node version
       PACKAGE_NAME: <package name> tests
       PACKAGE: <package-name> #Relative to the Packages folder not the root folder.
       #The following inputs are not mandatory, but may be necessary depending on your needs

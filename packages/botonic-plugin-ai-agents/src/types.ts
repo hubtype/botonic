@@ -1,10 +1,10 @@
-import {
+import type {
   AgenticOutputMessage,
   AiAgentArgs,
-  type BotContext,
+  BotContext,
   GuardrailRule,
   InferenceResponse,
-  type ResolvedPlugins,
+  ResolvedPlugins,
   RunResult,
 } from '@botonic/core'
 import type {
@@ -97,7 +97,7 @@ export interface ResultRawResponse {
 
 export type AgenticInputMessage = AgentInputItem
 
-export {
+export type {
   AgenticOutputMessage,
   AiAgentArgs,
   GuardrailRule,

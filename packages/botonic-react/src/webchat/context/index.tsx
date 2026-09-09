@@ -4,7 +4,7 @@ import type { ChunkIdsGroupedBySourceData } from '../../components/system-debug-
 import type { MinimalHubtypeMessage } from '../../index-types'
 import type { WebchatContextProps, WebchatState } from './types'
 
-export { ClientSession, WebchatState } from './types'
+export type { ClientSession, WebchatState } from './types'
 export { useWebchat } from './use-webchat'
 
 export const WebchatContext = createContext<WebchatContextProps>({
