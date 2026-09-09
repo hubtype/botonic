@@ -7,7 +7,7 @@
     "botonic": "./bin/run.js"
   },
   "scripts": {
-    "build": "node ../../scripts/build/clean.mjs && rslib build --no-env",
+    "build": "rslib build --no-env",
     "postpack": "shx rm -f oclif.manifest.json",
     "prepack": "npm run build && oclif manifest",
     "lint": "biome check --write src/ tests/",
@@ -16,7 +16,7 @@
     "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
     "test_ci": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
     "version": "oclif readme && git add README.md",
-    "build:watch": "node ../../scripts/build/clean.mjs && rslib build --watch --no-env"
+    "build:watch": "rslib build --watch --no-env"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.6",
@@ -52,12 +52,12 @@
     "./oclif.manifest.json"
   ],
   "homepage": "https://github.com/hubtype/botonic",
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "type": "module",
   "oclif": {
     "bin": "botonic",
     "dirname": "botonic",
-    "commands": "./lib/src/commands",
+    "commands": "./lib/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
@@ -72,7 +72,7 @@
     ]
   },
   "repository": "hubtype/botonic",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/index.d.ts",
   "keywords": [
     "bot-framework",
     "chatbot",

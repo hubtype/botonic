@@ -3,7 +3,7 @@
   "compilerOptions": {
     "paths": {},
     "rootDir": "src",
-    "outDir": "lib/esm",
+    "outDir": "lib",
     "composite": false,
     "module": "ESNext",
     "moduleResolution": "Bundler",

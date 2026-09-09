@@ -3,7 +3,7 @@
   "name": "botonic",
   "version": "0.54.0",
   "scripts": {
-    "clean": "rimraf packages/**/lib",
+    "clean": "rm -rf packages/**/lib",
     "build": "npm run build -w @botonic/core && npm run build -w @botonic/react && npm run build -w @botonic/plugin-ai-agents && npm run build -w @botonic/plugin-flow-builder && npm run build -w @botonic/plugin-hubtype-analytics && npm run build -w @botonic/cli",
     "test:packages": "node scripts/build/verify-packages.mjs"
   },

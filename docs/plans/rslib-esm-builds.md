@@ -11,7 +11,7 @@ The correction plan supplied for PR #3270 supersedes the original migration plan
 Work stays on `codex/rslib-esm-builds`, targeting `master`, in the same draft PR.
 No package publication, bot deployment or protection-rule changes are included.
 
-## Original migration
+## Original migration (historical output layout)
 
 - Small per-package `.mts` configs use the existing shared Rslib configuration.
   Libraries target ES2020 and `lib/esm`; the CLI targets ES2022 and `lib/src`.
@@ -62,7 +62,7 @@ No package publication, bot deployment or protection-rule changes are included.
 
 Removing `lib/cjs` is a breaking change. Node >=22.19.0 remains required.
 Core supports **only** `@botonic/core` and `@botonic/core/testing`; its exports map
-blocks deep paths, including `@botonic/core/lib/esm/*`. Migrate to those public entries.
+blocks deep paths, including `@botonic/core/lib/*`. Migrate to those public entries.
 
 React and Flow Builder's current entries require a bundler that handles SVG and
 other resources. Direct Node import is not promised. Existing React/plugin deep
@@ -70,7 +70,7 @@ paths remain governed by their existing package layout; no new exports maps or
 uniform deep-import policy are introduced here. Keep `src/**` because the application
 bundler still loads HTML templates from it.
 
-All five libraries ship `lib/esm/package.json` with `"type": "module"`, verified in
+All five libraries ship `lib/package.json` with `"type": "module"`, verified in
 the installed tarballs. Root module types remain unchanged; the CLI was already ESM.
 
 Modern Node can synchronously require this ESM graph, returning a module namespace.
@@ -96,7 +96,55 @@ then run `tsc -p tsconfig.json` in core, React, AI Agents, Flow Builder and anal
 in that order. Inspect `lib/cjs/index.js` and load the two resource-free plugin
 entries with Node. This comparison does not claim a historical registry-tarball test.
 
-## Reproducible final validation
+## Unified output directory
+
+All six compiled packages now emit directly into `lib`: libraries keep ES2020 and
+CLI keeps ES2022. Rslib owns cleanup through `output.cleanDistPath: true`, including
+obsolete nested output directories on the first build. Build/watch scripts invoke
+Rslib directly; no custom cleanup script is needed. Manual root cleanup remains.
+
+Published entries and CLI command discovery point to `lib`. Libraries mark only
+`lib/package.json` as ESM; package-root module types stay unchanged. Imports of
+public entries are unchanged. Consumers of the historical `lib/esm/*` or CLI
+`lib/src/*` paths must use the corresponding `lib/*` paths (with `.js` for Node ESM);
+there are no compatibility aliases. Core continues to block all internal paths.
+The documented Flow Builder action import is now
+`@botonic/plugin-flow-builder/lib/action.js`.
+
+Development tsconfigs do not emit. Library development uses ESNext/Bundler; CLI
+keeps NodeNext. Build configs enable declarations/emission into `lib`, with `src`
+as their root and workspace aliases cleared. CommonJS Jest settings are explicit
+in test configs. The configuration-only Rspack package retains CommonJS/node
+settings locally; the shared CJS base has been removed.
+
+`test:packages` verifies the flat tarball layout and runs disposable build/watch
+fixtures with obsolete output files, checking cleanup and preservation of files
+outside `lib`. The validation results below describe the previous migration;
+they are historical evidence, not validation of this layout revision.
+
+### Validation of the unified layout (2026-09-09)
+
+With Node 22.22.0, the six builds, all 128 Jest suites (1,033 passed tests and
+3 skipped), all six package lint checks and Biome checks for modified package
+configs passed. The full `npm run test:packages` harness passed, including strict
+installed declaration checks, CLI command discovery/help/version, runtime and
+resource contracts, UMD compilation/Node interaction, watch, and direct Rslib
+cleanup checks for all six packages. The CLI suite and package harness needed
+registry/cache access outside the restricted sandbox.
+
+All six development tsconfigs pass `tsc --noEmit`; the Core and CLI test configs
+also pass. Standalone test type checking retains pre-existing failures: React's
+WhatsApp template tests have incompatible enum types; the three plugin test
+configs use unsupported bracket globs and report TS18003 (no inputs). These were
+observed before the changes as well and are not resolved by this output-layout
+refactor. Jest still executes and passes their suites.
+
+Logs for this revision are in `/tmp/botonic-lib-validation/`. Existing lockfile
+and dependency-manifest edits were preserved. The application template's
+`dx/baseline` path mappings describe consumer applications, not these package
+builds, and retain their existing layout.
+
+## Reproducible validation and historical migration results
 
 ```sh
 npm ci
@@ -173,5 +221,6 @@ to the local server was denied by browser permissions. Neither compilation nor t
 simulated Node interaction makes that test pass. No browser success is claimed.
 No packages have been published and no bots deployed by this work.
 
-After receiving alpha results, fix observed failures first. Defer shared tsconfig
-refactoring, a single package graph and uniform exports/subpath policy until then.
+After receiving alpha results, fix observed failures first. A single package graph
+and uniform exports/subpath policy remain deferred. The lib/tsconfig simplification
+below was separately authorized.

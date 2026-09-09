@@ -62,10 +62,13 @@ for (const name of names) {
   references[`@botonic/${name}`] = `file:${join(tarballs, pack.filename)}`
   const files = pack.files.map(file => file.path)
   assert(
-    !files.some(file => file.startsWith('lib/cjs/')),
-    `${name}: stale CJS output`
+    !files.some(file => /^lib\/(cjs|esm|src)\//.test(file)),
+    `${name}: stale output directory`
   )
   if (name === 'cli') {
+    for (const file of ['index.js', 'index.d.ts', 'index.js.map']) {
+      assert(files.includes(`lib/${file}`), `${name}: missing ${file}`)
+    }
     assert(files.includes('oclif.manifest.json'))
     assert(
       !existsSync(join(root, 'packages/botonic-cli/oclif.manifest.json')),
@@ -83,7 +86,7 @@ for (const name of names) {
       'index.js.map',
       'package.json',
     ]) {
-      assert(files.includes(`lib/esm/${file}`), `${name}: missing ${file}`)
+      assert(files.includes(`lib/${file}`), `${name}: missing ${file}`)
     }
   }
 }
@@ -162,7 +165,7 @@ function verifyInstalled(directory) {
     assert(!realpathSync(installed).startsWith(root), `${path}: checkout link`)
     if (names.slice(0, 5).some(short => name === `@botonic/${short}`)) {
       assert.equal(
-        JSON.parse(readFileSync(join(installed, 'lib/esm/package.json'))).type,
+        JSON.parse(readFileSync(join(installed, 'lib/package.json'))).type,
         'module'
       )
     }
@@ -269,6 +272,7 @@ console.log(
   for (const name of ['core', 'core/testing', 'react', 'plugin-ai-agents', 'plugin-flow-builder', 'plugin-hubtype-analytics', 'cli']) {
     assert(require.resolve('@botonic/' + name).startsWith(process.cwd() + '/node_modules/'));
   }
+  assert.throws(() => require('@botonic/core/lib/index.js'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
   assert.throws(() => require('@botonic/core/lib/esm/index.js'), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });
   console.log('Installed ESM and synchronous require passed');
 `,
@@ -283,7 +287,7 @@ for (const file of readdirSync(join(reactSource, 'assets'))) {
     assert.deepEqual(
       readFileSync(join(reactSource, 'assets', file)),
       readFileSync(
-        join(contract, 'node_modules/@botonic/react/lib/esm/assets', file)
+        join(contract, 'node_modules/@botonic/react/lib/assets', file)
       )
     )
   }
@@ -295,7 +299,7 @@ for (const mode of ['development', 'production']) {
       '--input-type=module',
       '-e',
       `
-    const { isProd } = await import('./node_modules/@botonic/plugin-ai-agents/lib/esm/constants.js');
+    const { isProd } = await import('./node_modules/@botonic/plugin-ai-agents/lib/constants.js');
     if (isProd !== (process.env.NODE_ENV === 'production')) throw Error('Environment was inlined');
   `,
     ],
@@ -400,3 +404,4 @@ console.log(
 )
 
 console.log(run(process.execPath, ['scripts/build/verify-watch.mjs'], root))
+console.log(run(process.execPath, ['scripts/build/verify-clean.mjs'], root))

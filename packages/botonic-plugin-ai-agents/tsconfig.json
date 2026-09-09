@@ -1,8 +1,11 @@
 {
-  "extends": "../../tsconfig.cjs.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./lib/cjs"
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "include": ["src/"]
+  "include": ["src/"],
+  "exclude": ["lib"]
 }

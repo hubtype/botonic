@@ -1,11 +1,13 @@
 {
-  "extends": "../../tsconfig.cjs.base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./lib/cjs",
     "allowJs": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
-  "exclude": ["tests/**/*"]
+  "exclude": ["tests/**/*", "lib"]
 }
