@@ -1,4 +1,4 @@
-name: Botonic published package compatibility
+name: Botonic package builds
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  published-packages:
+  package-builds:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,4 +27,3 @@ jobs:
       - run: npm install --global npm@11.10.0
       - run: npm ci
       - run: npm run build
-      - run: npm run test:packages

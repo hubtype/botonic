@@ -1,6 +1,5 @@
 import { defineConfig } from '@rslib/core'
 import { pluginReact } from '@rsbuild/plugin-react'
-import { fileURLToPath } from 'node:url'
 
 /** Build npm packages; application UMD bundles remain the responsibility of dx. */
 export function packageConfig({ react = false, cli = false } = {}) {
@@ -39,16 +38,6 @@ export function packageConfig({ react = false, cli = false } = {}) {
           context: 'src',
           noErrorOnMissing: true,
         },
-        ...(!cli
-          ? [
-              {
-                from: fileURLToPath(
-                  new URL('./module-package.json', import.meta.url)
-                ),
-                to: 'package.json',
-              },
-            ]
-          : []),
       ],
     },
   })

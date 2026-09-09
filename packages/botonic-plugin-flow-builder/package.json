@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "@botonic/plugin-flow-builder",
   "version": "0.57.0-rslib-esm.0",
   "main": "./lib/index.js",
