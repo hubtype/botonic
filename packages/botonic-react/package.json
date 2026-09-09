@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "@botonic/react",
   "version": "0.57.0-rslib-esm.0",
   "license": "MIT",
@@ -7,9 +8,9 @@
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test:no-coverage": "../../node_modules/.bin/jest -c ./jest.config.js",
-    "test": "../../node_modules/.bin/jest -c ./jest.config.js --coverage",
-    "updateSnapshot": "../../node_modules/.bin/jest -c ./jest.config.js --updateSnapshot",
+    "test:no-coverage": "../../node_modules/.bin/jest -c ./jest.config.cjs",
+    "test": "../../node_modules/.bin/jest -c ./jest.config.cjs --coverage",
+    "updateSnapshot": "../../node_modules/.bin/jest -c ./jest.config.cjs --updateSnapshot",
     "cloc": "../../scripts/qa/cloc-package.sh .",
     "prepublishOnly": "npm run build && npm run test && npm run lint",
     "build": "rslib build --no-env",

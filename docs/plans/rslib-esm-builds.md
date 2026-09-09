@@ -21,9 +21,9 @@ No package publication, bot deployment or protection-rule changes are included.
 - Build dependencies before consumers. Explicit type re-exports avoid nonexistent
   runtime exports under SWC/isolated modules.
 
-## Correction plan and implementation
+## Previous correction plan and implementation (historical)
 
-1. Correct the published contract below. Keep the nested ESM module marker and
+1. Correct the then-current published contract below. Keep the nested ESM module marker and
    shipped `src/**`; do not expand exports or change package-root module types.
 2. Separate synthetic contract checks from integration with `blank-typescript`.
    Preserve the example manifest's scripts and dependencies; replace existing
@@ -70,8 +70,8 @@ paths remain governed by their existing package layout; no new exports maps or
 uniform deep-import policy are introduced here. Keep `src/**` because the application
 bundler still loads HTML templates from it.
 
-All five libraries ship `lib/package.json` with `"type": "module"`, verified in
-the installed tarballs. Root module types remain unchanged; the CLI was already ESM.
+All six compiled packages declare `"type": "module"` in their root manifests.
+They do not ship `lib/package.json`; generated JavaScript inherits ESM from the root.
 
 Modern Node can synchronously require this ESM graph, returning a module namespace.
 Use `require('@botonic/plugin-ai-agents').default` and similarly for analytics.
@@ -103,9 +103,9 @@ CLI keeps ES2022. Rslib owns cleanup through `output.cleanDistPath: true`, inclu
 obsolete nested output directories on the first build. Build/watch scripts invoke
 Rslib directly; no custom cleanup script is needed. Manual root cleanup remains.
 
-Published entries and CLI command discovery point to `lib`. Libraries mark only
-`lib/package.json` as ESM; package-root module types stay unchanged. Imports of
-public entries are unchanged. Consumers of the historical `lib/esm/*` or CLI
+Published entries and CLI command discovery point to `lib`. The six package roots
+declare ESM. Imports of public entries are unchanged. Consumers of the historical
+`lib/esm/*` or CLI
 `lib/src/*` paths must use the corresponding `lib/*` paths (with `.js` for Node ESM);
 there are no compatibility aliases. Core continues to block all internal paths.
 The documented Flow Builder action import is now
@@ -117,12 +117,61 @@ as their root and workspace aliases cleared. CommonJS Jest settings are explicit
 in test configs. The configuration-only Rspack package retains CommonJS/node
 settings locally; the shared CJS base has been removed.
 
-`test:packages` verifies the flat tarball layout and runs disposable build/watch
-fixtures with obsolete output files, checking cleanup and preservation of files
-outside `lib`. The validation results below describe the previous migration;
-they are historical evidence, not validation of this layout revision.
+## Simplified build and test commands
 
-### Validation of the unified layout (2026-09-09)
+`scripts/build` contains only `rslib.mts`. Rslib still cleans `lib`, emits declarations
+and source maps, and copies resources and ambient declarations from `src`. The first
+build removes obsolete `lib/package.json` markers. Targets and syntax are unchanged.
+Core, React, AI Agents, Flow Builder and analytics now declare ESM at their roots,
+as the CLI already did. Their Jest and Babel configs use `jest.config.cjs` and
+`babel.config.cjs`; React's CommonJS asset mock is `file-mock.cjs`. Source and setup
+files retain their extensions. Jest continues transforming library tests to CommonJS;
+the CLI retains its ESM transform. `dx`, `dx-bundler-rspack`, `eslint-config`, examples
+and the repository root retain their existing module types.
+
+`npm run test:packages` runs the six existing package test commands sequentially:
+Core, React, AI Agents, Flow Builder, analytics, then CLI. It stops at the first
+failure, preserves each suite's coverage options, and does not build implicitly.
+The package-builds workflow installs dependencies and builds; the all-packages
+workflow continues running the six suites separately. Permanent coverage is build
+and package suites. The tarball, watch and cleanup verification scripts have been
+removed without replacement. Results for those checks below are historical only.
+
+### Validation of root ESM and simplified scripts (2026-09-09)
+
+The initial worktree was clean. With Node 22.22.0 and npm 11.10.0:
+
+- All six builds pass, emit into `lib`, and leave no `lib/package.json`.
+- The new `npm run test:packages` reaches all six packages: 127 suites pass,
+  one CLI suite fails to load, 1,032 tests pass and 3 are skipped. All five
+  library suites retain their previous counts, including React snapshots and
+  both AI Agents guardrail cases. The CLI has 5 passing suites (46 tests);
+  `deploy.test.ts` fails because Jest cannot execute the `require()` of
+  `@napi-rs/lzma/stream-polyfill.mjs` under Node 22. The identical failure was
+  reproduced against a `git archive HEAD` copy of the initial CLI with the same
+  installed dependencies. Registry access does not resolve it. The all-suites-pass
+  acceptance criterion remains unmet due to this pre-existing incompatibility;
+  dependencies and existing Jest transformations were preserved.
+- All six development tsconfigs pass without emission (CLI includes its tests).
+  Core's standalone test config passes. React's test enum errors and the three
+  plugins' TS18003 errors match the captured before-change diagnostics exactly.
+- Core, AI Agents, analytics and CLI lint pass. React reports 4 errors and Flow
+  Builder 10; the same counts reproduce in archived initial sources. Changed JSON
+  and TypeScript pass Biome; shared build/workflow formatting and `git diff --check`
+  pass. Renamed CommonJS configs and React's asset mock load successfully.
+- A one-off temporary consumer installs normal tarballs of all six packages,
+  including CLI pack hooks. Root ESM manifests, public imports (bundled for React
+  and Flow Builder), declarations, maps, copied resources, strict NodeNext and
+  Bundler type checking, and installed CLI help/version pass. No permanent
+  verification script was added.
+
+Logs and disposable fixtures are in `/tmp/botonic-esm-root-validation/`. Searches
+found no invocations of removed scripts or renamed configs, and no executable
+CommonJS in the six packages' tracked `.js` files. `scripts/build` contains only
+`rslib.mts`. Remaining `.js` configuration references belong to excluded packages
+and examples.
+
+### Historical validation of the unified layout (2026-09-09)
 
 With Node 22.22.0, the six builds, all 128 Jest suites (1,033 passed tests and
 3 skipped), all six package lint checks and Biome checks for modified package
@@ -144,21 +193,17 @@ and dependency-manifest edits were preserved. The application template's
 `dx/baseline` path mappings describe consumer applications, not these package
 builds, and retain their existing layout.
 
-## Reproducible validation and historical migration results
+## Current commands and historical migration results
 
 ```sh
 npm ci
 npm run build
-for pkg in core react plugin-ai-agents plugin-flow-builder plugin-hubtype-analytics cli; do
-  npm run test -w "@botonic/$pkg" -- --runInBand
-done
 npm run test:packages
 ```
 
-`test:packages` creates new temporary tarballs and two new consumer installations,
-then runs all contract, types, resource, CLI, UMD and watch checks described above.
-It logs the retained fixture path. Run with registry/cache access: the CLI suites
-also install temporary example bots. No manually edited build artifacts are reused.
+The CLI suite installs temporary example bots and needs registry/cache access.
+The following results describe the removed verification harness, not the current
+`test:packages` command or ongoing automated coverage.
 
 Local clean sequence passed on 2026-09-08 with Node 22.22.0, npm 11.10.0 and
 Rslib 1.0.0. Fresh `npm ci` and all six builds completed successfully, followed by:
@@ -206,7 +251,7 @@ Read-only GitHub API review on 2026-09-08 found no classic branch protection on
 `master` (404: Branch not protected). Effective ruleset 16126606 requires one PR
 approval and prevents non-fast-forward updates, but lists no required status checks.
 An administrator should consider requiring the six all-packages Jest job checks and
-`published-packages` once their final check names are visible in Actions. No rules
+`package-builds` once its final check name is visible in Actions. No rules
 were changed. Tests must not depend on report publication or Codecov credentials.
 
 Keep PR #3270 in draft until the user publishes an alpha and tests a real bot:
