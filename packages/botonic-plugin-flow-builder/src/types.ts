@@ -1,10 +1,10 @@
-import {
+import type {
   AiAgentArgs,
-  type BotContext,
+  BotContext,
   GuardrailRule,
-  type InferenceResponse,
-  type PluginPreRequest,
-  type ResolvedPlugins,
+  InferenceResponse,
+  PluginPreRequest,
+  ResolvedPlugins,
 } from '@botonic/core'
 import type { FlowContent } from './content-fields'
 import type {
@@ -101,4 +101,4 @@ export interface RatingSubmittedInfo extends HtRatingButton {
   possibleValues: number[]
 }
 
-export { AiAgentArgs, GuardrailRule }
+export type { AiAgentArgs, GuardrailRule }

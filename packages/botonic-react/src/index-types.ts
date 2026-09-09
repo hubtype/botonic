@@ -18,12 +18,12 @@ import type {
   ReplyProps,
   WebchatSettingsProps,
 } from './components'
-import { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
+import type { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
 import type { CloseWebviewOptions } from './contexts'
 import type { UseWebchat } from './webchat/context/use-webchat'
-import {
-  type CoverComponentOptions,
-  type PersistentMenuOptionsTheme,
+import type {
+  CoverComponentOptions,
+  PersistentMenuOptionsTheme,
   WebchatTheme,
 } from './webchat/theme/types'
 import type { WebchatApp } from './webchat-app'
@@ -239,5 +239,5 @@ interface UpdateMessageInfoEvent {
   isError?: boolean
 }
 
-export { CaseEventQueuePositionChangedInput } from '@botonic/core'
-export { ChunkIdsGroupedBySourceData, WebchatTheme }
+export type { CaseEventQueuePositionChangedInput } from '@botonic/core'
+export type { ChunkIdsGroupedBySourceData, WebchatTheme }
