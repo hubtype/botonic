@@ -5,6 +5,7 @@ export enum OutputMessageType {
   TextWithButtons = 'textWithButtons',
   BotExecutor = 'botExecutor',
   Carousel = 'carousel',
+  RequestContactInfo = 'requestContactInfo',
   Exit = 'exit',
 }
 
@@ -61,6 +62,13 @@ export interface CarouselMessage extends BaseMessage {
   }
 }
 
+export interface RequestContactInfoMessage extends BaseMessage {
+  type: OutputMessageType.RequestContactInfo
+  content: {
+    text: string
+  }
+}
+
 export interface ExitMessage extends BaseMessage {
   type: OutputMessageType.Exit
 }
@@ -70,6 +78,7 @@ export type OutputMessage<Extra extends BaseMessage<string> = never> =
   | TextWithButtonsMessage
   | BotExecutorMessage
   | CarouselMessage
+  | RequestContactInfoMessage
   | ExitMessage
   | Extra
 

@@ -268,6 +268,43 @@ describe('WorkerAgent', () => {
       const result = OutputSchema.safeParse(invalidOutput)
       expect(result.success).toBe(false)
     })
+
+    it('should validate requestContactInfo message', () => {
+      const validOutput = {
+        messages: [
+          {
+            type: 'requestContactInfo',
+            content: { text: 'Please share your phone number' },
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(validOutput)
+      expect(result.success).toBe(true)
+    })
+
+    it('should reject requestContactInfo without content', () => {
+      const invalidOutput = {
+        messages: [{ type: 'requestContactInfo' }],
+      }
+
+      const result = OutputSchema.safeParse(invalidOutput)
+      expect(result.success).toBe(false)
+    })
+
+    it('should reject requestContactInfo without text', () => {
+      const invalidOutput = {
+        messages: [
+          {
+            type: 'requestContactInfo',
+            content: {},
+          },
+        ],
+      }
+
+      const result = OutputSchema.safeParse(invalidOutput)
+      expect(result.success).toBe(false)
+    })
   })
 
   describe('Contact info prompt format', () => {
@@ -648,6 +685,14 @@ describe('WorkerAgent', () => {
           ],
         },
         { messages: [{ type: 'exit' }] },
+        {
+          messages: [
+            {
+              type: 'requestContactInfo',
+              content: { text: 'Please share your phone number' },
+            },
+          ],
+        },
       ]
 
       for (const msg of testMessages) {

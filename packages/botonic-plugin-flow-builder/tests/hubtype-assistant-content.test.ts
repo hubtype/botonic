@@ -14,6 +14,7 @@ import {
   FlowText,
   FlowVideo,
   FlowWhatsappCtaUrlButtonNode,
+  FlowWhatsappRequestContactInfoNode,
   FlowWhatsappTemplate,
 } from '../src/content-fields/index'
 import {
@@ -195,6 +196,24 @@ describe('HubtypeAssistantContentAdapter', () => {
       whatsappCta.url = 'https://a.com'
       expect(HubtypeAssistantContent.adapt(whatsappCta)).toBe(
         'H\nB\nF\n[Open] (https://a.com)'
+      )
+    })
+  })
+
+  describe('FlowWhatsappRequestContactInfoNode', () => {
+    test('returns text when body is present', () => {
+      const requestContactInfo = new FlowWhatsappRequestContactInfoNode('rci1')
+      requestContactInfo.text = 'Please share your phone number'
+      expect(HubtypeAssistantContent.adapt(requestContactInfo)).toBe(
+        'Please share your phone number'
+      )
+    })
+
+    test('returns placeholder when body is empty', () => {
+      const requestContactInfo = new FlowWhatsappRequestContactInfoNode('rci1')
+      requestContactInfo.text = ''
+      expect(HubtypeAssistantContent.adapt(requestContactInfo)).toBe(
+        '[WhatsApp Request Contact Info]'
       )
     })
   })

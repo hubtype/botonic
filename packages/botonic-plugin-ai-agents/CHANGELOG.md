@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.55.x] - 2026-mm-dd
+## [0.56.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3273](https://github.com/hubtype/botonic/pull/3273): Add `requestContactInfo` message to the AI agent structured output schema.
 
 ### Changed
 

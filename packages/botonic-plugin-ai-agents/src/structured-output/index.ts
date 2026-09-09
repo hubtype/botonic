@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { BotExecutorSchema } from './bot-executor'
 import { CarouselSchema } from './carousel'
 import { ExitSchema } from './exit'
+import { RequestContactInfoSchema } from './request-contact-info'
 import { TextSchema } from './text'
 import { TextWithButtonsSchema } from './text-with-buttons'
 
@@ -16,6 +17,7 @@ const baseMessageSchemas = [
   CarouselSchema,
   ExitSchema,
   BotExecutorSchema,
+  RequestContactInfoSchema,
 ] as const
 export const OutputSchema = z
   .object({
