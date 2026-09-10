@@ -7,6 +7,7 @@ import type {
   Context,
   GuardrailRule,
 } from '../src/types'
+import { getAllMockCallArgs, getLastMockCallArg } from './helpers/mock-utils'
 
 const mockTrackLlmRuns = vi.hoisted(() =>
   vi.fn<(...args: any[]) => Promise<void>>().mockResolvedValue(undefined)
@@ -38,18 +39,11 @@ type RunnerConfig = {
   tracingDisabled: boolean
 }
 
-// Captured runner config for assertions
-const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
-const capturedRunnerConfigs = vi.hoisted(() => ({
-  value: [] as RunnerConfig[],
-}))
-const capturedAgentConfigs = vi.hoisted(() => ({ value: [] as any[] }))
 const mockRunnerRunImpl = vi.hoisted(() =>
   vi.fn<(...args: any[]) => Promise<any>>()
 )
-
-vi.mock('@openai/agents', () => {
-  const MockAgent = vi.fn(function AgentConstructor(config: {
+const mockAgent = vi.hoisted(() =>
+  vi.fn(function AgentConstructor(config: {
     name: string
     model?: unknown
     modelSettings?: LLMConfig['modelSettings']
@@ -57,7 +51,6 @@ vi.mock('@openai/agents', () => {
     tools?: unknown[]
     outputType?: unknown
   }) {
-    capturedAgentConfigs.value.push(config)
     return {
       name: config.name,
       instructions: config.instructions,
@@ -67,6 +60,16 @@ vi.mock('@openai/agents', () => {
       outputType: config.outputType,
     }
   })
+)
+const mockRunner = vi.hoisted(() =>
+  vi.fn(function RunnerConstructor(_config: RunnerConfig) {
+    return {
+      run: mockRunnerRunImpl,
+    }
+  })
+)
+
+vi.mock('@openai/agents', () => {
 
   class MockRunToolCallItem {
     rawItem: any
@@ -97,19 +100,9 @@ vi.mock('@openai/agents', () => {
     }
   }
 
-  const MockRunner = vi.fn().mockImplementation(function RunnerConstructor(
-    config: any
-  ) {
-    capturedRunnerConfig.value = config
-    capturedRunnerConfigs.value.push(config)
-    return {
-      run: mockRunnerRunImpl,
-    }
-  })
-
   return {
-    Agent: MockAgent,
-    Runner: MockRunner,
+    Agent: mockAgent,
+    Runner: mockRunner,
     RunContext: MockRunContext,
     RunToolCallItem: MockRunToolCallItem,
     RunToolCallOutputItem: MockRunToolCallOutputItem,
@@ -259,9 +252,6 @@ const sampleMessages: AgenticInputMessage[] = [
 describe('WorkerAgentRunner', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
-    capturedRunnerConfig.value = null
-    capturedRunnerConfigs.value = []
-    capturedAgentConfigs.value = []
     mockConstants.OPENAI_PROVIDER = 'azure'
     await loadRunner(false)
   })
@@ -512,29 +502,31 @@ describe('WorkerAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfigs.value).toHaveLength(2)
-      expect(capturedRunnerConfigs.value).toEqual([
+      const runnerConfigs = getAllMockCallArgs<RunnerConfig>(mockRunner)
+      expect(runnerConfigs).toHaveLength(2)
+      expect(runnerConfigs).toEqual([
         { tracingDisabled: true },
         { tracingDisabled: true },
       ])
-      expect(capturedAgentConfigs.value).toHaveLength(1)
-      expect(capturedAgentConfigs.value[0].modelSettings).not.toBe(
-        llmConfig.modelSettings
-      )
-      expect(capturedAgentConfigs.value[0].modelSettings).toHaveProperty(
+      const agentConfigs = getAllMockCallArgs<{
+        modelSettings: LLMConfig['modelSettings']
+      }>(mockAgent)
+      expect(agentConfigs).toHaveLength(1)
+      expect(agentConfigs[0].modelSettings).not.toBe(llmConfig.modelSettings)
+      expect(agentConfigs[0].modelSettings).toHaveProperty(
         'toolChoice',
         undefined
       )
-      expect(capturedAgentConfigs.value[0].modelSettings.reasoning).toEqual(
+      expect(agentConfigs[0].modelSettings?.reasoning).toEqual(
         llmConfig.modelSettings.reasoning
       )
-      expect(capturedAgentConfigs.value[0].modelSettings.reasoning).not.toBe(
+      expect(agentConfigs[0].modelSettings?.reasoning).not.toBe(
         llmConfig.modelSettings.reasoning
       )
-      expect(capturedAgentConfigs.value[0].modelSettings.text).toEqual(
+      expect(agentConfigs[0].modelSettings?.text).toEqual(
         llmConfig.modelSettings.text
       )
-      expect(capturedAgentConfigs.value[0].modelSettings.text).not.toBe(
+      expect(agentConfigs[0].modelSettings?.text).not.toBe(
         llmConfig.modelSettings.text
       )
       expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
@@ -575,11 +567,10 @@ describe('WorkerAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfig.value).toEqual({
-        tracingDisabled: true,
-      })
-      expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
-      expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
+      expect(mockRunner).toHaveBeenCalledWith({ tracingDisabled: true })
+      const runnerConfig = getLastMockCallArg<Record<string, unknown>>(mockRunner)
+      expect(runnerConfig).not.toHaveProperty('modelSettings')
+      expect(runnerConfig).not.toHaveProperty('modelProvider')
     })
   })
 

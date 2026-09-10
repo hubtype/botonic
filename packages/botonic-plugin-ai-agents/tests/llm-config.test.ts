@@ -7,24 +7,22 @@ import { LLMConfig } from '../src/llm-config'
 const DEFAULT_MAX_RETRIES = 2
 const DEFAULT_TIMEOUT = 16000
 
-const capturedOpenAIConfig = vi.hoisted(() => ({
-  value: null as Record<string, unknown> | null,
-}))
-const capturedAzureConfig = vi.hoisted(() => ({
-  value: null as Record<string, unknown> | null,
-}))
+const mockOpenAI = vi.hoisted(() =>
+  vi.fn(function MockOpenAI(_config: Record<string, unknown>) {
+    return { type: 'openai' }
+  })
+)
+const mockAzureOpenAI = vi.hoisted(() =>
+  vi.fn(function AzureOpenAIMock(_config: Record<string, unknown>) {
+    return { type: 'azure' }
+  })
+)
 const mockResolvedModel = vi.hoisted(() => ({ id: 'resolved-model' }))
 
 vi.mock('openai', () => ({
   __esModule: true,
-  default: vi.fn(function MockOpenAI(config: Record<string, unknown>) {
-    capturedOpenAIConfig.value = config
-    return { type: 'openai' }
-  }),
-  AzureOpenAI: vi.fn(function AzureOpenAIMock(config: Record<string, unknown>) {
-    capturedAzureConfig.value = config
-    return { type: 'azure' }
-  }),
+  default: mockOpenAI,
+  AzureOpenAI: mockAzureOpenAI,
 }))
 
 vi.mock('@openai/agents', () => ({
@@ -82,8 +80,7 @@ describe('LLMConfig', () => {
   const originalEnv = process.env
 
   beforeEach(() => {
-    capturedOpenAIConfig.value = null
-    capturedAzureConfig.value = null
+    vi.clearAllMocks()
     process.env = { ...originalEnv }
   })
 
@@ -210,11 +207,13 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig.value?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig.value?.baseURL).toBe(
-        'https://platform.openai.azure.com/openai/'
+      expect(mockAzureOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'platform-key',
+          baseURL: 'https://platform.openai.azure.com/openai/',
+          apiVersion: '2026-01-01',
+        })
       )
-      expect(capturedAzureConfig.value?.apiVersion).toBe('2026-01-01')
     })
 
     it('falls back to LLM_* constants when botContext settings are empty', () => {
@@ -232,11 +231,13 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig.value?.apiKey).toBe('fallback-key')
-      expect(capturedAzureConfig.value?.baseURL).toBe(
-        'https://fallback.openai.azure.com/openai/'
+      expect(mockAzureOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'fallback-key',
+          baseURL: 'https://fallback.openai.azure.com/openai/',
+          apiVersion: '2025-01-01-preview',
+        })
       )
-      expect(capturedAzureConfig.value?.apiVersion).toBe('2025-01-01-preview')
     })
 
     it('botContext takes priority over LLM_* fallbacks', () => {
@@ -251,9 +252,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig.value?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig.value?.baseURL).toBe(
-        'https://platform.openai.azure.com/openai/'
+      expect(mockAzureOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: 'platform-key',
+          baseURL: 'https://platform.openai.azure.com/openai/',
+        })
       )
     })
 
@@ -266,9 +269,13 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedAzureConfig.value?.deployment).toBe('gpt-4.1-mini')
-      expect(capturedAzureConfig.value?.timeout).toBe(30000)
-      expect(capturedAzureConfig.value?.maxRetries).toBe(5)
+      expect(mockAzureOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          deployment: 'gpt-4.1-mini',
+          timeout: 30000,
+          maxRetries: 5,
+        })
+      )
     })
   })
 
@@ -289,7 +296,9 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.apiKey).toBe('platform-openai-key')
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({ apiKey: 'platform-openai-key' })
+      )
     })
 
     it('falls back to LLM_API_KEY constant when botContext secret is empty', () => {
@@ -301,7 +310,9 @@ describe('LLMConfig', () => {
         botContext: makeBotContext({}, { AZURE_OPENAI_API_KEY: '' }),
       })
 
-      expect(capturedOpenAIConfig.value?.apiKey).toBe('fallback-key')
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({ apiKey: 'fallback-key' })
+      )
     })
 
     it('sets timeout and maxRetries', () => {
@@ -313,8 +324,9 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedOpenAIConfig.value?.timeout).toBe(30000)
-      expect(capturedOpenAIConfig.value?.maxRetries).toBe(5)
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({ timeout: 30000, maxRetries: 5 })
+      )
     })
   })
 
@@ -478,11 +490,13 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.baseURL).toBe(
-        'https://litellm.example.com'
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          baseURL: 'https://litellm.example.com',
+          apiKey: 'platform-litellm-key',
+        })
       )
-      expect(capturedOpenAIConfig.value?.apiKey).toBe('platform-litellm-key')
-      expect(capturedAzureConfig.value).toBeNull()
+      expect(mockAzureOpenAI).not.toHaveBeenCalled()
     })
 
     it('falls back to LLM_API_KEY when LITELLM_API_KEY is empty', () => {
@@ -497,7 +511,9 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.apiKey).toBe('fallback-key')
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({ apiKey: 'fallback-key' })
+      )
     })
 
     it('uses LLM_API_URL as litellm URL when LLM_PROVIDER=litellm and no botContext URL', () => {
@@ -512,8 +528,10 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedOpenAIConfig.value?.baseURL).toBe(
-        'https://litellm-local.example.com'
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          baseURL: 'https://litellm-local.example.com',
+        })
       )
 
       mockConstants.LLM_PROVIDER = 'azure'
@@ -533,9 +551,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
-        'x-litellm-tags': 'bot_id:my-bot,org_id:my-org',
-      })
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          defaultHeaders: { 'x-litellm-tags': 'bot_id:my-bot,org_id:my-org' },
+        })
+      )
     })
 
     it('sets x-litellm-tags header with only bot_id when org_id is missing', () => {
@@ -551,9 +571,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
-        'x-litellm-tags': 'bot_id:my-bot',
-      })
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          defaultHeaders: { 'x-litellm-tags': 'bot_id:my-bot' },
+        })
+      )
     })
 
     it('sets x-litellm-tags header with only org_id when bot_id is missing', () => {
@@ -569,9 +591,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
-        'x-litellm-tags': 'org_id:my-org',
-      })
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.objectContaining({
+          defaultHeaders: { 'x-litellm-tags': 'org_id:my-org' },
+        })
+      )
     })
 
     it('omits x-litellm-tags header when both bot_id and org_id are missing', () => {
@@ -587,7 +611,9 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig.value?.defaultHeaders).toBeUndefined()
+      expect(mockOpenAI).toHaveBeenCalledWith(
+        expect.not.objectContaining({ defaultHeaders: expect.anything() })
+      )
     })
 
     it('Azure client has no defaultHeaders even when botId and orgId are present', () => {
@@ -603,8 +629,10 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig.value?.defaultHeaders).toBeUndefined()
-      expect(capturedOpenAIConfig.value).toBeNull()
+      expect(mockAzureOpenAI).toHaveBeenCalledWith(
+        expect.not.objectContaining({ defaultHeaders: expect.anything() })
+      )
+      expect(mockOpenAI).not.toHaveBeenCalled()
     })
   })
 })

@@ -1,20 +1,15 @@
-// biome-ignore lint/correctness/noUnusedImports: we need to import Runner to mock it
-import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
+import { Agent, type RunContext, type Usage } from '@openai/agents'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { GuardrailTrackingContext } from '../../src/guardrails/input'
 import type { LLMConfig } from '../../src/llm-config'
 import type { GuardrailRule } from '../../src/types'
+import { getLastMockCallArg } from '../helpers/mock-utils'
 
 const mockRunnerRun = vi.hoisted(() => vi.fn())
 const mockTrackLlmRuns = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
-const capturedAgentConfig = vi.hoisted(() => ({ value: null as any }))
-const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
-
-// Mock OpenAI Agent and Runner
-vi.mock('@openai/agents', () => ({
-  Agent: vi.fn().mockImplementation(function AgentMock(config) {
-    capturedAgentConfig.value = config
+const mockAgent = vi.hoisted(() =>
+  vi.fn(function AgentMock(config: Record<string, unknown>) {
     return {
       name: config.name,
       instructions: config.instructions,
@@ -22,13 +17,20 @@ vi.mock('@openai/agents', () => ({
       model: config.model,
       modelSettings: config.modelSettings,
     }
-  }),
-  Runner: vi.fn().mockImplementation(function RunnerMock(config) {
-    capturedRunnerConfig.value = config
+  })
+)
+const mockRunner = vi.hoisted(() =>
+  vi.fn(function RunnerMock(_config: Record<string, unknown>) {
     return {
       run: mockRunnerRun,
     }
-  }),
+  })
+)
+
+// Mock OpenAI Agent and Runner
+vi.mock('@openai/agents', () => ({
+  Agent: mockAgent,
+  Runner: mockRunner,
 }))
 
 vi.mock('../../src/services/hubtype-api-client', () => ({
@@ -86,7 +88,7 @@ describe('createInputGuardrails', () => {
     '#private': Symbol('private'),
   } as unknown as RunContext<unknown>
 
-  const mockAgent = new Agent({
+  const mockAgentInstance = new Agent({
     name: 'TestAgent',
     instructions: 'Test instructions',
     outputType: undefined,
@@ -114,8 +116,6 @@ describe('createInputGuardrails', () => {
 
   beforeEach(async () => {
     vi.clearAllMocks()
-    capturedAgentConfig.value = null
-    capturedRunnerConfig.value = null
     await loadGuardrails(false)
   })
 
@@ -127,20 +127,20 @@ describe('createInputGuardrails', () => {
     )
 
     expect(guardrail.name).toBe('InputGuardrail')
-    expect(Agent).toHaveBeenCalledWith(
+    expect(mockAgent).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'InputGuardrail',
         model: { id: 'guardrail-model' },
         instructions:
           'Check if the user triggers some of the following guardrails.',
         outputType: expect.any(Object),
+        modelSettings: expect.objectContaining({
+          temperature: 0,
+          text: { verbosity: 'medium' },
+          toolChoice: undefined,
+        }),
       })
     )
-    expect(capturedAgentConfig.value.modelSettings).toMatchObject({
-      temperature: 0,
-      text: { verbosity: 'medium' },
-      toolChoice: undefined,
-    })
   })
 
   it('should return no guardrails when no rules are configured', async () => {
@@ -176,7 +176,7 @@ describe('createInputGuardrails', () => {
         },
       ],
       context: mockRunContext,
-      agent: mockAgent,
+      agent: mockAgentInstance,
     })
 
     expect(result).toEqual({
@@ -193,9 +193,10 @@ describe('createInputGuardrails', () => {
       ],
       { context: mockRunContext }
     )
-    expect(capturedRunnerConfig.value).toEqual({ tracingDisabled: true })
-    expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
-    expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
+    expect(mockRunner).toHaveBeenCalledWith({ tracingDisabled: true })
+    const runnerConfig = getLastMockCallArg<Record<string, unknown>>(mockRunner)
+    expect(runnerConfig).not.toHaveProperty('modelSettings')
+    expect(runnerConfig).not.toHaveProperty('modelProvider')
   })
 
   it('should return no triggered guardrails when no rules are violated', async () => {
@@ -220,7 +221,7 @@ describe('createInputGuardrails', () => {
         },
       ],
       context: mockRunContext,
-      agent: mockAgent,
+      agent: mockAgentInstance,
     })
 
     expect(result).toEqual({
@@ -249,7 +250,7 @@ describe('createInputGuardrails', () => {
           },
         ],
         context: mockRunContext,
-        agent: mockAgent,
+        agent: mockAgentInstance,
       })
     ).rejects.toThrow('Guardrail agent failed to produce output')
   })
@@ -280,7 +281,7 @@ describe('createInputGuardrails', () => {
         },
       ],
       context: mockRunContext,
-      agent: mockAgent,
+      agent: mockAgentInstance,
     })
 
     // Allow fire-and-forget promise to resolve

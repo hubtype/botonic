@@ -13,9 +13,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import BotonicPluginAiAgents from '../src/index'
 import { LLMConfig as MockedLLMConfig } from '../src/llm-config'
 
-// Store the captured SpecialistAgent arguments
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const capturedSpecialistAgentArgs = vi.hoisted(() => ({ value: null as any }))
 type MockLlmConfig = {
   modelName: string
   modelSettings: { temperature: number }
@@ -31,9 +28,6 @@ type MockRouterAgentArgs = {
   outputMessagesSchemas: unknown[]
   guardrailTrackingContext: unknown
 }
-const capturedRouterAgentArgs = vi.hoisted(() => ({
-  value: null as MockRouterAgentArgs | null,
-}))
 type MockAgentConfig = {
   name: string
   instructions?: string
@@ -43,6 +37,33 @@ type MockAgentConfig = {
   inputGuardrails?: { name: string }[]
 }
 type MockAgentInstance = MockAgentConfig
+
+const mockSpecialistAgentCreate = vi.hoisted(() =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  vi.fn(async (args: any) => ({
+    getAgent: vi.fn(() => ({
+      name: args.name,
+      instructions: args.instructions,
+      model: { id: `resolved-${args.llmConfig.modelName}` },
+      modelSettings: args.llmConfig.modelSettings,
+      tools: args.tools || [],
+    })),
+  }))
+)
+
+const mockRouterAgentCreate = vi.hoisted(() =>
+  vi.fn(async (args: unknown) => {
+    const routerAgentArgs = args as MockRouterAgentArgs
+    return {
+      getAgent: vi.fn(() => ({
+        name: routerAgentArgs.name,
+        instructions: routerAgentArgs.instructions,
+        modelSettings: routerAgentArgs.llmConfig.modelSettings,
+        handoffs: routerAgentArgs.handoffs,
+      })),
+    }
+  })
+)
 
 vi.mock('@openai/agents', () => {
   const create = vi.fn(
@@ -89,39 +110,15 @@ vi.mock('../src/llm-config', () => ({
   }),
 }))
 
-// Mock SpecialistAgent to capture the arguments it receives
 vi.mock('../src/agents/specialist-agent', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   SpecialistAgent: {
-    create: vi.fn(async (args: any) => {
-      capturedSpecialistAgentArgs.value = args
-      return {
-        getAgent: vi.fn(() => ({
-          name: args.name,
-          instructions: args.instructions,
-          model: { id: `resolved-${args.llmConfig.modelName}` },
-          modelSettings: args.llmConfig.modelSettings,
-          tools: args.tools || [],
-        })),
-      }
-    }),
+    create: mockSpecialistAgentCreate,
   },
 }))
 
 vi.mock('../src/agents/router-agent', () => ({
   RouterAgent: {
-    create: vi.fn(async (args: unknown) => {
-      const routerAgentArgs = args as MockRouterAgentArgs
-      capturedRouterAgentArgs.value = routerAgentArgs
-      return {
-        getAgent: vi.fn(() => ({
-          name: routerAgentArgs.name,
-          instructions: routerAgentArgs.instructions,
-          modelSettings: routerAgentArgs.llmConfig.modelSettings,
-          handoffs: routerAgentArgs.handoffs,
-        })),
-      }
-    }),
+    create: mockRouterAgentCreate,
   },
 }))
 
@@ -220,8 +217,6 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    capturedSpecialistAgentArgs.value = null
-    capturedRouterAgentArgs.value = null
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -246,9 +241,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignsContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.campaignsContext).toEqual(
-      campaignsContext
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({ campaignsContext })
     )
   })
 
@@ -260,8 +254,9 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(undefined)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.campaignsContext).toBeUndefined()
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({ campaignsContext: undefined })
+    )
   })
 
   it('should pass undefined campaignsContext when input.context is undefined', async () => {
@@ -275,8 +270,9 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.campaignsContext).toBeUndefined()
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({ campaignsContext: undefined })
+    )
   })
 
   it('should pass campaigns_v2 without agent_context', async () => {
@@ -295,12 +291,14 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignWithoutAgentContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.campaignsContext).toEqual(
-      campaignWithoutAgentContext
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        campaignsContext: campaignWithoutAgentContext,
+      })
     )
     expect(
-      capturedSpecialistAgentArgs.value.campaignsContext[0].agent_context
+      mockSpecialistAgentCreate.mock.calls[0][0].campaignsContext[0]
+        .agent_context
     ).toBeUndefined()
   })
 
@@ -320,12 +318,14 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     const request = createMockRequest(campaignWithEmptyAgentContext)
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.campaignsContext).toEqual(
-      campaignWithEmptyAgentContext
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        campaignsContext: campaignWithEmptyAgentContext,
+      })
     )
     expect(
-      capturedSpecialistAgentArgs.value.campaignsContext[0].agent_context
+      mockSpecialistAgentCreate.mock.calls[0][0].campaignsContext[0]
+        .agent_context
     ).toBe('')
   })
 
@@ -350,18 +350,16 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, customAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.name).toBe('Custom Agent')
-    expect(capturedSpecialistAgentArgs.value.instructions).toBe(
-      'Custom instructions for the agent'
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Custom Agent',
+        instructions: 'Custom instructions for the agent',
+        sourceIds: ['source-1', 'source-2'],
+        inputGuardrailRules: [
+          { name: 'is_offensive', description: 'Check for offensive content' },
+        ],
+      })
     )
-    expect(capturedSpecialistAgentArgs.value.sourceIds).toEqual([
-      'source-1',
-      'source-2',
-    ])
-    expect(capturedSpecialistAgentArgs.value.inputGuardrailRules).toEqual([
-      { name: 'is_offensive', description: 'Check for offensive content' },
-    ])
   })
 
   it('should pass router configuration to RouterAgent', async () => {
@@ -399,18 +397,36 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, routerArgs)
 
-    const routerAgentArgs = capturedRouterAgentArgs.value
-    if (!routerAgentArgs) {
-      throw new Error('Router builder was not created')
-    }
-    expect(routerAgentArgs.name).toBe('Router Agent')
-    expect(routerAgentArgs.instructions).toBe(
-      'Route the conversation to the right worker'
+    expect(mockRouterAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Router Agent',
+        instructions: 'Route the conversation to the right worker',
+        llmConfig: expect.objectContaining({
+          modelName: 'gpt-4.1-mini',
+          modelSettings: { temperature: 0 },
+        }),
+        inputGuardrailRules: [
+          {
+            name: 'is_offensive',
+            description: 'Check for offensive content',
+          },
+        ],
+        outputMessagesSchemas: [],
+        guardrailTrackingContext: {
+          botId: 'bot-123',
+          isTest: false,
+          authToken: 'test-auth-token',
+          inferenceId: expect.any(String),
+        },
+        handoffs: [
+          expect.objectContaining({
+            agent: expect.objectContaining({
+              name: 'Support Agent',
+            }),
+          }),
+        ],
+      })
     )
-    expect(routerAgentArgs.llmConfig).toMatchObject({
-      modelName: 'gpt-4.1-mini',
-      modelSettings: { temperature: 0 },
-    })
     expect(MockedLLMConfig).toHaveBeenCalledWith(
       expect.objectContaining({
         maxRetries: 2,
@@ -419,26 +435,6 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
         verbosity: VerbosityLevel.High,
       })
     )
-    expect(routerAgentArgs.inputGuardrailRules).toEqual([
-      {
-        name: 'is_offensive',
-        description: 'Check for offensive content',
-      },
-    ])
-    expect(routerAgentArgs.outputMessagesSchemas).toEqual([])
-    expect(routerAgentArgs.guardrailTrackingContext).toEqual({
-      botId: 'bot-123',
-      isTest: false,
-      authToken: 'test-auth-token',
-      inferenceId: expect.any(String),
-    })
-    expect(routerAgentArgs.handoffs).toEqual([
-      expect.objectContaining({
-        agent: expect.objectContaining({
-          name: 'Support Agent',
-        }),
-      }),
-    ])
   })
 
   it('should pass router specialist sourceIds to the handoff agent builder', async () => {
@@ -470,19 +466,23 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, routerArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.name).toBe('Knowledge Agent')
-    expect(capturedSpecialistAgentArgs.value.sourceIds).toEqual([
-      'source-1',
-      'source-2',
-    ])
-    expect(capturedRouterAgentArgs.value?.handoffs).toEqual([
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
       expect.objectContaining({
-        agent: expect.objectContaining({
-          name: 'Knowledge Agent',
-        }),
-      }),
-    ])
+        name: 'Knowledge Agent',
+        sourceIds: ['source-1', 'source-2'],
+      })
+    )
+    expect(mockRouterAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        handoffs: [
+          expect.objectContaining({
+            agent: expect.objectContaining({
+              name: 'Knowledge Agent',
+            }),
+          }),
+        ],
+      })
+    )
   })
 
   it('should pass contact_info from session.user', async () => {
@@ -508,21 +508,24 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.contactInfo).toEqual([
-      {
-        name: 'email',
-        value: 'user@example.com',
-        type: 'string',
-        description: 'User email',
-      },
-      {
-        name: 'phone',
-        value: '+1234567890',
-        type: 'string',
-        description: 'User phone',
-      },
-    ])
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        contactInfo: [
+          {
+            name: 'email',
+            value: 'user@example.com',
+            type: 'string',
+            description: 'User email',
+          },
+          {
+            name: 'phone',
+            value: '+1234567890',
+            type: 'string',
+            description: 'User phone',
+          },
+        ],
+      })
+    )
   })
 
   it('should pass empty object for contactInfo when contact_info is undefined', async () => {
@@ -535,7 +538,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     await plugin.getInference(request, mockAiAgentArgs)
 
-    expect(capturedSpecialistAgentArgs.value).toBeDefined()
-    expect(capturedSpecialistAgentArgs.value.contactInfo).toEqual([])
+    expect(mockSpecialistAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({ contactInfo: [] })
+    )
   })
 })
