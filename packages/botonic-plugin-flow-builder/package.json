@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.57.0-rslib-esm.0",
+  "version": "0.57.0-rslib-esm.1",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -16,7 +16,7 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "^0.57.0-rslib-esm.0",
+    "@botonic/react": "0.57.0-rslib-esm.1",
     "axios": "^1.18.1",
     "uuid": "^10.0.0"
   },
