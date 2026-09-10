@@ -1,11 +1,12 @@
 /**
- * @jest-environment jsdom
- * @jest-environment-options {"url": "https://jestjs.io/"}
+ * @vitest-environment jsdom
+ * @vitest-environment-options {"url": "https://jestjs.io/"}
  */
 
 import 'intersection-observer'
 
 import { act, render, screen } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { Audio, Document, Image, Video } from '../../src/components'
 import { ROLES } from '../../src/constants'
@@ -26,6 +27,8 @@ describe('Adding webchat messageComponent', () => {
   }
 
   it('TEST: When adding an Image message the webchat has StyledWebchat, MessageList, StyledMessage and ImageMessage', async () => {
+    const disconnect = vi.spyOn(IntersectionObserver.prototype, 'disconnect')
+    let view
     const { result } = renderUseWebchatHook()
     act(() => {
       result.current.toggleWebchat(true)
@@ -34,7 +37,7 @@ describe('Adding webchat messageComponent', () => {
       )
     })
     await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
+      view = render(<Webchat webchatHooks={result.current} />)
     })
     expectToHaveRoles(
       [ROLES.WEBCHAT, ROLES.MESSAGE_LIST, ROLES.MESSAGE, ROLES.IMAGE_MESSAGE],
@@ -44,6 +47,9 @@ describe('Adding webchat messageComponent', () => {
       [ROLES.AUDIO_MESSAGE, ROLES.VIDEO_MESSAGE, ROLES.DOCUMENT_MESSAGE],
       screen
     )
+    view.unmount()
+    expect(disconnect).toHaveBeenCalled()
+    disconnect.mockRestore()
   })
 
   it('TEST: When adding an Audio message the webchat has StyledWebchat, MessageList, StyledMessage and AudioMessage', async () => {

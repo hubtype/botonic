@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapshot 1`] = `
+exports[`SystemDebugTrace Component > Snapshot Tests > AI Agent event matches snapshot 1`] = `
 <div
   className="sc-cPiKLX hiNMMD collapsible"
   onClick={[Function]}
@@ -124,7 +124,7 @@ exports[`SystemDebugTrace Component Snapshot Tests AI Agent event matches snapsh
 </div>
 `;
 
-exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapshot 1`] = `
+exports[`SystemDebugTrace Component > Snapshot Tests > fallback event matches snapshot 1`] = `
 <div
   className="sc-cPiKLX hiNMMD"
 >
@@ -159,7 +159,7 @@ exports[`SystemDebugTrace Component Snapshot Tests fallback event matches snapsh
 </div>
 `;
 
-exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches snapshot 1`] = `
+exports[`SystemDebugTrace Component > Snapshot Tests > handoff success event matches snapshot 1`] = `
 <div
   className="sc-cPiKLX hiNMMD collapsible"
   onClick={[Function]}
@@ -246,7 +246,7 @@ exports[`SystemDebugTrace Component Snapshot Tests handoff success event matches
 </div>
 `;
 
-exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapshot 1`] = `
+exports[`SystemDebugTrace Component > Snapshot Tests > keyword event matches snapshot 1`] = `
 <div
   className="sc-cPiKLX hiNMMD"
 >
@@ -281,7 +281,7 @@ exports[`SystemDebugTrace Component Snapshot Tests keyword event matches snapsho
 </div>
 `;
 
-exports[`SystemDebugTrace Component Snapshot Tests smart intent event matches snapshot 1`] = `
+exports[`SystemDebugTrace Component > Snapshot Tests > smart intent event matches snapshot 1`] = `
 <div
   className="sc-cPiKLX hiNMMD"
 >

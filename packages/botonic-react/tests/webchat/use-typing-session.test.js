@@ -1,15 +1,16 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { act, renderHook } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { Typing } from '../../src/index-types'
 import { useTypingSession } from '../../src/webchat/input-panel/use-typing-session'
 
 function createSendChatEventMock() {
   let resolveOn
-  const sendChatEvent = jest.fn(
+  const sendChatEvent = vi.fn(
     () =>
       new Promise(resolve => {
         resolveOn = resolve
@@ -24,11 +25,11 @@ function createSendChatEventMock() {
 
 describe('useTypingSession', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('does not send typing_off after clear and retype while typing_on is pending', async () => {
@@ -57,7 +58,7 @@ describe('useTypingSession', () => {
   })
 
   it('sends typing_off after clear when typing_on was already delivered', async () => {
-    const sendChatEvent = jest.fn().mockResolvedValue(true)
+    const sendChatEvent = vi.fn().mockResolvedValue(true)
     const { result } = renderHook(() => useTypingSession(sendChatEvent))
 
     await act(async () => {
