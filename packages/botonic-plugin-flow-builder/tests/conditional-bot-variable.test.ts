@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowCustomConditional, FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
@@ -45,18 +45,19 @@ describe('Check the contents returned by the plugin after conditional custom nod
     }
   )
 
+  // Wrap each value so Vitest passes array values as one argument too.
   test.each([
-    'yes',
-    '',
-    {},
-    { value: 'yes' },
-    [],
-    [true, false],
-    [1, 2],
-    0,
-    2,
-    null,
-    undefined,
+    ['yes'],
+    [''],
+    [{}],
+    [{ value: 'yes' }],
+    [[]],
+    [[true, false]],
+    [[1, 2]],
+    [0],
+    [2],
+    [null],
+    [undefined],
   ])(
     'The expected content is displayed after using a non boolean variable in a boolean conditional with value: %s',
     async (loggedValue?: any) => {

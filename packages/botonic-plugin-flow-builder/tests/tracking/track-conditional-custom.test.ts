@@ -1,5 +1,5 @@
 import { EventAction, INPUT } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test } from 'vitest'
 
 import { FlowCustomConditional, FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'

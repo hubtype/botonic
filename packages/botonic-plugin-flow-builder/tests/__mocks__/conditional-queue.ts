@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals'
+import { vi } from 'vitest'
 
 import {
   type AvailabilityData,
@@ -16,7 +16,7 @@ export function mockQueueAvailability({
   isOpen = false,
   name,
 }: QueueAvailabilityMockOptions) {
-  const getQueueAvailabilitySpy = jest.spyOn(
+  const getQueueAvailabilitySpy = vi.spyOn(
     HubtypeQueuesApi.prototype as any,
     'getAvailability'
   )

@@ -1,5 +1,5 @@
 import { INPUT, PROVIDER } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test } from 'vitest'
 
 import type { FlowWhatsappCtaUrlButtonNode } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'

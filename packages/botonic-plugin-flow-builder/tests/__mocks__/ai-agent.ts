@@ -1,4 +1,5 @@
 import type { InferenceResponse } from '@botonic/core'
+import { vi } from 'vitest'
 
 export function mockAiAgentResponse({
   messages = [],
@@ -14,7 +15,7 @@ export function mockAiAgentResponse({
   availableSpecialists = [],
   isTransferredToSpecialist = false,
 }: Partial<InferenceResponse>) {
-  return jest.fn(() => {
+  return vi.fn(() => {
     const response: InferenceResponse = {
       messages,
       toolsExecuted,

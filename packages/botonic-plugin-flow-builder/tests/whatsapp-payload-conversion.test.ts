@@ -4,7 +4,7 @@ import {
   OutputMessageType,
   PROVIDER,
 } from '@botonic/core'
-import { beforeEach, describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { EMPTY_PAYLOAD, SOURCE_INFO_SEPARATOR } from '../src/constants'
 import { FlowAiAgent } from '../src/content-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
@@ -21,7 +21,7 @@ describe('WhatsApp AI Agent Empty Payload Conversion', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('should convert WhatsApp empty payload to text input when referral exists', async () => {
