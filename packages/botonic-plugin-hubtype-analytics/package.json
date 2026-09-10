@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@botonic/plugin-hubtype-analytics",
-  "version": "0.57.0-rslib-esm.0",
+  "version": "0.57.0-rslib-esm.1",
   "description": "Plugin for tracking in the Hubtype backend to see the results in the Hubtype Dashbord",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
-    "@botonic/core": "^0.57.0-rslib-esm.0",
+    "@botonic/core": "0.57.0-rslib-esm.1",
     "axios": "^1.18.1"
   },
   "devDependencies": {
