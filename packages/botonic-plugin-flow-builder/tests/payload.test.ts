@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test } from 'vitest'
 
 import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import type { FlowText } from '../src/index'

@@ -12,7 +12,7 @@ import {
   type WhatsappTemplateRequestContactInfoButton,
   type WhatsappTemplateUrlButton,
 } from '@botonic/react'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowWhatsappTemplate } from '../../src/content-fields/flow-whatsapp-template'
 import { HtNodeWithContentType } from '../../src/content-fields/hubtype-fields/node-types'

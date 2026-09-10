@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'

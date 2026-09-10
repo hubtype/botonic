@@ -1,9 +1,9 @@
-import { jest } from '@jest/globals'
+import { vi } from 'vitest'
 
 import { CaptureUserInputApi } from '../../src/user-input/capture-user-input-api'
 
 export function mockCaptureUserInputResponse(success: boolean, value?: string) {
-  const getAiCaptureResponseSpy = jest.spyOn(
+  const getAiCaptureResponseSpy = vi.spyOn(
     CaptureUserInputApi.prototype as any,
     'getAiCaptureResponse'
   )

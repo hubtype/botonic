@@ -1,5 +1,5 @@
 import { INPUT, type InferenceResponse, OutputMessageType } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test } from 'vitest'
 
 import { FlowBuilderAction } from '../src/action/index'
 import { FlowAiAgent, type FlowText } from '../src/content-fields/index'
