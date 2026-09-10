@@ -1,56 +1,52 @@
 import { ReasoningEffort, VerbosityLevel } from '@botonic/core'
 import { createTestBotContext } from '@botonic/core/testing'
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LLMConfig } from '../src/llm-config'
 
 const DEFAULT_MAX_RETRIES = 2
 const DEFAULT_TIMEOUT = 16000
 
-let capturedOpenAIConfig: Record<string, unknown> | null = null
-let capturedAzureConfig: Record<string, unknown> | null = null
-const mockResolvedModel = { id: 'resolved-model' }
+const capturedOpenAIConfig = vi.hoisted(() => ({
+  value: null as Record<string, unknown> | null,
+}))
+const capturedAzureConfig = vi.hoisted(() => ({
+  value: null as Record<string, unknown> | null,
+}))
+const mockResolvedModel = vi.hoisted(() => ({ id: 'resolved-model' }))
 
-jest.mock('openai', () => ({
+vi.mock('openai', () => ({
   __esModule: true,
-  default: jest.fn((config: Record<string, unknown>) => {
-    capturedOpenAIConfig = config
+  default: vi.fn(function MockOpenAI(config: Record<string, unknown>) {
+    capturedOpenAIConfig.value = config
     return { type: 'openai' }
   }),
-  AzureOpenAI: jest.fn((config: Record<string, unknown>) => {
-    capturedAzureConfig = config
+  AzureOpenAI: vi.fn(function AzureOpenAIMock(config: Record<string, unknown>) {
+    capturedAzureConfig.value = config
     return { type: 'azure' }
   }),
 }))
 
-jest.mock('@openai/agents', () => ({
-  OpenAIProvider: jest.fn(() => ({
-    type: 'provider',
-    getModel: jest.fn(async () => mockResolvedModel),
-  })),
+vi.mock('@openai/agents', () => ({
+  OpenAIProvider: vi.fn(function OpenAIProviderMock() {
+    return {
+      type: 'provider',
+      getModel: vi.fn(async () => mockResolvedModel),
+    }
+  }),
 }))
 
-// var so the variable is hoisted and assignable when the mock factory runs (Jest hoists mocks)
-// eslint-disable-next-line no-var
-var mockConstants: {
-  LLM_PROVIDERS: { OPENAI: 'openai'; AZURE: 'azure'; LITELLM: 'litellm' }
-  LLM_PROVIDER: 'openai' | 'azure' | 'litellm'
-  LLM_OPENAI_MODEL: string
-  LLM_API_KEY: string
-  LLM_API_URL: string
-  LLM_AZURE_API_VERSION: string
-  isProd: boolean
-  LITELLM_TAG_KEYS: { BOT_ID: 'bot_id'; ORG_ID: 'org_id'; SEPARATOR: ',' }
-}
-jest.mock('../src/constants', () => {
-  mockConstants = {
+const mockConstants = vi.hoisted(
+  (): {
+    LLM_PROVIDERS: { OPENAI: 'openai'; AZURE: 'azure'; LITELLM: 'litellm' }
+    LLM_PROVIDER: 'openai' | 'azure' | 'litellm'
+    LLM_OPENAI_MODEL: string
+    LLM_API_KEY: string
+    LLM_API_URL: string
+    LLM_AZURE_API_VERSION: string
+    isProd: boolean
+    LITELLM_TAG_KEYS: { BOT_ID: 'bot_id'; ORG_ID: 'org_id'; SEPARATOR: ',' }
+  } => ({
     LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure', LITELLM: 'litellm' },
     LLM_PROVIDER: 'azure',
     LLM_OPENAI_MODEL: 'gpt-4.1-mini',
@@ -59,9 +55,9 @@ jest.mock('../src/constants', () => {
     LLM_AZURE_API_VERSION: '2025-01-01-preview',
     isProd: false,
     LITELLM_TAG_KEYS: { BOT_ID: 'bot_id', ORG_ID: 'org_id', SEPARATOR: ',' },
-  }
-  return mockConstants
-})
+  })
+)
+vi.mock('../src/constants', () => mockConstants)
 
 function makeBotContext(
   settings: Partial<{
@@ -86,8 +82,8 @@ describe('LLMConfig', () => {
   const originalEnv = process.env
 
   beforeEach(() => {
-    capturedOpenAIConfig = null
-    capturedAzureConfig = null
+    capturedOpenAIConfig.value = null
+    capturedAzureConfig.value = null
     process.env = { ...originalEnv }
   })
 
@@ -214,11 +210,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig?.baseURL).toBe(
+      expect(capturedAzureConfig.value?.apiKey).toBe('platform-key')
+      expect(capturedAzureConfig.value?.baseURL).toBe(
         'https://platform.openai.azure.com/openai/'
       )
-      expect(capturedAzureConfig?.apiVersion).toBe('2026-01-01')
+      expect(capturedAzureConfig.value?.apiVersion).toBe('2026-01-01')
     })
 
     it('falls back to LLM_* constants when botContext settings are empty', () => {
@@ -236,11 +232,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig?.apiKey).toBe('fallback-key')
-      expect(capturedAzureConfig?.baseURL).toBe(
+      expect(capturedAzureConfig.value?.apiKey).toBe('fallback-key')
+      expect(capturedAzureConfig.value?.baseURL).toBe(
         'https://fallback.openai.azure.com/openai/'
       )
-      expect(capturedAzureConfig?.apiVersion).toBe('2025-01-01-preview')
+      expect(capturedAzureConfig.value?.apiVersion).toBe('2025-01-01-preview')
     })
 
     it('botContext takes priority over LLM_* fallbacks', () => {
@@ -255,8 +251,8 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig?.apiKey).toBe('platform-key')
-      expect(capturedAzureConfig?.baseURL).toBe(
+      expect(capturedAzureConfig.value?.apiKey).toBe('platform-key')
+      expect(capturedAzureConfig.value?.baseURL).toBe(
         'https://platform.openai.azure.com/openai/'
       )
     })
@@ -270,9 +266,9 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedAzureConfig?.deployment).toBe('gpt-4.1-mini')
-      expect(capturedAzureConfig?.timeout).toBe(30000)
-      expect(capturedAzureConfig?.maxRetries).toBe(5)
+      expect(capturedAzureConfig.value?.deployment).toBe('gpt-4.1-mini')
+      expect(capturedAzureConfig.value?.timeout).toBe(30000)
+      expect(capturedAzureConfig.value?.maxRetries).toBe(5)
     })
   })
 
@@ -293,7 +289,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.apiKey).toBe('platform-openai-key')
+      expect(capturedOpenAIConfig.value?.apiKey).toBe('platform-openai-key')
     })
 
     it('falls back to LLM_API_KEY constant when botContext secret is empty', () => {
@@ -305,7 +301,7 @@ describe('LLMConfig', () => {
         botContext: makeBotContext({}, { AZURE_OPENAI_API_KEY: '' }),
       })
 
-      expect(capturedOpenAIConfig?.apiKey).toBe('fallback-key')
+      expect(capturedOpenAIConfig.value?.apiKey).toBe('fallback-key')
     })
 
     it('sets timeout and maxRetries', () => {
@@ -317,8 +313,8 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedOpenAIConfig?.timeout).toBe(30000)
-      expect(capturedOpenAIConfig?.maxRetries).toBe(5)
+      expect(capturedOpenAIConfig.value?.timeout).toBe(30000)
+      expect(capturedOpenAIConfig.value?.maxRetries).toBe(5)
     })
   })
 
@@ -482,9 +478,11 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.baseURL).toBe('https://litellm.example.com')
-      expect(capturedOpenAIConfig?.apiKey).toBe('platform-litellm-key')
-      expect(capturedAzureConfig).toBeNull()
+      expect(capturedOpenAIConfig.value?.baseURL).toBe(
+        'https://litellm.example.com'
+      )
+      expect(capturedOpenAIConfig.value?.apiKey).toBe('platform-litellm-key')
+      expect(capturedAzureConfig.value).toBeNull()
     })
 
     it('falls back to LLM_API_KEY when LITELLM_API_KEY is empty', () => {
@@ -499,7 +497,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.apiKey).toBe('fallback-key')
+      expect(capturedOpenAIConfig.value?.apiKey).toBe('fallback-key')
     })
 
     it('uses LLM_API_URL as litellm URL when LLM_PROVIDER=litellm and no botContext URL', () => {
@@ -514,7 +512,7 @@ describe('LLMConfig', () => {
         botContext: makeBotContext(),
       })
 
-      expect(capturedOpenAIConfig?.baseURL).toBe(
+      expect(capturedOpenAIConfig.value?.baseURL).toBe(
         'https://litellm-local.example.com'
       )
 
@@ -535,7 +533,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:my-bot,org_id:my-org',
       })
     })
@@ -553,7 +551,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
         'x-litellm-tags': 'bot_id:my-bot',
       })
     })
@@ -571,7 +569,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.defaultHeaders).toEqual({
+      expect(capturedOpenAIConfig.value?.defaultHeaders).toEqual({
         'x-litellm-tags': 'org_id:my-org',
       })
     })
@@ -589,7 +587,7 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedOpenAIConfig?.defaultHeaders).toBeUndefined()
+      expect(capturedOpenAIConfig.value?.defaultHeaders).toBeUndefined()
     })
 
     it('Azure client has no defaultHeaders even when botId and orgId are present', () => {
@@ -605,8 +603,8 @@ describe('LLMConfig', () => {
         ),
       })
 
-      expect(capturedAzureConfig?.defaultHeaders).toBeUndefined()
-      expect(capturedOpenAIConfig).toBeNull()
+      expect(capturedAzureConfig.value?.defaultHeaders).toBeUndefined()
+      expect(capturedOpenAIConfig.value).toBeNull()
     })
   })
 })

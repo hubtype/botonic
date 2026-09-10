@@ -1,4 +1,5 @@
 import type { AgentOutputType, Handoff, ModelSettings } from '@openai/agents'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
 
 import type { GuardrailTrackingContext } from '../src/guardrails/input'
@@ -19,18 +20,20 @@ type MockAgentConfig = {
   inputGuardrails?: { name: string }[]
 }
 
-let capturedAgentConfig: MockAgentConfig | null = null
+const capturedAgentConfig = vi.hoisted(() => ({
+  value: null as MockAgentConfig | null,
+}))
 
-jest.mock('@openai/agents', () => ({
+vi.mock('@openai/agents', () => ({
   Agent: {
-    create: jest.fn((config: MockAgentConfig) => {
-      capturedAgentConfig = config
+    create: vi.fn((config: MockAgentConfig) => {
+      capturedAgentConfig.value = config
       return config
     }),
   },
 }))
 
-const mockResolvedModel = { id: 'resolved-gpt-4.1-mini' }
+const mockResolvedModel = vi.hoisted(() => ({ id: 'resolved-gpt-4.1-mini' }))
 const mockModelSettings: ModelSettings = {
   temperature: 1,
   reasoning: { effort: 'none' },
@@ -40,15 +43,15 @@ const mockLlmConfig = {
   modelName: 'gpt-4.1-mini',
   modelSettings: mockModelSettings,
   modelProvider: {},
-  getModel: jest.fn().mockResolvedValue(mockResolvedModel),
+  getModel: vi.fn().mockResolvedValue(mockResolvedModel),
 } as unknown as LLMConfig
 
-const mockInputGuardrails = [{ name: 'InputGuardrail' }]
-const mockCreateInputGuardrails = jest
-  .fn()
-  .mockResolvedValue(mockInputGuardrails as never)
+const mockInputGuardrails = vi.hoisted(() => [{ name: 'InputGuardrail' }])
+const mockCreateInputGuardrails = vi.hoisted(() =>
+  vi.fn().mockResolvedValue(mockInputGuardrails as never)
+)
 
-jest.mock('../src/guardrails', () => ({
+vi.mock('../src/guardrails', () => ({
   createInputGuardrails: mockCreateInputGuardrails,
 }))
 
@@ -70,8 +73,8 @@ describe('RouterAgent', () => {
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
+    vi.clearAllMocks()
+    capturedAgentConfig.value = null
   })
 
   it('should build a router agent with handoffs, guardrails and structured output', async () => {
@@ -92,9 +95,9 @@ describe('RouterAgent', () => {
       mockLlmConfig,
       guardrailTrackingContext
     )
-    expect(agent).toBe(capturedAgentConfig)
+    expect(agent).toBe(capturedAgentConfig.value)
 
-    const agentConfig = capturedAgentConfig
+    const agentConfig = capturedAgentConfig.value
     if (!agentConfig?.outputType) {
       throw new Error('Router agent was not created with outputType')
     }
@@ -129,7 +132,7 @@ describe('RouterAgent', () => {
       guardrailTrackingContext,
     })
 
-    const outputType = capturedAgentConfig?.outputType
+    const outputType = capturedAgentConfig.value?.outputType
     if (!outputType) {
       throw new Error('Router agent was not created with outputType')
     }
@@ -152,12 +155,12 @@ describe('RouterAgent', () => {
       guardrailTrackingContext,
     })
 
-    expect(capturedAgentConfig?.modelSettings).toEqual(mockModelSettings)
-    expect(capturedAgentConfig?.modelSettings).not.toBe(mockModelSettings)
-    expect(capturedAgentConfig?.modelSettings?.reasoning).not.toBe(
+    expect(capturedAgentConfig.value?.modelSettings).toEqual(mockModelSettings)
+    expect(capturedAgentConfig.value?.modelSettings).not.toBe(mockModelSettings)
+    expect(capturedAgentConfig.value?.modelSettings?.reasoning).not.toBe(
       mockModelSettings.reasoning
     )
-    expect(capturedAgentConfig?.modelSettings?.text).not.toBe(
+    expect(capturedAgentConfig.value?.modelSettings?.text).not.toBe(
       mockModelSettings.text
     )
   })

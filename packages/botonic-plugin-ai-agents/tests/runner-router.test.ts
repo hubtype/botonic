@@ -1,29 +1,28 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DebugLogger } from '../src/debug-logger'
 import type { LLMConfig } from '../src/llm-config'
 import type { AgenticInputMessage, AIAgent, Context } from '../src/types'
 
-const mockTrackLlmRuns = jest.fn().mockResolvedValue(undefined)
-const mockRunnerRunImpl = jest.fn()
-let capturedRunnerConfig: any = null
-var mockIsProd = false
+const mockTrackLlmRuns = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
+const mockRunnerRunImpl = vi.hoisted(() => vi.fn())
+const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
 
-jest.mock('../src/services/hubtype-api-client', () => ({
-  HubtypeApiClient: jest.fn().mockImplementation(() => ({
-    trackLlmRuns: mockTrackLlmRuns,
-  })),
+vi.mock('../src/services/hubtype-api-client', () => ({
+  HubtypeApiClient: vi.fn().mockImplementation(function HubtypeApiClientMock() {
+    return {
+      trackLlmRuns: mockTrackLlmRuns,
+    }
+  }),
 }))
 
-jest.mock('../src/constants', () => ({
+const mockConstants = vi.hoisted(() => ({
   LLM_PROVIDER: 'azure',
   LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure', LITELLM: 'litellm' },
   LLM_OPENAI_MODEL: 'gpt-4.1-mini',
   LLM_AZURE_API_VERSION: '2025-01-01-preview',
-  get isProd() {
-    return mockIsProd
-  },
 }))
 
-jest.mock('@openai/agents', () => {
+vi.mock('@openai/agents', () => {
   class MockInputGuardrailTripwireTriggered extends Error {
     result: any
     constructor(result: any) {
@@ -39,8 +38,10 @@ jest.mock('@openai/agents', () => {
     }
   }
 
-  const MockRunner = jest.fn().mockImplementation((config: any) => {
-    capturedRunnerConfig = config
+  const MockRunner = vi.fn().mockImplementation(function RunnerConstructor(
+    config: any
+  ) {
+    capturedRunnerConfig.value = config
     return {
       run: mockRunnerRunImpl,
     }
@@ -53,32 +54,37 @@ jest.mock('@openai/agents', () => {
   }
 })
 
-import { RouterRunner } from '../src/runners/router-runner'
+let RouterRunner: typeof import('../src/runners/router-runner').RouterRunner
+async function loadRunner(isProd: boolean) {
+  vi.resetModules()
+  vi.doMock('../src/constants', () => ({ ...mockConstants, isProd }))
+  ;({ RouterRunner } = await import('../src/runners/router-runner'))
+}
 
 const mockLogger: DebugLogger = {
-  logInitialConfig: jest.fn(),
-  logAgentDebugInfo: jest.fn(),
-  logModelSettings: jest.fn(),
-  logRunnerStart: jest.fn(),
-  logRunResult: jest.fn(),
-  logGuardrailTriggered: jest.fn(),
-  logRunnerError: jest.fn(),
-  logToolExecution: jest.fn(),
+  logInitialConfig: vi.fn(),
+  logAgentDebugInfo: vi.fn(),
+  logModelSettings: vi.fn(),
+  logRunnerStart: vi.fn(),
+  logRunResult: vi.fn(),
+  logGuardrailTriggered: vi.fn(),
+  logRunnerError: vi.fn(),
+  logToolExecution: vi.fn(),
 }
 
 const mockLlmConfig = {
   modelName: 'gpt-4.1-mini',
   modelSettings: { temperature: 0 },
   modelProvider: {},
-  getApiVersion: jest.fn().mockReturnValue('test-api-version'),
-  getProviderName: jest.fn().mockReturnValue('azure'),
+  getApiVersion: vi.fn().mockReturnValue('test-api-version'),
+  getProviderName: vi.fn().mockReturnValue('azure'),
 } as unknown as LLMConfig
 
 const mockAgent = {
   name: 'RouterAgent',
   tools: [],
   modelSettings: { temperature: 0 },
-  getSystemPrompt: jest.fn().mockResolvedValue('test system prompt'),
+  getSystemPrompt: vi.fn().mockResolvedValue('test system prompt'),
 } as unknown as AIAgent<any, any>
 
 const mockContext = {
@@ -113,10 +119,10 @@ function makeRawResponse(
 }
 
 describe('RouterAgentRunner', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-    capturedRunnerConfig = null
-    mockIsProd = false
+  beforeEach(async () => {
+    vi.clearAllMocks()
+    capturedRunnerConfig.value = null
+    await loadRunner(false)
   })
 
   it('should create Runner with execution settings only', async () => {
@@ -136,9 +142,9 @@ describe('RouterAgentRunner', () => {
 
     const result = await runner.run(sampleMessages, mockContext)
 
-    expect(capturedRunnerConfig).toEqual({ tracingDisabled: true })
-    expect(capturedRunnerConfig).not.toHaveProperty('modelSettings')
-    expect(capturedRunnerConfig).not.toHaveProperty('modelProvider')
+    expect(capturedRunnerConfig.value).toEqual({ tracingDisabled: true })
+    expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
+    expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
     expect(result.messages).toEqual([{ type: 'text', content: { text: 'Hi' } }])
     expect(result.exit).toBe(false)
   })
@@ -240,8 +246,8 @@ describe('RouterAgentRunner', () => {
   })
 
   describe('LLM run tracking', () => {
-    beforeEach(() => {
-      mockIsProd = true
+    beforeEach(async () => {
+      await loadRunner(true)
     })
 
     it('should call trackLlmRuns after a successful router run in production', async () => {
@@ -318,7 +324,7 @@ describe('RouterAgentRunner', () => {
     })
 
     it('should not call trackLlmRuns when not in production', async () => {
-      mockIsProd = false
+      await loadRunner(false)
       mockRunnerRunImpl.mockResolvedValueOnce({
         finalOutput: {
           messages: [{ type: 'text', content: { text: 'Hi' } }],

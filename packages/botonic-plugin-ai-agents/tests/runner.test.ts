@@ -1,11 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DebugLogger } from '../src/debug-logger'
 import type { LLMConfig } from '../src/llm-config'
 import type {
@@ -15,26 +8,28 @@ import type {
   GuardrailRule,
 } from '../src/types'
 
-const mockTrackLlmRuns = jest
-  .fn<(...args: any[]) => Promise<void>>()
-  .mockResolvedValue(undefined)
+const mockTrackLlmRuns = vi.hoisted(() =>
+  vi.fn<(...args: any[]) => Promise<void>>().mockResolvedValue(undefined)
+)
 
-jest.mock('../src/services/hubtype-api-client', () => ({
-  HubtypeApiClient: jest.fn().mockImplementation(() => ({
-    trackLlmRuns: mockTrackLlmRuns,
-  })),
+vi.mock('../src/services/hubtype-api-client', () => ({
+  HubtypeApiClient: vi.fn().mockImplementation(function HubtypeApiClientMock() {
+    return {
+      trackLlmRuns: mockTrackLlmRuns,
+    }
+  }),
 }))
 
 // Mock DebugLogger (no-op)
 const mockLogger: DebugLogger = {
-  logInitialConfig: jest.fn(),
-  logAgentDebugInfo: jest.fn(),
-  logModelSettings: jest.fn(),
-  logRunnerStart: jest.fn(),
-  logRunResult: jest.fn(),
-  logGuardrailTriggered: jest.fn(),
-  logRunnerError: jest.fn(),
-  logToolExecution: jest.fn(),
+  logInitialConfig: vi.fn(),
+  logAgentDebugInfo: vi.fn(),
+  logModelSettings: vi.fn(),
+  logRunnerStart: vi.fn(),
+  logRunResult: vi.fn(),
+  logGuardrailTriggered: vi.fn(),
+  logRunnerError: vi.fn(),
+  logToolExecution: vi.fn(),
 }
 
 type RunnerConfig = {
@@ -44,32 +39,34 @@ type RunnerConfig = {
 }
 
 // Captured runner config for assertions
-let capturedRunnerConfig: any = null
-let capturedRunnerConfigs: RunnerConfig[] = []
-let capturedAgentConfigs: any[] = []
-const mockRunnerRunImpl = jest.fn<(...args: any[]) => Promise<any>>()
+const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
+const capturedRunnerConfigs = vi.hoisted(() => ({
+  value: [] as RunnerConfig[],
+}))
+const capturedAgentConfigs = vi.hoisted(() => ({ value: [] as any[] }))
+const mockRunnerRunImpl = vi.hoisted(() =>
+  vi.fn<(...args: any[]) => Promise<any>>()
+)
 
-jest.mock('@openai/agents', () => {
-  const MockAgent = jest.fn(
-    (config: {
-      name: string
-      model?: unknown
-      modelSettings?: LLMConfig['modelSettings']
-      instructions?: string
-      tools?: unknown[]
-      outputType?: unknown
-    }) => {
-      capturedAgentConfigs.push(config)
-      return {
-        name: config.name,
-        instructions: config.instructions,
-        tools: config.tools ?? [],
-        model: config.model,
-        modelSettings: config.modelSettings,
-        outputType: config.outputType,
-      }
+vi.mock('@openai/agents', () => {
+  const MockAgent = vi.fn(function AgentConstructor(config: {
+    name: string
+    model?: unknown
+    modelSettings?: LLMConfig['modelSettings']
+    instructions?: string
+    tools?: unknown[]
+    outputType?: unknown
+  }) {
+    capturedAgentConfigs.value.push(config)
+    return {
+      name: config.name,
+      instructions: config.instructions,
+      tools: config.tools ?? [],
+      model: config.model,
+      modelSettings: config.modelSettings,
+      outputType: config.outputType,
     }
-  )
+  })
 
   class MockRunToolCallItem {
     rawItem: any
@@ -100,9 +97,11 @@ jest.mock('@openai/agents', () => {
     }
   }
 
-  const MockRunner = jest.fn().mockImplementation((config: any) => {
-    capturedRunnerConfig = config
-    capturedRunnerConfigs.push(config)
+  const MockRunner = vi.fn().mockImplementation(function RunnerConstructor(
+    config: any
+  ) {
+    capturedRunnerConfig.value = config
+    capturedRunnerConfigs.value.push(config)
     return {
       run: mockRunnerRunImpl,
     }
@@ -123,25 +122,32 @@ const mockRetrieveKnowledge = {
   description: 'Consult the knowledge base for information before answering.',
 }
 
-jest.mock('../src/tools', () => ({
+vi.mock('../src/tools', () => ({
   mandatoryTools: [],
   RETRIEVE_KNOWLEDGE_TOOL_NAME: 'retrieve_knowledge',
 }))
 
-const mockConstants = {
+const mockConstants = vi.hoisted(() => ({
   OPENAI_PROVIDER: 'azure' as 'openai' | 'azure',
   OPENAI_MODEL: 'gpt-4.1-mini',
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
   isProd: false,
   LLM_PROVIDERS: { AZURE: 'azure', OPENAI: 'openai', LITELLM: 'litellm' },
-}
+}))
 
-jest.mock('../src/constants', () => mockConstants)
+vi.mock('../src/constants', () => mockConstants)
 
 // Import after mocks
 import { RunToolCallItem } from '@openai/agents'
-import { createInputGuardrails } from '../src/guardrails/input'
-import { SpecialistRunner } from '../src/runners/specialist-runner'
+
+let SpecialistRunner: typeof import('../src/runners/specialist-runner').SpecialistRunner
+let createInputGuardrails: typeof import('../src/guardrails/input').createInputGuardrails
+async function loadRunner(isProd: boolean) {
+  vi.resetModules()
+  vi.doMock('../src/constants', () => ({ ...mockConstants, isProd }))
+  ;({ SpecialistRunner } = await import('../src/runners/specialist-runner'))
+  ;({ createInputGuardrails } = await import('../src/guardrails/input'))
+}
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -166,9 +172,9 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
       toolChoice: undefined as string | undefined,
     },
     modelProvider: { provider },
-    getModel: jest.fn(async () => ({ id: 'guardrail-model' })),
-    getApiVersion: jest.fn().mockReturnValue('test-api-version'),
-    getProviderName: jest.fn().mockReturnValue(provider),
+    getModel: vi.fn(async () => ({ id: 'guardrail-model' })),
+    getApiVersion: vi.fn().mockReturnValue('test-api-version'),
+    getProviderName: vi.fn().mockReturnValue(provider),
   } as unknown as LLMConfig
 }
 
@@ -180,7 +186,7 @@ function buildMockAgent(
     name: 'TestAgent',
     tools: includeRetrieveKnowledge ? [mockRetrieveKnowledge] : [],
     modelSettings,
-    getSystemPrompt: jest.fn(async () => 'test system prompt'),
+    getSystemPrompt: vi.fn(async () => 'test system prompt'),
   } as unknown as AIAgent<any, any>
 }
 
@@ -240,7 +246,7 @@ function makeRawResponse(
 function createRunner(
   agent = buildMockAgent(),
   llmConfig = buildMockLlmConfig()
-): SpecialistRunner {
+): InstanceType<typeof SpecialistRunner> {
   return new SpecialistRunner(agent, llmConfig, 'test-inference-id', mockLogger)
 }
 
@@ -251,19 +257,18 @@ const sampleMessages: AgenticInputMessage[] = [
 // ── tests ─────────────────────────────────────────────────────────────────────
 
 describe('WorkerAgentRunner', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-    capturedRunnerConfig = null
-    capturedRunnerConfigs = []
-    capturedAgentConfigs = []
+  beforeEach(async () => {
+    vi.clearAllMocks()
+    capturedRunnerConfig.value = null
+    capturedRunnerConfigs.value = []
+    capturedAgentConfigs.value = []
     mockConstants.OPENAI_PROVIDER = 'azure'
-    mockConstants.isProd = false
+    await loadRunner(false)
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     mockConstants.OPENAI_PROVIDER = 'azure'
-    mockConstants.isProd = false
   })
 
   // ── constructor ──────────────────────────────────────────────────────────
@@ -507,29 +512,29 @@ describe('WorkerAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfigs).toHaveLength(2)
-      expect(capturedRunnerConfigs).toEqual([
+      expect(capturedRunnerConfigs.value).toHaveLength(2)
+      expect(capturedRunnerConfigs.value).toEqual([
         { tracingDisabled: true },
         { tracingDisabled: true },
       ])
-      expect(capturedAgentConfigs).toHaveLength(1)
-      expect(capturedAgentConfigs[0].modelSettings).not.toBe(
+      expect(capturedAgentConfigs.value).toHaveLength(1)
+      expect(capturedAgentConfigs.value[0].modelSettings).not.toBe(
         llmConfig.modelSettings
       )
-      expect(capturedAgentConfigs[0].modelSettings).toHaveProperty(
+      expect(capturedAgentConfigs.value[0].modelSettings).toHaveProperty(
         'toolChoice',
         undefined
       )
-      expect(capturedAgentConfigs[0].modelSettings.reasoning).toEqual(
+      expect(capturedAgentConfigs.value[0].modelSettings.reasoning).toEqual(
         llmConfig.modelSettings.reasoning
       )
-      expect(capturedAgentConfigs[0].modelSettings.reasoning).not.toBe(
+      expect(capturedAgentConfigs.value[0].modelSettings.reasoning).not.toBe(
         llmConfig.modelSettings.reasoning
       )
-      expect(capturedAgentConfigs[0].modelSettings.text).toEqual(
+      expect(capturedAgentConfigs.value[0].modelSettings.text).toEqual(
         llmConfig.modelSettings.text
       )
-      expect(capturedAgentConfigs[0].modelSettings.text).not.toBe(
+      expect(capturedAgentConfigs.value[0].modelSettings.text).not.toBe(
         llmConfig.modelSettings.text
       )
       expect(llmConfig.modelSettings.toolChoice).toBe('retrieve_knowledge')
@@ -570,11 +575,11 @@ describe('WorkerAgentRunner', () => {
         buildMockContext()
       )
 
-      expect(capturedRunnerConfig).toEqual({
+      expect(capturedRunnerConfig.value).toEqual({
         tracingDisabled: true,
       })
-      expect(capturedRunnerConfig).not.toHaveProperty('modelSettings')
-      expect(capturedRunnerConfig).not.toHaveProperty('modelProvider')
+      expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
+      expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
     })
   })
 
@@ -637,8 +642,8 @@ describe('WorkerAgentRunner', () => {
   })
 
   describe('run() – LLM run tracking', () => {
-    beforeEach(() => {
-      mockConstants.isProd = true
+    beforeEach(async () => {
+      await loadRunner(true)
     })
 
     it('should call trackLlmRuns after a successful run in production', async () => {
@@ -703,7 +708,7 @@ describe('WorkerAgentRunner', () => {
     })
 
     it('should NOT call trackLlmRuns when not in production', async () => {
-      mockConstants.isProd = false
+      await loadRunner(false)
       mockRunnerRunImpl.mockResolvedValueOnce(
         makeTextRunnerResult('Hi', { rawResponses: [makeRawResponse(100, 20)] })
       )
