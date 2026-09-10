@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, expect, test } from '@jest/globals'
 
 import {
   FlowCountryConditional,
@@ -17,20 +17,23 @@ describe('Check the contents returned by the plugin after conditional country no
     ['FR', 'Message only for France'],
     ['GB', 'Message only for United Kingdom'],
     ['DE', 'Message for other countries'],
-  ])('The content of the country %s is displayed', async (countryISO: string, messageExpected: string) => {
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: basicFlow },
-      requestArgs: {
-        input: { data: 'countryConditional', type: INPUT.TEXT },
-        user: {
-          locale: 'en',
-          country: countryISO,
-          systemLocale: 'en',
+  ])(
+    'The content of the country %s is displayed',
+    async (countryISO: string, messageExpected: string) => {
+      const { contents } = await createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: basicFlow },
+        requestArgs: {
+          input: { data: 'countryConditional', type: INPUT.TEXT },
+          user: {
+            locale: 'en',
+            country: countryISO,
+            systemLocale: 'en',
+          },
         },
-      },
-    })
+      })
 
-    expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
-    expect((contents[1] as FlowText).text).toBe(messageExpected)
-  })
+      expect(contents[0]).toBeInstanceOf(FlowCountryConditional)
+      expect((contents[1] as FlowText).text).toBe(messageExpected)
+    }
+  )
 })

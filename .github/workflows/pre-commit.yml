@@ -16,9 +16,8 @@ jobs:
         with:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
-      # Install Biome for the local pre-commit hook
-      - name: Install Biome
-        run: npm install -g @biomejs/biome@2.3.13
+      - name: Install dependencies
+        run: npm ci
       - uses: pre-commit/action@v3.0.0
         # this will push back fixes to the pull request branch.
         with:

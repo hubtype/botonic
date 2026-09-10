@@ -815,4 +815,5 @@ const Webchat = forwardRef<WebchatRef | null, WebchatProps>((props, ref) => {
 })
 
 Webchat.displayName = 'Webchat'
+
 export { Webchat }

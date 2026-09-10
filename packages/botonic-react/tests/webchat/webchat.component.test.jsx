@@ -215,24 +215,24 @@ describe('TEST: Webchat Component', () => {
     )
   })
 
-  it.each([
-    PROVIDER.DEV,
-    PROVIDER.WEBCHAT,
-  ])('TEST: When calling updateWebview with provider %s a webview is displayed and has StyledWebview and StyledWebviewHeader', async provider => {
-    const { result } = renderUseWebchatHook()
-    act(() => {
-      result.current.webchatState.session.user = { provider }
-      result.current.toggleWebchat(true)
-      result.current.updateWebview('webview')
-    })
-    await act(async () => {
-      render(<Webchat webchatHooks={result.current} />)
-    })
-    expectToHaveRoles(
-      [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
-      screen
-    )
-  })
+  it.each([PROVIDER.DEV, PROVIDER.WEBCHAT])(
+    'TEST: When calling updateWebview with provider %s a webview is displayed and has StyledWebview and StyledWebviewHeader',
+    async provider => {
+      const { result } = renderUseWebchatHook()
+      act(() => {
+        result.current.webchatState.session.user = { provider }
+        result.current.toggleWebchat(true)
+        result.current.updateWebview('webview')
+      })
+      await act(async () => {
+        render(<Webchat webchatHooks={result.current} />)
+      })
+      expectToHaveRoles(
+        [ROLES.WEBVIEW, ROLES.WEBVIEW_HEADER, ROLES.WEBCHAT],
+        screen
+      )
+    }
+  )
 
   function TestWebview() {
     return <div role='test-webview'>Test Webview Content</div>

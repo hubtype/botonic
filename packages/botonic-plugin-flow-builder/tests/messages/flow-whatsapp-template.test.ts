@@ -340,7 +340,7 @@ describe('FlowWhatsappTemplate', () => {
 
       expect(headerComponent?.type).toBe(WhatsAppTemplateComponentType.HEADER)
       expect(
-        (headerComponent?.parameters[0] as WhatsappTemplateHeaderTextParameter)
+        (headerComponent!.parameters[0] as WhatsappTemplateHeaderTextParameter)
           .text
       ).toBe('ORD-99999')
     })
@@ -370,7 +370,7 @@ describe('FlowWhatsappTemplate', () => {
         WhatsAppTemplateParameterType.IMAGE
       )
       expect(
-        (headerComponent?.parameters[0] as WhatsappTemplateHeaderImageParameter)
+        (headerComponent!.parameters[0] as WhatsappTemplateHeaderImageParameter)
           .image.link
       ).toBe('https://example.com/promo-es.jpg')
     })
@@ -400,7 +400,7 @@ describe('FlowWhatsappTemplate', () => {
         WhatsAppTemplateParameterType.VIDEO
       )
       expect(
-        (headerComponent?.parameters[0] as WhatsappTemplateHeaderVideoParameter)
+        (headerComponent!.parameters[0] as WhatsappTemplateHeaderVideoParameter)
           .video.link
       ).toBe('https://example.com/video-es.mp4')
     })

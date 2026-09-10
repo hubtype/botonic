@@ -27,14 +27,15 @@ export { ContentFieldsBase } from './content-fields-base'
 export { FlowButton } from './flow-button'
 export { FlowElement } from './flow-element'
 export {
-  FlowAiAgentRouter,
   FlowAiAgent,
+  FlowAiAgentRouter,
   FlowBotAction,
   FlowCaptureUserInput,
   FlowCarousel,
   FlowChannelConditional,
   FlowCountryConditional,
   FlowCustomConditional,
+  FlowCustomConditionalV2,
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
@@ -48,7 +49,6 @@ export {
   FlowWhatsappCtaUrlButtonNode,
   FlowWhatsappRequestContactInfoNode,
   FlowWhatsappTemplate,
-  FlowCustomConditionalV2,
 }
 
 export type FlowContent =

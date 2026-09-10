@@ -40,28 +40,26 @@ let capturedAgentConfigs: any[] = []
 const mockRunnerRunImpl: jest.Mock = jest.fn()
 
 jest.mock('@openai/agents', () => {
-  const MockAgent = jest
-    .fn()
-    .mockImplementation(
-      (config: {
-        name: string
-        model?: unknown
-        modelSettings?: LLMConfig['modelSettings']
-        instructions?: string
-        tools?: unknown[]
-        outputType?: unknown
-      }) => {
-        capturedAgentConfigs.push(config)
-        return {
-          name: config.name,
-          instructions: config.instructions,
-          tools: config.tools ?? [],
-          model: config.model,
-          modelSettings: config.modelSettings,
-          outputType: config.outputType,
-        }
+  const MockAgent = jest.fn(
+    (config: {
+      name: string
+      model?: unknown
+      modelSettings?: LLMConfig['modelSettings']
+      instructions?: string
+      tools?: unknown[]
+      outputType?: unknown
+    }) => {
+      capturedAgentConfigs.push(config)
+      return {
+        name: config.name,
+        instructions: config.instructions,
+        tools: config.tools ?? [],
+        model: config.model,
+        modelSettings: config.modelSettings,
+        outputType: config.outputType,
       }
-    )
+    }
+  )
 
   class MockRunToolCallItem {
     rawItem: any
@@ -79,8 +77,8 @@ jest.mock('@openai/agents', () => {
 
   class MockInputGuardrailTripwireTriggered extends Error {
     result: any
-    constructor(result: any) {
-      super('InputGuardrailTripwireTriggered')
+    constructor(message: string, result: any) {
+      super(message)
       this.result = result
     }
   }
@@ -158,7 +156,7 @@ function buildMockLlmConfig(provider: 'openai' | 'azure' = 'azure'): LLMConfig {
       toolChoice: undefined as string | undefined,
     },
     modelProvider: { provider },
-    getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
+    getModel: jest.fn(async () => ({ id: 'guardrail-model' })),
     getApiVersion: jest.fn().mockReturnValue('test-api-version'),
     getProviderName: jest.fn().mockReturnValue(provider),
   } as unknown as LLMConfig
@@ -172,7 +170,7 @@ function buildMockAgent(
     name: 'TestAgent',
     tools: includeRetrieveKnowledge ? [mockRetrieveKnowledge] : [],
     modelSettings,
-    getSystemPrompt: jest.fn().mockResolvedValue('test system prompt'),
+    getSystemPrompt: jest.fn(async () => 'test system prompt'),
   } as unknown as AIAgent<any, any>
 }
 
@@ -479,14 +477,16 @@ describe('WorkerAgentRunner', () => {
       // Simulates the OpenAI runner executing the input guardrails before the
       // main agent output is produced.
       mockRunnerRunImpl
-        .mockImplementationOnce(async (agentArg, messages, options) => {
-          await agentArg.inputGuardrails[0].execute({
-            input: messages,
-            context: options.context,
-            agent: agentArg,
-          })
-          return makeTextRunnerResult()
-        })
+        .mockImplementationOnce(
+          async (agentArg: any, messages: any, options: any) => {
+            await agentArg.inputGuardrails[0].execute({
+              input: messages,
+              context: options.context,
+              agent: agentArg,
+            })
+            return makeTextRunnerResult()
+          }
+        )
         .mockResolvedValueOnce({
           finalOutput: { is_offensive: false },
           rawResponses: [],
@@ -572,11 +572,15 @@ describe('WorkerAgentRunner', () => {
 
   describe('run() – error handling', () => {
     it('should handle InputGuardrailTripwireTriggered and return guardrail result', async () => {
-      const { InputGuardrailTripwireTriggered } = require('@openai/agents')
+      const { InputGuardrailTripwireTriggered } = await import('@openai/agents')
       const guardrailOutput = [{ name: 'is_offensive', triggered: true }]
-      const guardrailError = new InputGuardrailTripwireTriggered({
-        output: { outputInfo: guardrailOutput },
-      })
+      const guardrailError = new InputGuardrailTripwireTriggered(
+        'Guardrail triggered',
+        {
+          guardrail: { type: 'input', name: 'is_offensive' },
+          output: { outputInfo: guardrailOutput, tripwireTriggered: true },
+        }
+      )
       mockRunnerRunImpl.mockRejectedValueOnce(guardrailError)
 
       const result = await createRunner().run(
@@ -594,10 +598,14 @@ describe('WorkerAgentRunner', () => {
     })
 
     it('should call logGuardrailTriggered and logRunResult when guardrail fires', async () => {
-      const { InputGuardrailTripwireTriggered } = require('@openai/agents')
-      const guardrailError = new InputGuardrailTripwireTriggered({
-        output: { outputInfo: [] },
-      })
+      const { InputGuardrailTripwireTriggered } = await import('@openai/agents')
+      const guardrailError = new InputGuardrailTripwireTriggered(
+        'Guardrail triggered',
+        {
+          guardrail: { type: 'input', name: 'is_offensive' },
+          output: { outputInfo: [], tripwireTriggered: true },
+        }
+      )
       mockRunnerRunImpl.mockRejectedValueOnce(guardrailError)
 
       await createRunner().run(sampleMessages, buildMockContext())
@@ -678,7 +686,9 @@ describe('WorkerAgentRunner', () => {
           ]),
         })
       )
-      const payload = mockTrackLlmRuns.mock.calls[0][1]
+      const payload = mockTrackLlmRuns.mock.calls[0][1] as {
+        llm_runs: unknown[]
+      }
       expect(payload.llm_runs).toHaveLength(2)
     })
 

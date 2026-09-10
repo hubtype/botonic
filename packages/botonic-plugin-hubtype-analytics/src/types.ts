@@ -61,10 +61,10 @@ export interface RequestData {
 }
 
 export {
+  type AvailableSpecialist,
   EventAction,
   type EventAiAgent,
   type EventAiAgentRouter,
-  type AvailableSpecialist,
   type EventBotAction,
   type EventCaptureUserInput,
   type EventConditionalChannel,
