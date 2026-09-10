@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "types": ["vitest/globals", "node"]
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.setup.ts"],
+  "exclude": ["templates", "dist", "lib", "node_modules", "botonic-tmp*"]
+}

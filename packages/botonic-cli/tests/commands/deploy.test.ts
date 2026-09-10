@@ -1,8 +1,8 @@
 import { assert } from 'node:console'
 import { join } from 'node:path'
 import { chdir } from 'node:process'
-import { jest } from '@jest/globals'
 import { Config } from '@oclif/core'
+import { vi } from 'vitest'
 
 import { BotonicAPIService } from '../../src/botonic-api-service.js'
 import { EXAMPLES } from '../../src/botonic-examples.js'
@@ -42,13 +42,13 @@ describe('TEST: Deploy pipeline', () => {
     chdir(tmpPath)
     await newCommand.installDependencies()
 
-    const spyDeployBundle = jest
+    const spyDeployBundle = vi
       .spyOn(deployCommand, 'deployBundle')
       .mockImplementation(async () => {
         return { hasDeployErrors: false }
       })
 
-    const spyDeploy = jest
+    const spyDeploy = vi
       .spyOn(deployCommand, 'deploy')
       .mockImplementation(async () => {
         await botonicApiService.build()
