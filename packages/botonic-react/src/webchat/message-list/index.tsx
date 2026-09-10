@@ -87,6 +87,7 @@ export const WebchatMessageList = () => {
         })
       })
       observer.observe(lastMessageRef.current)
+      return () => observer.disconnect()
     }
   }, [webchatState.messagesComponents])
 

@@ -1,10 +1,12 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
+
 import { EventAction } from '@botonic/core'
 import { act, render, waitFor } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import TestRenderer from 'react-test-renderer'
+import { vi } from 'vitest'
 
 import {
   AiAgent,
@@ -31,13 +33,13 @@ const renderToJSON = (sut: ReactElement) => TestRenderer.create(sut).toJSON()
 
 const mockWebchatContext = {
   previewUtils: {
-    onClickOpenChunks: jest.fn(),
-    onClickOpenToolResults: jest.fn(),
-    getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
-    getMessageById: jest.fn().mockResolvedValue({}),
-    trackPreviewEventOpened: jest.fn(),
+    onClickOpenChunks: vi.fn(),
+    onClickOpenToolResults: vi.fn(),
+    getChunkIdsGroupedBySource: vi.fn().mockResolvedValue([]),
+    getMessageById: vi.fn().mockResolvedValue({}),
+    trackPreviewEventOpened: vi.fn(),
   },
-  updateMessage: jest.fn(),
+  updateMessage: vi.fn(),
   webchatState: {
     messagesJSON: [],
   },
@@ -228,7 +230,7 @@ describe('System Debug Trace - Event Components', () => {
     })
 
     test('rehydrates truncated event via getMessageById', async () => {
-      const getMessageById = jest.fn().mockResolvedValue({
+      const getMessageById = vi.fn().mockResolvedValue({
         event_data: {
           tools_executed: [
             {
@@ -265,8 +267,8 @@ describe('System Debug Trace - Event Components', () => {
     })
 
     test('fetches chunks via getChunkIdsGroupedBySource after rehydration', async () => {
-      const getChunkIdsGroupedBySource = jest.fn().mockResolvedValue([])
-      const getMessageById = jest.fn().mockResolvedValue({
+      const getChunkIdsGroupedBySource = vi.fn().mockResolvedValue([])
+      const getMessageById = vi.fn().mockResolvedValue({
         event_data: {
           tools_executed: [
             {
@@ -312,7 +314,7 @@ describe('System Debug Trace - Event Components', () => {
     })
 
     test('does not fetch when event is not truncated', async () => {
-      const getMessageById = jest.fn()
+      const getMessageById = vi.fn()
       const context = withWebchatContext({
         previewUtils: { getMessageById },
       })
@@ -331,7 +333,7 @@ describe('System Debug Trace - Event Components', () => {
 
     test('does not show no tools executed while rehydrating', async () => {
       let resolvePromise!: (value: MinimalHubtypeMessage) => void
-      const getMessageById = jest.fn(
+      const getMessageById = vi.fn(
         (): Promise<MinimalHubtypeMessage> =>
           new Promise(resolve => {
             resolvePromise = resolve
@@ -373,7 +375,7 @@ describe('System Debug Trace - Event Components', () => {
     })
 
     test('does not show no tools executed when rehydration returns no event_data', async () => {
-      const getMessageById = jest.fn().mockResolvedValue({})
+      const getMessageById = vi.fn().mockResolvedValue({})
       const context = withWebchatContext({
         previewUtils: { getMessageById },
       })

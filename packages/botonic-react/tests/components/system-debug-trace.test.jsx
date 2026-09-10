@@ -1,11 +1,13 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /* eslint-disable @typescript-eslint/naming-convention */
+
 import { EventAction, INPUT } from '@botonic/core'
-import { render, waitFor } from '@testing-library/react'
+import { render as renderComponent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import TestRenderer from 'react-test-renderer'
+import { vi } from 'vitest'
 
 import { SystemDebugTrace } from '../../src/components/system-debug-trace'
 import { DebugMessage } from '../../src/components/system-debug-trace/debug-message'
@@ -26,24 +28,31 @@ import {
 import { ROLES } from '../../src/constants'
 import { WebchatContext } from '../../src/webchat/context'
 
-const renderToJSON = sut => TestRenderer.create(sut).toJSON()
+const withWebchatContext = sut => (
+  <WebchatContext.Provider value={mockWebchatContext}>
+    {sut}
+  </WebchatContext.Provider>
+)
+const renderToJSON = sut =>
+  TestRenderer.create(withWebchatContext(sut)).toJSON()
+const render = sut => renderComponent(withWebchatContext(sut))
 
 const mockWebchatContext = {
   previewUtils: {
-    onClickOpenChunks: jest.fn(),
-    getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
+    onClickOpenChunks: vi.fn(),
+    getChunkIdsGroupedBySource: vi.fn().mockResolvedValue([]),
   },
-  getKnowledgeBaseSources: jest.fn(),
-  getKnowledgeBaseChunks: jest.fn(),
-  updateMessage: jest.fn(),
+  getKnowledgeBaseSources: vi.fn(),
+  getKnowledgeBaseChunks: vi.fn(),
+  updateMessage: vi.fn(),
   webchatState: {
     messagesJSON: [],
   },
 }
 
 // Mock isBrowser to return true for rendering components
-jest.mock('@botonic/core', () => {
-  const actual = jest.requireActual('@botonic/core')
+vi.mock('@botonic/core', async importOriginal => {
+  const actual = await importOriginal()
   return {
     ...actual,
     isBrowser: () => true,

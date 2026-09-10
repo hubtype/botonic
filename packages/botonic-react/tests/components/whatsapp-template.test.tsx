@@ -1,5 +1,5 @@
-import { describe, expect, test } from '@jest/globals'
 import TestRenderer from 'react-test-renderer'
+import { describe, expect, test } from 'vitest'
 
 import { WhatsappTemplate } from '../../src/components/whatsapp-template/index'
 import {

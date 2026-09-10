@@ -1,8 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { act, renderHook } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { Typing } from '../../src/index-types'
 import {
@@ -11,12 +12,12 @@ import {
 } from '../../src/webchat/input-panel/typing-network-sender'
 import { useTypingChatEventSender } from '../../src/webchat/input-panel/use-typing-chat-event-sender'
 
-jest.mock('uuid', () => ({
+vi.mock('uuid', () => ({
   v7: () => 'test-uuid',
 }))
 
 function createDispatchMock() {
-  return jest.fn().mockResolvedValue(true)
+  return vi.fn().mockResolvedValue(true)
 }
 
 function createContext(sessionId = 'user-1', lastRoutePath = 'route-a') {
@@ -28,11 +29,11 @@ function createContext(sessionId = 'user-1', lastRoutePath = 'route-a') {
 
 describe('TypingNetworkSender', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('sends typing_on only once for repeated on signals', async () => {
@@ -48,7 +49,7 @@ describe('TypingNetworkSender', () => {
   })
 
   it('does not mark the server as typing when sendToServer returns false', async () => {
-    const dispatch = jest.fn().mockResolvedValue(false)
+    const dispatch = vi.fn().mockResolvedValue(false)
     const sender = new TypingNetworkSender(() => createContext(), dispatch)
 
     await sender.send(Typing.On)
@@ -68,7 +69,7 @@ describe('TypingNetworkSender', () => {
     expect(dispatch).toHaveBeenCalledTimes(1)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(dispatch).toHaveBeenCalledTimes(2)
@@ -88,7 +89,7 @@ describe('TypingNetworkSender', () => {
     await sender.send(Typing.Off)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(dispatch.mock.calls).toEqual([
@@ -105,7 +106,7 @@ describe('TypingNetworkSender', () => {
     await sender.send(Typing.Off)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     await sender.send(Typing.On)
@@ -120,7 +121,7 @@ describe('TypingNetworkSender', () => {
     await sender.send(Typing.Off)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(dispatch).not.toHaveBeenCalled()
@@ -141,7 +142,7 @@ describe('TypingNetworkSender', () => {
   })
 
   it('resets typing state when typing_on delivery fails', async () => {
-    const dispatch = jest
+    const dispatch = vi
       .fn()
       .mockResolvedValueOnce(false)
       .mockResolvedValueOnce(true)
@@ -155,7 +156,7 @@ describe('TypingNetworkSender', () => {
 
   it('coalesces concurrent typing_on requests into a single network call', async () => {
     let resolveSend
-    const dispatch = jest.fn(
+    const dispatch = vi.fn(
       () =>
         new Promise(resolve => {
           resolveSend = resolve
@@ -174,7 +175,7 @@ describe('TypingNetworkSender', () => {
 
   it('sends typing_off immediately when dispose resolves a pending typing_on', async () => {
     let resolveSend
-    const dispatch = jest.fn(
+    const dispatch = vi.fn(
       () =>
         new Promise(resolve => {
           resolveSend = resolve
@@ -204,15 +205,15 @@ describe('useTypingChatEventSender', () => {
   }
 
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('calls onUserInput with a chat event payload for typing_on', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { result } = renderHook(() =>
       useTypingChatEventSender({
         onUserInput,
@@ -239,7 +240,7 @@ describe('useTypingChatEventSender', () => {
   })
 
   it('retries typing_on after onUserInput becomes available', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { result, rerender } = renderHook(
       ({ handler }) =>
         useTypingChatEventSender({
@@ -267,7 +268,7 @@ describe('useTypingChatEventSender', () => {
   })
 
   it('does not mark typing as active when onUserInput rejects', async () => {
-    const onUserInput = jest
+    const onUserInput = vi
       .fn()
       .mockRejectedValueOnce(new Error('network error'))
       .mockResolvedValueOnce(undefined)
@@ -287,7 +288,7 @@ describe('useTypingChatEventSender', () => {
   })
 
   it('debounces typing_off before calling onUserInput', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { result } = renderHook(() =>
       useTypingChatEventSender({
         onUserInput,
@@ -303,7 +304,7 @@ describe('useTypingChatEventSender', () => {
     expect(onUserInput).toHaveBeenCalledTimes(1)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(onUserInput).toHaveBeenCalledTimes(2)
@@ -311,7 +312,7 @@ describe('useTypingChatEventSender', () => {
   })
 
   it('sends typing_off immediately on unmount when user was typing', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { result, unmount } = renderHook(() =>
       useTypingChatEventSender({
         onUserInput,
@@ -332,7 +333,7 @@ describe('useTypingChatEventSender', () => {
   })
 
   it('keeps typing_off on the same session after session changes', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const sessionA = { user: { id: 'session-a' } }
     const sessionB = { user: { id: 'session-b' } }
     const { result, rerender } = renderHook(
@@ -363,7 +364,7 @@ describe('useTypingChatEventSender', () => {
 
     await act(async () => {
       await sendTyping(Typing.Off)
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(onUserInput.mock.calls[0][0].session).toBe(sessionA)
