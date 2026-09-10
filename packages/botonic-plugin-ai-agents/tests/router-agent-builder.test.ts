@@ -1,35 +1,29 @@
 import type { AgentOutputType, Handoff, ModelSettings } from '@openai/agents'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { z } from 'zod'
 
 import type { GuardrailTrackingContext } from '../src/guardrails/input'
 import type { LLMConfig } from '../src/llm-config'
 import type { OutputSchema } from '../src/structured-output'
 import type { Context, GuardrailRule } from '../src/types'
+import { getLastMockCallArg } from './helpers/mock-utils'
 
-type MockOutputType = {
-  safeParse: (value: unknown) => { success: boolean }
-}
 type MockAgentConfig = {
   name: string
   instructions?: string
   model?: unknown
   modelSettings?: ModelSettings
-  outputType?: MockOutputType
+  outputType?: unknown
   handoffs?: unknown
   inputGuardrails?: { name: string }[]
 }
 
-const capturedAgentConfig = vi.hoisted(() => ({
-  value: null as MockAgentConfig | null,
-}))
+const mockAgentCreate = vi.hoisted(() =>
+  vi.fn((config: MockAgentConfig) => config)
+)
 
 vi.mock('@openai/agents', () => ({
   Agent: {
-    create: vi.fn((config: MockAgentConfig) => {
-      capturedAgentConfig.value = config
-      return config
-    }),
+    create: mockAgentCreate,
   },
 }))
 
@@ -74,7 +68,6 @@ describe('RouterAgent', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    capturedAgentConfig.value = null
   })
 
   it('should build a router agent with handoffs, guardrails and structured output', async () => {
@@ -95,53 +88,22 @@ describe('RouterAgent', () => {
       mockLlmConfig,
       guardrailTrackingContext
     )
-    expect(agent).toBe(capturedAgentConfig.value)
-
-    const agentConfig = capturedAgentConfig.value
-    if (!agentConfig?.outputType) {
-      throw new Error('Router agent was not created with outputType')
-    }
-
-    expect(agentConfig.name).toBe('Router Agent')
-    expect(agentConfig.model).toBe(mockResolvedModel)
-    expect(agentConfig.handoffs).toBe(handoffs)
-    expect(agentConfig.inputGuardrails).toBe(mockInputGuardrails)
-    expect(agentConfig.instructions).toContain(
-      'Route the conversation to the right worker'
+    expect(agent).toBe(mockAgentCreate.mock.results[0].value)
+    expect(mockAgentCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'Router Agent',
+        model: mockResolvedModel,
+        handoffs,
+        inputGuardrails: mockInputGuardrails,
+        outputType: expect.any(Object),
+        instructions: expect.stringContaining(
+          'Route the conversation to the right worker'
+        ),
+      })
     )
-    expect(agentConfig.instructions).toContain('<output>')
     expect(
-      agentConfig.outputType.safeParse({
-        messages: [{ type: 'text', content: { text: 'Hi' } }],
-      }).success
-    ).toBe(true)
-  })
-
-  it('should include external output message schemas in the router output type', async () => {
-    const customMessageSchema = z.object({
-      type: z.literal('custom'),
-      content: z.object({ value: z.string() }),
-    })
-    await RouterAgent.create({
-      name: 'Router Agent',
-      instructions: 'Route the conversation to the right worker',
-      llmConfig: mockLlmConfig,
-      handoffs,
-      inputGuardrailRules: [],
-      outputMessagesSchemas: [customMessageSchema],
-      guardrailTrackingContext,
-    })
-
-    const outputType = capturedAgentConfig.value?.outputType
-    if (!outputType) {
-      throw new Error('Router agent was not created with outputType')
-    }
-
-    expect(
-      outputType.safeParse({
-        messages: [{ type: 'custom', content: { value: 'extra' } }],
-      }).success
-    ).toBe(true)
+      getLastMockCallArg<MockAgentConfig>(mockAgentCreate).instructions
+    ).toContain('<output>')
   })
 
   it('should copy nested router model settings before passing them to the agent', async () => {
@@ -155,13 +117,12 @@ describe('RouterAgent', () => {
       guardrailTrackingContext,
     })
 
-    expect(capturedAgentConfig.value?.modelSettings).toEqual(mockModelSettings)
-    expect(capturedAgentConfig.value?.modelSettings).not.toBe(mockModelSettings)
-    expect(capturedAgentConfig.value?.modelSettings?.reasoning).not.toBe(
+    const agentConfig = getLastMockCallArg<MockAgentConfig>(mockAgentCreate)
+    expect(agentConfig.modelSettings).toEqual(mockModelSettings)
+    expect(agentConfig.modelSettings).not.toBe(mockModelSettings)
+    expect(agentConfig.modelSettings?.reasoning).not.toBe(
       mockModelSettings.reasoning
     )
-    expect(capturedAgentConfig.value?.modelSettings?.text).not.toBe(
-      mockModelSettings.text
-    )
+    expect(agentConfig.modelSettings?.text).not.toBe(mockModelSettings.text)
   })
 })

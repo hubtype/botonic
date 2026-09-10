@@ -2,10 +2,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { DebugLogger } from '../src/debug-logger'
 import type { LLMConfig } from '../src/llm-config'
 import type { AgenticInputMessage, AIAgent, Context } from '../src/types'
+import { getLastMockCallArg } from './helpers/mock-utils'
 
 const mockTrackLlmRuns = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
 const mockRunnerRunImpl = vi.hoisted(() => vi.fn())
-const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
+const mockRunner = vi.hoisted(() =>
+  vi.fn(function RunnerConstructor(_config: Record<string, unknown>) {
+    return {
+      run: mockRunnerRunImpl,
+    }
+  })
+)
 
 vi.mock('../src/services/hubtype-api-client', () => ({
   HubtypeApiClient: vi.fn().mockImplementation(function HubtypeApiClientMock() {
@@ -38,17 +45,8 @@ vi.mock('@openai/agents', () => {
     }
   }
 
-  const MockRunner = vi.fn().mockImplementation(function RunnerConstructor(
-    config: any
-  ) {
-    capturedRunnerConfig.value = config
-    return {
-      run: mockRunnerRunImpl,
-    }
-  })
-
   return {
-    Runner: MockRunner,
+    Runner: mockRunner,
     RunContext: MockRunContext,
     InputGuardrailTripwireTriggered: MockInputGuardrailTripwireTriggered,
   }
@@ -121,7 +119,6 @@ function makeRawResponse(
 describe('RouterAgentRunner', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
-    capturedRunnerConfig.value = null
     await loadRunner(false)
   })
 
@@ -142,9 +139,10 @@ describe('RouterAgentRunner', () => {
 
     const result = await runner.run(sampleMessages, mockContext)
 
-    expect(capturedRunnerConfig.value).toEqual({ tracingDisabled: true })
-    expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
-    expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
+    expect(mockRunner).toHaveBeenCalledWith({ tracingDisabled: true })
+    const runnerConfig = getLastMockCallArg<Record<string, unknown>>(mockRunner)
+    expect(runnerConfig).not.toHaveProperty('modelSettings')
+    expect(runnerConfig).not.toHaveProperty('modelProvider')
     expect(result.messages).toEqual([{ type: 'text', content: { text: 'Hi' } }])
     expect(result.exit).toBe(false)
   })
