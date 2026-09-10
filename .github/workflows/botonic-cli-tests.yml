@@ -3,6 +3,11 @@ name: Botonic cli tests
 on:
   push:
     paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig*.json'
+      - 'scripts/build/**'
+      - '.github/workflows/botonic-common-workflow.yml'
       - "packages/botonic-cli/**"
       - ".github/workflows/botonic-cli-tests.yml"
   workflow_dispatch:
@@ -10,11 +15,8 @@ on:
 jobs:
   botonic-cli-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit #pragma: allowlist secret
     with:
       PACKAGE_NAME: Botonic cli tests
       PACKAGE: botonic-cli
       UNIT_TEST_COMMAND: npm run test_ci
       LINT_COMMAND: npm run lint:check
-      PUBLISH_TESTS_RESULTS: "yes"
-      NEEDS_CODECOV_UPLOAD: "yes"

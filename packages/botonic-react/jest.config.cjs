@@ -15,13 +15,13 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!@botonic|axios|react-children-utilities|parse5).+\\.(js|jsx|tsx)$',
   ],
-  moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
+  moduleFileExtensions: ['js', 'cjs', 'jsx', 'json', 'ts', 'tsx'],
   snapshotSerializers: [],
   moduleDirectories: ['<rootDir>', 'node_modules', 'src'],
   modulePaths: ['<rootDir>', 'node_modules', 'src'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/tests/__mocks__/file-mock.js',
+      '<rootDir>/tests/__mocks__/file-mock.cjs',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],

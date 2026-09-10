@@ -1,22 +1,22 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.56.0-alpha.0",
+  "version": "0.57.0-rslib-esm.1",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run.js"
   },
   "scripts": {
-    "prepublishOnly": "npm i && npm run build",
-    "build": "shx rm -rf lib && tsc -b",
+    "build": "rslib build --no-env",
     "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "oclif manifest && oclif readme",
+    "prepack": "npm run build && oclif manifest",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/",
     "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
     "test_ci": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
-    "version": "oclif readme && git add README.md"
+    "version": "oclif readme && git add README.md",
+    "build:watch": "rslib build --watch --no-env"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.6",
@@ -49,16 +49,15 @@
   "files": [
     "./bin",
     "./lib",
-    "./lib",
     "./oclif.manifest.json"
   ],
   "homepage": "https://github.com/hubtype/botonic",
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "type": "module",
   "oclif": {
     "bin": "botonic",
     "dirname": "botonic",
-    "commands": "./lib/src/commands",
+    "commands": "./lib/commands",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
@@ -73,7 +72,7 @@
     ]
   },
   "repository": "hubtype/botonic",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/index.d.ts",
   "keywords": [
     "bot-framework",
     "chatbot",
