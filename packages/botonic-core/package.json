@@ -17,7 +17,7 @@
     }
   },
   "scripts": {
-    "test": "../../node_modules/.bin/jest --coverage",
+    "test": "vitest run --coverage",
     "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/",
     "lint:check": "biome check src/",
@@ -56,8 +56,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/pako": "^1.0.2",
-    "babel-plugin-add-module-exports": "^1.0.2"
+    "@types/pako": "^1.0.2"
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
