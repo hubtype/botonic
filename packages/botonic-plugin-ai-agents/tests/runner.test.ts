@@ -70,7 +70,6 @@ const mockRunner = vi.hoisted(() =>
 )
 
 vi.mock('@openai/agents', () => {
-
   class MockRunToolCallItem {
     rawItem: any
     constructor(rawItem: any) {
@@ -568,7 +567,8 @@ describe('WorkerAgentRunner', () => {
       )
 
       expect(mockRunner).toHaveBeenCalledWith({ tracingDisabled: true })
-      const runnerConfig = getLastMockCallArg<Record<string, unknown>>(mockRunner)
+      const runnerConfig =
+        getLastMockCallArg<Record<string, unknown>>(mockRunner)
       expect(runnerConfig).not.toHaveProperty('modelSettings')
       expect(runnerConfig).not.toHaveProperty('modelProvider')
     })
