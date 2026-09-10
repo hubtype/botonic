@@ -110,29 +110,26 @@ describe('FlowCustomConditionalV2', () => {
         expectedResult: 'class',
         expectedTarget: touristTarget,
       },
-    ])('should resolve $operator when bookingType is $bookingType', ({
-      operator,
-      value,
-      bookingType,
-      expectedResult,
-      expectedTarget,
-    }) => {
-      const node = createMockCustomConditionalV2Node({
-        type: VariableFormat.String,
-        key_path: 'bookingType',
-        conditions: [{ operator, value, target: expectedTarget }],
-        default_target: defaultTarget,
-      })
+    ])(
+      'should resolve $operator when bookingType is $bookingType',
+      ({ operator, value, bookingType, expectedResult, expectedTarget }) => {
+        const node = createMockCustomConditionalV2Node({
+          type: VariableFormat.String,
+          key_path: 'bookingType',
+          conditions: [{ operator, value, target: expectedTarget }],
+          default_target: defaultTarget,
+        })
 
-      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
-        node,
-        createBotContext({ bookingType })
-      )
+        const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+          node,
+          createBotContext({ bookingType })
+        )
 
-      expect(customConditional.customResult).toBe(expectedResult)
-      expect(customConditional.resolvedOperator).toBe(operator)
-      expect(customConditional.followUp).toEqual(expectedTarget)
-    })
+        expect(customConditional.customResult).toBe(expectedResult)
+        expect(customConditional.resolvedOperator).toBe(operator)
+        expect(customConditional.followUp).toEqual(expectedTarget)
+      }
+    )
 
     test('should use default target when no string condition matches', () => {
       const node = createMockCustomConditionalV2Node({
@@ -218,29 +215,26 @@ describe('FlowCustomConditionalV2', () => {
         expectedResult: '1',
         expectedTarget: oneBagTarget,
       },
-    ])('should resolve $operator when bagsAdded is $bagsAdded', ({
-      operator,
-      value,
-      bagsAdded,
-      expectedResult,
-      expectedTarget,
-    }) => {
-      const node = createMockCustomConditionalV2Node({
-        type: VariableFormat.Number,
-        key_path: 'bagsAdded',
-        conditions: [{ operator, value, target: expectedTarget }],
-        default_target: defaultTarget,
-      })
+    ])(
+      'should resolve $operator when bagsAdded is $bagsAdded',
+      ({ operator, value, bagsAdded, expectedResult, expectedTarget }) => {
+        const node = createMockCustomConditionalV2Node({
+          type: VariableFormat.Number,
+          key_path: 'bagsAdded',
+          conditions: [{ operator, value, target: expectedTarget }],
+          default_target: defaultTarget,
+        })
 
-      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
-        node,
-        createBotContext({ bagsAdded })
-      )
+        const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+          node,
+          createBotContext({ bagsAdded })
+        )
 
-      expect(customConditional.customResult).toBe(expectedResult)
-      expect(customConditional.resolvedOperator).toBe(operator)
-      expect(customConditional.followUp).toEqual(expectedTarget)
-    })
+        expect(customConditional.customResult).toBe(expectedResult)
+        expect(customConditional.resolvedOperator).toBe(operator)
+        expect(customConditional.followUp).toEqual(expectedTarget)
+      }
+    )
 
     test.each([
       {
@@ -255,36 +249,34 @@ describe('FlowCustomConditionalV2', () => {
         min: 1,
         max: 3,
       },
-    ])('should resolve $operator when bagsAdded is $bagsAdded', ({
-      operator,
-      bagsAdded,
-      min,
-      max,
-    }) => {
-      const node = createMockCustomConditionalV2Node({
-        type: VariableFormat.Number,
-        key_path: 'bagsAdded',
-        conditions: [
-          {
-            operator,
-            value: 0,
-            min,
-            max,
-            target: betweenTarget,
-          },
-        ],
-        default_target: defaultTarget,
-      })
+    ])(
+      'should resolve $operator when bagsAdded is $bagsAdded',
+      ({ operator, bagsAdded, min, max }) => {
+        const node = createMockCustomConditionalV2Node({
+          type: VariableFormat.Number,
+          key_path: 'bagsAdded',
+          conditions: [
+            {
+              operator,
+              value: 0,
+              min,
+              max,
+              target: betweenTarget,
+            },
+          ],
+          default_target: defaultTarget,
+        })
 
-      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
-        node,
-        createBotContext({ bagsAdded })
-      )
+        const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+          node,
+          createBotContext({ bagsAdded })
+        )
 
-      expect(customConditional.customResult).toBe(`min: ${min} - max: ${max}`)
-      expect(customConditional.resolvedOperator).toBe(operator)
-      expect(customConditional.followUp).toEqual(betweenTarget)
-    })
+        expect(customConditional.customResult).toBe(`min: ${min} - max: ${max}`)
+        expect(customConditional.resolvedOperator).toBe(operator)
+        expect(customConditional.followUp).toEqual(betweenTarget)
+      }
+    )
 
     test('should use default target when no number condition matches', () => {
       const node = createMockCustomConditionalV2Node({
