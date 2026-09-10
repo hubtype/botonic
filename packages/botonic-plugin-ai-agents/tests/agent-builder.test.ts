@@ -1,11 +1,4 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
 import type { DebugLogger } from '../src/debug-logger'
 import { OutputSchema } from '../src/structured-output/index'
@@ -13,23 +6,23 @@ import type { GuardrailRule, Tool } from '../src/types'
 
 // Create a mock disabled logger for tests (no-op implementations)
 const mockLogger: DebugLogger = {
-  logInitialConfig: jest.fn(),
-  logAgentDebugInfo: jest.fn(),
-  logModelSettings: jest.fn(),
-  logRunnerStart: jest.fn(),
-  logRunResult: jest.fn(),
-  logGuardrailTriggered: jest.fn(),
-  logRunnerError: jest.fn(),
-  logToolExecution: jest.fn(),
+  logInitialConfig: vi.fn(),
+  logAgentDebugInfo: vi.fn(),
+  logModelSettings: vi.fn(),
+  logRunnerStart: vi.fn(),
+  logRunResult: vi.fn(),
+  logGuardrailTriggered: vi.fn(),
+  logRunnerError: vi.fn(),
+  logToolExecution: vi.fn(),
 }
 
 // Store captured Agent config for assertions
-let capturedAgentConfig: any = null
+const capturedAgentConfig = vi.hoisted(() => ({ value: null as any }))
 
 // Mock OpenAI Agent class
-jest.mock('@openai/agents', () => ({
-  Agent: jest.fn((config: Record<string, unknown>) => {
-    capturedAgentConfig = config
+vi.mock('@openai/agents', () => ({
+  Agent: vi.fn(function AgentMock(config: Record<string, unknown>) {
+    capturedAgentConfig.value = config
     return {
       name: config.name,
       instructions: config.instructions,
@@ -41,8 +34,8 @@ jest.mock('@openai/agents', () => ({
   }),
 }))
 
-jest.mock('../src/tools', () => ({
-  createRetrieveKnowledge: jest.fn((sourceIds: string[]) => ({
+vi.mock('../src/tools', () => ({
+  createRetrieveKnowledge: vi.fn((sourceIds: string[]) => ({
     name: 'retrieve_knowledge',
     description: 'Consult the knowledge base for information before answering.',
     sourceIds,
@@ -52,13 +45,13 @@ jest.mock('../src/tools', () => ({
 }))
 
 // Mock constants - can be overridden per test
-const mockConstants = {
+const mockConstants = vi.hoisted(() => ({
   LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure' },
   LLM_PROVIDER: 'azure' as 'openai' | 'azure',
   LLM_OPENAI_MODEL: 'gpt-4.1-mini',
-}
+}))
 
-jest.mock('../src/constants', () => mockConstants)
+vi.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
@@ -86,7 +79,7 @@ const mockLlmConfig = {
     toolChoice: undefined as string | undefined,
   },
   modelProvider: {},
-  getModel: jest.fn(async () => resolvedModel),
+  getModel: vi.fn(async () => resolvedModel),
 } as unknown as LLMConfig
 
 describe('WorkerAgent', () => {
@@ -140,15 +133,15 @@ describe('WorkerAgent', () => {
   const sourceIds: string[] = ['123', '456']
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
-    jest
-      .spyOn(Date.prototype, 'toISOString')
-      .mockReturnValue('2024-01-01T00:00:00.000Z')
+    vi.clearAllMocks()
+    capturedAgentConfig.value = null
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue(
+      '2024-01-01T00:00:00.000Z'
+    )
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   it('should initialize correctly with name, instructions and tools', async () => {
     const worker = await SpecialistAgent.create({
@@ -500,8 +493,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
+      expect(capturedAgentConfig.value).toBeDefined()
+      const outputType = capturedAgentConfig.value.outputType
 
       const validBaseMessage = {
         messages: [{ type: 'text', content: { text: 'Hello' } }],
@@ -542,8 +535,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
+      expect(capturedAgentConfig.value).toBeDefined()
+      const outputType = capturedAgentConfig.value.outputType
 
       const validCustomMessage = {
         messages: [
@@ -590,8 +583,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
+      expect(capturedAgentConfig.value).toBeDefined()
+      const outputType = capturedAgentConfig.value.outputType
 
       const validVideoMessage = {
         messages: [
@@ -639,8 +632,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
+      expect(capturedAgentConfig.value).toBeDefined()
+      const outputType = capturedAgentConfig.value.outputType
 
       const invalidMessage = {
         messages: [
@@ -668,8 +661,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
+      expect(capturedAgentConfig.value).toBeDefined()
+      const outputType = capturedAgentConfig.value.outputType
 
       const testMessages = [
         { messages: [{ type: 'text', content: { text: 'Hello' } }] },
@@ -725,7 +718,7 @@ describe('WorkerAgent', () => {
           hasRetrieveKnowledge: true,
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+      expect(capturedAgentConfig.value.modelSettings.toolChoice).toBe(
         'retrieve_knowledge'
       )
     })
@@ -760,7 +753,7 @@ describe('WorkerAgent', () => {
           hasRetrieveKnowledge: true,
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+      expect(capturedAgentConfig.value.modelSettings.toolChoice).toBe(
         'retrieve_knowledge'
       )
     })
@@ -811,7 +804,7 @@ describe('WorkerAgent', () => {
           toolChoice: 'retrieve_knowledge',
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+      expect(capturedAgentConfig.value.modelSettings.toolChoice).toBeUndefined()
     })
 
     it('should set resolved model for azure provider', async () => {
@@ -829,8 +822,8 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      expect(capturedAgentConfig.model).toBe(resolvedModel)
+      expect(capturedAgentConfig.value).toBeDefined()
+      expect(capturedAgentConfig.value.model).toBe(resolvedModel)
     })
 
     it('should set reasoning and text settings for azure provider (same as openai)', async () => {
@@ -856,7 +849,7 @@ describe('WorkerAgent', () => {
           text: { verbosity: 'medium' },
         })
       )
-      expect(capturedAgentConfig.modelSettings).toMatchObject({
+      expect(capturedAgentConfig.value.modelSettings).toMatchObject({
         reasoning: { effort: 'none' },
         text: { verbosity: 'medium' },
       })
@@ -885,18 +878,18 @@ describe('WorkerAgent - OpenAI Provider', () => {
   ]
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
-    jest
-      .spyOn(Date.prototype, 'toISOString')
-      .mockReturnValue('2024-01-01T00:00:00.000Z')
+    vi.clearAllMocks()
+    capturedAgentConfig.value = null
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue(
+      '2024-01-01T00:00:00.000Z'
+    )
 
     // Set provider to 'openai' for these tests
     mockConstants.LLM_PROVIDER = 'openai'
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     // Reset to default azure provider
     mockConstants.LLM_PROVIDER = 'azure'
   })
@@ -958,8 +951,8 @@ describe('WorkerAgent - OpenAI Provider', () => {
       guardrailTrackingContext: mockGuardrailTrackingContext,
     }).then(agent => agent.getAgent())
 
-    expect(capturedAgentConfig).toBeDefined()
-    expect(capturedAgentConfig.model).toBe(resolvedModel)
+    expect(capturedAgentConfig.value).toBeDefined()
+    expect(capturedAgentConfig.value.model).toBe(resolvedModel)
   })
 
   it('should set toolChoice for gpt-4 models even with openai provider', async () => {
@@ -983,7 +976,7 @@ describe('WorkerAgent - OpenAI Provider', () => {
         hasRetrieveKnowledge: true,
       })
     )
-    expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
+    expect(capturedAgentConfig.value.modelSettings.toolChoice).toBe(
       'retrieve_knowledge'
     )
   })

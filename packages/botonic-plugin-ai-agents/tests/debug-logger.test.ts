@@ -1,11 +1,20 @@
 import { type AiAgentArgs, AiAgentType, VerbosityLevel } from '@botonic/core'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type MockInstance,
+  vi,
+} from 'vitest'
 import { createDebugLogger, type DebugLogger } from '../src/debug-logger'
 
 describe('DebugLogger', () => {
-  let consoleSpy: jest.SpyInstance
+  let consoleSpy: MockInstance
 
   beforeEach(() => {
-    consoleSpy = jest.spyOn(console, 'log').mockImplementation()
+    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined)
   })
 
   afterEach(() => {

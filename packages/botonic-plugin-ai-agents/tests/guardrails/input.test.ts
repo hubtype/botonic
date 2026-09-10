@@ -1,22 +1,20 @@
 // biome-ignore lint/correctness/noUnusedImports: we need to import Runner to mock it
 import { Agent, type RunContext, Runner, type Usage } from '@openai/agents'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import {
-  createInputGuardrails,
-  type GuardrailTrackingContext,
-} from '../../src/guardrails/input'
+import type { GuardrailTrackingContext } from '../../src/guardrails/input'
 import type { LLMConfig } from '../../src/llm-config'
 import type { GuardrailRule } from '../../src/types'
 
-const mockRunnerRun = jest.fn()
-const mockTrackLlmRuns = jest.fn().mockResolvedValue(undefined)
-let capturedAgentConfig: any = null
-let capturedRunnerConfig: any = null
+const mockRunnerRun = vi.hoisted(() => vi.fn())
+const mockTrackLlmRuns = vi.hoisted(() => vi.fn().mockResolvedValue(undefined))
+const capturedAgentConfig = vi.hoisted(() => ({ value: null as any }))
+const capturedRunnerConfig = vi.hoisted(() => ({ value: null as any }))
 
 // Mock OpenAI Agent and Runner
-jest.mock('@openai/agents', () => ({
-  Agent: jest.fn().mockImplementation(config => {
-    capturedAgentConfig = config
+vi.mock('@openai/agents', () => ({
+  Agent: vi.fn().mockImplementation(function AgentMock(config) {
+    capturedAgentConfig.value = config
     return {
       name: config.name,
       instructions: config.instructions,
@@ -25,26 +23,35 @@ jest.mock('@openai/agents', () => ({
       modelSettings: config.modelSettings,
     }
   }),
-  Runner: jest.fn().mockImplementation(config => {
-    capturedRunnerConfig = config
+  Runner: vi.fn().mockImplementation(function RunnerMock(config) {
+    capturedRunnerConfig.value = config
     return {
       run: mockRunnerRun,
     }
   }),
 }))
 
-jest.mock('../../src/services/hubtype-api-client', () => ({
-  HubtypeApiClient: jest.fn().mockImplementation(() => ({
-    trackLlmRuns: mockTrackLlmRuns,
-  })),
+vi.mock('../../src/services/hubtype-api-client', () => ({
+  HubtypeApiClient: vi.fn().mockImplementation(function HubtypeApiClientMock() {
+    return {
+      trackLlmRuns: mockTrackLlmRuns,
+    }
+  }),
 }))
 
-jest.mock('../../src/constants', () => ({
+const mockConstants = vi.hoisted(() => ({
   isProd: false,
   OPENAI_PROVIDER: 'azure',
   AZURE_OPENAI_API_VERSION: '2025-01-01-preview',
   LLM_PROVIDERS: { AZURE: 'azure', OPENAI: 'openai', LITELLM: 'litellm' },
 }))
+
+let createInputGuardrails: typeof import('../../src/guardrails/input').createInputGuardrails
+async function loadGuardrails(isProd: boolean) {
+  vi.resetModules()
+  vi.doMock('../../src/constants', () => ({ ...mockConstants, isProd }))
+  ;({ createInputGuardrails } = await import('../../src/guardrails/input'))
+}
 
 describe('createInputGuardrails', () => {
   const mockRules: GuardrailRule[] = [
@@ -66,7 +73,7 @@ describe('createInputGuardrails', () => {
     inputTokensDetails: [] as Record<string, number>[],
     outputTokensDetails: [] as Record<string, number>[],
     requestUsageEntries: undefined,
-    add: jest.fn(),
+    add: vi.fn(),
   }
 
   const mockRunContext = {
@@ -93,9 +100,9 @@ describe('createInputGuardrails', () => {
       toolChoice: 'retrieve_knowledge',
     },
     modelProvider: {},
-    getModel: jest.fn().mockResolvedValue({ id: 'guardrail-model' }),
-    getApiVersion: jest.fn().mockReturnValue('test-api-version'),
-    getProviderName: jest.fn().mockReturnValue('azure'),
+    getModel: vi.fn().mockResolvedValue({ id: 'guardrail-model' }),
+    getApiVersion: vi.fn().mockReturnValue('test-api-version'),
+    getProviderName: vi.fn().mockReturnValue('azure'),
   } as unknown as LLMConfig
 
   const mockTrackingContext: GuardrailTrackingContext = {
@@ -105,11 +112,11 @@ describe('createInputGuardrails', () => {
     inferenceId: 'test-inference-id',
   }
 
-  beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
-    capturedRunnerConfig = null
-    jest.requireMock('../../src/constants').isProd = false
+  beforeEach(async () => {
+    vi.clearAllMocks()
+    capturedAgentConfig.value = null
+    capturedRunnerConfig.value = null
+    await loadGuardrails(false)
   })
 
   it('should create a guardrail with the correct configuration', async () => {
@@ -129,7 +136,7 @@ describe('createInputGuardrails', () => {
         outputType: expect.any(Object),
       })
     )
-    expect(capturedAgentConfig.modelSettings).toMatchObject({
+    expect(capturedAgentConfig.value.modelSettings).toMatchObject({
       temperature: 0,
       text: { verbosity: 'medium' },
       toolChoice: undefined,
@@ -186,9 +193,9 @@ describe('createInputGuardrails', () => {
       ],
       { context: mockRunContext }
     )
-    expect(capturedRunnerConfig).toEqual({ tracingDisabled: true })
-    expect(capturedRunnerConfig).not.toHaveProperty('modelSettings')
-    expect(capturedRunnerConfig).not.toHaveProperty('modelProvider')
+    expect(capturedRunnerConfig.value).toEqual({ tracingDisabled: true })
+    expect(capturedRunnerConfig.value).not.toHaveProperty('modelSettings')
+    expect(capturedRunnerConfig.value).not.toHaveProperty('modelProvider')
   })
 
   it('should return no triggered guardrails when no rules are violated', async () => {
@@ -248,7 +255,7 @@ describe('createInputGuardrails', () => {
   })
 
   it('should call trackLlmRuns after guardrail execution in production', async () => {
-    jest.requireMock('../../src/constants').isProd = true
+    await loadGuardrails(true)
     const mockAgentOutput = {
       finalOutput: { is_offensive: false, is_spam: false },
       rawResponses: [
