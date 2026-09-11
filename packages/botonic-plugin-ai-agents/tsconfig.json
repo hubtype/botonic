@@ -6,6 +6,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler"
   },
-  "include": ["src/"],
+  "include": ["src/**/*.ts", "vitest.config.ts"],
   "exclude": ["lib"]
 }

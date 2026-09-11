@@ -1,9 +1,9 @@
-import type { RequestContactInfoMessage } from '@botonic/core'
 import {
   INPUT,
   OutputMessageType,
   PROVIDER,
   WhatsappInputOrigin,
+  type RequestContactInfoMessage,
 } from '@botonic/core'
 import TestRenderer from 'react-test-renderer'
 import { describe, expect, test } from 'vitest'
