@@ -8,6 +8,13 @@
     "module": "ESNext",
     "moduleResolution": "Bundler"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx", "vitest.setup.js", "vitest.config.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "vitest.setup.js",
+    "vitest.config.ts"
+  ],
   "exclude": ["tests/**/*", "lib"]
 }
