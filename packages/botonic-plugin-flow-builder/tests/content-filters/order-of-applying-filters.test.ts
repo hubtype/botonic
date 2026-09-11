@@ -1,5 +1,5 @@
 import { INPUT, type InferenceResponse, OutputMessageType } from '@botonic/core'
-import { describe, jest, test } from '@jest/globals'
+import { describe, test, vi } from 'vitest'
 
 import { FlowAiAgent, FlowText } from '../../src/content-fields/index'
 import { type ContentFilter, ProcessEnvNodeEnvs } from '../../src/types'
@@ -12,7 +12,7 @@ import { aiAgentTestFlow } from '../helpers/flows/ai-agent'
 import { basicFlow } from '../helpers/flows/basic'
 import { createFlowBuilderPluginAndGetContents } from '../helpers/utils'
 
-const removeButtonFilter = jest.fn<ContentFilter>((_request, content) => {
+const removeButtonFilter = vi.fn<ContentFilter>((_request, content) => {
   if (content instanceof FlowText) {
     content.buttons = content.buttons.filter(
       button => button.text !== 'Talk to an agent'
@@ -65,7 +65,7 @@ describe('For an AiAgent content, the filter should be applied first, followed b
   })
 
   test('should be filtered and and then create jsx elements', async () => {
-    const messagesToBotonicJSXElementsSpy = jest.spyOn(
+    const messagesToBotonicJSXElementsSpy = vi.spyOn(
       FlowAiAgent.prototype,
       'messagesToBotonicJSXElements'
     )

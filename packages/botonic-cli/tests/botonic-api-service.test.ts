@@ -3,8 +3,8 @@
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { jest } from '@jest/globals'
 import axios from 'axios'
+import { vi } from 'vitest'
 
 import { BotonicAPIService } from '../src/botonic-api-service.js'
 import type { BotDetail, Me, OAuth } from '../src/interfaces.js'
@@ -54,35 +54,42 @@ describe('TEST: BotonicApiService', () => {
 
   beforeEach(() => {
     credentialsDirectory = mkdtempSync(join(tmpdir(), 'botonic-api-test-'))
-    jest
-      .spyOn(GlobalCredentialsHandler.prototype, 'initialize')
-      .mockImplementation(function (this: GlobalCredentialsHandler) {
-        this.homeDir = credentialsDirectory
-        this.pathToCredentials = join(credentialsDirectory, 'credentials.json')
-      })
+    vi.spyOn(
+      GlobalCredentialsHandler.prototype,
+      'initialize'
+    ).mockImplementation(function (this: GlobalCredentialsHandler) {
+      this.homeDir = credentialsDirectory
+      this.pathToCredentials = join(credentialsDirectory, 'credentials.json')
+    })
     // Mock reads/writes; logout uses real deletion in the temporary directory.
-    jest
-      .spyOn(GlobalCredentialsHandler.prototype, 'load')
-      .mockReturnValue(undefined)
-    jest
-      .spyOn(BotCredentialsHandler.prototype, 'load')
-      .mockReturnValue(undefined)
-    jest
-      .spyOn(GlobalCredentialsHandler.prototype, 'dump')
-      .mockImplementation(() => {})
-    jest
-      .spyOn(BotCredentialsHandler.prototype, 'dump')
-      .mockImplementation(() => {})
-    jest
-      .spyOn(GlobalCredentialsHandler.prototype, 'createDirIfNotExists')
-      .mockImplementation(() => {})
-    jest
-      .spyOn(BotCredentialsHandler.prototype, 'createDirIfNotExists')
-      .mockImplementation(() => {})
+    vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue(
+      undefined
+    )
+    vi.spyOn(BotCredentialsHandler.prototype, 'load').mockReturnValue(undefined)
+    vi.spyOn(GlobalCredentialsHandler.prototype, 'dump').mockImplementation(
+      () => {
+        return
+      }
+    )
+    vi.spyOn(BotCredentialsHandler.prototype, 'dump').mockImplementation(() => {
+      return
+    })
+    vi.spyOn(
+      GlobalCredentialsHandler.prototype,
+      'createDirIfNotExists'
+    ).mockImplementation(() => {
+      return
+    })
+    vi.spyOn(
+      BotCredentialsHandler.prototype,
+      'createDirIfNotExists'
+    ).mockImplementation(() => {
+      return
+    })
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     rmSync(credentialsDirectory, { recursive: true, force: true })
   })
 
@@ -97,7 +104,7 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should load existing global credentials', () => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -109,9 +116,9 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should load existing bot credentials', () => {
-      jest
-        .spyOn(BotCredentialsHandler.prototype, 'load')
-        .mockReturnValue({ bot: mockBot })
+      vi.spyOn(BotCredentialsHandler.prototype, 'load').mockReturnValue({
+        bot: mockBot,
+      })
 
       service = new BotonicAPIService()
 
@@ -119,7 +126,7 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should set headers with access token', () => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -134,9 +141,9 @@ describe('TEST: BotonicApiService', () => {
 
   describe('botInfo', () => {
     beforeEach(() => {
-      jest
-        .spyOn(BotCredentialsHandler.prototype, 'load')
-        .mockReturnValue({ bot: mockBot })
+      vi.spyOn(BotCredentialsHandler.prototype, 'load').mockReturnValue({
+        bot: mockBot,
+      })
       service = new BotonicAPIService()
     })
 
@@ -153,7 +160,7 @@ describe('TEST: BotonicApiService', () => {
 
   describe('getOauth', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -177,9 +184,9 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should save global and bot credentials', () => {
-      const globalDumpSpy = jest.spyOn(service.globalCredentialsHandler, 'dump')
-      const botDumpSpy = jest.spyOn(service.botCredentialsHandler, 'dump')
-      const createDirSpy = jest.spyOn(
+      const globalDumpSpy = vi.spyOn(service.globalCredentialsHandler, 'dump')
+      const botDumpSpy = vi.spyOn(service.botCredentialsHandler, 'dump')
+      const createDirSpy = vi.spyOn(
         service.globalCredentialsHandler,
         'createDirIfNotExists'
       )
@@ -207,22 +214,20 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should login successfully and set credentials', async () => {
-      const postSpy = jest.spyOn(axios, 'post').mockResolvedValueOnce({
+      const postSpy = vi.spyOn(axios, 'post').mockResolvedValueOnce({
         data: mockOAuth,
         status: 200,
         statusText: 'OK',
         headers: {},
         config: {} as any,
       })
-      const _getSpy = jest
-        .spyOn(service.apiClient, 'get')
-        .mockResolvedValueOnce({
-          data: mockMe,
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {} as any,
-        })
+      const _getSpy = vi.spyOn(service.apiClient, 'get').mockResolvedValueOnce({
+        data: mockMe,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {} as any,
+      })
 
       await service.login('test@example.com', 'password123')
 
@@ -247,7 +252,7 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should call signup endpoint with correct data', async () => {
-      const postSpy = jest
+      const postSpy = vi
         .spyOn(service.apiClient, 'post')
         .mockResolvedValueOnce({
           data: { success: true },
@@ -276,7 +281,7 @@ describe('TEST: BotonicApiService', () => {
 
   describe('createBot', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -284,7 +289,7 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should create a new bot and set it as current', async () => {
-      const postSpy = jest
+      const postSpy = vi
         .spyOn(service.apiClient, 'post')
         .mockResolvedValueOnce({
           data: mockBot,
@@ -308,7 +313,7 @@ describe('TEST: BotonicApiService', () => {
 
   describe('getBots', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -331,7 +336,7 @@ describe('TEST: BotonicApiService', () => {
         headers: {},
         config: {} as any,
       }
-      const getSpy = jest
+      const getSpy = vi
         .spyOn(service.apiClient, 'get')
         .mockResolvedValueOnce(mockResponse)
 
@@ -373,7 +378,7 @@ describe('TEST: BotonicApiService', () => {
         config: {} as any,
       }
 
-      const getSpy = jest
+      const getSpy = vi
         .spyOn(service.apiClient, 'get')
         .mockResolvedValueOnce(firstPageResponse)
         .mockResolvedValueOnce(secondPageResponse)
@@ -398,7 +403,7 @@ describe('TEST: BotonicApiService', () => {
 
   describe('logout', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -423,13 +428,13 @@ describe('TEST: BotonicApiService', () => {
 
   describe('getProviders', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
-      jest
-        .spyOn(BotCredentialsHandler.prototype, 'load')
-        .mockReturnValue({ bot: mockBot })
+      vi.spyOn(BotCredentialsHandler.prototype, 'load').mockReturnValue({
+        bot: mockBot,
+      })
       service = new BotonicAPIService()
     })
 
@@ -438,15 +443,13 @@ describe('TEST: BotonicApiService', () => {
         { id: 'provider-1', name: 'Provider 1' },
         { id: 'provider-2', name: 'Provider 2' },
       ]
-      const getSpy = jest
-        .spyOn(service.apiClient, 'get')
-        .mockResolvedValueOnce({
-          data: mockProviders,
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {} as any,
-        })
+      const getSpy = vi.spyOn(service.apiClient, 'get').mockResolvedValueOnce({
+        data: mockProviders,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {} as any,
+      })
 
       await service.getProviders()
 
@@ -461,27 +464,25 @@ describe('TEST: BotonicApiService', () => {
 
   describe('deployStatus', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
-      jest
-        .spyOn(BotCredentialsHandler.prototype, 'load')
-        .mockReturnValue({ bot: mockBot })
+      vi.spyOn(BotCredentialsHandler.prototype, 'load').mockReturnValue({
+        bot: mockBot,
+      })
       service = new BotonicAPIService()
     })
 
     it('should get deploy status', async () => {
       const mockDeployStatus = { status: 'completed', deploy_id: 'deploy-123' }
-      const getSpy = jest
-        .spyOn(service.apiClient, 'get')
-        .mockResolvedValueOnce({
-          data: mockDeployStatus,
-          status: 200,
-          statusText: 'OK',
-          headers: {},
-          config: {} as any,
-        })
+      const getSpy = vi.spyOn(service.apiClient, 'get').mockResolvedValueOnce({
+        data: mockDeployStatus,
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {} as any,
+      })
 
       await service.deployStatus('deploy-123')
 
@@ -496,7 +497,7 @@ describe('TEST: BotonicApiService', () => {
 
   describe('refreshToken', () => {
     beforeEach(() => {
-      jest.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
+      vi.spyOn(GlobalCredentialsHandler.prototype, 'load').mockReturnValue({
         oauth: mockOAuth,
         me: mockMe,
       })
@@ -505,14 +506,14 @@ describe('TEST: BotonicApiService', () => {
 
     it('should refresh token successfully', async () => {
       const newOAuth = { ...mockOAuth, access_token: 'new-access-token' }
-      const postSpy = jest.spyOn(axios, 'post').mockResolvedValueOnce({
+      const postSpy = vi.spyOn(axios, 'post').mockResolvedValueOnce({
         status: 200,
         data: newOAuth,
         statusText: 'OK',
         headers: {},
         config: {} as any,
       })
-      const dumpSpy = jest.spyOn(service.globalCredentialsHandler, 'dump')
+      const dumpSpy = vi.spyOn(service.globalCredentialsHandler, 'dump')
 
       // Access private method through any
       await (service as any).refreshToken()
@@ -532,7 +533,7 @@ describe('TEST: BotonicApiService', () => {
     })
 
     it('should throw error when refresh fails', async () => {
-      jest.spyOn(axios, 'post').mockResolvedValueOnce({
+      vi.spyOn(axios, 'post').mockResolvedValueOnce({
         status: 401,
         data: {},
         statusText: 'Unauthorized',

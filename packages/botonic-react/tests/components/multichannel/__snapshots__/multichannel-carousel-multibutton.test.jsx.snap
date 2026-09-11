@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just text in button) with payload/path buttons N Buttons 1`] = `
+exports[`Multichannel carousel COMPACT mode N Buttons > dynamic carousel (just text in button) with payload/path buttons N Buttons 1`] = `
 [
   <message
     delay={0}
@@ -57,7 +57,7 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel (just tex
 ]
 `;
 
-exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL and postback buttons N Buttons displaying only postback buttons as whatsapp buttons 1`] = `
+exports[`Multichannel carousel COMPACT mode N Buttons > dynamic carousel with URL and postback buttons N Buttons displaying only postback buttons as whatsapp buttons 1`] = `
 [
   <message
     delay={0}
@@ -142,7 +142,7 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with URL 
 ]
 `;
 
-exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payload/path buttons N Buttons 1`] = `
+exports[`Multichannel carousel COMPACT mode N Buttons > dynamic carousel with payload/path buttons N Buttons 1`] = `
 [
   <message
     delay={0}
@@ -199,7 +199,7 @@ exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with payl
 ]
 `;
 
-exports[`Multichannel carousel COMPACT mode N Buttons dynamic carousel with url buttons 1`] = `
+exports[`Multichannel carousel COMPACT mode N Buttons > dynamic carousel with url buttons 1`] = `
 [
   <message
     delay={0}

@@ -13,8 +13,8 @@
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/",
-    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage",
-    "test_ci": "node --experimental-vm-modules --no-warnings=ExperimentalWarning ../../node_modules/.bin/jest --coverage --ci --reporters=default --reporters=jest-junit",
+    "test": "vitest run --coverage",
+    "test_ci": "vitest run --coverage",
     "version": "oclif readme && git add README.md",
     "build:watch": "rslib build --watch --no-env"
   },
@@ -34,11 +34,9 @@
   "devDependencies": {
     "@oclif/test": "^4.1.18",
     "@types/fs-extra": "^11.0.4",
-    "@types/jest": "^29.5.14",
     "@types/node": "^22.0.0",
     "oclif": "^4.23.0",
     "shx": "^0.4.0",
-    "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2"
   },
   "engines": {

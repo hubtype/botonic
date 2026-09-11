@@ -1,6 +1,6 @@
 /**
- * @jest-environment jsdom
- * @jest-environment-options {"url": "https://jestjs.io/"}
+ * @vitest-environment jsdom
+ * @vitest-environment-options {"url": "https://jestjs.io/"}
  */
 
 import { act, screen } from '@testing-library/react'

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CustomMessage replies TEST: replies are moved outside the custom component Button 1`] = `
+exports[`CustomMessage replies > TEST: replies are moved outside the custom component Button 1`] = `
 <message
   delay={0}
   json="{"children":{"key":null,"ref":null,"props":{"payload":"payloadundefined","children":["button",null]},"_owner":null,"_store":{}},"customTypeName":"test1"}"
@@ -23,7 +23,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 </message>
 `;
 
-exports[`CustomMessage replies TEST: replies are moved outside the custom component Button,Button 1`] = `
+exports[`CustomMessage replies > TEST: replies are moved outside the custom component Button,Button 1`] = `
 <message
   delay={0}
   json="{"children":[{"key":".$1","ref":null,"props":{"payload":"payload1","children":["button",1]},"_owner":null,"_store":{}},{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
@@ -53,7 +53,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 </message>
 `;
 
-exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply 1`] = `
+exports[`CustomMessage replies > TEST: replies are moved outside the custom component Reply 1`] = `
 <message
   delay={0}
   json="{"children":[],"customTypeName":"test1"}"
@@ -75,7 +75,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 </message>
 `;
 
-exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Button 1`] = `
+exports[`CustomMessage replies > TEST: replies are moved outside the custom component Reply,Button 1`] = `
 <message
   delay={0}
   json="{"children":[{"key":".$2","ref":null,"props":{"payload":"payload2","children":["button",2]},"_owner":null,"_store":{}}],"customTypeName":"test1"}"
@@ -105,7 +105,7 @@ exports[`CustomMessage replies TEST: replies are moved outside the custom compon
 </message>
 `;
 
-exports[`CustomMessage replies TEST: replies are moved outside the custom component Reply,Reply 1`] = `
+exports[`CustomMessage replies > TEST: replies are moved outside the custom component Reply,Reply 1`] = `
 <message
   delay={0}
   json="{"children":[],"customTypeName":"test1"}"
