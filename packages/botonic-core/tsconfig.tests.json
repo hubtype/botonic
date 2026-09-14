@@ -1,12 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "declaration": false,
     "noEmit": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["jest", "node"]
+    "types": ["vitest/globals", "node"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["lib", "node_modules"]

@@ -1,5 +1,5 @@
-import { expect, test } from '@jest/globals'
 import TestRenderer from 'react-test-renderer'
+import { expect, test, vi } from 'vitest'
 
 import { WhatsappButtonList } from '../../src/components/whatsapp-button-list'
 
@@ -88,7 +88,7 @@ test('renders WhatsappButtonList component with truncated contents', () => {
 })
 
 test('renders WhatsappButtonList component but shows console.error due to long IDs', () => {
-  console.error = jest.fn()
+  console.error = vi.fn()
 
   const props = {
     body: 'This is the body',

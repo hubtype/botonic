@@ -1,9 +1,11 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 /* eslint-disable @typescript-eslint/naming-convention */
+
 import { EventAction } from '@botonic/core'
 import { render, renderHook } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { GuardrailList } from '../../src/components/system-debug-trace/events/components/guardrail-item'
 import { SourcesSection } from '../../src/components/system-debug-trace/events/components/sources-section'
@@ -90,7 +92,7 @@ describe('System Debug Trace - Utility Components', () => {
         },
       ]
 
-      const mockIcon = jest.fn(() => <span>Icon</span>)
+      const mockIcon = vi.fn(() => <span>Icon</span>)
 
       const { container } = render(
         <SourcesSection
@@ -125,7 +127,7 @@ describe('System Debug Trace - Utility Components', () => {
         },
       ]
 
-      const mockIcon = jest.fn(() => <span>Icon</span>)
+      const mockIcon = vi.fn(() => <span>Icon</span>)
 
       const { container } = render(
         <SourcesSection
@@ -196,7 +198,7 @@ describe('System Debug Trace - Utility Components', () => {
         },
       ]
 
-      const mockClickHandler = jest.fn()
+      const mockClickHandler = vi.fn()
 
       render(
         <SourcesSection
@@ -441,12 +443,12 @@ describe('System Debug Trace - Utility Components', () => {
     ]
 
     const createMockWebchatContext = (overrides = {}) => ({
-      updateMessage: jest.fn(),
+      updateMessage: vi.fn(),
       webchatState: {
         messagesJSON: [],
       },
       previewUtils: {
-        getChunkIdsGroupedBySource: jest.fn().mockResolvedValue([]),
+        getChunkIdsGroupedBySource: vi.fn().mockResolvedValue([]),
       },
       ...overrides,
     })
@@ -527,7 +529,7 @@ describe('System Debug Trace - Utility Components', () => {
     })
 
     test('does not fetch when existing data is provided', () => {
-      const mockGetChunks = jest.fn()
+      const mockGetChunks = vi.fn()
       const mockContext = createMockWebchatContext({
         previewUtils: {
           getChunkIdsGroupedBySource: mockGetChunks,

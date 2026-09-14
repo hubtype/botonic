@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Text Component Just one Text 1`] = `
+exports[`Text Component > Just one Text 1`] = `
 <message
   delay={0}
   markdown={1}
@@ -11,7 +11,7 @@ exports[`Text Component Just one Text 1`] = `
 </message>
 `;
 
-exports[`Text Component N Text with N button 1`] = `
+exports[`Text Component > N Text with N button 1`] = `
 [
   <message
     delay={0}
@@ -46,7 +46,7 @@ exports[`Text Component N Text with N button 1`] = `
 ]
 `;
 
-exports[`Text Component N Text with N replies 1`] = `
+exports[`Text Component > N Text with N replies 1`] = `
 [
   <message
     delay={0}
@@ -81,7 +81,7 @@ exports[`Text Component N Text with N replies 1`] = `
 ]
 `;
 
-exports[`Text Component Text with <BR>: markdown disabled 1`] = `
+exports[`Text Component > Text with <BR>: markdown disabled 1`] = `
 <message
   delay={0}
   markdown={0}
@@ -94,7 +94,7 @@ exports[`Text Component Text with <BR>: markdown disabled 1`] = `
 </message>
 `;
 
-exports[`Text Component Text with <BR>: markdown enabled 1`] = `
+exports[`Text Component > Text with <BR>: markdown enabled 1`] = `
 <message
   delay={0}
   markdown={1}
@@ -107,7 +107,7 @@ exports[`Text Component Text with <BR>: markdown enabled 1`] = `
 </message>
 `;
 
-exports[`Text Component Text with 1 button 1`] = `
+exports[`Text Component > Text with 1 button 1`] = `
 <message
   delay={0}
   markdown={1}
@@ -123,7 +123,7 @@ exports[`Text Component Text with 1 button 1`] = `
 </message>
 `;
 
-exports[`Text Component Text with 1 reply 1`] = `
+exports[`Text Component > Text with 1 reply 1`] = `
 <message
   delay={0}
   markdown={1}
@@ -139,7 +139,7 @@ exports[`Text Component Text with 1 reply 1`] = `
 </message>
 `;
 
-exports[`Text Component Text with N button 1`] = `
+exports[`Text Component > Text with N button 1`] = `
 <message
   delay={0}
   markdown={1}
@@ -160,7 +160,7 @@ exports[`Text Component Text with N button 1`] = `
 </message>
 `;
 
-exports[`Text Component Text with N replies 1`] = `
+exports[`Text Component > Text with N replies 1`] = `
 <message
   delay={0}
   markdown={1}

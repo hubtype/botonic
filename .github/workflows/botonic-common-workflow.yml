@@ -56,11 +56,11 @@ jobs:
         run: npm ci
 
       - name: Build
-        if: ${{ inputs.BUILD_COMMAND != "" }}
+        if: ${{ inputs.BUILD_COMMAND != '' }}
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.BUILD_COMMAND }})
 
       - name: Run tests
-        if: ${{ inputs.UNIT_TEST_COMMAND != "" && always() }}
+        if: ${{ inputs.UNIT_TEST_COMMAND != '' && always() }}
         run: (cd ./packages/${{ inputs.PACKAGE }} && ${{ inputs.UNIT_TEST_COMMAND }})
 
       - name: Verify lint

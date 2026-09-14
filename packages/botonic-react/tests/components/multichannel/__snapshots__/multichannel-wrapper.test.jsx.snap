@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Multichannel wrapper 1 text in 1 single message 1`] = `
+exports[`Multichannel wrapper > 1 text in 1 single message 1`] = `
 <message
   delay={0}
   markdown={0}
@@ -11,7 +11,7 @@ exports[`Multichannel wrapper 1 text in 1 single message 1`] = `
 </message>
 `;
 
-exports[`Multichannel wrapper 2 text in 1 single message 1`] = `
+exports[`Multichannel wrapper > 2 text in 1 single message 1`] = `
 <message
   delay={0}
   markdown={0}
@@ -24,7 +24,7 @@ Text2
 </message>
 `;
 
-exports[`Multichannel wrapper 2 texts with buttons 1`] = `
+exports[`Multichannel wrapper > 2 texts with buttons 1`] = `
 <message
   delay={0}
   markdown={0}
@@ -41,7 +41,7 @@ Button 2
 </message>
 `;
 
-exports[`Multichannel wrapper just text 1`] = `
+exports[`Multichannel wrapper > just text 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -53,7 +53,7 @@ exports[`Multichannel wrapper just text 1`] = `
 </message>
 `;
 
-exports[`Multichannel wrapper many multichannels 1`] = `
+exports[`Multichannel wrapper > many multichannels 1`] = `
 [
   <message
     delay={0}
@@ -97,7 +97,7 @@ exports[`Multichannel wrapper many multichannels 1`] = `
 ]
 `;
 
-exports[`Multichannel wrapper text and carousel legacy 1`] = `
+exports[`Multichannel wrapper > text and carousel legacy 1`] = `
 [
   <message
     delay={0}
@@ -176,7 +176,7 @@ exports[`Multichannel wrapper text and carousel legacy 1`] = `
 ]
 `;
 
-exports[`Multichannel wrapper text and carousel only show button text, 1 single message 1`] = `
+exports[`Multichannel wrapper > text and carousel only show button text, 1 single message 1`] = `
 <message
   delay={0}
   markdown={0}
@@ -213,7 +213,7 @@ exports[`Multichannel wrapper text and carousel only show button text, 1 single 
 </message>
 `;
 
-exports[`Multichannel wrapper text with buttons 1`] = `
+exports[`Multichannel wrapper > text with buttons 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -231,7 +231,7 @@ exports[`Multichannel wrapper text with buttons 1`] = `
 </message>
 `;
 
-exports[`Multichannel wrapper text with replies 1`] = `
+exports[`Multichannel wrapper > text with replies 1`] = `
 <message
   delay={0}
   indexMode="number"

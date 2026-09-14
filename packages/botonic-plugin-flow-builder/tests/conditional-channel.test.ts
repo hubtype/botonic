@@ -1,5 +1,5 @@
 import { INPUT, PROVIDER, type ProviderType } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import {
   FlowChannelConditional,

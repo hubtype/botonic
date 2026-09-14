@@ -1,13 +1,14 @@
-import { jest } from '@jest/globals'
+import type { MockInstance } from 'vitest'
+import { vi } from 'vitest'
 
 import { SmartIntentsApi } from '../../src/user-input/smart-intent'
 
-export let smartIntentInferenceSpy: jest.SpiedFunction<
+export let smartIntentInferenceSpy: MockInstance<
   (inferenceParams: unknown) => Promise<unknown>
 >
 
 export function mockSmartIntent(intentName?: string) {
-  smartIntentInferenceSpy = jest.spyOn(
+  smartIntentInferenceSpy = vi.spyOn(
     SmartIntentsApi.prototype as any,
     'getInference'
   )

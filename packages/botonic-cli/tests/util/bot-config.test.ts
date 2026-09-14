@@ -1,17 +1,17 @@
-import { jest } from '@jest/globals'
+import { vi } from 'vitest'
 import { BotConfig } from '../../src/util/bot-config.js'
 
 describe('BotConfig.loadBotConfig', () => {
   let botConfig: BotConfig
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     botConfig = new BotConfig()
-    jest.spyOn(botConfig as any, 'deleteBotConfig').mockResolvedValue(undefined)
+    vi.spyOn(botConfig as any, 'deleteBotConfig').mockResolvedValue(undefined)
   })
 
   it('returns variables: [] when bot config has no variables field', async () => {
-    jest.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
+    vi.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
       tools: [],
       payloads: [],
       webviews: [],
@@ -23,7 +23,7 @@ describe('BotConfig.loadBotConfig', () => {
   })
 
   it('returns variables: [] when bot config has variables: undefined', async () => {
-    jest.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
+    vi.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
       tools: [],
       payloads: [],
       webviews: [],
@@ -44,7 +44,7 @@ describe('BotConfig.loadBotConfig', () => {
       },
       { key_path: 'session.user.extra_data.score', type: 'number' as const },
     ]
-    jest.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
+    vi.spyOn(botConfig as any, 'getBotConfig').mockResolvedValue({
       tools: [],
       payloads: [],
       webviews: [],
@@ -66,9 +66,9 @@ describe('BotConfig.loadBotConfig', () => {
   })
 
   it('returns variables: [] when loadBotConfig throws', async () => {
-    jest
-      .spyOn(botConfig as any, 'getBotConfig')
-      .mockRejectedValue(new Error('dist/bot-config.js not found'))
+    vi.spyOn(botConfig as any, 'getBotConfig').mockRejectedValue(
+      new Error('dist/bot-config.js not found')
+    )
 
     const result = await botConfig.loadBotConfig('/any')
 

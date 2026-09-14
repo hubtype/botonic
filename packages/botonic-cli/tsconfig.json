@@ -12,7 +12,13 @@
     "composite": false,
     "noEmit": true
   },
-  "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
+  "include": [
+    "./src/**/*",
+    "./src/types/**/*",
+    "./tests/**/*",
+    "./vitest.setup.ts",
+    "./vitest.config.ts"
+  ],
   "exclude": ["templates", "dist", "lib"],
   "ts-node": {
     "esm": true

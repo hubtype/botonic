@@ -1,8 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 // biome-ignore assist/source/organizeImports: organize imports
+import { vi } from 'vitest'
 import { isURL, staticAsset } from '../src/util/environment'
 import { toSnakeCaseKeys } from '../src/util/functional'
 import { deserializeRegex, stringifyWithRegexs } from '../src/util/regexs'
@@ -33,10 +34,10 @@ describe('Regex serialization / deserialization', () => {
   })
 })
 
-jest.mock('../src/util/environment', () => ({
-  ...jest.requireActual('../src/util/environment'),
-  isURL: jest.fn(),
-  normalize: jest.fn(),
+vi.mock('../src/util/environment', async importOriginal => ({
+  ...(await importOriginal()),
+  isURL: vi.fn(),
+  normalize: vi.fn(),
 }))
 
 const createScript = src => {
@@ -52,7 +53,7 @@ const removeScript = script => {
 
 describe('staticAsset function', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('should return the path if it is a URL', () => {
@@ -107,7 +108,7 @@ describe('staticAsset function', () => {
     //arrange
     isURL.mockReturnValue(false)
 
-    const consoleErrorSpy = jest
+    const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {
         return

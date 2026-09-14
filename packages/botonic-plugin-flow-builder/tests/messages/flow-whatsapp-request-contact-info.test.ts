@@ -1,7 +1,11 @@
-import type { RequestContactInfoMessage } from '@botonic/core'
-import { INPUT, OutputMessageType, PROVIDER } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import {
+  INPUT,
+  OutputMessageType,
+  PROVIDER,
+  type RequestContactInfoMessage,
+} from '@botonic/core'
 import TestRenderer from 'react-test-renderer'
+import { describe, expect, test } from 'vitest'
 
 import { FlowWhatsappRequestContactInfoNode } from '../../src/content-fields/flow-whatsapp-request-contact-info'
 import { ProcessEnvNodeEnvs } from '../../src/types'
