@@ -5,6 +5,7 @@ import {
   PROVIDER,
   type ResolvedPlugins,
   type Session,
+  WhatsappInputOrigin,
 } from '@botonic/core'
 import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
@@ -105,6 +106,8 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request: this.currentRequest,
     })
 
+    this.resolveWhatsappContactRequestPayload(request)
+
     const checkUserTextInput =
       inputHasTextOrTranscript(request.input) && !request.input.payload
 
@@ -120,6 +123,28 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     await this.updateRequestBeforeRoutes(request)
+  }
+
+  private resolveWhatsappContactRequestPayload(
+    request: PluginPreRequest
+  ): void {
+    if (
+      request.input.type !== INPUT.CONTACT ||
+      request.input.origin !== WhatsappInputOrigin.ContactRequest
+    ) {
+      return
+    }
+
+    const whatsappRequestContactInfoNode =
+      this.cmsApi.getWhatsappRequestContactInfoNode()
+
+    if (whatsappRequestContactInfoNode) {
+      request.input.payload = this.cmsApi.getPayload(
+        whatsappRequestContactInfoNode.content.button.target
+      )
+    }
+
+    this.cmsApi.removeWhatsappRequestContactId()
   }
 
   private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
