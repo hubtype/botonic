@@ -1,4 +1,9 @@
-import { type BotContext, INPUT } from '@botonic/core'
+import {
+  type BotContext,
+  INPUT,
+  type Input,
+  WhatsappInputOrigin,
+} from '@botonic/core'
 import { EMPTY_PAYLOAD } from '../constants'
 import type { FlowContent } from '../content-fields'
 import { inputHasTextOrTranscript } from '../utils/input'
@@ -35,7 +40,10 @@ export async function getContents(
     return await getContentsByFallback(context)
   }
 
-  if (inputHasTextOrTranscript(botContext.input)) {
+  if (
+    inputHasTextOrTranscript(botContext.input) ||
+    isContactRequested(botContext.input)
+  ) {
     const aiAgentContents = await getContentsByAiAgentFromUserInput(context)
     if (aiAgentContents.length > 0) {
       return aiAgentContents
@@ -43,4 +51,11 @@ export async function getContents(
   }
 
   return await getContentsByFallback(context)
+}
+
+function isContactRequested(input: Input) {
+  return (
+    input.type === INPUT.CONTACT &&
+    input.origin === WhatsappInputOrigin.ContactRequest
+  )
 }

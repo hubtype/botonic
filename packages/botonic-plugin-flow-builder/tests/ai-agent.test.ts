@@ -1,4 +1,10 @@
-import { INPUT, type InferenceResponse, OutputMessageType } from '@botonic/core'
+import {
+  INPUT,
+  type InferenceResponse,
+  OutputMessageType,
+  PROVIDER,
+  WhatsappInputOrigin,
+} from '@botonic/core'
 import { describe, test } from '@jest/globals'
 
 import type { FlowAiAgent, FlowText } from '../src'
@@ -190,6 +196,74 @@ describe('Check the contents returned by the plugin when it use an ai agent', ()
         text: 'Here is the weather forecast for your location.',
       },
     })
+  })
+
+  test('When CONTACT input has contact_request origin, the ai agent responds', async () => {
+    const mockResponse: Partial<InferenceResponse> = {
+      messages: [
+        {
+          type: OutputMessageType.Text,
+          content: {
+            text: 'Thanks for sharing your contact info.',
+          },
+        },
+      ],
+    }
+
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+      },
+      requestArgs: {
+        provider: PROVIDER.WHATSAPP,
+        input: {
+          type: INPUT.CONTACT,
+          origin: WhatsappInputOrigin.ContactRequest,
+          data: '+441234567',
+        },
+      },
+    })
+
+    expect(aiAgentMock).toHaveBeenCalled()
+    const aiAgentContentMessages = (contents[0] as FlowAiAgent).messages
+    expect(aiAgentContentMessages[0]).toEqual({
+      type: 'text',
+      content: {
+        text: 'Thanks for sharing your contact info.',
+      },
+    })
+  })
+
+  test('When CONTACT input does not have contact_request origin, the ai agent is not triggered and fallback is shown', async () => {
+    const aiAgentMock = mockAiAgentResponse({
+      messages: [
+        {
+          type: OutputMessageType.Text,
+          content: { text: 'Ai agent response' },
+        },
+      ],
+    })
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentTestFlow,
+        getAiAgentResponse: aiAgentMock,
+      },
+      requestArgs: {
+        provider: PROVIDER.WHATSAPP,
+        input: {
+          type: INPUT.CONTACT,
+          origin: WhatsappInputOrigin.Other,
+          data: '+441234567',
+        },
+      },
+    })
+
+    expect(aiAgentMock).not.toHaveBeenCalled()
+    expect((contents[0] as FlowText).text).toBe('Fallback')
   })
 
   test('When AUDIO input has no transcript, ai agent is not triggered and fallback is shown', async () => {
