@@ -11,8 +11,10 @@ import {
   FlowAiAgent,
   FlowAiAgentRouter,
   type FlowContent,
+  FlowWhatsappRequestContactInfoNode,
 } from '../content-fields'
 import { splitAiAgentContents } from '../utils/ai-agent'
+import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { getFlowBuilderActionContext } from './context'
 import { getContentsByFirstInteraction } from './first-interaction'
 import { getContents } from './get-contents'
@@ -65,6 +67,11 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
       }
 
       await content.processContent(botContext)
+
+      if (content instanceof FlowWhatsappRequestContactInfoNode) {
+        const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+        flowBuilderPlugin.cmsApi.setWhatsappRequestContactId(content.id)
+      }
     }
 
     return contents

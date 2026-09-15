@@ -135,6 +135,11 @@ export enum NluType {
   SmartIntent = 'smart-intent',
 }
 
+export enum WhatsappInputOrigin {
+  ContactRequest = 'contact_request',
+  Other = 'other',
+}
+
 export interface Input {
   text?: string
   src?: string
@@ -286,6 +291,9 @@ export interface Session<TExtraData = any> {
   }
   capture_user_input?: {
     node_id: string
+  }
+  whatsapp_request_contact?: {
+    id: string
   }
 }
 

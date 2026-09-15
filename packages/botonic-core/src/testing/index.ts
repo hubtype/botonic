@@ -112,6 +112,7 @@ export interface TestSessionOptions {
   shadowing?: boolean
   hubtypeCaseId?: string
   captureUserInputNodeId?: string
+  whatsappRequestContactId?: string
 }
 
 export function createTestSession(
@@ -133,6 +134,9 @@ export function createTestSession(
     capture_user_input: options?.captureUserInputNodeId
       ? { node_id: options.captureUserInputNodeId }
       : undefined,
+    whatsapp_request_contact: options?.whatsappRequestContactId
+      ? { id: options.whatsappRequestContactId }
+      : undefined,
   }
 }
 
@@ -146,6 +150,7 @@ export interface TestInputOptions {
   messageId?: string
   context?: Input['context']
   transcript?: string
+  origin?: string
 }
 
 export function createTestInput(options?: TestInputOptions): Input {
@@ -156,6 +161,7 @@ export function createTestInput(options?: TestInputOptions): Input {
     payload: options?.payload,
     src: options?.src,
     transcript: options?.transcript,
+    origin: options?.origin,
     context: options?.context,
     bot_interaction_id:
       options?.botInteractionId ?? TEST_DEFAULTS.BOT_INTERACTION_ID,
