@@ -110,6 +110,10 @@ export abstract class FlowAiAgentBase extends ContentFieldsBase {
           this.jsxElements.push(content.toBotonic(botContext))
         }
       }
+
+      if (message.type === OutputMessageType.DoNothing) {
+        this.jsxElements.push(<></>)
+      }
     }
     return
   }

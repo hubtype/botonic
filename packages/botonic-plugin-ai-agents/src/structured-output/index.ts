@@ -2,6 +2,7 @@ import type { OutputMessage } from '@botonic/core'
 import { z } from 'zod'
 import { BotExecutorSchema } from './bot-executor'
 import { CarouselSchema } from './carousel'
+import { DoNothingSchema } from './do-nothing'
 import { ExitSchema } from './exit'
 import { RequestContactInfoSchema } from './request-contact-info'
 import { TextSchema } from './text'
@@ -15,6 +16,7 @@ const baseMessageSchemas = [
   TextSchema,
   TextWithButtonsSchema,
   CarouselSchema,
+  DoNothingSchema,
   ExitSchema,
   BotExecutorSchema,
   RequestContactInfoSchema,

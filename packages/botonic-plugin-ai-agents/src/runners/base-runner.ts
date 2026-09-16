@@ -1,7 +1,8 @@
-import type {
-  OutputMessage,
-  ResolvedPlugins,
-  ToolExecution,
+import {
+  type OutputMessage,
+  OutputMessageType,
+  type ResolvedPlugins,
+  type ToolExecution,
 } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
@@ -214,7 +215,13 @@ export abstract class BaseRunner<
     const outputMessages = result.finalOutput?.messages || []
     const hasExit =
       outputMessages.length === 0 ||
-      outputMessages.some(message => message.type === 'exit')
+      outputMessages.some(message => message.type === OutputMessageType.Exit)
+
+    const doNothing =
+      outputMessages.length === 0 ||
+      outputMessages.some(
+        message => message.type === OutputMessageType.DoNothing
+      )
 
     return {
       startingAgentName: '',
@@ -230,6 +237,7 @@ export abstract class BaseRunner<
       exit: hasExit,
       memoryLength,
       error: false,
+      doNothing: doNothing,
       inputGuardrailsTriggered: [],
       outputGuardrailsTriggered: [],
     }
@@ -295,6 +303,7 @@ export abstract class BaseRunner<
         toolsExecuted: [],
         exit: true,
         error: false,
+        doNothing: false,
         inputGuardrailsTriggered: error.result.output.outputInfo,
         outputGuardrailsTriggered: [],
       }

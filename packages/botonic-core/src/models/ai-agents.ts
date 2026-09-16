@@ -6,6 +6,7 @@ export enum OutputMessageType {
   BotExecutor = 'botExecutor',
   Carousel = 'carousel',
   RequestContactInfo = 'requestContactInfo',
+  DoNothing = 'doNothing',
   Exit = 'exit',
 }
 
@@ -69,6 +70,10 @@ export interface RequestContactInfoMessage extends BaseMessage {
   }
 }
 
+export interface DoNothingMessage extends BaseMessage {
+  type: OutputMessageType.DoNothing
+}
+
 export interface ExitMessage extends BaseMessage {
   type: OutputMessageType.Exit
 }
@@ -79,6 +84,7 @@ export type OutputMessage<Extra extends BaseMessage<string> = never> =
   | BotExecutorMessage
   | CarouselMessage
   | RequestContactInfoMessage
+  | DoNothingMessage
   | ExitMessage
   | Extra
 
@@ -104,6 +110,7 @@ export interface RunResult<Extra extends BaseMessage<string> = never> {
   memoryLength: number
   exit: boolean
   error: boolean
+  doNothing: boolean
   inputGuardrailsTriggered: string[]
   outputGuardrailsTriggered: string[]
   startingAgentName: string
