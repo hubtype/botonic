@@ -30,6 +30,7 @@ export class HtEventAiAgent extends HtEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
+  do_nothing: boolean
 
   constructor(event: EventAiAgent, requestData: RequestData) {
     super(event, requestData)
@@ -50,6 +51,7 @@ export class HtEventAiAgent extends HtEvent {
     this.output_guardrails_triggered = event.outputGuardrailsTriggered
     this.exit = event.exit
     this.error = event.error
+    this.do_nothing = event.doNothing
   }
 
   private truncateToolResults(toolResults?: string): string | undefined {

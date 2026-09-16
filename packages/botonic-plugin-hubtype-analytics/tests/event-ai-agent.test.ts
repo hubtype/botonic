@@ -33,6 +33,7 @@ describe('Ai agent event', () => {
       outputGuardrailsTriggered: [],
       exit: false,
       error: false,
+      doNothing: false,
     })
 
     expect(htEvent).toEqual({
@@ -69,6 +70,7 @@ describe('Ai agent event', () => {
       output_guardrails_triggered: [],
       exit: false,
       error: false,
+      do_nothing: false,
       input_message_id: 'messageIdTest',
     })
   })

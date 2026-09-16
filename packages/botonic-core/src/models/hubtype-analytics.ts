@@ -165,6 +165,7 @@ export interface EventAiAgent extends HtBaseEventAllFlowProps {
   outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
+  doNothing: boolean
 }
 
 export interface EventAiAgentRouter extends HtBaseEventAllFlowProps {
