@@ -86,6 +86,33 @@ export const whatsappRequestContactInfoFlow = {
             locale: 'en',
           },
         ],
+        button: {
+          id: '019a0001-0001-7000-8000-000000000010',
+          text: [{ message: 'Share contact', locale: 'en' }],
+          url: [],
+          hidden: [],
+          target: {
+            id: '019a0001-0001-7000-8000-000000000003',
+            type: 'text',
+          },
+        },
+      },
+    },
+    {
+      id: '019a0001-0001-7000-8000-000000000003',
+      code: 'contact-received',
+      is_code_ai_generated: false,
+      meta: { x: 1300.0, y: 102.2 },
+      follow_up: null,
+      target: null,
+      flow_id: '8d527e7d-ea6d-5422-b810-5b4c8be7657b',
+      is_meaningful: false,
+      ai_translated_locales: [],
+      type: 'text',
+      content: {
+        text: [{ message: 'Contact received', locale: 'en' }],
+        buttons_style: 'button',
+        buttons: [],
       },
     },
     {

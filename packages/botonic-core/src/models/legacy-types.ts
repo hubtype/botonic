@@ -292,6 +292,9 @@ export interface Session<TExtraData = any> {
   capture_user_input?: {
     node_id: string
   }
+  whatsapp_request_contact?: {
+    id: string
+  }
 }
 
 export type InputMatcher = (input: Input) => boolean
