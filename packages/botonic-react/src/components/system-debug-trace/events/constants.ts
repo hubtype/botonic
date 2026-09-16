@@ -12,6 +12,7 @@ export const LABELS = {
   AUTO_ASSIGN_OFF: 'OFF',
   EXIT: 'Exit',
   ERROR: 'Error',
+  DO_NOTHING: 'Do nothing',
   QUEUE: 'Queue',
   AUTO_ASSIGN: 'Auto-assign',
   NOTE: 'Note',

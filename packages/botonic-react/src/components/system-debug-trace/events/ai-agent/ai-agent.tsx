@@ -30,6 +30,7 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
     output_guardrails_triggered,
     exit,
     error,
+    do_nothing,
     messageId,
     knowledge_base_chunks_with_sources,
     truncated,
@@ -117,6 +118,12 @@ export const AiAgent = (props: AiAgentDebugEvent) => {
       {error && (
         <StyledDebugDetail>
           <StyledDebugLabel>{LABELS.ERROR}</StyledDebugLabel>
+        </StyledDebugDetail>
+      )}
+
+      {do_nothing && (
+        <StyledDebugDetail>
+          <StyledDebugLabel>{LABELS.DO_NOTHING}</StyledDebugLabel>
         </StyledDebugDetail>
       )}
     </>
