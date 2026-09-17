@@ -81,6 +81,7 @@ describe('Check tracked events when a contents are displayed', () => {
         outputGuardrailsTriggered: [],
         exit: false,
         error: false,
+        doNothing: false,
       }
     )
   })

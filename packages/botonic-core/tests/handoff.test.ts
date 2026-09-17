@@ -158,7 +158,7 @@ describe('Handoff', () => {
       JSON.stringify({
         force_assign_if_not_available: true,
         bot_event: {
-          format_version: 5,
+          format_version: 6,
           flow_id: 'flow-123',
           flow_name: 'Test Flow',
           flow_node_id: 'node-456',
