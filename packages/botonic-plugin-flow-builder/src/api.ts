@@ -18,6 +18,7 @@ import {
   type HtRatingButton,
   type HtRatingNode,
   type HtSmartIntentNode,
+  type HtWhatsappRequestContactInfoNode,
 } from './content-fields/hubtype-fields'
 import {
   type FlowBuilderApiOptions,
@@ -285,6 +286,33 @@ export class FlowBuilderApi {
       return undefined
     }
     return this.getNodeById<HtCaptureUserInputNode>(captureUserInputId)
+  }
+
+  getSessionWhatsappRequestContactId(): string | undefined {
+    return this.request.session.whatsapp_request_contact?.id
+  }
+
+  setWhatsappRequestContactId(id: string): void {
+    if (this.request.session.whatsapp_request_contact) {
+      this.request.session.whatsapp_request_contact.id = id
+    }
+    this.request.session.whatsapp_request_contact = { id }
+  }
+
+  removeWhatsappRequestContactId(): void {
+    this.request.session.whatsapp_request_contact = undefined
+  }
+
+  getWhatsappRequestContactInfoNode():
+    | HtWhatsappRequestContactInfoNode
+    | undefined {
+    const whatsappRequestContactId = this.getSessionWhatsappRequestContactId()
+    if (!whatsappRequestContactId) {
+      return undefined
+    }
+    return this.getNodeById<HtWhatsappRequestContactInfoNode>(
+      whatsappRequestContactId
+    )
   }
 
   getResolvedLocale(): string {

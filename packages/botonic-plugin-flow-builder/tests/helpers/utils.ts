@@ -67,6 +67,7 @@ interface RequestArgs {
   }
   hubtypeCaseId?: string
   captureUserInputId?: string
+  whatsappRequestContactId?: string
   contactInfo?: ContactInfo[]
 }
 
@@ -84,6 +85,7 @@ export function createRequest({
   shadowing = false,
   hubtypeCaseId,
   captureUserInputId,
+  whatsappRequestContactId,
   contactInfo = [],
 }: RequestArgs): PluginPreRequest {
   return createTestPluginPreRequest({
@@ -104,6 +106,7 @@ export function createRequest({
       shadowing,
       hubtypeCaseId,
       captureUserInputNodeId: captureUserInputId,
+      whatsappRequestContactId,
     },
     input: {
       bot_interaction_id: 'testInteractionId',

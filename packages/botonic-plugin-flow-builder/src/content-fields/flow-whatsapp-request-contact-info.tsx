@@ -35,6 +35,8 @@ export class FlowWhatsappRequestContactInfoNode extends ContentFieldsBase {
     message: RequestContactInfoMessage,
     botContext: BotContext
   ): JSX.Element {
+    botContext.session.whatsapp_request_contact = undefined
+
     if (!isWhatsapp(botContext.session)) {
       return <Text key={id}>{message.content.text}</Text>
     }
