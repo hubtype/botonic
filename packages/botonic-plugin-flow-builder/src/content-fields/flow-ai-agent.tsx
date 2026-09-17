@@ -94,6 +94,7 @@ export class FlowAiAgent extends FlowAiAgentBase {
         this.aiAgentResponse?.inputGuardrailsTriggered ?? [],
       outputGuardrailsTriggered: [], //aiAgentResponse.outputGuardrailsTriggered,
       error: this.aiAgentResponse?.error ?? false,
+      doNothing: this.aiAgentResponse?.doNothing ?? false,
     }
     const { action, ...eventArgs } = event
 

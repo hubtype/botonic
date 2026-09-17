@@ -110,10 +110,6 @@ export abstract class FlowAiAgentBase extends ContentFieldsBase {
           this.jsxElements.push(content.toBotonic(botContext))
         }
       }
-
-      if (message.type === OutputMessageType.DoNothing) {
-        this.jsxElements.push(<></>)
-      }
     }
     return
   }
@@ -122,7 +118,7 @@ export abstract class FlowAiAgentBase extends ContentFieldsBase {
     botContext: BotContext,
     previousContents?: FlowContent[]
   ): Promise<void> {
-    if (this.messages.length === 0) {
+    if (!this.aiAgentResponse) {
       await this.resolveAIAgentResponse(botContext, previousContents)
     }
     if (this.jsxElements.length === 0) {

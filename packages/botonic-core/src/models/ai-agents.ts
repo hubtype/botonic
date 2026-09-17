@@ -89,7 +89,7 @@ export type OutputMessage<Extra extends BaseMessage<string> = never> =
   | Extra
 
 export type AgenticOutputMessage<Extra extends BaseMessage<string> = never> =
-  Exclude<OutputMessage<Extra>, ExitMessage>
+  Exclude<OutputMessage<Extra>, ExitMessage | DoNothingMessage>
 
 export interface ToolExecution {
   toolName: string

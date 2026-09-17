@@ -317,6 +317,25 @@ describe('WorkerAgentRunner', () => {
       expect(result.messages).toEqual([])
     })
 
+    it('should set doNothing: true and strip doNothing-type messages', async () => {
+      const outputMessages = [
+        { type: 'text', content: { text: 'Hello' } },
+        { type: 'doNothing' },
+      ]
+      mockRunnerRunImpl.mockResolvedValueOnce(
+        makeRunnerResult({ finalOutput: { messages: outputMessages } })
+      )
+
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
+
+      expect(result.doNothing).toBe(true)
+      expect(result.exit).toBe(false)
+      expect(result.messages).toEqual([])
+    })
+
     it('should handle undefined finalOutput gracefully', async () => {
       mockRunnerRunImpl.mockResolvedValueOnce(
         makeRunnerResult({ finalOutput: undefined })

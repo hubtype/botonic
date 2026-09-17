@@ -149,6 +149,7 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: false,
     error: false,
+    do_nothing: false,
     knowledge_base_chunks_with_sources: mockChunksWithSources,
   } satisfies AiAgentDebugEvent,
 
@@ -161,6 +162,7 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: false,
     error: false,
+    do_nothing: false,
   } satisfies AiAgentDebugEvent,
 
   aiAgentError: {
@@ -172,6 +174,7 @@ export const DEBUG_SYSTEM_MESSAGES = {
     output_guardrails_triggered: [],
     exit: false,
     error: true,
+    do_nothing: false,
   } satisfies AiAgentDebugEvent,
 
   aiAgentRouter: {
