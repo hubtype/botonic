@@ -3,14 +3,14 @@
   "compilerOptions": {
     "declaration": true,
     "module": "NodeNext",
-    "outDir": "lib",
     "rootDir": ".",
     "strict": false,
     "target": "es2022",
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "isolatedModules": true,
-    "composite": true
+    "composite": false,
+    "noEmit": true
   },
   "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
   "exclude": ["templates", "dist", "lib"],

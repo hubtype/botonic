@@ -1,20 +1,21 @@
 {
+  "type": "module",
   "name": "@botonic/plugin-ai-agents",
-  "version": "0.56.0-alpha.0",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
+  "version": "0.57.0-rslib-esm.1",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
   "description": "Use AI Agents to generate your contents",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "build:watch": "npm run build -- --watch",
+    "build": "rslib build --no-env",
+    "build:watch": "rslib build --watch --no-env",
     "test": "../../node_modules/.bin/jest --coverage",
-    "prepublishOnly": "rm -rf lib && npm i && npm run build",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/core": "^0.56.0-alpha.0",
+    "@botonic/core": "0.57.0-rslib-esm.1",
     "@openai/agents": "^0.10.1",
     "axios": "^1.18.1",
     "openai": "^6.36.0",
@@ -45,5 +46,6 @@
     "typescript",
     "javascript"
   ],
-  "author": ""
+  "author": "",
+  "types": "./lib/index.d.ts"
 }

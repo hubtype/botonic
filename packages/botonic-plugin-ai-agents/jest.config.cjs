@@ -13,7 +13,7 @@ module.exports = {
     ],
     '^.+\\.jsx?$': [
       'babel-jest',
-      { configFile: path.resolve(__dirname, 'babel.config.js') },
+      { configFile: path.resolve(__dirname, 'babel.config.cjs') },
     ],
   },
   preset: 'ts-jest',

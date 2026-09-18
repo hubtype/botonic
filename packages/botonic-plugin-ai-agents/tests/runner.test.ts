@@ -1,3 +1,11 @@
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals'
 import type { DebugLogger } from '../src/debug-logger'
 import type { LLMConfig } from '../src/llm-config'
 import type {
@@ -7,7 +15,9 @@ import type {
   GuardrailRule,
 } from '../src/types'
 
-const mockTrackLlmRuns = jest.fn().mockResolvedValue(undefined)
+const mockTrackLlmRuns = jest
+  .fn<(...args: any[]) => Promise<void>>()
+  .mockResolvedValue(undefined)
 
 jest.mock('../src/services/hubtype-api-client', () => ({
   HubtypeApiClient: jest.fn().mockImplementation(() => ({
@@ -37,7 +47,7 @@ type RunnerConfig = {
 let capturedRunnerConfig: any = null
 let capturedRunnerConfigs: RunnerConfig[] = []
 let capturedAgentConfigs: any[] = []
-const mockRunnerRunImpl: jest.Mock = jest.fn()
+const mockRunnerRunImpl = jest.fn<(...args: any[]) => Promise<any>>()
 
 jest.mock('@openai/agents', () => {
   const MockAgent = jest.fn(

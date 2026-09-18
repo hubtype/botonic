@@ -40,24 +40,28 @@ When adding dependencies, respect this graph to avoid cycles.
 ```
 packages/<package-name>/
 ├── src/                  # TypeScript/TSX source code
-├── lib/                  # Compiled output (CJS in lib/cjs, ESM in lib/esm)
+├── lib/                  # Compiled ESM JavaScript, declarations and source maps
 ├── tests/                # Jest tests
 ├── package.json
-├── tsconfig.json         # CJS build
-├── tsconfig.esm.json     # ESM build (when applicable)
+├── tsconfig.json         # Development type checking (no emit)
+├── tsconfig.build.json   # Rslib declaration/build settings
 └── README.md
 ```
 
 ## Build
 
-- Each package compiles to **CJS** and **ESM** when applicable
-- Standard script: `tsc -p tsconfig.json && tsc -p tsconfig.esm.json`
-- Output: `lib/cjs/` and `lib/esm/`
-- `package.json`: `main` → `./lib/cjs/index.js`, `module` → `./lib/esm/index.js`
+- Core, React, the three plugins and CLI compile to **ESM** with Rslib.
+- Standard script: `rslib build --no-env`; watch adds `--watch`.
+- Output: `lib/`; Rslib cleans it before building (`output.cleanDistPath: true`).
+- `package.json`: `main` and `module` (where present) → `./lib/index.js`.
+- Configuration-only packages ship without compilation.
 
 ## TypeScript Configuration
 
-- Extends from `../../tsconfig.cjs.base.json` or `../../tsconfig.esm.base.json`
+- Development configs extend `../../tsconfig.base.json` with `noEmit: true`.
+- Libraries use ESNext/Bundler; CLI development uses NodeNext.
+- `tsconfig.build.json` uses ESNext/Bundler, `rootDir: "src"`, `outDir: "lib"` and enables declarations/emission.
+- CommonJS Jest settings belong in test configs; CLI tests remain ESM.
 - Workspace paths at root: `@botonic/core` and `@botonic/react` point to `./packages/*/src`
 
 ## Linting and Formatting
@@ -88,6 +92,6 @@ packages/<package-name>/
 1. Create folder in `packages/<name>/`
 2. Add `package.json` with `name: "@botonic/<name>"`
 3. When creating a new package, start with a version equal to the current minor version of `@botonic/core`
-4. Create `tsconfig.json` and `tsconfig.esm.json` if it compiles TS
+4. Create `tsconfig.json` and `tsconfig.build.json` if it compiles TS
 5. Include scripts: `build`, `test`, `lint`, `lint:check`, `format`
 6. Add `engines: { "node": ">=22.19.0", "npm": ">=10.0.0" }`

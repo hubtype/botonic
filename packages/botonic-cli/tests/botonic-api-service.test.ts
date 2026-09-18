@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { jest } from '@jest/globals'
 import axios from 'axios'
 
@@ -11,6 +15,7 @@ import {
 
 describe('TEST: BotonicApiService', () => {
   let service: BotonicAPIService
+  let credentialsDirectory: string
 
   const mockOAuth: OAuth = {
     access_token: 'test-access-token',
@@ -48,7 +53,14 @@ describe('TEST: BotonicApiService', () => {
   }
 
   beforeEach(() => {
-    // Mock the credential handlers
+    credentialsDirectory = mkdtempSync(join(tmpdir(), 'botonic-api-test-'))
+    jest
+      .spyOn(GlobalCredentialsHandler.prototype, 'initialize')
+      .mockImplementation(function (this: GlobalCredentialsHandler) {
+        this.homeDir = credentialsDirectory
+        this.pathToCredentials = join(credentialsDirectory, 'credentials.json')
+      })
+    // Mock reads/writes; logout uses real deletion in the temporary directory.
     jest
       .spyOn(GlobalCredentialsHandler.prototype, 'load')
       .mockReturnValue(undefined)
@@ -71,6 +83,7 @@ describe('TEST: BotonicApiService', () => {
 
   afterEach(() => {
     jest.restoreAllMocks()
+    rmSync(credentialsDirectory, { recursive: true, force: true })
   })
 
   describe('Constructor', () => {
@@ -392,10 +405,19 @@ describe('TEST: BotonicApiService', () => {
       service = new BotonicAPIService()
     })
 
-    it('should call logout and attempt to delete credentials', () => {
-      // Just verify the logout method runs without errors
-      // File system operations are mocked at the module level
+    it('should delete existing credentials', () => {
+      const path = service.globalCredentialsHandler.pathToCredentials
+      writeFileSync(path, JSON.stringify({ oauth: mockOAuth, me: mockMe }))
+      expect(existsSync(path)).toBe(true)
+      service.logout()
+      expect(existsSync(path)).toBe(false)
+    })
+
+    it('should tolerate missing credentials', () => {
+      const path = service.globalCredentialsHandler.pathToCredentials
+      expect(existsSync(path)).toBe(false)
       expect(() => service.logout()).not.toThrow()
+      expect(existsSync(path)).toBe(false)
     })
   })
 

@@ -1,21 +1,22 @@
 {
+  "type": "module",
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.56.0-alpha.0",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
+  "version": "0.57.0-rslib-esm.1",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
   "description": "Use Flow Builder to show your contents",
   "scripts": {
-    "build": "rm -rf lib && ../../node_modules/.bin/tsc -p tsconfig.json && ../../node_modules/.bin/tsc -p tsconfig.esm.json",
-    "build:watch": "npm run build -- --watch",
+    "build": "rslib build --no-env",
+    "build:watch": "rslib build --watch --no-env",
     "test": "../../node_modules/.bin/jest --coverage",
     "cloc": "../../scripts/qa/cloc-package.sh .",
-    "prepublishOnly": "rm -rf lib && npm i && npm run build",
+    "prepublishOnly": "npm run build && npm run test && npm run lint",
     "lint": "biome check --write src/ tests/",
     "lint:check": "biome check src/ tests/",
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "^0.56.0-alpha.0",
+    "@botonic/react": "0.57.0-rslib-esm.1",
     "axios": "^1.18.1",
     "uuid": "^10.0.0"
   },
@@ -46,5 +47,6 @@
   ],
   "devDependencies": {
     "@types/uuid": "^10.0.0"
-  }
+  },
+  "types": "./lib/index.d.ts"
 }

@@ -10,7 +10,10 @@
     "../src/**/*.[jt]s",
     "../src/**/*.[jt]sx"
   ],
+  "exclude": ["lib", "node_modules"],
   "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "rootDir": "../",
     // Options below are for compiling @botonic js/jsx files
     "declaration": false,

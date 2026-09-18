@@ -164,7 +164,7 @@ e.g using @botonic/plugin-ai-agents
 
 ```ts
 import { Input, Session } from '@botonic/core'
-import FlowBuilderAction from '@botonic/plugin-flow-builder/lib/esm/action'
+import { FlowBuilderAction } from '@botonic/plugin-flow-builder'
 
 type RouteRequest = { input: Input; session: Session }
 export function routes(request: RouteRequest) {
