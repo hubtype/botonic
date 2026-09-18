@@ -18,6 +18,7 @@ export interface AiAgentDebugEvent {
   output_guardrails_triggered: string[]
   exit: boolean
   error: boolean
+  do_nothing: boolean
   knowledge_base_chunks_with_sources?: ChunkIdsGroupedBySourceData[]
   messageId?: string
   truncated?: boolean

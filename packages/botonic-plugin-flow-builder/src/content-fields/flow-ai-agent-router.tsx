@@ -194,6 +194,7 @@ export class FlowAiAgentRouter extends FlowAiAgentBase {
       inputGuardrailsTriggered: [],
       outputGuardrailsTriggered:
         this.aiAgentResponse?.outputGuardrailsTriggered ?? [],
+      doNothing: this.aiAgentResponse?.doNothing ?? false,
     }
     const { action, ...specialistEventArgs } = specialistEvent
     await trackEvent(botContext, action, specialistEventArgs)

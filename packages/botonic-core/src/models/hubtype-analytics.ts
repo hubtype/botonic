@@ -1,6 +1,6 @@
 import type { AvailableSpecialist, ToolExecution } from './ai-agents'
 
-export const EVENT_FORMAT_VERSION = 5
+export const EVENT_FORMAT_VERSION = 6
 
 export enum EventAction {
   AiAgent = 'ai_agent',
@@ -165,6 +165,7 @@ export interface EventAiAgent extends HtBaseEventAllFlowProps {
   outputGuardrailsTriggered: string[]
   exit: boolean
   error: boolean
+  doNothing: boolean
 }
 
 export interface EventAiAgentRouter extends HtBaseEventAllFlowProps {

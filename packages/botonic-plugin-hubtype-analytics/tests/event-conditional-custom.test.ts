@@ -22,7 +22,7 @@ describe('Create conditional custom event', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 5,
+      format_version: 6,
       action: EventAction.ConditionalCustom,
       flow_thread_id: 'flowThreadIdTest',
       flow_id: 'flowIdTest',

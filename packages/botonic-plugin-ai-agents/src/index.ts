@@ -116,6 +116,7 @@ export default class BotonicPluginAiAgents<
         memoryLength: 0,
         exit: true,
         error: true,
+        doNothing: false,
         inputGuardrailsTriggered: [],
         outputGuardrailsTriggered: [],
         startingAgentName: '',

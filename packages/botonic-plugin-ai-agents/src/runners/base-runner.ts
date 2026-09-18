@@ -1,7 +1,8 @@
-import type {
-  OutputMessage,
-  ResolvedPlugins,
-  ToolExecution,
+import {
+  type OutputMessage,
+  OutputMessageType,
+  type ResolvedPlugins,
+  type ToolExecution,
 } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
@@ -214,22 +215,30 @@ export abstract class BaseRunner<
     const outputMessages = result.finalOutput?.messages || []
     const hasExit =
       outputMessages.length === 0 ||
-      outputMessages.some(message => message.type === 'exit')
+      outputMessages.some(message => message.type === OutputMessageType.Exit)
+
+    const hasDoNothing = outputMessages.some(
+      message => message.type === OutputMessageType.DoNothing
+    )
 
     return {
       startingAgentName: '',
       lastAgentName: '',
       availableSpecialists: [],
       isTransferredToSpecialist: false,
-      messages: hasExit
-        ? []
-        : (outputMessages.filter(
-            message => message.type !== 'exit'
-          ) as AgenticOutputMessage[]),
+      messages:
+        hasExit || hasDoNothing
+          ? []
+          : (outputMessages.filter(
+              message =>
+                message.type !== OutputMessageType.Exit &&
+                message.type !== OutputMessageType.DoNothing
+            ) as AgenticOutputMessage[]),
       toolsExecuted: this.getToolsExecuted(result, context),
       exit: hasExit,
       memoryLength,
       error: false,
+      doNothing: hasDoNothing,
       inputGuardrailsTriggered: [],
       outputGuardrailsTriggered: [],
     }
@@ -295,6 +304,7 @@ export abstract class BaseRunner<
         toolsExecuted: [],
         exit: true,
         error: false,
+        doNothing: false,
         inputGuardrailsTriggered: error.result.output.outputInfo,
         outputGuardrailsTriggered: [],
       }

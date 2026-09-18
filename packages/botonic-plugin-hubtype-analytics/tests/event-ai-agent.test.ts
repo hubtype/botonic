@@ -33,6 +33,7 @@ describe('Ai agent event', () => {
       outputGuardrailsTriggered: [],
       exit: false,
       error: false,
+      doNothing: false,
     })
 
     expect(htEvent).toEqual({
@@ -42,7 +43,7 @@ describe('Ai agent event', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 5,
+      format_version: 6,
       bot_interaction_id: 'testInteractionId',
       flow_thread_id: 'flowThreadIdTest',
       flow_id: 'flowIdTest',
@@ -69,6 +70,7 @@ describe('Ai agent event', () => {
       output_guardrails_triggered: [],
       exit: false,
       error: false,
+      do_nothing: false,
       input_message_id: 'messageIdTest',
     })
   })

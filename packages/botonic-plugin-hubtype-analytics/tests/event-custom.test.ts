@@ -20,7 +20,7 @@ describe('Create custom events', () => {
       user_locale: 'es',
       user_country: 'ES',
       system_locale: 'es',
-      format_version: 5,
+      format_version: 6,
       action: EventAction.Custom,
       custom_fields: {
         name: 'custom bot event',
