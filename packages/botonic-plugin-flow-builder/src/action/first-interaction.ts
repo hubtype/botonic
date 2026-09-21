@@ -1,3 +1,4 @@
+import { NluType } from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
 import { MAIN_FLOW_NAME } from '../constants'
 import {
@@ -50,6 +51,11 @@ export async function getContentsByFirstInteraction(
 
   if (request.input.nluResolution || inputHasTextOrTranscript(request.input)) {
     const contentsByUserInput = await getContentsByUserInput(context)
+
+    if (request.input.nluResolution?.type === NluType.AiAgent) {
+      const startContents = await flowBuilderPlugin.getStartContents()
+      return [...startContents, ...contentsByUserInput]
+    }
 
     return [...firstInteractionContents, ...contentsByUserInput]
   }
