@@ -7,6 +7,7 @@ import { FlowCarousel } from './flow-carousel'
 import { FlowChannelConditional } from './flow-channel-conditional'
 import { FlowCountryConditional } from './flow-country-conditional'
 import { FlowCustomConditional } from './flow-custom-conditional'
+import { FlowDoNothing } from './flow-do-nothing'
 import { FlowGoToFlow } from './flow-go-to-flow'
 import { FlowHandoff } from './flow-handoff'
 import { FlowImage } from './flow-image'
@@ -36,6 +37,7 @@ export {
   FlowCountryConditional,
   FlowCustomConditional,
   FlowCustomConditionalV2,
+  FlowDoNothing,
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
@@ -72,3 +74,4 @@ export type FlowContent =
   | FlowCaptureUserInput
   | FlowAiAgentRouter
   | FlowCustomConditionalV2
+  | FlowDoNothing
