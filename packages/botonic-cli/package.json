@@ -1,7 +1,7 @@
 {
   "name": "@botonic/cli",
   "description": "Build Chatbots Using React",
-  "version": "0.56.0-alpha.0",
+  "version": "0.56.0-alpha.1",
   "license": "MIT",
   "bin": {
     "botonic": "./bin/run.js"
@@ -42,7 +42,7 @@
     "ts-node": "^10.9.2"
   },
   "engines": {
-    "node": ">=22.19.0",
+    "node": ">=22.23.0",
     "npm": ">=10.0.0"
   },
   "bugs": "https://github.com/hubtype/botonic/issues",

@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3273](https://github.com/hubtype/botonic/pull/3273): Add `requestContactInfo` message to the AI agent structured output schema.
+- [PR-3282](https://github.com/hubtype/botonic/pull/3282): Add `doNothing` message to the AI agent structured output schema.
 
 ### Changed
 

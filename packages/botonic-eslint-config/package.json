@@ -1,6 +1,6 @@
 {
   "name": "@botonic/eslint-config",
-  "version": "0.56.0-alpha.0",
+  "version": "0.56.0-alpha.1",
   "description": "Eslint config for botonic packages",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,10 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=22.23.0",
+    "npm": ">=10.0.0"
   },
   "files": [
     "index.js",

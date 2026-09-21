@@ -16,6 +16,7 @@ All notable changes to Botonic will be documented in this file.
 
 - [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
 - [PR-3269](https://github.com/hubtype/botonic/pull/3269): Add `WhatsappRequestContactInfo` component for WhatsApp session interactive `request_contact_info` messages.
+- [PR-3282](https://github.com/hubtype/botonic/pull/3282): Update AI agent preview event component with doNothing info.
 
 ### Changed
 

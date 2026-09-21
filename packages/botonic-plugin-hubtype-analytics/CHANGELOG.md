@@ -11,9 +11,11 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.55.x] - 2026-mm-dd
+## [0.56.0] - 2026-mm-dd
 
 ### Added
+
+- [PR-3282](https://github.com/hubtype/botonic/pull/3282): Update AI agent event with new doNothing boolean attribute.
 
 ### Changed
 
