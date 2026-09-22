@@ -133,6 +133,7 @@ export interface Translations {
 export enum NluType {
   Keyword = 'keyword',
   SmartIntent = 'smart-intent',
+  AiAgent = 'ai-agent',
 }
 
 export enum WhatsappInputOrigin {

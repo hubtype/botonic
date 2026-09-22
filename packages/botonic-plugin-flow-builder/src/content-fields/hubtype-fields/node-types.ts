@@ -20,6 +20,7 @@ export enum HtNodeWithContentType {
   GO_TO_FLOW = 'go-to-flow',
   CAPTURE_USER_INPUT = 'capture-user-input',
   CUSTOM_CONDITION = 'custom-condition',
+  DO_NOTHING = 'do-nothing',
 }
 
 export enum HtNodeWithoutContentType {
