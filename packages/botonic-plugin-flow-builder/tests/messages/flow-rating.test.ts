@@ -4,7 +4,7 @@ import {
   type InputType,
   storeCaseRating,
 } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test, vi } from 'vitest'
 
 import { AGENT_RATING_PAYLOAD } from '../../src/constants'
 import { RatingType } from '../../src/content-fields/hubtype-fields/index'
@@ -20,11 +20,11 @@ import {
   getContentsAfterPreAndBotonicInit,
 } from '../helpers/utils'
 
-jest.mock('@botonic/core', () => {
-  const actual = jest.requireActual('@botonic/core') as any
+vi.mock('@botonic/core', async importOriginal => {
+  const actual = await importOriginal<typeof import('@botonic/core')>()
   return {
     ...actual,
-    storeCaseRating: jest.fn((_session, _value) => {
+    storeCaseRating: vi.fn((_session, _value) => {
       return Promise.resolve({ status: 'ok' })
     }),
   }
@@ -35,7 +35,7 @@ describe('Rating', () => {
 
   beforeEach(() => {
     trackEventMock.mockClear()
-    ;(storeCaseRating as jest.Mock).mockClear()
+    vi.mocked(storeCaseRating).mockClear()
   })
 
   test('The contents of the rating message are displayed', async () => {

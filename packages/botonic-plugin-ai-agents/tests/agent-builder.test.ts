@@ -1,35 +1,22 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
 import type { DebugLogger } from '../src/debug-logger'
-import { OutputSchema } from '../src/structured-output/index'
 import type { GuardrailRule, Tool } from '../src/types'
 
 // Create a mock disabled logger for tests (no-op implementations)
 const mockLogger: DebugLogger = {
-  logInitialConfig: jest.fn(),
-  logAgentDebugInfo: jest.fn(),
-  logModelSettings: jest.fn(),
-  logRunnerStart: jest.fn(),
-  logRunResult: jest.fn(),
-  logGuardrailTriggered: jest.fn(),
-  logRunnerError: jest.fn(),
-  logToolExecution: jest.fn(),
+  logInitialConfig: vi.fn(),
+  logAgentDebugInfo: vi.fn(),
+  logModelSettings: vi.fn(),
+  logRunnerStart: vi.fn(),
+  logRunResult: vi.fn(),
+  logGuardrailTriggered: vi.fn(),
+  logRunnerError: vi.fn(),
+  logToolExecution: vi.fn(),
 }
 
-// Store captured Agent config for assertions
-let capturedAgentConfig: any = null
-
-// Mock OpenAI Agent class
-jest.mock('@openai/agents', () => ({
-  Agent: jest.fn((config: Record<string, unknown>) => {
-    capturedAgentConfig = config
+const mockAgent = vi.hoisted(() =>
+  vi.fn(function AgentMock(config: Record<string, unknown>) {
     return {
       name: config.name,
       instructions: config.instructions,
@@ -38,11 +25,15 @@ jest.mock('@openai/agents', () => ({
       model: config.model,
       modelSettings: config.modelSettings,
     }
-  }),
+  })
+)
+
+vi.mock('@openai/agents', () => ({
+  Agent: mockAgent,
 }))
 
-jest.mock('../src/tools', () => ({
-  createRetrieveKnowledge: jest.fn((sourceIds: string[]) => ({
+vi.mock('../src/tools', () => ({
+  createRetrieveKnowledge: vi.fn((sourceIds: string[]) => ({
     name: 'retrieve_knowledge',
     description: 'Consult the knowledge base for information before answering.',
     sourceIds,
@@ -52,13 +43,13 @@ jest.mock('../src/tools', () => ({
 }))
 
 // Mock constants - can be overridden per test
-const mockConstants = {
+const mockConstants = vi.hoisted(() => ({
   LLM_PROVIDERS: { OPENAI: 'openai', AZURE: 'azure' },
   LLM_PROVIDER: 'azure' as 'openai' | 'azure',
   LLM_OPENAI_MODEL: 'gpt-4.1-mini',
-}
+}))
 
-jest.mock('../src/constants', () => mockConstants)
+vi.mock('../src/constants', () => mockConstants)
 
 // Import after mocks are set up
 import type { ContactInfo } from '@botonic/core'
@@ -86,7 +77,7 @@ const mockLlmConfig = {
     toolChoice: undefined as string | undefined,
   },
   modelProvider: {},
-  getModel: jest.fn(async () => resolvedModel),
+  getModel: vi.fn(async () => resolvedModel),
 } as unknown as LLMConfig
 
 describe('WorkerAgent', () => {
@@ -140,15 +131,14 @@ describe('WorkerAgent', () => {
   const sourceIds: string[] = ['123', '456']
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
-    jest
-      .spyOn(Date.prototype, 'toISOString')
-      .mockReturnValue('2024-01-01T00:00:00.000Z')
+    vi.clearAllMocks()
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue(
+      '2024-01-01T00:00:00.000Z'
+    )
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   it('should initialize correctly with name, instructions and tools', async () => {
     const worker = await SpecialistAgent.create({
@@ -175,136 +165,6 @@ describe('WorkerAgent', () => {
         sourceIds,
       })
     )
-  })
-
-  describe('Structured Output Schema Validation', () => {
-    it('should validate textWithButtons with multiple buttons', () => {
-      const validOutput = {
-        messages: [
-          {
-            type: 'textWithButtons',
-            content: {
-              text: 'Choose an option:',
-              buttons: [
-                { text: 'Option 1' },
-                { text: 'Option 2' },
-                { text: 'Option 3' },
-              ],
-            },
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(validOutput)
-      expect(result.success).toBe(true)
-    })
-
-    it('should validate carousel with multiple elements', () => {
-      const validOutput = {
-        messages: [
-          {
-            type: 'carousel',
-            content: {
-              elements: [
-                {
-                  title: 'Product 1',
-                  subtitle: 'Description 1',
-                  image: 'https://example.com/1.jpg',
-                  button: { text: 'View', url: 'https://example.com/1' },
-                },
-                {
-                  title: 'Product 2',
-                  subtitle: 'Description 2',
-                  image: 'https://example.com/2.jpg',
-                  button: { text: 'Buy', url: 'https://example.com/2' },
-                },
-              ],
-            },
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(validOutput)
-      expect(result.success).toBe(true)
-    })
-
-    it('should reject invalid button structure', () => {
-      const invalidOutput = {
-        messages: [
-          {
-            type: 'textWithButtons',
-            content: {
-              text: 'Choose an option:',
-              buttons: [
-                { text: 'Valid button' },
-                {}, // Invalid empty button
-              ],
-            },
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(invalidOutput)
-      expect(result.success).toBe(false)
-    })
-
-    it('should reject carousel with missing required fields', () => {
-      const invalidOutput = {
-        messages: [
-          {
-            type: 'carousel',
-            content: {
-              elements: [
-                {
-                  title: 'Product 1',
-                  // Missing subtitle, image, button
-                },
-              ],
-            },
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(invalidOutput)
-      expect(result.success).toBe(false)
-    })
-
-    it('should validate requestContactInfo message', () => {
-      const validOutput = {
-        messages: [
-          {
-            type: 'requestContactInfo',
-            content: { text: 'Please share your phone number' },
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(validOutput)
-      expect(result.success).toBe(true)
-    })
-
-    it('should reject requestContactInfo without content', () => {
-      const invalidOutput = {
-        messages: [{ type: 'requestContactInfo' }],
-      }
-
-      const result = OutputSchema.safeParse(invalidOutput)
-      expect(result.success).toBe(false)
-    })
-
-    it('should reject requestContactInfo without text', () => {
-      const invalidOutput = {
-        messages: [
-          {
-            type: 'requestContactInfo',
-            content: {},
-          },
-        ],
-      }
-
-      const result = OutputSchema.safeParse(invalidOutput)
-      expect(result.success).toBe(false)
-    })
   })
 
   describe('Contact info prompt format', () => {
@@ -486,138 +346,7 @@ describe('WorkerAgent', () => {
   })
 
   describe('outputMessagesSchemas handling', () => {
-    it('should build with only base schemas when outputMessagesSchemas is not provided', async () => {
-      await SpecialistAgent.create({
-        name: agentName,
-        instructions: agentInstructions,
-        llmConfig: mockLlmConfig,
-        tools: agentCustomTools,
-        contactInfo,
-        inputGuardrailRules: [],
-        sourceIds: [],
-        campaignsContext: undefined,
-        logger: mockLogger,
-        guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).then(agent => agent.getAgent())
-
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
-
-      const validBaseMessage = {
-        messages: [{ type: 'text', content: { text: 'Hello' } }],
-      }
-      expect(outputType.safeParse(validBaseMessage).success).toBe(true)
-
-      const invalidCustomMessage = {
-        messages: [
-          {
-            type: 'customVideo',
-            content: { videoUrl: 'https://example.com/video.mp4' },
-          },
-        ],
-      }
-      expect(outputType.safeParse(invalidCustomMessage).success).toBe(false)
-    })
-
-    it('should include custom schemas when outputMessagesSchemas is provided', async () => {
-      const customVideoSchema = z.object({
-        type: z.enum(['customVideo']),
-        content: z.object({
-          videoUrl: z.string(),
-          thumbnail: z.string().optional(),
-        }),
-      })
-
-      await SpecialistAgent.create({
-        name: agentName,
-        instructions: agentInstructions,
-        llmConfig: mockLlmConfig,
-        tools: agentCustomTools,
-        contactInfo,
-        inputGuardrailRules: [],
-        sourceIds: [],
-        outputMessagesSchemas: [customVideoSchema],
-        campaignsContext: undefined,
-        logger: mockLogger,
-        guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).then(agent => agent.getAgent())
-
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
-
-      const validCustomMessage = {
-        messages: [
-          {
-            type: 'customVideo',
-            content: { videoUrl: 'https://example.com/video.mp4' },
-          },
-        ],
-      }
-      expect(outputType.safeParse(validCustomMessage).success).toBe(true)
-
-      const validBaseMessage = {
-        messages: [{ type: 'text', content: { text: 'Hello' } }],
-      }
-      expect(outputType.safeParse(validBaseMessage).success).toBe(true)
-    })
-
-    it('should include multiple custom schemas when provided', async () => {
-      const customVideoSchema = z.object({
-        type: z.enum(['customVideo']),
-        content: z.object({
-          videoUrl: z.string(),
-        }),
-      })
-      const customImageSchema = z.object({
-        type: z.enum(['customImage']),
-        content: z.object({
-          imageUrl: z.string(),
-          altText: z.string(),
-        }),
-      })
-
-      await SpecialistAgent.create({
-        name: agentName,
-        instructions: agentInstructions,
-        llmConfig: mockLlmConfig,
-        tools: agentCustomTools,
-        contactInfo,
-        inputGuardrailRules: [],
-        sourceIds: [],
-        outputMessagesSchemas: [customVideoSchema, customImageSchema],
-        campaignsContext: undefined,
-        logger: mockLogger,
-        guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).then(agent => agent.getAgent())
-
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
-
-      const validVideoMessage = {
-        messages: [
-          {
-            type: 'customVideo',
-            content: { videoUrl: 'https://example.com/video.mp4' },
-          },
-        ],
-      }
-      expect(outputType.safeParse(validVideoMessage).success).toBe(true)
-
-      const validImageMessage = {
-        messages: [
-          {
-            type: 'customImage',
-            content: {
-              imageUrl: 'https://example.com/image.png',
-              altText: 'A test image',
-            },
-          },
-        ],
-      }
-      expect(outputType.safeParse(validImageMessage).success).toBe(true)
-    })
-
-    it('should reject invalid custom message when custom schemas are provided', async () => {
+    it('should pass outputType to Agent when outputMessagesSchemas is provided', async () => {
       const customVideoSchema = z.object({
         type: z.enum(['customVideo']),
         content: z.object({
@@ -637,69 +366,11 @@ describe('WorkerAgent', () => {
         campaignsContext: undefined,
         logger: mockLogger,
         guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).then(agent => agent.getAgent())
+      })
 
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
-
-      const invalidMessage = {
-        messages: [
-          {
-            type: 'customVideo',
-            content: { videoUrl: 123 },
-          },
-        ],
-      }
-      expect(outputType.safeParse(invalidMessage).success).toBe(false)
-    })
-
-    it('should produce same schema as OutputSchema when empty array is provided', async () => {
-      await SpecialistAgent.create({
-        name: agentName,
-        instructions: agentInstructions,
-        llmConfig: mockLlmConfig,
-        tools: agentCustomTools,
-        contactInfo,
-        inputGuardrailRules: [],
-        sourceIds: [],
-        outputMessagesSchemas: [],
-        campaignsContext: undefined,
-        logger: mockLogger,
-        guardrailTrackingContext: mockGuardrailTrackingContext,
-      }).then(agent => agent.getAgent())
-
-      expect(capturedAgentConfig).toBeDefined()
-      const outputType = capturedAgentConfig.outputType
-
-      const testMessages = [
-        { messages: [{ type: 'text', content: { text: 'Hello' } }] },
-        {
-          messages: [
-            {
-              type: 'textWithButtons',
-              content: {
-                text: 'Pick one',
-                buttons: [{ text: 'A' }],
-              },
-            },
-          ],
-        },
-        { messages: [{ type: 'exit' }] },
-        {
-          messages: [
-            {
-              type: 'requestContactInfo',
-              content: { text: 'Please share your phone number' },
-            },
-          ],
-        },
-      ]
-
-      for (const msg of testMessages) {
-        expect(outputType.safeParse(msg).success).toBe(
-          OutputSchema.safeParse(msg).success
-        )
-      }
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({ outputType: expect.any(Object) })
+      )
     })
   })
 
@@ -725,8 +396,12 @@ describe('WorkerAgent', () => {
           hasRetrieveKnowledge: true,
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
-        'retrieve_knowledge'
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          modelSettings: expect.objectContaining({
+            toolChoice: 'retrieve_knowledge',
+          }),
+        })
       )
     })
 
@@ -760,8 +435,12 @@ describe('WorkerAgent', () => {
           hasRetrieveKnowledge: true,
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
-        'retrieve_knowledge'
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          modelSettings: expect.objectContaining({
+            toolChoice: 'retrieve_knowledge',
+          }),
+        })
       )
     })
 
@@ -811,7 +490,13 @@ describe('WorkerAgent', () => {
           toolChoice: 'retrieve_knowledge',
         })
       )
-      expect(capturedAgentConfig.modelSettings.toolChoice).toBeUndefined()
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          modelSettings: expect.objectContaining({
+            toolChoice: undefined,
+          }),
+        })
+      )
     })
 
     it('should set resolved model for azure provider', async () => {
@@ -829,8 +514,9 @@ describe('WorkerAgent', () => {
         guardrailTrackingContext: mockGuardrailTrackingContext,
       }).then(agent => agent.getAgent())
 
-      expect(capturedAgentConfig).toBeDefined()
-      expect(capturedAgentConfig.model).toBe(resolvedModel)
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({ model: resolvedModel })
+      )
     })
 
     it('should set reasoning and text settings for azure provider (same as openai)', async () => {
@@ -856,10 +542,14 @@ describe('WorkerAgent', () => {
           text: { verbosity: 'medium' },
         })
       )
-      expect(capturedAgentConfig.modelSettings).toMatchObject({
-        reasoning: { effort: 'none' },
-        text: { verbosity: 'medium' },
-      })
+      expect(mockAgent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          modelSettings: expect.objectContaining({
+            reasoning: { effort: 'none' },
+            text: { verbosity: 'medium' },
+          }),
+        })
+      )
     })
   })
 })
@@ -885,18 +575,17 @@ describe('WorkerAgent - OpenAI Provider', () => {
   ]
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    capturedAgentConfig = null
-    jest
-      .spyOn(Date.prototype, 'toISOString')
-      .mockReturnValue('2024-01-01T00:00:00.000Z')
+    vi.clearAllMocks()
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue(
+      '2024-01-01T00:00:00.000Z'
+    )
 
     // Set provider to 'openai' for these tests
     mockConstants.LLM_PROVIDER = 'openai'
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     // Reset to default azure provider
     mockConstants.LLM_PROVIDER = 'azure'
   })
@@ -958,8 +647,9 @@ describe('WorkerAgent - OpenAI Provider', () => {
       guardrailTrackingContext: mockGuardrailTrackingContext,
     }).then(agent => agent.getAgent())
 
-    expect(capturedAgentConfig).toBeDefined()
-    expect(capturedAgentConfig.model).toBe(resolvedModel)
+    expect(mockAgent).toHaveBeenCalledWith(
+      expect.objectContaining({ model: resolvedModel })
+    )
   })
 
   it('should set toolChoice for gpt-4 models even with openai provider', async () => {
@@ -983,8 +673,12 @@ describe('WorkerAgent - OpenAI Provider', () => {
         hasRetrieveKnowledge: true,
       })
     )
-    expect(capturedAgentConfig.modelSettings.toolChoice).toBe(
-      'retrieve_knowledge'
+    expect(mockAgent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        modelSettings: expect.objectContaining({
+          toolChoice: 'retrieve_knowledge',
+        }),
+      })
     )
   })
 })

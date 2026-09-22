@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { createHtEvent, EventAction, EventType } from '../src'
 import { getRequestData } from './helpers'
 

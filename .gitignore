@@ -1,6 +1,7 @@
 *-debug.log
 *-error.log
 .oclif.manifest.json
+oclif.manifest.json
 .docz
 .netlify
 lib/

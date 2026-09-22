@@ -1,9 +1,10 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { useRef } from 'react'
+import { vi } from 'vitest'
 
 import { Typing } from '../../src/index-types'
 import { useWebchat, WebchatContext } from '../../src/webchat/context'
@@ -14,8 +15,8 @@ import {
 import { TYPING_OFF_DEBOUNCE_MS } from '../../src/webchat/input-panel/typing-network-sender'
 import { useTypingChatEventSender } from '../../src/webchat/input-panel/use-typing-chat-event-sender'
 
-jest.mock('../../src/webchat/hooks/use-device-adapter', () => ({
-  useDeviceAdapter: jest.fn(),
+vi.mock('../../src/webchat/hooks/use-device-adapter', () => ({
+  useDeviceAdapter: vi.fn(),
 }))
 
 function typeCharacter(textarea, value) {
@@ -23,8 +24,8 @@ function typeCharacter(textarea, value) {
 }
 
 function renderTextarea({ onUserInput, sendTextResolver } = {}) {
-  const sendChatEvent = jest.fn().mockResolvedValue(true)
-  const sendTextAreaText = jest.fn().mockImplementation(
+  const sendChatEvent = vi.fn().mockResolvedValue(true)
+  const sendTextAreaText = vi.fn().mockImplementation(
     () =>
       new Promise(resolve => {
         setTimeout(resolve, sendTextResolver?.delayMs ?? 0)
@@ -73,11 +74,11 @@ function renderTextarea({ onUserInput, sendTextResolver } = {}) {
 
 describe('Textarea typing events', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('sends typing_on only once across multiple changes', async () => {
@@ -164,7 +165,7 @@ describe('Textarea typing events', () => {
     })
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_IDLE_MS)
+      vi.advanceTimersByTime(TYPING_IDLE_MS)
     })
 
     expect(sendChatEvent).toHaveBeenCalledTimes(2)
@@ -190,7 +191,7 @@ describe('Textarea typing events', () => {
     expect(sendChatEvent.mock.calls).toEqual([[Typing.On], [Typing.Off]])
 
     await act(async () => {
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
     })
 
     expect(sendChatEvent).toHaveBeenCalledTimes(2)
@@ -216,7 +217,7 @@ describe('Textarea typing events', () => {
     expect(sendChatEvent).toHaveBeenCalledWith(Typing.On)
 
     await act(async () => {
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
     })
 
     expect(sendChatEvent).toHaveBeenCalledTimes(1)
@@ -224,12 +225,12 @@ describe('Textarea typing events', () => {
   })
 
   it('stops typing when sendTextAreaText rejects', async () => {
-    const sendTextAreaText = jest
+    const sendTextAreaText = vi
       .fn()
       .mockImplementation(() =>
         Promise.reject(new Error('send failed')).catch(() => undefined)
       )
-    const sendChatEvent = jest.fn().mockResolvedValue(true)
+    const sendChatEvent = vi.fn().mockResolvedValue(true)
     const textareaRef = { current: undefined }
     const host = document.createElement('div')
     let webchatApi
@@ -298,15 +299,15 @@ describe('Textarea typing events', () => {
 
 describe('Textarea typing integration', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   it('delivers typing_on and debounced typing_off to onUserInput', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { getTextarea } = renderTextarea({ onUserInput })
     const textarea = getTextarea()
 
@@ -319,7 +320,7 @@ describe('Textarea typing integration', () => {
     expect(onUserInput.mock.calls[0][0].input.data).toBe(Typing.On)
 
     await act(async () => {
-      jest.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
+      vi.advanceTimersByTime(TYPING_OFF_DEBOUNCE_MS)
     })
 
     expect(onUserInput).toHaveBeenCalledTimes(2)
@@ -327,7 +328,7 @@ describe('Textarea typing integration', () => {
   })
 
   it('delivers typing_off immediately to onUserInput on unmount', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     const { getTextarea, unmount } = renderTextarea({ onUserInput })
     const textarea = getTextarea()
 
@@ -345,7 +346,7 @@ describe('Textarea typing integration', () => {
   })
 
   it('retries typing_on from Textarea after onUserInput becomes available', async () => {
-    const onUserInput = jest.fn().mockResolvedValue(undefined)
+    const onUserInput = vi.fn().mockResolvedValue(undefined)
     let handler
 
     function Harness() {
@@ -364,7 +365,7 @@ describe('Textarea typing integration', () => {
             host={hostRef.current}
             textareaRef={textareaRef}
             sendChatEvent={sendTypingEvent}
-            sendTextAreaText={jest.fn().mockResolvedValue(undefined)}
+            sendTextAreaText={vi.fn().mockResolvedValue(undefined)}
           />
         </WebchatContext.Provider>
       )

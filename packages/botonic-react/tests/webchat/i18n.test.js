@@ -1,6 +1,6 @@
 /**
- * @jest-environment jsdom
- * @jest-environment-options {"url": "https://jestjs.io/"}
+ * @vitest-environment jsdom
+ * @vitest-environment-options {"url": "https://jestjs.io/"}
  */
 
 // eslint-disable-next-line filenames/match-regex
