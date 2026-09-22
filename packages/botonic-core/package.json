@@ -1,6 +1,6 @@
 {
   "name": "@botonic/core",
-  "version": "0.56.0-alpha.0",
+  "version": "0.56.0",
   "license": "MIT",
   "description": "Build Chatbots using React",
   "main": "./lib/cjs/index.js",
@@ -60,7 +60,7 @@
   },
   "homepage": "https://github.com/hubtype/botonic#readme",
   "engines": {
-    "node": ">=22.19.0",
+    "node": ">=22.23.2",
     "npm": ">=10.0.0"
   },
   "keywords": [

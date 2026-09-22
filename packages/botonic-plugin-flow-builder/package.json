@@ -1,6 +1,6 @@
 {
   "name": "@botonic/plugin-flow-builder",
-  "version": "0.56.0-alpha.0",
+  "version": "0.56.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "description": "Use Flow Builder to show your contents",
@@ -15,7 +15,7 @@
     "format": "biome format --write src/ tests/"
   },
   "dependencies": {
-    "@botonic/react": "^0.56.0-alpha.0",
+    "@botonic/react": "^0.56.0",
     "axios": "^1.18.1",
     "uuid": "^10.0.0"
   },
@@ -33,7 +33,7 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=22.19.0",
+    "node": ">=22.23.2",
     "npm": ">=10.0.0"
   },
   "keywords": [

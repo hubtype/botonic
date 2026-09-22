@@ -15,15 +15,21 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
-- [PR-3272](https://github.com/hubtype/botonic/pull/3272): Add support for reading `whatsapp-request-contact-info` nodes from Flow Builder.
-- [PR-3273](https://github.com/hubtype/botonic/pull/3273):Add AI agent support for `requestContactInfo` messages: render from structured output, include CMS nodes in conversation history, and fall back to `Text` on non-WhatsApp channels.
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.56.0] - 2026-09-22
+
+### Added
+
+- [PR-3268](https://github.com/hubtype/botonic/pull/3268): Add support for `REQUEST_CONTACT_INFO` button in WhatsApp templates.
+- [PR-3272](https://github.com/hubtype/botonic/pull/3272): Add support for reading `whatsapp-request-contact-info` nodes from Flow Builder.
+- [PR-3273](https://github.com/hubtype/botonic/pull/3273):Add AI agent support for `requestContactInfo` messages: render from structured output, include CMS nodes in conversation history, and fall back to `Text` on non-WhatsApp channels.
+- [PR-3282](https://github.com/hubtype/botonic/pull/3282): When AI agent return a doNothing output plugin-flow-builder not respond, neither send the fallback message.
+- [PR-3284](https://github.com/hubtype/botonic/pull/3284): New node Do nothing to avoid that bot respond after a conditional/keyword/smart-intent etc.
 
 ## [0.55.2] - 2026-09-03
 
