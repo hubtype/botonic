@@ -13,6 +13,7 @@ import {
   aiAgentTestFlow,
 } from './helpers/flows/ai-agent'
 import { basicFlow } from './helpers/flows/basic'
+import { aiAgentNluStartConditionFlow } from './helpers/flows/nlu-resolution-start-condition'
 import {
   createFlowBuilderPlugin,
   createFlowBuilderPluginAndGetContents,
@@ -256,6 +257,53 @@ describe('Check the contents returned by the plugin in first interaction with AI
         text: 'AI agent response in first interaction',
       },
     })
+  })
+
+  test('When Main start has a custom condition on input.nluResolution, start contents are resolved after AI agent sets nluResolution', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents, request } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentNluStartConditionFlow,
+        getAiAgentResponse: aiAgentMock,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect(aiAgentMock).toHaveBeenCalled()
+    expect(request.input.nluResolution?.type).toEqual('ai-agent')
+    expect((contents[1] as FlowText).text).toBe('Terms without welcome')
+    expect(contents.length).toBe(3)
+    expect(contents[2]).toBeInstanceOf(FlowAiAgent)
+  })
+
+  test('When Main start has a custom condition on input.nluResolution and there is no NLU match, the default start branch is used', async () => {
+    const aiAgentMock = mockAiAgentResponse(mockResponse)
+
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: {
+        flow: aiAgentNluStartConditionFlow,
+        getAiAgentResponse: aiAgentMock,
+        disableAIAgentInFirstInteraction: true,
+      },
+      requestArgs: {
+        input: {
+          data: 'How can you help me?',
+          type: INPUT.TEXT,
+        },
+        isFirstInteraction: true,
+      },
+    })
+
+    expect(aiAgentMock).not.toHaveBeenCalled()
+    expect((contents[1] as FlowText).text).toBe('Welcome')
+    expect(contents.length).toBe(2)
   })
 
   test('When disableAIAgentInFirstInteraction is true but it is not first interaction, the AI agent still responds', async () => {

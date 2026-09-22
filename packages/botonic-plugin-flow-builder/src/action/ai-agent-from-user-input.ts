@@ -1,3 +1,4 @@
+import { NluType } from '@botonic/core'
 import type { FlowContent } from '../content-fields/index'
 import { splitAiAgentContents } from '../utils/ai-agent'
 import type { FlowBuilderContext } from './context'
@@ -44,6 +45,12 @@ export async function getContentsByAiAgentFromUserInput({
     if (!aiAgentResponse || aiAgentResponse.exit) {
       return []
     }
+  }
+
+  request.input.nluResolution = {
+    type: NluType.AiAgent,
+    matchedValue: 'ai-agent-from-user-input',
+    payload: undefined,
   }
 
   return contents

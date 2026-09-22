@@ -11,6 +11,7 @@ import {
   FlowCountryConditional,
   FlowCustomConditional,
   FlowCustomConditionalV2,
+  FlowDoNothing,
   FlowGoToFlow,
   FlowHandoff,
   FlowImage,
@@ -117,6 +118,9 @@ export class FlowFactory {
           hubtypeContent,
           this.botContext
         )
+
+      case HtNodeWithContentType.DO_NOTHING:
+        return FlowDoNothing.fromHubtypeCMS(hubtypeContent)
 
       default:
         return undefined
