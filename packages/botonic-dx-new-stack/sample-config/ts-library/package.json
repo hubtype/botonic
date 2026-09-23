@@ -1,0 +1,28 @@
+{
+  "name": "my-ts-library",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rslib build --no-env",
+    "build:watch": "rslib build --watch --no-env",
+    "typecheck": "tsc -p tsconfig.tests.json",
+    "test": "vitest run --coverage",
+    "lint": "biome check --write src/ tests/",
+    "lint:check": "biome check src/ tests/",
+    "format": "biome format --write src/ tests/"
+  },
+  "devDependencies": {
+    "@botonic/dx-new-stack": "0.57.0-rslib-esm.2"
+  },
+  "engines": {
+    "node": ">=22.19.0",
+    "npm": ">=10.0.0"
+  },
+  "files": [
+    "lib/**",
+    "README.md"
+  ]
+}

@@ -37,6 +37,7 @@ const names = [
   'plugin-hubtype-analytics',
   'cli',
   'dx',
+  'dx-new-stack',
   'eslint-config',
 ]
 const archives = []
@@ -61,6 +62,22 @@ for (const name of names) {
     assert(!files.some(file => file.startsWith('lib/tests/')))
   } else if (name === 'dx') {
     assert(files.includes('baseline/rspack.config.ts'))
+  } else if (name === 'dx-new-stack') {
+    for (const file of [
+      'baseline/tsconfig.json',
+      'baseline/tsconfig.build.json',
+      'baseline/tsconfig.tests.json',
+      'baseline/tests/tsconfig.json',
+      'baseline/vitest.config.ts',
+      'baseline/vitest.config.mjs',
+      'baseline/vitest.config.d.mts',
+      'baseline/rslib.config.mts',
+      'baseline/biome.json',
+      'sample-config/ts-library/package.json',
+      'sample-config/react-library/package.json',
+    ]) {
+      assert(files.includes(file), `dx-new-stack: missing ${file}`)
+    }
   } else if (name !== 'eslint-config') {
     for (const file of ['index.js', 'index.d.ts', 'index.js.map']) {
       assert(files.includes(`lib/${file}`), `${name}: missing ${file}`)

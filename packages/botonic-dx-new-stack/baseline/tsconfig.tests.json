@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "noEmit": true,
+    "types": ["vitest/globals", "node"]
+  }
+}
