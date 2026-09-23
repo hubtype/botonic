@@ -1,13 +1,14 @@
-# Botonic CI (continuous integration)
+# Botonic DX
 
 ## What Does This Package Do?
 
-This package simplifies the configuration of all CI tasks for projects which use botonic.
+This package provides development tooling and baseline configuration for Botonic projects.
 
 ### Features
 
 - eslint
 - typescript type checking
+- Rspack configuration for Botonic apps
 
 ## Setup
 
@@ -33,6 +34,26 @@ Instructions here because it cannot contain comments
   (remove --cache from eslint command after updating your package.json).
 
 ## Usage
+
+### Rspack
+
+Copy `node_modules/@botonic/dx/baseline/rspack.config.ts` to the root of your
+bot project. The configuration builds the server, webchat, webviews, and bot
+config bundles, and supports the local development server. Add these scripts to
+your project's `package.json`:
+
+```json
+{
+  "scripts": {
+    "build_production": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
+    "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development"
+  }
+}
+```
+
+The `target=all` build expects a `rspack-entries/bot-config-entry.ts` file.
+Webviews imported from `webviews/index.ts` must be classes or functions rather
+than arrow functions.
 
 ### eslint
 

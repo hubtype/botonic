@@ -37,7 +37,6 @@ const names = [
   'plugin-hubtype-analytics',
   'cli',
   'dx',
-  'dx-bundler-rspack',
   'eslint-config',
 ]
 const archives = []
@@ -60,14 +59,11 @@ for (const name of names) {
   if (name === 'cli') {
     assert(files.includes('oclif.manifest.json'))
     assert(!files.some(file => file.startsWith('lib/tests/')))
-  } else if (!['dx', 'dx-bundler-rspack', 'eslint-config'].includes(name)) {
-    for (const file of [
-      'index.js',
-      'index.d.ts',
-      'index.js.map',
-      'package.json',
-    ]) {
-      assert(files.includes(`lib/esm/${file}`), `${name}: missing ${file}`)
+  } else if (name === 'dx') {
+    assert(files.includes('baseline/rspack.config.ts'))
+  } else if (name !== 'eslint-config') {
+    for (const file of ['index.js', 'index.d.ts', 'index.js.map']) {
+      assert(files.includes(`lib/${file}`), `${name}: missing ${file}`)
     }
   }
 }
@@ -81,7 +77,7 @@ cpSync(join(root, 'examples/blank-typescript'), fixture, {
 })
 // Exercise the shipped application bundler, with the published ESM packages.
 cpSync(
-  join(root, 'packages/botonic-dx-bundler-rspack/baseline/rspack.config.ts'),
+  join(root, 'packages/botonic-dx/baseline/rspack.config.ts'),
   join(fixture, 'rspack.config.ts')
 )
 writeFileSync(
@@ -173,7 +169,7 @@ for (const file of readdirSync(join(reactSource, 'assets'))) {
     assert.deepEqual(
       readFileSync(join(reactSource, 'assets', file)),
       readFileSync(
-        join(fixture, 'node_modules/@botonic/react/lib/esm/assets', file)
+        join(fixture, 'node_modules/@botonic/react/lib/assets', file)
       )
     )
   }
@@ -185,7 +181,7 @@ for (const mode of ['development', 'production']) {
       '--input-type=module',
       '-e',
       `
-    const { isProd } = await import('./node_modules/@botonic/plugin-ai-agents/lib/esm/constants.js');
+    const { isProd } = await import('./node_modules/@botonic/plugin-ai-agents/lib/constants.js');
     if (isProd !== (process.env.NODE_ENV === 'production')) throw Error('Environment was inlined');
   `,
     ],
