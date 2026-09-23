@@ -22,13 +22,25 @@ function reactPlugins() {
   ]
 }
 
-export function packageTests(packageUrl, { react: useReact = false } = {}) {
+export function packageTests(
+  packageUrl,
+  { react: useReact = false, botApp = false } = {}
+) {
+  const projectPath = fileURLToPath(new URL('.', packageUrl))
   return defineConfig({
-    root: fileURLToPath(new URL('.', packageUrl)),
+    root: projectPath,
     plugins: useReact ? reactPlugins() : [],
     resolve: useReact
       ? {
           alias: [
+            ...(botApp
+              ? [
+                  {
+                    find: /^BotonicProject(?=\/|$)/,
+                    replacement: `${projectPath}src`,
+                  },
+                ]
+              : []),
             {
               find: /^.*\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$/,
               replacement: fileURLToPath(

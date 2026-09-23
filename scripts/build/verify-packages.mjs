@@ -72,9 +72,19 @@ for (const name of names) {
       'baseline/vitest.config.mjs',
       'baseline/vitest.config.d.mts',
       'baseline/rslib.config.mts',
+      'baseline/rspack.config.mjs',
+      'baseline/rspack.config.d.mts',
       'baseline/biome.json',
       'sample-config/ts-library/package.json',
       'sample-config/react-library/package.json',
+      'sample-config/bot-app/package.json',
+      'sample-config/bot-app/rspack.config.ts',
+      'sample-config/bot-app/vitest.config.ts',
+      'sample-config/bot-app/tsconfig.json',
+      'sample-config/bot-app/tsconfig.tests.json',
+      'sample-config/bot-app/tests/tsconfig.json',
+      'sample-config/bot-app/biome.json',
+      'sample-config/bot-app/gitignore.txt',
     ]) {
       assert(files.includes(file), `dx-new-stack: missing ${file}`)
     }
@@ -94,7 +104,7 @@ cpSync(join(root, 'examples/blank-typescript'), fixture, {
 })
 // Exercise the shipped application bundler, with the published ESM packages.
 cpSync(
-  join(root, 'packages/botonic-dx/baseline/rspack.config.ts'),
+  join(root, 'packages/botonic-dx-new-stack/sample-config/bot-app/rspack.config.ts'),
   join(fixture, 'rspack.config.ts')
 )
 writeFileSync(
@@ -104,6 +114,7 @@ writeFileSync(
 console.log(
   run('npm', [
     'install',
+    '--legacy-peer-deps',
     '--ignore-scripts',
     '--no-audit',
     '--no-fund',

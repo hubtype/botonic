@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "./tsconfig.json",
+    "@botonic/dx-new-stack/baseline/tsconfig.tests.json"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "rspack-entries/**/*.ts",
+    "rspack-entries/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/**/*.js",
+    "tests/**/*.jsx",
+    "rspack.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
+}
