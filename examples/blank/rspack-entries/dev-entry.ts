@@ -14,4 +14,4 @@ export const app = new DevApp({
   webviews,
   ...webchat,
   ...config,
-})
+} as unknown as ConstructorParameters<typeof DevApp>[0])

@@ -1,4 +1,4 @@
-import { Route } from '@botonic/core'
+import type { Route } from '@botonic/core'
 import { FlowBuilderMultichannelAction } from '@botonic/plugin-flow-builder'
 
 import { StartConversationAction } from './actions/start-conversation'

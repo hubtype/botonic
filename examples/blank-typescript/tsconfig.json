@@ -1,26 +1,24 @@
 {
+  "extends": "@botonic/dx-new-stack/baseline/tsconfig.json",
   "compilerOptions": {
-    // skipLibCheck to  avoid error below (I checked and all @types/react have the same versipn)
-    //    ERROR in [at-loader] ../../../botonic/packages/@botonic/plugin-contentful/node_modules/@botonic/react/node_modules/@types/react/index.d.ts:2814:14
-    //TS2300: Duplicate identifier 'LibraryManagedAttributes'.
-    //
-    //ERROR in [at-loader] ./node_modules/@botonic/react/node_modules/@types/react/index.d.ts:2814:14
-    //TS2300: Duplicate identifier 'LibraryManagedAttributes'.
-    "sourceMap": true,
-    "target": "ES2015",
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "baseUrl": "src",
-    "paths": {
-      "*": ["src/*", "lib/*", "types/*"]
-    },
-    "outDir": "lib",
-    "jsx": "react-jsx",
     "allowJs": true,
-    "lib": ["DOM", "ES2022"],
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "paths": {
+      "BotonicProject": ["./src"],
+      "BotonicProject/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "lib"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "rspack-entries/**/*.ts",
+    "rspack-entries/**/*.tsx",
+    "rspack.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["tests", "dist", "node_modules"]
 }
