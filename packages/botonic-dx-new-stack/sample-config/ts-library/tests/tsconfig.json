@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.tests.json",
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

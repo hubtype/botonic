@@ -1,6 +1,9 @@
-import { EventAction, HtEventProps } from '@botonic/plugin-hubtype-analytics'
+import {
+  EventAction,
+  type HtEventProps,
+} from '@botonic/plugin-hubtype-analytics'
 
-import { BotRequest } from './types'
+import type { BotRequest } from './types'
 import { isLocal } from './utils/env-utils'
 
 type EventArgs = { [key: string]: any }

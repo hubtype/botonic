@@ -1,10 +1,10 @@
 import {
-  FlowBuilderActionProps,
+  type FlowBuilderActionProps,
   FlowBuilderMultichannelAction,
 } from '@botonic/plugin-flow-builder'
 import { RequestContext } from '@botonic/react'
 
-import { BotRequest } from '../types'
+import type { BotRequest } from '../types'
 
 // Action intended to be used in first interaction, when there is inactivity or when the start over button is clicked
 export class StartConversationAction extends FlowBuilderMultichannelAction {

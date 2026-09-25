@@ -1,3 +1,3 @@
-import { WebchatAppArgs } from '@botonic/react'
+import type { WebchatArgs } from '@botonic/react'
 
-export const webchat: WebchatAppArgs = {}
+export const webchat: WebchatArgs = {}

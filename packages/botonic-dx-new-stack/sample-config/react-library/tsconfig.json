@@ -1,0 +1,16 @@
+{
+  "extends": "@botonic/dx-new-stack/baseline/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "vitest.config.ts",
+    "rslib.config.mts"
+  ],
+  "exclude": ["tests", "lib"]
+}

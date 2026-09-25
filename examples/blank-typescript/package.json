@@ -5,14 +5,21 @@
     "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
     "deploy": "botonic deploy -c build",
-    "test": "jest"
+    "typecheck": "tsc -p tsconfig.tests.json",
+    "test": "vitest run --coverage",
+    "lint": "biome check --write .",
+    "lint:check": "biome check .",
+    "format": "biome format --write ."
   },
   "dependencies": {
-    "@babel/runtime": "^7.26.0",
-    "@botonic/react": "^0.55.0"
+    "@botonic/react": "0.57.0-rslib-esm.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@botonic/dx": "^0.55.0"
+    "@botonic/dx-new-stack": "0.57.0-rslib-esm.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5"
   },
   "engines": {
     "node": ">=22.19.0",

@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "./tsconfig.json",
+    "@botonic/dx-new-stack/baseline/tsconfig.tests.json"
+  ],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["lib", "node_modules"]
+}
