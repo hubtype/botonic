@@ -14,8 +14,5 @@ export interface HtContactReasonsNode extends HtBaseNode {
   content: {
     contact_reasons: HtContactReasonBranch[]
     default_target?: HtNodeLink
-    discarded_target?: HtNodeLink
-    discarded_by_user_target?: HtNodeLink
-    discarded_by_system_target?: HtNodeLink
   }
 }

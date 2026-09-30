@@ -9,9 +9,6 @@ import type {
 
 export class FlowContactReasonsConditional extends ContentFieldsBase {
   public contactReasons: HtContactReasonBranch[] = []
-  public discardedTarget?: HtNodeLink
-  public discardedByUserTarget?: HtNodeLink
-  public discardedBySystemTarget?: HtNodeLink
   public defaultTarget?: HtNodeLink
 
   static fromHubtypeCMS(
@@ -23,12 +20,6 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
     )
     newContactReasonsConditional.contactReasons =
       component.content.contact_reasons
-    newContactReasonsConditional.discardedTarget =
-      component.content.discarded_target
-    newContactReasonsConditional.discardedByUserTarget =
-      component.content.discarded_by_user_target
-    newContactReasonsConditional.discardedBySystemTarget =
-      component.content.discarded_by_system_target
     newContactReasonsConditional.defaultTarget =
       component.content.default_target
     newContactReasonsConditional.setFollowUp(botContext)
@@ -47,22 +38,6 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
       if (matchingBranch?.target) {
         this.followUp = matchingBranch.target
       }
-    }
-
-    if (sessionContactReasons?.some(reason => reason.name === 'discarded')) {
-      this.followUp = this.discardedTarget
-    }
-    if (
-      sessionContactReasons?.some(reason => reason.name === 'discarded_by_user')
-    ) {
-      this.followUp = this.discardedByUserTarget
-    }
-    if (
-      sessionContactReasons?.some(
-        reason => reason.name === 'discarded_by_system'
-      )
-    ) {
-      this.followUp = this.discardedBySystemTarget
     }
 
     this.followUp ??= this.defaultTarget
