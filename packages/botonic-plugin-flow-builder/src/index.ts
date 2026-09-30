@@ -106,6 +106,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       request: this.currentRequest,
     })
 
+    if (this.cmsApi.isPushFlowPayload(request.input.payload)) {
+      request.session.is_first_interaction = false
+    }
+
     this.resolveWhatsappContactRequestPayload(request)
 
     const checkUserTextInput =
