@@ -7,7 +7,6 @@ import {
   FlowBotAction,
   FlowCarousel,
   FlowChannelConditional,
-  FlowContactReasonsConditional,
   type FlowContent,
   FlowCountryConditional,
   FlowCustomConditional,
@@ -122,12 +121,6 @@ export class FlowFactory {
 
       case HtNodeWithContentType.DO_NOTHING:
         return FlowDoNothing.fromHubtypeCMS(hubtypeContent)
-
-      case HtNodeWithContentType.CONTACT_REASONS_CONDITION:
-        return FlowContactReasonsConditional.fromHubtypeCMS(
-          hubtypeContent,
-          this.botContext
-        )
 
       default:
         return undefined

@@ -5,7 +5,6 @@ import { FlowBotAction } from './flow-bot-action'
 import { FlowCaptureUserInput } from './flow-capture-user-input'
 import { FlowCarousel } from './flow-carousel'
 import { FlowChannelConditional } from './flow-channel-conditional'
-import { FlowContactReasonsConditional } from './flow-contact-reasons-conditional'
 import { FlowCountryConditional } from './flow-country-conditional'
 import { FlowCustomConditional } from './flow-custom-conditional'
 import { FlowDoNothing } from './flow-do-nothing'
@@ -35,7 +34,6 @@ export {
   FlowCaptureUserInput,
   FlowCarousel,
   FlowChannelConditional,
-  FlowContactReasonsConditional,
   FlowCountryConditional,
   FlowCustomConditional,
   FlowCustomConditionalV2,
@@ -77,4 +75,3 @@ export type FlowContent =
   | FlowAiAgentRouter
   | FlowCustomConditionalV2
   | FlowDoNothing
-  | FlowContactReasonsConditional

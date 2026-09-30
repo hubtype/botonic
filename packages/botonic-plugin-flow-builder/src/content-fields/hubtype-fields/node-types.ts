@@ -21,7 +21,6 @@ export enum HtNodeWithContentType {
   CAPTURE_USER_INPUT = 'capture-user-input',
   CUSTOM_CONDITION = 'custom-condition',
   DO_NOTHING = 'do-nothing',
-  CONTACT_REASONS_CONDITION = 'contact-reasons-condition',
 }
 
 export enum HtNodeWithoutContentType {
