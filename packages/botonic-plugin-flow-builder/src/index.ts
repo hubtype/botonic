@@ -94,9 +94,6 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   }
 
   async pre(request: PluginPreRequest): Promise<void> {
-    if (this.cmsApi.isPushFlowPayload(request.input.payload)) {
-      this.currentRequest.session.is_first_interaction = false
-    }
     // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
     this.convertWhatsappAiAgentEmptyPayloads(request)
 
@@ -108,6 +105,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       accessToken: this.getAccessToken(request.session),
       request: this.currentRequest,
     })
+
+    if (this.cmsApi.isPushFlowPayload(request.input.payload)) {
+      request.session.is_first_interaction = false
+    }
 
     this.resolveWhatsappContactRequestPayload(request)
 
