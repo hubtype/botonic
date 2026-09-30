@@ -11,13 +11,15 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.56.0] - 2026-mm-dd
+## [0.56.1] - 2026-09-30
 
 ### Added
 
 ### Changed
 
 ### Fixed
+
+- [PR-3287](https://github.com/hubtype/botonic/pull/3287): do call first push flows payloads before getting contents
 
 </details>
 
