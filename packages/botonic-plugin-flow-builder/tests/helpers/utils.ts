@@ -54,7 +54,10 @@ export function createFlowBuilderPlugin({
 }
 
 interface RequestArgs {
-  input: Omit<Input, 'bot_interaction_id' | 'message_id' | 'is_new_conversation'> &
+  input: Omit<
+    Input,
+    'bot_interaction_id' | 'message_id' | 'is_new_conversation'
+  > &
     Partial<Pick<Input, 'is_new_conversation'>>
   plugins?: ResolvedPlugins
   provider?: ProviderType
