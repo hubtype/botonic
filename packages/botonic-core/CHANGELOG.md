@@ -14,6 +14,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3289](https://github.com/hubtype/botonic/pull/3289): Type is_new_conversation and conversation_id in request.input.
+
 ### Changed
 
 ### Fixed

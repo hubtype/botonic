@@ -1,6 +1,6 @@
 import { INPUT } from '@botonic/core'
 import { describe, expect, test } from '@jest/globals'
-
+import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
@@ -204,6 +204,44 @@ describe('FlowBuilderApi - Campaign methods', () => {
       const flowName = cmsApi.getFlowName('non-existent-id')
 
       expect(flowName).toBe('')
+    })
+  })
+
+  describe('isPushFlowPayload', () => {
+    test('returns true for push-flow payload with campaign id', async () => {
+      const flowBuilderPlugin = createFlowBuilderPlugin({
+        flow: campaignsFlow,
+      })
+      const request = createRequest({
+        input: {
+          type: INPUT.POSTBACK,
+          payload: `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`,
+        },
+        plugins: { flowBuilderPlugin },
+      })
+
+      await flowBuilderPlugin.pre(request)
+
+      expect(
+        flowBuilderPlugin.cmsApi.isPushFlowPayload(request.input.payload)
+      ).toBe(true)
+    })
+
+    test('returns false for unrelated postback payloads', async () => {
+      const flowBuilderPlugin = createFlowBuilderPlugin({
+        flow: campaignsFlow,
+      })
+      const request = createRequest({
+        input: { type: INPUT.POSTBACK, payload: 'some-node-id' },
+        plugins: { flowBuilderPlugin },
+      })
+
+      await flowBuilderPlugin.pre(request)
+
+      expect(
+        flowBuilderPlugin.cmsApi.isPushFlowPayload(request.input.payload)
+      ).toBe(false)
+      expect(flowBuilderPlugin.cmsApi.isPushFlowPayload(undefined)).toBe(false)
     })
   })
 })

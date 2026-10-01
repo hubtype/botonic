@@ -167,6 +167,8 @@ export interface Input {
     payload?: string
   }
   origin?: string
+  conversation_id?: string
+  is_new_conversation: boolean
 }
 
 export interface CaseEventQueuePositionChangedInput {
