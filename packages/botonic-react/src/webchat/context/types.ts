@@ -47,8 +47,14 @@ export interface WebchatState {
   isInputFocused: boolean
 }
 
-// ClientInput: type for sendInput and updateLatestInput function without message_id and bot_interaction_id because backend set this values
-export type ClientInput = Omit<CoreInput, 'message_id' | 'bot_interaction_id'>
+// ClientInput: type for sendInput and updateLatestInput function without message_id, bot_interaction_id, conversation_id and is_new_conversation because backend set this values
+export type ClientInput = Omit<
+  CoreInput,
+  | 'message_id'
+  | 'bot_interaction_id'
+  | 'conversation_id'
+  | 'is_new_conversation'
+>
 // ClientSession: type for session in frontend when webchat is deployed
 export type ClientSession = {
   user: ClientUser
