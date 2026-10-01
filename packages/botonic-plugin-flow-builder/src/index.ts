@@ -1,27 +1,17 @@
-import {
-  type BotContext,
-  INPUT,
-  type Plugin,
-  PROVIDER,
-  type ResolvedPlugins,
-  type Session,
-  WhatsappInputOrigin,
+import type {
+  BotContext,
+  Plugin,
+  ResolvedPlugins,
+  Session,
 } from '@botonic/core'
 import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
+import { BotContextManager } from './bot-context-manager'
+import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
+import type { FlowContent } from './content-fields'
 import {
-  EMPTY_PAYLOAD,
-  FLOW_BUILDER_API_URL_PROD,
-  ON_CLOSE_HANDOFF_PAYLOAD,
-  SEPARATOR,
-  SOURCE_INFO_SEPARATOR,
-} from './constants'
-import { type FlowContent, FlowHandoff } from './content-fields'
-import {
-  type HtBotActionNode,
   type HtFlowBuilderData,
-  type HtHandoffNode,
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
@@ -37,10 +27,8 @@ import {
   type RatingSubmittedInfo,
   type TrackEventFunction,
 } from './types'
-import { getNextPayloadByUserInput } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils/authentication'
-import { inputHasTextOrTranscript } from './utils/input'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 
@@ -104,107 +92,11 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       botContext: this.botContext,
     })
 
-    // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
-    this.convertWhatsappAiAgentEmptyPayloads(botContext)
-
-    if (this.cmsApi.isPushFlowPayload(botContext.input.payload)) {
-      botContext.session.is_first_interaction = false
-    }
-
-    this.resolveWhatsappContactRequestPayload(botContext)
-    this.resolveOnCloseHandoffPayload(botContext)
-
-    const checkUserTextInput =
-      inputHasTextOrTranscript(botContext.input) && !botContext.input.payload
-
-    if (checkUserTextInput) {
-      const resolvedLocale = this.cmsApi.getResolvedLocale()
-      const nextPayload = await getNextPayloadByUserInput(
-        this.cmsApi,
-        resolvedLocale,
-        botContext,
-        this.smartIntentsConfig
-      )
-      botContext.input.payload = nextPayload
-    }
-
-    await this.updateRequestBeforeRoutes(botContext)
-  }
-
-  private resolveWhatsappContactRequestPayload(botContext: BotContext): void {
-    if (
-      botContext.input.type !== INPUT.CONTACT ||
-      botContext.input.origin !== WhatsappInputOrigin.ContactRequest
-    ) {
-      return
-    }
-
-    const whatsappRequestContactInfoNode =
-      this.cmsApi.getWhatsappRequestContactInfoNode()
-
-    if (whatsappRequestContactInfoNode) {
-      botContext.input.payload = this.cmsApi.getPayload(
-        whatsappRequestContactInfoNode.content.button.target
-      )
-    }
-
-    this.cmsApi.removeWhatsappRequestContactId()
-  }
-
-  private resolveOnCloseHandoffPayload(botContext: BotContext): void {
-    if (botContext.input.payload?.startsWith(ON_CLOSE_HANDOFF_PAYLOAD)) {
-      const handoffNodeId = botContext.input.payload.split(SEPARATOR)[1]
-      const handoffNode = this.cmsApi.getNodeById<HtHandoffNode>(handoffNodeId)
-      if (handoffNode && handoffNode.type === HtNodeWithContentType.HANDOFF) {
-        const flowHandoff = FlowHandoff.fromHubtypeCMS(
-          handoffNode,
-          this.cmsApi.getResolvedLocale(),
-          this.cmsApi
-        )
-        botContext.input.payload = flowHandoff.resolveOnClosePayload(botContext)
-      }
-    }
-  }
-
-  private convertWhatsappAiAgentEmptyPayloads(botContext: BotContext): void {
-    if (botContext.session.user.provider === PROVIDER.WHATSAPP) {
-      const shouldUseReferral =
-        botContext.input.referral &&
-        botContext.input.payload?.startsWith(EMPTY_PAYLOAD)
-
-      if (shouldUseReferral) {
-        botContext.input.type = INPUT.TEXT
-        botContext.input.data = botContext.input.referral
-      }
-    }
-  }
-
-  private async updateRequestBeforeRoutes(
-    botContext: BotContext
-  ): Promise<void> {
-    this.cmsApi.removeCaptureUserInputId()
-    if (botContext.input.payload) {
-      botContext.input.payload = this.removeSourceSuffix(
-        botContext.input.payload
-      )
-
-      if (this.cmsApi.isBotAction(botContext.input.payload)) {
-        const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
-          botContext.input.payload
-        )
-
-        botContext.input.payload =
-          this.cmsApi.createPayloadWithParams(cmsBotAction)
-
-        // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
-        // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
-        this.convertWhatsappAiAgentEmptyPayloads(botContext)
-      }
-    }
-  }
-
-  private removeSourceSuffix(payload: string): string {
-    return payload.split(SOURCE_INFO_SEPARATOR)[0]
+    const botContextManager = new BotContextManager(
+      this.cmsApi,
+      this.smartIntentsConfig
+    )
+    await botContextManager.updateBeforeRoutes(botContext)
   }
 
   post(botContext: BotContext): void {
