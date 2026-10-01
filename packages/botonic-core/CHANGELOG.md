@@ -10,17 +10,21 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.56.0] - 2026-mm-dd
+## [0.56.x] - 2026-mm-dd
 
 ### Added
-
-- [PR-3289](https://github.com/hubtype/botonic/pull/3289): Type is_new_conversation and conversation_id in request.input.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.56.1] - 2026-10-01
+
+### Added
+
+- [PR-3289](https://github.com/hubtype/botonic/pull/3289): Type is_new_conversation and conversation_id in request.input.
 
 ## [0.56.0] - 2026-09-22
 
