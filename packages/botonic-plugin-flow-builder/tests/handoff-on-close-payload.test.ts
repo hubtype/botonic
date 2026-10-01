@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 
 import type { FlowBuilderApi } from '../src/api'
 import { ON_CLOSE_HANDOFF_PAYLOAD, SEPARATOR } from '../src/constants'
-import { FlowHandoff, FlowText } from '../src/content-fields'
+import { FlowHandoff, type FlowText } from '../src/content-fields'
 import type { HtHandoffNode } from '../src/content-fields/hubtype-fields'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields/node-types'
 import { ProcessEnvNodeEnvs } from '../src/types'
