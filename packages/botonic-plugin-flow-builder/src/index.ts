@@ -1,13 +1,12 @@
 import {
+  type BotContext,
   INPUT,
   type Plugin,
-  type PluginPreRequest,
   PROVIDER,
   type ResolvedPlugins,
   type Session,
   WhatsappInputOrigin,
 } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
@@ -49,7 +48,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
-  private currentRequest: PluginPreRequest
+  private botContext: BotContext
   public getAccessToken: (session: Session) => string
   public trackEvent?: TrackEventFunction
   public getAiAgentResponse?: AiAgentFunction
@@ -88,56 +87,54 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       options.disableAIAgentInFirstInteraction || false
   }
 
-  resolveFlowUrl(request: PluginPreRequest): string {
-    if (request.session.is_test_integration) {
+  resolveFlowUrl(botContext: BotContext): string {
+    if (botContext.session.is_test_integration) {
       return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${FlowBuilderJSONVersion.DRAFT}/`
     }
     return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${this.jsonVersion}/`
   }
 
-  async pre(request: PluginPreRequest): Promise<void> {
-    // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
-    this.convertWhatsappAiAgentEmptyPayloads(request)
-
-    this.currentRequest = request
+  async pre(botContext: BotContext): Promise<void> {
+    this.botContext = botContext
     this.cmsApi = await FlowBuilderApi.create({
-      flowUrl: this.resolveFlowUrl(request),
+      flowUrl: this.resolveFlowUrl(botContext),
       url: this.apiUrl,
       flow: this.flow,
-      accessToken: this.getAccessToken(request.session),
-      request: this.currentRequest,
+      accessToken: this.getAccessToken(botContext.session),
+      botContext: this.botContext,
     })
 
-    if (this.cmsApi.isPushFlowPayload(request.input.payload)) {
-      request.session.is_first_interaction = false
+    // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
+    this.convertWhatsappAiAgentEmptyPayloads(botContext)
+
+    if (this.cmsApi.isPushFlowPayload(botContext.input.payload)) {
+      botContext.session.is_first_interaction = false
     }
 
-    this.resolveWhatsappContactRequestPayload(request)
-    this.resolveOnCloseHandoffPayload(request)
+    this.resolveWhatsappContactRequestPayload(botContext)
+    this.resolveOnCloseHandoffPayload(botContext)
 
     const checkUserTextInput =
-      inputHasTextOrTranscript(request.input) && !request.input.payload
+      inputHasTextOrTranscript(botContext.input) && !botContext.input.payload
 
     if (checkUserTextInput) {
       const resolvedLocale = this.cmsApi.getResolvedLocale()
       const nextPayload = await getNextPayloadByUserInput(
         this.cmsApi,
         resolvedLocale,
-        request as unknown as ActionRequest,
+        botContext,
         this.smartIntentsConfig
       )
-      request.input.payload = nextPayload
+      botContext.input.payload = nextPayload
     }
 
-    await this.updateRequestBeforeRoutes(request)
+    await this.updateRequestBeforeRoutes(botContext)
   }
 
-  private resolveWhatsappContactRequestPayload(
-    request: PluginPreRequest
-  ): void {
+  private resolveWhatsappContactRequestPayload(botContext: BotContext): void {
     if (
-      request.input.type !== INPUT.CONTACT ||
-      request.input.origin !== WhatsappInputOrigin.ContactRequest
+      botContext.input.type !== INPUT.CONTACT ||
+      botContext.input.origin !== WhatsappInputOrigin.ContactRequest
     ) {
       return
     }
@@ -146,7 +143,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       this.cmsApi.getWhatsappRequestContactInfoNode()
 
     if (whatsappRequestContactInfoNode) {
-      request.input.payload = this.cmsApi.getPayload(
+      botContext.input.payload = this.cmsApi.getPayload(
         whatsappRequestContactInfoNode.content.button.target
       )
     }
@@ -154,9 +151,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     this.cmsApi.removeWhatsappRequestContactId()
   }
 
-  private resolveOnCloseHandoffPayload(request: PluginPreRequest): void {
-    if (request.input.payload?.startsWith(ON_CLOSE_HANDOFF_PAYLOAD)) {
-      const handoffNodeId = request.input.payload.split(SEPARATOR)[1]
+  private resolveOnCloseHandoffPayload(botContext: BotContext): void {
+    if (botContext.input.payload?.startsWith(ON_CLOSE_HANDOFF_PAYLOAD)) {
+      const handoffNodeId = botContext.input.payload.split(SEPARATOR)[1]
       const handoffNode = this.cmsApi.getNodeById<HtHandoffNode>(handoffNodeId)
       if (handoffNode && handoffNode.type === HtNodeWithContentType.HANDOFF) {
         const flowHandoff = FlowHandoff.fromHubtypeCMS(
@@ -164,42 +161,44 @@ export default class BotonicPluginFlowBuilder implements Plugin {
           this.cmsApi.getResolvedLocale(),
           this.cmsApi
         )
-        request.input.payload = flowHandoff.resolveOnClosePayload(request)
+        botContext.input.payload = flowHandoff.resolveOnClosePayload(botContext)
       }
     }
   }
 
-  private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
-    if (request.session.user.provider === PROVIDER.WHATSAPP) {
+  private convertWhatsappAiAgentEmptyPayloads(botContext: BotContext): void {
+    if (botContext.session.user.provider === PROVIDER.WHATSAPP) {
       const shouldUseReferral =
-        request.input.referral &&
-        request.input.payload?.startsWith(EMPTY_PAYLOAD)
+        botContext.input.referral &&
+        botContext.input.payload?.startsWith(EMPTY_PAYLOAD)
 
       if (shouldUseReferral) {
-        request.input.type = INPUT.TEXT
-        request.input.data = request.input.referral
+        botContext.input.type = INPUT.TEXT
+        botContext.input.data = botContext.input.referral
       }
     }
   }
 
   private async updateRequestBeforeRoutes(
-    request: PluginPreRequest
+    botContext: BotContext
   ): Promise<void> {
     this.cmsApi.removeCaptureUserInputId()
-    if (request.input.payload) {
-      request.input.payload = this.removeSourceSuffix(request.input.payload)
+    if (botContext.input.payload) {
+      botContext.input.payload = this.removeSourceSuffix(
+        botContext.input.payload
+      )
 
-      if (this.cmsApi.isBotAction(request.input.payload)) {
+      if (this.cmsApi.isBotAction(botContext.input.payload)) {
         const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
-          request.input.payload
+          botContext.input.payload
         )
 
-        request.input.payload =
+        botContext.input.payload =
           this.cmsApi.createPayloadWithParams(cmsBotAction)
 
         // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
         // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
-        this.convertWhatsappAiAgentEmptyPayloads(request)
+        this.convertWhatsappAiAgentEmptyPayloads(botContext)
       }
     }
   }
@@ -208,9 +207,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     return payload.split(SOURCE_INFO_SEPARATOR)[0]
   }
 
-  post(request: PluginPreRequest): void {
-    request.input.nluResolution = undefined
-    delete request.session.user.system_locale_updated
+  post(botContext: BotContext): void {
+    botContext.input.nluResolution = undefined
+    delete botContext.session.user.system_locale_updated
   }
 
   async getContentsByContentID(
@@ -236,7 +235,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getStartContents(): Promise<FlowContent[]> {
     const startNode = this.cmsApi.getStartNode()
-    this.currentRequest.session.flow_thread_id = uuidv7()
+    this.botContext.session.flow_thread_id = uuidv7()
     return await this.getContentsByNode(startNode)
   }
 
@@ -253,7 +252,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     ) {
       const customFunctionResolver = new CustomFunction(
         this.functions,
-        this.currentRequest,
+        this.botContext,
         resolvedLocale
       )
       const targetId = await customFunctionResolver.call(node)
@@ -261,7 +260,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     const flowFactory = new FlowFactory(
-      this.currentRequest,
+      this.botContext,
       this.cmsApi,
       resolvedLocale
     )

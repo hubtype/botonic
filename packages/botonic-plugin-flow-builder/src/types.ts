@@ -3,7 +3,6 @@ import type {
   BotContext,
   GuardrailRule,
   InferenceResponse,
-  PluginPreRequest,
   ResolvedPlugins,
 } from '@botonic/core'
 import type { FlowContent } from './content-fields'
@@ -67,7 +66,7 @@ export interface FlowBuilderApiOptions {
   flowUrl: string
   flow?: HtFlowBuilderData
   accessToken: string
-  request: PluginPreRequest
+  botContext: BotContext
 }
 
 export enum ProcessEnvNodeEnvs {
