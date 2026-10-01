@@ -14,13 +14,15 @@ import { FlowBuilderApi } from './api'
 import {
   EMPTY_PAYLOAD,
   FLOW_BUILDER_API_URL_PROD,
+  ON_CLOSE_HANDOFF_PAYLOAD,
   SEPARATOR,
   SOURCE_INFO_SEPARATOR,
 } from './constants'
-import type { FlowContent } from './content-fields'
+import { type FlowContent, FlowHandoff } from './content-fields'
 import {
   type HtBotActionNode,
   type HtFlowBuilderData,
+  type HtHandoffNode,
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
@@ -111,6 +113,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     this.resolveWhatsappContactRequestPayload(request)
+    this.resolveOnCloseHandoffPayload(request)
 
     const checkUserTextInput =
       inputHasTextOrTranscript(request.input) && !request.input.payload
@@ -149,6 +152,21 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     this.cmsApi.removeWhatsappRequestContactId()
+  }
+
+  private resolveOnCloseHandoffPayload(request: PluginPreRequest): void {
+    if (request.input.payload?.startsWith(ON_CLOSE_HANDOFF_PAYLOAD)) {
+      const handoffNodeId = request.input.payload.split(SEPARATOR)[1]
+      const handoffNode = this.cmsApi.getNodeById<HtHandoffNode>(handoffNodeId)
+      if (handoffNode && handoffNode.type === HtNodeWithContentType.HANDOFF) {
+        const flowHandoff = FlowHandoff.fromHubtypeCMS(
+          handoffNode,
+          this.cmsApi.getResolvedLocale(),
+          this.cmsApi
+        )
+        request.input.payload = flowHandoff.resolveOnClosePayload(request)
+      }
+    }
   }
 
   private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
