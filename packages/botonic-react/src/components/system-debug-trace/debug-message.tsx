@@ -8,6 +8,7 @@ import {
   getAiAgentRouterEventConfig,
   getBotActionEventConfig,
   getConditionalChannelEventConfig,
+  getConditionalContactReasonsEventConfig,
   getConditionalCountryEventConfig,
   getConditionalCustomEventConfig,
   getConditionalQueueStatusEventConfig,
@@ -61,6 +62,8 @@ const getEventConfig = (
       return getRedirectFlowEventConfig(debugEvent)
     case EventAction.WebviewActionTriggered:
       return getWebviewActionTriggeredEventConfig(debugEvent)
+    case EventAction.ConditionalContactReasons:
+      return getConditionalContactReasonsEventConfig(debugEvent)
     default:
       return undefined
   }

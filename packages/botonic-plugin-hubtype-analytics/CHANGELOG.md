@@ -11,9 +11,11 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.56.0] - 2026-mm-dd
+## [0.57.0] - 2026-mm-dd
 
 ### Added
+
+- [PR-3293](https://github.com/hubtype/botonic/pull/3293): Add support for `conditional_contact_reasons` Hubtype analytics event.
 
 ### Changed
 

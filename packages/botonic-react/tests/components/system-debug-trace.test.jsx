@@ -13,6 +13,7 @@ import {
   getAiAgentEventConfig,
   getBotActionEventConfig,
   getConditionalChannelEventConfig,
+  getConditionalContactReasonsEventConfig,
   getConditionalCountryEventConfig,
   getConditionalCustomEventConfig,
   getConditionalQueueStatusEventConfig,
@@ -248,6 +249,26 @@ describe('SystemDebugTrace Component', () => {
       expect(container.querySelector('[style*="display: none"]')).toBeTruthy()
     })
 
+    test('renders conditional contact reasons event', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalContactReasons,
+        contactReasons: ['billing', 'technical'],
+        result: 'billing_branch',
+      }
+
+      const { container } = render(
+        <DebugMessage debugEvent={debugEvent} messageId='msg-contact-reasons' />
+      )
+
+      const header = container.querySelector('.collapsible > div:first-child')
+      expect(header?.textContent).toContain('Contact reasons condition')
+      expect(container.querySelector('.collapsible')).toBeTruthy()
+      expect(container.textContent).toContain('Contact reasons')
+      expect(container.textContent).toContain('billing, technical')
+      expect(container.textContent).toContain('Target')
+      expect(container.textContent).toContain('billing_branch')
+    })
+
     test('renders conditional queue status event', () => {
       const debugEvent = {
         action: EventAction.ConditionalQueueStatus,
@@ -452,6 +473,22 @@ describe('SystemDebugTrace Component', () => {
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBe('Custom condition')
+    })
+
+    test('getConditionalContactReasonsEventConfig returns collapsible config', () => {
+      const data = {
+        action: EventAction.ConditionalContactReasons,
+        contactReasons: ['billing'],
+        result: 'default',
+      }
+
+      const config = getConditionalContactReasonsEventConfig(data)
+
+      expect(config.action).toBe(EventAction.ConditionalContactReasons)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBe('Contact reasons condition')
     })
 
     test('getConditionalQueueStatusEventConfig returns non-collapsible config', () => {

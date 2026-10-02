@@ -5,14 +5,14 @@ export interface HtContactReasonBranch {
   id: string
   name: string
   project_id: string
-  project_name?: string
-  target?: HtNodeLink
+  project_name: string
+  target: HtNodeLink
 }
 
 export interface HtContactReasonsNode extends HtBaseNode {
   type: HtNodeWithContentType.CONTACT_REASONS_CONDITION
   content: {
     contact_reasons: HtContactReasonBranch[]
-    default_target?: HtNodeLink
+    default_target: HtNodeLink
   }
 }

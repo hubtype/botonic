@@ -22,6 +22,7 @@ import {
   HtEventWebviewStep,
 } from './event-models'
 import { HtEventCaptureUserInput } from './event-models/ht-event-capture-user-input'
+import { HtEventConditionalContactReasons } from './event-models/ht-event-conditional-contact-reasons'
 import { EventAction, type HtEventProps, type RequestData } from './types'
 
 export function createHtEvent(
@@ -80,6 +81,9 @@ export function createHtEvent(
 
     case EventAction.ConditionalChannel:
       return new HtEventConditionalChannel(htEventProps, requestData)
+
+    case EventAction.ConditionalContactReasons:
+      return new HtEventConditionalContactReasons(htEventProps, requestData)
 
     case EventAction.BotAction:
       return new HtEventBotAction(htEventProps, requestData)

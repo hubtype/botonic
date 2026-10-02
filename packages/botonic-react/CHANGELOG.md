@@ -10,9 +10,11 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
 
-## [0.56.x] - 2026-mm-dd
+## [0.57.x] - 2026-mm-dd
 
 ### Added
+
+- [PR-3293](https://github.com/hubtype/botonic/pull/3293): Create new component to show `conditional_contact_reasons` event.
 
 ### Changed
 
