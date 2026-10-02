@@ -6,17 +6,27 @@ import {
   isWebchat,
 } from '@botonic/core'
 import { WebchatSettings } from '@botonic/react'
-
 import type { FlowBuilderApi } from '../api'
+import { ON_CLOSE_HANDOFF_PAYLOAD, SEPARATOR } from '../constants'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import type { HtHandoffNode, HtQueueLocale } from './hubtype-fields'
+import {
+  DiscardType,
+  type HtHandoffNode,
+  type HtNodeLink,
+  type HtQueueLocale,
+} from './hubtype-fields'
 
 export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
   public onFinishPayload?: string
   public handoffAutoAssign: boolean
   public hasQueuePositionChangedNotificationsEnabled: boolean
+  public hasDifferentiatedCloseTypes: boolean
+  public resolvedByAgent?: HtNodeLink
+  public discardedByAgent?: HtNodeLink
+  public discardedByUser?: HtNodeLink
+  public discardedBySystem?: HtNodeLink
   public isTestIntegration: boolean
 
   static fromHubtypeCMS(
@@ -30,14 +40,21 @@ export class FlowHandoff extends ContentFieldsBase {
       locale,
       cmsHandoff.content.queue
     )
+    newHandoff.hasDifferentiatedCloseTypes =
+      cmsHandoff.content.has_differentiated_close_types
+    newHandoff.resolvedByAgent = cmsHandoff.content.resolved_by_agent
+    newHandoff.discardedByAgent = cmsHandoff.content.discarded_by_agent
+    newHandoff.discardedByUser = cmsHandoff.content.discarded_by_user
+    newHandoff.discardedBySystem = cmsHandoff.content.discarded_by_system
+    newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
+    newHandoff.hasQueuePositionChangedNotificationsEnabled =
+      cmsHandoff.content.has_queue_position_changed_notifications_enabled
+
     newHandoff.onFinishPayload = FlowHandoff.getOnFinishPayload(
       cmsHandoff,
       cmsApi
     )
-    newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
-    newHandoff.hasQueuePositionChangedNotificationsEnabled =
-      cmsHandoff.content.has_queue_position_changed_notifications_enabled
-    newHandoff.followUp = cmsHandoff.follow_up
+    newHandoff.followUp = undefined
 
     return newHandoff
   }
@@ -46,11 +63,41 @@ export class FlowHandoff extends ContentFieldsBase {
     cmsHandoff: HtHandoffNode,
     cmsApi: FlowBuilderApi
   ): string | undefined {
-    if (cmsHandoff.target?.id) {
+    if (cmsHandoff.content.has_differentiated_close_types) {
+      return `${ON_CLOSE_HANDOFF_PAYLOAD}${SEPARATOR}${cmsHandoff.id}`
+    } else if (cmsHandoff.target?.id) {
       return cmsApi.getPayload(cmsHandoff.target)
     }
 
     return undefined
+  }
+
+  resolveOnClosePayload(botContext: BotContext): string {
+    const contactReasons =
+      botContext.session._hubtype_case_contact_reasons || []
+
+    if (contactReasons.some(reason => reason.name === DiscardType.ByAgent)) {
+      if (this.discardedByAgent?.id) {
+        return this.discardedByAgent.id
+      }
+      console.error('No discarded by agent target found')
+    }
+    if (contactReasons.some(reason => reason.name === DiscardType.ByUser)) {
+      if (this.discardedByUser?.id) {
+        return this.discardedByUser.id
+      }
+      console.error('No discarded by user target found')
+    }
+    if (contactReasons.some(reason => reason.name === DiscardType.BySystem)) {
+      if (this.discardedBySystem?.id) {
+        return this.discardedBySystem.id
+      }
+      console.error('No discarded by system target found')
+    }
+    if (this.resolvedByAgent?.id) {
+      return this.resolvedByAgent.id
+    }
+    throw new Error('No resolved by agent target found')
   }
 
   async doHandoff(botContext: BotContext): Promise<void> {
