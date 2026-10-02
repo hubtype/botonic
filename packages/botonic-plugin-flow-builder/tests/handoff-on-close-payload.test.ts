@@ -1,11 +1,13 @@
 import { BotonicAction, INPUT, type PluginPreRequest } from '@botonic/core'
 import { beforeEach, describe, expect, jest, test } from '@jest/globals'
-
 import type { FlowBuilderApi } from '../src/api'
 import { ON_CLOSE_HANDOFF_PAYLOAD, SEPARATOR } from '../src/constants'
-import { FlowHandoff, type FlowText } from '../src/content-fields'
-import type { HtHandoffNode } from '../src/content-fields/hubtype-fields'
+import {
+  DiscardType,
+  type HtHandoffNode,
+} from '../src/content-fields/hubtype-fields/index'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields/node-types'
+import { FlowHandoff, type FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockQueueAvailability } from './__mocks__/conditional-queue'
@@ -216,9 +218,9 @@ describe('FlowHandoff.resolveOnClosePayload', () => {
   }
 
   test.each([
-    ['discarded', DISCARDED_BY_AGENT_TEXT_ID],
-    ['discarded_by_user', DISCARDED_BY_USER_TEXT_ID],
-    ['discarded_by_system', DISCARDED_BY_SYSTEM_TEXT_ID],
+    [DiscardType.ByAgent, DISCARDED_BY_AGENT_TEXT_ID],
+    [DiscardType.ByUser, DISCARDED_BY_USER_TEXT_ID],
+    [DiscardType.BySystem, DISCARDED_BY_SYSTEM_TEXT_ID],
   ])(
     'returns the link target for discard reason %s',
     (reasonName, expectedTargetId) => {
@@ -273,7 +275,7 @@ describe('FlowHandoff.resolveOnClosePayload', () => {
     const request = createRequest({
       input: { data: 'test', type: INPUT.TEXT },
     })
-    setContactReasons(request, ['discarded_by_user', 'discarded'])
+    setContactReasons(request, [DiscardType.ByUser, DiscardType.ByAgent])
 
     expect(handoff.resolveOnClosePayload(request)).toBe(
       DISCARDED_BY_AGENT_TEXT_ID
@@ -322,10 +324,14 @@ describe('plugin.pre resolveOnCloseHandoffPayload', () => {
   })
 
   test.each([
-    ['discarded', DISCARDED_BY_AGENT_TEXT_ID, 'Case discarded by agent'],
-    ['discarded_by_user', DISCARDED_BY_USER_TEXT_ID, 'Case discarded by user'],
     [
-      'discarded_by_system',
+      DiscardType.ByAgent,
+      DISCARDED_BY_AGENT_TEXT_ID,
+      'Case discarded by agent',
+    ],
+    [DiscardType.ByUser, DISCARDED_BY_USER_TEXT_ID, 'Case discarded by user'],
+    [
+      DiscardType.BySystem,
       DISCARDED_BY_SYSTEM_TEXT_ID,
       'Case discarded by system',
     ],

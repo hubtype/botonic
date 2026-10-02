@@ -10,7 +10,12 @@ import type { FlowBuilderApi } from '../api'
 import { ON_CLOSE_HANDOFF_PAYLOAD, SEPARATOR } from '../constants'
 import { getCommonFlowContentEventArgsForContentId } from '../tracking'
 import { ContentFieldsBase } from './content-fields-base'
-import type { HtHandoffNode, HtNodeLink, HtQueueLocale } from './hubtype-fields'
+import {
+  DiscardType,
+  type HtHandoffNode,
+  type HtNodeLink,
+  type HtQueueLocale,
+} from './hubtype-fields'
 
 export class FlowHandoff extends ContentFieldsBase {
   public queue?: HtQueueLocale
@@ -71,19 +76,19 @@ export class FlowHandoff extends ContentFieldsBase {
     const contactReasons =
       botContext.session._hubtype_case_contact_reasons || []
 
-    if (contactReasons.some(reason => reason.name === 'discarded')) {
+    if (contactReasons.some(reason => reason.name === DiscardType.ByAgent)) {
       if (this.discardedByAgent?.id) {
         return this.discardedByAgent.id
       }
       console.error('No discarded by agent target found')
     }
-    if (contactReasons.some(reason => reason.name === 'discarded_by_user')) {
+    if (contactReasons.some(reason => reason.name === DiscardType.ByUser)) {
       if (this.discardedByUser?.id) {
         return this.discardedByUser.id
       }
       console.error('No discarded by user target found')
     }
-    if (contactReasons.some(reason => reason.name === 'discarded_by_system')) {
+    if (contactReasons.some(reason => reason.name === DiscardType.BySystem)) {
       if (this.discardedBySystem?.id) {
         return this.discardedBySystem.id
       }

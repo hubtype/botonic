@@ -6,6 +6,12 @@ import type {
 } from './common'
 import type { HtNodeWithContentType } from './node-types'
 
+export enum DiscardType {
+  ByAgent = 'discarded',
+  ByUser = 'discarded_by_user',
+  BySystem = 'discarded_by_system',
+}
+
 export interface HtHandoffNode extends HtBaseNode {
   type: HtNodeWithContentType.HANDOFF
   content: {
