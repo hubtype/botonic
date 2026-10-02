@@ -31,4 +31,5 @@ export const LABELS = {
   SPECIALISTS_AVAILABLE: 'Specialists available',
   NO_TRANSFER: 'No transfer',
   TRANSFERRED_TO: 'Transferred to',
+  CONTACT_REASONS: 'Contact reasons',
 } as const
