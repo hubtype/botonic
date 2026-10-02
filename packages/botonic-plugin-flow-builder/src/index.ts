@@ -97,7 +97,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       this.cmsApi,
       this.smartIntentsConfig
     )
-    await botContextManager.updateBeforeRoutes(botContext)
+    await botContextManager.prepareInputForRoutes(botContext)
   }
 
   post(botContext: BotContext): void {

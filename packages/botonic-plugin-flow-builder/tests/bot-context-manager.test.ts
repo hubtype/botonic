@@ -34,14 +34,14 @@ const smartIntentsConfig: SmartIntentsInferenceConfig = {
 const NODE_UUID = '11111111-1111-4111-8111-111111111111'
 const HANDOFF_ID = 'handoff-id'
 
-describe('BotContextManager.updateBeforeRoutes', () => {
+describe('BotContextManager.prepareInputForRoutes', () => {
   let cmsApi: MockFlowBuilderApi
-  let manager: BotContextManager
+  let botContextManager: BotContextManager
 
   beforeEach(() => {
     jest.clearAllMocks()
     cmsApi = createMockFlowBuilderApi()
-    manager = new BotContextManager(
+    botContextManager = new BotContextManager(
       asFlowBuilderApi(cmsApi),
       smartIntentsConfig
     )
@@ -59,7 +59,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(botContext.input.type).toBe(INPUT.TEXT)
       expect(botContext.input.data).toBe(referral)
@@ -77,7 +77,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(botContext.session.is_first_interaction).toBe(false)
     })
@@ -97,7 +97,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(cmsApi.getPayload).toHaveBeenCalledWith(target)
       expect(botContext.input.payload).toBe('contact-target-payload')
@@ -124,7 +124,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(FlowHandoff.fromHubtypeCMS).toHaveBeenCalled()
       expect(resolveOnClosePayload).toHaveBeenCalledWith(botContext)
@@ -142,7 +142,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(mockedGetNextPayload).toHaveBeenCalledWith(
         asFlowBuilderApi(cmsApi),
@@ -162,7 +162,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(mockedGetNextPayload).not.toHaveBeenCalled()
       expect(botContext.input.payload).toBe('existing-payload')
@@ -170,7 +170,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
   })
 
   describe('removeCaptureUserInputId', () => {
-    test('clears capture user input once at the end of updateBeforeRoutes', async () => {
+    test('clears capture user input once at the end of prepareInputForRoutes', async () => {
       const botContext = createRequest({
         captureUserInputId: 'capture-node',
         input: {
@@ -179,7 +179,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(cmsApi.removeCaptureUserInputId).toHaveBeenCalledTimes(1)
     })
@@ -194,7 +194,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(botContext.input.payload).toBe(NODE_UUID)
       expect(cmsApi.isBotAction).toHaveBeenCalledWith(NODE_UUID)
@@ -217,7 +217,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(cmsApi.getNodeById).toHaveBeenCalledWith(NODE_UUID)
       expect(cmsApi.createPayloadWithParams).toHaveBeenCalledWith(botActionNode)
@@ -243,7 +243,7 @@ describe('BotContextManager.updateBeforeRoutes', () => {
         },
       })
 
-      await manager.updateBeforeRoutes(botContext)
+      await botContextManager.prepareInputForRoutes(botContext)
 
       expect(botContext.input.type).toBe(INPUT.TEXT)
       expect(botContext.input.data).toBe(referral)

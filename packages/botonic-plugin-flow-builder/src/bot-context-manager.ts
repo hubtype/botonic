@@ -28,7 +28,7 @@ export class BotContextManager {
     private readonly smartIntentsConfig: SmartIntentsInferenceConfig
   ) {}
 
-  async updateBeforeRoutes(botContext: BotContext): Promise<void> {
+  async prepareInputForRoutes(botContext: BotContext): Promise<void> {
     // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
     this.convertWhatsappAiAgentEmptyPayloads(botContext)
 
