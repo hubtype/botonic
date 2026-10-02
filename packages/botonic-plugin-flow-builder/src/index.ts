@@ -12,7 +12,6 @@ import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
 import type { FlowContent } from './content-fields'
 import {
   type HtFlowBuilderData,
-  type HtHandoffNode,
   type HtNodeWithContent,
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
