@@ -88,6 +88,10 @@ function reactPlugins() {
   ]
 }
 
+const registerAssetLoaderPath = fileURLToPath(
+  new URL('./register-asset-loader.mjs', import.meta.url)
+)
+
 export function packageTests(
   packageUrl,
   { react: useReact = false, botApp = false } = {}
@@ -133,6 +137,9 @@ export function packageTests(
       globals: true,
       environment: 'node',
       isolate: true,
+      ...(useBotonicTestStack
+        ? { execArgv: ['--import', registerAssetLoaderPath] }
+        : {}),
       server: useBotonicTestStack
         ? {
             deps: {
@@ -142,8 +149,8 @@ export function packageTests(
           }
         : undefined,
       include: [
-        'tests/**/*.{js,jsx,ts,tsx}',
-        '**/*.{test,spec}.{js,jsx,ts,tsx}',
+        'tests/**/*.{js,mjs,jsx,ts,tsx}',
+        '**/*.{test,spec}.{js,mjs,jsx,ts,tsx}',
       ],
       exclude: [
         '**/node_modules/**',

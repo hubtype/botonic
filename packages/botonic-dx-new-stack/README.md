@@ -73,7 +73,7 @@ poder cargarse como espera el CLI.
 | `tests/tsconfig.json` | Extiende el `tsconfig.tests.json` local. Permite que el editor asocie los archivos de `tests/` con el proyecto TypeScript de pruebas. |
 | `rslib.config.mts` | Importa `packageConfig()` de `baseline/rslib.config`. Produce ESM sin agrupar en `lib/`, con declaraciones y mapas de fuente; `{ react: true }` activa el plugin de React y el destino web. |
 | `rspack.config.ts` | En `bot-app`, importa `botAppConfig()` de `baseline/rspack.config` para compilar los cuatro bundles y servir la aplicación local. |
-| `vitest.config.ts` | Importa `packageTests(import.meta.url)` de `baseline/vitest.config`. Fija la raíz en el proyecto consumidor y configura aislamiento, reportes JUnit y cobertura V8. `{ react: true }` añade el plugin React y alias para recursos; `{ botApp: true }` añade el alias `BotonicProject`. |
+| `vitest.config.ts` | Importa `packageTests(import.meta.url)` de `baseline/vitest.config`. Fija la raíz en el proyecto consumidor y configura aislamiento, reportes JUnit y cobertura V8. `{ react: true }` añade el plugin React y alias para recursos; `{ botApp: true }` añade el alias `BotonicProject`. Con `{ react: true }` o `{ botApp: true }`, los tests registran un loader de Node para assets y estilos, de modo que un import nativo de `@botonic/react` no falle por `.svg` o `.png`. |
 | `biome.json` | Vive en la raíz de cada proyecto y extiende `@botonic/dx-new-stack/biome`. Comparte formato, lint e importaciones ordenadas; permite añadir ajustes propios en el mismo archivo. |
 
 Las subrutas públicas de Rspack y Vitest cargan sus archivos `.mjs` y exponen
@@ -82,8 +82,9 @@ tipos mediante archivos `.d.mts`. También se incluye
 importar directamente un `.ts` desde `node_modules` durante el arranque de
 Vitest.
 
-Este paquete de configuración no tiene tests propios. Los scripts de pruebas
-de `sample-config/` pertenecen a las futuras librerías consumidoras.
+Este paquete incluye pruebas del loader de assets de Node (`npm test -w
+@botonic/dx-new-stack`). Los scripts de pruebas de `sample-config/` pertenecen
+a las futuras librerías consumidoras.
 
 Los archivos de `baseline/` son los valores compartidos. Los archivos de
 `sample-config/` son los adaptadores que se copian a cada proyecto. Las

@@ -31,7 +31,8 @@
     "prepublishOnly": "npm run lint && npm run format",
     "lint": "biome check --write baseline/",
     "lint:check": "biome check baseline/",
-    "format": "biome format --write baseline/"
+    "format": "biome format --write baseline/",
+    "test": "vitest run"
   },
   "dependencies": {
     "@biomejs/biome": "^2.5.13",
