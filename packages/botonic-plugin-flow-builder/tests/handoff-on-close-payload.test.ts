@@ -1,5 +1,5 @@
 import { BotonicAction, INPUT, type PluginPreRequest } from '@botonic/core'
-import { beforeEach, describe, expect, jest, test } from '@jest/globals'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 import type { FlowBuilderApi } from '../src/api'
 import { ON_CLOSE_HANDOFF_PAYLOAD, SEPARATOR } from '../src/constants'
 import {
@@ -283,7 +283,7 @@ describe('FlowHandoff.resolveOnClosePayload', () => {
   })
 
   test('logs an error and falls back to resolved_by_agent when discard reason has no link', () => {
-    const consoleError = jest
+    const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => undefined)
     const handoff = handoffWithCloseLinks({

@@ -1,30 +1,32 @@
+import type { Mock } from 'vitest'
+import { vi } from 'vitest'
 import type { FlowBuilderApi } from '../../src/api'
 
 export interface MockFlowBuilderApi {
-  isPushFlowPayload: jest.Mock
-  getResolvedLocale: jest.Mock
-  getWhatsappRequestContactInfoNode: jest.Mock
-  getPayload: jest.Mock
-  removeWhatsappRequestContactId: jest.Mock
-  getNodeById: jest.Mock
-  isBotAction: jest.Mock
-  createPayloadWithParams: jest.Mock
-  removeCaptureUserInputId: jest.Mock
+  isPushFlowPayload: Mock
+  getResolvedLocale: Mock
+  getWhatsappRequestContactInfoNode: Mock
+  getPayload: Mock
+  removeWhatsappRequestContactId: Mock
+  getNodeById: Mock
+  isBotAction: Mock
+  createPayloadWithParams: Mock
+  removeCaptureUserInputId: Mock
 }
 
 export function createMockFlowBuilderApi(
   overrides: Partial<MockFlowBuilderApi> = {}
 ): MockFlowBuilderApi {
   return {
-    isPushFlowPayload: jest.fn().mockReturnValue(false),
-    getResolvedLocale: jest.fn().mockReturnValue('en'),
-    getWhatsappRequestContactInfoNode: jest.fn().mockReturnValue(undefined),
-    getPayload: jest.fn(),
-    removeWhatsappRequestContactId: jest.fn(),
-    getNodeById: jest.fn(),
-    isBotAction: jest.fn().mockReturnValue(false),
-    createPayloadWithParams: jest.fn(),
-    removeCaptureUserInputId: jest.fn(),
+    isPushFlowPayload: vi.fn().mockReturnValue(false),
+    getResolvedLocale: vi.fn().mockReturnValue('en'),
+    getWhatsappRequestContactInfoNode: vi.fn().mockReturnValue(undefined),
+    getPayload: vi.fn(),
+    removeWhatsappRequestContactId: vi.fn(),
+    getNodeById: vi.fn(),
+    isBotAction: vi.fn().mockReturnValue(false),
+    createPayloadWithParams: vi.fn(),
+    removeCaptureUserInputId: vi.fn(),
     ...overrides,
   }
 }
