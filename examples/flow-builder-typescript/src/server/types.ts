@@ -1,7 +1,7 @@
-import { BotContext, Session, SessionUser } from '@botonic/core'
+import type { BotContext, Session, SessionUser } from '@botonic/core'
 
-import { UserData } from './domain/user-data'
-import { BotPlugins } from './plugins'
+import type { UserData } from './domain/user-data'
+import type { BotPlugins } from './plugins'
 
 export type BotRequest = BotContext<BotPlugins, UserData>
 

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {},
+    "composite": false,
+    "declaration": true,
+    "noEmit": false,
+    "isolatedModules": true
+  }
+}

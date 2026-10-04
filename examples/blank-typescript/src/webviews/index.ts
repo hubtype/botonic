@@ -1,3 +1,3 @@
-import { Webview } from '@botonic/react'
+import type { Webview } from '@botonic/react'
 
 export const webviews: Webview[] = []

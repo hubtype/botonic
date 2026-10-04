@@ -1,8 +1,24 @@
 {
+  "extends": "@botonic/dx-new-stack/baseline/tsconfig.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
-    "esModuleInterop": true,
-    "jsx": "react-jsx"
-  }
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "paths": {
+      "BotonicProject": ["./src"],
+      "BotonicProject/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "rspack-entries/**/*.ts",
+    "rspack-entries/**/*.tsx",
+    "rspack.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": ["tests", "dist", "node_modules"]
 }

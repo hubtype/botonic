@@ -1,0 +1,64 @@
+{
+  "name": "@botonic/dx-new-stack",
+  "version": "0.57.0-rslib-esm.2",
+  "type": "module",
+  "description": "Shared Rslib, Rspack, Vitest, Biome and TypeScript configuration for Botonic libraries and apps",
+  "license": "MIT",
+  "exports": {
+    "./biome": "./baseline/biome.json",
+    "./baseline/biome.json": "./baseline/biome.json",
+    "./baseline/tsconfig.json": "./baseline/tsconfig.json",
+    "./baseline/tsconfig.build.json": "./baseline/tsconfig.build.json",
+    "./baseline/tsconfig.tests.json": "./baseline/tsconfig.tests.json",
+    "./baseline/tests/tsconfig.json": "./baseline/tests/tsconfig.json",
+    "./baseline/rslib.config": "./baseline/rslib.config.mts",
+    "./baseline/rspack.config": {
+      "types": "./baseline/rspack.config.d.mts",
+      "default": "./baseline/rspack.config.mjs"
+    },
+    "./baseline/vitest.config": {
+      "types": "./baseline/vitest.config.d.mts",
+      "default": "./baseline/vitest.config.mjs"
+    }
+  },
+  "files": [
+    "README.md",
+    "baseline/**",
+    "sample-config/**"
+  ],
+  "scripts": {
+    "build": "node -e \"console.log('Configuration package: no compilation required')\"",
+    "prepublishOnly": "npm run lint && npm run format",
+    "lint": "biome check --write baseline/",
+    "lint:check": "biome check baseline/",
+    "format": "biome format --write baseline/"
+  },
+  "dependencies": {
+    "@biomejs/biome": "^2.5.13",
+    "@rsbuild/plugin-react": "2.1.0",
+    "@rslib/core": "1.0.0",
+    "@rspack/cli": "^1.7.12",
+    "@rspack/core": "^1.6.12",
+    "@rspack/plugin-react-refresh": "^1.5.2",
+    "@types/node": "^20.17.14",
+    "@vitejs/plugin-react": "5.0.4",
+    "@vitest/coverage-v8": "4.1.11",
+    "identity-obj-proxy": "3.0.0",
+    "html-webpack-plugin": "^5.6.4",
+    "jsdom": "26.1.0",
+    "node-polyfill-webpack-plugin": "^4.1.0",
+    "null-loader": "^4.0.1",
+    "sass": "^1.93.2",
+    "sass-loader": "^16.0.5",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
+    "vite": "7.3.6",
+    "vitest": "4.1.11"
+  },
+  "engines": {
+    "node": ">=22.19.0",
+    "npm": ">=10.0.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "./tsconfig.json",
+    "@botonic/dx-new-stack/baseline/tsconfig.tests.json"
+  ],
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "tests/**/*.js",
+    "tests/**/*.jsx"
+  ],
+  "exclude": ["lib", "node_modules"]
+}

@@ -94,7 +94,7 @@ export class BotConfig {
         `\nError loading dist/bot-config.js.
         This file is not required but is used to share config with flow builder frontend.
         To create this file update your build process to include the bot-config.js file in dest folder.
-        You have an example with rspack in botonic-dx-bundler-rspack/baseline/rspack.config.ts`
+        You have an example with rspack in @botonic/dx/baseline/rspack.config.ts`
       )
       return {
         tools: [],
