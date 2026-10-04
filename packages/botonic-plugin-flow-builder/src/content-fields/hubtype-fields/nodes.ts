@@ -3,6 +3,7 @@ import type { HtAiAgentRouterNode } from './ai-agent-router'
 import type { HtBotActionNode } from './bot-action'
 import type { HtCaptureUserInputNode } from './capture-user-input'
 import type { HtCarouselNode } from './carousel'
+import type { HtContactReasonsNode } from './contact-reasons-conditional'
 import type { HtCustomConditionalV2Node } from './custom-conditional-v2'
 import type { HtDoNothingNode } from './do-nothing'
 // import { HtChannelConditionalNode } from './channel-conditional'
@@ -50,6 +51,7 @@ export type HtNodeWithContent =
   | HtCaptureUserInputNode
   | HtCustomConditionalV2Node
   | HtDoNothingNode
+  | HtContactReasonsNode
 // | HtChannelConditionalNode
 // | HtCountryConditionalNode
 // | HtCustomConditionalNode

@@ -151,6 +151,8 @@ export interface TestInputOptions {
   context?: Input['context']
   transcript?: string
   origin?: string
+  conversationId?: string
+  isNewConversation?: boolean
 }
 
 export function createTestInput(options?: TestInputOptions): Input {
@@ -166,6 +168,8 @@ export function createTestInput(options?: TestInputOptions): Input {
     bot_interaction_id:
       options?.botInteractionId ?? TEST_DEFAULTS.BOT_INTERACTION_ID,
     message_id: options?.messageId ?? TEST_DEFAULTS.MESSAGE_ID,
+    conversation_id: options?.conversationId,
+    is_new_conversation: options?.isNewConversation ?? false,
   }
 }
 

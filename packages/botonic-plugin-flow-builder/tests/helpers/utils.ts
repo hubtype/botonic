@@ -54,7 +54,11 @@ export function createFlowBuilderPlugin({
 }
 
 interface RequestArgs {
-  input: Omit<Input, 'bot_interaction_id' | 'message_id'>
+  input: Omit<
+    Input,
+    'bot_interaction_id' | 'message_id' | 'is_new_conversation'
+  > &
+    Partial<Pick<Input, 'is_new_conversation'>>
   plugins?: ResolvedPlugins
   provider?: ProviderType
   isFirstInteraction?: boolean
@@ -111,8 +115,9 @@ export function createRequest({
     input: {
       bot_interaction_id: 'testInteractionId',
       message_id: 'testMessageId',
+      is_new_conversation: input.is_new_conversation ?? false,
       ...input,
-    } as Input,
+    },
     plugins,
   })
 }

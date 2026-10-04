@@ -1,7 +1,12 @@
-import type { PluginPreRequest } from '@botonic/core'
+import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
+import {
+  AI_AGENTS_FLOW_NAME,
+  PUSH_FLOW_PAYLOAD,
+  SEPARATOR,
+  UUID_REGEXP,
+} from './constants'
 import {
   type HtBotActionNode,
   type HtCaptureUserInputNode,
@@ -31,7 +36,7 @@ export class FlowBuilderApi {
   url: string
   flowUrl: string
   flow: HtFlowBuilderData
-  request: PluginPreRequest
+  botContext: BotContext
 
   private constructor() {}
 
@@ -39,12 +44,12 @@ export class FlowBuilderApi {
     const newApi = new FlowBuilderApi()
 
     newApi.url = options.url
-    newApi.request = options.request
+    newApi.botContext = options.botContext
     // TODO: Refactor later to combine logic from `FlowBuilderApi.create`, `resolveFlowUrl` and `getAccessToken` to be in one place
     if (process.env.NODE_ENV === ProcessEnvNodeEnvs.DEVELOPMENT) {
       await newApi.updateSessionWithUserInfo(options.accessToken)
     }
-    const updatedRequest = newApi.request
+    const updatedRequest = newApi.botContext
     newApi.flowUrl = options.flowUrl.replace(
       '{bot_id}',
       updatedRequest.session.bot.id
@@ -65,8 +70,8 @@ export class FlowBuilderApi {
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     })
-    this.request.session.organization_id = response.data.organization_id
-    this.request.session.bot.id = response.data.bot_id
+    this.botContext.session.organization_id = response.data.organization_id
+    this.botContext.session.bot.id = response.data.bot_id
   }
 
   getNodeByFlowId(id: string): HtNodeWithContent {
@@ -260,23 +265,23 @@ export class FlowBuilderApi {
   }
 
   getCaptureUserInputId(): string | undefined {
-    return this.request.session.capture_user_input?.node_id
+    return this.botContext.session.capture_user_input?.node_id
   }
 
   setCaptureUserInputId(id: string): void {
-    if (this.request.session.capture_user_input) {
-      this.request.session.capture_user_input.node_id = id
+    if (this.botContext.session.capture_user_input) {
+      this.botContext.session.capture_user_input.node_id = id
     }
-    this.request.session.capture_user_input = { node_id: id }
+    this.botContext.session.capture_user_input = { node_id: id }
   }
 
   removeCaptureUserInputId(): void {
-    this.request.session.capture_user_input = undefined
+    this.botContext.session.capture_user_input = undefined
   }
 
   setUserExtraDataVariable(key: string, value: string): void {
-    if (this.request.session.user.extra_data) {
-      this.request.session.user.extra_data[key] = value
+    if (this.botContext.session.user.extra_data) {
+      this.botContext.session.user.extra_data[key] = value
     }
   }
 
@@ -289,18 +294,18 @@ export class FlowBuilderApi {
   }
 
   getSessionWhatsappRequestContactId(): string | undefined {
-    return this.request.session.whatsapp_request_contact?.id
+    return this.botContext.session.whatsapp_request_contact?.id
   }
 
   setWhatsappRequestContactId(id: string): void {
-    if (this.request.session.whatsapp_request_contact) {
-      this.request.session.whatsapp_request_contact.id = id
+    if (this.botContext.session.whatsapp_request_contact) {
+      this.botContext.session.whatsapp_request_contact.id = id
     }
-    this.request.session.whatsapp_request_contact = { id }
+    this.botContext.session.whatsapp_request_contact = { id }
   }
 
   removeWhatsappRequestContactId(): void {
-    this.request.session.whatsapp_request_contact = undefined
+    this.botContext.session.whatsapp_request_contact = undefined
   }
 
   getWhatsappRequestContactInfoNode():
@@ -320,9 +325,13 @@ export class FlowBuilderApi {
     const defaultLocaleCode = this.flow.default_locale_code
 
     return new FlowLocale(
-      this.request,
+      this.botContext,
       flowLocales,
       defaultLocaleCode
     ).resolve()
+  }
+
+  isPushFlowPayload(payload?: string): boolean {
+    return payload?.startsWith(PUSH_FLOW_PAYLOAD) ?? false
   }
 }

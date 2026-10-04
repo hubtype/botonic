@@ -1,14 +1,20 @@
 import { INPUT } from '@botonic/core'
-import { describe, test } from 'vitest'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
-import type { FlowText } from '../src/index'
+import { FlowWhatsappTemplate } from '../src/content-fields/flow-whatsapp-template'
+import { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
 // eslint-disable-next-line jest/no-mocks-import
 import { mockSmartIntent } from './__mocks__/smart-intent'
 import { basicFlow } from './helpers/flows/basic'
 import { campaignsFlow } from './helpers/flows/campaigns'
-import { createFlowBuilderPluginAndGetContents } from './helpers/utils'
+import { campaignsWhatsappTemplatePushFlow } from './helpers/flows/campaigns-whatsapp-template-push-flow'
+import {
+  createFlowBuilderPlugin,
+  createFlowBuilderPluginAndGetContents,
+  createRequest,
+} from './helpers/utils'
 
 describe('Check the contents returned by the plugin when user clicks a button', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
@@ -150,5 +156,107 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
     expect((contents[0] as FlowText).text).toBe(
       "Sorry, I didn't understand that."
     )
+  })
+})
+
+describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => mockSmartIntent('Other'))
+
+  test('pre() sets is_first_interaction to false when payload is push-flow', async () => {
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: campaignsFlow })
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
+    const request = createRequest({
+      isFirstInteraction: true,
+      input: { type: INPUT.POSTBACK, payload: pushFlowPayload },
+      plugins: { flowBuilderPlugin },
+    })
+
+    expect(request.session.is_first_interaction).toBe(true)
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(request.session.is_first_interaction).toBe(false)
+  })
+
+  test('pre() does not change is_first_interaction for other payloads', async () => {
+    const flowBuilderPlugin = createFlowBuilderPlugin({ flow: campaignsFlow })
+    const request = createRequest({
+      isFirstInteraction: true,
+      input: { type: INPUT.POSTBACK, payload: 'unrelated-payload' },
+      plugins: { flowBuilderPlugin },
+    })
+
+    await flowBuilderPlugin.pre(request)
+
+    expect(request.session.is_first_interaction).toBe(true)
+  })
+
+  test('first interaction with push-flow returns only campaign contents (no main welcome)', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: campaignsFlow },
+      requestArgs: {
+        isFirstInteraction: true,
+        input: {
+          type: INPUT.POSTBACK,
+          payload: pushFlowPayload,
+        },
+      },
+    })
+
+    expect(contents.length).toBe(2)
+    expect((contents[0] as FlowText).text).toBe(
+      'Welcome to Campaign 1 - Summer Sale!'
+    )
+    expect(
+      contents.every(content => !(content instanceof FlowWhatsappTemplate))
+    )
+    expect(
+      contents.some(
+        content =>
+          content instanceof FlowText && content.text === 'Welcome to main flow'
+      )
+    ).toBe(false)
+  })
+
+  test('first interaction with push-flow to WhatsApp template campaign returns template only', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-template`
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: campaignsWhatsappTemplatePushFlow },
+      requestArgs: {
+        isFirstInteraction: true,
+        input: {
+          type: INPUT.POSTBACK,
+          payload: pushFlowPayload,
+        },
+      },
+    })
+
+    expect(contents).toHaveLength(1)
+    expect(contents[0]).toBeInstanceOf(FlowWhatsappTemplate)
+    const template = contents[0] as FlowWhatsappTemplate
+    expect(template.htWhatsappTemplate.name).toBe('proactive_campaign_template')
+    expect(
+      contents.some(
+        content =>
+          content instanceof FlowText && content.text === 'Welcome to main flow'
+      )
+    ).toBe(false)
+  })
+
+  test('first interaction without push-flow still returns main welcome before anything else', async () => {
+    const { contents } = await createFlowBuilderPluginAndGetContents({
+      flowBuilderOptions: { flow: campaignsWhatsappTemplatePushFlow },
+      requestArgs: {
+        isFirstInteraction: true,
+        input: { type: INPUT.TEXT, data: 'hello' },
+      },
+    })
+
+    expect(contents.length).toBeGreaterThanOrEqual(1)
+    expect(contents[0]).not.toBeInstanceOf(FlowWhatsappTemplate)
+    expect((contents[0] as FlowText).text).toBe('Welcome to main flow')
   })
 })

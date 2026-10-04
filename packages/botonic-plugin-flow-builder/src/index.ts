@@ -1,25 +1,16 @@
-import {
-  INPUT,
-  type Plugin,
-  type PluginPreRequest,
-  PROVIDER,
-  type ResolvedPlugins,
-  type Session,
-  WhatsappInputOrigin,
+import type {
+  BotContext,
+  Plugin,
+  ResolvedPlugins,
+  Session,
 } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
 import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
-import {
-  EMPTY_PAYLOAD,
-  FLOW_BUILDER_API_URL_PROD,
-  SEPARATOR,
-  SOURCE_INFO_SEPARATOR,
-} from './constants'
+import { BotContextManager } from './bot-context-manager'
+import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
 import type { FlowContent } from './content-fields'
 import {
-  type HtBotActionNode,
   type HtFlowBuilderData,
   type HtNodeWithContent,
   HtNodeWithContentType,
@@ -36,10 +27,8 @@ import {
   type RatingSubmittedInfo,
   type TrackEventFunction,
 } from './types'
-import { getNextPayloadByUserInput } from './user-input'
 import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
 import { resolveGetAccessToken } from './utils/authentication'
-import { inputHasTextOrTranscript } from './utils/input'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
 
@@ -47,7 +36,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public cmsApi: FlowBuilderApi
   private flow?: HtFlowBuilderData
   private functions: Record<any, any>
-  private currentRequest: PluginPreRequest
+  private botContext: BotContext
   public getAccessToken: (session: Session) => string
   public trackEvent?: TrackEventFunction
   public getAiAgentResponse?: AiAgentFunction
@@ -86,109 +75,33 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       options.disableAIAgentInFirstInteraction || false
   }
 
-  resolveFlowUrl(request: PluginPreRequest): string {
-    if (request.session.is_test_integration) {
+  resolveFlowUrl(botContext: BotContext): string {
+    if (botContext.session.is_test_integration) {
       return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${FlowBuilderJSONVersion.DRAFT}/`
     }
     return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${this.jsonVersion}/`
   }
 
-  async pre(request: PluginPreRequest): Promise<void> {
-    // When AI Agent is executed in Whatsapp, button payloads come as referral and must be converted to text being processed by the agent.
-    this.convertWhatsappAiAgentEmptyPayloads(request)
-
-    this.currentRequest = request
+  async pre(botContext: BotContext): Promise<void> {
+    this.botContext = botContext
     this.cmsApi = await FlowBuilderApi.create({
-      flowUrl: this.resolveFlowUrl(request),
+      flowUrl: this.resolveFlowUrl(botContext),
       url: this.apiUrl,
       flow: this.flow,
-      accessToken: this.getAccessToken(request.session),
-      request: this.currentRequest,
+      accessToken: this.getAccessToken(botContext.session),
+      botContext: this.botContext,
     })
 
-    this.resolveWhatsappContactRequestPayload(request)
-
-    const checkUserTextInput =
-      inputHasTextOrTranscript(request.input) && !request.input.payload
-
-    if (checkUserTextInput) {
-      const resolvedLocale = this.cmsApi.getResolvedLocale()
-      const nextPayload = await getNextPayloadByUserInput(
-        this.cmsApi,
-        resolvedLocale,
-        request as unknown as ActionRequest,
-        this.smartIntentsConfig
-      )
-      request.input.payload = nextPayload
-    }
-
-    await this.updateRequestBeforeRoutes(request)
+    const botContextManager = new BotContextManager(
+      this.cmsApi,
+      this.smartIntentsConfig
+    )
+    await botContextManager.prepareInputForRoutes(botContext)
   }
 
-  private resolveWhatsappContactRequestPayload(
-    request: PluginPreRequest
-  ): void {
-    if (
-      request.input.type !== INPUT.CONTACT ||
-      request.input.origin !== WhatsappInputOrigin.ContactRequest
-    ) {
-      return
-    }
-
-    const whatsappRequestContactInfoNode =
-      this.cmsApi.getWhatsappRequestContactInfoNode()
-
-    if (whatsappRequestContactInfoNode) {
-      request.input.payload = this.cmsApi.getPayload(
-        whatsappRequestContactInfoNode.content.button.target
-      )
-    }
-
-    this.cmsApi.removeWhatsappRequestContactId()
-  }
-
-  private convertWhatsappAiAgentEmptyPayloads(request: PluginPreRequest): void {
-    if (request.session.user.provider === PROVIDER.WHATSAPP) {
-      const shouldUseReferral =
-        request.input.referral &&
-        request.input.payload?.startsWith(EMPTY_PAYLOAD)
-
-      if (shouldUseReferral) {
-        request.input.type = INPUT.TEXT
-        request.input.data = request.input.referral
-      }
-    }
-  }
-
-  private async updateRequestBeforeRoutes(
-    request: PluginPreRequest
-  ): Promise<void> {
-    this.cmsApi.removeCaptureUserInputId()
-    if (request.input.payload) {
-      request.input.payload = this.removeSourceSuffix(request.input.payload)
-
-      if (this.cmsApi.isBotAction(request.input.payload)) {
-        const cmsBotAction = this.cmsApi.getNodeById<HtBotActionNode>(
-          request.input.payload
-        )
-
-        request.input.payload =
-          this.cmsApi.createPayloadWithParams(cmsBotAction)
-
-        // Re-execute convertWhatsappAiAgentEmptyPayloads function to handle
-        // the case that a BotAction has a payload equals to EMPTY_PAYLOAD
-        this.convertWhatsappAiAgentEmptyPayloads(request)
-      }
-    }
-  }
-
-  private removeSourceSuffix(payload: string): string {
-    return payload.split(SOURCE_INFO_SEPARATOR)[0]
-  }
-
-  post(request: PluginPreRequest): void {
-    request.input.nluResolution = undefined
-    delete request.session.user.system_locale_updated
+  post(botContext: BotContext): void {
+    botContext.input.nluResolution = undefined
+    delete botContext.session.user.system_locale_updated
   }
 
   async getContentsByContentID(
@@ -214,7 +127,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
 
   async getStartContents(): Promise<FlowContent[]> {
     const startNode = this.cmsApi.getStartNode()
-    this.currentRequest.session.flow_thread_id = uuidv7()
+    this.botContext.session.flow_thread_id = uuidv7()
     return await this.getContentsByNode(startNode)
   }
 
@@ -231,7 +144,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     ) {
       const customFunctionResolver = new CustomFunction(
         this.functions,
-        this.currentRequest,
+        this.botContext,
         resolvedLocale
       )
       const targetId = await customFunctionResolver.call(node)
@@ -239,7 +152,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
     }
 
     const flowFactory = new FlowFactory(
-      this.currentRequest,
+      this.botContext,
       this.cmsApi,
       resolvedLocale
     )
