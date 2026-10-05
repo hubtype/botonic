@@ -13,6 +13,7 @@ export enum EventAction {
   ConditionalQueueStatus = 'conditional_queue_status',
   ConditionalCustom = 'conditional_custom',
   ConditionalChannel = 'conditional_channel',
+  ConditionalContactReasons = 'conditional_contact_reasons',
   BotAction = 'bot_action',
   WebviewActionTriggered = 'webview_action_triggered',
   HandoffOption = 'handoff_option',
@@ -95,6 +96,13 @@ export interface EventConditionalCustom extends HtBaseEventAllFlowProps {
 export interface EventConditionalChannel extends HtBaseEventAllFlowProps {
   action: EventAction.ConditionalChannel
   channel: string
+}
+
+export interface EventConditionalContactReasons
+  extends HtBaseEventAllFlowProps {
+  action: EventAction.ConditionalContactReasons
+  contactReasons: string[]
+  result: string
 }
 
 export interface EventHandoff extends HtBaseEventProps {
