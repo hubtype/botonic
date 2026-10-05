@@ -32,4 +32,5 @@ export const LABELS = {
   NO_TRANSFER: 'No transfer',
   TRANSFERRED_TO: 'Transferred to',
   CONTACT_REASONS: 'Contact reasons',
+  NO_CONTACT_REASONS: 'No contact reasons added',
 } as const

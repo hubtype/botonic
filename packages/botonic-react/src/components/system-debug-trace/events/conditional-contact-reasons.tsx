@@ -11,7 +11,7 @@ import { LABELS } from './constants'
 
 export interface ConditionalContactReasonsDebugEvent {
   action: EventAction.ConditionalContactReasons
-  contactReasons: string[]
+  contact_reasons: string[]
   result: string
 }
 
@@ -21,8 +21,16 @@ export const ConditionalContactReasons = (
   return (
     <>
       <StyledDebugDetail>
-        <StyledDebugLabel>{LABELS.CONTACT_REASONS}</StyledDebugLabel>
-        <StyledDebugValue>{props.contactReasons.join(', ')}</StyledDebugValue>
+        {props.contact_reasons.length > 0 ? (
+          <>
+            <StyledDebugLabel>{LABELS.CONTACT_REASONS}</StyledDebugLabel>
+            <StyledDebugValue>
+              {props.contact_reasons.join(', ')}
+            </StyledDebugValue>
+          </>
+        ) : (
+          <StyledDebugValue>{LABELS.NO_CONTACT_REASONS}</StyledDebugValue>
+        )}
       </StyledDebugDetail>
       <StyledDebugDetail>
         <StyledDebugLabel>{LABELS.TARGET}</StyledDebugLabel>
