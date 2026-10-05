@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx-new-stack",
-  "version": "0.57.0-rslib-esm.2",
+  "version": "0.58.0-alpha-new-stack.0",
   "type": "module",
   "description": "Shared Rslib, Rspack, Vitest, Biome and TypeScript configuration for Botonic libraries and apps",
   "license": "MIT",

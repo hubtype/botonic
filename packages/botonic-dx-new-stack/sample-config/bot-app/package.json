@@ -12,12 +12,12 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@botonic/react": "0.57.0-rslib-esm.2",
+    "@botonic/react": "0.58.0-alpha-new-stack.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@botonic/dx-new-stack": "0.57.0-rslib-esm.2",
+    "@botonic/dx-new-stack": "0.58.0-alpha-new-stack.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5"
   },

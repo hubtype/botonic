@@ -1,6 +1,6 @@
 {
   "name": "@botonic/dx",
-  "version": "0.57.0-rslib-esm.2",
+  "version": "0.58.0-alpha-new-stack.0",
   "description": "Development tooling and Rspack configuration for Botonic apps",
   "scripts": {
     "build": "echo Skipping build..."
@@ -19,7 +19,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@botonic/eslint-config": "0.57.0-rslib-esm.2",
+    "@botonic/eslint-config": "0.58.0-alpha-new-stack.0",
     "@rspack/cli": "^1.6.1",
     "@rspack/core": "^1.6.1",
     "@rspack/plugin-react-refresh": "^1.5.2",

@@ -1,6 +1,6 @@
 {
   "name": "@botonic/example-flow-builder-typescript",
-  "version": "0.56.0",
+  "version": "0.58.0-alpha-new-stack.0",
   "scripts": {
     "build": "ENVIRONMENT=production NODE_ENV=production rspack build --env target=all --mode=production",
     "start": "ENVIRONMENT=local NODE_ENV=development rspack serve --env target=dev --mode=development",
@@ -11,11 +11,11 @@
     "format": "biome format --write ."
   },
   "dependencies": {
-    "@botonic/core": "0.57.0-rslib-esm.2",
-    "@botonic/plugin-ai-agents": "0.57.0-rslib-esm.2",
-    "@botonic/plugin-flow-builder": "0.57.0-rslib-esm.2",
-    "@botonic/plugin-hubtype-analytics": "0.57.0-rslib-esm.2",
-    "@botonic/react": "0.57.0-rslib-esm.2",
+    "@botonic/core": "0.58.0-alpha-new-stack.0",
+    "@botonic/plugin-ai-agents": "0.58.0-alpha-new-stack.0",
+    "@botonic/plugin-flow-builder": "0.58.0-alpha-new-stack.0",
+    "@botonic/plugin-hubtype-analytics": "0.58.0-alpha-new-stack.0",
+    "@botonic/react": "0.58.0-alpha-new-stack.0",
     "@reduxjs/toolkit": "1.9.7",
     "axios": "^1.18.1",
     "he": "^1.2.0",
@@ -27,7 +27,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@botonic/dx-new-stack": "0.57.0-rslib-esm.2",
+    "@botonic/dx-new-stack": "0.58.0-alpha-new-stack.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@types/react-redux": "^7.1.34",
