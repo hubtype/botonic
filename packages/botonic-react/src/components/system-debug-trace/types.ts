@@ -5,6 +5,7 @@ import type {
   AiAgentRouterDebugEvent,
   BotActionDebugEvent,
   ConditionalChannelDebugEvent,
+  ConditionalContactReasonsDebugEvent,
   ConditionalCountryDebugEvent,
   ConditionalCustomDebugEvent,
   ConditionalQueueStatusDebugEvent,
@@ -33,6 +34,7 @@ export type DebugEvent =
   | ConditionalCountryDebugEvent
   | ConditionalCustomDebugEvent
   | ConditionalQueueStatusDebugEvent
+  | ConditionalContactReasonsDebugEvent
   | RedirectFlowDebugEvent
   | WebviewActionTriggeredDebugEvent
 
