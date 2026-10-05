@@ -252,7 +252,7 @@ describe('SystemDebugTrace Component', () => {
     test('renders conditional contact reasons event', () => {
       const debugEvent = {
         action: EventAction.ConditionalContactReasons,
-        contactReasons: ['billing', 'technical'],
+        contact_reasons: ['billing', 'technical'],
         result: 'billing_branch',
       }
 
@@ -267,6 +267,25 @@ describe('SystemDebugTrace Component', () => {
       expect(container.textContent).toContain('billing, technical')
       expect(container.textContent).toContain('Target')
       expect(container.textContent).toContain('billing_branch')
+    })
+
+    test('renders conditional contact reasons event when no contact reasons added', () => {
+      const debugEvent = {
+        action: EventAction.ConditionalContactReasons,
+        contact_reasons: [],
+        result: 'default_branch',
+      }
+
+      const { container } = render(
+        <DebugMessage
+          debugEvent={debugEvent}
+          messageId='msg-contact-reasons-empty'
+        />
+      )
+
+      expect(container.textContent).toContain('No contact reasons added')
+      expect(container.textContent).toContain('Target')
+      expect(container.textContent).toContain('default_branch')
     })
 
     test('renders conditional queue status event', () => {
@@ -478,7 +497,7 @@ describe('SystemDebugTrace Component', () => {
     test('getConditionalContactReasonsEventConfig returns collapsible config', () => {
       const data = {
         action: EventAction.ConditionalContactReasons,
-        contactReasons: ['billing'],
+        contact_reasons: ['billing'],
         result: 'default',
       }
 
