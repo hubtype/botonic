@@ -6,7 +6,7 @@ const SESSION_USER_EXTRA_DATA_PREFIX = 'session.user.extra_data'
 export const BASE_SESSION_VARIABLES: VariableConfigJSON[] = [
   { key_path: 'input.data', type: VariableType.String },
   { key_path: 'input.type', type: VariableType.String },
-  { key_path: 'session.is_new_conversation', type: VariableType.Boolean },
+  { key_path: 'input.is_new_conversation', type: VariableType.Boolean },
   {
     key_path: 'session.is_first_interaction',
     type: VariableType.Boolean,
