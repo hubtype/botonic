@@ -20,6 +20,12 @@ All notable changes to Botonic will be documented in this file.
 
 </details>
 
+## [0.56.2] - 2026-10-05
+
+### Fix
+
+- BASE_SESSION_VARIABLES declare is_new_conversation inside `input`instead of `session`.
+
 ## [0.56.1] - 2026-10-01
 
 ### Added
