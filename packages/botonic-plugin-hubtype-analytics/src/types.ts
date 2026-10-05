@@ -6,6 +6,7 @@ import {
   type EventBotAction,
   type EventCaptureUserInput,
   type EventConditionalChannel,
+  type EventConditionalContactReasons,
   type EventConditionalCountry,
   type EventConditionalCustom,
   type EventConditionalQueueStatus,
@@ -35,6 +36,7 @@ export type HtEventProps =
   | EventFlow
   | EventBotAction
   | EventConditionalChannel
+  | EventConditionalContactReasons
   | EventConditionalCountry
   | EventConditionalCustom
   | EventConditionalQueueStatus
@@ -68,6 +70,7 @@ export {
   type EventBotAction,
   type EventCaptureUserInput,
   type EventConditionalChannel,
+  type EventConditionalContactReasons,
   type EventConditionalCountry,
   type EventConditionalCustom,
   type EventConditionalQueueStatus,

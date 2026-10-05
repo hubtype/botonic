@@ -15,10 +15,16 @@ const branchTarget = {
   type: HtNodeWithContentType.TEXT,
 }
 
+const defaultTarget = {
+  id: 'default-target-id',
+  type: HtNodeWithContentType.TEXT,
+}
+
 const billingBranch: HtContactReasonBranch = {
   id: 'reason-billing-id',
   name: 'billing',
   project_id: 'project-1',
+  project_name: 'Project 1',
   target: branchTarget,
 }
 
@@ -26,6 +32,7 @@ const supportBranch: HtContactReasonBranch = {
   id: 'reason-support-id',
   name: 'support',
   project_id: 'project-1',
+  project_name: 'Project 1',
   target: {
     id: 'support-target-id',
     type: HtNodeWithContentType.TEXT,
@@ -134,11 +141,72 @@ describe('FlowContactReasonsConditional.setFollowUp', () => {
           type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
           content: {
             contact_reasons: [billingBranch, supportBranch],
+            default_target: defaultTarget,
           },
         },
         botContext
       )
 
     expect(flowContactReasonsConditional.followUp).toEqual(branchTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe('billing')
+  })
+
+  test('sets followUp to default_target when there is no matching branch', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+    botContext.session._hubtype_case_contact_reasons = [
+      {
+        id: 'unknown-id',
+        name: 'unknown',
+        project_id: 'project-1',
+      },
+    ]
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            default_target: defaultTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(defaultTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe('default')
+  })
+
+  test('sets followUp to default_target when session has no contact reasons', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            default_target: defaultTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(defaultTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe('default')
   })
 })

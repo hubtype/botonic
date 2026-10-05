@@ -1,4 +1,13 @@
-import type { BotContext, HubtypeCaseContactReason } from '@botonic/core'
+import {
+  type BotContext,
+  EventAction,
+  type EventConditionalContactReasons,
+} from '@botonic/core'
+
+import {
+  getCommonFlowContentEventArgsForContentId,
+  trackEvent,
+} from '../tracking'
 import { findMatchingContactReasonBranch } from './contact-reasons-conditional-matcher'
 import { ContentFieldsBase } from './content-fields-base'
 import type { HtNodeLink } from './hubtype-fields/common'
@@ -9,7 +18,8 @@ import type {
 
 export class FlowContactReasonsConditional extends ContentFieldsBase {
   public contactReasons: HtContactReasonBranch[] = []
-  public defaultTarget?: HtNodeLink
+  public conditionalResult: string = ''
+  public defaultTarget: HtNodeLink
 
   static fromHubtypeCMS(
     component: HtContactReasonsNode,
@@ -27,30 +37,50 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
   }
 
   private setFollowUp(botContext: BotContext): void {
-    const sessionContactReasons: HubtypeCaseContactReason[] | undefined =
+    const sessionContactReasons =
       botContext.session._hubtype_case_contact_reasons
 
-    if (sessionContactReasons) {
-      const matchingBranch = findMatchingContactReasonBranch(
-        sessionContactReasons,
-        this.contactReasons
-      )
-      if (matchingBranch?.target) {
-        this.followUp = matchingBranch.target
-      }
-    }
+    const matchingBranch = sessionContactReasons
+      ? findMatchingContactReasonBranch(
+          sessionContactReasons,
+          this.contactReasons
+        )
+      : undefined
 
-    this.followUp ??= this.defaultTarget
+    if (matchingBranch) {
+      this.conditionalResult = matchingBranch.name
+      this.followUp = matchingBranch.target
+    } else {
+      this.conditionalResult = 'default'
+      this.followUp = this.defaultTarget
+    }
   }
 
-  async trackFlow(_botContext: BotContext): Promise<void> {
-    // await trackFlow(botContext)
+  async trackFlow(botContext: BotContext): Promise<void> {
+    const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
+      getCommonFlowContentEventArgsForContentId(botContext, this.id)
+    const eventContactReasonsConditional: EventConditionalContactReasons = {
+      action: EventAction.ConditionalContactReasons,
+      flowThreadId,
+      flowId,
+      flowName,
+      flowNodeId,
+      flowNodeContentId,
+      flowNodeIsMeaningful: false,
+      contactReasons:
+        botContext.session._hubtype_case_contact_reasons?.map(
+          contactReason => contactReason.name
+        ) || [],
+      result: this.conditionalResult,
+    }
+    const { action, ...eventArgs } = eventContactReasonsConditional
+    await trackEvent(botContext, action, eventArgs)
     return
   }
 
-  async processContent(_botContext: BotContext): Promise<void> {
-    // await this.filterContent(botContext, this)
-    // await this.trackFlow(botContext)
+  async processContent(botContext: BotContext): Promise<void> {
+    await this.filterContent(botContext, this)
+    await this.trackFlow(botContext)
     return
   }
 
