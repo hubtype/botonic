@@ -7,11 +7,7 @@ const PACKAGES_DIR: string = path.resolve(`${BIN_DIR}/../../packages`)
 
 const packageInPackages = fs.readdirSync(PACKAGES_DIR)
 const botonicPackages = packageInPackages.filter(function (file: string) {
-  return (
-    file.startsWith('botonic') &&
-    !file.includes('botonic-dx') &&
-    !file.includes('botonic-eslint')
-  )
+  return file.startsWith('botonic')
 })
 
 botonicPackages.forEach(botonicPackage => {

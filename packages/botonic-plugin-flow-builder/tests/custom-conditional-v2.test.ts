@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowCustomConditionalV2 } from '../src/content-fields/custom-conditional/flow-custom-condition-v2'
 import {

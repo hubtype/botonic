@@ -1,5 +1,5 @@
 import { INPUT } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, test } from 'vitest'
 import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import { ProcessEnvNodeEnvs } from '../src/types'

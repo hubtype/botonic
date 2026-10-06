@@ -102,7 +102,7 @@ export class DevApp extends WebchatApp {
     )
   }
 
-  render(dest, optionsAtRuntime = {}) {
+  async render(dest, optionsAtRuntime = {}) {
     onDOMLoaded(() => {
       const devAppComponent = this.getComponent(dest, optionsAtRuntime)
       const container = this.getReactMountNode(dest)

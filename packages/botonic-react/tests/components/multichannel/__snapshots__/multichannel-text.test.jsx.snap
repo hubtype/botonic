@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Multichannel text display URL buttons as text even if buttonsAsText is set to false 1`] = `
+exports[`Multichannel text > display URL buttons as text even if buttonsAsText is set to false 1`] = `
 <message
   buttonsAsText={0}
   delay={0}
@@ -19,7 +19,7 @@ exports[`Multichannel text display URL buttons as text even if buttonsAsText is 
 </message>
 `;
 
-exports[`Multichannel text display custom text as button separator when more than 3 buttons in message 1`] = `
+exports[`Multichannel text > display custom text as button separator when more than 3 buttons in message 1`] = `
 [
   <message
     body="The verbose text"
@@ -56,7 +56,7 @@ exports[`Multichannel text display custom text as button separator when more tha
 ]
 `;
 
-exports[`Multichannel text display postback buttons as whatsapp buttons 1`] = `
+exports[`Multichannel text > display postback buttons as whatsapp buttons 1`] = `
 <message
   buttonsAsText={0}
   delay={0}
@@ -78,7 +78,7 @@ exports[`Multichannel text display postback buttons as whatsapp buttons 1`] = `
 </message>
 `;
 
-exports[`Multichannel text just text 1`] = `
+exports[`Multichannel text > just text 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -90,7 +90,7 @@ exports[`Multichannel text just text 1`] = `
 </message>
 `;
 
-exports[`Multichannel text split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
+exports[`Multichannel text > split messages with more than 3 postback buttons into separate messages (without webview buttons) 1`] = `
 [
   <message
     body="The verbose text"
@@ -111,7 +111,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
 ]
 `;
 
-exports[`Multichannel text split messages with more than 3 postback buttons into separate messages 1`] = `
+exports[`Multichannel text > split messages with more than 3 postback buttons into separate messages 1`] = `
 [
   <message
     body="The verbose text"
@@ -146,7 +146,7 @@ exports[`Multichannel text split messages with more than 3 postback buttons into
 ]
 `;
 
-exports[`Multichannel text split webview buttons into separate messages 1`] = `
+exports[`Multichannel text > split webview buttons into separate messages 1`] = `
 [
   <message
     buttonsAsText={0}
@@ -179,7 +179,7 @@ exports[`Multichannel text split webview buttons into separate messages 1`] = `
 ]
 `;
 
-exports[`Multichannel text with buttons as array 1`] = `
+exports[`Multichannel text > with buttons as array 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -197,7 +197,7 @@ exports[`Multichannel text with buttons as array 1`] = `
 </message>
 `;
 
-exports[`Multichannel text with buttons plain 1`] = `
+exports[`Multichannel text > with buttons plain 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -215,7 +215,7 @@ exports[`Multichannel text with buttons plain 1`] = `
 </message>
 `;
 
-exports[`Multichannel text with replies as array 1`] = `
+exports[`Multichannel text > with replies as array 1`] = `
 <message
   delay={0}
   indexMode="number"
@@ -231,7 +231,7 @@ exports[`Multichannel text with replies as array 1`] = `
 </message>
 `;
 
-exports[`Multichannel text with replies plain 1`] = `
+exports[`Multichannel text > with replies plain 1`] = `
 <message
   delay={0}
   indexMode="number"

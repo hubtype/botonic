@@ -1,5 +1,5 @@
-import { jest } from '@jest/globals'
+import { vi } from 'vitest'
 
-export const trackEventMock = jest.fn((_request, _eventAction, _args) => {
+export const trackEventMock = vi.fn((_request, _eventAction, _args) => {
   return Promise.resolve()
 })

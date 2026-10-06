@@ -27,10 +27,16 @@ If you want to add an extra workflow follow the steps:
      From this point, each command is **OPTIONAL**
    - `UNIT_TEST_COMMAND`: Command to execute unit tests (usually) using npm. This has a default value of `npm run test`, but if the package does not contain any test whatsoever, use the input by adding `''` as the parameter. Also useful when needing a different test command.
    - `BUILD_COMMAND`: Command to execute the build action of the package inside CI, the main idea is that some packages have different build command. By default the command is set as `npm run build`.
-   - `PUBLISH_TESTS_RESULTS`: As the name indicates, this input functions as a flag to know whether if it need to publish the results or not. Usually this flag does not need any special string, by adding a simple `'yes'` is enough, **if it is not needed, just do not add it**.
-     _The rest of inputs from now on, will work similar as `PUBLISH_TESTS_RESULTS` due to being optional flags_.
-   - `NEEDS_AWS_CRED`: some packages need AWS credentials to perform some steps inside the workflow, this flag enables the AWS credential generation (or verification).
-   - `NEEDS_CODECOV_UPLOAD`: Flag to determinate if the workflow will upload the tests to Codecov or will ignore it.
+
+Package workflows explicitly install npm 11.10.0 to match local development;
+`setup-node` alone otherwise uses Node's bundled npm.
+
+Tests run with `contents: read` and no secrets. Reports are uploaded as artifacts.
+`botonic-test-reports.yml` publishes JUnit and coverage in a separate privileged
+workflow after branch runs; it does not run for pull requests or execute their
+code. That workflow must exist on the default branch for `workflow_run` to fire.
+The all-packages workflow runs all six Jest suites on every pull request,
+including forks, so shared configuration changes cannot bypass these checks.
 
 3. Write the workflow:
    To write the workflow, we know what each input does, now it is a matter of structure:
@@ -68,15 +74,12 @@ If you want to add an extra workflow follow the steps:
    jobs:
      <package-name>-tests:
        uses: ./.github/workflows/botonic-common-workflow.yml
-       secrets: inherit
        with:
          NODE_VERSION: '22.19.0' #minimum supported Node version
          PACKAGE_NAME: <package name> tests
          PACKAGE: <package-name> #Relative to the Packages folder not the root folder.
          #The following inputs are not mandatory, but may be necessary depending on your needs
          UNIT_TEST_COMMAND: npm run test_ci #or just add '' if there is not tests in the package.
-         PUBLISH_TESTS_RESULTS: 'yes' #or just any string you want, p.e. 'y'
-         NEEDS_CODECOV_UPLOAD: 'yes'
          #If any input extra is needed, add it below...
    ```
 
@@ -84,7 +87,6 @@ If you want to add an extra workflow follow the steps:
 
    - Some description to the keywords above:
    - `jobs`: Which actions will the workflow perform.
-   - `secrets`: if the workflow needs secrets, it will inherit from the ones in the home repository of **THIS** file.
    - `with`: The required inputs to run the workflow.
    - `uses`: Which workflow with use to run the steps. The input can be a path inside the same repository, a reference to an online workflow or a reference to another repository **INSIDE** your organization. An example would be the following: `organization/repository/.github/workflows/workflow-to-use.yml@branch-to-fetch-from`.
 
@@ -105,15 +107,12 @@ name: <package name> tests
 jobs:
   <package-name>-tests:
     uses: ./.github/workflows/botonic-common-workflow.yml
-    secrets: inherit
     with:
       NODE_VERSION: '22.19.0' #minimum supported Node version
       PACKAGE_NAME: <package name> tests
       PACKAGE: <package-name> #Relative to the Packages folder not the root folder.
       #The following inputs are not mandatory, but may be necessary depending on your needs
       # UNIT_TEST_COMMAND: npm run test_ci
-      # PUBLISH_TESTS_RESULTS: 'yes'
-      # NEEDS_CODECOV_UPLOAD: 'yes'
       #If any input extra is needed, add it below..
 ```
 

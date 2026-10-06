@@ -1,5 +1,5 @@
 import { INPUT, PROVIDER } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowWhatsappTemplate } from '../src/content-fields/flow-whatsapp-template'
 import { ProcessEnvNodeEnvs } from '../src/types'

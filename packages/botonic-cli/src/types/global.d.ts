@@ -5,16 +5,6 @@ declare module 'nodemon' {
   export = nodemon
 }
 
-declare module '@types/glob' {
-  interface IOptions {
-    [key: string]: any
-  }
-
-  interface IMinimatch {
-    [key: string]: any
-  }
-}
-
 declare module '@types/inquirer' {
   interface Question<T> {
     [key: string]: any

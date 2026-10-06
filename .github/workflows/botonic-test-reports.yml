@@ -1,0 +1,40 @@
+name: Botonic test reports
+
+on:
+  workflow_run:
+    workflows:
+      - Botonic cli tests
+      - Botonic core tests
+      - Botonic react tests
+      - Botonic plugin ai agents tests
+      - Botonic plugin flow builder tests
+      - Botonic plugin hubtype analytics tests
+      - Botonic CI test all packages
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  reports:
+    # Never execute PR code or consume fork reports with privileged credentials.
+    if: ${{ github.event.workflow_run.event != 'pull_request' && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          pattern: reports-*
+          path: reports
+      - uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: reports/**/junit.xml
+          commit: ${{ github.event.workflow_run.head_sha }}
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: reports
+          override_commit: ${{ github.event.workflow_run.head_sha }}

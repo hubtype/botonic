@@ -1,6 +1,7 @@
 /*
-  @jest-environment jsdom
+  @vitest-environment jsdom
 */
+import { vi } from 'vitest'
 import {
   ESCAPED_LINE_BREAK,
   renderLinks,
@@ -8,8 +9,8 @@ import {
 } from '../../src/components/markdown'
 
 // Mock the environment utility
-jest.mock('../../src/util/environment', () => ({
-  isInWebviewApp: jest.fn(),
+vi.mock('../../src/util/environment', () => ({
+  isInWebviewApp: vi.fn(),
 }))
 
 import { isInWebviewApp } from '../../src/util/environment'

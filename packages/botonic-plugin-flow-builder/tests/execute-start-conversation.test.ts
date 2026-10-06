@@ -1,5 +1,5 @@
 import { INPUT, type InputType } from '@botonic/core'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowBuilderAction, type FlowText } from '../src'
 import { ProcessEnvNodeEnvs } from '../src/types'

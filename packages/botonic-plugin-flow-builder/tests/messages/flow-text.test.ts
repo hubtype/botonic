@@ -3,7 +3,7 @@ import {
   OutputMessageType,
   type TextWithButtonsMessage,
 } from '@botonic/core'
-import { describe, test } from '@jest/globals'
+import { describe, test } from 'vitest'
 
 import { FlowText } from '../../src/content-fields/flow-text'
 import { ProcessEnvNodeEnvs } from '../../src/types'

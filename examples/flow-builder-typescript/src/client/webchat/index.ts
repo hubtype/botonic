@@ -1,4 +1,8 @@
-import { CustomRatingMessage, WebchatApp, WebchatArgs } from '@botonic/react'
+import {
+  CustomRatingMessage,
+  type WebchatApp,
+  type WebchatArgs,
+} from '@botonic/react'
 
 import { START_CONVERSATION_PAYLOAD } from '../../server/constants'
 

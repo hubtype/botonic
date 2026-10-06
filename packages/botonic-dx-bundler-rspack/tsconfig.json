@@ -1,6 +1,0 @@
-{
-  "extends": "../../tsconfig.cjs.base.json",
-  "compilerOptions": {
-    "baseUrl": "./"
-  }
-}

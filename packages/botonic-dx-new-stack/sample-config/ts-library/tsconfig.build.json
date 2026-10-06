@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "./tsconfig.json",
+    "@botonic/dx-new-stack/baseline/tsconfig.build.json"
+  ],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["tests", "lib"]
+}

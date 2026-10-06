@@ -5,7 +5,7 @@ import {
   createTestSettings,
   TEST_DEFAULTS,
 } from '@botonic/core/testing'
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 
 import { FlowLocale } from '../src/utils/flow-locale'
 

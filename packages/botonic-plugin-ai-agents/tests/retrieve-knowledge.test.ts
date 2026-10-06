@@ -1,7 +1,8 @@
+import { vi } from 'vitest'
 import { createRetrieveKnowledge } from '../src/tools/retrieve-knowledge'
 import type { Context } from '../src/types'
 
-const mockRetrieveSimilarChunks = jest.fn()
+const mockRetrieveSimilarChunks = vi.hoisted(() => vi.fn())
 
 type RetrieveKnowledgeTool = {
   execute: (
@@ -10,14 +11,16 @@ type RetrieveKnowledgeTool = {
   ) => Promise<string[]>
 }
 
-jest.mock('@openai/agents', () => ({
-  tool: jest.fn(config => config),
+vi.mock('@openai/agents', () => ({
+  tool: vi.fn(config => config),
 }))
 
-jest.mock('../src/services/hubtype-api-client', () => ({
-  HubtypeApiClient: jest.fn().mockImplementation(() => ({
-    retrieveSimilarChunks: mockRetrieveSimilarChunks,
-  })),
+vi.mock('../src/services/hubtype-api-client', () => ({
+  HubtypeApiClient: vi.fn().mockImplementation(function HubtypeApiClientMock() {
+    return {
+      retrieveSimilarChunks: mockRetrieveSimilarChunks,
+    }
+  }),
 }))
 
 const buildContext = (): Context =>
@@ -34,7 +37,7 @@ const buildContext = (): Context =>
 
 describe('createRetrieveKnowledge', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockRetrieveSimilarChunks.mockResolvedValue([
       { id: 'chunk-1', text: 'Knowledge chunk' },
     ] as never)

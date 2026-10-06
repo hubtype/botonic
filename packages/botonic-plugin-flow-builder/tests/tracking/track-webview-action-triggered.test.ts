@@ -1,5 +1,5 @@
 import { EventAction, INPUT } from '@botonic/core'
-import { beforeEach, describe, expect, test } from '@jest/globals'
+import { beforeEach, describe, expect, test } from 'vitest'
 
 import { FlowCarousel, FlowText } from '../../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../../src/types'

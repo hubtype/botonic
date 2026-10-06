@@ -1,3 +1,3 @@
-import { Route } from '@botonic/react'
+import type { Route } from '@botonic/react'
 
 export const routes: Route[] = []

@@ -1,5 +1,5 @@
 import { INPUT, PROVIDER, WhatsappInputOrigin } from '@botonic/core'
-import { beforeEach, describe, expect, jest, test } from '@jest/globals'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { BotContextManager } from '../src/bot-context-manager'
 import {
@@ -19,13 +19,11 @@ import {
 } from './helpers/mock-cms-api'
 import { createRequest } from './helpers/utils'
 
-jest.mock('../src/user-input', () => ({
-  getNextPayloadByUserInput: jest.fn(),
+vi.mock('../src/user-input', () => ({
+  getNextPayloadByUserInput: vi.fn(),
 }))
 
-const mockedGetNextPayload = getNextPayloadByUserInput as jest.MockedFunction<
-  typeof getNextPayloadByUserInput
->
+const mockedGetNextPayload = vi.mocked(getNextPayloadByUserInput)
 
 const smartIntentsConfig: SmartIntentsInferenceConfig = {
   useLatest: false,
@@ -39,7 +37,7 @@ describe('BotContextManager.prepareInputForRoutes', () => {
   let botContextManager: BotContextManager
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     cmsApi = createMockFlowBuilderApi()
     botContextManager = new BotContextManager(
       asFlowBuilderApi(cmsApi),
@@ -107,10 +105,8 @@ describe('BotContextManager.prepareInputForRoutes', () => {
 
   describe('On-close handoff', () => {
     test('replaces the on-close payload with the resolved handoff payload', async () => {
-      const resolveOnClosePayload = jest
-        .fn()
-        .mockReturnValue('resolved-payload')
-      jest.spyOn(FlowHandoff, 'fromHubtypeCMS').mockReturnValue({
+      const resolveOnClosePayload = vi.fn().mockReturnValue('resolved-payload')
+      vi.spyOn(FlowHandoff, 'fromHubtypeCMS').mockReturnValue({
         resolveOnClosePayload,
       } as unknown as FlowHandoff)
       cmsApi.getNodeById.mockReturnValue({

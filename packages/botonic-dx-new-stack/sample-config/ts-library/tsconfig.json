@@ -1,0 +1,5 @@
+{
+  "extends": "@botonic/dx-new-stack/baseline/tsconfig.json",
+  "include": ["src/**/*.ts", "vitest.config.ts", "rslib.config.mts"],
+  "exclude": ["tests", "lib"]
+}

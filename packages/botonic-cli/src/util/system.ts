@@ -1,6 +1,6 @@
 import { execSync, spawn } from 'node:child_process'
 
-export async function sleep(ms: number): Promise<number> {
+export async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 

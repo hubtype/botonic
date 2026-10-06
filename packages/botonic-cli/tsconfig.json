@@ -3,16 +3,22 @@
   "compilerOptions": {
     "declaration": true,
     "module": "NodeNext",
-    "outDir": "lib",
     "rootDir": ".",
     "strict": false,
     "target": "es2022",
     "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "isolatedModules": true,
-    "composite": true
+    "composite": false,
+    "noEmit": true
   },
-  "include": ["./src/**/*", "./src/types/**/*", "./tests/**/*"],
+  "include": [
+    "./src/**/*",
+    "./src/types/**/*",
+    "./tests/**/*",
+    "./vitest.setup.ts",
+    "./vitest.config.ts"
+  ],
   "exclude": ["templates", "dist", "lib"],
   "ts-node": {
     "esm": true

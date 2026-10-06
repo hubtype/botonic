@@ -15,6 +15,9 @@
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
   // YAML formatting with single quotes
   "yaml.format.singleQuote": true,
   "editor.formatOnSave": true,
