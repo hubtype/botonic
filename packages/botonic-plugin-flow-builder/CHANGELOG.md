@@ -15,15 +15,19 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
-- [PR-3288](https://github.com/hubtype/botonic/pull/3288): Add contact reasons conditional node.
-- [PR-3291](https://github.com/hubtype/botonic/pull/3291): Improve handoff node with resolved and different discarded close type
-- [PR-3293](https://github.com/hubtype/botonic/pull/3293): Send `conditional_contact_reasons` Hubtype analytics event when resolving contact reasons conditional nodes.
-
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.57.0] - 2026-10-05
+
+### Added
+
+- [PR-3288](https://github.com/hubtype/botonic/pull/3288): Add contact reasons conditional node.
+- [PR-3291](https://github.com/hubtype/botonic/pull/3291): Improve handoff node with resolved and different discarded close type
+- [PR-3293](https://github.com/hubtype/botonic/pull/3293): Send `conditional_contact_reasons` Hubtype analytics event when resolving contact reasons conditional nodes.
 
 ## [0.56.1] - 2026-10-01
 
