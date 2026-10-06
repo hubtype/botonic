@@ -15,10 +15,10 @@ Scripts for:
   - Functionality: Bumps versions of Botonic packages to the inputed version. It affects the templates in `botonic-cli` and `botonic-react` and `botonic-plugin-nlu` , because updates the dependencies for packages pointing to other botonic projects.
 - prepare-packages.sh:
   - Use: This script has to be launched manually.
-  - Functionality: This script cleans the package `node_modules`, `lib` and `dist`. Then it reinstalls it, and also runs the build command. Finally, restarts the `eslint_d` plugin
+  - Functionality: This script cleans the package `node_modules`, `lib` and `dist`. Then it reinstalls it, and also runs the build command.
 - upgrade-deps.sh:
   - Use: This script has to be launched manually.
-  - Functionality: This script stops eslint plugin, upgrades all the development dependencies for every package and finally restart the eslint plugin.
+  - Functionality: This script upgrades all the development dependencies for every package.
 
 #### QA
 

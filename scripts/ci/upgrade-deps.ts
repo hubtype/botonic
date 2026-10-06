@@ -14,8 +14,6 @@ child_process.execSync(`renice 10 ${process.pid} > /dev/null`, {
   stdio: 'inherit',
 })
 
-child_process.execSync('eslint_d stop > /dev/null', { stdio: 'inherit' })
-
 console.log('Upgrading common dev dependencies')
 console.log('====================================')
 
@@ -38,5 +36,3 @@ botonicPackages.forEach(botonicPackage => {
   )
   process.chdir(packagesDir)
 })
-
-child_process.execSync('eslint_d start', { stdio: 'inherit' })

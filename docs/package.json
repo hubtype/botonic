@@ -4,7 +4,7 @@
     "start": "docusaurus start",
     "build": "npm run update-docs && docusaurus build && cp _redirects build",
     "update-docs": "./node_modules/.bin/ts-node ./scripts/update-plugins-docs/index.ts; npm run prettify-updated-docs;",
-    "prettify-updated-docs": "./node_modules/.bin/prettier --write --config ../.prettierrc ./sidebars.json ./i18n/en.json ./docs/plugins ./docs/releases",
+    "prettify-updated-docs": "./node_modules/.bin/prettier --write ./sidebars.json ./i18n/en.json ./docs/plugins ./docs/releases",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

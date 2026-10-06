@@ -59,7 +59,7 @@ For the sake of clarity and organization, we follow [this guideline](https://hac
 
 All JavaScript must adhere to [JavaScript Standard Style](https://standardjs.com/).
 * The code for our packages is mainly written in [JavaScript's ES6 syntax](https://www.w3schools.com/js/js_es6.asp), but some others are written as well with [TypeScript](https://www.typescriptlang.org/), as for example the [CLI](https://github.com/hubtype/botonic/tree/master/packages/botonic-cli) or [botonic-plugin-contentful](https://github.com/hubtype/botonic/tree/master/packages/botonic-plugin-contentful), so feel free to contribute with what make you feel more comfortable.
-* We format all of our code with [editorconfig](http://editorconfig.org/) and [Prettier](https://prettier.io/). The configurations are the following:
+* We format and lint package code with [Biome](https://biomejs.dev/). The configuration lives in [biome.json](https://github.com/hubtype/botonic/blob/master/biome.json). [Editorconfig](http://editorconfig.org/) is also applied:
 #### [.editorconfig](https://github.com/hubtype/botonic/blob/master/.editorconfig)
 ```javascript
 root = true
@@ -85,27 +85,6 @@ ij_typescript_use_double_quotes = false
 trim_trailing_whitespace = false
 ```
 
-#### [.prettierrc](https://github.com/hubtype/botonic/blob/master/.prettierrc)
-```javascript
-{
-
-"bracketSpacing": true,
-
-"endOfLine": "lf",
-
-"singleQuote": true,
-
-"jsxSingleQuote": true,
-
-"semi": false,
-
-"tabWidth": 2,
-
-"trailingComma": "es5"
-
-}
-```
-
-Please, be sure you have all the code formatted in with these parameters before submitting your code.
+Please, be sure you have all the code formatted with Biome before submitting your code.
 
 

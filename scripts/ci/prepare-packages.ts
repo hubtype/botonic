@@ -43,6 +43,3 @@ botonicPackages.forEach(pkg => {
   console.log('')
   process.chdir('..')
 })
-
-child_process.execSync('killall eslint_d 2> /dev/null')
-child_process.execSync('killall -9 eslint_d 2> /dev/null')

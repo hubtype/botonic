@@ -36,9 +36,7 @@ const names = [
   'plugin-flow-builder',
   'plugin-hubtype-analytics',
   'cli',
-  'dx',
   'dx-new-stack',
-  'eslint-config',
 ]
 const archives = []
 // Exercise the CLI's real prepack hook, including command discovery.
@@ -60,8 +58,6 @@ for (const name of names) {
   if (name === 'cli') {
     assert(files.includes('oclif.manifest.json'))
     assert(!files.some(file => file.startsWith('lib/tests/')))
-  } else if (name === 'dx') {
-    assert(files.includes('baseline/rspack.config.ts'))
   } else if (name === 'dx-new-stack') {
     for (const file of [
       'baseline/tsconfig.json',
@@ -88,7 +84,7 @@ for (const name of names) {
     ]) {
       assert(files.includes(file), `dx-new-stack: missing ${file}`)
     }
-  } else if (name !== 'eslint-config') {
+  } else {
     for (const file of ['index.js', 'index.d.ts', 'index.js.map']) {
       assert(files.includes(`lib/${file}`), `${name}: missing ${file}`)
     }
