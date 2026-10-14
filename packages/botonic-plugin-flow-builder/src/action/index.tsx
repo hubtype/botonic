@@ -1,5 +1,6 @@
 import { type BotContext, isDev, isWebchat } from '@botonic/core'
 import {
+  CampaignFirstMessageProvider,
   Multichannel,
   RequestContext,
   WebchatSettings,
@@ -21,6 +22,7 @@ import { getContents } from './get-contents'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
+  campaignFirstMessageId?: string
   webchatSettingsParams?: WebchatSettingsProps
 }
 
@@ -46,14 +48,20 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext,
     contentID?: string
   ): Promise<FlowBuilderActionProps> {
-    const contents = await getContents(botContext, contentID)
+    const { contents, campaignFirstMessageId } = await getContents(
+      botContext,
+      contentID
+    )
 
     const contentsToRender = await FlowBuilderAction.prepareContentsToRender(
       botContext,
       contents
     )
 
-    return { contents: contentsToRender }
+    return {
+      contents: contentsToRender,
+      campaignFirstMessageId,
+    }
   }
 
   static async prepareContentsToRender(
@@ -137,7 +145,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   }
 
   render(): JSX.Element | JSX.Element[] {
-    const { contents } = this.props
+    const { contents, campaignFirstMessageId } = this.props
     const botContext = this.context as BotContext
     const { shouldSendWebchatSettings, webchatSettingsParams } =
       this.getWebchatSettingsParams(botContext)
@@ -147,15 +155,37 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(botContext))}
+        {FlowBuilderAction.renderContents(
+          contents,
+          botContext,
+          campaignFirstMessageId
+        )}
       </>
+    )
+  }
+
+  protected static renderContents(
+    contents: FlowContent[],
+    botContext: BotContext,
+    campaignFirstMessageId?: string
+  ): JSX.Element | JSX.Element[] {
+    const rendered = contents.map(content => content.toBotonic(botContext))
+
+    if (!campaignFirstMessageId) {
+      return rendered
+    }
+
+    return (
+      <CampaignFirstMessageProvider campaignId={campaignFirstMessageId}>
+        {rendered}
+      </CampaignFirstMessageProvider>
     )
   }
 }
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    const { contents } = this.props
+    const { contents, campaignFirstMessageId } = this.props
     const botContext = this.context as BotContext
     const { shouldSendWebchatSettings, webchatSettingsParams } =
       this.getWebchatSettingsParams(botContext)
@@ -165,7 +195,11 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {contents.map(content => content.toBotonic(botContext))}
+        {FlowBuilderAction.renderContents(
+          contents,
+          botContext,
+          campaignFirstMessageId
+        )}
       </Multichannel>
     )
   }
