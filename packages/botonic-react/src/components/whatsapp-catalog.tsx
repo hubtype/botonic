@@ -1,9 +1,10 @@
 import { INPUT } from '@botonic/core'
 
 import {
-  omitCampaignMessageProps,
-  toCampaignHtmlAttributes,
-} from '../util/campaign-message-attributes'
+  resolveCampaignHtmlAttributes,
+  useCampaignFirstMessageContext,
+} from '../contexts/campaign-first-message'
+import { omitCampaignMessageProps } from '../util/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import type { CampaignMessageProps } from './index-types'
 import { Message } from './message'
@@ -19,6 +20,8 @@ const serialize = (message: string) => {
 }
 
 export const WhatsappCatalog = (props: WhatsappCatalogProps) => {
+  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
+
   const renderBrowser = () => {
     // Return a dummy message for browser
     const message = `WhatsApp Catalog would be sent to the user.`
@@ -34,7 +37,7 @@ export const WhatsappCatalog = (props: WhatsappCatalogProps) => {
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...omitCampaignMessageProps(props)}
-        {...toCampaignHtmlAttributes(props)}
+        {...resolveCampaignHtmlAttributes(props, takeCampaignMessageProps)}
         body={props.body}
         footer={props.footer}
         thumbnailProductId={props.thumbnailProductId}

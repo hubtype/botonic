@@ -1,4 +1,12 @@
 export {
+  CampaignFirstMessageContext,
+  CampaignFirstMessageProvider,
+  type CampaignFirstMessageProviderProps,
+  mergeCampaignMessageProps,
+  resolveCampaignHtmlAttributes,
+  useCampaignFirstMessageContext,
+} from '../contexts/campaign-first-message'
+export {
   type CampaignHtmlAttributes,
   omitCampaignMessageProps,
   toCampaignHtmlAttributes,

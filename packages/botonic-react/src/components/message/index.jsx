@@ -4,9 +4,12 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext } from '../../contexts'
+import {
+  resolveCampaignHtmlAttributes,
+  useCampaignFirstMessageContext,
+} from '../../contexts/campaign-first-message'
 import { SENDERS } from '../../index-types'
 import { Fade } from '../../shared/styles'
-import { toCampaignHtmlAttributes } from '../../util/campaign-message-attributes'
 import { isDev } from '../../util/environment'
 import { ConditionalWrapper, renderComponent } from '../../util/react'
 import { WebchatContext } from '../../webchat/context'
@@ -27,6 +30,7 @@ import { resolveMessageTimestamps } from './timestamps'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
+  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
   let {
     type = '',
     blob = true,
@@ -291,12 +295,12 @@ export const Message = props => {
     campaignId,
     ...nodeProps
   } = props
-  const campaignHtmlAttributes = toCampaignHtmlAttributes({
-    isCampaignFirstMessage,
-    campaignId,
-  })
-  const renderNode = () =>
-    type === INPUT.CUSTOM ? (
+  const renderNode = () => {
+    const campaignHtmlAttributes = resolveCampaignHtmlAttributes(
+      { isCampaignFirstMessage, campaignId },
+      takeCampaignMessageProps
+    )
+    return type === INPUT.CUSTOM ? (
       <message
         json={JSON.stringify(_json)}
         typing={typing}
@@ -314,6 +318,7 @@ export const Message = props => {
         {children}
       </message>
     )
+  }
 
   return renderComponent({ renderBrowser, renderNode })
 }

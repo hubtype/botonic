@@ -1,10 +1,10 @@
 import { INPUT } from '@botonic/core'
-
-import { truncateText } from '../util'
 import {
-  omitCampaignMessageProps,
-  toCampaignHtmlAttributes,
-} from '../util/campaign-message-attributes'
+  resolveCampaignHtmlAttributes,
+  useCampaignFirstMessageContext,
+} from '../contexts/campaign-first-message'
+import { truncateText } from '../util'
+import { omitCampaignMessageProps } from '../util/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
 import type { CampaignMessageProps } from './index-types'
@@ -82,6 +82,8 @@ const serialize = _whatsappCTAUrlButtonProps => {
 }
 
 export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
+  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
+
   const renderBrowser = () => {
     // Return a dummy message for browser
     const message = `${JSON.stringify(props)}`
@@ -136,7 +138,7 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...validatedProps}
-        {...toCampaignHtmlAttributes(props)}
+        {...resolveCampaignHtmlAttributes(props, takeCampaignMessageProps)}
         type={INPUT.WHATSAPP_CTA_URL_BUTTON}
       />
     )
