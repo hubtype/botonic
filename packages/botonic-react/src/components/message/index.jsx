@@ -6,6 +6,7 @@ import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext } from '../../contexts'
 import { SENDERS } from '../../index-types'
 import { Fade } from '../../shared/styles'
+import { toCampaignHtmlAttributes } from '../../util/campaign-message-attributes'
 import { isDev } from '../../util/environment'
 import { ConditionalWrapper, renderComponent } from '../../util/react'
 import { WebchatContext } from '../../webchat/context'
@@ -283,17 +284,33 @@ export const Message = props => {
     )
   }
 
-  const { blob: _blob, json: _json, ...nodeProps } = props
+  const {
+    blob: _blob,
+    json: _json,
+    isCampaignFirstMessage,
+    campaignId,
+    ...nodeProps
+  } = props
+  const campaignHtmlAttributes = toCampaignHtmlAttributes({
+    isCampaignFirstMessage,
+    campaignId,
+  })
   const renderNode = () =>
     type === INPUT.CUSTOM ? (
       <message
         json={JSON.stringify(_json)}
         typing={typing}
         delay={delay}
+        {...campaignHtmlAttributes}
         {...nodeProps}
       />
     ) : (
-      <message typing={typing} delay={delay} {...nodeProps}>
+      <message
+        typing={typing}
+        delay={delay}
+        {...campaignHtmlAttributes}
+        {...nodeProps}
+      >
         {children}
       </message>
     )

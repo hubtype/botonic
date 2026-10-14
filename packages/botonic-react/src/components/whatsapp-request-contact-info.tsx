@@ -1,11 +1,13 @@
 import { INPUT } from '@botonic/core'
 
+import { toCampaignHtmlAttributes } from '../util/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import { WHATSAPP_MAX_BODY_CHARS } from './multichannel/whatsapp/constants'
 import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
+import type { CampaignMessageProps } from './index-types'
 import { Text } from './text'
 
-export interface WhatsappRequestContactInfoProps {
+export interface WhatsappRequestContactInfoProps extends CampaignMessageProps {
   body: string
 }
 
@@ -30,7 +32,11 @@ export const WhatsappRequestContactInfo = (
     const body = validateBody(props.body)
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
-      <message body={body} type={INPUT.WHATSAPP_REQUEST_CONTACT_INFO} />
+      <message
+        body={body}
+        type={INPUT.WHATSAPP_REQUEST_CONTACT_INFO}
+        {...toCampaignHtmlAttributes(props)}
+      />
     )
   }
 

@@ -1,6 +1,7 @@
 import { INPUT } from '@botonic/core'
 import styled from 'styled-components'
 
+import { toCampaignHtmlAttributes } from '../util/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
 
@@ -30,7 +31,13 @@ export const Location = props => {
 
   const renderNode = () => {
     return (
-      <message type={INPUT.LOCATION}>
+      <message
+        type={INPUT.LOCATION}
+        {...toCampaignHtmlAttributes({
+          isCampaignFirstMessage: props.isCampaignFirstMessage,
+          campaignId: props.campaignId,
+        })}
+      >
         <lat>{lat}</lat>
         <long>{long}</long>
       </message>

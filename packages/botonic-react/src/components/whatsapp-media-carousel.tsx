@@ -1,7 +1,12 @@
 import { INPUT } from '@botonic/core'
 
+import {
+  omitCampaignMessageProps,
+  toCampaignHtmlAttributes,
+} from '../util/campaign-message-attributes'
 import { toSnakeCaseKeys } from '../util/functional'
 import { renderComponent } from '../util/react'
+import type { CampaignMessageProps } from './index-types'
 import { Message } from './message'
 
 type Parameters = TextParameter | CurrencyParameter | DateTimeParameter
@@ -49,7 +54,7 @@ interface Card {
   extraComponents?: Record<string, any>[]
 }
 
-export interface WhatsappMediaCarouselProps {
+export interface WhatsappMediaCarouselProps extends CampaignMessageProps {
   templateName: string
   templateLanguage: string
   cards: Card[]
@@ -92,7 +97,8 @@ export const WhatsappMediaCarousel = (props: WhatsappMediaCarouselProps) => {
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
-        {...props}
+        {...omitCampaignMessageProps(props)}
+        {...toCampaignHtmlAttributes(props)}
         bodyParameters={JSON.stringify(toSnakeCaseKeys(props.bodyParameters))}
         cards={JSON.stringify(getCards(props.cards))}
         templateName={props.templateName}

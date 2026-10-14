@@ -1,3 +1,8 @@
+export {
+  type CampaignHtmlAttributes,
+  omitCampaignMessageProps,
+  toCampaignHtmlAttributes,
+} from '../util/campaign-message-attributes'
 export { Audio } from './audio'
 export { Button } from './button/index'
 export { Carousel } from './carousel'

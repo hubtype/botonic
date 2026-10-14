@@ -1,6 +1,11 @@
 import { INPUT } from '@botonic/core'
 
+import {
+  omitCampaignMessageProps,
+  toCampaignHtmlAttributes,
+} from '../../util/campaign-message-attributes'
 import { renderComponent } from '../../util/react'
+import type { CampaignMessageProps } from '../index-types'
 import { Message } from '../message'
 import type {
   WhatsappTemplateComponentBody,
@@ -13,7 +18,7 @@ const serialize = (message: string) => {
   return { text: message }
 }
 
-export interface WhatsappTemplateProps {
+export interface WhatsappTemplateProps extends CampaignMessageProps {
   name: string
   language: string
   namespace?: string
@@ -38,7 +43,8 @@ export const WhatsappTemplate = (props: WhatsappTemplateProps) => {
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
-        {...props}
+        {...omitCampaignMessageProps(props)}
+        {...toCampaignHtmlAttributes(props)}
         name={props.name}
         language={props.language}
         namespace={props.namespace}
