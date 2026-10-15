@@ -6,14 +6,14 @@ import {
   PUSH_FLOW_PAYLOAD,
   SEPARATOR,
 } from '../constants'
-import type { FlowContent } from '../content-fields'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
+import type { FlowBuilderContentsResult } from './contents-result'
 import type { FlowBuilderContext } from './context'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext
-): Promise<FlowContent[]> {
+): Promise<FlowBuilderContentsResult> {
   const { cmsApi, flowBuilderPlugin, request, contentID } = context
   if (request.input.payload?.startsWith(AGENT_RATING_PAYLOAD)) {
     return await resolveRatingPayload(context)
@@ -28,19 +28,21 @@ export async function getContentsByPayload(
   const targetNode = id ? cmsApi.getNodeById<HtNodeWithContent>(id) : undefined
 
   if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode)
+    return {
+      contents: await flowBuilderPlugin.getContentsByNode(targetNode),
+    }
   }
 
-  return []
+  return { contents: [] }
 }
 
 async function resolveRatingPayload(
   context: FlowBuilderContext
-): Promise<FlowContent[]> {
+): Promise<FlowBuilderContentsResult> {
   const { cmsApi, flowBuilderPlugin, request } = context
 
   if (!request.input.payload) {
-    return []
+    return { contents: [] }
   }
 
   const { target, text, value, possibleOptions, possibleValues } =
@@ -66,26 +68,28 @@ async function resolveRatingPayload(
     : undefined
 
   if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode)
+    return {
+      contents: await flowBuilderPlugin.getContentsByNode(targetNode),
+    }
   }
 
-  return []
+  return { contents: [] }
 }
 
 async function resolvePushFlowPayload(
   context: FlowBuilderContext
-): Promise<FlowContent[]> {
+): Promise<FlowBuilderContentsResult> {
   const { cmsApi, flowBuilderPlugin, request } = context
 
   if (!request.input.payload) {
-    return []
+    return { contents: [] }
   }
 
   const parts = request.input.payload.split(SEPARATOR)
   const pushFlowId = parts.length > 1 ? parts[1] : ''
 
   if (!pushFlowId) {
-    return []
+    return { contents: [] }
   }
 
   try {
@@ -93,12 +97,20 @@ async function resolvePushFlowPayload(
       cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
 
     if (!pushFlowNode) {
-      return []
+      return { contents: [] }
     }
 
-    return await flowBuilderPlugin.getContentsByNode(pushFlowNode)
+    // TODO: Review how get the correct campaign_id
+    const campaignId = context.request.input.context?.campaign_id
+    if (!campaignId) {
+      console.error('No campaign id found in input context')
+    }
+
+    return {
+      contents: await flowBuilderPlugin.getContentsByNode(pushFlowNode),
+      campaignFirstMessageId: campaignId,
+    }
   } catch {
-    // Campaign not found - return empty to trigger fallback
-    return []
+    return { contents: [] }
   }
 }
