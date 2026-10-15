@@ -63,8 +63,7 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
     }
 
     if (this.splitDefault) {
-      const hasSessionContactReasons =
-        (sessionContactReasons?.length ?? 0) > 0
+      const hasSessionContactReasons = (sessionContactReasons?.length ?? 0) > 0
       if (hasSessionContactReasons) {
         this.conditionalResult = 'any_contact_reason'
         this.followUp = this.anyContactReasonTarget

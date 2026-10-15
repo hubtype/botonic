@@ -245,7 +245,9 @@ describe('FlowContactReasonsConditional.setFollowUp', () => {
         botContext
       )
 
-    expect(flowContactReasonsConditional.followUp).toEqual(noContactReasonTarget)
+    expect(flowContactReasonsConditional.followUp).toEqual(
+      noContactReasonTarget
+    )
     expect(flowContactReasonsConditional.conditionalResult).toBe(
       'no_contact_reason'
     )
@@ -277,7 +279,9 @@ describe('FlowContactReasonsConditional.setFollowUp', () => {
         botContext
       )
 
-    expect(flowContactReasonsConditional.followUp).toEqual(noContactReasonTarget)
+    expect(flowContactReasonsConditional.followUp).toEqual(
+      noContactReasonTarget
+    )
     expect(flowContactReasonsConditional.conditionalResult).toBe(
       'no_contact_reason'
     )
@@ -315,7 +319,9 @@ describe('FlowContactReasonsConditional.setFollowUp', () => {
         botContext
       )
 
-    expect(flowContactReasonsConditional.followUp).toEqual(anyContactReasonTarget)
+    expect(flowContactReasonsConditional.followUp).toEqual(
+      anyContactReasonTarget
+    )
     expect(flowContactReasonsConditional.conditionalResult).toBe(
       'any_contact_reason'
     )
