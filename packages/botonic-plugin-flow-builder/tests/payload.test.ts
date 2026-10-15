@@ -1,4 +1,4 @@
-import { INPUT } from '@botonic/core'
+import { INPUT, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
 import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
@@ -14,7 +14,15 @@ import {
   createFlowBuilderPlugin,
   createFlowBuilderPluginAndGetContents,
   createRequest,
+  renderFlowBuilderActionHtml,
 } from './helpers/utils'
+
+const CAMPAIGN_V2_ID = '0197a2b1-0000-7000-8000-000000000001'
+
+function getOutboundMessageOpenTags(html: string): string[] {
+  const tags = html.match(/<message\b[^>]*>/g) ?? []
+  return tags.filter(tag => !tag.includes('type="webchatsettings"'))
+}
 
 describe('Check the contents returned by the plugin when user clicks a button', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
@@ -258,5 +266,75 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
     expect(contents.length).toBeGreaterThanOrEqual(1)
     expect(contents[0]).not.toBeInstanceOf(FlowWhatsappTemplate)
     expect((contents[0] as FlowText).text).toBe('Welcome to main flow')
+  })
+})
+
+describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
+  process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
+
+  beforeEach(() => mockSmartIntent('Other'))
+
+  test('marks only the first message when push-flow resolves with two texts', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
+
+    const html = await renderFlowBuilderActionHtml({
+      flowBuilderOptions: { flow: campaignsFlow },
+      requestArgs: {
+        input: {
+          payload: pushFlowPayload,
+          type: INPUT.POSTBACK,
+          context: { campaign_id: CAMPAIGN_V2_ID },
+        },
+      },
+    })
+
+    const messageTags = getOutboundMessageOpenTags(html)
+    expect(messageTags).toHaveLength(2)
+    expect(messageTags[0]).toContain('iscampaignfirstmessage="1"')
+    expect(messageTags[0]).toContain(`campaignid="${CAMPAIGN_V2_ID}"`)
+    expect(messageTags[1]).not.toContain('iscampaignfirstmessage')
+    expect(messageTags[1]).not.toContain('campaignid')
+  })
+
+  test('marks the WhatsApp template message when push-flow resolves to a template node', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-template`
+
+    const html = await renderFlowBuilderActionHtml({
+      flowBuilderOptions: { flow: campaignsWhatsappTemplatePushFlow },
+      requestArgs: {
+        provider: PROVIDER.WHATSAPP,
+        input: {
+          payload: pushFlowPayload,
+          type: INPUT.POSTBACK,
+          context: { campaign_id: CAMPAIGN_V2_ID },
+        },
+      },
+    })
+
+    const messageTags = getOutboundMessageOpenTags(html)
+    expect(messageTags).toHaveLength(1)
+    expect(messageTags[0]).toContain('iscampaignfirstmessage="1"')
+    expect(messageTags[0]).toContain(`campaignid="${CAMPAIGN_V2_ID}"`)
+    expect(messageTags[0]).toContain('name="proactive_campaign_template"')
+  })
+
+  test('does not mark messages when push-flow falls back to default contents', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}non-existent-campaign-id`
+
+    const html = await renderFlowBuilderActionHtml({
+      flowBuilderOptions: { flow: campaignsFlow },
+      requestArgs: {
+        input: {
+          payload: pushFlowPayload,
+          type: INPUT.POSTBACK,
+          context: { campaign_id: CAMPAIGN_V2_ID },
+        },
+      },
+    })
+
+    const messageTags = getOutboundMessageOpenTags(html)
+    expect(messageTags).toHaveLength(1)
+    expect(messageTags[0]).not.toContain('iscampaignfirstmessage')
+    expect(messageTags[0]).not.toContain('campaignid')
   })
 })

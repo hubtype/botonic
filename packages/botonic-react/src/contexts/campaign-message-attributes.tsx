@@ -102,14 +102,23 @@ export type CampaignHtmlAttributes = {
   campaignid?: string
 }
 
+function isCampaignFirstMessageTrue(value: unknown): boolean {
+  return value === true || value === 1
+}
+
+function isCampaignFirstMessageFalse(value: unknown): boolean {
+  return value === false || value === 0
+}
+
 function toCampaignHtmlAttributes(
   props: CampaignMessagePropsSlice
 ): CampaignHtmlAttributes {
   const attrs: CampaignHtmlAttributes = {}
+  const isCampaignFirstMessage = props.isCampaignFirstMessage as unknown
 
-  if (props.isCampaignFirstMessage === true) {
+  if (isCampaignFirstMessageTrue(isCampaignFirstMessage)) {
     attrs.iscampaignfirstmessage = '1'
-  } else if (props.isCampaignFirstMessage === false) {
+  } else if (isCampaignFirstMessageFalse(isCampaignFirstMessage)) {
     attrs.iscampaignfirstmessage = '0'
   }
 
