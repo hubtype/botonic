@@ -20,6 +20,16 @@ const defaultTarget = {
   type: HtNodeWithContentType.TEXT,
 }
 
+const anyContactReasonTarget = {
+  id: 'any-contact-reason-target-id',
+  type: HtNodeWithContentType.TEXT,
+}
+
+const noContactReasonTarget = {
+  id: 'no-contact-reason-target-id',
+  type: HtNodeWithContentType.TEXT,
+}
+
 const billingBranch: HtContactReasonBranch = {
   id: 'reason-billing-id',
   name: 'billing',
@@ -201,6 +211,179 @@ describe('FlowContactReasonsConditional.setFollowUp', () => {
           content: {
             contact_reasons: [billingBranch, supportBranch],
             default_target: defaultTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(defaultTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe('default')
+  })
+
+  test('with split_default uses no_contact_reason_target when session has no contact reasons', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            split_default: true,
+            default_target: defaultTarget,
+            any_contact_reason_target: anyContactReasonTarget,
+            no_contact_reason_target: noContactReasonTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(noContactReasonTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe(
+      'no_contact_reason'
+    )
+  })
+
+  test('with split_default uses no_contact_reason_target when session contact reasons array is empty', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+    botContext.session._hubtype_case_contact_reasons = []
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            split_default: true,
+            default_target: defaultTarget,
+            any_contact_reason_target: anyContactReasonTarget,
+            no_contact_reason_target: noContactReasonTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(noContactReasonTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe(
+      'no_contact_reason'
+    )
+  })
+
+  test('with split_default uses any_contact_reason_target when there is no matching branch', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+    botContext.session._hubtype_case_contact_reasons = [
+      {
+        id: 'unknown-id',
+        name: 'unknown',
+        project_id: 'project-1',
+      },
+    ]
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            split_default: true,
+            default_target: defaultTarget,
+            any_contact_reason_target: anyContactReasonTarget,
+            no_contact_reason_target: noContactReasonTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(anyContactReasonTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe(
+      'any_contact_reason'
+    )
+  })
+
+  test('with split_default still uses matching branch target when there is a match', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+    botContext.session._hubtype_case_contact_reasons = [
+      {
+        id: 'reason-billing-id',
+        name: 'billing',
+        project_id: 'project-1',
+      },
+    ]
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            split_default: true,
+            default_target: defaultTarget,
+            any_contact_reason_target: anyContactReasonTarget,
+            no_contact_reason_target: noContactReasonTarget,
+          },
+        },
+        botContext
+      )
+
+    expect(flowContactReasonsConditional.followUp).toEqual(branchTarget)
+    expect(flowContactReasonsConditional.conditionalResult).toBe('billing')
+  })
+
+  test('without split_default ignores split targets and uses default_target', () => {
+    const botContext = createRequest({
+      input: { data: 'test', type: INPUT.TEXT },
+    })
+    botContext.session._hubtype_case_contact_reasons = [
+      {
+        id: 'unknown-id',
+        name: 'unknown',
+        project_id: 'project-1',
+      },
+    ]
+
+    const flowContactReasonsConditional =
+      FlowContactReasonsConditional.fromHubtypeCMS(
+        {
+          id: 'contact-reasons-node-id',
+          code: 'CONTACT_REASONS',
+          meta: { x: 0, y: 0 },
+          flow_id: 'flow-id',
+          is_meaningful: false,
+          type: HtNodeWithContentType.CONTACT_REASONS_CONDITION,
+          content: {
+            contact_reasons: [billingBranch, supportBranch],
+            split_default: false,
+            default_target: defaultTarget,
+            any_contact_reason_target: anyContactReasonTarget,
+            no_contact_reason_target: noContactReasonTarget,
           },
         },
         botContext

@@ -19,7 +19,10 @@ import type {
 export class FlowContactReasonsConditional extends ContentFieldsBase {
   public contactReasons: HtContactReasonBranch[] = []
   public conditionalResult: string = ''
-  public defaultTarget: HtNodeLink
+  public defaultTarget?: HtNodeLink
+  public splitDefault = false
+  public anyContactReasonTarget?: HtNodeLink
+  public noContactReasonTarget?: HtNodeLink
 
   static fromHubtypeCMS(
     component: HtContactReasonsNode,
@@ -32,6 +35,12 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
       component.content.contact_reasons
     newContactReasonsConditional.defaultTarget =
       component.content.default_target
+    newContactReasonsConditional.splitDefault =
+      component.content.split_default ?? false
+    newContactReasonsConditional.anyContactReasonTarget =
+      component.content.any_contact_reason_target
+    newContactReasonsConditional.noContactReasonTarget =
+      component.content.no_contact_reason_target
     newContactReasonsConditional.setFollowUp(botContext)
     return newContactReasonsConditional
   }
@@ -40,7 +49,7 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
     const sessionContactReasons =
       botContext.session._hubtype_case_contact_reasons
 
-    const matchingBranch = sessionContactReasons
+    const matchingBranch = sessionContactReasons?.length
       ? findMatchingContactReasonBranch(
           sessionContactReasons,
           this.contactReasons
@@ -50,10 +59,24 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
     if (matchingBranch) {
       this.conditionalResult = matchingBranch.name
       this.followUp = matchingBranch.target
-    } else {
-      this.conditionalResult = 'default'
-      this.followUp = this.defaultTarget
+      return
     }
+
+    if (this.splitDefault) {
+      const hasSessionContactReasons =
+        (sessionContactReasons?.length ?? 0) > 0
+      if (hasSessionContactReasons) {
+        this.conditionalResult = 'any_contact_reason'
+        this.followUp = this.anyContactReasonTarget
+      } else {
+        this.conditionalResult = 'no_contact_reason'
+        this.followUp = this.noContactReasonTarget
+      }
+      return
+    }
+
+    this.conditionalResult = 'default'
+    this.followUp = this.defaultTarget
   }
 
   async trackFlow(botContext: BotContext): Promise<void> {
