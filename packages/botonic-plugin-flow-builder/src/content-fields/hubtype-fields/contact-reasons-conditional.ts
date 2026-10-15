@@ -13,6 +13,9 @@ export interface HtContactReasonsNode extends HtBaseNode {
   type: HtNodeWithContentType.CONTACT_REASONS_CONDITION
   content: {
     contact_reasons: HtContactReasonBranch[]
-    default_target: HtNodeLink
+    split_default?: boolean
+    default_target?: HtNodeLink
+    any_contact_reason_target?: HtNodeLink
+    no_contact_reason_target?: HtNodeLink
   }
 }
