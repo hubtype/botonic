@@ -8,8 +8,8 @@ import {
 } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
-import type { FlowBuilderContext } from './context'
 import type { FlowBuilderContentsResult } from './contents-result'
+import type { FlowBuilderContext } from './context'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext
@@ -100,9 +100,15 @@ async function resolvePushFlowPayload(
       return { contents: [] }
     }
 
+    // TODO: Review how get the correct campaign_id
+    const campaignId = context.request.input.context?.campaign_id
+    if (!campaignId) {
+      console.error('No campaign id found in input context')
+    }
+
     return {
       contents: await flowBuilderPlugin.getContentsByNode(pushFlowNode),
-      campaignFirstMessageId: pushFlowId,
+      campaignFirstMessageId: campaignId,
     }
   } catch {
     return { contents: [] }
