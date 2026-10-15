@@ -149,15 +149,7 @@ export interface Input {
   payload?: string
   referral?: string
   type: InputType
-  context?: {
-    campaign?: Campaign
-    campaigns_v2?: CampaignV2[]
-    salesforce?: {
-      access_token: string
-    }
-    campaign_id?: string
-    campaign_chat_execution_id?: string
-  }
+  context?: InputContext
   transcript?: string
   message_id: string
   bot_interaction_id: string
@@ -219,13 +211,13 @@ export type InputContext = {
     access_token: string
   }
 } & (
-  | InputContextCampaignV2FirstExecution
+  | InputContextCampaignV2FromPostback
   | InputContextCampaignV2Active
   | InputContextCampaignV1Active
 )
 
 // only with an input of type POSTBACK and payload that starts with "push-flow|...
-export interface InputContextCampaignV2FirstExecution {
+export interface InputContextCampaignV2FromPostback {
   campaign_id?: string
   campaign_chat_execution_id?: string
 }
