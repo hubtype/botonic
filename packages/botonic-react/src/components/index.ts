@@ -1,16 +1,13 @@
 export {
-  CampaignFirstMessageContext,
-  CampaignFirstMessageProvider,
-  type CampaignFirstMessageProviderProps,
-  mergeCampaignMessageProps,
-  resolveCampaignHtmlAttributes,
-  useCampaignFirstMessageContext,
-} from '../contexts/campaign-first-message'
-export {
+  CAMPAIGN_MESSAGE_PROP_KEYS,
   type CampaignHtmlAttributes,
-  omitCampaignMessageProps,
-  toCampaignHtmlAttributes,
-} from '../util/campaign-message-attributes'
+  CampaignMessageAttributesProvider,
+  type CampaignMessageAttributesProviderProps,
+  type CampaignMessagePropKey,
+  type CampaignMessagePropsSlice,
+  type CampaignMessagePropsWithoutCampaign,
+  useCampaignMessageAttributes,
+} from '../contexts/campaign-message-attributes'
 export { Audio } from './audio'
 export { Button } from './button/index'
 export { Carousel } from './carousel'

@@ -1,6 +1,6 @@
 import { type BotContext, isDev, isWebchat } from '@botonic/core'
 import {
-  CampaignFirstMessageProvider,
+  CampaignMessageAttributesProvider,
   Multichannel,
   RequestContext,
   WebchatSettings,
@@ -176,9 +176,9 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     }
 
     return (
-      <CampaignFirstMessageProvider campaignId={campaignFirstMessageId}>
+      <CampaignMessageAttributesProvider campaignId={campaignFirstMessageId}>
         {rendered}
-      </CampaignFirstMessageProvider>
+      </CampaignMessageAttributesProvider>
     )
   }
 }

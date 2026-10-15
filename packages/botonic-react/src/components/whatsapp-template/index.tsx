@@ -1,10 +1,6 @@
 import { INPUT } from '@botonic/core'
 
-import {
-  resolveCampaignHtmlAttributes,
-  useCampaignFirstMessageContext,
-} from '../../contexts/campaign-first-message'
-import { omitCampaignMessageProps } from '../../util/campaign-message-attributes'
+import { useCampaignMessageAttributes } from '../../contexts/campaign-message-attributes'
 import { renderComponent } from '../../util/react'
 import type { CampaignMessageProps } from '../index-types'
 import { Message } from '../message'
@@ -30,7 +26,8 @@ export interface WhatsappTemplateProps extends CampaignMessageProps {
 }
 
 export const WhatsappTemplate = (props: WhatsappTemplateProps) => {
-  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
+  const { messageProps, campaignHtmlAttributes } =
+    useCampaignMessageAttributes(props)
 
   const renderBrowser = () => {
     // Return a dummy message for browser
@@ -46,8 +43,8 @@ export const WhatsappTemplate = (props: WhatsappTemplateProps) => {
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
-        {...omitCampaignMessageProps(props)}
-        {...resolveCampaignHtmlAttributes(props, takeCampaignMessageProps)}
+        {...messageProps}
+        {...campaignHtmlAttributes}
         name={props.name}
         language={props.language}
         namespace={props.namespace}

@@ -1,9 +1,6 @@
 import { INPUT } from '@botonic/core'
 
-import {
-  resolveCampaignHtmlAttributes,
-  useCampaignFirstMessageContext,
-} from '../contexts/campaign-first-message'
+import { useCampaignMessageAttributes } from '../contexts/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import type { CampaignMessageProps } from './index-types'
 import { WHATSAPP_MAX_BODY_CHARS } from './multichannel/whatsapp/constants'
@@ -29,7 +26,7 @@ const validateBody = (body: string): string => {
 export const WhatsappRequestContactInfo = (
   props: WhatsappRequestContactInfoProps
 ) => {
-  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
+  const { campaignHtmlAttributes } = useCampaignMessageAttributes(props)
 
   const renderBrowser = () => <Text>{props.body}</Text>
 
@@ -40,7 +37,7 @@ export const WhatsappRequestContactInfo = (
       <message
         body={body}
         type={INPUT.WHATSAPP_REQUEST_CONTACT_INFO}
-        {...resolveCampaignHtmlAttributes(props, takeCampaignMessageProps)}
+        {...campaignHtmlAttributes}
       />
     )
   }

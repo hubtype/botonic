@@ -1,10 +1,6 @@
 import { INPUT } from '@botonic/core'
-import {
-  resolveCampaignHtmlAttributes,
-  useCampaignFirstMessageContext,
-} from '../contexts/campaign-first-message'
+import { useCampaignMessageAttributes } from '../contexts/campaign-message-attributes'
 import { truncateText } from '../util'
-import { omitCampaignMessageProps } from '../util/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
 import type { CampaignMessageProps } from './index-types'
@@ -82,7 +78,8 @@ const serialize = _whatsappCTAUrlButtonProps => {
 }
 
 export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
-  const { takeCampaignMessageProps } = useCampaignFirstMessageContext()
+  const { messageProps, campaignHtmlAttributes } =
+    useCampaignMessageAttributes(props)
 
   const renderBrowser = () => {
     // Return a dummy message for browser
@@ -100,7 +97,7 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
 
   const renderNode = () => {
     const validatedProps = {
-      ...omitCampaignMessageProps(props),
+      ...messageProps,
       headerType: props.headerType,
       header:
         props.headerType === WhatsappCTAUrlHeaderType.Text && props.header
@@ -138,7 +135,7 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
         {...validatedProps}
-        {...resolveCampaignHtmlAttributes(props, takeCampaignMessageProps)}
+        {...campaignHtmlAttributes}
         type={INPUT.WHATSAPP_CTA_URL_BUTTON}
       />
     )
