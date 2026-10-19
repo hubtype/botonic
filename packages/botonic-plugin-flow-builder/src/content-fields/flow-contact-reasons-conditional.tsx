@@ -16,6 +16,12 @@ import type {
   HtContactReasonsNode,
 } from './hubtype-fields/contact-reasons-conditional'
 
+enum ConditionalResult {
+  AnyContactReason = 'any_contact_reason',
+  NoContactReason = 'no_contact_reason',
+  Default = 'default',
+}
+
 export class FlowContactReasonsConditional extends ContentFieldsBase {
   public contactReasons: HtContactReasonBranch[] = []
   public conditionalResult: string = ''
@@ -65,16 +71,17 @@ export class FlowContactReasonsConditional extends ContentFieldsBase {
     if (this.splitDefault) {
       const hasSessionContactReasons = (sessionContactReasons?.length ?? 0) > 0
       if (hasSessionContactReasons) {
-        this.conditionalResult = 'any_contact_reason'
+        this.conditionalResult = ConditionalResult.AnyContactReason
         this.followUp = this.anyContactReasonTarget
-      } else {
-        this.conditionalResult = 'no_contact_reason'
-        this.followUp = this.noContactReasonTarget
+        return
       }
+
+      this.conditionalResult = ConditionalResult.NoContactReason
+      this.followUp = this.noContactReasonTarget
       return
     }
 
-    this.conditionalResult = 'default'
+    this.conditionalResult = ConditionalResult.Default
     this.followUp = this.defaultTarget
   }
 
