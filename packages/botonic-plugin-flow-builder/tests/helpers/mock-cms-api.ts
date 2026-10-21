@@ -7,6 +7,7 @@ export interface MockFlowBuilderApi {
   getPayload: jest.Mock
   removeWhatsappRequestContactId: jest.Mock
   getNodeById: jest.Mock
+  getNodeByCampaignId: jest.Mock
   isBotAction: jest.Mock
   createPayloadWithParams: jest.Mock
   removeCaptureUserInputId: jest.Mock
@@ -22,6 +23,7 @@ export function createMockFlowBuilderApi(
     getPayload: jest.fn(),
     removeWhatsappRequestContactId: jest.fn(),
     getNodeById: jest.fn(),
+    getNodeByCampaignId: jest.fn(),
     isBotAction: jest.fn().mockReturnValue(false),
     createPayloadWithParams: jest.fn(),
     removeCaptureUserInputId: jest.fn(),

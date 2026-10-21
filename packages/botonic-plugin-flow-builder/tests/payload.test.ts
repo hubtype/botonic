@@ -1,6 +1,10 @@
 import { INPUT, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
+import {
+  PushFlowError,
+  PushFlowErrorCode,
+} from '../src/action/push-flow-resolver'
 import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import { FlowWhatsappTemplate } from '../src/content-fields/flow-whatsapp-template'
 import { FlowText } from '../src/content-fields/index'
@@ -74,6 +78,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
+          context: { campaign_id: CAMPAIGN_V2_ID },
         },
       },
     })
@@ -95,6 +100,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
+          context: { campaign_id: CAMPAIGN_V2_ID },
         },
       },
     })
@@ -105,65 +111,78 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
     )
   })
 
-  test('Should return fallback when PUSH_FLOW_PAYLOAD is used with invalid campaign ID', async () => {
+  test('throws when PUSH_FLOW_PAYLOAD is used with invalid campaign node id', async () => {
     const invalidCampaignId = 'non-existent-campaign-id'
     const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${invalidCampaignId}`
 
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: campaignsFlow },
-      requestArgs: {
-        input: {
-          payload: pushFlowPayload,
-          type: INPUT.POSTBACK,
+    await expect(
+      createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: campaignsFlow },
+        requestArgs: {
+          input: {
+            payload: pushFlowPayload,
+            type: INPUT.POSTBACK,
+            context: { campaign_id: CAMPAIGN_V2_ID },
+          },
         },
-      },
+      })
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoCampaignStartNode,
     })
-
-    // Should return fallback when campaign not found
-    expect(contents.length).toBe(1)
-    expect((contents[0] as FlowText).text).toBe(
-      "Sorry, I didn't understand that."
-    )
   })
 
-  test('Should return fallback when PUSH_FLOW_PAYLOAD is used without campaign ID', async () => {
+  test('throws when PUSH_FLOW_PAYLOAD is used without campaign node id in payload', async () => {
     const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}`
 
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: campaignsFlow },
-      requestArgs: {
-        input: {
-          payload: pushFlowPayload,
-          type: INPUT.POSTBACK,
+    await expect(
+      createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: campaignsFlow },
+        requestArgs: {
+          input: {
+            payload: pushFlowPayload,
+            type: INPUT.POSTBACK,
+            context: { campaign_id: CAMPAIGN_V2_ID },
+          },
         },
-      },
+      })
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoPushFlowId,
     })
-
-    // Should return fallback when no campaign ID provided
-    expect(contents.length).toBe(1)
-    expect((contents[0] as FlowText).text).toBe(
-      "Sorry, I didn't understand that."
-    )
   })
 
-  test('Should return fallback when PUSH_FLOW_PAYLOAD has no separator', async () => {
+  test('throws when PUSH_FLOW_PAYLOAD has no separator', async () => {
     const pushFlowPayload = PUSH_FLOW_PAYLOAD
 
-    const { contents } = await createFlowBuilderPluginAndGetContents({
-      flowBuilderOptions: { flow: campaignsFlow },
-      requestArgs: {
-        input: {
-          payload: pushFlowPayload,
-          type: INPUT.POSTBACK,
+    await expect(
+      createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: campaignsFlow },
+        requestArgs: {
+          input: {
+            payload: pushFlowPayload,
+            type: INPUT.POSTBACK,
+            context: { campaign_id: CAMPAIGN_V2_ID },
+          },
         },
-      },
+      })
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoPushFlowId,
     })
+  })
 
-    // Should return fallback when no separator in payload
-    expect(contents.length).toBe(1)
-    expect((contents[0] as FlowText).text).toBe(
-      "Sorry, I didn't understand that."
-    )
+  test('throws when PUSH_FLOW_PAYLOAD is used without campaign_id in context', async () => {
+    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
+
+    await expect(
+      createFlowBuilderPluginAndGetContents({
+        flowBuilderOptions: { flow: campaignsFlow },
+        requestArgs: {
+          input: {
+            payload: pushFlowPayload,
+            type: INPUT.POSTBACK,
+          },
+        },
+      })
+    ).rejects.toBeInstanceOf(PushFlowError)
   })
 })
 
@@ -210,6 +229,7 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
         input: {
           type: INPUT.POSTBACK,
           payload: pushFlowPayload,
+          context: { campaign_id: CAMPAIGN_V2_ID },
         },
       },
     })
@@ -238,6 +258,7 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
         input: {
           type: INPUT.POSTBACK,
           payload: pushFlowPayload,
+          context: { campaign_id: CAMPAIGN_V2_ID },
         },
       },
     })
@@ -318,23 +339,22 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
     expect(messageTags[0]).toContain('name="proactive_campaign_template"')
   })
 
-  test('does not mark messages when push-flow falls back to default contents', async () => {
+  test('throws when push-flow campaign node cannot be resolved', async () => {
     const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}non-existent-campaign-id`
 
-    const html = await renderFlowBuilderActionHtml({
-      flowBuilderOptions: { flow: campaignsFlow },
-      requestArgs: {
-        input: {
-          payload: pushFlowPayload,
-          type: INPUT.POSTBACK,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+    await expect(
+      renderFlowBuilderActionHtml({
+        flowBuilderOptions: { flow: campaignsFlow },
+        requestArgs: {
+          input: {
+            payload: pushFlowPayload,
+            type: INPUT.POSTBACK,
+            context: { campaign_id: CAMPAIGN_V2_ID },
+          },
         },
-      },
+      })
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoCampaignStartNode,
     })
-
-    const messageTags = getOutboundMessageOpenTags(html)
-    expect(messageTags).toHaveLength(1)
-    expect(messageTags[0]).not.toContain('iscampaignfirstmessage')
-    expect(messageTags[0]).not.toContain('campaignid')
   })
 })

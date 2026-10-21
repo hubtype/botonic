@@ -33,9 +33,9 @@ describe('FlowBuilderApi - Campaign methods', () => {
         cmsApi.getNodeByCampaignId<HtNodeWithContent>('campaign-uuid-1')
 
       expect(campaignNode).toBeDefined()
-      expect(campaignNode.id).toBe('campaign-1-start-node')
-      expect(campaignNode.code).toBe('CAMPAIGN_1_START')
-      expect(campaignNode.type).toBe('text')
+      expect(campaignNode!.id).toBe('campaign-1-start-node')
+      expect(campaignNode!.code).toBe('CAMPAIGN_1_START')
+      expect(campaignNode!.type).toBe('text')
     })
 
     test('should return the start node for campaign 2', async () => {
@@ -57,11 +57,11 @@ describe('FlowBuilderApi - Campaign methods', () => {
         cmsApi.getNodeByCampaignId<HtNodeWithContent>('campaign-uuid-2')
 
       expect(campaignNode).toBeDefined()
-      expect(campaignNode.id).toBe('campaign-2-start-node')
-      expect(campaignNode.code).toBe('CAMPAIGN_2_START')
+      expect(campaignNode!.id).toBe('campaign-2-start-node')
+      expect(campaignNode!.code).toBe('CAMPAIGN_2_START')
     })
 
-    test('should throw error when campaign ID does not exist', async () => {
+    test('returns undefined when campaign ID does not exist', async () => {
       const flowBuilderPlugin = createFlowBuilderPlugin({
         flow: campaignsFlow,
       })
@@ -76,9 +76,9 @@ describe('FlowBuilderApi - Campaign methods', () => {
       await flowBuilderPlugin.pre(request)
       const cmsApi = flowBuilderPlugin.cmsApi
 
-      expect(() => {
+      expect(
         cmsApi.getNodeByCampaignId('non-existent-campaign')
-      }).toThrow("Campaign with id: 'non-existent-campaign' not found")
+      ).toBeUndefined()
     })
   })
 

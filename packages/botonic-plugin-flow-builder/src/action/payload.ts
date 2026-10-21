@@ -1,15 +1,11 @@
 import { EventAction, type EventFeedback, storeCaseRating } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
-
-import {
-  AGENT_RATING_PAYLOAD,
-  PUSH_FLOW_PAYLOAD,
-  SEPARATOR,
-} from '../constants'
+import { AGENT_RATING_PAYLOAD, PUSH_FLOW_PAYLOAD } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
 import type { FlowBuilderContentsResult } from './contents-result'
 import type { FlowBuilderContext } from './context'
+import { PushFlowResolver } from './push-flow-resolver'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext
@@ -19,7 +15,8 @@ export async function getContentsByPayload(
     return await resolveRatingPayload(context)
   }
   if (request.input.payload?.startsWith(PUSH_FLOW_PAYLOAD)) {
-    return await resolvePushFlowPayload(context)
+    const pushFlow = new PushFlowResolver(context)
+    return await pushFlow.getContents()
   }
 
   const id = contentID
@@ -74,43 +71,4 @@ async function resolveRatingPayload(
   }
 
   return { contents: [] }
-}
-
-async function resolvePushFlowPayload(
-  context: FlowBuilderContext
-): Promise<FlowBuilderContentsResult> {
-  const { cmsApi, flowBuilderPlugin, request } = context
-
-  if (!request.input.payload) {
-    return { contents: [] }
-  }
-
-  const parts = request.input.payload.split(SEPARATOR)
-  const pushFlowId = parts.length > 1 ? parts[1] : ''
-
-  if (!pushFlowId) {
-    return { contents: [] }
-  }
-
-  try {
-    const pushFlowNode =
-      cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
-
-    if (!pushFlowNode) {
-      return { contents: [] }
-    }
-
-    // TODO: Review how get the correct campaign_id
-    const campaignId = context.request.input.context?.campaign_id
-    if (!campaignId) {
-      console.error('No campaign id found in input context')
-    }
-
-    return {
-      contents: await flowBuilderPlugin.getContentsByNode(pushFlowNode),
-      campaignFirstMessageId: campaignId,
-    }
-  } catch {
-    return { contents: [] }
-  }
 }
