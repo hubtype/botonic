@@ -1,7 +1,8 @@
 import { INPUT } from '@botonic/core'
-
+import { useCampaignMessageAttributes } from '../contexts/campaign-message-attributes'
 import { truncateText } from '../util'
 import { renderComponent } from '../util/react'
+import type { CampaignMessageProps } from './index-types'
 import { Message } from './message'
 import { WHATSAPP_MAX_BUTTON_CHARS } from './multichannel/whatsapp/constants'
 import { convertToMarkdownMeta } from './multichannel/whatsapp/markdown-meta'
@@ -22,7 +23,7 @@ export interface WhatsappButtonListRowProps {
   description?: string
 }
 
-export interface WhatsappButtonListProps {
+export interface WhatsappButtonListProps extends CampaignMessageProps {
   header?: string
   body: string
   footer?: string
@@ -36,6 +37,9 @@ const serialize = _whatsappButtonListProps => {
 }
 
 export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
+  const { messageProps, campaignHtmlAttributes } =
+    useCampaignMessageAttributes(props)
+
   const truncateSectionsContents = (
     sections: WhatsappButtonListSectionProps[]
   ): WhatsappButtonListSectionProps[] => {
@@ -83,7 +87,8 @@ export const WhatsappButtonList = (props: WhatsappButtonListProps) => {
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
       <message
-        {...props}
+        {...messageProps}
+        {...campaignHtmlAttributes}
         body={convertToMarkdownMeta(props.body)}
         button={truncateText(props.button, WHATSAPP_MAX_BUTTON_CHARS)}
         sections={JSON.stringify(truncateSectionsContents(props.sections))}

@@ -8,7 +8,7 @@ export class FlowDoNothing extends ContentFieldsBase {
   static fromHubtypeCMS(cmsDoNothing: HtDoNothingNode): FlowDoNothing {
     const newDoNothing = new FlowDoNothing(cmsDoNothing.id)
     newDoNothing.code = cmsDoNothing.code
-    newDoNothing.followUp = cmsDoNothing.follow_up
+    newDoNothing.followUp = undefined
 
     return newDoNothing
   }

@@ -298,6 +298,11 @@ export default class BotonicPluginAiAgents<
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
 
+    const campaignsContext =
+      botContext.input.context && 'campaigns_v2' in botContext.input.context
+        ? botContext.input.context?.campaigns_v2
+        : []
+
     const specialist = await SpecialistAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,
       instructions: aiAgentArgs.instructions,
@@ -306,7 +311,7 @@ export default class BotonicPluginAiAgents<
       inputGuardrailRules: aiAgentArgs.inputGuardrailRules || [],
       sourceIds,
       outputMessagesSchemas: outputMessagesSchemas || [],
-      campaignsContext: botContext.input.context?.campaigns_v2,
+      campaignsContext: campaignsContext,
       logger: this.logger,
       llmConfig,
       guardrailTrackingContext: {
