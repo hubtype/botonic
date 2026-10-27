@@ -22,6 +22,7 @@ import {
   getKeywordEventConfig,
   getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
+  getUpdateVariablesEventConfig,
   getWebviewActionTriggeredEventConfig,
 } from '../../src/components/system-debug-trace/events'
 import { ROLES } from '../../src/constants'
@@ -337,6 +338,53 @@ describe('SystemDebugTrace Component', () => {
       expect(container.textContent).toContain('Webview action triggered')
       expect(container.textContent).toContain('Payment Form')
     })
+
+    test('renders update variables event', () => {
+      const debugEvent = {
+        action: EventAction.UpdateVariables,
+        set_variables: {
+          'session.user.name': 'Ada',
+          'session.customFlag': true,
+          'session.nested.value': 42,
+        },
+        unset_variables: ['session.user.phone'],
+      }
+
+      const { container } = render(
+        <DebugMessage
+          debugEvent={debugEvent}
+          messageId='msg-update-variables'
+        />
+      )
+
+      const header = container.querySelector('.collapsible > div:first-child')
+      expect(header?.textContent).toContain('Update variables')
+      expect(container.querySelector('.collapsible')).toBeTruthy()
+      expect(container.textContent).toContain('session.user.name')
+      expect(container.textContent).toContain('Ada')
+      expect(container.textContent).toContain('true')
+      expect(container.textContent).toContain('42')
+      expect(container.textContent).toContain('Unset')
+      expect(container.textContent).toContain('session.user.phone')
+    })
+
+    test('renders update variables event when no variables changed', () => {
+      const debugEvent = {
+        action: EventAction.UpdateVariables,
+        set_variables: {},
+        unset_variables: [],
+      }
+
+      const { container } = render(
+        <DebugMessage
+          debugEvent={debugEvent}
+          messageId='msg-update-variables-empty'
+        />
+      )
+
+      expect(container.textContent).toContain('Update variables')
+      expect(container.textContent).toContain('No variables')
+    })
   })
 
   describe('Event Configuration Functions', () => {
@@ -560,6 +608,22 @@ describe('SystemDebugTrace Component', () => {
       expect(config.collapsible).toBe(true)
       expect(config.icon).toBeTruthy()
       expect(config.title).toBeTruthy()
+    })
+
+    test('getUpdateVariablesEventConfig returns collapsible config', () => {
+      const data = {
+        action: EventAction.UpdateVariables,
+        set_variables: { 'session.user.name': 'Ada' },
+        unset_variables: [],
+      }
+
+      const config = getUpdateVariablesEventConfig(data)
+
+      expect(config.action).toBe(EventAction.UpdateVariables)
+      expect(config.component).toBeTruthy()
+      expect(config.collapsible).toBe(true)
+      expect(config.icon).toBeTruthy()
+      expect(config.title).toBe('Update variables')
     })
   })
 

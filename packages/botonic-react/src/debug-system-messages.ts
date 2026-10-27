@@ -26,6 +26,7 @@ import type {
   KeywordDebugEvent,
   RedirectFlowDebugEvent,
   SmartIntentDebugEvent,
+  UpdateVariablesDebugEvent,
   WebviewActionTriggeredDebugEvent,
 } from './components/system-debug-trace/events'
 import type { ChunkIdsGroupedBySourceData } from './components/system-debug-trace/events/knowledge-bases-types'
@@ -119,6 +120,17 @@ export const DEBUG_SYSTEM_MESSAGES = {
     flow_target_id: 'flow-mock-002',
     flow_target_name: 'Billing Flow',
   } satisfies RedirectFlowDebugEvent,
+
+  updateVariables: {
+    action: EventAction.UpdateVariables,
+    set_variables: {
+      'session.user.name': 'Ada',
+      'session.user.contact_info.email': 'a@b.com',
+      'session.customFlag': true,
+      'session.nested.value': 42,
+    },
+    unset_variables: ['session.user.phone'],
+  } satisfies UpdateVariablesDebugEvent,
 
   webviewActionTriggered: {
     action: EventAction.WebviewActionTriggered,

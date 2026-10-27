@@ -11,6 +11,7 @@ import { LABELS } from '../../src/components/system-debug-trace/events/constants
 import { useKnowledgeBaseInfo } from '../../src/components/system-debug-trace/hooks/use-knowledge-base-info'
 import {
   BrainSvg,
+  BracketsCurlySvg,
   CaretDownSvg,
   CaretUpSvg,
   HeadSetSvg,
@@ -231,6 +232,7 @@ describe('System Debug Trace - Utility Components', () => {
       expect(() => render(<LifeRingSvg />)).not.toThrow()
       expect(() => render(<HeadSetSvg />)).not.toThrow()
       expect(() => render(<WandSvg />)).not.toThrow()
+      expect(() => render(<BracketsCurlySvg />)).not.toThrow()
     })
 
     test('caret icons render without errors', () => {
