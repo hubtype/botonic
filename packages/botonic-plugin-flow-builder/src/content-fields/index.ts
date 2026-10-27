@@ -15,6 +15,7 @@ import { FlowImage } from './flow-image'
 import { FlowQueueStatusConditional } from './flow-queue-status-conditional'
 import { FlowRating } from './flow-rating'
 import { FlowText } from './flow-text'
+import { FlowUpdateVariables } from './flow-update-variables'
 import { FlowVideo } from './flow-video'
 import { FlowWhatsappCtaUrlButtonNode } from './flow-whatsapp-cta-url-button'
 import { FlowWhatsappRequestContactInfoNode } from './flow-whatsapp-request-contact-info'
@@ -46,6 +47,7 @@ export {
   FlowQueueStatusConditional,
   FlowRating,
   FlowText,
+  FlowUpdateVariables,
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappButtonListRow,
@@ -77,4 +79,5 @@ export type FlowContent =
   | FlowAiAgentRouter
   | FlowCustomConditionalV2
   | FlowDoNothing
+  | FlowUpdateVariables
   | FlowContactReasonsConditional
