@@ -1,6 +1,9 @@
-import type { EventRedirectFlow } from '@botonic/core'
-
-import { EventAction, EventType, type RequestData } from '../types'
+import {
+  EventAction,
+  type EventRedirectFlow,
+  EventType,
+  type RequestData,
+} from '../types'
 import { HtEvent } from './ht-event'
 
 export class HtEventRedirectFlow extends HtEvent {
