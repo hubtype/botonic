@@ -17,6 +17,7 @@ import {
   getKeywordEventConfig,
   getRedirectFlowEventConfig,
   getSmartIntentEventConfig,
+  getUpdateVariablesEventConfig,
   getWebviewActionTriggeredEventConfig,
 } from './events'
 import { useLastLabelPosition } from './hooks/use-last-label-position'
@@ -64,6 +65,8 @@ const getEventConfig = (
       return getWebviewActionTriggeredEventConfig(debugEvent)
     case EventAction.ConditionalContactReasons:
       return getConditionalContactReasonsEventConfig(debugEvent)
+    case EventAction.UpdateVariables:
+      return getUpdateVariablesEventConfig(debugEvent)
     default:
       return undefined
   }

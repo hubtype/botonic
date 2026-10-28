@@ -15,6 +15,8 @@ All notable changes to Botonic will be documented in this file.
 
 ### Added
 
+- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
+
 ### Changed
 
 ### Fixed

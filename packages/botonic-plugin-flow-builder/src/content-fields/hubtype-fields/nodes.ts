@@ -20,6 +20,7 @@ import type { HtPayloadNode } from './payload'
 import type { HtRatingNode } from './rating'
 import type { HtSmartIntentNode } from './smart-intent'
 import type { HtTextNode } from './text'
+import type { HtUpdateVariablesNode } from './update-variables'
 import type { HtUrlNode } from './url'
 import type { HtVideoNode } from './video'
 import type { HtWebviewNode } from './webview'
@@ -52,6 +53,7 @@ export type HtNodeWithContent =
   | HtCustomConditionalV2Node
   | HtDoNothingNode
   | HtContactReasonsNode
+  | HtUpdateVariablesNode
 // | HtChannelConditionalNode
 // | HtCountryConditionalNode
 // | HtCustomConditionalNode

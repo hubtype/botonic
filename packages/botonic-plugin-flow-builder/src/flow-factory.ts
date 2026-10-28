@@ -19,6 +19,7 @@ import {
   FlowQueueStatusConditional,
   FlowRating,
   FlowText,
+  FlowUpdateVariables,
   FlowVideo,
   FlowWhatsappButtonList,
   FlowWhatsappCtaUrlButtonNode,
@@ -122,6 +123,12 @@ export class FlowFactory {
 
       case HtNodeWithContentType.DO_NOTHING:
         return FlowDoNothing.fromHubtypeCMS(hubtypeContent)
+
+      case HtNodeWithContentType.UPDATE_VARIABLES:
+        return FlowUpdateVariables.fromHubtypeCMS(
+          hubtypeContent,
+          this.botContext
+        )
 
       case HtNodeWithContentType.CONTACT_REASONS_CONDITION:
         return FlowContactReasonsConditional.fromHubtypeCMS(

@@ -22,6 +22,7 @@ export enum HtNodeWithContentType {
   CUSTOM_CONDITION = 'custom-condition',
   DO_NOTHING = 'do-nothing',
   CONTACT_REASONS_CONDITION = 'contact-reasons-condition',
+  UPDATE_VARIABLES = 'update-variables',
 }
 
 export enum HtNodeWithoutContentType {

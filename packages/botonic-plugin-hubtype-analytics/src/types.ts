@@ -19,6 +19,7 @@ import {
   type EventIntentSmart,
   type EventKeyword,
   type EventRedirectFlow,
+  type EventUpdateVariables,
   type EventWebviewActionTriggered,
   type EventWebviewEnd,
   type EventWebviewStep,
@@ -53,6 +54,7 @@ export type HtEventProps =
   | EventAiAgentRouter
   | EventRedirectFlow
   | EventCaptureUserInput
+  | EventUpdateVariables
 
 export interface RequestData {
   userId?: string
@@ -82,6 +84,8 @@ export {
   type EventHandoffOption,
   type EventIntentSmart,
   type EventKeyword,
+  type EventRedirectFlow,
+  type EventUpdateVariables,
   type EventWebviewActionTriggered,
   type EventWebviewEnd,
   type EventWebviewStep,
