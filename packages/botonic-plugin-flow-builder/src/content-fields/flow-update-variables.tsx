@@ -41,8 +41,12 @@ export class FlowUpdateVariables extends ContentFieldsBase {
       value: string | number | boolean | undefined
     }[] = []
 
-    for (const [keyPath, value] of Object.entries(this.setVariables)) {
+    const updateVariable = (
+      keyPath: string,
+      value: string | number | boolean | undefined
+    ) => {
       const fieldName = this.getContactInfoFieldName(keyPath)
+
       if (fieldName) {
         this.updateSessionContactInfoField(botContext, fieldName, value)
         contactInfoUpdates.push({ fieldName, value })
@@ -51,14 +55,12 @@ export class FlowUpdateVariables extends ContentFieldsBase {
       }
     }
 
+    for (const [keyPath, value] of Object.entries(this.setVariables)) {
+      updateVariable(keyPath, value)
+    }
+
     for (const keyPath of this.unsetVariables) {
-      const fieldName = this.getContactInfoFieldName(keyPath)
-      if (fieldName) {
-        this.updateSessionContactInfoField(botContext, fieldName, undefined)
-        contactInfoUpdates.push({ fieldName, value: undefined })
-      } else {
-        this.setSessionValueFromKeyPath(botContext, keyPath, undefined)
-      }
+      updateVariable(keyPath, undefined)
     }
 
     if (contactInfoUpdates.length === 0) {
