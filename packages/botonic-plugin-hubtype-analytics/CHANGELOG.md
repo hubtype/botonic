@@ -11,9 +11,11 @@ All notable changes to Botonic will be documented in this file.
   </summary>
   
   
-## [0.57.x] - 2026-mm-dd
+## [0.58.0] - 2026-mm-dd
 
 ### Added
+
+- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add support for `update_variables` hubtype analytics event.
 
 ### Changed
 

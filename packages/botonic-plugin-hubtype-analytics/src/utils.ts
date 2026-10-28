@@ -17,6 +17,7 @@ import {
   HtEventIntentSmart,
   HtEventKeyword,
   HtEventRedirectFlow,
+  HtEventUpdateVariables,
   HtEventWebviewActionTriggered,
   HtEventWebviewEnd,
   HtEventWebviewStep,
@@ -96,6 +97,9 @@ export function createHtEvent(
 
     case EventAction.CaptureUserInput:
       return new HtEventCaptureUserInput(htEventProps, requestData)
+
+    case EventAction.UpdateVariables:
+      return new HtEventUpdateVariables(htEventProps, requestData)
 
     default:
       return new HtEvent(htEventProps, requestData)

@@ -14,6 +14,7 @@ import type {
   KeywordDebugEvent,
   RedirectFlowDebugEvent,
   SmartIntentDebugEvent,
+  UpdateVariablesDebugEvent,
   WebviewActionTriggeredDebugEvent,
 } from './events'
 
@@ -36,6 +37,7 @@ export type DebugEvent =
   | ConditionalQueueStatusDebugEvent
   | ConditionalContactReasonsDebugEvent
   | RedirectFlowDebugEvent
+  | UpdateVariablesDebugEvent
   | WebviewActionTriggeredDebugEvent
 
 export interface DebugEventConfig {

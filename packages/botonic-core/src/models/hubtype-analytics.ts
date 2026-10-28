@@ -28,6 +28,7 @@ export enum EventAction {
   RedirectFlow = 'redirect_flow',
   CaptureUserInput = 'capture_user_input',
   AiAgentRouter = 'ai_agent_router',
+  UpdateVariables = 'update_variables',
 }
 
 export interface HtBaseEventProps {
@@ -202,6 +203,12 @@ export interface EventCaptureUserInput extends HtBaseEventAllFlowProps {
   userInput: string
   captureSuccess: boolean
   messageId: string
+}
+
+export interface EventUpdateVariables extends HtBaseEventAllFlowProps {
+  action: EventAction.UpdateVariables
+  setVariables: Record<string, string | number | boolean>
+  unsetVariables: string[]
 }
 
 export interface EventFallback extends HtBaseEventProps {

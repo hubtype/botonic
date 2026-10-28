@@ -14,6 +14,7 @@ import {
   CaretDownSvg,
   CaretUpSvg,
   HeadSetSvg,
+  PenToSquareSvg,
   WandSvg,
 } from '../../src/components/system-debug-trace/icons'
 import { LifeRingSvg } from '../../src/components/system-debug-trace/icons/life-ring'
@@ -231,6 +232,7 @@ describe('System Debug Trace - Utility Components', () => {
       expect(() => render(<LifeRingSvg />)).not.toThrow()
       expect(() => render(<HeadSetSvg />)).not.toThrow()
       expect(() => render(<WandSvg />)).not.toThrow()
+      expect(() => render(<PenToSquareSvg />)).not.toThrow()
     })
 
     test('caret icons render without errors', () => {

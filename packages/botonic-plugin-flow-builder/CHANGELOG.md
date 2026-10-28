@@ -11,17 +11,23 @@ All notable changes to Botonic will be documented in this file.
     Click to see more.
   </summary>
   
-## [0.57.1] - 2026-mm-dd
+## [0.58.0] - 2026-mm-dd
 
 ### Added
 
-- [PR-3298](https://github.com/hubtype/botonic/pull/3298): Resolve contact reasons conditional fallback with `split_default` using `no_contact_reason_target` or `any_contact_reason_target` instead of `default_target`.
+- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
 
 ### Changed
 
 ### Fixed
 
 </details>
+
+## [0.57.1] - 2026-10-27
+
+### Added
+
+- [PR-3298](https://github.com/hubtype/botonic/pull/3298): Resolve contact reasons conditional fallback with `split_default` using `no_contact_reason_target` or `any_contact_reason_target` instead of `default_target`.
 
 ## [0.57.0] - 2026-10-05
 

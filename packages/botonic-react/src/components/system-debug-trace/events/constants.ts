@@ -33,4 +33,6 @@ export const LABELS = {
   TRANSFERRED_TO: 'Transferred to',
   CONTACT_REASONS: 'Contact reasons',
   NO_CONTACT_REASONS: 'No contact reasons added',
+  UNSET: 'Unset',
+  NO_VARIABLES: 'No variables',
 } as const
