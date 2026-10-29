@@ -1,4 +1,4 @@
-import { INPUT, PROVIDER } from '@botonic/core'
+import { BotonicInputContextType, INPUT, PROVIDER } from '@botonic/core'
 import { createTestPluginPreRequest } from '@botonic/core/testing'
 import { describe, expect, jest, test } from '@jest/globals'
 
@@ -15,6 +15,7 @@ import {
   asFlowBuilderApi,
   createMockFlowBuilderApi,
 } from './helpers/mock-cms-api'
+import { createTestPushFlowContext } from './helpers/push-flow-context'
 
 const CAMPAIGN_ID = '0197a2b1-0000-7000-8000-000000000001'
 const PUSH_FLOW_CAMPAIGN_NODE_ID = 'campaign-uuid-1'
@@ -69,7 +70,9 @@ function createPushFlowContext({
       is_new_conversation: false,
       type: INPUT.POSTBACK,
       payload,
-      context: omitCampaignId ? undefined : { campaign_id: campaignId },
+      context: omitCampaignId
+        ? undefined
+        : createTestPushFlowContext(campaignId),
     },
     plugins: {},
   })
@@ -160,6 +163,21 @@ describe('PushFlowResolver', () => {
       payload: `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${PUSH_FLOW_CAMPAIGN_NODE_ID}`,
       omitCampaignId: true,
     })
+
+    await expect(
+      new PushFlowResolver(context).getContents()
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoCampaignId,
+    })
+  })
+
+  test('throws NoCampaignId when context is active_campaigns', async () => {
+    const payload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${PUSH_FLOW_CAMPAIGN_NODE_ID}`
+    const { context } = createPushFlowContext({ payload })
+    context.request.input.context = {
+      type: BotonicInputContextType.ActiveCampaigns,
+      campaigns_v2: [],
+    }
 
     await expect(
       new PushFlowResolver(context).getContents()

@@ -14,6 +14,7 @@ import { mockSmartIntent } from './__mocks__/smart-intent'
 import { basicFlow } from './helpers/flows/basic'
 import { campaignsFlow } from './helpers/flows/campaigns'
 import { campaignsWhatsappTemplatePushFlow } from './helpers/flows/campaigns-whatsapp-template-push-flow'
+import { createTestPushFlowContext } from './helpers/push-flow-context'
 import {
   createFlowBuilderPlugin,
   createFlowBuilderPluginAndGetContents,
@@ -78,7 +79,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -100,7 +101,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -122,7 +123,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
           input: {
             payload: pushFlowPayload,
             type: INPUT.POSTBACK,
-            context: { campaign_id: CAMPAIGN_V2_ID },
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
           },
         },
       })
@@ -141,7 +142,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
           input: {
             payload: pushFlowPayload,
             type: INPUT.POSTBACK,
-            context: { campaign_id: CAMPAIGN_V2_ID },
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
           },
         },
       })
@@ -160,7 +161,7 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
           input: {
             payload: pushFlowPayload,
             type: INPUT.POSTBACK,
-            context: { campaign_id: CAMPAIGN_V2_ID },
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
           },
         },
       })
@@ -229,7 +230,7 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
         input: {
           type: INPUT.POSTBACK,
           payload: pushFlowPayload,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -258,7 +259,7 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
         input: {
           type: INPUT.POSTBACK,
           payload: pushFlowPayload,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -304,7 +305,7 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -327,7 +328,7 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
         input: {
           payload: pushFlowPayload,
           type: INPUT.POSTBACK,
-          context: { campaign_id: CAMPAIGN_V2_ID },
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
         },
       },
     })
@@ -349,7 +350,7 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
           input: {
             payload: pushFlowPayload,
             type: INPUT.POSTBACK,
-            context: { campaign_id: CAMPAIGN_V2_ID },
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
           },
         },
       })

@@ -2,6 +2,7 @@ import {
   type AIAgentRouterArgs,
   type AiAgentArgs,
   AiAgentType,
+  BotonicInputContextType,
   type BotContext,
   INPUT,
   PROVIDER,
@@ -168,7 +169,8 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     campaigns_v2?: {
       id: string
       name: string
-      agent_context?: string
+      agent_context?: string | null
+      end_date?: string | null
     }[]
   ): BotContext =>
     createTestBotContext({
@@ -198,7 +200,17 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
         data: 'Hello',
         botInteractionId: 'interaction-123',
         messageId: 'msg-123',
-        context: campaigns_v2 ? { campaigns_v2 } : undefined,
+        context: campaigns_v2
+          ? {
+              type: BotonicInputContextType.ActiveCampaigns,
+              campaigns_v2: campaigns_v2.map(campaign => ({
+                id: campaign.id,
+                name: campaign.name,
+                agent_context: campaign.agent_context ?? null,
+                end_date: campaign.end_date ?? null,
+              })),
+            }
+          : undefined,
       },
     })
 
@@ -231,6 +243,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
         id: 'campaign-123',
         name: 'Test Campaign',
         agent_context: 'Additional context for the agent',
+        end_date: null,
       },
     ]
 
@@ -274,12 +287,32 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     expect(capturedSpecialistAgentArgs.campaignsContext).toBeUndefined()
   })
 
+  it('should pass undefined campaignsContext when context is not active_campaigns', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    request.input.context = {
+      type: BotonicInputContextType.PushFlow,
+      campaign_id: 'campaign-1',
+      campaign_chat_execution_id: 'execution-1',
+      campaign_flow_id: 'flow-1',
+    }
+
+    await plugin.getInference(request, mockAiAgentArgs)
+
+    expect(capturedSpecialistAgentArgs).toBeDefined()
+    expect(capturedSpecialistAgentArgs.campaignsContext).toBeUndefined()
+  })
+
   it('should pass campaigns_v2 without agent_context', async () => {
     const campaignWithoutAgentContext = [
       {
         id: 'campaign-456',
         name: 'Campaign without agent context',
-        // No agent_context field
+        agent_context: null,
+        end_date: null,
       },
     ]
 
@@ -296,7 +329,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     )
     expect(
       capturedSpecialistAgentArgs.campaignsContext[0].agent_context
-    ).toBeUndefined()
+    ).toBeNull()
   })
 
   it('should pass campaigns_v2 with empty agent_context', async () => {
@@ -305,6 +338,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
         id: 'campaign-789',
         name: 'Campaign with empty agent context',
         agent_context: '',
+        end_date: null,
       },
     ]
 

@@ -4,6 +4,8 @@ import {
   type AiAgentSpecialistArgs,
   AiAgentType,
   type BotContext,
+  BotonicInputContextType,
+  getInputContextOfType,
   type HubtypeAssistantMessage,
   type Plugin,
   type ResolvedPlugins,
@@ -298,10 +300,10 @@ export default class BotonicPluginAiAgents<
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
 
-    const campaignsContext =
-      botContext.input.context && 'campaigns_v2' in botContext.input.context
-        ? botContext.input.context?.campaigns_v2
-        : []
+    const campaignsContext = getInputContextOfType(
+      botContext.input.context,
+      BotonicInputContextType.ActiveCampaigns
+    )?.campaigns_v2
 
     const specialist = await SpecialistAgent.create<TPlugins, TExtraData>({
       name: aiAgentArgs.name,

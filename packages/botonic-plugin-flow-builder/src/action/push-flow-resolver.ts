@@ -1,4 +1,8 @@
-import type { BotContext } from '@botonic/core'
+import {
+  type BotContext,
+  BotonicInputContextType,
+  getInputContextOfType,
+} from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
 import { SEPARATOR } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
@@ -83,11 +87,10 @@ export class PushFlowResolver {
   }
 
   private getCampaignId(): string {
-    const campaignId =
-      this.botContext.input.context &&
-      'campaign_id' in this.botContext.input.context
-        ? this.botContext.input.context.campaign_id
-        : undefined
+    const campaignId = getInputContextOfType(
+      this.botContext.input.context,
+      BotonicInputContextType.PushFlow
+    )?.campaign_id
 
     if (!campaignId) {
       throw new PushFlowError(
