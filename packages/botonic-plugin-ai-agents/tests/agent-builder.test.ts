@@ -108,6 +108,7 @@ describe('WorkerAgent', () => {
       id: '1234-5678-9012-3456',
       name: 'Campaign 1',
       agent_context: 'This is some context coming from campaigns',
+      end_date: null,
     },
   ]
 
@@ -407,7 +408,8 @@ describe('WorkerAgent', () => {
         {
           id: '1234-5678-9012-3456',
           name: 'Campaign without context',
-          // agent_context is undefined
+          agent_context: null,
+          end_date: null,
         },
       ]
 
@@ -434,6 +436,7 @@ describe('WorkerAgent', () => {
           id: '1234-5678-9012-3456',
           name: 'Campaign with empty context',
           agent_context: '',
+          end_date: null,
         },
       ]
 
@@ -461,6 +464,7 @@ describe('WorkerAgent', () => {
           id: '1234-5678-9012-3456',
           name: 'Campaign with context',
           agent_context: 'This is the campaign context for the agent',
+          end_date: null,
         },
       ]
 

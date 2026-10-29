@@ -9,7 +9,9 @@ import {
   type ResolvedPlugins,
 } from '@botonic/core'
 import { createTestPluginPreRequest } from '@botonic/core/testing'
-import type { ActionRequest } from '@botonic/react'
+import { type ActionRequest, RequestContext } from '@botonic/react'
+import React from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 import BotonicPluginFlowBuilder, {
   FlowBuilderAction,
@@ -172,4 +174,32 @@ export async function createFlowBuilderPluginAndGetContents({
   }
 
   return { contents, request, flowBuilderPluginPost }
+}
+
+export async function renderFlowBuilderActionHtml({
+  flowBuilderOptions,
+  requestArgs,
+}: FlowBuilderPluginAndGetContentsArgs): Promise<string> {
+  const flowBuilderPlugin = createFlowBuilderPlugin(flowBuilderOptions)
+
+  const request = createRequest({
+    ...requestArgs,
+    plugins: {
+      flowBuilderPlugin,
+    },
+  })
+
+  const actionProps = await getContentsAfterPreAndBotonicInit(
+    request,
+    flowBuilderPlugin
+  )
+  const actionRequest = getActionRequest(request)
+
+  return renderToStaticMarkup(
+    React.createElement(
+      RequestContext.Provider,
+      { value: actionRequest },
+      React.createElement(FlowBuilderAction, actionProps)
+    )
+  )
 }

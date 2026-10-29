@@ -13,7 +13,12 @@ export type MessageType =
   | 'text'
   | 'video'
 
-export interface MessageProps {
+export interface CampaignMessageProps {
+  isCampaignFirstMessage?: boolean
+  campaignId?: string
+}
+
+export interface MessageProps extends CampaignMessageProps {
   blob?: boolean
   children?: React.ReactNode
   delay?: number

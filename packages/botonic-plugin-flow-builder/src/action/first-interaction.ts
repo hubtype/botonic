@@ -89,12 +89,13 @@ async function getContentsByUserInput(
       return []
     }
 
-    const contentsByKeywordsOrIntents = await getContentsByPayload({
-      cmsApi,
-      flowBuilderPlugin,
-      request,
-      resolvedLocale,
-    })
+    const { contents: contentsByKeywordsOrIntents } =
+      await getContentsByPayload({
+        cmsApi,
+        flowBuilderPlugin,
+        request,
+        resolvedLocale,
+      })
 
     const hasRepeatedContent = await checkRepeatedContents(
       flowBuilderPlugin,
