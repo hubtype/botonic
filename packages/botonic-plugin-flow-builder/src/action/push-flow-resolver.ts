@@ -4,17 +4,15 @@ import {
   getInputContextOfType,
 } from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
-import { SEPARATOR } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import type BotonicPluginFlowBuilder from '../index'
 import type { FlowBuilderContentsResult } from './contents-result'
 import type { FlowBuilderContext } from './context'
 
 export enum PushFlowErrorCode {
-  NoInputPayload = 'NoInputPayload',
-  NoPushFlowId = 'NoPushFlowId',
+  NoCampaignContext = 'NoCampaignContext',
   NoCampaignStartNode = 'NoCampaignStartNode',
-  NoCampaignId = 'NoCampaignId',
+  NoCampaignFollowUpNode = 'NoCampaignFollowUpNode',
 }
 
 export class PushFlowError extends Error {
@@ -39,66 +37,55 @@ export class PushFlowResolver {
   }
 
   async getContents(): Promise<FlowBuilderContentsResult> {
-    const pushFlowId = this.getPushFlowId()
-    const pushFlowNode = this.getPushFlowNode(pushFlowId)
-    const campaignId = this.getCampaignId()
+    const campaignContext = getInputContextOfType(
+      this.botContext.input.context,
+      BotonicInputContextType.PushFlow
+    )
+
+    if (!campaignContext) {
+      throw new PushFlowError(
+        PushFlowErrorCode.NoCampaignContext,
+        'No campaign context found in input context'
+      )
+    }
+
+    const {
+      campaign_id: campaignId,
+      campaign_flow_id: campaignFlowId,
+      campaign_follow_up_id: campaignFollowUpId,
+    } = campaignContext
+
+    const campaignStartNode = this.getCampaignStartNode(campaignFlowId)
+    const followUpNode = campaignFollowUpId
+      ? this.cmsApi.getNodeById<HtNodeWithContent>(campaignFollowUpId)
+      : undefined
+
+    if (campaignFollowUpId && !followUpNode) {
+      throw new PushFlowError(
+        PushFlowErrorCode.NoCampaignFollowUpNode,
+        'No campaign follow up node found'
+      )
+    }
 
     return {
-      contents: await this.flowBuilderPlugin.getContentsByNode(pushFlowNode),
+      contents: await this.flowBuilderPlugin.getContentsByNode(
+        followUpNode ?? campaignStartNode
+      ),
       campaignFirstMessageId: campaignId,
     }
   }
 
-  private getPushFlowId(): string {
-    const payload = this.botContext.input.payload
+  private getCampaignStartNode(campaignId: string): HtNodeWithContent {
+    const campaignStartNode =
+      this.cmsApi.getNodeByCampaignId<HtNodeWithContent>(campaignId)
 
-    if (!payload) {
-      throw new PushFlowError(
-        PushFlowErrorCode.NoInputPayload,
-        'No payload found in input'
-      )
-    }
-
-    const parts = payload.split(SEPARATOR)
-    const pushFlowId = parts.length > 1 ? parts[1] : ''
-
-    if (!pushFlowId) {
-      throw new PushFlowError(
-        PushFlowErrorCode.NoPushFlowId,
-        'No push flow id found in input payload'
-      )
-    }
-
-    return pushFlowId
-  }
-
-  private getPushFlowNode(pushFlowId: string): HtNodeWithContent {
-    const pushFlowNode =
-      this.cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
-
-    if (!pushFlowNode) {
+    if (!campaignStartNode) {
       throw new PushFlowError(
         PushFlowErrorCode.NoCampaignStartNode,
         'No campaign start node found'
       )
     }
 
-    return pushFlowNode
-  }
-
-  private getCampaignId(): string {
-    const campaignId = getInputContextOfType(
-      this.botContext.input.context,
-      BotonicInputContextType.PushFlow
-    )?.campaign_id
-
-    if (!campaignId) {
-      throw new PushFlowError(
-        PushFlowErrorCode.NoCampaignId,
-        'No campaign id found in input context'
-      )
-    }
-
-    return campaignId
+    return campaignStartNode
   }
 }
