@@ -8,7 +8,6 @@ import {
   PushFlowErrorCode,
   PushFlowResolver,
 } from '../src/action/push-flow-resolver'
-import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import type { FlowContent } from '../src/content-fields'
 import type { HtNodeWithContent } from '../src/content-fields/hubtype-fields'
 import {
@@ -21,14 +20,14 @@ const CAMPAIGN_ID = '0197a2b1-0000-7000-8000-000000000001'
 const PUSH_FLOW_CAMPAIGN_NODE_ID = 'campaign-uuid-1'
 
 function createPushFlowContext({
-  payload,
   campaignId = CAMPAIGN_ID,
-  omitCampaignId = false,
+  campaignFlowId = PUSH_FLOW_CAMPAIGN_NODE_ID,
+  inputContext,
 }: {
-  payload?: string
   campaignId?: string
-  omitCampaignId?: boolean
-}): {
+  campaignFlowId?: string
+  inputContext?: ReturnType<typeof createTestPushFlowContext> | null
+} = {}): {
   context: FlowBuilderContext
   pushFlowNode: HtNodeWithContent
 } {
@@ -69,10 +68,13 @@ function createPushFlowContext({
       message_id: 'testMessageId',
       is_new_conversation: false,
       type: INPUT.POSTBACK,
-      payload,
-      context: omitCampaignId
-        ? undefined
-        : createTestPushFlowContext(campaignId),
+      context:
+        inputContext === null
+          ? undefined
+          : (inputContext ??
+            createTestPushFlowContext(campaignId, {
+              campaign_flow_id: campaignFlowId,
+            })),
     },
     plugins: {},
   })
@@ -90,8 +92,7 @@ function createPushFlowContext({
 
 describe('PushFlowResolver', () => {
   test('getContents resolves node and returns campaign first message id', async () => {
-    const payload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${PUSH_FLOW_CAMPAIGN_NODE_ID}`
-    const { context, pushFlowNode } = createPushFlowContext({ payload })
+    const { context, pushFlowNode } = createPushFlowContext()
     const contents: FlowContent[] = [{ id: 'content-1' } as FlowContent]
     jest
       .mocked(context.flowBuilderPlugin.getContentsByNode)
@@ -111,44 +112,9 @@ describe('PushFlowResolver', () => {
     )
   })
 
-  test('throws NoInputPayload when input payload is missing', async () => {
-    const { context } = createPushFlowContext({ payload: undefined })
-
-    await expect(new PushFlowResolver(context).getContents()).rejects.toThrow(
-      PushFlowError
-    )
-    await expect(
-      new PushFlowResolver(context).getContents()
-    ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoInputPayload,
-    })
-  })
-
-  test('throws NoPushFlowId when payload has no campaign node id after separator', async () => {
+  test('throws NoCampaignStartNode when campaign_flow_id is not in the flow', async () => {
     const { context } = createPushFlowContext({
-      payload: `${PUSH_FLOW_PAYLOAD}${SEPARATOR}`,
-    })
-
-    await expect(
-      new PushFlowResolver(context).getContents()
-    ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoPushFlowId,
-    })
-  })
-
-  test('throws NoPushFlowId when payload is only push-flow prefix', async () => {
-    const { context } = createPushFlowContext({ payload: PUSH_FLOW_PAYLOAD })
-
-    await expect(
-      new PushFlowResolver(context).getContents()
-    ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoPushFlowId,
-    })
-  })
-
-  test('throws NoPushFlowNode when campaign node id is not in the flow', async () => {
-    const { context } = createPushFlowContext({
-      payload: `${PUSH_FLOW_PAYLOAD}${SEPARATOR}unknown-campaign-node`,
+      campaignFlowId: 'unknown-campaign-node',
     })
 
     await expect(
@@ -158,22 +124,21 @@ describe('PushFlowResolver', () => {
     })
   })
 
-  test('throws NoCampaignId when input context has no campaign_id', async () => {
-    const { context } = createPushFlowContext({
-      payload: `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${PUSH_FLOW_CAMPAIGN_NODE_ID}`,
-      omitCampaignId: true,
-    })
+  test('throws NoCampaignContext when input has no push-flow context', async () => {
+    const { context } = createPushFlowContext({ inputContext: null })
 
+    await expect(new PushFlowResolver(context).getContents()).rejects.toThrow(
+      PushFlowError
+    )
     await expect(
       new PushFlowResolver(context).getContents()
     ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoCampaignId,
+      code: PushFlowErrorCode.NoCampaignContext,
     })
   })
 
-  test('throws NoCampaignId when context is active_campaigns', async () => {
-    const payload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${PUSH_FLOW_CAMPAIGN_NODE_ID}`
-    const { context } = createPushFlowContext({ payload })
+  test('throws NoCampaignContext when context is active_campaigns', async () => {
+    const { context } = createPushFlowContext()
     context.request.input.context = {
       type: BotonicInputContextType.ActiveCampaigns,
       campaigns_v2: [],
@@ -182,7 +147,25 @@ describe('PushFlowResolver', () => {
     await expect(
       new PushFlowResolver(context).getContents()
     ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoCampaignId,
+      code: PushFlowErrorCode.NoCampaignContext,
+    })
+  })
+
+  test('throws NoCampaignFollowUpNode when follow up id does not match a node', async () => {
+    const { context } = createPushFlowContext({
+      inputContext: createTestPushFlowContext(CAMPAIGN_ID, {
+        campaign_flow_id: PUSH_FLOW_CAMPAIGN_NODE_ID,
+        campaign_follow_up_id: 'missing-follow-up',
+      }),
+    })
+    jest
+      .mocked(context.cmsApi.getNodeById)
+      .mockReturnValue(undefined as unknown as HtNodeWithContent)
+
+    await expect(
+      new PushFlowResolver(context).getContents()
+    ).rejects.toMatchObject({
+      code: PushFlowErrorCode.NoCampaignFollowUpNode,
     })
   })
 })

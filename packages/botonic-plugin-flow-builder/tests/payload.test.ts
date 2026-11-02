@@ -1,11 +1,8 @@
 import { INPUT, PROVIDER } from '@botonic/core'
 import { beforeEach, describe, expect, test } from '@jest/globals'
 
-import {
-  PushFlowError,
-  PushFlowErrorCode,
-} from '../src/action/push-flow-resolver'
-import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
+import { PushFlowErrorCode } from '../src/action/push-flow-resolver'
+import { PUSH_FLOW_PAYLOAD } from '../src/constants'
 import { FlowWhatsappTemplate } from '../src/content-fields/flow-whatsapp-template'
 import { FlowText } from '../src/content-fields/index'
 import { ProcessEnvNodeEnvs } from '../src/types'
@@ -70,16 +67,17 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
   beforeEach(() => mockSmartIntent('Other'))
 
   test('Should return campaign start node content when PUSH_FLOW_PAYLOAD is used with valid campaign ID', async () => {
-    const campaignId = 'campaign-uuid-1'
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${campaignId}`
+    const campaignFlowId = 'campaign-uuid-1'
 
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: campaignsFlow },
       requestArgs: {
         input: {
-          payload: pushFlowPayload,
+          payload: PUSH_FLOW_PAYLOAD,
           type: INPUT.POSTBACK,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: campaignFlowId,
+          }),
         },
       },
     })
@@ -92,16 +90,15 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
   })
 
   test('Should return campaign 2 content when using campaign-uuid-2', async () => {
-    const campaignId = 'campaign-uuid-2'
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${campaignId}`
-
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: campaignsFlow },
       requestArgs: {
         input: {
-          payload: pushFlowPayload,
+          payload: PUSH_FLOW_PAYLOAD,
           type: INPUT.POSTBACK,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: 'campaign-uuid-2',
+          }),
         },
       },
     })
@@ -112,18 +109,17 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
     )
   })
 
-  test('throws when PUSH_FLOW_PAYLOAD is used with invalid campaign node id', async () => {
-    const invalidCampaignId = 'non-existent-campaign-id'
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}${invalidCampaignId}`
-
+  test('throws when campaign_flow_id does not match a campaign', async () => {
     await expect(
       createFlowBuilderPluginAndGetContents({
         flowBuilderOptions: { flow: campaignsFlow },
         requestArgs: {
           input: {
-            payload: pushFlowPayload,
+            payload: PUSH_FLOW_PAYLOAD,
             type: INPUT.POSTBACK,
-            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+              campaign_flow_id: 'non-existent-campaign-id',
+            }),
           },
         },
       })
@@ -132,58 +128,20 @@ describe('PUSH_FLOW_PAYLOAD - Campaign flow trigger via payload', () => {
     })
   })
 
-  test('throws when PUSH_FLOW_PAYLOAD is used without campaign node id in payload', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}`
-
+  test('throws when PUSH_FLOW_PAYLOAD is used without push-flow context', async () => {
     await expect(
       createFlowBuilderPluginAndGetContents({
         flowBuilderOptions: { flow: campaignsFlow },
         requestArgs: {
           input: {
-            payload: pushFlowPayload,
+            payload: PUSH_FLOW_PAYLOAD,
             type: INPUT.POSTBACK,
-            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
           },
         },
       })
     ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoPushFlowId,
+      code: PushFlowErrorCode.NoCampaignContext,
     })
-  })
-
-  test('throws when PUSH_FLOW_PAYLOAD has no separator', async () => {
-    const pushFlowPayload = PUSH_FLOW_PAYLOAD
-
-    await expect(
-      createFlowBuilderPluginAndGetContents({
-        flowBuilderOptions: { flow: campaignsFlow },
-        requestArgs: {
-          input: {
-            payload: pushFlowPayload,
-            type: INPUT.POSTBACK,
-            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
-          },
-        },
-      })
-    ).rejects.toMatchObject({
-      code: PushFlowErrorCode.NoPushFlowId,
-    })
-  })
-
-  test('throws when PUSH_FLOW_PAYLOAD is used without campaign_id in context', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
-
-    await expect(
-      createFlowBuilderPluginAndGetContents({
-        flowBuilderOptions: { flow: campaignsFlow },
-        requestArgs: {
-          input: {
-            payload: pushFlowPayload,
-            type: INPUT.POSTBACK,
-          },
-        },
-      })
-    ).rejects.toBeInstanceOf(PushFlowError)
   })
 })
 
@@ -194,10 +152,9 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
 
   test('pre() sets is_first_interaction to false when payload is push-flow', async () => {
     const flowBuilderPlugin = createFlowBuilderPlugin({ flow: campaignsFlow })
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
     const request = createRequest({
       isFirstInteraction: true,
-      input: { type: INPUT.POSTBACK, payload: pushFlowPayload },
+      input: { type: INPUT.POSTBACK, payload: PUSH_FLOW_PAYLOAD },
       plugins: { flowBuilderPlugin },
     })
 
@@ -222,15 +179,16 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
   })
 
   test('first interaction with push-flow returns only campaign contents (no main welcome)', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: campaignsFlow },
       requestArgs: {
         isFirstInteraction: true,
         input: {
           type: INPUT.POSTBACK,
-          payload: pushFlowPayload,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          payload: PUSH_FLOW_PAYLOAD,
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: 'campaign-uuid-1',
+          }),
         },
       },
     })
@@ -251,15 +209,16 @@ describe('PUSH_FLOW_PAYLOAD - skip first interaction in pre()', () => {
   })
 
   test('first interaction with push-flow to WhatsApp template campaign returns template only', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-template`
     const { contents } = await createFlowBuilderPluginAndGetContents({
       flowBuilderOptions: { flow: campaignsWhatsappTemplatePushFlow },
       requestArgs: {
         isFirstInteraction: true,
         input: {
           type: INPUT.POSTBACK,
-          payload: pushFlowPayload,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          payload: PUSH_FLOW_PAYLOAD,
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: 'campaign-uuid-template',
+          }),
         },
       },
     })
@@ -297,15 +256,15 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
   beforeEach(() => mockSmartIntent('Other'))
 
   test('marks only the first message when push-flow resolves with two texts', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-1`
-
     const html = await renderFlowBuilderActionHtml({
       flowBuilderOptions: { flow: campaignsFlow },
       requestArgs: {
         input: {
-          payload: pushFlowPayload,
+          payload: PUSH_FLOW_PAYLOAD,
           type: INPUT.POSTBACK,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: 'campaign-uuid-1',
+          }),
         },
       },
     })
@@ -319,16 +278,16 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
   })
 
   test('marks the WhatsApp template message when push-flow resolves to a template node', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}campaign-uuid-template`
-
     const html = await renderFlowBuilderActionHtml({
       flowBuilderOptions: { flow: campaignsWhatsappTemplatePushFlow },
       requestArgs: {
         provider: PROVIDER.WHATSAPP,
         input: {
-          payload: pushFlowPayload,
+          payload: PUSH_FLOW_PAYLOAD,
           type: INPUT.POSTBACK,
-          context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+          context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+            campaign_flow_id: 'campaign-uuid-template',
+          }),
         },
       },
     })
@@ -341,16 +300,16 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
   })
 
   test('throws when push-flow campaign node cannot be resolved', async () => {
-    const pushFlowPayload = `${PUSH_FLOW_PAYLOAD}${SEPARATOR}non-existent-campaign-id`
-
     await expect(
       renderFlowBuilderActionHtml({
         flowBuilderOptions: { flow: campaignsFlow },
         requestArgs: {
           input: {
-            payload: pushFlowPayload,
+            payload: PUSH_FLOW_PAYLOAD,
             type: INPUT.POSTBACK,
-            context: createTestPushFlowContext(CAMPAIGN_V2_ID),
+            context: createTestPushFlowContext(CAMPAIGN_V2_ID, {
+              campaign_flow_id: 'non-existent-campaign-id',
+            }),
           },
         },
       })
