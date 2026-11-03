@@ -2,6 +2,7 @@ import { describe, expect, test } from '@jest/globals'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Image } from '../../src/components/image'
 import { Text } from '../../src/components/text'
+import { WebchatSettings } from '../../src/components/webchat-settings'
 import { WhatsappTemplate } from '../../src/components/whatsapp-template/index'
 import { CampaignMessageAttributesProvider } from '../../src/contexts/campaign-message-attributes'
 
@@ -45,6 +46,23 @@ describe('Campaign message HTML attributes', () => {
 
     expect(html).not.toContain('iscampaignfirstmessage')
     expect(html).not.toContain('campaignid')
+  })
+
+  test('CampaignMessageAttributesProvider does not mark WebchatSettings; next message is first', () => {
+    const html = renderToStaticMarkup(
+      <CampaignMessageAttributesProvider campaignId={CAMPAIGN_ID}>
+        <WebchatSettings theme={{}} />
+        <Text>Hello</Text>
+      </CampaignMessageAttributesProvider>
+    )
+
+    const messageTags = getMessageOpenTags(html)
+    expect(messageTags).toHaveLength(2)
+    expect(messageTags[0]).toContain('type="webchatsettings"')
+    expect(messageTags[0]).not.toContain('iscampaignfirstmessage')
+    expect(messageTags[0]).not.toContain('campaignid')
+    expect(messageTags[1]).toContain('iscampaignfirstmessage="1"')
+    expect(messageTags[1]).toContain(`campaignid="${CAMPAIGN_ID}"`)
   })
 
   test('CampaignMessageAttributesProvider marks only the first message', () => {
