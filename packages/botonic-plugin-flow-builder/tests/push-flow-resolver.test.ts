@@ -100,10 +100,7 @@ describe('PushFlowResolver', () => {
 
     const result = await new PushFlowResolver(context).getContents()
 
-    expect(result).toEqual({
-      contents,
-      campaignFirstMessageId: CAMPAIGN_ID,
-    })
+    expect(result).toEqual({ contents })
     expect(context.cmsApi.getNodeByCampaignId).toHaveBeenCalledWith(
       PUSH_FLOW_CAMPAIGN_NODE_ID
     )

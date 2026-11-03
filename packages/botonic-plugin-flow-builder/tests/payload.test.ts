@@ -21,7 +21,7 @@ import {
 
 const CAMPAIGN_V2_ID = '0197a2b1-0000-7000-8000-000000000001'
 
-function getOutboundMessageOpenTags(html: string): string[] {
+function getBotResponseMessageOpenTags(html: string): string[] {
   const tags = html.match(/<message\b[^>]*>/g) ?? []
   return tags.filter(tag => !tag.includes('type="webchatsettings"'))
 }
@@ -269,7 +269,7 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
       },
     })
 
-    const messageTags = getOutboundMessageOpenTags(html)
+    const messageTags = getBotResponseMessageOpenTags(html)
     expect(messageTags).toHaveLength(2)
     expect(messageTags[0]).toContain('iscampaignfirstmessage="1"')
     expect(messageTags[0]).toContain(`campaignid="${CAMPAIGN_V2_ID}"`)
@@ -292,7 +292,7 @@ describe('PUSH_FLOW_PAYLOAD - campaign first message HTML attributes', () => {
       },
     })
 
-    const messageTags = getOutboundMessageOpenTags(html)
+    const messageTags = getBotResponseMessageOpenTags(html)
     expect(messageTags).toHaveLength(1)
     expect(messageTags[0]).toContain('iscampaignfirstmessage="1"')
     expect(messageTags[0]).toContain(`campaignid="${CAMPAIGN_V2_ID}"`)

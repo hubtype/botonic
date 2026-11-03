@@ -68,7 +68,7 @@ describe('BotContextManager.prepareInputForRoutes', () => {
 
   describe('Push flow first interaction', () => {
     test('sets is_first_interaction to false when the payload is a push flow', async () => {
-      cmsApi.isPushFlowPayload.mockReturnValue(true)
+      cmsApi.campaignExecution.isPushFlowPayload.mockReturnValue(true)
       const botContext = createRequest({
         isFirstInteraction: true,
         input: {

@@ -223,7 +223,9 @@ describe('FlowBuilderApi - Campaign methods', () => {
       await flowBuilderPlugin.pre(request)
 
       expect(
-        flowBuilderPlugin.cmsApi.isPushFlowPayload(request.input.payload)
+        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(
+          request.input.payload
+        )
       ).toBe(true)
     })
 
@@ -239,9 +241,13 @@ describe('FlowBuilderApi - Campaign methods', () => {
       await flowBuilderPlugin.pre(request)
 
       expect(
-        flowBuilderPlugin.cmsApi.isPushFlowPayload(request.input.payload)
+        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(
+          request.input.payload
+        )
       ).toBe(false)
-      expect(flowBuilderPlugin.cmsApi.isPushFlowPayload(undefined)).toBe(false)
+      expect(
+        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(undefined)
+      ).toBe(false)
     })
   })
 })
