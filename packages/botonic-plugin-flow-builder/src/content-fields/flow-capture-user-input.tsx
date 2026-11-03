@@ -34,6 +34,10 @@ export class FlowCaptureUserInput extends ContentFieldsBase {
     return
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(): Promise<void> {
     return
   }

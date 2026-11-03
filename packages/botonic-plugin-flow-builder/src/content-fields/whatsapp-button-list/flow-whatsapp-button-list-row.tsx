@@ -33,6 +33,10 @@ export class FlowWhatsappButtonListRow extends ContentFieldsBase {
     return
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(): Promise<void> {
     return
   }
