@@ -4,7 +4,7 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext } from '../../contexts'
-import { useCampaignMessageAttributes } from '../../contexts/campaign-message-attributes'
+import { useCampaignMessageAttributes, shouldSkipCampaignMessageProvider } from '../../contexts/campaign-message-attributes'
 import { SENDERS } from '../../index-types'
 import { Fade } from '../../shared/styles'
 import { isDev } from '../../util/environment'
@@ -27,7 +27,9 @@ import { resolveMessageTimestamps } from './timestamps'
 
 export const Message = props => {
   const { defaultTyping, defaultDelay } = useContext(RequestContext)
-  const { campaignHtmlAttributes } = useCampaignMessageAttributes(props)
+  const { campaignHtmlAttributes } = useCampaignMessageAttributes(props, {
+    skipProvider: shouldSkipCampaignMessageProvider(props.type),
+  })
   let {
     type = '',
     blob = true,

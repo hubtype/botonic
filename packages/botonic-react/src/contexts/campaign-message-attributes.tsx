@@ -1,3 +1,4 @@
+import { INPUT } from '@botonic/core'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useRef } from 'react'
 
@@ -7,6 +8,35 @@ export const CAMPAIGN_MESSAGE_PROP_KEYS = [
   'isCampaignFirstMessage',
   'campaignId',
 ] as const satisfies readonly (keyof CampaignMessageProps)[]
+
+/**
+ * Botonic message `type` values that must not consume
+ * {@link CampaignMessageAttributesProvider}'s single "first campaign message" slot
+ * or receive campaign attrs injected from that provider.
+ *
+ * Components that render `<message>` without `Message` / `useCampaignMessageAttributes`
+ * (e.g. {@link WebchatSettings}) are excluded implicitly — add types here when they
+ * go through `Message` but should behave like non-campaign traffic.
+ */
+export const CAMPAIGN_MESSAGE_PROVIDER_SKIP_MESSAGE_TYPES = [
+  INPUT.SYSTEM_DEBUG_TRACE,
+  INPUT.WEBCHAT_SETTINGS,
+  INPUT.CHAT_EVENT,
+  INPUT.EVENT_AGENT_MESSAGE_CREATED,
+  INPUT.EVENT_QUEUE_POSITION_CHANGED,
+  INPUT.EVENT_CASE_STATUS_CHANGED,
+] as const satisfies readonly string[]
+
+export function shouldSkipCampaignMessageProvider(
+  messageType: string | undefined
+): boolean {
+  if (!messageType) {
+    return false
+  }
+  return (
+    CAMPAIGN_MESSAGE_PROVIDER_SKIP_MESSAGE_TYPES as readonly string[]
+  ).includes(messageType)
+}
 
 export type CampaignMessagePropKey = (typeof CAMPAIGN_MESSAGE_PROP_KEYS)[number]
 
@@ -129,8 +159,14 @@ function toCampaignHtmlAttributes(
   return attrs
 }
 
+export type UseCampaignMessageAttributesOptions = {
+  /** When true, props from CampaignMessageAttributesProvider are ignored and not consumed. */
+  skipProvider?: boolean
+}
+
 export function useCampaignMessageAttributes<T extends CampaignMessageProps>(
-  props: T
+  props: T,
+  options?: UseCampaignMessageAttributesOptions
 ): {
   campaignHtmlAttributes: CampaignHtmlAttributes
   messageProps: CampaignMessagePropsWithoutCampaign<T>
@@ -138,9 +174,12 @@ export function useCampaignMessageAttributes<T extends CampaignMessageProps>(
   const { takeCampaignMessageProps } = useContext(
     CampaignMessageAttributesContext
   )
+  const takeFromProvider = options?.skipProvider
+    ? (): CampaignMessagePropsSlice => ({})
+    : takeCampaignMessageProps
   const merged = mergeCampaignMessageProps(
     pickCampaignMessagePropsSlice(props),
-    takeCampaignMessageProps
+    takeFromProvider
   )
   return {
     campaignHtmlAttributes: toCampaignHtmlAttributes(merged),
