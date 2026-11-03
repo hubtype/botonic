@@ -6,10 +6,7 @@ import { FlowText } from '../src/content-fields/flow-text'
 import type { HtDoNothingNode } from '../src/content-fields/hubtype-fields'
 import { CampaignsV2Api } from '../src/services/campaigns-v2-api'
 import { ProcessEnvNodeEnvs } from '../src/types'
-import {
-  mockSkipEmptyBotResponse,
-  mockSmartIntent,
-} from './__mocks__'
+import { mockSkipEmptyBotResponse, mockSmartIntent } from './__mocks__'
 import {
   CAMPAIGN_DO_NOTHING_ID,
   CAMPAIGN_TEXT_THEN_SILENT_ID,

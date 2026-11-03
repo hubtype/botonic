@@ -4,7 +4,10 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { COLORS, WEBCHAT } from '../../constants'
 import { RequestContext } from '../../contexts'
-import { useCampaignMessageAttributes, shouldSkipCampaignMessageProvider } from '../../contexts/campaign-message-attributes'
+import {
+  shouldSkipCampaignMessageProvider,
+  useCampaignMessageAttributes,
+} from '../../contexts/campaign-message-attributes'
 import { SENDERS } from '../../index-types'
 import { Fade } from '../../shared/styles'
 import { isDev } from '../../util/environment'

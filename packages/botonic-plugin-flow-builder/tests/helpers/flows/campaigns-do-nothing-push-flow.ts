@@ -61,7 +61,9 @@ export const campaignsDoNothingPushFlow = {
       ai_translated_locales: [],
       type: 'text',
       content: {
-        text: [{ message: 'Campaign message before silent branch', locale: 'en' }],
+        text: [
+          { message: 'Campaign message before silent branch', locale: 'en' },
+        ],
         buttons_style: 'button',
         buttons: [],
       },
