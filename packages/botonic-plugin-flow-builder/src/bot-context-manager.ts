@@ -48,7 +48,8 @@ export class BotContextManager {
   private async updateFirstInteractionOnPushFlowPayload(
     botContext: BotContext
   ): Promise<void> {
-    if (this.cmsApi.isPushFlowPayload(botContext.input.payload)) {
+    const campaignExecution = this.cmsApi.campaignExecution
+    if (campaignExecution.isPushFlowPayload(botContext.input.payload)) {
       botContext.session.is_first_interaction = false
     }
   }

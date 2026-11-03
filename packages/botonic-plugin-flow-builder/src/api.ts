@@ -1,12 +1,8 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  AI_AGENTS_FLOW_NAME,
-  PUSH_FLOW_PAYLOAD,
-  SEPARATOR,
-  UUID_REGEXP,
-} from './constants'
+import { CampaignExecution } from './campaign-execution'
+import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   type HtBotActionNode,
   type HtCaptureUserInputNode,
@@ -37,6 +33,7 @@ export class FlowBuilderApi {
   flowUrl: string
   flow: HtFlowBuilderData
   botContext: BotContext
+  campaignExecution: CampaignExecution
 
   private constructor() {}
 
@@ -55,6 +52,7 @@ export class FlowBuilderApi {
       updatedRequest.session.bot.id
     )
     newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
+    newApi.campaignExecution = new CampaignExecution(newApi.botContext)
     return newApi
   }
 
@@ -339,9 +337,5 @@ export class FlowBuilderApi {
       flowLocales,
       defaultLocaleCode
     ).resolve()
-  }
-
-  isPushFlowPayload(payload?: string): boolean {
-    return payload?.startsWith(PUSH_FLOW_PAYLOAD) ?? false
   }
 }
