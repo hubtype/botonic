@@ -222,11 +222,7 @@ describe('FlowBuilderApi - Campaign methods', () => {
 
       await flowBuilderPlugin.pre(request)
 
-      expect(
-        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(
-          request.input.payload
-        )
-      ).toBe(true)
+      expect(flowBuilderPlugin.campaignExecution.isPushFlowPayload()).toBe(true)
     })
 
     test('returns false for unrelated postback payloads', async () => {
@@ -240,14 +236,9 @@ describe('FlowBuilderApi - Campaign methods', () => {
 
       await flowBuilderPlugin.pre(request)
 
-      expect(
-        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(
-          request.input.payload
-        )
-      ).toBe(false)
-      expect(
-        flowBuilderPlugin.cmsApi.campaignExecution.isPushFlowPayload(undefined)
-      ).toBe(false)
+      expect(flowBuilderPlugin.campaignExecution.isPushFlowPayload()).toBe(
+        false
+      )
     })
   })
 })

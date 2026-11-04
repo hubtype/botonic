@@ -57,7 +57,7 @@ describe('Campaign skip on do-nothing', () => {
 
       await flowBuilderPlugin.pre(request)
 
-      expect(flowBuilderPlugin.cmsApi.campaignExecution.isActive()).toBe(true)
+      expect(flowBuilderPlugin.campaignExecution.isActive()).toBe(true)
     })
 
     test('returns false when push-flow payload has no push_flow context', async () => {
@@ -74,7 +74,7 @@ describe('Campaign skip on do-nothing', () => {
 
       await flowBuilderPlugin.pre(request)
 
-      expect(flowBuilderPlugin.cmsApi.campaignExecution.isActive()).toBe(false)
+      expect(flowBuilderPlugin.campaignExecution.isActive()).toBe(false)
     })
 
     test('returns false for non push-flow payloads even with push_flow context', async () => {
@@ -92,7 +92,7 @@ describe('Campaign skip on do-nothing', () => {
 
       await flowBuilderPlugin.pre(request)
 
-      expect(flowBuilderPlugin.cmsApi.campaignExecution.isActive()).toBe(false)
+      expect(flowBuilderPlugin.campaignExecution.isActive()).toBe(false)
     })
   })
 
@@ -155,7 +155,7 @@ describe('Campaign skip on do-nothing', () => {
         plugins: { flowBuilderPlugin },
       })
       await flowBuilderPlugin.pre(request)
-      flowBuilderPlugin.cmsApi.campaignExecution.updateHasBotResponse({
+      flowBuilderPlugin.campaignExecution.updateHasBotResponse({
         id: 'prior-bot-response-content',
         producesBotResponse: () => true,
       } as FlowText)

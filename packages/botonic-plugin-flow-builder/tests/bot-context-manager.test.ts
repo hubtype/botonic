@@ -12,9 +12,12 @@ import { FlowHandoff } from '../src/content-fields'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields'
 import { getNextPayloadByUserInput } from '../src/user-input'
 import type { SmartIntentsInferenceConfig } from '../src/user-input/smart-intent'
+import type { CampaignExecution } from '../src/campaign-execution'
 import {
   asFlowBuilderApi,
+  createMockCampaignExecution,
   createMockFlowBuilderApi,
+  type MockCampaignExecution,
   type MockFlowBuilderApi,
 } from './helpers/mock-cms-api'
 import { createRequest } from './helpers/utils'
@@ -36,12 +39,15 @@ const HANDOFF_ID = 'handoff-id'
 
 describe('BotContextManager.prepareInputForRoutes', () => {
   let cmsApi: MockFlowBuilderApi
+  let campaignExecution: MockCampaignExecution
   let botContextManager: BotContextManager
 
   beforeEach(() => {
     jest.clearAllMocks()
     cmsApi = createMockFlowBuilderApi()
+    campaignExecution = createMockCampaignExecution()
     botContextManager = new BotContextManager(
+      campaignExecution as unknown as CampaignExecution,
       asFlowBuilderApi(cmsApi),
       smartIntentsConfig
     )
@@ -68,7 +74,7 @@ describe('BotContextManager.prepareInputForRoutes', () => {
 
   describe('Push flow first interaction', () => {
     test('sets is_first_interaction to false when the payload is a push flow', async () => {
-      cmsApi.campaignExecution.isPushFlowPayload.mockReturnValue(true)
+      campaignExecution.isPushFlowPayload.mockReturnValue(true)
       const botContext = createRequest({
         isFirstInteraction: true,
         input: {
