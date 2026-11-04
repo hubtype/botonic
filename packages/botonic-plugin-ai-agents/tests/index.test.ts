@@ -90,6 +90,32 @@ jest.mock('../src/llm-config', () => ({
   })),
 }))
 
+// Mock the MCP resolver so we can assert that whatever it returns is
+// propagated to SpecialistAgent.create (and that the tracking context is
+// set). The real connect/tracking behaviour is covered in tests/mcp/*.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockCreatedMcpServers: any[] = []
+jest.mock('../src/mcp', () => {
+  class TrackedMcpServer {
+    setTrackingContext = jest.fn()
+  }
+  return {
+    TrackedMcpServer,
+    getOrCreateMcpServers: jest.fn(async (defs: unknown) => {
+      if (!Array.isArray(defs) || defs.length === 0) {
+        return []
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return defs.map(() => {
+        const server = new TrackedMcpServer()
+        mockCreatedMcpServers.push(server)
+        return server
+      })
+    }),
+    isMcpServerInstance: jest.fn(),
+  }
+})
+
 // Mock SpecialistAgent to capture the arguments it receives
 jest.mock('../src/agents/specialist-agent', () => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -217,6 +243,7 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
     jest.clearAllMocks()
     capturedSpecialistAgentArgs = null
     capturedRouterAgentArgs = null
+    mockCreatedMcpServers.length = 0
     // Set NODE_ENV to non-production to use authToken from options
     process.env.NODE_ENV = 'test'
   })
@@ -532,5 +559,44 @@ describe('BotonicPluginAiAgents - Campaign Context Integration', () => {
 
     expect(capturedSpecialistAgentArgs).toBeDefined()
     expect(capturedSpecialistAgentArgs.contactInfo).toEqual([])
+  })
+
+  it('should pass resolved MCP servers to the specialist agent and set their tracking context', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+      mcpServers: [
+        {
+          name: 'viva',
+          url: 'https://mcp.viva.com',
+          allowedTools: ['viva_search_flights'],
+        },
+      ],
+    })
+
+    const request = createMockRequest()
+    await plugin.getInference(request, mockAiAgentArgs)
+
+    expect(capturedSpecialistAgentArgs).toBeDefined()
+    expect(capturedSpecialistAgentArgs.mcpServers).toHaveLength(1)
+    expect(capturedSpecialistAgentArgs.mcpServers[0]).toBe(
+      mockCreatedMcpServers[0]
+    )
+    expect(mockCreatedMcpServers[0].setTrackingContext).toHaveBeenCalledWith({
+      botContext: request,
+      inferenceId: expect.any(String),
+      agentName: 'Test Agent',
+    })
+  })
+
+  it('should default mcpServers to an empty array when not provided', async () => {
+    const plugin = new BotonicPluginAiAgents({
+      authToken: 'test-auth-token',
+    })
+
+    const request = createMockRequest()
+    await plugin.getInference(request, mockAiAgentArgs)
+
+    expect(capturedSpecialistAgentArgs).toBeDefined()
+    expect(capturedSpecialistAgentArgs.mcpServers).toEqual([])
   })
 })

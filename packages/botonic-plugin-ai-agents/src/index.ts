@@ -20,6 +20,11 @@ import {
 } from './constants'
 import { createDebugLogger, type DebugLogger } from './debug-logger'
 import { LLMConfig } from './llm-config'
+import {
+  getOrCreateMcpServers,
+  type McpServerOption,
+  TrackedMcpServer,
+} from './mcp'
 import { RouterRunner, SpecialistRunner } from './runners'
 import { HubtypeApiClient } from './services/hubtype-api-client'
 import type {
@@ -44,6 +49,7 @@ export default class BotonicPluginAiAgents<
   private readonly maxRetries: number
   public toolDefinitions: CustomTool<TPlugins, TExtraData>[] = []
   private readonly localStorageKey: string
+  private readonly mcpServerDefinitions: McpServerOption[]
 
   constructor(options?: PluginAiAgentOptions<TPlugins, TExtraData>) {
     this.authToken = options?.authToken
@@ -53,6 +59,7 @@ export default class BotonicPluginAiAgents<
     this.maxRetries = options?.maxRetries ?? DEFAULT_MAX_RETRIES
     this.logger = createDebugLogger(options?.enableDebug ?? false)
     this.localStorageKey = options?.localStorageKey ?? 'botonicState'
+    this.mcpServerDefinitions = options?.mcpServers ?? []
     setTracingDisabled(true)
 
     this.logger.logInitialConfig({
@@ -60,6 +67,7 @@ export default class BotonicPluginAiAgents<
       maxRetries: options?.maxRetries ?? DEFAULT_MAX_RETRIES,
       timeout: options?.timeout ?? DEFAULT_TIMEOUT_16_SECONDS,
       customToolNames: this.toolDefinitions.map(t => t.name),
+      mcpServerNames: this.mcpServerDefinitions.map(s => s.name),
       memory: this.memory,
     })
   }
@@ -294,6 +302,24 @@ export default class BotonicPluginAiAgents<
     // Build tools
     const tools = this.buildTools(aiAgentArgs)
 
+    // Resolve MCP servers (declarative definitions are connected and cached per
+    // name|url; already-built MCPServer instances are passed through). They are
+    // injected as Agent.mcpServers so their tools are concatenated with the
+    // function tools above during run (getAllTools) instead of replacing them.
+    const mcpServers = await getOrCreateMcpServers(
+      this.mcpServerDefinitions,
+      this.logger
+    )
+    for (const server of mcpServers) {
+      if (server instanceof TrackedMcpServer) {
+        server.setTrackingContext({
+          botContext,
+          inferenceId,
+          agentName: aiAgentArgs.name,
+        })
+      }
+    }
+
     // Build agent
     const sourceIds =
       aiAgentArgs.type === AiAgentType.Specialist ? aiAgentArgs.sourceIds : []
@@ -317,6 +343,7 @@ export default class BotonicPluginAiAgents<
       },
       forceToolNameOverride: aiAgentArgs.forceToolNameOverride,
       disableForceRetrieveKnowledge: aiAgentArgs.disableForceRetrieveKnowledge,
+      mcpServers,
     })
     const specialistAgent = specialist.getAgent()
 
@@ -365,4 +392,5 @@ export default class BotonicPluginAiAgents<
 }
 
 export * from './bot-config-tools'
+export * from './mcp'
 export * from './types'
