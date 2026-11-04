@@ -2,6 +2,7 @@ import { INPUT, PROVIDER, WhatsappInputOrigin } from '@botonic/core'
 import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 
 import { BotContextManager } from '../src/bot-context-manager'
+import type { CampaignExecution } from '../src/campaign-execution'
 import {
   EMPTY_PAYLOAD,
   ON_CLOSE_HANDOFF_PAYLOAD,
@@ -12,7 +13,6 @@ import { FlowHandoff } from '../src/content-fields'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields'
 import { getNextPayloadByUserInput } from '../src/user-input'
 import type { SmartIntentsInferenceConfig } from '../src/user-input/smart-intent'
-import type { CampaignExecution } from '../src/campaign-execution'
 import {
   asFlowBuilderApi,
   createMockCampaignExecution,
