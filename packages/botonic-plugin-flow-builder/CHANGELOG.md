@@ -16,6 +16,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
+- [PR-3303](https://github.com/hubtype/botonic/pull/3303): Resolve handoff target with `discarded_by_bulk` contact reason.
 
 ### Changed
 
