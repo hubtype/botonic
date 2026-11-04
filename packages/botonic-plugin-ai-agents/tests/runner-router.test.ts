@@ -46,7 +46,20 @@ jest.mock('@openai/agents', () => {
     }
   })
 
+  class MockMCPServerStreamableHttp {
+    constructor(_config?: unknown) {}
+    async callTool(_name: string, _args?: unknown): Promise<unknown> {
+      return []
+    }
+    async listTools(): Promise<unknown[]> {
+      return []
+    }
+    async connect(): Promise<void> {}
+    async close(): Promise<void> {}
+  }
+
   return {
+    MCPServerStreamableHttp: MockMCPServerStreamableHttp,
     Runner: MockRunner,
     RunContext: MockRunContext,
     InputGuardrailTripwireTriggered: MockInputGuardrailTripwireTriggered,
@@ -64,6 +77,8 @@ const mockLogger: DebugLogger = {
   logGuardrailTriggered: jest.fn(),
   logRunnerError: jest.fn(),
   logToolExecution: jest.fn(),
+  logMcpServers: jest.fn(),
+  logMcpToolCall: jest.fn(),
 }
 
 const mockLlmConfig = {

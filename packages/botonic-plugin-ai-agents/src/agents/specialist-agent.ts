@@ -1,5 +1,10 @@
 import type { CampaignV2, ContactInfo, ResolvedPlugins } from '@botonic/core'
-import { Agent, type AgentOutputType, type ModelSettings } from '@openai/agents'
+import {
+  Agent,
+  type AgentOutputType,
+  type MCPServer,
+  type ModelSettings,
+} from '@openai/agents'
 import type { z } from 'zod'
 import { LLM_PROVIDER } from '../constants'
 import type { DebugLogger } from '../debug-logger'
@@ -31,6 +36,8 @@ interface SpecialistAgentOptions<
   guardrailTrackingContext: GuardrailTrackingContext
   forceToolNameOverride?: string
   disableForceRetrieveKnowledge?: boolean
+  /** MCP servers exposed to this specialist as additional tools. */
+  mcpServers?: MCPServer[]
 }
 
 export class SpecialistAgent<
@@ -42,6 +49,7 @@ export class SpecialistAgent<
   private agent!: AIAgent<TPlugins, TExtraData>
   private forceToolNameOverride?: string
   private disableForceRetrieveKnowledge?: boolean
+  private mcpServers: MCPServer[]
 
   private constructor(options: SpecialistAgentOptions<TPlugins, TExtraData>) {
     super({
@@ -61,6 +69,7 @@ export class SpecialistAgent<
     this.logger = options.logger
     this.forceToolNameOverride = options.forceToolNameOverride
     this.disableForceRetrieveKnowledge = options.disableForceRetrieveKnowledge
+    this.mcpServers = options.mcpServers ?? []
   }
 
   static async create<
@@ -100,6 +109,14 @@ export class SpecialistAgent<
       outputType: specialistAgent.getOutputType(),
       inputGuardrails,
       outputGuardrails: [],
+      // Viva's MCP schemas are not strict-compatible; non-strict keeps them
+      // usable with Azure OpenAI via chat completions (LLMConfig uses useResponses: false).
+      ...(specialistAgent.mcpServers && specialistAgent.mcpServers.length > 0
+        ? {
+            mcpServers: specialistAgent.mcpServers,
+            mcpConfig: { convertSchemasToStrict: false },
+          }
+        : {}),
     })
 
     specialistAgent.agent = agent

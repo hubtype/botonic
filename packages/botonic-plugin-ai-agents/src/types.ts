@@ -15,7 +15,7 @@ import type {
   Tool as OpenAITool,
 } from '@openai/agents'
 import type { ZodType } from 'zod'
-
+import type { McpServerOption } from './mcp'
 import type { OutputSchema } from './structured-output'
 
 export interface Context<
@@ -83,6 +83,8 @@ export interface PluginAiAgentOptions<
   memory?: Partial<MemoryOptions>
   /** Enable debug logging for AI agent configuration and execution details. */
   enableDebug?: boolean
+  /** MCP servers exposed to every AI agent as additional tools. */
+  mcpServers?: McpServerOption[]
   /** Key for the local storage to to get messages in local development mode */
   localStorageKey?: string
 }

@@ -25,6 +25,8 @@ const mockLogger: DebugLogger = {
   logGuardrailTriggered: jest.fn(),
   logRunnerError: jest.fn(),
   logToolExecution: jest.fn(),
+  logMcpServers: jest.fn(),
+  logMcpToolCall: jest.fn(),
 }
 
 type RunnerConfig = {
@@ -100,8 +102,21 @@ jest.mock('@openai/agents', () => {
     }
   })
 
+  class MockMCPServerStreamableHttp {
+    constructor(_config?: unknown) {}
+    async callTool(_name: string, _args?: unknown): Promise<unknown> {
+      return []
+    }
+    async listTools(): Promise<unknown[]> {
+      return []
+    }
+    async connect(): Promise<void> {}
+    async close(): Promise<void> {}
+  }
+
   return {
     Agent: MockAgent,
+    MCPServerStreamableHttp: MockMCPServerStreamableHttp,
     Runner: MockRunner,
     RunContext: MockRunContext,
     RunToolCallItem: MockRunToolCallItem,
@@ -131,7 +146,7 @@ const mockConstants = {
 jest.mock('../src/constants', () => mockConstants)
 
 // Import after mocks
-import { RunToolCallItem } from '@openai/agents'
+import { RunToolCallItem, RunToolCallOutputItem } from '@openai/agents'
 import { createInputGuardrails } from '../src/guardrails/input'
 import { SpecialistRunner } from '../src/runners/specialist-runner'
 
@@ -140,11 +155,23 @@ import { SpecialistRunner } from '../src/runners/specialist-runner'
 function makeToolCallItem(
   name: string,
   args: string,
-  type = 'function_call'
+  type = 'function_call',
+  callId = `${name}-call`
 ): InstanceType<typeof RunToolCallItem> {
   return new RunToolCallItem(
-    { type, name, arguments: args } as any,
+    { type, name, arguments: args, callId } as any,
     {} as any
+  ) as any
+}
+
+function makeToolCallOutputItem(
+  callId: string,
+  output: unknown
+): InstanceType<typeof RunToolCallOutputItem> {
+  return new RunToolCallOutputItem(
+    { type: 'function_call_result', callId, output } as any,
+    {} as any,
+    output
   ) as any
 }
 
@@ -362,6 +389,75 @@ describe('WorkerAgentRunner', () => {
         toolName: 'my_tool',
         toolArguments: { param: 'value' },
       })
+    })
+
+    it('should populate toolResults for MCP-style array content output', async () => {
+      const callId = 'mcp-tool-call'
+      const toolItem = makeToolCallItem(
+        'viva_search_flights',
+        '{}',
+        'function_call',
+        callId
+      )
+      const outputItem = makeToolCallOutputItem(callId, [
+        { type: 'text', text: 'Flight MAD->BCN 09:00' },
+      ])
+      mockRunnerRunImpl.mockResolvedValueOnce(
+        makeTextRunnerResult('Done', { newItems: [toolItem, outputItem] })
+      )
+
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
+
+      expect(result.toolsExecuted).toHaveLength(1)
+      expect(result.toolsExecuted[0].toolResults).toBe('Flight MAD->BCN 09:00')
+    })
+
+    it('should populate toolResults for single text-object output', async () => {
+      const callId = 'single-text-call'
+      const toolItem = makeToolCallItem(
+        'my_tool',
+        '{}',
+        'function_call',
+        callId
+      )
+      const outputItem = makeToolCallOutputItem(callId, {
+        type: 'text',
+        text: 'plain string result',
+      })
+      mockRunnerRunImpl.mockResolvedValueOnce(
+        makeTextRunnerResult('Done', { newItems: [toolItem, outputItem] })
+      )
+
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
+
+      expect(result.toolsExecuted[0].toolResults).toBe('plain string result')
+    })
+
+    it('should populate toolResults for string output (custom tool)', async () => {
+      const callId = 'string-call'
+      const toolItem = makeToolCallItem(
+        'my_tool',
+        '{}',
+        'function_call',
+        callId
+      )
+      const outputItem = makeToolCallOutputItem(callId, 'raw string result')
+      mockRunnerRunImpl.mockResolvedValueOnce(
+        makeTextRunnerResult('Done', { newItems: [toolItem, outputItem] })
+      )
+
+      const result = await createRunner().run(
+        sampleMessages,
+        buildMockContext()
+      )
+
+      expect(result.toolsExecuted[0].toolResults).toBe('raw string result')
     })
 
     it('should include knowledgebase info for retrieve_knowledge tool', async () => {
