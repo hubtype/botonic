@@ -19,7 +19,7 @@ export class FlowDoNothing extends ContentFieldsBase {
     botContext: BotContext
   ): Promise<void> {
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const campaignExecution = flowBuilderPlugin.cmsApi.campaignExecution
+    const campaignExecution = flowBuilderPlugin.campaignExecution
     if (!campaignExecution.isActive() || campaignExecution.hasBotResponse) {
       return
     }

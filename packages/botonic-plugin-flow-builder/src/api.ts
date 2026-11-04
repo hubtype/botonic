@@ -1,7 +1,6 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import { CampaignExecution } from './campaign-execution'
 import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   type HtBotActionNode,
@@ -33,7 +32,6 @@ export class FlowBuilderApi {
   flowUrl: string
   flow: HtFlowBuilderData
   botContext: BotContext
-  campaignExecution: CampaignExecution
 
   private constructor() {}
 
@@ -52,7 +50,6 @@ export class FlowBuilderApi {
       updatedRequest.session.bot.id
     )
     newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
-    newApi.campaignExecution = new CampaignExecution(newApi.botContext)
     return newApi
   }
 

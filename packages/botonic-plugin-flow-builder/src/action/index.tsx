@@ -64,21 +64,21 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     contents: FlowContent[]
   ) {
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const { cmsApi } = flowBuilderPlugin
+    const { campaignExecution, cmsApi } = flowBuilderPlugin
 
     for (const content of contents) {
       if (FlowBuilderAction.isAiAgentContent(content)) {
         await FlowBuilderAction.processAiAgentContent(botContext, contents)
-        cmsApi.campaignExecution.updateHasBotResponse(content)
+        campaignExecution.updateHasBotResponse(content)
         continue
       }
 
       await content.processContent(botContext)
 
-      cmsApi.campaignExecution.updateHasBotResponse(content)
+      campaignExecution.updateHasBotResponse(content)
 
       if (content instanceof FlowWhatsappRequestContactInfoNode) {
-        flowBuilderPlugin.cmsApi.setWhatsappRequestContactId(content.id)
+        cmsApi.setWhatsappRequestContactId(content.id)
       }
     }
 
@@ -165,7 +165,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext
   ): JSX.Element | JSX.Element[] {
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const { campaignExecution } = flowBuilderPlugin.cmsApi
+    const { campaignExecution } = flowBuilderPlugin
 
     const rendered = contents.map(content => content.toBotonic(botContext))
 

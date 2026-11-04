@@ -6,6 +6,7 @@ import {
 } from '@botonic/core'
 
 import type { FlowBuilderApi } from './api'
+import type { CampaignExecution } from './campaign-execution'
 import {
   EMPTY_PAYLOAD,
   ON_CLOSE_HANDOFF_PAYLOAD,
@@ -24,6 +25,7 @@ import { inputHasTextOrTranscript } from './utils/input'
 
 export class BotContextManager {
   constructor(
+    private readonly campaignExecution: CampaignExecution,
     private readonly cmsApi: FlowBuilderApi,
     private readonly smartIntentsConfig: SmartIntentsInferenceConfig
   ) {}
@@ -48,8 +50,8 @@ export class BotContextManager {
   private async updateFirstInteractionOnPushFlowPayload(
     botContext: BotContext
   ): Promise<void> {
-    const campaignExecution = this.cmsApi.campaignExecution
-    if (campaignExecution.isPushFlowPayload(botContext.input.payload)) {
+    const campaignExecution = this.campaignExecution
+    if (campaignExecution.isPushFlowPayload()) {
       botContext.session.is_first_interaction = false
     }
   }

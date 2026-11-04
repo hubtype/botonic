@@ -17,7 +17,7 @@ export class CampaignExecution {
   }
 
   isActive(): boolean {
-    if (!this.isPushFlowPayload(this.botContext.input.payload)) {
+    if (!this.isPushFlowPayload()) {
       return false
     }
 
@@ -37,7 +37,8 @@ export class CampaignExecution {
     }
   }
 
-  isPushFlowPayload(payload?: string): boolean {
+  isPushFlowPayload(): boolean {
+    const payload = this.botContext.input.payload
     return payload?.startsWith(PUSH_FLOW_PAYLOAD) ?? false
   }
 
