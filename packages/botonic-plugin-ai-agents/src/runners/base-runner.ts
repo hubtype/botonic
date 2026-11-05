@@ -6,6 +6,7 @@ import {
 } from '@botonic/core'
 import {
   InputGuardrailTripwireTriggered,
+  type MCPServer,
   RunContext,
   Runner,
   RunToolCallItem,
@@ -14,6 +15,7 @@ import {
 import { isProd, LLM_PROVIDERS } from '../constants'
 import type { DebugLogger } from '../debug-logger'
 import type { LLMConfig } from '../llm-config'
+import { TrackedMcpServer } from '../mcp/tracked-mcp-server'
 import { HubtypeApiClient } from '../services/hubtype-api-client'
 import { TrackFeature, TrackProductName } from '../services/types'
 import { RETRIEVE_KNOWLEDGE_TOOL_NAME } from '../tools'
@@ -102,7 +104,27 @@ export abstract class BaseRunner<
       this.logger.logRunnerError(startTime, error)
 
       throw error
+    } finally {
+      // Close any per-inference (non-reused) MCP servers. Reused ones are kept
+      // warm in the module-level singleton for the next Lambda invocation.
+      await this.closeEphemeralMcpServers()
     }
+  }
+
+  private async closeEphemeralMcpServers(): Promise<void> {
+    const mcpServers = (this.agent as unknown as { mcpServers?: MCPServer[] })
+      .mcpServers
+    if (!mcpServers?.length) {
+      return
+    }
+    await Promise.allSettled(
+      mcpServers
+        .filter(
+          (server): server is TrackedMcpServer =>
+            server instanceof TrackedMcpServer && !server.reuseConnection
+        )
+        .map(server => server.close().catch(() => undefined))
+    )
   }
 
   protected getToolsExecuted(
@@ -137,10 +159,10 @@ export abstract class BaseRunner<
       }
       const rawItem = item.rawItem as {
         callId?: string
-        output?: string | { type?: string; text?: string }
+        output?: unknown
       }
       const callId = rawItem?.callId
-      const output = rawItem?.output
+      const output = rawItem?.output ?? (item as { output?: unknown }).output
       if (callId == null || output == null) {
         continue
       }
@@ -152,15 +174,34 @@ export abstract class BaseRunner<
     return map
   }
 
-  private extractToolResult(
-    output: string | { type?: string; text?: string }
-  ): string | undefined {
+  private extractToolResult(output: unknown): string | undefined {
+    if (output == null) {
+      return undefined
+    }
     if (typeof output === 'string') {
       return output
     }
-    return output?.type === 'text' && typeof output?.text === 'string'
-      ? output.text
-      : undefined
+    if (Array.isArray(output)) {
+      const parts = output
+        .map(part => this.extractToolResult(part))
+        .filter((part): part is string => part != null)
+      return parts.length > 0 ? parts.join('\n') : undefined
+    }
+    const item = output as { type?: string; text?: unknown }
+    if (item?.type === 'text' && typeof item?.text === 'string') {
+      return item.text
+    }
+    // Non-text content (image/file/etc.) or other shapes: stringify so the
+    // Hubtype trace still shows what the tool returned instead of dropping it.
+    return this.safeStringify(output)
+  }
+
+  private safeStringify(value: unknown): string {
+    try {
+      return JSON.stringify(value)
+    } catch {
+      return String(value)
+    }
   }
 
   private getToolExecutionInfo(

@@ -5,6 +5,7 @@ import {
 } from '@botonic/core'
 import type { ModelSettings } from '@openai/agents'
 import { LLM_PROVIDER } from './constants'
+import type { McpServerSummary, McpToolCallEvent } from './mcp'
 import type { AgenticInputMessage, MemoryOptions, RunResult } from './types'
 
 const PREFIX = '[BotonicPluginAiAgents]'
@@ -14,6 +15,7 @@ export interface DebugLoggerConfig {
   maxRetries: number
   timeout: number
   customToolNames: string[]
+  mcpServerNames?: string[]
   memory: MemoryOptions
 }
 
@@ -43,6 +45,8 @@ export interface DebugLogger {
   logGuardrailTriggered(): void
   logRunnerError(startTime: number, error: unknown): void
   logToolExecution(toolExecution: ToolExecution): void
+  logMcpServers(servers: McpServerSummary[]): void
+  logMcpToolCall(event: McpToolCallEvent): void
 }
 
 class EnabledDebugLogger implements DebugLogger {
@@ -57,6 +61,11 @@ class EnabledDebugLogger implements DebugLogger {
     console.log(
       `${PREFIX} Custom Tools Registered: ${config.customToolNames.join(', ') || 'none'}`
     )
+    if (config.mcpServerNames) {
+      console.log(
+        `${PREFIX} MCP Servers: ${config.mcpServerNames.join(', ') || 'none'}`
+      )
+    }
     console.log(`${PREFIX} Memory Options:`, {
       maxMessages: config.memory.maxMessages,
       includeToolCalls: config.memory.includeToolCalls,
@@ -162,6 +171,45 @@ class EnabledDebugLogger implements DebugLogger {
       `${PREFIX} Knowledgebase Chunks IDs: ${JSON.stringify(toolExecution.knowledgebaseChunksIds)}`
     )
   }
+
+  logMcpServers(servers: McpServerSummary[]): void {
+    console.log(`${PREFIX} === MCP Servers ===`)
+    for (const server of servers) {
+      const tools = server.allowedTools?.length
+        ? `${server.allowedTools.join(', ')} (allowed)`
+        : server.excludedTools?.length
+          ? `${server.excludedTools.join(', ')} (excluded)`
+          : 'all'
+      console.log(`${PREFIX} MCP Server: ${server.name} (${server.url})`)
+      console.log(`${PREFIX} MCP Tools: ${tools}`)
+    }
+    console.log(`${PREFIX} === End MCP Servers ===`)
+  }
+
+  logMcpToolCall(event: McpToolCallEvent): void {
+    console.log(
+      `${PREFIX} MCP Tool Call: ${event.serverName}/${event.toolName} [${event.phase}] ${event.durationMs}ms${event.isError ? ` (error: ${event.errorMessage})` : ''}`
+    )
+    console.log(
+      `${PREFIX} Inference: ${event.inferenceId} | Agent: ${event.agentName}`
+    )
+    if (event.args && Object.keys(event.args).length > 0) {
+      console.log(`${PREFIX} Args: ${JSON.stringify(event.args)}`)
+    }
+    if (event.isError) {
+      console.log(`${PREFIX} Error: ${event.errorMessage}`)
+      return
+    }
+    if (event.cartId) {
+      console.log(`${PREFIX} Cart ID: ${event.cartId}`)
+    }
+    if (event.offerId) {
+      console.log(`${PREFIX} Offer ID: ${event.offerId}`)
+    }
+    if (event.resultPreview) {
+      console.log(`${PREFIX} Result Preview: ${event.resultPreview}`)
+    }
+  }
 }
 
 class DisabledDebugLogger implements DebugLogger {
@@ -191,6 +239,12 @@ class DisabledDebugLogger implements DebugLogger {
     return
   }
   logToolExecution(): void {
+    return
+  }
+  logMcpServers(): void {
+    return
+  }
+  logMcpToolCall(): void {
     return
   }
 }
