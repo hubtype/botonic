@@ -28,7 +28,7 @@ describe('Flow do-nothing node', () => {
     const doNothing = contents[0] as FlowDoNothing
     expect(doNothing.id).toBe('do-nothing-node-id')
     expect(doNothing.code).toBe('SILENT_BRANCH')
-    expect(doNothing.followUp).toBeNull()
+    expect(doNothing.followUp).toBeUndefined()
   })
 
   test('tracks flow_node event for the silent branch', async () => {

@@ -115,6 +115,10 @@ export class FlowCustomConditional extends ContentFieldsBase {
     )
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.filterContent(botContext, this)
     await this.trackFlow(botContext)

@@ -150,6 +150,10 @@ export class FlowHandoff extends ContentFieldsBase {
     // TODO: Not apply for this content because backend track handoff success event
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.filterContent(botContext, this)
     await this.doHandoff(botContext)

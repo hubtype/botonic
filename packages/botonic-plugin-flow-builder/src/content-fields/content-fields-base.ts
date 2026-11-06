@@ -22,6 +22,8 @@ export abstract class ContentFieldsBase {
 
   abstract trackFlow(botContext: BotContext): Promise<void>
 
+  abstract producesBotResponse(): boolean
+
   abstract processContent(botContext: BotContext): Promise<void>
 
   async filterContent(

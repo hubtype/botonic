@@ -51,6 +51,10 @@ export class FlowBotAction extends ContentFieldsBase {
     botContext.session._botonic_action = `${BotonicAction.Redirect}:${this.payload}`
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.filterContent(botContext, this)
     this.doBotAction(botContext)

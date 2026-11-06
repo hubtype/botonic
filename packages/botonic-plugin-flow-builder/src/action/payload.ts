@@ -1,25 +1,22 @@
 import { EventAction, type EventFeedback, storeCaseRating } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
-
-import {
-  AGENT_RATING_PAYLOAD,
-  PUSH_FLOW_PAYLOAD,
-  SEPARATOR,
-} from '../constants'
-import type { FlowContent } from '../content-fields'
+import { AGENT_RATING_PAYLOAD, PUSH_FLOW_PAYLOAD } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
 import { trackEvent } from '../tracking'
+import type { FlowBuilderContentsResult } from './contents-result'
 import type { FlowBuilderContext } from './context'
+import { PushFlowResolver } from './push-flow-resolver'
 
 export async function getContentsByPayload(
   context: FlowBuilderContext
-): Promise<FlowContent[]> {
+): Promise<FlowBuilderContentsResult> {
   const { cmsApi, flowBuilderPlugin, request, contentID } = context
   if (request.input.payload?.startsWith(AGENT_RATING_PAYLOAD)) {
     return await resolveRatingPayload(context)
   }
   if (request.input.payload?.startsWith(PUSH_FLOW_PAYLOAD)) {
-    return await resolvePushFlowPayload(context)
+    const pushFlow = new PushFlowResolver(context)
+    return await pushFlow.getContents()
   }
 
   const id = contentID
@@ -28,19 +25,21 @@ export async function getContentsByPayload(
   const targetNode = id ? cmsApi.getNodeById<HtNodeWithContent>(id) : undefined
 
   if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode)
+    return {
+      contents: await flowBuilderPlugin.getContentsByNode(targetNode),
+    }
   }
 
-  return []
+  return { contents: [] }
 }
 
 async function resolveRatingPayload(
   context: FlowBuilderContext
-): Promise<FlowContent[]> {
+): Promise<FlowBuilderContentsResult> {
   const { cmsApi, flowBuilderPlugin, request } = context
 
   if (!request.input.payload) {
-    return []
+    return { contents: [] }
   }
 
   const { target, text, value, possibleOptions, possibleValues } =
@@ -66,39 +65,10 @@ async function resolveRatingPayload(
     : undefined
 
   if (targetNode) {
-    return await flowBuilderPlugin.getContentsByNode(targetNode)
-  }
-
-  return []
-}
-
-async function resolvePushFlowPayload(
-  context: FlowBuilderContext
-): Promise<FlowContent[]> {
-  const { cmsApi, flowBuilderPlugin, request } = context
-
-  if (!request.input.payload) {
-    return []
-  }
-
-  const parts = request.input.payload.split(SEPARATOR)
-  const pushFlowId = parts.length > 1 ? parts[1] : ''
-
-  if (!pushFlowId) {
-    return []
-  }
-
-  try {
-    const pushFlowNode =
-      cmsApi.getNodeByCampaignId<HtNodeWithContent>(pushFlowId)
-
-    if (!pushFlowNode) {
-      return []
+    return {
+      contents: await flowBuilderPlugin.getContentsByNode(targetNode),
     }
-
-    return await flowBuilderPlugin.getContentsByNode(pushFlowNode)
-  } catch {
-    // Campaign not found - return empty to trigger fallback
-    return []
   }
+
+  return { contents: [] }
 }

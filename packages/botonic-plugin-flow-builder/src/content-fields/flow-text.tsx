@@ -70,6 +70,10 @@ export class FlowText extends ContentFieldsBase {
     )
   }
 
+  producesBotResponse(): boolean {
+    return true
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.filterContent(botContext, this)
     await this.trackFlow(botContext)

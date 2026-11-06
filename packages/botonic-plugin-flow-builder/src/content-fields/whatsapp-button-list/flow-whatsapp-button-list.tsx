@@ -40,6 +40,10 @@ export class FlowWhatsappButtonList extends ContentFieldsBase {
     await trackOneContent(botContext, this)
   }
 
+  producesBotResponse(): boolean {
+    return true
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.trackFlow(botContext)
     await this.filterContent(botContext, this)

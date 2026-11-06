@@ -1,3 +1,15 @@
+export {
+  CAMPAIGN_MESSAGE_PROP_KEYS,
+  CAMPAIGN_MESSAGE_PROVIDER_SKIP_MESSAGE_TYPES,
+  type CampaignHtmlAttributes,
+  CampaignMessageAttributesProvider,
+  type CampaignMessageAttributesProviderProps,
+  type CampaignMessagePropKey,
+  type CampaignMessagePropsSlice,
+  type CampaignMessagePropsWithoutCampaign,
+  shouldSkipCampaignMessageProvider,
+  useCampaignMessageAttributes,
+} from '../contexts/campaign-message-attributes'
 export { Audio } from './audio'
 export { Button } from './button/index'
 export { Carousel } from './carousel'

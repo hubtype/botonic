@@ -1,8 +1,9 @@
 import { INPUT } from '@botonic/core'
-
+import { useCampaignMessageAttributes } from '../contexts/campaign-message-attributes'
 import { truncateText } from '../util'
 import { renderComponent } from '../util/react'
 import { generateWebviewUrlWithParams } from '../util/webviews'
+import type { CampaignMessageProps } from './index-types'
 import { Message } from './message'
 import {
   WHATSAPP_MAX_BODY_CHARS,
@@ -65,9 +66,11 @@ export type WhatsappCTAUrlButtonWebviewProps =
     params?: Record<string, string>
   }
 
-export type WhatsappCTAUrlButtonProps =
+export type WhatsappCTAUrlButtonProps = (
   | WhatsappCTAUrlButtonUrlProps
   | WhatsappCTAUrlButtonWebviewProps
+) &
+  CampaignMessageProps
 
 const serialize = _whatsappCTAUrlButtonProps => {
   // TODO: Implement to have data persistence in localStorage, not needed for this WhatsApp development
@@ -75,6 +78,9 @@ const serialize = _whatsappCTAUrlButtonProps => {
 }
 
 export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
+  const { messageProps, campaignHtmlAttributes } =
+    useCampaignMessageAttributes(props)
+
   const renderBrowser = () => {
     // Return a dummy message for browser
     const message = `${JSON.stringify(props)}`
@@ -91,7 +97,7 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
 
   const renderNode = () => {
     const validatedProps = {
-      ...props,
+      ...messageProps,
       headerType: props.headerType,
       header:
         props.headerType === WhatsappCTAUrlHeaderType.Text && props.header
@@ -127,7 +133,11 @@ export const WhatsappCTAUrlButton = (props: WhatsappCTAUrlButtonProps) => {
     }
     return (
       // @ts-expect-error Property 'message' does not exist on type 'JSX.IntrinsicElements'.
-      <message {...validatedProps} type={INPUT.WHATSAPP_CTA_URL_BUTTON} />
+      <message
+        {...validatedProps}
+        {...campaignHtmlAttributes}
+        type={INPUT.WHATSAPP_CTA_URL_BUTTON}
+      />
     )
   }
 
