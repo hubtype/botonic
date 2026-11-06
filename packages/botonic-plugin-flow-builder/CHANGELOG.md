@@ -16,6 +16,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
+- [PR-3303](https://github.com/hubtype/botonic/pull/3303): Resolve handoff target with `discarded_by_bulk` contact reason.
 - [PR-3297](https://github.com/hubtype/botonic/pull/3297): When resolve a `push-flow` payload, add campaign_id in first campaign message or mark campaign as skipped when no sent any message.
 
 ### Changed

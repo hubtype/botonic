@@ -10,6 +10,7 @@ export enum DiscardType {
   ByAgent = 'discarded',
   ByUser = 'discarded_by_user',
   BySystem = 'discarded_by_system',
+  ByBulk = 'discarded_by_bulk',
 }
 
 export interface HtHandoffNode extends HtBaseNode {
@@ -24,5 +25,6 @@ export interface HtHandoffNode extends HtBaseNode {
     discarded_by_agent?: HtNodeLink
     discarded_by_user?: HtNodeLink
     discarded_by_system?: HtNodeLink
+    discarded_by_bulk?: HtNodeLink
   }
 }
