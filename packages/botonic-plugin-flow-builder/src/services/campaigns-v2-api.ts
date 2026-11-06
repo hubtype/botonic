@@ -17,7 +17,9 @@ export class CampaignsV2Api {
 
   constructor(botContext: BotContext) {
     this.hubtypeApiUrl =
-      botContext.settings.HUBTYPE_API_URL || FLOW_BUILDER_API_URL_PROD
+      botContext.session._hubtype_api ||
+      botContext.settings?.HUBTYPE_API_URL ||
+      FLOW_BUILDER_API_URL_PROD
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
     this.accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
     this.botId = botContext.session.bot.id

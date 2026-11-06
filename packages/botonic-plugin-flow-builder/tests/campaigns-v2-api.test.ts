@@ -13,11 +13,7 @@ class BotonicPluginFlowBuilder {
 }
 
 function createBotContext(
-  overrides: {
-    hubtypeApi?: string
-    botId?: string
-    userId?: string
-  } = {}
+  overrides: { hubtypeApi?: string; botId?: string; userId?: string } = {}
 ): BotContext {
   const hubtypeApi = overrides.hubtypeApi
   return {
