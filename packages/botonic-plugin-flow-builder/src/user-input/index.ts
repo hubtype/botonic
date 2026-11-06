@@ -1,4 +1,4 @@
-import type { ActionRequest } from '@botonic/react'
+import type { BotContext } from '@botonic/core'
 
 import type { FlowBuilderApi } from '../api'
 import {
@@ -9,32 +9,32 @@ import {
 import { CaptureUserInputApi } from './capture-user-input-api'
 import { KeywordMatcher } from './keyword'
 import {
-  SmartIntentsApi,
   type SmartIntentsInferenceConfig,
-} from './smart-intent'
+  SmartIntentsResolver,
+} from './smart-intent-resolver'
 
 export async function getNextPayloadByUserInput(
   cmsApi: FlowBuilderApi,
   locale: string,
-  request: ActionRequest,
+  botContext: BotContext,
   smartIntentsConfig: SmartIntentsInferenceConfig
 ): Promise<string | undefined> {
-  const userTextOrTranscript = getTextOrTranscript(request.input)
+  const userTextOrTranscript = getTextOrTranscript(botContext.input)
   if (userTextOrTranscript) {
     if (cmsApi.shouldCaptureUserInput()) {
       const captureUserInputApi = new CaptureUserInputApi(
         cmsApi,
-        request,
+        botContext,
         userTextOrTranscript
       )
       return await captureUserInputApi.getNextNodeId()
     }
 
-    if (isKeywordsAllowed(request)) {
+    if (isKeywordsAllowed(botContext)) {
       const keywordMatcher = new KeywordMatcher({
         cmsApi,
         locale,
-        request,
+        request: botContext,
         userTextOrTranscript,
       })
       const keywordNode = await keywordMatcher.getNodeByInput()
@@ -43,14 +43,14 @@ export async function getNextPayloadByUserInput(
       }
     }
 
-    if (isSmartIntentsAllowed(request)) {
-      const smartIntentsApi = new SmartIntentsApi(
+    if (isSmartIntentsAllowed(botContext)) {
+      const smartIntentsResolver = new SmartIntentsResolver(
         cmsApi,
-        request,
+        botContext,
         smartIntentsConfig,
         userTextOrTranscript
       )
-      const smartIntentNode = await smartIntentsApi.getNodeByInput()
+      const smartIntentNode = await smartIntentsResolver.getNodeByInput()
       if (smartIntentNode) {
         return cmsApi.getPayload(smartIntentNode.target)
       }

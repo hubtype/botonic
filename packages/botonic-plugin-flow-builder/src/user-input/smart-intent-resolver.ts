@@ -1,36 +1,34 @@
-import { EventAction, type EventIntentSmart, NluType } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
-import axios from 'axios'
+import {
+  type BotContext,
+  EventAction,
+  type EventIntentSmart,
+  NluType,
+} from '@botonic/core'
 
 import type { FlowBuilderApi } from '../api'
 import type { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
+import { SmartIntentsApi } from '../services/smart-intent-api'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import type { SmartIntentResponse } from '../types'
-import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
-
-export interface SmartIntentsInferenceParams {
-  bot_id: string
-  text: string
-  num_smart_intents_to_use?: number
-  use_latest: boolean
-  disabled_smart_intent_titles: string[]
-}
 
 export interface SmartIntentsInferenceConfig {
   useLatest: boolean
   numSmartIntentsToUse?: number
 }
 
-export class SmartIntentsApi {
+export class SmartIntentsResolver {
+  private smartIntentsApi: SmartIntentsApi
+
   constructor(
     public cmsApi: FlowBuilderApi,
-    public currentRequest: ActionRequest,
+    public botContext: BotContext,
     public smartIntentsConfig: SmartIntentsInferenceConfig,
     public userTextOrTranscript: string
-  ) {}
+  ) {
+    this.smartIntentsApi = new SmartIntentsApi(this.botContext)
+  }
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {
     if (!this.userTextOrTranscript) {
@@ -46,7 +44,7 @@ export class SmartIntentsApi {
       .map(smartIntentNode => smartIntentNode.content.title)
 
     const params = {
-      bot_id: this.currentRequest.session.bot.id,
+      bot_id: this.botContext.session.bot.id,
       text: this.userTextOrTranscript,
       num_smart_intents_to_use: this.smartIntentsConfig.numSmartIntentsToUse,
       use_latest: this.resolveUseLatest(),
@@ -54,7 +52,7 @@ export class SmartIntentsApi {
     }
 
     try {
-      const response = await this.getInference(params)
+      const response = await this.smartIntentsApi.getInference(params)
       const smartIntentNode = smartIntentNodes.find(
         smartIntentNode =>
           smartIntentNode.content.title === response.data.smart_intent_title
@@ -62,7 +60,7 @@ export class SmartIntentsApi {
 
       if (smartIntentNode) {
         const targetPayload = this.cmsApi.getPayload(smartIntentNode.target)
-        this.currentRequest.input.nluResolution = {
+        this.botContext.input.nluResolution = {
           type: NluType.SmartIntent,
           matchedValue: smartIntentNode.content.title,
           payload: targetPayload,
@@ -70,7 +68,7 @@ export class SmartIntentsApi {
 
         const { flowId, flowName, flowNodeId, flowNodeContentId } =
           getCommonFlowContentEventArgsForContentId(
-            this.currentRequest,
+            this.botContext,
             smartIntentNode.id
           )
 
@@ -78,9 +76,9 @@ export class SmartIntentsApi {
           action: EventAction.IntentSmart,
           nluIntentSmartTitle: response.data.smart_intent_title,
           nluIntentSmartNumUsed: response.data.smart_intents_used.length,
-          nluIntentSmartMessageId: this.currentRequest.input.message_id,
+          nluIntentSmartMessageId: this.botContext.input.message_id,
           userInput: this.userTextOrTranscript,
-          flowThreadId: this.currentRequest.session.flow_thread_id as string,
+          flowThreadId: this.botContext.session.flow_thread_id as string,
           flowId,
           flowName,
           flowNodeContentId,
@@ -88,7 +86,7 @@ export class SmartIntentsApi {
         }
         const { action, ...eventArgs } = event
 
-        await trackEvent(this.currentRequest, action, eventArgs)
+        await trackEvent(this.botContext, action, eventArgs)
 
         return smartIntentNode
       }
@@ -99,27 +97,9 @@ export class SmartIntentsApi {
   }
 
   private resolveUseLatest(): boolean {
-    if (this.currentRequest.session.is_test_integration) {
+    if (this.botContext.session.is_test_integration) {
       return false
     }
     return this.smartIntentsConfig.useLatest
-  }
-
-  private async getInference(
-    inferenceParams: SmartIntentsInferenceParams
-  ): Promise<SmartIntentResponse> {
-    const pluginFlowBuilder = getFlowBuilderPlugin(this.currentRequest.plugins)
-    const token = pluginFlowBuilder.getAccessToken(this.currentRequest.session)
-
-    return await axios({
-      method: 'POST',
-      url: `${process.env.HUBTYPE_API_URL}/external/v2/ai/smart_intents/inference/`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      data: inferenceParams,
-      timeout: 10000,
-    })
   }
 }

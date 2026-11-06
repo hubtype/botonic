@@ -20,7 +20,7 @@ import {
   HtNodeWithContentType,
 } from './content-fields/hubtype-fields'
 import { getNextPayloadByUserInput } from './user-input'
-import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
+import type { SmartIntentsInferenceConfig } from './user-input/smart-intent-resolver'
 import { inputHasTextOrTranscript } from './utils/input'
 
 export class BotContextManager {

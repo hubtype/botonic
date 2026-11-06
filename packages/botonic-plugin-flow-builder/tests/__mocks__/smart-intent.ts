@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { SmartIntentsApi } from '../../src/user-input/smart-intent'
+import { SmartIntentsApi } from '../../src/services/smart-intent-api'
 
 export let smartIntentInferenceSpy: jest.SpiedFunction<
   (inferenceParams: unknown) => Promise<unknown>

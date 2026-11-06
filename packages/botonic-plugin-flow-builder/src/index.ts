@@ -28,7 +28,7 @@ import {
   type RatingSubmittedInfo,
   type TrackEventFunction,
 } from './types'
-import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
+import type { SmartIntentsInferenceConfig } from './user-input/smart-intent-resolver'
 import { resolveGetAccessToken } from './utils/authentication'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
