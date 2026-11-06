@@ -12,13 +12,15 @@ export type SkipEmptyBotResponseResult = {
 export class CampaignsV2Api {
   private hubtypeApiUrl: string
   private accessToken: string
+  private botId: string
   private chatId: string
 
   constructor(botContext: BotContext) {
     this.hubtypeApiUrl =
-      botContext.session._hubtype_api || FLOW_BUILDER_API_URL_PROD
+      botContext.settings.HUBTYPE_API_URL || FLOW_BUILDER_API_URL_PROD
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
     this.accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
+    this.botId = botContext.session.bot.id
     this.chatId = botContext.session.user.id
   }
 
@@ -26,8 +28,8 @@ export class CampaignsV2Api {
     campaignId: string
   ): Promise<SkipEmptyBotResponseResult> {
     const { data } = await axios.post<SkipEmptyBotResponseResult>(
-      `${this.hubtypeApiUrl}/external/v2/campaigns/${campaignId}/skip/`,
-      { chat_id: this.chatId },
+      `${this.hubtypeApiUrl}/external/v2/conversational_apps/${this.botId}/users/${this.chatId}/skip_campaign/`,
+      { campaign_id: campaignId },
       {
         headers: {
           'Content-Type': 'application/json',
