@@ -1,12 +1,7 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  AI_AGENTS_FLOW_NAME,
-  PUSH_FLOW_PAYLOAD,
-  SEPARATOR,
-  UUID_REGEXP,
-} from './constants'
+import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   type HtBotActionNode,
   type HtCaptureUserInputNode,
@@ -339,9 +334,5 @@ export class FlowBuilderApi {
       flowLocales,
       defaultLocaleCode
     ).resolve()
-  }
-
-  isPushFlowPayload(payload?: string): boolean {
-    return payload?.startsWith(PUSH_FLOW_PAYLOAD) ?? false
   }
 }

@@ -1,7 +1,19 @@
 import type { FlowBuilderApi } from '../../src/api'
 
-export interface MockFlowBuilderApi {
+export interface MockCampaignExecution {
   isPushFlowPayload: jest.Mock
+}
+
+export function createMockCampaignExecution(
+  overrides: Partial<MockCampaignExecution> = {}
+): MockCampaignExecution {
+  return {
+    isPushFlowPayload: jest.fn().mockReturnValue(false),
+    ...overrides,
+  }
+}
+
+export interface MockFlowBuilderApi {
   getResolvedLocale: jest.Mock
   getWhatsappRequestContactInfoNode: jest.Mock
   getPayload: jest.Mock
@@ -17,7 +29,6 @@ export function createMockFlowBuilderApi(
   overrides: Partial<MockFlowBuilderApi> = {}
 ): MockFlowBuilderApi {
   return {
-    isPushFlowPayload: jest.fn().mockReturnValue(false),
     getResolvedLocale: jest.fn().mockReturnValue('en'),
     getWhatsappRequestContactInfoNode: jest.fn().mockReturnValue(undefined),
     getPayload: jest.fn(),

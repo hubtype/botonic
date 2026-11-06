@@ -114,6 +114,10 @@ export abstract class FlowAiAgentBase extends ContentFieldsBase {
     return
   }
 
+  producesBotResponse(): boolean {
+    return this.jsxElements.length > 0
+  }
+
   async processContent(
     botContext: BotContext,
     previousContents?: FlowContent[]

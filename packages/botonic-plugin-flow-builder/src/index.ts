@@ -8,6 +8,7 @@ import { v7 as uuidv7 } from 'uuid'
 
 import { FlowBuilderApi } from './api'
 import { BotContextManager } from './bot-context-manager'
+import { CampaignExecution } from './campaign-execution'
 import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
 import type { FlowContent } from './content-fields'
 import {
@@ -49,6 +50,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public apiUrl: string
   public customRatingMessageEnabled: boolean
   public disableAIAgentInFirstInteraction: boolean
+  public campaignExecution: CampaignExecution
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
     this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
@@ -91,8 +93,10 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       accessToken: this.getAccessToken(botContext.session),
       botContext: this.botContext,
     })
+    this.campaignExecution = new CampaignExecution(botContext)
 
     const botContextManager = new BotContextManager(
+      this.campaignExecution,
       this.cmsApi,
       this.smartIntentsConfig
     )

@@ -425,6 +425,10 @@ export class FlowWhatsappTemplate extends ContentFieldsBase {
     await trackOneContent(botContext, this)
   }
 
+  producesBotResponse(): boolean {
+    return true
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.filterContent(botContext, this)
     await this.trackFlow(botContext)

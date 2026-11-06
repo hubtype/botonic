@@ -22,7 +22,6 @@ import { getContents } from './get-contents'
 
 export type FlowBuilderActionProps = {
   contents: FlowContent[]
-  campaignFirstMessageId?: string
   webchatSettingsParams?: WebchatSettingsProps
 }
 
@@ -48,10 +47,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext,
     contentID?: string
   ): Promise<FlowBuilderActionProps> {
-    const { contents, campaignFirstMessageId } = await getContents(
-      botContext,
-      contentID
-    )
+    const { contents } = await getContents(botContext, contentID)
 
     const contentsToRender = await FlowBuilderAction.prepareContentsToRender(
       botContext,
@@ -60,7 +56,6 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
     return {
       contents: contentsToRender,
-      campaignFirstMessageId,
     }
   }
 
@@ -68,17 +63,22 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
     botContext: BotContext,
     contents: FlowContent[]
   ) {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const { campaignExecution, cmsApi } = flowBuilderPlugin
+
     for (const content of contents) {
       if (FlowBuilderAction.isAiAgentContent(content)) {
         await FlowBuilderAction.processAiAgentContent(botContext, contents)
+        campaignExecution.updateHasBotResponse(content)
         continue
       }
 
       await content.processContent(botContext)
 
+      campaignExecution.updateHasBotResponse(content)
+
       if (content instanceof FlowWhatsappRequestContactInfoNode) {
-        const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-        flowBuilderPlugin.cmsApi.setWhatsappRequestContactId(content.id)
+        cmsApi.setWhatsappRequestContactId(content.id)
       }
     }
 
@@ -145,7 +145,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
   }
 
   render(): JSX.Element | JSX.Element[] {
-    const { contents, campaignFirstMessageId } = this.props
+    const { contents } = this.props
     const botContext = this.context as BotContext
     const { shouldSendWebchatSettings, webchatSettingsParams } =
       this.getWebchatSettingsParams(botContext)
@@ -155,28 +155,28 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {FlowBuilderAction.renderContents(
-          contents,
-          botContext,
-          campaignFirstMessageId
-        )}
+        {FlowBuilderAction.renderContents(contents, botContext)}
       </>
     )
   }
 
   protected static renderContents(
     contents: FlowContent[],
-    botContext: BotContext,
-    campaignFirstMessageId?: string
+    botContext: BotContext
   ): JSX.Element | JSX.Element[] {
+    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
+    const { campaignExecution } = flowBuilderPlugin
+
     const rendered = contents.map(content => content.toBotonic(botContext))
 
-    if (!campaignFirstMessageId) {
+    if (!campaignExecution.isActive() || !campaignExecution.campaignId) {
       return rendered
     }
 
     return (
-      <CampaignMessageAttributesProvider campaignId={campaignFirstMessageId}>
+      <CampaignMessageAttributesProvider
+        campaignId={campaignExecution.campaignId}
+      >
         {rendered}
       </CampaignMessageAttributesProvider>
     )
@@ -185,7 +185,7 @@ export class FlowBuilderAction extends React.Component<FlowBuilderActionProps> {
 
 export class FlowBuilderMultichannelAction extends FlowBuilderAction {
   render(): JSX.Element | JSX.Element[] {
-    const { contents, campaignFirstMessageId } = this.props
+    const { contents } = this.props
     const botContext = this.context as BotContext
     const { shouldSendWebchatSettings, webchatSettingsParams } =
       this.getWebchatSettingsParams(botContext)
@@ -195,11 +195,7 @@ export class FlowBuilderMultichannelAction extends FlowBuilderAction {
         {shouldSendWebchatSettings && (
           <WebchatSettings {...webchatSettingsParams} />
         )}
-        {FlowBuilderAction.renderContents(
-          contents,
-          botContext,
-          campaignFirstMessageId
-        )}
+        {FlowBuilderAction.renderContents(contents, botContext)}
       </Multichannel>
     )
   }

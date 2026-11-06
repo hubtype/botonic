@@ -50,7 +50,6 @@ export class PushFlowResolver {
     }
 
     const {
-      campaign_id: campaignId,
       campaign_flow_id: campaignFlowId,
       campaign_follow_up_id: campaignFollowUpId,
     } = campaignContext
@@ -71,7 +70,6 @@ export class PushFlowResolver {
       contents: await this.flowBuilderPlugin.getContentsByNode(
         followUpNode ?? campaignStartNode
       ),
-      campaignFirstMessageId: campaignId,
     }
   }
 

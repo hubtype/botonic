@@ -98,6 +98,10 @@ export class FlowButton extends ContentFieldsBase {
     }
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(): Promise<void> {
     return
   }
