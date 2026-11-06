@@ -6,7 +6,7 @@ import {
   isKeywordsAllowed,
   isSmartIntentsAllowed,
 } from '../utils/input'
-import { CaptureUserInputApi } from './capture-user-input-api'
+import { CaptureUserInputResolver } from './capture-user-input-resolver'
 import { KeywordMatcher } from './keyword'
 import {
   type SmartIntentsInferenceConfig,
@@ -22,7 +22,7 @@ export async function getNextPayloadByUserInput(
   const userTextOrTranscript = getTextOrTranscript(botContext.input)
   if (userTextOrTranscript) {
     if (cmsApi.shouldCaptureUserInput()) {
-      const captureUserInputApi = new CaptureUserInputApi(
+      const captureUserInputApi = new CaptureUserInputResolver(
         cmsApi,
         botContext,
         userTextOrTranscript
