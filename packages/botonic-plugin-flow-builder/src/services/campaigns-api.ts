@@ -1,6 +1,6 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
-import { FLOW_BUILDER_API_URL_PROD } from '../constants'
+import { HUBTYPE_API_URL } from '../constants'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 
 export type SkipEmptyBotResponseResult = {
@@ -9,17 +9,14 @@ export type SkipEmptyBotResponseResult = {
   skip_reason: 'empty_bot_response'
 }
 
-export class CampaignsV2Api {
+export class CampaignsApi {
   private hubtypeApiUrl: string
   private accessToken: string
   private botId: string
   private chatId: string
 
   constructor(botContext: BotContext) {
-    this.hubtypeApiUrl =
-      botContext.session._hubtype_api ||
-      botContext.settings?.HUBTYPE_API_URL ||
-      FLOW_BUILDER_API_URL_PROD
+    this.hubtypeApiUrl = botContext.settings?.HUBTYPE_API_URL || HUBTYPE_API_URL
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
     this.accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
     this.botId = botContext.session.bot.id

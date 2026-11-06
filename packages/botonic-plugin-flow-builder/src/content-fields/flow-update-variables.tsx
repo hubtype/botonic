@@ -5,13 +5,11 @@ import {
   type Session,
 } from '@botonic/core'
 
-import { FLOW_BUILDER_API_URL_PROD } from '../constants'
 import { ContactInfoFieldsClient } from '../services/contact-info-fields-api'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
 import type { HtUpdateVariablesNode } from './hubtype-fields/update-variables'
 
@@ -67,23 +65,14 @@ export class FlowUpdateVariables extends ContentFieldsBase {
       return
     }
 
-    const hubtypeApiUrl =
-      botContext.session._hubtype_api || FLOW_BUILDER_API_URL_PROD
-    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    const accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
-    const chatId = botContext.session.user.id
-
-    const contactInfoFieldsClient = new ContactInfoFieldsClient(
-      hubtypeApiUrl,
-      accessToken
-    )
+    const contactInfoFieldsClient = new ContactInfoFieldsClient(botContext)
 
     await Promise.all(
       contactInfoUpdates.map(({ fieldName, value }) => {
         if (value === undefined) {
-          return contactInfoFieldsClient.delete(chatId, fieldName)
+          return contactInfoFieldsClient.delete(fieldName)
         }
-        return contactInfoFieldsClient.update(chatId, fieldName, value)
+        return contactInfoFieldsClient.update(fieldName, value)
       })
     )
   }

@@ -9,7 +9,7 @@ import { v7 as uuidv7 } from 'uuid'
 import { FlowBuilderApi } from './api'
 import { BotContextManager } from './bot-context-manager'
 import { CampaignExecution } from './campaign-execution'
-import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
+import { HUBTYPE_API_URL, SEPARATOR } from './constants'
 import type { FlowContent } from './content-fields'
 import {
   type HtFlowBuilderData,
@@ -53,7 +53,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public campaignExecution: CampaignExecution
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
-    this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
+    this.apiUrl = options.apiUrl || HUBTYPE_API_URL
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)

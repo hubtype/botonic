@@ -1,6 +1,6 @@
 import type { BotContext } from '@botonic/core'
 
-import { CampaignsV2Api } from '../services/campaigns-v2-api'
+import { CampaignsApi } from '../services/campaigns-api'
 import { trackOneContent } from '../tracking'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { ContentFieldsBase } from './content-fields-base'
@@ -28,7 +28,7 @@ export class FlowDoNothing extends ContentFieldsBase {
       return
     }
 
-    const campaignsV2Api = new CampaignsV2Api(botContext)
+    const campaignsV2Api = new CampaignsApi(botContext)
     await campaignsV2Api.skipEmptyBotResponse(campaignId)
   }
 

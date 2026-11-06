@@ -1,6 +1,6 @@
+import type { BotContext } from '@botonic/core'
 import axios from 'axios'
-
-const HUBTYPE_API_URL = process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
+import { HUBTYPE_API_URL } from '../constants'
 
 export interface AvailabilityData {
   available: boolean
@@ -11,23 +11,23 @@ export interface AvailabilityData {
   available_agents: number
 }
 export class HubtypeQueuesApi {
-  public queueId: string
-  public checkAvailableAgents: boolean
+  private hubtypeApiUrl: string
 
-  constructor(queueId: string, checkAvailableAgents?: boolean) {
-    this.queueId = queueId
-    this.checkAvailableAgents = checkAvailableAgents || false
+  constructor(botContext: BotContext) {
+    this.hubtypeApiUrl = botContext.settings?.HUBTYPE_API_URL || HUBTYPE_API_URL
   }
 
-  async getAvailability(): Promise<AvailabilityData> {
+  async getAvailability(
+    queueId: string,
+    checkAvailableAgents?: boolean
+  ): Promise<AvailabilityData> {
     const response = await axios.get(
-      `${HUBTYPE_API_URL}/external/v1/queues/${this.queueId}/availability/`,
-      // TODO: Make it configurable in the future
+      `${this.hubtypeApiUrl}/external/v1/queues/${queueId}/availability/`,
       {
         params: {
           check_queue_schedule: true,
           check_waiting_cases: false,
-          check_available_agents: this.checkAvailableAgents,
+          check_available_agents: checkAvailableAgents || false,
         },
       }
     )

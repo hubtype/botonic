@@ -4,7 +4,7 @@ import { PUSH_FLOW_PAYLOAD, SEPARATOR } from '../src/constants'
 import { FlowDoNothing } from '../src/content-fields/flow-do-nothing'
 import { FlowText } from '../src/content-fields/flow-text'
 import type { HtDoNothingNode } from '../src/content-fields/hubtype-fields'
-import { CampaignsV2Api } from '../src/services/campaigns-v2-api'
+import { CampaignsApi } from '../src/services/campaigns-api'
 import { ProcessEnvNodeEnvs } from '../src/types'
 import { mockSkipEmptyBotResponse, mockSmartIntent } from './__mocks__'
 import {
@@ -21,14 +21,12 @@ import {
   getActionRequest,
 } from './helpers/utils'
 
-jest.mock('../src/services/campaigns-v2-api', () =>
+jest.mock('../src/services/campaigns-api', () =>
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  require('./__mocks__/campaigns-v2-api').getCampaignsV2ApiJestMock()
+  require('./__mocks__/campaigns-api').getCampaignsApiJestMock()
 )
 
-const CampaignsV2ApiMock = CampaignsV2Api as jest.MockedClass<
-  typeof CampaignsV2Api
->
+const CampaignsApiMock = CampaignsApi as jest.MockedClass<typeof CampaignsApi>
 
 describe('Campaign skip on do-nothing', () => {
   process.env.NODE_ENV = ProcessEnvNodeEnvs.PRODUCTION
@@ -36,7 +34,7 @@ describe('Campaign skip on do-nothing', () => {
   beforeEach(() => {
     mockSmartIntent('Other')
     mockSkipEmptyBotResponse.mockClear()
-    CampaignsV2ApiMock.mockClear()
+    CampaignsApiMock.mockClear()
   })
 
   describe('CampaignExecution.isActive', () => {
@@ -125,7 +123,7 @@ describe('Campaign skip on do-nothing', () => {
       expect(mockSkipEmptyBotResponse).toHaveBeenCalledWith(
         CAMPAIGN_DO_NOTHING_ID
       )
-      expect(CampaignsV2ApiMock).toHaveBeenCalledWith(botContext)
+      expect(CampaignsApiMock).toHaveBeenCalledWith(botContext)
     })
 
     test('does not call skip API outside campaign execution', async () => {
@@ -192,7 +190,7 @@ describe('Campaign skip on do-nothing', () => {
       expect(mockSkipEmptyBotResponse).toHaveBeenCalledWith(
         CAMPAIGN_DO_NOTHING_ID
       )
-      expect(CampaignsV2ApiMock).toHaveBeenCalledWith(getActionRequest(request))
+      expect(CampaignsApiMock).toHaveBeenCalledWith(getActionRequest(request))
     })
 
     test('does not call skip when text precedes do-nothing in the same campaign turn', async () => {
