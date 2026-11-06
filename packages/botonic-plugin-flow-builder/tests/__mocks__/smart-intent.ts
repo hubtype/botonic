@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import { SmartIntentsApi } from '../../src/services/smart-intent-api'
+import { SmartIntentsClient } from '../../src/services/smart-intent-client'
 
 export let smartIntentInferenceSpy: jest.SpiedFunction<
   (inferenceParams: unknown) => Promise<unknown>
@@ -8,7 +8,7 @@ export let smartIntentInferenceSpy: jest.SpiedFunction<
 
 export function mockSmartIntent(intentName?: string) {
   smartIntentInferenceSpy = jest.spyOn(
-    SmartIntentsApi.prototype as any,
+    SmartIntentsClient.prototype as any,
     'getInference'
   )
 

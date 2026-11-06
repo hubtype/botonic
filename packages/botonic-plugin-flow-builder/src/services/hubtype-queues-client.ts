@@ -1,6 +1,7 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
-import { HUBTYPE_API_URL } from '../constants'
+
+import { HubtypeClientBase } from './hubtype-client-base'
 
 export interface AvailabilityData {
   available: boolean
@@ -10,11 +11,9 @@ export interface AvailabilityData {
   name: string
   available_agents: number
 }
-export class HubtypeQueuesApi {
-  private hubtypeApiUrl: string
-
+export class HubtypeQueuesClient extends HubtypeClientBase {
   constructor(botContext: BotContext) {
-    this.hubtypeApiUrl = botContext.settings?.HUBTYPE_API_URL || HUBTYPE_API_URL
+    super(botContext)
   }
 
   async getAvailability(

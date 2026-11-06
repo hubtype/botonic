@@ -9,7 +9,7 @@ import {
   HtAiValidationType,
   type HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
-import { CaptureUserInputApi } from '../services/capture-user-input-api'
+import { CaptureUserInputClient } from '../services/capture-user-input-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -20,7 +20,7 @@ export class CaptureUserInputResolver {
   private cmsApi: FlowBuilderApi
   private botContext: BotContext
   private textOrTranscript: string
-  private captureUserInputApi: CaptureUserInputApi
+  private captureUserInputClient: CaptureUserInputClient
 
   constructor(
     cmsApi: FlowBuilderApi,
@@ -30,7 +30,7 @@ export class CaptureUserInputResolver {
     this.cmsApi = cmsApi
     this.botContext = botContext
     this.textOrTranscript = textOrTranscript
-    this.captureUserInputApi = new CaptureUserInputApi(botContext)
+    this.captureUserInputClient = new CaptureUserInputClient(botContext)
   }
 
   async getNextNodeId(): Promise<string | undefined> {
@@ -55,7 +55,7 @@ export class CaptureUserInputResolver {
       }
 
       const aiCaptureResponse =
-        await this.captureUserInputApi.getAiCaptureResponse(
+        await this.captureUserInputClient.getAiCaptureResponse(
           this.textOrTranscript,
           captureUserInputNode.content.field_name,
           captureUserInputNode.content.ai_validation_instructions

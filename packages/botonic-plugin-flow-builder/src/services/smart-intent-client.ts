@@ -1,9 +1,8 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import { HUBTYPE_API_URL } from '../constants'
 import type { SmartIntentResponse } from '../types'
-import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
+import { HubtypeClientBase } from './hubtype-client-base'
 
 export interface SmartIntentsInferenceParams {
   bot_id: string
@@ -13,14 +12,9 @@ export interface SmartIntentsInferenceParams {
   disabled_smart_intent_titles: string[]
 }
 
-export class SmartIntentsApi {
-  private hubtypeApiUrl: string
-  private accessToken: string
-
+export class SmartIntentsClient extends HubtypeClientBase {
   constructor(botContext: BotContext) {
-    this.hubtypeApiUrl = botContext.settings?.HUBTYPE_API_URL || HUBTYPE_API_URL
-    const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    this.accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
+    super(botContext)
   }
 
   async getInference(

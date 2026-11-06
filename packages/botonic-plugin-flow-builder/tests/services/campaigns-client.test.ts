@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from '../../src/constants'
-import { CampaignsApi } from '../../src/services/campaigns-api'
+import { CampaignsClient } from '../../src/services/campaigns-client'
 
 jest.mock('axios')
 const axiosPostMock = axios.post as jest.MockedFunction<typeof axios.post>
@@ -31,7 +31,7 @@ function createBotContext(
   } as BotContext
 }
 
-describe('CampaignsApi', () => {
+describe('CampaignsClient', () => {
   beforeEach(() => {
     axiosPostMock.mockReset()
   })
@@ -46,10 +46,10 @@ describe('CampaignsApi', () => {
     }
     axiosPostMock.mockResolvedValue({ data: responseBody })
 
-    const api = new CampaignsApi(
+    const client = new CampaignsClient(
       createBotContext({ hubtypeApi, botId: 'bid1', userId: 'uid1' })
     )
-    const result = await api.skipEmptyBotResponse(campaignId)
+    const result = await client.skipEmptyBotResponse(campaignId)
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       `${hubtypeApi}/external/v2/conversational_apps/bid1/users/uid1/skip_campaign/`,
@@ -73,8 +73,8 @@ describe('CampaignsApi', () => {
       },
     })
 
-    const api = new CampaignsApi(createBotContext())
-    await api.skipEmptyBotResponse('campaign-id')
+    const client = new CampaignsClient(createBotContext())
+    await client.skipEmptyBotResponse('campaign-id')
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       `${HUBTYPE_API_URL}/external/v2/conversational_apps/bid1/users/uid1/skip_campaign/`,
@@ -94,11 +94,11 @@ describe('CampaignsApi', () => {
     })
     axiosPostMock.mockRejectedValue(notFoundError)
 
-    const api = new CampaignsApi(
+    const client = new CampaignsClient(
       createBotContext({ hubtypeApi: 'https://api.test.hubtype.com' })
     )
 
-    await expect(api.skipEmptyBotResponse('campaign-id')).rejects.toBe(
+    await expect(client.skipEmptyBotResponse('campaign-id')).rejects.toBe(
       notFoundError
     )
   })

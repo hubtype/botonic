@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import { FlowUpdateVariables } from '../src/content-fields/flow-update-variables'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields/node-types'
 import type { HtUpdateVariablesNode } from '../src/content-fields/hubtype-fields/update-variables'
-import { ContactInfoFieldsClient } from '../src/services/contact-info-fields-api'
+import { ContactInfoFieldsClient } from '../src/services/contact-info-fields-client'
 import { ProcessEnvNodeEnvs, type TrackEventFunction } from '../src/types'
 import { getFlowBuilderPlugin } from '../src/utils/get-flow-builder-plugin'
 import { trackEventMock } from './__mocks__/track-event'
@@ -20,7 +20,7 @@ const mockUpdate = jest.fn(
 )
 const mockDelete = jest.fn(async (_fieldName: string) => undefined)
 
-jest.mock('../src/services/contact-info-fields-api', () => ({
+jest.mock('../src/services/contact-info-fields-client', () => ({
   ContactInfoFieldsClient: jest.fn().mockImplementation(() => ({
     update: mockUpdate,
     delete: mockDelete,

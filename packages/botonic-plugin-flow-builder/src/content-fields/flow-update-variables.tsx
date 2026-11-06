@@ -5,7 +5,7 @@ import {
   type Session,
 } from '@botonic/core'
 
-import { ContactInfoFieldsClient } from '../services/contact-info-fields-api'
+import { ContactInfoFieldsClient } from '../services/contact-info-fields-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,

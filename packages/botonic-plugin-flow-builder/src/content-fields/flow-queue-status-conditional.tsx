@@ -5,7 +5,7 @@ import {
 } from '@botonic/core'
 
 import { getArgumentsByLocale } from '../functions'
-import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
+import { HubtypeQueuesClient } from '../services/hubtype-queues-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -95,8 +95,11 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
     queueName,
     botContext,
   }: ConditionalQueueStatusArgs): Promise<QueueStatusResult> {
-    const queuesApi = new HubtypeQueuesApi(botContext)
-    const data = await queuesApi.getAvailability(queueId, checkAvailableAgents)
+    const queuesClient = new HubtypeQueuesClient(botContext)
+    const data = await queuesClient.getAvailability(
+      queueId,
+      checkAvailableAgents
+    )
     this.queueId = queueId
     this.queueName = queueName
     this.isQueueOpen = data.open

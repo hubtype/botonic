@@ -1,21 +1,19 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
-import { HUBTYPE_API_URL } from '../constants'
 import type { HtFlowBuilderData } from '../content-fields/hubtype-fields'
 import { FlowBuilderJSONVersion } from '../types'
 import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
+import { HubtypeClientBase } from './hubtype-client-base'
 
-export class FlowBuilderClient {
+export class FlowBuilderClient extends HubtypeClientBase {
   private botContext: BotContext
-  private accessToken: string
-  private hubtypeApiUrl: string
   private jsonVersion: FlowBuilderJSONVersion
 
   constructor(botContext: BotContext) {
+    super(botContext)
     this.botContext = botContext
-    this.hubtypeApiUrl = botContext.settings?.HUBTYPE_API_URL || HUBTYPE_API_URL
+
     const flowBuilderPlugin = getFlowBuilderPlugin(botContext.plugins)
-    this.accessToken = flowBuilderPlugin.getAccessToken(botContext.session)
     this.jsonVersion = botContext.session.is_test_integration
       ? FlowBuilderJSONVersion.DRAFT
       : flowBuilderPlugin.jsonVersion

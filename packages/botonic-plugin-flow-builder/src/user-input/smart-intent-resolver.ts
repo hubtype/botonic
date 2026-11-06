@@ -7,7 +7,7 @@ import {
 
 import type { FlowBuilderApi } from '../api'
 import type { HtSmartIntentNode } from '../content-fields/hubtype-fields/smart-intent'
-import { SmartIntentsApi } from '../services/smart-intent-api'
+import { SmartIntentsClient } from '../services/smart-intent-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -19,7 +19,7 @@ export interface SmartIntentsInferenceConfig {
 }
 
 export class SmartIntentsResolver {
-  private smartIntentsApi: SmartIntentsApi
+  private smartIntentsClient: SmartIntentsClient
 
   constructor(
     public cmsApi: FlowBuilderApi,
@@ -27,7 +27,7 @@ export class SmartIntentsResolver {
     public smartIntentsConfig: SmartIntentsInferenceConfig,
     public userTextOrTranscript: string
   ) {
-    this.smartIntentsApi = new SmartIntentsApi(this.botContext)
+    this.smartIntentsClient = new SmartIntentsClient(this.botContext)
   }
 
   async getNodeByInput(): Promise<HtSmartIntentNode | undefined> {
@@ -52,7 +52,7 @@ export class SmartIntentsResolver {
     }
 
     try {
-      const response = await this.smartIntentsApi.getInference(params)
+      const response = await this.smartIntentsClient.getInference(params)
       const smartIntentNode = smartIntentNodes.find(
         smartIntentNode =>
           smartIntentNode.content.title === response.data.smart_intent_title
