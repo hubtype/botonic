@@ -192,7 +192,9 @@ describe('Campaign skip on do-nothing', () => {
       expect(mockSkipEmptyBotResponse).toHaveBeenCalledWith(
         CAMPAIGN_DO_NOTHING_ID
       )
-      expect(CampaignsClientMock).toHaveBeenCalledWith(getActionRequest(request))
+      expect(CampaignsClientMock).toHaveBeenCalledWith(
+        getActionRequest(request)
+      )
     })
 
     test('does not call skip when text precedes do-nothing in the same campaign turn', async () => {

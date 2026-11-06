@@ -1,35 +1,12 @@
-import type { BotContext } from '@botonic/core'
 import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import axios from 'axios'
 
 import { HUBTYPE_API_URL } from '../../src/constants'
 import { CampaignsClient } from '../../src/services/campaigns-client'
+import { createServiceClientBotContext } from '../helpers/service-client-test-context'
 
 jest.mock('axios')
 const axiosPostMock = axios.post as jest.MockedFunction<typeof axios.post>
-
-class BotonicPluginFlowBuilder {
-  getAccessToken = jest.fn(() => 'test-access-token')
-}
-
-function createBotContext(
-  overrides: { hubtypeApi?: string; botId?: string; userId?: string } = {}
-): BotContext {
-  return {
-    session: {
-      bot: { id: overrides.botId ?? 'bid1' },
-      user: { id: overrides.userId ?? 'uid1' },
-    } as BotContext['session'],
-    settings: (
-      overrides.hubtypeApi !== undefined
-        ? { HUBTYPE_API_URL: overrides.hubtypeApi }
-        : {}
-    ) as BotContext['settings'],
-    plugins: {
-      flowBuilder: new BotonicPluginFlowBuilder(),
-    } as BotContext['plugins'],
-  } as BotContext
-}
 
 describe('CampaignsClient', () => {
   beforeEach(() => {
@@ -47,7 +24,11 @@ describe('CampaignsClient', () => {
     axiosPostMock.mockResolvedValue({ data: responseBody })
 
     const client = new CampaignsClient(
-      createBotContext({ hubtypeApi, botId: 'bid1', userId: 'uid1' })
+      createServiceClientBotContext({
+        hubtypeApi,
+        botId: 'bid1',
+        userId: 'uid1',
+      })
     )
     const result = await client.skipEmptyBotResponse(campaignId)
 
@@ -73,7 +54,7 @@ describe('CampaignsClient', () => {
       },
     })
 
-    const client = new CampaignsClient(createBotContext())
+    const client = new CampaignsClient(createServiceClientBotContext())
     await client.skipEmptyBotResponse('campaign-id')
 
     expect(axiosPostMock).toHaveBeenCalledWith(
@@ -95,7 +76,9 @@ describe('CampaignsClient', () => {
     axiosPostMock.mockRejectedValue(notFoundError)
 
     const client = new CampaignsClient(
-      createBotContext({ hubtypeApi: 'https://api.test.hubtype.com' })
+      createServiceClientBotContext({
+        hubtypeApi: 'https://api.test.hubtype.com',
+      })
     )
 
     await expect(client.skipEmptyBotResponse('campaign-id')).rejects.toBe(
