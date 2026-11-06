@@ -1,5 +1,15 @@
 // TODO: This file contains all the legacy types we had in index.ts. After some refactors, we should be able to get rid of many of them.
 
+import type {
+  CampaignV1Context,
+  CampaignV2Context,
+  InputContext,
+} from './input-context'
+
+export type Campaign = CampaignV1Context
+
+export type CampaignV2 = CampaignV2Context
+
 export enum CASE_STATUS {
   WAITING = 'status_waiting',
   ATTENDING = 'status_attending',
@@ -149,13 +159,7 @@ export interface Input {
   payload?: string
   referral?: string
   type: InputType
-  context?: {
-    campaign?: Campaign
-    campaigns_v2?: CampaignV2[]
-    salesforce?: {
-      access_token: string
-    }
-  }
+  context?: InputContext
   transcript?: string
   message_id: string
   bot_interaction_id: string
@@ -210,23 +214,6 @@ interface ProductItem {
   quantity: number
   item_price: number
   currency: string
-}
-
-export interface Campaign {
-  id: string
-  name: string
-  status: string
-  start_date: string
-  end_date: string
-  bot_path: string
-  template_name: string
-}
-
-export interface CampaignV2 {
-  id: string
-  name: string
-  agent_context?: string
-  end_date?: string
 }
 
 export interface ContactInfo {

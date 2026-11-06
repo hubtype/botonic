@@ -1,6 +1,7 @@
 import { INPUT } from '@botonic/core'
 import styled from 'styled-components'
 
+import { useCampaignMessageAttributes } from '../contexts/campaign-message-attributes'
 import { renderComponent } from '../util/react'
 import { Message } from './message'
 
@@ -16,6 +17,7 @@ const serialize = locationProps => {
 
 export const Location = props => {
   const { lat, long } = props
+  const { campaignHtmlAttributes } = useCampaignMessageAttributes(props)
 
   const renderBrowser = () => {
     const locationUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${long}`
@@ -30,7 +32,7 @@ export const Location = props => {
 
   const renderNode = () => {
     return (
-      <message type={INPUT.LOCATION}>
+      <message type={INPUT.LOCATION} {...campaignHtmlAttributes}>
         <lat>{lat}</lat>
         <long>{long}</long>
       </message>

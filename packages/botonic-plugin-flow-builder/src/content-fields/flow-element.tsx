@@ -62,6 +62,10 @@ export class FlowElement extends ContentFieldsBase {
     }
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(botContext: BotContext): Promise<void> {
     await this.trackFlow(botContext)
     return

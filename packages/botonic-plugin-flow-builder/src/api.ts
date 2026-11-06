@@ -1,12 +1,7 @@
 import type { BotContext } from '@botonic/core'
 import axios from 'axios'
 
-import {
-  AI_AGENTS_FLOW_NAME,
-  PUSH_FLOW_PAYLOAD,
-  SEPARATOR,
-  UUID_REGEXP,
-} from './constants'
+import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
   type HtBotActionNode,
   type HtCaptureUserInputNode,
@@ -82,12 +77,22 @@ export class FlowBuilderApi {
     return this.getNodeById<HtNodeWithContent>(subFlow.start_node_id)
   }
 
-  getNodeByCampaignId<T extends HtNodeComponent>(id: string): T {
+  getNodeByCampaignId<T extends HtNodeComponent>(id: string): T | undefined {
     const campaign = this.flow.campaigns.find(campaign => campaign.id === id)
     if (!campaign) {
-      throw Error(`Campaign with id: '${id}' not found`)
+      return undefined
     }
-    return this.getNodeById<T>(campaign.start_node_id)
+
+    const node = this.flow.nodes.find(
+      flowNode => flowNode.id === campaign.start_node_id
+    )
+
+    if (!node) {
+      console.error(`Node with id: '${campaign.start_node_id}' not found`)
+      return undefined
+    }
+
+    return node as T
   }
 
   getNodeById<T extends HtNodeComponent>(id: string): T {
@@ -329,9 +334,5 @@ export class FlowBuilderApi {
       flowLocales,
       defaultLocaleCode
     ).resolve()
-  }
-
-  isPushFlowPayload(payload?: string): boolean {
-    return payload?.startsWith(PUSH_FLOW_PAYLOAD) ?? false
   }
 }

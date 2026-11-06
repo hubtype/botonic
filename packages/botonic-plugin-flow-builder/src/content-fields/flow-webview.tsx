@@ -95,6 +95,10 @@ export class FlowWebview extends ContentFieldsBase {
     await trackEvent(botContext, action, eventArgs)
   }
 
+  producesBotResponse(): boolean {
+    return false
+  }
+
   async processContent(): Promise<void> {
     return
   }
