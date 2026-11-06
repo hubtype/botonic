@@ -77,17 +77,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       options.disableAIAgentInFirstInteraction || false
   }
 
-  resolveFlowUrl(botContext: BotContext): string {
-    if (botContext.session.is_test_integration) {
-      return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${FlowBuilderJSONVersion.DRAFT}/`
-    }
-    return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${this.jsonVersion}/`
-  }
-
   async pre(botContext: BotContext): Promise<void> {
     this.botContext = botContext
     this.cmsApi = await FlowBuilderApi.create({
-      flowUrl: this.resolveFlowUrl(botContext),
       url: this.apiUrl,
       flow: this.flow,
       accessToken: this.getAccessToken(botContext.session),
