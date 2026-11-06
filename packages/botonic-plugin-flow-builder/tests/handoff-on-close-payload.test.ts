@@ -383,6 +383,7 @@ describe('plugin.pre resolveOnCloseHandoffPayload', () => {
     })
     const request = createRequest({
       input: { payload, type: INPUT.POSTBACK },
+      plugins: { flowBuilderPlugin },
     })
 
     await flowBuilderPlugin.pre(request)
@@ -397,6 +398,7 @@ describe('plugin.pre resolveOnCloseHandoffPayload', () => {
     })
     const request = createRequest({
       input: { payload, type: INPUT.POSTBACK },
+      plugins: { flowBuilderPlugin },
     })
 
     await flowBuilderPlugin.pre(request)

@@ -1,5 +1,4 @@
 import type { BotContext } from '@botonic/core'
-import axios from 'axios'
 
 import { AI_AGENTS_FLOW_NAME, SEPARATOR, UUID_REGEXP } from './constants'
 import {
@@ -20,6 +19,7 @@ import {
   type HtSmartIntentNode,
   type HtWhatsappRequestContactInfoNode,
 } from './content-fields/hubtype-fields'
+import { FlowBuilderClient } from './services/flow-builder-client'
 import {
   type FlowBuilderApiOptions,
   type PayloadParamsBase,
@@ -29,7 +29,6 @@ import { FlowLocale } from './utils/flow-locale'
 
 export class FlowBuilderApi {
   url: string
-  flowUrl: string
   flow: HtFlowBuilderData
   botContext: BotContext
 
@@ -40,33 +39,13 @@ export class FlowBuilderApi {
 
     newApi.url = options.url
     newApi.botContext = options.botContext
-    // TODO: Refactor later to combine logic from `FlowBuilderApi.create`, `resolveFlowUrl` and `getAccessToken` to be in one place
+    const flowBuilderClient = new FlowBuilderClient(options.botContext)
     if (process.env.NODE_ENV === ProcessEnvNodeEnvs.DEVELOPMENT) {
-      await newApi.updateSessionWithUserInfo(options.accessToken)
+      await flowBuilderClient.updateSessionWithUserInfo()
     }
-    const updatedRequest = newApi.botContext
-    newApi.flowUrl = options.flowUrl.replace(
-      '{bot_id}',
-      updatedRequest.session.bot.id
-    )
-    newApi.flow = options.flow ?? (await newApi.getFlow(options.accessToken))
+
+    newApi.flow = options.flow ?? (await flowBuilderClient.getFlow())
     return newApi
-  }
-
-  private async getFlow(token: string): Promise<HtFlowBuilderData> {
-    const { data } = await axios.get(this.flowUrl, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    return data as HtFlowBuilderData
-  }
-
-  private async updateSessionWithUserInfo(token: string) {
-    const url = `${this.url}/v1/flow_builder/user_info/`
-    const response = await axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    this.botContext.session.organization_id = response.data.organization_id
-    this.botContext.session.bot.id = response.data.bot_id
   }
 
   getNodeByFlowId(id: string): HtNodeWithContent {

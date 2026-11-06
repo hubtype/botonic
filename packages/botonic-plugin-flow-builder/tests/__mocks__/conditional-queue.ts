@@ -2,8 +2,8 @@ import { jest } from '@jest/globals'
 
 import {
   type AvailabilityData,
-  HubtypeQueuesApi,
-} from '../../src/services/hubtype-queues-api'
+  HubtypeQueuesClient,
+} from '../../src/services/hubtype-queues-client'
 
 interface QueueAvailabilityMockOptions {
   availableAgents?: number
@@ -17,7 +17,7 @@ export function mockQueueAvailability({
   name,
 }: QueueAvailabilityMockOptions) {
   const getQueueAvailabilitySpy = jest.spyOn(
-    HubtypeQueuesApi.prototype as any,
+    HubtypeQueuesClient.prototype as any,
     'getAvailability'
   )
 

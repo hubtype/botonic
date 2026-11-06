@@ -1,49 +1,41 @@
-import { EventAction, type EventCaptureUserInput } from '@botonic/core'
-import type { ActionRequest } from '@botonic/react'
-import axios from 'axios'
-
+import {
+  type BotContext,
+  EventAction,
+  type EventCaptureUserInput,
+} from '@botonic/core'
 import type { FlowBuilderApi } from '../api'
 import { FlowCaptureUserInput } from '../content-fields'
 import {
   HtAiValidationType,
   type HtCaptureUserInputNode,
 } from '../content-fields/hubtype-fields'
+import { CaptureUserInputClient } from '../services/capture-user-input-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
 } from '../tracking'
-import { getFlowBuilderPlugin } from '../utils/get-flow-builder-plugin'
 import { inputHasTextOrTranscript } from '../utils/input'
 
-interface AiCaptureResponseSuccess {
-  success: true
-  value: string
-}
-
-interface AiCaptureResponseFailure {
-  success: false
-}
-
-type AiCaptureResponse = AiCaptureResponseSuccess | AiCaptureResponseFailure
-
-export class CaptureUserInputApi {
+export class CaptureUserInputResolver {
   private cmsApi: FlowBuilderApi
-  private request: ActionRequest
+  private botContext: BotContext
   private textOrTranscript: string
+  private captureUserInputClient: CaptureUserInputClient
 
   constructor(
     cmsApi: FlowBuilderApi,
-    request: ActionRequest,
+    botContext: BotContext,
     textOrTranscript: string
   ) {
     this.cmsApi = cmsApi
-    this.request = request
+    this.botContext = botContext
     this.textOrTranscript = textOrTranscript
+    this.captureUserInputClient = new CaptureUserInputClient(botContext)
   }
 
   async getNextNodeId(): Promise<string | undefined> {
     if (
-      inputHasTextOrTranscript(this.request.input) &&
+      inputHasTextOrTranscript(this.botContext.input) &&
       this.cmsApi.shouldCaptureUserInput()
     ) {
       const captureUserInputNode = this.cmsApi.getCaptureUserInputNode()
@@ -63,7 +55,11 @@ export class CaptureUserInputApi {
       }
 
       const aiCaptureResponse =
-        await this.getAiCaptureResponse(captureUserInputNode)
+        await this.captureUserInputClient.getAiCaptureResponse(
+          this.textOrTranscript,
+          captureUserInputNode.content.field_name,
+          captureUserInputNode.content.ai_validation_instructions
+        )
       if (!aiCaptureResponse.success) {
         await this.trackUserInputCapture(captureUserInputNode, false)
         return captureUserInput.captureFailId
@@ -79,50 +75,13 @@ export class CaptureUserInputApi {
     return undefined
   }
 
-  async getAiCaptureResponse(
-    captureUserInputNode: HtCaptureUserInputNode
-  ): Promise<AiCaptureResponse> {
-    try {
-      const url = `${process.env.HUBTYPE_API_URL}/external/v1/capture_user_input/`
-      const data = {
-        field_name: captureUserInputNode.content.field_name,
-        validation_instructions:
-          captureUserInputNode.content.ai_validation_instructions,
-        user_input: this.textOrTranscript,
-      }
-      const pluginFlowBuilder = getFlowBuilderPlugin(this.request.plugins)
-      const token = pluginFlowBuilder.getAccessToken(this.request.session)
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-
-      const aiCaptureResponse = await axios.post<AiCaptureResponse>(
-        url,
-        data,
-        config
-      )
-
-      return aiCaptureResponse.data
-    } catch (error) {
-      console.warn('Error getting ai/capture_user_input', error)
-    }
-
-    return {
-      success: false,
-    }
-  }
-
   async trackUserInputCapture(
     captureUserInputNode: HtCaptureUserInputNode,
     captureSuccess: boolean
   ): Promise<void> {
     const { flowThreadId, flowId, flowName, flowNodeId, flowNodeContentId } =
       getCommonFlowContentEventArgsForContentId(
-        this.request,
+        this.botContext,
         captureUserInputNode.id
       )
     const event: EventCaptureUserInput = {
@@ -136,9 +95,9 @@ export class CaptureUserInputApi {
       fieldName: captureUserInputNode.content.field_name,
       userInput: this.textOrTranscript,
       captureSuccess,
-      messageId: this.request.input.message_id,
+      messageId: this.botContext.input.message_id,
     }
     const { action, ...eventArgs } = event
-    await trackEvent(this.request, action, eventArgs)
+    await trackEvent(this.botContext, action, eventArgs)
   }
 }

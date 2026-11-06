@@ -12,7 +12,7 @@ import {
 import { FlowHandoff } from '../src/content-fields'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields'
 import { getNextPayloadByUserInput } from '../src/user-input'
-import type { SmartIntentsInferenceConfig } from '../src/user-input/smart-intent'
+import type { SmartIntentsInferenceConfig } from '../src/user-input/smart-intent-resolver'
 import {
   asFlowBuilderApi,
   createMockCampaignExecution,

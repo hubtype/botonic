@@ -9,7 +9,7 @@ import { v7 as uuidv7 } from 'uuid'
 import { FlowBuilderApi } from './api'
 import { BotContextManager } from './bot-context-manager'
 import { CampaignExecution } from './campaign-execution'
-import { FLOW_BUILDER_API_URL_PROD, SEPARATOR } from './constants'
+import { HUBTYPE_API_URL, SEPARATOR } from './constants'
 import type { FlowContent } from './content-fields'
 import {
   type HtFlowBuilderData,
@@ -28,7 +28,7 @@ import {
   type RatingSubmittedInfo,
   type TrackEventFunction,
 } from './types'
-import type { SmartIntentsInferenceConfig } from './user-input/smart-intent'
+import type { SmartIntentsInferenceConfig } from './user-input/smart-intent-resolver'
 import { resolveGetAccessToken } from './utils/authentication'
 
 // TODO: Create a proper service to wrap all calls and allow api versioning
@@ -53,7 +53,7 @@ export default class BotonicPluginFlowBuilder implements Plugin {
   public campaignExecution: CampaignExecution
 
   constructor(options: BotonicPluginFlowBuilderOptions<ResolvedPlugins, any>) {
-    this.apiUrl = options.apiUrl || FLOW_BUILDER_API_URL_PROD
+    this.apiUrl = options.apiUrl || HUBTYPE_API_URL
     this.jsonVersion = options.jsonVersion || FlowBuilderJSONVersion.LATEST
     this.flow = options.flow
     this.getAccessToken = resolveGetAccessToken(options.getAccessToken)
@@ -77,17 +77,9 @@ export default class BotonicPluginFlowBuilder implements Plugin {
       options.disableAIAgentInFirstInteraction || false
   }
 
-  resolveFlowUrl(botContext: BotContext): string {
-    if (botContext.session.is_test_integration) {
-      return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${FlowBuilderJSONVersion.DRAFT}/`
-    }
-    return `${this.apiUrl}/v1/bot_flows/{bot_id}/versions/${this.jsonVersion}/`
-  }
-
   async pre(botContext: BotContext): Promise<void> {
     this.botContext = botContext
     this.cmsApi = await FlowBuilderApi.create({
-      flowUrl: this.resolveFlowUrl(botContext),
       url: this.apiUrl,
       flow: this.flow,
       accessToken: this.getAccessToken(botContext.session),

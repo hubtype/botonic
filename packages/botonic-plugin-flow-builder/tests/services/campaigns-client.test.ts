@@ -1,34 +1,14 @@
-import type { BotContext } from '@botonic/core'
 import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import axios from 'axios'
 
-import { FLOW_BUILDER_API_URL_PROD } from '../src/constants'
-import { CampaignsV2Api } from '../src/services/campaigns-v2-api'
+import { HUBTYPE_API_URL } from '../../src/constants'
+import { CampaignsClient } from '../../src/services/campaigns-client'
+import { createServiceClientBotContext } from '../helpers/service-client-test-context'
 
 jest.mock('axios')
 const axiosPostMock = axios.post as jest.MockedFunction<typeof axios.post>
 
-class BotonicPluginFlowBuilder {
-  getAccessToken = jest.fn(() => 'test-access-token')
-}
-
-function createBotContext(
-  overrides: { hubtypeApi?: string; botId?: string; userId?: string } = {}
-): BotContext {
-  const hubtypeApi = overrides.hubtypeApi
-  return {
-    session: {
-      bot: { id: overrides.botId ?? 'bid1' },
-      user: { id: overrides.userId ?? 'uid1' },
-      ...(hubtypeApi !== undefined ? { _hubtype_api: hubtypeApi } : {}),
-    } as BotContext['session'],
-    plugins: {
-      flowBuilder: new BotonicPluginFlowBuilder(),
-    } as BotContext['plugins'],
-  } as BotContext
-}
-
-describe('CampaignsV2Api', () => {
+describe('CampaignsClient', () => {
   beforeEach(() => {
     axiosPostMock.mockReset()
   })
@@ -43,10 +23,14 @@ describe('CampaignsV2Api', () => {
     }
     axiosPostMock.mockResolvedValue({ data: responseBody })
 
-    const api = new CampaignsV2Api(
-      createBotContext({ hubtypeApi, botId: 'bid1', userId: 'uid1' })
+    const client = new CampaignsClient(
+      createServiceClientBotContext({
+        hubtypeApi,
+        botId: 'bid1',
+        userId: 'uid1',
+      })
     )
-    const result = await api.skipEmptyBotResponse(campaignId)
+    const result = await client.skipEmptyBotResponse(campaignId)
 
     expect(axiosPostMock).toHaveBeenCalledWith(
       `${hubtypeApi}/external/v2/conversational_apps/bid1/users/uid1/skip_campaign/`,
@@ -70,13 +54,18 @@ describe('CampaignsV2Api', () => {
       },
     })
 
-    const api = new CampaignsV2Api(createBotContext())
-    await api.skipEmptyBotResponse('campaign-id')
+    const client = new CampaignsClient(createServiceClientBotContext())
+    await client.skipEmptyBotResponse('campaign-id')
 
     expect(axiosPostMock).toHaveBeenCalledWith(
-      `${FLOW_BUILDER_API_URL_PROD}/external/v2/conversational_apps/bid1/users/uid1/skip_campaign/`,
+      `${HUBTYPE_API_URL}/external/v2/conversational_apps/bid1/users/uid1/skip_campaign/`,
       { campaign_id: 'campaign-id' },
-      expect.any(Object)
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer test-access-token',
+        },
+      }
     )
   })
 
@@ -86,11 +75,13 @@ describe('CampaignsV2Api', () => {
     })
     axiosPostMock.mockRejectedValue(notFoundError)
 
-    const api = new CampaignsV2Api(
-      createBotContext({ hubtypeApi: 'https://api.test.hubtype.com' })
+    const client = new CampaignsClient(
+      createServiceClientBotContext({
+        hubtypeApi: 'https://api.test.hubtype.com',
+      })
     )
 
-    await expect(api.skipEmptyBotResponse('campaign-id')).rejects.toBe(
+    await expect(client.skipEmptyBotResponse('campaign-id')).rejects.toBe(
       notFoundError
     )
   })

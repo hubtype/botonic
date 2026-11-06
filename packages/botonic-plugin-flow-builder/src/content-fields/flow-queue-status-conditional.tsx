@@ -5,7 +5,7 @@ import {
 } from '@botonic/core'
 
 import { getArgumentsByLocale } from '../functions'
-import { HubtypeQueuesApi } from '../services/hubtype-queues-api'
+import { HubtypeQueuesClient } from '../services/hubtype-queues-client'
 import {
   getCommonFlowContentEventArgsForContentId,
   trackEvent,
@@ -30,6 +30,7 @@ type ConditionalQueueStatusArgs = {
   queueId: string
   queueName: string
   checkAvailableAgents: boolean
+  botContext: BotContext
 }
 
 export class FlowQueueStatusConditional extends ContentFieldsBase {
@@ -43,19 +44,23 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
 
   static async fromHubtypeCMS(
     component: HtQueueStatusConditionalNode,
-    locale: string
+    locale: string,
+    botContext: BotContext
   ): Promise<FlowQueueStatusConditional> {
     const newChannelConditional = new FlowQueueStatusConditional(component.id)
     newChannelConditional.code = component.code
     newChannelConditional.arguments = component.content.arguments
     newChannelConditional.resultMapping = component.content
       .result_mapping as HtQueueStatusConditionalResultMapping
-    await newChannelConditional.setConditionalResult(locale)
+    await newChannelConditional.setConditionalResult(botContext, locale)
 
     return newChannelConditional
   }
 
-  async setConditionalResult(locale: string): Promise<void> {
+  async setConditionalResult(
+    botContext: BotContext,
+    locale: string
+  ): Promise<void> {
     const args = getArgumentsByLocale(this.arguments, locale)
 
     const queueId = args.find(arg => arg.name === 'queue_id')?.value || ''
@@ -68,6 +73,7 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
       queueId,
       queueName,
       checkAvailableAgents,
+      botContext,
     })
 
     const conditionalResult = this.resultMapping.find(
@@ -87,9 +93,13 @@ export class FlowQueueStatusConditional extends ContentFieldsBase {
     queueId,
     checkAvailableAgents,
     queueName,
+    botContext,
   }: ConditionalQueueStatusArgs): Promise<QueueStatusResult> {
-    const queuesApi = new HubtypeQueuesApi(queueId, checkAvailableAgents)
-    const data = await queuesApi.getAvailability()
+    const queuesClient = new HubtypeQueuesClient(botContext)
+    const data = await queuesClient.getAvailability(
+      queueId,
+      checkAvailableAgents
+    )
     this.queueId = queueId
     this.queueName = queueName
     this.isQueueOpen = data.open

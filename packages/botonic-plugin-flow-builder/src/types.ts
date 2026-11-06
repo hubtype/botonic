@@ -63,7 +63,6 @@ export type ContentFilter<
 
 export interface FlowBuilderApiOptions {
   url: string
-  flowUrl: string
   flow?: HtFlowBuilderData
   accessToken: string
   botContext: BotContext

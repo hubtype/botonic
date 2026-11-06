@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 
-import type { SkipEmptyBotResponseResult } from '../../src/services/campaigns-v2-api'
+import type { SkipEmptyBotResponseResult } from '../../src/services/campaigns-client'
 
 export const mockSkipEmptyBotResponse = jest.fn<
   (campaignId: string) => Promise<SkipEmptyBotResponseResult>
@@ -10,9 +10,9 @@ export const mockSkipEmptyBotResponse = jest.fn<
   skip_reason: 'empty_bot_response',
 }))
 
-export function getCampaignsV2ApiJestMock() {
+export function getCampaignsClientJestMock() {
   return {
-    CampaignsV2Api: jest.fn().mockImplementation(() => ({
+    CampaignsClient: jest.fn().mockImplementation(() => ({
       skipEmptyBotResponse: mockSkipEmptyBotResponse,
     })),
   }
