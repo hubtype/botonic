@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { COLORS, ROLES } from '../constants'
 import { staticAsset } from '../util/environment'
 import type { VideoProps } from './index-types'
+import { serializeMedia, withMediaCaption } from './media-caption'
 import { Message } from './message'
 
 const StyledVideo = styled.video`
@@ -14,25 +15,26 @@ const StyledVideo = styled.video`
   margin: 10px;
 `
 
-const serialize = (videoProps: { src: string }) => {
-  return { video: videoProps.src }
-}
+const serialize = (videoProps: { src: string; caption?: string }) =>
+  serializeMedia('video', videoProps)
 
 export const Video = (props: VideoProps) => {
-  props = { ...props, src: staticAsset(props.src) }
-  let content = props.children
+  const { caption, ...messageProps } = props
+  const resolved = { ...messageProps, src: staticAsset(messageProps.src) }
+  let content = resolved.children
   if (isBrowser()) {
     content = (
       <StyledVideo controls>
-        <source src={props.src} />
+        <source src={resolved.src} />
       </StyledVideo>
     )
   }
+  content = withMediaCaption(content, caption)
   return (
     <Message
       role={ROLES.VIDEO_MESSAGE}
-      json={serialize(props)}
-      {...props}
+      json={serialize({ src: resolved.src, caption })}
+      {...resolved}
       type={INPUT.VIDEO}
     >
       {content}
