@@ -6,6 +6,7 @@ import { ROLES, WEBCHAT } from '../constants'
 import { staticAsset } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
 import type { ImageProps } from './index-types'
+import { serializeMedia, withMediaCaption } from './media-caption'
 import { Message } from './message'
 
 interface StyledImageProps {
@@ -20,16 +21,16 @@ const StyledImage = styled.img<StyledImageProps>`
   cursor: ${({ hasPreviewer }) => (hasPreviewer ? 'pointer' : 'auto')};
 `
 
-const serialize = (imageProps: { src: string }) => {
-  return { image: imageProps.src }
-}
+const serialize = (imageProps: { src: string; caption?: string }) =>
+  serializeMedia('image', imageProps)
 
 export const Image = (props: ImageProps) => {
-  props = props.input?.data
-    ? { ...props, src: props.input.data }
-    : { ...props, src: staticAsset(props.src) }
+  const { caption, ...messageProps } = props
+  const resolved = messageProps.input?.data
+    ? { ...messageProps, src: messageProps.input.data }
+    : { ...messageProps, src: staticAsset(messageProps.src) }
 
-  let content = props.children
+  let content = resolved.children
 
   const [isPreviewerOpened, setIsPreviewerOpened] = useState(false)
   const openPreviewer = () => setIsPreviewerOpened(true)
@@ -44,13 +45,13 @@ export const Image = (props: ImageProps) => {
     content = (
       <>
         <StyledImage
-          src={props.src}
+          src={resolved.src}
           onClick={openPreviewer}
           hasPreviewer={Boolean(ImagePreviewer)}
         />
         {ImagePreviewer && (
           <ImagePreviewer
-            src={props.src}
+            src={resolved.src}
             isPreviewerOpened={isPreviewerOpened}
             openPreviewer={openPreviewer}
             closePreviewer={closePreviewer}
@@ -60,11 +61,13 @@ export const Image = (props: ImageProps) => {
     )
   }
 
+  content = withMediaCaption(content, caption)
+
   return (
     <Message
       role={ROLES.IMAGE_MESSAGE}
-      json={serialize(props)}
-      {...props}
+      json={serialize({ src: resolved.src, caption })}
+      {...resolved}
       type={INPUT.IMAGE}
     >
       {content}

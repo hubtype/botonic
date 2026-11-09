@@ -6,6 +6,7 @@ import { ROLES, WEBCHAT } from '../constants'
 import { staticAsset } from '../util/environment'
 import { WebchatContext } from '../webchat/context'
 import type { DocumentProps } from './index-types'
+import { serializeMedia, withMediaCaption } from './media-caption'
 import { Message } from './message'
 
 const StyledButton = styled.a`
@@ -26,14 +27,14 @@ const StyledButton = styled.a`
   }
 `
 
-const serialize = (documentProps: { src: string }) => {
-  return { document: documentProps.src }
-}
+const serialize = (documentProps: { src: string; caption?: string }) =>
+  serializeMedia('document', documentProps)
 
 export const Document = (props: DocumentProps) => {
-  props = { ...props, src: staticAsset(props.src) }
+  const { caption, ...messageProps } = props
+  const resolved = { ...messageProps, src: staticAsset(messageProps.src) }
 
-  let content = props.children
+  let content = resolved.children
 
   const { getThemeProperty } = useContext(WebchatContext)
   let documentDownload = getThemeProperty(
@@ -41,13 +42,13 @@ export const Document = (props: DocumentProps) => {
     {}
   )
   if (typeof documentDownload === 'function') {
-    documentDownload = documentDownload(props.from)
+    documentDownload = documentDownload(resolved.from)
   }
 
   if (isBrowser()) {
     content = (
       <StyledButton
-        href={props.src}
+        href={resolved.src}
         target='_blank'
         rel='noreferrer'
         style={{
@@ -59,11 +60,13 @@ export const Document = (props: DocumentProps) => {
     )
   }
 
+  content = withMediaCaption(content, caption)
+
   return (
     <Message
       role={ROLES.DOCUMENT_MESSAGE}
-      json={serialize(props)}
-      {...props}
+      json={serialize({ src: resolved.src, caption })}
+      {...resolved}
       type={INPUT.DOCUMENT}
     >
       {content}

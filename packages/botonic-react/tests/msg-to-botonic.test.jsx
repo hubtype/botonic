@@ -1,14 +1,56 @@
 import {
+  Audio,
   Button,
   Carousel,
+  Document,
   Element,
+  Image,
   Pic,
   Reply,
   Subtitle,
   Text,
   Title,
+  Video,
 } from '../src/components'
 import { msgsToBotonic } from '../src/msg-to-botonic'
+
+const MEDIA_URL = 'https://example.com/file'
+
+describe('msgsToBotonic media captions', () => {
+  test.each([
+    ['image', Image],
+    ['video', Video],
+    ['audio', Audio],
+    ['document', Document],
+  ])('maps %s with sibling caption from Pusher payload', (type, Component) => {
+    const msg = {
+      type,
+      data: MEDIA_URL,
+      caption: 'Caption from agent',
+    }
+    const element = msgsToBotonic(msg)
+    expect(element).toEqual(
+      <Component {...msg} src={MEDIA_URL} caption='Caption from agent' />
+    )
+  })
+
+  test('image without caption', () => {
+    const msg = { type: 'image', data: MEDIA_URL }
+    expect(msgsToBotonic(msg)).toEqual(
+      <Image {...msg} src={MEDIA_URL} caption={undefined} />
+    )
+  })
+
+  test('rehydrated image keeps caption from serialized data', () => {
+    const msg = {
+      type: 'image',
+      data: { image: MEDIA_URL, caption: 'Stored caption' },
+    }
+    expect(msgsToBotonic(msg)).toEqual(
+      <Image {...msg} src={MEDIA_URL} caption='Stored caption' />
+    )
+  })
+})
 
 describe('msgsToBotonic carousel', () => {
   test('with pic, title & subtitle', () => {
