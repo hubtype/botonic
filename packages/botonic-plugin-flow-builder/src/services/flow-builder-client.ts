@@ -35,7 +35,6 @@ export class FlowBuilderClient extends HubtypeClientBase {
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${this.accessToken}` },
     })
-    console.log('updateSessionWithUserInfo:', this.botContext.session.bot.id)
 
     this.botContext.session.organization_id = response.data.organization_id
     this.botContext.session.bot.id = response.data.bot_id
