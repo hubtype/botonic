@@ -15,6 +15,7 @@ All notable changes to Botonic will be documented in this file.
 ### Added
 
 - [PR-3300](https://github.com/hubtype/botonic/pull/3300): Create new component to show `update_variables` event.
+- [PR-3306](https://github.com/hubtype/botonic/pull/3306): Webchat renders optional `caption` text below image, video, audio, and document messages.
 
 ### Changed
 
