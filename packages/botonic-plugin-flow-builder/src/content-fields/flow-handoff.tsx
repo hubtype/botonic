@@ -27,6 +27,7 @@ export class FlowHandoff extends ContentFieldsBase {
   public discardedByAgent?: HtNodeLink
   public discardedByUser?: HtNodeLink
   public discardedBySystem?: HtNodeLink
+  public discardedByBulk?: HtNodeLink
   public isTestIntegration: boolean
 
   static fromHubtypeCMS(
@@ -46,6 +47,7 @@ export class FlowHandoff extends ContentFieldsBase {
     newHandoff.discardedByAgent = cmsHandoff.content.discarded_by_agent
     newHandoff.discardedByUser = cmsHandoff.content.discarded_by_user
     newHandoff.discardedBySystem = cmsHandoff.content.discarded_by_system
+    newHandoff.discardedByBulk = cmsHandoff.content.discarded_by_bulk
     newHandoff.handoffAutoAssign = cmsHandoff.content.has_auto_assign
     newHandoff.hasQueuePositionChangedNotificationsEnabled =
       cmsHandoff.content.has_queue_position_changed_notifications_enabled
@@ -93,6 +95,12 @@ export class FlowHandoff extends ContentFieldsBase {
         return this.discardedBySystem.id
       }
       console.error('No discarded by system target found')
+    }
+    if (contactReasons.some(reason => reason.name === DiscardType.ByBulk)) {
+      if (this.discardedByBulk?.id) {
+        return this.discardedByBulk.id
+      }
+      console.error('No discarded by bulk target found')
     }
     if (this.resolvedByAgent?.id) {
       return this.resolvedByAgent.id
