@@ -1,29 +1,20 @@
-# Changelog
+# Changelog @botonic/plugin-flow-builder
 
-All notable changes to Botonic will be documented in this file.
-
-## [Unreleased]
-
-
-<details>
-  <summary>
-    Changes that have landed in master-lts but are not yet released.
-    Click to see more.
-  </summary>
-  
-## [0.58.0] - 2026-mm-dd
+## [Next release] - yyyy-mm-dd
 
 ### Added
-
-- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
-- [PR-3303](https://github.com/hubtype/botonic/pull/3303): Resolve handoff target with `discarded_by_bulk` contact reason.
-- [PR-3297](https://github.com/hubtype/botonic/pull/3297): When resolve a `push-flow` payload, add campaign_id in first campaign message or mark campaign as skipped when no sent any message.
 
 ### Changed
 
 ### Fixed
 
-</details>
+## [0.58.0] - 2026-11-10
+
+### Added
+
+- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Add new `update_variables` node.
+- [PR-3303](https://github.com/hubtype/botonic/pull/3303): Resolve handoff target with `discarded_by_bulk` contact reason.
+- [PR-3297](https://github.com/hubtype/botonic/pull/3297): When resolve a `push-flow` payload, add campaign_id in first campaign message or mark campaign as skipped when no sent any message finishing with a `do-nothing`.
 
 ## [0.57.1] - 2026-10-27
 
