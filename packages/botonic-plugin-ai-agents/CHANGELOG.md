@@ -1,24 +1,12 @@
-# Changelog
+# Changelog @botonic/plugin-ai-agents
 
-All notable changes to Botonic will be documented in this file.
-
-## [Unreleased]
-
-<details>
-  <summary>
-    Changes that have landed in master but are not yet released.
-    Click to see more.
-  </summary>
-
-## [0.56.x] - 2026-mm-dd
+## [Next release] - yyyy-mm-dd
 
 ### Added
 
 ### Changed
 
 ### Fixed
-
-</details>
 
 ## [0.56.0] - 2026-09-22
 
