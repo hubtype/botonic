@@ -58,6 +58,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
         key={msg.key}
         {...msg}
         src={msg.data.image !== undefined ? msg.data.image : msg.data}
+        caption={msg.caption || msg.data?.caption}
       />
     )
   } else if (isVideo(msg)) {
@@ -65,6 +66,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
       <Video
         {...msg}
         src={msg.data.video !== undefined ? msg.data.video : msg.data}
+        caption={msg.caption || msg.data?.caption}
       />
     )
   } else if (isAudio(msg)) {
@@ -72,6 +74,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
       <Audio
         {...msg}
         src={msg.data.audio !== undefined ? msg.data.audio : msg.data}
+        caption={msg.caption || msg.data?.caption}
       />
     )
   } else if (isDocument(msg)) {
@@ -79,6 +82,7 @@ export function msgToBotonic(msg, customMessageTypes = []) {
       <Document
         {...msg}
         src={msg.data.document !== undefined ? msg.data.document : msg.data}
+        caption={msg.caption || msg.data?.caption}
       />
     )
   } else if (isLocation(msg)) {

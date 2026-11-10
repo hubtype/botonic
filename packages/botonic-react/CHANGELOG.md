@@ -1,26 +1,19 @@
-# Changelog
+# Changelog @botonic/react
 
-All notable changes to Botonic will be documented in this file.
-
-## [Unreleased]
-
-<details>
-  <summary>
-    Changes that have landed in master-lts but are not yet released.
-    Click to see more.
-  </summary>
-
-## [0.58.0] - 2026-mm-dd
+## [Next release] - yyyy-mm-dd
 
 ### Added
-
-- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Create new component to show `update_variables` event.
 
 ### Changed
 
 ### Fixed
 
-</details>
+## [0.58.0] - 2026-11-10
+
+### Added
+
+- [PR-3300](https://github.com/hubtype/botonic/pull/3300): Create new component to show `update_variables` event.
+- [PR-3306](https://github.com/hubtype/botonic/pull/3306): Webchat renders optional `caption` text below image, video, audio, and document messages.
 
 ## [0.57.0] - 2026-10-05
 

@@ -69,21 +69,25 @@ export interface ReplyProps {
 
 export interface ImageProps extends MessageProps {
   src: string
+  caption?: string
   input?: { data: string }
 }
 
 export interface VideoProps extends MessageProps {
   src: string
+  caption?: string
   input?: { data: string }
 }
 
 export interface AudioProps extends MessageProps {
   src: string
+  caption?: string
   input?: { data: string }
 }
 
 export interface DocumentProps extends MessageProps {
   src: string
+  caption?: string
   input?: { data: string }
   from?: any
 }
