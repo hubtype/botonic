@@ -149,6 +149,7 @@ export class CoreBot {
         HUBTYPE_ACCESS_TOKEN: '',
         LITELLM_API_KEY: '',
         AZURE_OPENAI_API_KEY: '',
+        TINYBIRD_ACCESS_TOKEN: '',
         custom: {},
       }
     }

@@ -28,6 +28,7 @@ export const TEST_DEFAULTS = {
   LITELLM_API_KEY: 'testLiteLLMAPIKey', // pragma: allowlist secret
   AZURE_OPENAI_API_KEY: 'testAzureOpenAIAPIKey', // pragma: allowlist secret
   ACCESS_TOKEN: 'fake_access_token',
+  TINYBIRD_ACCESS_TOKEN: 'testTinybirdAccessToken', // pragma: allowlist secret
   HUBTYPE_API_HOST: 'https://api.hubtype.com',
   FLOW_THREAD_ID: 'testFlowThreadId',
   BOT_ID: 'testBotId',
@@ -67,6 +68,7 @@ export function createTestSecrets(overrides?: Partial<BotSecrets>): BotSecrets {
     HUBTYPE_ACCESS_TOKEN: TEST_DEFAULTS.HUBTYPE_ACCESS_TOKEN,
     LITELLM_API_KEY: TEST_DEFAULTS.LITELLM_API_KEY,
     AZURE_OPENAI_API_KEY: TEST_DEFAULTS.AZURE_OPENAI_API_KEY,
+    TINYBIRD_ACCESS_TOKEN: TEST_DEFAULTS.TINYBIRD_ACCESS_TOKEN,
     custom: {},
     ...overrides,
   }
@@ -213,6 +215,7 @@ function isFullSecrets(v: Partial<BotSecrets> | BotSecrets): v is BotSecrets {
     'HUBTYPE_ACCESS_TOKEN' in v &&
     'LITELLM_API_KEY' in v &&
     'AZURE_OPENAI_API_KEY' in v &&
+    'TINYBIRD_ACCESS_TOKEN' in v &&
     'custom' in v
   )
 }
