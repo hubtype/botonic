@@ -355,6 +355,7 @@ export interface BotSecrets {
   HUBTYPE_ACCESS_TOKEN: string
   LITELLM_API_KEY: string
   AZURE_OPENAI_API_KEY: string
+  TINYBIRD_ACCESS_TOKEN: string
   custom: Record<string, any>
 }
 
