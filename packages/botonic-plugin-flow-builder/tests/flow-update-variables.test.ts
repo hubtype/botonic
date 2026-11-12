@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, jest, test } from '@jest/globals'
 import { FlowUpdateVariables } from '../src/content-fields/flow-update-variables'
 import { HtNodeWithContentType } from '../src/content-fields/hubtype-fields/node-types'
 import type { HtUpdateVariablesNode } from '../src/content-fields/hubtype-fields/update-variables'
-import { ContactInfoFieldsClient } from '../src/services/contact-info-fields-api'
+import { ContactInfoFieldsClient } from '../src/services/contact-info-fields-client'
 import { ProcessEnvNodeEnvs, type TrackEventFunction } from '../src/types'
 import { getFlowBuilderPlugin } from '../src/utils/get-flow-builder-plugin'
 import { trackEventMock } from './__mocks__/track-event'
@@ -16,17 +16,11 @@ import {
 } from './helpers/utils'
 
 const mockUpdate = jest.fn(
-  async (
-    _chatId: string,
-    _fieldName: string,
-    _value: string | number | boolean
-  ) => undefined
+  async (_fieldName: string, _value: string | number | boolean) => undefined
 )
-const mockDelete = jest.fn(
-  async (_chatId: string, _fieldName: string) => undefined
-)
+const mockDelete = jest.fn(async (_fieldName: string) => undefined)
 
-jest.mock('../src/services/contact-info-fields-api', () => ({
+jest.mock('../src/services/contact-info-fields-client', () => ({
   ContactInfoFieldsClient: jest.fn().mockImplementation(() => ({
     update: mockUpdate,
     delete: mockDelete,
@@ -97,7 +91,7 @@ describe('FlowUpdateVariables.fromHubtypeCMS', () => {
     expect(botContext.session.user.contact_info).toEqual([
       { name: 'email', type: 'string', value: 'a@b.com' },
     ])
-    expect(mockUpdate).toHaveBeenCalledWith('uid1', 'email', 'a@b.com')
+    expect(mockUpdate).toHaveBeenCalledWith('email', 'a@b.com')
     expect(mockDelete).not.toHaveBeenCalled()
     expect(ContactInfoFieldsClientMock).toHaveBeenCalledTimes(1)
   })
@@ -114,7 +108,7 @@ describe('FlowUpdateVariables.fromHubtypeCMS', () => {
     await FlowUpdateVariables.fromHubtypeCMS(node, botContext)
 
     expect(botContext.session.user.contact_info).toEqual([])
-    expect(mockDelete).toHaveBeenCalledWith('uid1', 'email')
+    expect(mockDelete).toHaveBeenCalledWith('email')
     expect(mockUpdate).not.toHaveBeenCalled()
     expect(ContactInfoFieldsClientMock).toHaveBeenCalledTimes(1)
   })

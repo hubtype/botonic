@@ -1,7 +1,7 @@
 export {
-  getCampaignsV2ApiJestMock,
+  getCampaignsClientJestMock,
   mockSkipEmptyBotResponse,
-} from './campaigns-v2-api'
+} from './campaigns-client'
 export { mockQueueAvailability } from './conditional-queue'
 export { mockSmartIntent } from './smart-intent'
 export { trackEventMock } from './track-event'

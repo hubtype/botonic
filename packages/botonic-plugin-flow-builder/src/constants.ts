@@ -1,4 +1,4 @@
-export const FLOW_BUILDER_API_URL_PROD =
+export const HUBTYPE_API_URL =
   process.env.HUBTYPE_API_URL || 'https://api.hubtype.com'
 export const SEPARATOR = '|'
 export const SOURCE_INFO_SEPARATOR = `${SEPARATOR}source_`

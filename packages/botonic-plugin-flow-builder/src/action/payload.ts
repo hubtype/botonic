@@ -1,4 +1,4 @@
-import { EventAction, type EventFeedback, storeCaseRating } from '@botonic/core'
+import { EventAction, type EventFeedback, HubtypeClient } from '@botonic/core'
 import { v7 as uuid } from 'uuid'
 import { AGENT_RATING_PAYLOAD, PUSH_FLOW_PAYLOAD } from '../constants'
 import type { HtNodeWithContent } from '../content-fields/hubtype-fields'
@@ -56,7 +56,8 @@ async function resolveRatingPayload(
       value,
     }
 
-    await storeCaseRating(request.session, value)
+    const hubtypeClient = new HubtypeClient(request)
+    await hubtypeClient.storeCaseRating(value)
     await trackEvent(request, EventAction.FeedbackCase, event)
   }
 

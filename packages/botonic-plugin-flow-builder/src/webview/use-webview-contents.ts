@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-import { FLOW_BUILDER_API_URL_PROD } from '../constants'
+import { HUBTYPE_API_URL } from '../constants'
 import { FlowBuilderJSONVersion } from '../types'
 import {
   type MapContentsType,
@@ -14,7 +14,7 @@ import {
 } from './types'
 
 export function useWebviewContents<T extends MapContentsType>({
-  apiUrl = FLOW_BUILDER_API_URL_PROD,
+  apiUrl = HUBTYPE_API_URL,
   version = FlowBuilderJSONVersion.LATEST,
   botId,
   webviewId,

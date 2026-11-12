@@ -1,32 +1,5 @@
-import axios from 'axios'
-
 import { PATH_PAYLOAD_IDENTIFIER } from './constants'
-import {
-  BotonicAction,
-  type BotonicActionType,
-  EVENT_FORMAT_VERSION,
-  type Session,
-} from './models'
-
-const HUBTYPE_API_URL = 'https://api.hubtype.com'
-
-export interface HubtypeAgentsInfo {
-  attending_count: number
-  email: string
-  idle_count: number
-  last_message_sent: string
-  status: string
-}
-
-export interface BackendContext {
-  timeoutMs: number
-}
-
-export interface VacationRange {
-  end_date: number // timestamp
-  id: number
-  start_date: number // timestamp
-}
+import { BotonicAction, EVENT_FORMAT_VERSION, type Session } from './models'
 
 export type HandoffExtraData = {
   language?: string
@@ -53,32 +26,6 @@ export enum HelpdeskEvent {
   StatusChanged = 'status_changed',
   AgentMessageCreated = 'agent_message_created',
   QueuePositionChanged = 'queue_position_changed',
-}
-
-function contextDefaults(context: any): BackendContext {
-  return {
-    timeoutMs: context.timeoutMs || 10000,
-  }
-}
-
-export async function getOpenQueues(
-  session: Session,
-  context = {}
-): Promise<{ queues: string[] }> {
-  //be aware of https://github.com/axios/axios/issues/1543
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const endpointUrl = `${baseUrl}/v1/queues/get_open_queues/`
-  context = contextDefaults(context)
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'post',
-    url: endpointUrl,
-    data: { bot_id: session.bot.id },
-    timeout: (context as BackendContext).timeoutMs,
-  })
-  return resp.data
 }
 
 export class HandOffBuilder {
@@ -200,7 +147,15 @@ export class HandOffBuilder {
 /**
  * @deprecated use {@link HandOffBuilder} class instead
  */
-export async function humanHandOff(session, queueNameOrId = '', onFinish) {
+
+export async function humanHandOff(
+  session: Session,
+  queueNameOrId?: string,
+  onFinish?: {
+    path?: string
+    payload?: string
+  }
+): Promise<void> {
   const builder = new HandOffBuilder(session)
   if (queueNameOrId) {
     builder.withQueue(queueNameOrId)
@@ -289,86 +244,4 @@ async function _humanHandOff(
     params.subscribe_helpdesk_events = subscribeHelpdeskEvents
   }
   session._botonic_action = `${BotonicAction.CreateCase}:${JSON.stringify(params)}`
-}
-
-export async function storeCaseRating(
-  session: Session,
-  rating: number,
-  context: any = {}
-): Promise<{ status: string }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const chatId = session.user.id
-  context = contextDefaults(context)
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'post',
-    url: `${baseUrl}/v1/chats/${chatId}/store_case_rating/`,
-    data: { chat_id: chatId, rating },
-    timeout: (context as BackendContext).timeoutMs,
-  })
-  return resp.data
-}
-
-export async function getAvailableAgentsByQueue(
-  session: Session,
-  queueId: string
-): Promise<{ agents: string[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'post',
-    url: `${baseUrl}/v1/queues/${queueId}/get_available_agents/`,
-  })
-  return resp.data
-}
-
-export async function getAvailableAgents(
-  session: Session
-): Promise<{ agents: HubtypeAgentsInfo[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const botId = session.bot.id
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'post',
-    url: `${baseUrl}/v1/bots/${botId}/get_agents/`,
-  })
-  return resp.data
-}
-
-export async function getAgentVacationRanges(
-  session: Session,
-  { agentId, agentEmail }: { agentId?: string; agentEmail?: string }
-): Promise<{ vacation_ranges: VacationRange[] }> {
-  const baseUrl = session._hubtype_api || HUBTYPE_API_URL
-  const botId = session.bot.id
-  const resp = await axios({
-    headers: {
-      Authorization: `Bearer ${session._access_token}`,
-    },
-    method: 'get',
-    url: `${baseUrl}/v1/bots/${botId}/get_agent_vacation_ranges/`,
-    params: { agent_id: agentId, agent_email: agentEmail },
-  })
-  return resp.data
-}
-
-export function cancelHandoff(
-  session: Session,
-  typification: string | null = null
-): void {
-  let action: BotonicActionType = BotonicAction.DiscardCase
-  if (typification) {
-    action = `${action}:${JSON.stringify({ typification })}`
-  }
-  session._botonic_action = action
-}
-
-export function deleteUser(session: Session): void {
-  session._botonic_action = BotonicAction.DeleteUser
 }

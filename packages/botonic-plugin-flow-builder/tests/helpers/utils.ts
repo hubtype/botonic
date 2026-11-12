@@ -100,6 +100,7 @@ export function createRequest({
       organization: 'orgTest',
       organizationId: 'orgIdTest',
       botId: 'bid1',
+      _access_token: 'fake_token',
       user: {
         id: 'uid1',
         provider,
