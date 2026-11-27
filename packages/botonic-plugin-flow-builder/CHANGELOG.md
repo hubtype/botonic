@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- [PR-3309](https://github.com/hubtype/botonic/pull/3309): Custom conditionals resolve undefined variables with default target.
+
 ## [0.58.0] - 2026-11-10
 
 ### Added
