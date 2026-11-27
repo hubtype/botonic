@@ -154,6 +154,35 @@ describe('FlowCustomConditionalV2', () => {
       expect(customConditional.resolvedOperator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
+
+    test('should use default target when string variable is undefined', () => {
+      const node = createMockCustomConditionalV2Node({
+        type: VariableFormat.String,
+        key_path: 'missingBookingType',
+        conditions: [
+          {
+            operator: StringConditionOperator.NotEqualsTo,
+            value: 'tourist',
+            target: touristTarget,
+          },
+          {
+            operator: StringConditionOperator.Contains,
+            value: 'book',
+            target: businessTarget,
+          },
+        ],
+        default_target: defaultTarget,
+      })
+
+      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+        node,
+        createBotContext()
+      )
+
+      expect(customConditional.customResult).toBe('default')
+      expect(customConditional.resolvedOperator).toBe('')
+      expect(customConditional.followUp).toEqual(defaultTarget)
+    })
   })
 
   describe('number conditions', () => {
@@ -301,6 +330,37 @@ describe('FlowCustomConditionalV2', () => {
       expect(customConditional.resolvedOperator).toBe('')
       expect(customConditional.followUp).toEqual(defaultTarget)
     })
+
+    test('should use default target when number variable is undefined', () => {
+      const node = createMockCustomConditionalV2Node({
+        type: VariableFormat.Number,
+        key_path: 'missingBagsAdded',
+        conditions: [
+          {
+            operator: NumberConditionOperator.NotEqualsTo,
+            value: 0,
+            target: twoBagsTarget,
+          },
+          {
+            operator: NumberConditionOperator.NotBetween,
+            value: 0,
+            min: 1,
+            max: 3,
+            target: betweenTarget,
+          },
+        ],
+        default_target: defaultTarget,
+      })
+
+      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+        node,
+        createBotContext()
+      )
+
+      expect(customConditional.customResult).toBe('default')
+      expect(customConditional.resolvedOperator).toBe('')
+      expect(customConditional.followUp).toEqual(defaultTarget)
+    })
   })
 
   describe('boolean conditions', () => {
@@ -350,6 +410,29 @@ describe('FlowCustomConditionalV2', () => {
       const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
         node,
         createBotContext({ isLogged: false })
+      )
+
+      expect(customConditional.customResult).toBe('false')
+      expect(customConditional.resolvedOperator).toBe('')
+      expect(customConditional.followUp).toEqual(defaultTarget)
+    })
+
+    test('should use default target when boolean variable is undefined', () => {
+      const node = createMockCustomConditionalV2Node({
+        type: VariableFormat.Boolean,
+        key_path: 'missingIsLogged',
+        conditions: [
+          {
+            operator: BooleanConditionOperator.IsTruthy,
+            target: loggedInTarget,
+          },
+        ],
+        default_target: defaultTarget,
+      })
+
+      const customConditional = FlowCustomConditionalV2.fromHubtypeCMS(
+        node,
+        createBotContext()
       )
 
       expect(customConditional.customResult).toBe('false')

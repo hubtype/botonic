@@ -61,6 +61,17 @@ export class FlowCustomConditionalV2 extends ContentFieldsBase {
   }
 
   private evaluateConditions(botVariable: unknown): ConditionMatch {
+    if (botVariable === undefined) {
+      const defaultCustomResult =
+        this.variableFormat === VariableFormat.Boolean ? 'false' : 'default'
+      return resolveWithDefaultTarget(
+        undefined,
+        this.defaultTarget,
+        this.code,
+        defaultCustomResult
+      )
+    }
+
     switch (this.variableFormat) {
       case VariableFormat.String: {
         const match = findLastMatchingCondition(
